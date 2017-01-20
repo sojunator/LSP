@@ -1,5 +1,5 @@
 #include "Window.h"
-
+#include "Input.h"
 namespace thomas 
 {
 	LONG Window::m_width;
@@ -14,8 +14,38 @@ namespace thomas
 
 	LRESULT CALLBACK Window::EventHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		//If one case is hit the code will execute everything down until a break;
 		switch (message)
 		{
+
+		case WM_SETFOCUS:
+		case WM_KILLFOCUS:
+			Input::ProcessGamePad(message, wParam, lParam);
+			break;
+		case WM_ACTIVATEAPP:
+			Input::ProcessKeyboard(message, wParam, lParam);
+			Input::ProcessMouse(message, wParam, lParam);
+			break;
+		case WM_INPUT:
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MOUSEWHEEL:
+		case WM_XBUTTONDOWN:
+		case WM_XBUTTONUP:
+		case WM_MOUSEHOVER:
+			Input::ProcessMouse(message, wParam, lParam);
+			break;
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			Input::ProcessKeyboard(message, wParam, lParam);
+			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;

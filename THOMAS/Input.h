@@ -219,6 +219,13 @@ namespace thomas
 			RT
 		};
 
+
+		static bool Init();
+		static void Update();
+		static void ProcessKeyboard(UINT message, WPARAM wParam, LPARAM lParam);
+		static void ProcessMouse(UINT message, WPARAM wParam, LPARAM lParam);
+		static void ProcessGamePad(UINT message, WPARAM wParam, LPARAM lParam);
+
 		//Mouse
 		static LONG GetMouseY();
 		static LONG GetMouseX();
@@ -233,10 +240,17 @@ namespace thomas
 		static float GetLeftStickX();
 		static float GetRightStickY();
 		static float GetRightStickX();
+		
 
 	private:
-		static DirectX::Mouse s_mouse;
-		static DirectX::Keyboard s_keyboard;
-		static DirectX::GamePad s_gamePad;
+		static std::unique_ptr<DirectX::Keyboard> s_keyboard;
+		static std::unique_ptr<DirectX::Mouse> s_mouse;
+		static std::unique_ptr<DirectX::GamePad> s_gamePad;
+
+		static DirectX::Mouse::State s_mouseState;
+		static DirectX::Keyboard::State s_keyboardState;
+		static DirectX::GamePad::State s_gamePadState;
+
+		static bool s_initialized;
 	};
 }

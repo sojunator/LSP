@@ -1,5 +1,5 @@
 #include "ThomasCore.h"
-#include "Thomas.h"
+#include "Input.h"
 
 namespace thomas {
 	HINSTANCE ThomasCore::m_hInstance;
@@ -9,6 +9,8 @@ namespace thomas {
 	{
 		m_hInstance = hInstance;
 		m_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, L"Thomas test window");
+		if (m_initialized)
+			m_initialized = Input::Init();
 		return m_initialized;
 	}
 
@@ -19,8 +21,11 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-		if (thomas::Input::IsKeyDown(thomas::Input::Keys::Space))
-			system("pause"); //TODO: Fix this
+
+		if (thomas::Input::IsKeyDown(Input::Keys::Space))
+			OutputDebugString(L"space! ");
+
+		
 	}
 
 	void ThomasCore::Start()
@@ -39,6 +44,7 @@ namespace thomas {
 				}
 				else
 				{
+					Input::Update();
 					Update();
 				}
 			}
