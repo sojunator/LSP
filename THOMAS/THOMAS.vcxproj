@@ -18,6 +18,21 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+<<<<<<< HEAD
+=======
+  <ItemGroup>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Thomas.h" />
+    <ClInclude Include="ThomasCore.h" />
+    <ClInclude Include="utils\d3d.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ThomasCore.cpp" />
+    <ClCompile Include="utils\D3d.cpp" />
+    <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+>>>>>>> origin/d3d
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED0D8681-B384-43D1-8F56-B4145588E20C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
