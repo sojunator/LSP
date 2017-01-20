@@ -9,8 +9,8 @@ namespace thomas
 	private:
 
 	public:
-		Camera(DirectX::XMFLOAT3 camPos, DirectX::XMFLOAT3 focusAt, float fov, float near, float far);
-		DirectX::XMMATRIX CreateViewMatrix(DirectX::XMFLOAT3 camPos, DirectX::XMFLOAT3 focusAt);
+		Camera(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float near, float far);
+		DirectX::XMMATRIX CreateViewMatrix(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt);
 		DirectX::XMMATRIX CreateProjMatrix(float fov, float near, float far);
 
 	private:

@@ -1,17 +1,19 @@
 #include "Camera.h"
 #include "Window.h"
 
-thomas::Camera::Camera(DirectX::XMFLOAT3 camPos, DirectX::XMFLOAT3 focusAt, float fov, float viewNear, float viewFar)
+thomas::Camera::Camera(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float viewNear, float viewFar)
 {
 	CreateProjMatrix(fov, viewNear, viewFar);
 }
 
-DirectX::XMMATRIX thomas::Camera::CreateViewMatrix(DirectX::XMFLOAT3 camPos, DirectX::XMFLOAT3 focusAt)
+DirectX::XMMATRIX thomas::Camera::CreateViewMatrix(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt)
 {
-	//Call Thomas::Utils::Math::ToVector(camPos);
-	//Call Thomas::Utils::Math::ToVector(focusAt);
-	
-	//return DirectX::XMMatrixLookAtLH(camPos, focusAt, )
+	DirectX::XMVECTOR lookVector = DirectX::XMVectorSubtract(focusAt, camPos);
+	DirectX::XMVECTOR tempUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR right = DirectX::XMVector3Cross(tempUp, lookVector);
+	DirectX::XMVECTOR up =  DirectX::XMVector3Cross(lookVector, right);
+
+	return DirectX::XMMatrixLookAtLH(camPos, focusAt, up);
 }
 
 DirectX::XMMATRIX thomas::Camera::CreateProjMatrix(float fov, float viewNear, float viewFar)
