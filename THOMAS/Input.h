@@ -11,6 +11,12 @@ namespace thomas
 	class Input
 	{
 	public:
+		static enum MouseButtons
+		{
+			LEFT,
+			RIGHT,
+			SCROLL
+		};
 		static enum Buttons
 		{
 			//Main Buttons
@@ -33,29 +39,21 @@ namespace thomas
 			LT,
 			RT
 		};
-		static enum MouseButtons
-		{
-			LEFT,
-			RIGHT,
-			SCROLL
-		};
 
-		static bool Init();
-
+		//Mouse
 		static LONG GetMouseY();
 		static LONG GetMouseX();
 		static bool IsMouseButtonDown(MouseButtons button);
+
+		//Keyboard
 		static bool IsKeyDown(DirectX::Keyboard::Keys vKey);
+
+		//Gamepad
 		static bool IsButtonDown(Buttons button);
 		static float GetLeftStickY();
 		static float GetLeftStickX();
 		static float GetRightStickY();
-		static float GetRightStickX()
-
-		Input();
-		~Input();
-
-		
+		static float GetRightStickX();
 
 	private:
 		static DirectX::Mouse s_mouse;
