@@ -10,7 +10,7 @@ namespace thomas
 		void CreateViewMatrix(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt);
 		void CreateProjMatrix(float fov, float near, float far);
 		void CreateViewProjMatrix();
-		void Update(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float viewNear, float viewFar);
+		void Update();
 		
 	public:
 		Camera(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float near, float far);

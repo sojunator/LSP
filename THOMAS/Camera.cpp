@@ -9,7 +9,7 @@ thomas::Camera::Camera(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, floa
 	m_near = viewNear;
 	m_far = viewFar;
 
-	Update(m_camPos, m_focusAt, m_fov, m_near,m_far);
+	Update();
 }
 
 void thomas::Camera::CreateViewMatrix(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt)
@@ -32,7 +32,7 @@ void thomas::Camera::CreateViewProjMatrix()
 	m_viewProjMatrix = DirectX::XMMatrixMultiply(m_viewMatrix, m_projMatrix);
 }
 
-void thomas::Camera::Update(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float viewNear, float viewFar)
+void thomas::Camera::Update()
 {
 	CreateViewMatrix(m_camPos, m_focusAt);
 	CreateProjMatrix(m_fov, m_near, m_far);
