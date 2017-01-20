@@ -22,8 +22,8 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 
-		if (thomas::Input::IsKeyDown(Input::Keys::Space))
-			OutputDebugString(L"space! ");
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Window::Destroy();
 
 		
 	}

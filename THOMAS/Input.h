@@ -6,6 +6,15 @@
 #include "utils\Keyboard.h"
 #include "utils\Mouse.h"
 
+
+/*
+This class is a wrapper for handling all the inputs from the different DirectXTK input methods.
+
+GetDown/Up only returns true the frame the button/key was pressed/released.
+
+The other Get function returns true while the button/key is pressed.
+*/
+
 namespace thomas
 {
 	class Input
@@ -15,7 +24,7 @@ namespace thomas
 		{
 			LEFT,
 			RIGHT,
-			SCROLL
+			MIDDLE
 		};
 		enum class Keys
 		{
@@ -229,13 +238,20 @@ namespace thomas
 		//Mouse
 		static LONG GetMouseY();
 		static LONG GetMouseX();
-		static bool IsMouseButtonDown(MouseButtons button);
+		static bool GetMouseButtonDown(MouseButtons button);
+		static bool GetMouseButtonUP(MouseButtons button);
+		static bool GetMouseButton(MouseButtons button);
 
 		//Keyboard
-		static bool IsKeyDown(Keys vKey);
+		static bool GetKeyDown(Keys key);
+		static bool GetKeyUp(Keys key);
+		static bool GetKey(Keys key);
 
 		//Gamepad
-		static bool IsButtonDown(Buttons button);
+		static bool GetButtonDown(Buttons button);
+		static bool GetButtonUp(Buttons button);
+		static bool GetButton(Buttons button);
+
 		static float GetLeftStickY();
 		static float GetLeftStickX();
 		static float GetRightStickY();
@@ -250,6 +266,10 @@ namespace thomas
 		static DirectX::Mouse::State s_mouseState;
 		static DirectX::Keyboard::State s_keyboardState;
 		static DirectX::GamePad::State s_gamePadState;
+
+		static DirectX::Keyboard::KeyboardStateTracker s_keyboardTracker;
+		static DirectX::Mouse::ButtonStateTracker s_mouseTracker;
+		static DirectX::GamePad::ButtonStateTracker s_gamePadTracker;
 
 		static bool s_initialized;
 	};
