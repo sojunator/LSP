@@ -4,10 +4,10 @@ namespace thomas {
 	HINSTANCE ThomasCore::m_hInstance;
 	bool ThomasCore::m_initialized;
 
-	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight)
+	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
 		m_hInstance = hInstance;
-		m_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, L"Thomas test window");
+		m_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
 		return m_initialized;
 	}
 
