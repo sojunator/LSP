@@ -1,5 +1,7 @@
 #include "ThomasCore.h"
 
+#include "assimpincludes\assimp\Importer.hpp"
+
 namespace thomas {
 	HINSTANCE ThomasCore::m_hInstance;
 	bool ThomasCore::m_initialized;
@@ -23,6 +25,8 @@ namespace thomas {
 
 	void ThomasCore::Start()
 	{
+
+
 		if (m_initialized)
 		{
 			MSG msg = { 0 };
