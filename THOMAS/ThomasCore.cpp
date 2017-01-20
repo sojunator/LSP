@@ -1,4 +1,5 @@
 #include "ThomasCore.h"
+#include "Thomas.h"
 
 namespace thomas {
 	HINSTANCE ThomasCore::m_hInstance;
@@ -18,7 +19,8 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-
+		if (thomas::Input::IsKeyDown(thomas::Input::Keys::Space))
+			system("pause"); //TODO: Fix this
 	}
 
 	void ThomasCore::Start()

@@ -7,9 +7,9 @@ namespace thomas
 	DirectX::Mouse Input::s_mouse;
 
 
-	bool Input::IsKeyDown(DirectX::Keyboard::Keys key)
+	bool Input::IsKeyDown(Keys key)
 	{
-		return s_keyboard.GetState().IsKeyDown(key);
+		return DirectX::Keyboard::Get().GetState().IsKeyDown((DirectX::Keyboard::Keys)key);
 	}
 
 	bool Input::IsButtonDown(Buttons button)
@@ -68,10 +68,6 @@ namespace thomas
 		return s_gamePad.GetState(0, DirectX::GamePad::DEAD_ZONE_INDEPENDENT_AXES).thumbSticks.rightX;
 	}
 
-	bool Input::Init()
-	{
-	}
-
 	LONG Input::GetMouseY()
 	{
 		return s_mouse.GetState().y;
@@ -86,21 +82,14 @@ namespace thomas
 	{
 		switch (button)
 		{
-		case LEFT:
+		case MouseButtons::LEFT:
 			return s_mouse.GetState().leftButton % 2;
-		case RIGHT:
+		case MouseButtons::RIGHT:
 			return s_mouse.GetState().rightButton % 2;
-		case SCROLL:
+		case MouseButtons::SCROLL:
 			return s_mouse.GetState().middleButton % 2;
 		}
 		return false;
 	}
 
-	Input::Input()
-	{
-	}
-
-	Input::~Input()
-	{
-	}
 }
