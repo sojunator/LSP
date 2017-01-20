@@ -17,7 +17,7 @@ namespace thomas
 
 		static void Start();
 		static bool Initialized();
-
+		static bool Destroy();
 
 	private:
 		static HINSTANCE m_hInstance;

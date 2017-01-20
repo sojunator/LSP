@@ -26,7 +26,7 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-
+		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
 	}
 
 	void ThomasCore::Start()
@@ -48,12 +48,27 @@ namespace thomas {
 					Update();
 				}
 			}
+			Destroy();
 			Window::Destroy();
+
 		}
 	}
 	bool ThomasCore::Initialized()
 	{
 		return m_initialized;
+	}
+
+	bool ThomasCore::Destroy()
+	{
+		utils::D3d::Destroy();
+		s_swapchain->Release();
+		s_context->Release();
+		s_device->Release();
+
+		s_swapchain = 0;
+		s_context = 0;
+		s_device = 0;
+		return true;
 	}
 }
 
