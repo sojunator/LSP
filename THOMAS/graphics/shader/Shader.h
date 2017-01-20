@@ -7,16 +7,17 @@ namespace thomas {
 			class THOMAS_API Shader {
 			private:
 			public:
-				enum class Swag {
-					TEST = 1
-				};
+				static Shader CreateFromFile(std::string name, std::string filePath);
 				bool Bind();
 				bool Unbind();
-
 				std::string GetName();
-				std::string GetFileName();
+				std::string GetFilePath();
 				static Shader* GetCurrentBoundShader();
+
+
 			private:
+				std::string m_name;
+				std::string m_filePath;
 				static Shader* s_currentBoundShader;
 			};
 		}

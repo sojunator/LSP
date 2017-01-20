@@ -42,6 +42,9 @@
     <ClInclude Include="graphics\shader\Shader.h">
       <Filter>Header Files\graphics\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\shader\ShaderManager.h">
+      <Filter>Header Files\graphics\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ThomasCore.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="graphics\shader\Shader.cpp">
+      <Filter>Source Files\graphics\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\shader\ShaderManager.cpp">
       <Filter>Source Files\graphics\shader</Filter>
     </ClCompile>
   </ItemGroup>
