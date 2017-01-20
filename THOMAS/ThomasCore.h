@@ -17,8 +17,8 @@ namespace thomas
 
 
 	private:
-		static HINSTANCE m_hInstance;
-		static bool m_initialized;
+		static HINSTANCE s_hInstance;
+		static bool s_initialized;
 
 	};
 }

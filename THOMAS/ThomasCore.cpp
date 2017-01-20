@@ -1,19 +1,19 @@
 #include "ThomasCore.h"
 
 namespace thomas {
-	HINSTANCE ThomasCore::m_hInstance;
-	bool ThomasCore::m_initialized;
+	HINSTANCE ThomasCore::s_hInstance;
+	bool ThomasCore::s_initialized;
 
 	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
-		m_hInstance = hInstance;
-		m_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
-		return m_initialized;
+		s_hInstance = hInstance;
+		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
+		return s_initialized;
 	}
 
 	HINSTANCE ThomasCore::GetHInstance()
 	{
-		return m_hInstance;
+		return s_hInstance;
 	}
 
 	void ThomasCore::Update()
@@ -23,7 +23,7 @@ namespace thomas {
 
 	void ThomasCore::Start()
 	{
-		if (m_initialized)
+		if (s_initialized)
 		{
 			MSG msg = { 0 };
 
@@ -45,7 +45,7 @@ namespace thomas {
 	}
 	bool ThomasCore::Initialized()
 	{
-		return m_initialized;
+		return s_initialized;
 	}
 }
 

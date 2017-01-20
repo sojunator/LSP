@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{f6a5a7c9-7bfe-44e4-9e25-b54959c447c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\Shader">
+      <UniqueIdentifier>{28d99249-2db0-41bb-9893-025973d35506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{1c1f1e8b-c8c2-41e2-8141-7be93122f79c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\shader">
+      <UniqueIdentifier>{7e777054-5d2e-4657-924a-201eb048ad43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -27,6 +39,9 @@
     <ClInclude Include="ThomasCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\shader\Shader.h">
+      <Filter>Header Files\graphics\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ThomasCore.cpp">
@@ -34,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\shader\Shader.cpp">
+      <Filter>Source Files\graphics\shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

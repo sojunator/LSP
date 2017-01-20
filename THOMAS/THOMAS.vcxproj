@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="graphics\shader\Shader.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="graphics\shader\Shader.cpp" />
     <ClCompile Include="ThomasCore.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
