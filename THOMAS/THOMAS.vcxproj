@@ -23,20 +23,20 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
-    <ClInclude Include="utils\GamePad.h" />
-    <ClInclude Include="utils\Keyboard.h" />
-    <ClInclude Include="utils\Mouse.h" />
-    <ClInclude Include="utils\pch.h" />
-    <ClInclude Include="utils\PlatformHelpers.h" />
+    <ClInclude Include="utils\directXTK\GamePad.h" />
+    <ClInclude Include="utils\directXTK\Keyboard.h" />
+    <ClInclude Include="utils\directXTK\Mouse.h" />
+    <ClInclude Include="utils\directXTK\pch.h" />
+    <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="ThomasCore.cpp" />
-    <ClCompile Include="utils\GamePad.cpp" />
-    <ClCompile Include="utils\Keyboard.cpp" />
-    <ClCompile Include="utils\Mouse.cpp" />
-    <ClCompile Include="utils\pch.cpp" />
+    <ClCompile Include="utils\directXTK\GamePad.cpp" />
+    <ClCompile Include="utils\directXTK\Keyboard.cpp" />
+    <ClCompile Include="utils\directXTK\Mouse.cpp" />
+    <ClCompile Include="utils\directXTK\pch.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -110,6 +110,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

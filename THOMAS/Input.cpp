@@ -96,11 +96,87 @@ namespace thomas
 
 	bool Input::GetButtonDown(Buttons button)
 	{
+		if (!s_gamePadState.IsConnected()) //Always false if no gamePad.
+			return false;
+		switch (button)
+		{
+		case Buttons::A:
+			return (s_gamePadTracker.a == s_gamePadTracker.PRESSED);
+		case Buttons::B:
+			return (s_gamePadTracker.b == s_gamePadTracker.PRESSED);
+		case Buttons::X:
+			return (s_gamePadTracker.x == s_gamePadTracker.PRESSED);
+		case Buttons::Y:
+			return (s_gamePadTracker.y == s_gamePadTracker.PRESSED);
+		case Buttons::DPAD_UP:
+			return (s_gamePadTracker.dpadUp == s_gamePadTracker.PRESSED);
+		case Buttons::DPAD_DOWN:
+			return (s_gamePadTracker.dpadDown == s_gamePadTracker.PRESSED);
+		case Buttons::DPAD_LEFT:
+			return (s_gamePadTracker.dpadLeft == s_gamePadTracker.PRESSED);
+		case Buttons::DPAD_RIGHT:
+			return (s_gamePadTracker.dpadRight == s_gamePadTracker.PRESSED);
+		case Buttons::LS:
+			return (s_gamePadTracker.leftStick == s_gamePadTracker.PRESSED);
+		case Buttons::RS:
+			return (s_gamePadTracker.rightStick == s_gamePadTracker.PRESSED);
+		case Buttons::LB:
+			return (s_gamePadTracker.leftShoulder == s_gamePadTracker.PRESSED);
+		case Buttons::RB:
+			return (s_gamePadTracker.rightShoulder == s_gamePadTracker.PRESSED);
+		case Buttons::LT:
+			return (s_gamePadTracker.leftTrigger == s_gamePadTracker.PRESSED);
+		case Buttons::RT:
+			return (s_gamePadTracker.rightTrigger == s_gamePadTracker.PRESSED);
+		case Buttons::START:
+			return (s_gamePadTracker.start == s_gamePadTracker.PRESSED);
+		case Buttons::BACK:
+			return (s_gamePadTracker.back == s_gamePadTracker.PRESSED);
+
+		}
 		return false;
 	}
 
 	bool Input::GetButtonUp(Buttons button)
 	{
+		if (!s_gamePadState.IsConnected()) //Always false if no gamePad.
+			return false;
+		switch (button)
+		{
+		case Buttons::A:
+			return (s_gamePadTracker.a == s_gamePadTracker.RELEASED);
+		case Buttons::B:
+			return (s_gamePadTracker.b == s_gamePadTracker.RELEASED);
+		case Buttons::X:
+			return (s_gamePadTracker.x == s_gamePadTracker.RELEASED);
+		case Buttons::Y:
+			return (s_gamePadTracker.y == s_gamePadTracker.RELEASED);
+		case Buttons::DPAD_UP:
+			return (s_gamePadTracker.dpadUp == s_gamePadTracker.RELEASED);
+		case Buttons::DPAD_DOWN:
+			return (s_gamePadTracker.dpadDown == s_gamePadTracker.RELEASED);
+		case Buttons::DPAD_LEFT:
+			return (s_gamePadTracker.dpadLeft == s_gamePadTracker.RELEASED);
+		case Buttons::DPAD_RIGHT:
+			return (s_gamePadTracker.dpadRight == s_gamePadTracker.RELEASED);
+		case Buttons::LS:
+			return (s_gamePadTracker.leftStick == s_gamePadTracker.RELEASED);
+		case Buttons::RS:
+			return (s_gamePadTracker.rightStick == s_gamePadTracker.RELEASED);
+		case Buttons::LB:
+			return (s_gamePadTracker.leftShoulder == s_gamePadTracker.RELEASED);
+		case Buttons::RB:
+			return (s_gamePadTracker.rightShoulder == s_gamePadTracker.RELEASED);
+		case Buttons::LT:
+			return (s_gamePadTracker.leftTrigger == s_gamePadTracker.RELEASED);
+		case Buttons::RT:
+			return (s_gamePadTracker.rightTrigger == s_gamePadTracker.RELEASED);
+		case Buttons::START:
+			return (s_gamePadTracker.start == s_gamePadTracker.RELEASED);
+		case Buttons::BACK:
+			return (s_gamePadTracker.back == s_gamePadTracker.RELEASED);
+
+		}
 		return false;
 	}
 
@@ -138,6 +214,11 @@ namespace thomas
 			return s_gamePadState.IsLeftTriggerPressed();
 		case Buttons::RT:
 			return s_gamePadState.IsRightTriggerPressed();
+		case Buttons::START:
+			return s_gamePadState.IsStartPressed();
+		case Buttons::BACK:
+			return s_gamePadState.IsBackPressed();
+
 		}
 		return false;
 	}

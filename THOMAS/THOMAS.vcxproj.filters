@@ -19,6 +19,12 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{1fef4db8-c830-46b7-8962-396049d4ba13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\utils\DirectXTK">
+      <UniqueIdentifier>{63add5bb-c34a-4347-b51c-418bb48d52f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils\DirectXTK">
+      <UniqueIdentifier>{22a6e519-edde-4bda-9a02-b9755ee7bd69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -36,20 +42,20 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\GamePad.h">
-      <Filter>Header Files\utils</Filter>
+    <ClInclude Include="utils\directXTK\pch.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Keyboard.h">
-      <Filter>Header Files\utils</Filter>
+    <ClInclude Include="utils\directXTK\PlatformHelpers.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Mouse.h">
-      <Filter>Header Files\utils</Filter>
+    <ClInclude Include="utils\directXTK\GamePad.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
     </ClInclude>
-    <ClInclude Include="utils\PlatformHelpers.h">
-      <Filter>Header Files\utils</Filter>
+    <ClInclude Include="utils\directXTK\Keyboard.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
     </ClInclude>
-    <ClInclude Include="utils\pch.h">
-      <Filter>Header Files\utils</Filter>
+    <ClInclude Include="utils\directXTK\Mouse.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,17 +68,17 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils\GamePad.cpp">
-      <Filter>Source Files\utils</Filter>
+    <ClCompile Include="utils\directXTK\GamePad.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
     </ClCompile>
-    <ClCompile Include="utils\Keyboard.cpp">
-      <Filter>Source Files\utils</Filter>
+    <ClCompile Include="utils\directXTK\Keyboard.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
     </ClCompile>
-    <ClCompile Include="utils\Mouse.cpp">
-      <Filter>Source Files\utils</Filter>
+    <ClCompile Include="utils\directXTK\Mouse.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
     </ClCompile>
-    <ClCompile Include="utils\pch.cpp">
-      <Filter>Source Files\utils</Filter>
+    <ClCompile Include="utils\directXTK\pch.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

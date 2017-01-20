@@ -2,9 +2,10 @@
 #include <Windows.h>
 #include <string>
 #include "Common.h"
-#include "utils\GamePad.h"
-#include "utils\Keyboard.h"
-#include "utils\Mouse.h"
+#include "utils\directXTK\GamePad.h"
+#include "utils\directXTK\Keyboard.h"
+#include "utils\directXTK\Mouse.h"
+
 
 
 /*
@@ -225,7 +226,11 @@ namespace thomas
 			RB,
 			//TRIGGERS
 			LT,
-			RT
+			RT,
+
+			//OTHER
+			START,
+			BACK
 		};
 
 
