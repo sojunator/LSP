@@ -1,14 +1,22 @@
-// Plunder Planets.cpp : Defines the entry point for the console application.
+
+// main.cpp : Defines the entry point for the console application.
 //
 
 #include "Thomas.h"
+
 #include <string>
 #include <iostream>
 
-
-int main()
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	thomas::ThomasCore(1);
-    return 0;
+
+	MSG msg = { 0 };
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 600, 800);
+	//init code
+
+	//start
+	thomas::ThomasCore::Start();
+
+	return (int)msg.wParam;
 }
 
