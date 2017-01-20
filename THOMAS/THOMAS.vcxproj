@@ -22,10 +22,12 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
+    <ClInclude Include="utils\d3d.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ThomasCore.cpp" />
+    <ClCompile Include="utils\D3d.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
