@@ -4,12 +4,12 @@
 
 namespace thomas
 {
-	namespace graphics
+	namespace utils
 	{
 		class AssimpLoader
 		{
 		private:
-			static Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 			static void ProcessNode(aiNode* node, const aiScene* scene);
 
 		public:
@@ -18,7 +18,7 @@ namespace thomas
 		private:
 			struct Model
 			{
-				std::vector<Mesh*> meshes;
+				std::vector<graphics::Mesh*> meshes;
 			};
 		};
 	}

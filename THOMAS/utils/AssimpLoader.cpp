@@ -2,7 +2,7 @@
 
 namespace thomas
 {
-	namespace graphics
+	namespace utils
 	{
 		void AssimpLoader::LoadModel(std::string path)
 		{
@@ -20,10 +20,10 @@ namespace thomas
 			ProcessNode(scene->mRootNode, scene);
 		}
 
-		Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene * scene)
+		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene * scene)
 		{
 			// Data to fill
-			std::vector <Vertex> vertices;
+			std::vector <graphics::Vertex> vertices;
 			std::vector <int> indices;
 			std::string name = mesh->mName.C_Str();
 			
@@ -32,7 +32,7 @@ namespace thomas
 			// Walk through each of the mesh's vertices
 			for (int i = 0; i < mesh->mNumVertices; i++)
 			{
-				Vertex vertex;
+				graphics::Vertex vertex;
 				math::Vector3 vector;
 
 				// Positions
@@ -92,7 +92,7 @@ namespace thomas
 			//}
 
 			// Return a mesh object created from the extracted mesh data
-			return &Mesh(vertices, indices, name);
+			return &graphics::Mesh(vertices, indices, name);
 		}
 
 		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene)
