@@ -4,6 +4,8 @@
 #include <d3dcompiler.h>
 
 #pragma comment (lib, "d3d11.lib")
+#pragma comment(lib, "Dxguid.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 namespace thomas {
 	namespace utils
