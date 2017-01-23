@@ -1,5 +1,5 @@
 #include "ThomasCore.h"
-#include "utils/d3d.h"
+
 #include "Input.h"
 
 #include "assimpincludes\assimp\Importer.hpp"
@@ -80,6 +80,14 @@ namespace thomas {
 		s_context = 0;
 		s_device = 0;
 		return true;
+	}
+	ID3D11Device * ThomasCore::GetDevice()
+	{
+		return s_device;
+	}
+	ID3D11DeviceContext* ThomasCore::GetDeviceContext()
+	{
+		return s_context;
 	}
 }
 
