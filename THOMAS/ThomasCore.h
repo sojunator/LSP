@@ -11,7 +11,7 @@ namespace thomas
 	private:
 		static void Update();
 	public:
-		static bool Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight);
+		static bool Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title);
 		
 		static HINSTANCE GetHInstance();
 
@@ -20,8 +20,8 @@ namespace thomas
 		static bool Destroy();
 
 	private:
-		static HINSTANCE m_hInstance;
-		static bool m_initialized;
+		static HINSTANCE s_hInstance;
+		static bool s_initialized;
 		static ID3D11Device* s_device;
 		static ID3D11DeviceContext* s_context;
 		static IDXGISwapChain* s_swapchain;

@@ -1,21 +1,51 @@
 #include "Window.h"
-
+#include "Input.h"
 namespace thomas 
 {
-	LONG Window::m_width;
-	LONG Window::m_height;
-	WNDCLASSEX Window::m_windowClassInfo;
-	HWND Window::m_windowHandler;
-	RECT Window::m_windowRectangle;
-	LPWSTR Window::m_title;
-	bool Window::m_initialized;
-	bool Window::m_visibleCursor;
+	LONG Window::s_width;
+	LONG Window::s_height;
+	WNDCLASSEX Window::s_windowClassInfo;
+	HWND Window::s_windowHandler;
+	RECT Window::s_windowRectangle;
+	LPWSTR Window::s_title;
+	bool Window::s_initialized;
+	bool Window::s_visibleCursor;
 
 
 	LRESULT CALLBACK Window::EventHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		//If one case is hit the code will execute everything down until a break;
 		switch (message)
 		{
+
+		case WM_SETFOCUS:
+		case WM_KILLFOCUS:
+			Input::ProcessGamePad(message, wParam, lParam);
+			break;
+		case WM_ACTIVATEAPP:
+			Input::ProcessKeyboard(message, wParam, lParam);
+			Input::ProcessMouse(message, wParam, lParam);
+			break;
+		case WM_INPUT:
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MOUSEWHEEL:
+		case WM_XBUTTONDOWN:
+		case WM_XBUTTONUP:
+		case WM_MOUSEHOVER:
+			Input::ProcessMouse(message, wParam, lParam);
+			break;
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			Input::ProcessKeyboard(message, wParam, lParam);
+			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
@@ -31,56 +61,56 @@ namespace thomas
 
 	bool Window::Init(HINSTANCE hInstance, int nCmdShow, LONG width, LONG height, LPWSTR title)
 	{
-		if (m_initialized)
+		if (s_initialized)
 			return false;
 
-		m_height = height;
-		m_width = width;
-		m_title = title;
-		m_initialized = false;
+		s_height = height;
+		s_width = width;
+		s_title = title;
+		s_initialized = false;
 
-		m_windowClassInfo = { 0 };
-		m_windowClassInfo.cbSize = sizeof(WNDCLASSEX);
-		m_windowClassInfo.style = CS_HREDRAW | CS_VREDRAW;
-		m_windowClassInfo.lpfnWndProc = EventHandler; //Callback for EVENTS
-		m_windowClassInfo.hInstance = hInstance;
-		m_windowClassInfo.lpszClassName = L"ThomasWindow";
+		s_windowClassInfo = { 0 };
+		s_windowClassInfo.cbSize = sizeof(WNDCLASSEX);
+		s_windowClassInfo.style = CS_HREDRAW | CS_VREDRAW;
+		s_windowClassInfo.lpfnWndProc = EventHandler; //Callback for EVENTS
+		s_windowClassInfo.hInstance = hInstance;
+		s_windowClassInfo.lpszClassName = L"ThomasWindow";
 
-		if (!RegisterClassEx(&m_windowClassInfo))
+		if (!RegisterClassEx(&s_windowClassInfo))
 			return false;
 
-		m_windowRectangle = { 0, 0, width, height };
+		s_windowRectangle = { 0, 0, width, height };
 
 		//Properties for window
-		AdjustWindowRect(&m_windowRectangle, WS_OVERLAPPEDWINDOW, FALSE);
+		AdjustWindowRect(&s_windowRectangle, WS_OVERLAPPEDWINDOW, FALSE);
 
-		m_windowHandler = CreateWindow(
+		s_windowHandler = CreateWindow(
 			L"ThomasWindow",			// CLASS, if does not exists fails!
 			title,		// Window name (title)
 			WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
-			m_windowRectangle.right - m_windowRectangle.left,
-			m_windowRectangle.bottom - m_windowRectangle.top,
+			s_windowRectangle.right - s_windowRectangle.left,
+			s_windowRectangle.bottom - s_windowRectangle.top,
 			nullptr,
 			nullptr,
 			hInstance,
 			nullptr);
 
-		if (m_windowHandler)
+		if (s_windowHandler)
 		{
-			m_initialized = true;
+			s_initialized = true;
 			ChangeWindowShowState(nCmdShow);
 		}
 
-		return m_initialized;
+		return s_initialized;
 	}
 
 	bool Window::SetHeight(LONG height)
 	{
 		if (height > 0 && height <= GetVerticalResolution())
 		{
-			m_height = height;
+			s_height = height;
 			return UpdateWindow();
 		}
 
@@ -91,7 +121,7 @@ namespace thomas
 	{
 		if (width > 0 && width <= GetHorizontalResolution())
 		{
-			m_width = width;
+			s_width = width;
 			return UpdateWindow();
 		}
 
@@ -110,17 +140,17 @@ namespace thomas
 
 	LONG Window::GetHeight()
 	{
-		return m_height;
+		return s_height;
 	}
 
 	LONG Window::GetWidth()
 	{
-		return m_width;
+		return s_width;
 	}
 
 	HWND Window::GetWindowHandler()
 	{
-		return m_windowHandler;
+		return s_windowHandler;
 	}
 
 	LONG Window::GetHorizontalResolution()
@@ -141,29 +171,29 @@ namespace thomas
 
 	void Window::ShowCursor()
 	{
-		m_visibleCursor = true;
+		s_visibleCursor = true;
 		UpdateWindow();
 	}
 
 	void Window::HideCursor()
 	{
-		m_visibleCursor = false;
+		s_visibleCursor = false;
 		UpdateWindow();
 	}
 
 	bool Window::Destroy()
 	{
-		return DestroyWindow(m_windowHandler);
+		return DestroyWindow(s_windowHandler);
 	}
 
 	bool Window::Initialized()
 	{
-		return m_initialized;
+		return s_initialized;
 	}
 
 	bool Window::ChangeWindowShowState(int nCmdShow)
 	{
-		return ShowWindow(m_windowHandler, nCmdShow);
+		return ShowWindow(s_windowHandler, nCmdShow);
 	}
 
 
