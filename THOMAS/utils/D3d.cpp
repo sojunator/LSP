@@ -13,9 +13,11 @@ namespace thomas {
 			if (!CreateSwapChainTexture(device, swapchain))
 				return false;
 
-			//Set back buffer texture 
-			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
-			CreateViewPort(context, height, width);
+			////Set back buffer texture 
+			//context->OMSetRenderTargets(1, &s_backBuffer, NULL);
+			//CreateViewPort(context, height, width);
+
+			return true;
 
 		}
 
@@ -73,6 +75,7 @@ namespace thomas {
 			}
 
 			hr = device->CreateRenderTargetView(pbackBuffer, NULL, &s_backBuffer); // Move it to the gpu
+			pbackBuffer->Release(); // not needed anymore, its on the gpu
 
 			if (FAILED(hr))
 			{
@@ -81,6 +84,7 @@ namespace thomas {
 			}
 			return true;
 		}
+
 		void D3d::CreateViewPort(ID3D11DeviceContext *& context, LONG height, LONG width)
 		{
 			D3D11_VIEWPORT viewport;
