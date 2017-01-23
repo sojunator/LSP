@@ -21,6 +21,7 @@ namespace thomas {
 		{
 			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
 		}
+
 		return s_initialized;
 	}
 
@@ -44,6 +45,7 @@ namespace thomas {
 		if (s_initialized)
 		{
 			MSG msg = { 0 };
+
 
 			while (WM_QUIT != msg.message)
 			{

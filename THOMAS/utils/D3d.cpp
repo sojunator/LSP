@@ -104,6 +104,18 @@ namespace thomas {
 			swapchain->Present(0, 0);
 		}
 
+		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
+		{
+			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, fileName, texture, textureView, size);
+			if (FAILED(hr))
+			{
+				MessageBox(NULL, L"Could not create texture", fileName, MB_OK);
+		
+				return false;
+			}
+			return true;
+		}
+
 		bool D3d::Destroy()
 		{
 			s_backBuffer->Release();

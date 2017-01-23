@@ -2,6 +2,8 @@
 #include "../Common.h"
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <string>
+#include "directXTK\WICTextureLoader.h"
 
 #pragma comment (lib, "d3d11.lib")
 
@@ -18,6 +20,7 @@ namespace thomas {
 		public:
 			static bool Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
 			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
+			static bool LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size);
 			static bool Destroy();
 
 		private:
