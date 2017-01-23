@@ -24,7 +24,7 @@ namespace thomas
 				{
 					LOG(status);
 				}
-				else if (errorBlob)
+				if (errorBlob)
 				{
 					if (errorBlob->GetBufferSize())
 					{
@@ -75,7 +75,7 @@ namespace thomas
 						ID3D11ShaderReflectionVariable* variable = constantBuffer->GetVariableByIndex(j);
 						D3D11_SHADER_VARIABLE_DESC variableDesc;
 						variable->GetDesc(&variableDesc);
-						LOG(variableDesc.Name);
+						std::string name = variableDesc.Name;
 					}
 				}
 			}
@@ -94,7 +94,6 @@ namespace thomas
 				if(m_data.ps)
 					ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
 				//ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
-
 
 				//ShaderManager::AddShader(this);
 
@@ -134,9 +133,53 @@ namespace thomas
 			{
 				return std::string();
 			}
+			bool Shader::BindBuffer(ID3D11Buffer * resource, ResourceType type)
+			{
+				if (s_currentBoundShader == this)
+				{
+					return BindBuffer(resource, (int)type);
+				}
+				return false;
+			}
+			bool Shader::BindBuffer(ID3D11Buffer * resource, int slot)
+			{
+				if (s_currentBoundShader == this)
+				{
+					if (m_data.vs)
+						ThomasCore::GetDeviceContext()->VSSetConstantBuffers(slot, 1, &resource);
+					if (m_data.ps)
+						ThomasCore::GetDeviceContext()->PSSetConstantBuffers(slot, 1, &resource);
+					return true;
+				}
+				return false;
+			}
+			bool Shader::BindTextures(ID3D11ShaderResourceView * texture, int slot)
+			{
+				if (s_currentBoundShader == this)
+				{
+					if (m_data.vs)
+						ThomasCore::GetDeviceContext()->VSSetShaderResources(slot, 1, &texture);
+					if (m_data.ps)
+						ThomasCore::GetDeviceContext()->PSSetShaderResources(slot, 1, &texture);
+					return true;
+				}
+				return false;
+			}
+			bool Shader::BindTextureSampler(ID3D11SamplerState * sampler, int slot)
+			{
+				if (s_currentBoundShader == this)
+				{
+					if (m_data.vs)
+						ThomasCore::GetDeviceContext()->VSSetSamplers(slot, 1, &sampler);
+					if (m_data.ps)
+						ThomasCore::GetDeviceContext()->PSSetSamplers(slot, 1, &sampler);
+					return true;
+				}
+				return false;
+			}
 			Shader * Shader::GetCurrentBoundShader()
 			{
-				return nullptr;
+				return s_currentBoundShader;
 			}
 		}
 	}

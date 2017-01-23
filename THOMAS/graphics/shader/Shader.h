@@ -17,6 +17,13 @@ namespace thomas
 				ID3D11ShaderReflection* GetShaderReflection(ID3DBlob* shaderBlob);
 				void CreateBuffers(ID3DBlob* shaderBlob);
 			public:
+
+				enum class ResourceType
+				{
+					MVP_MATRIX = 0,
+					MATERIAL = 1
+				};
+
 				Shader(std::string name, std::string filePath);
 				~Shader();
 				bool Bind();
@@ -24,9 +31,10 @@ namespace thomas
 				std::string GetName();
 				std::string GetFilePath();
 
-				
-
-				
+				bool BindBuffer(ID3D11Buffer* resource, ResourceType type);
+				bool BindBuffer(ID3D11Buffer* resource, int slot);
+				bool BindTextures(ID3D11ShaderResourceView* texture, int slot);
+				bool BindTextureSampler(ID3D11SamplerState* sampler, int slot);
 
 
 				static Shader* GetCurrentBoundShader();
