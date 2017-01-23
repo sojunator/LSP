@@ -8,10 +8,10 @@ namespace thomas {
 			class THOMAS_API ShaderManager {
 			private:
 			public:
-				static bool AddShader(Shader shader);
-				static bool GetShader(std::string name);
+				static bool AddShader(Shader* shader);
+				static Shader* GetShader(std::string name);
 			private:
-				static std::vector<Shader> s_LoadedShaders;
+				static std::vector<Shader*> s_loadedShaders;
 
 			};
 		}

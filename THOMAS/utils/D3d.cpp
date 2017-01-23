@@ -1,10 +1,16 @@
 #pragma once
 #include "d3d.h"
+#include "../ThomasCore.h"
 
 namespace thomas {
 	namespace utils
 	{
+
 		ID3D11RenderTargetView* D3d::s_backBuffer;
+
+
+
+
 
 		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
 		{
@@ -14,6 +20,9 @@ namespace thomas {
 				return false;
 
 			////Set back buffer texture 
+			//context->OMSetRenderTargets(1, &s_backBuffer, NULL);
+			//CreateViewPort(context, height, width);
+			LOG("Initiating DirectX");
 			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
 			CreateViewPort(context, height, width);
 
@@ -27,17 +36,19 @@ namespace thomas {
 			DXGI_SWAP_CHAIN_DESC scd;
 			ZeroMemory(&scd, sizeof(scd));
 
-			scd.BufferCount = 1;
+			scd.BufferCount = 2;
 			scd.BufferDesc.Height = (float)height;
 			scd.BufferDesc.Width = (float)width;
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			scd.OutputWindow = handle;
+			scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // we recommend using this swap effect for all applications
+			scd.Flags = 0;
 			scd.SampleDesc.Count = 1; // AA times 1
 			scd.SampleDesc.Quality = 0;
 			scd.Windowed = TRUE;
 			scd.BufferDesc.RefreshRate.Numerator = 0; // change 0 to numerator for vsync
-			scd.BufferDesc.RefreshRate.Denominator = 1; // change 1 to denominator for vynsc
+			scd.BufferDesc.RefreshRate.Denominator = 0; // change 1 to denominator for vynsc
 
 			hr = D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
@@ -71,6 +82,7 @@ namespace thomas {
 			if (FAILED(hr))
 			{
 				MessageBox(NULL, L"Failed to get backbuffer", L"Fatal error", MB_OK);
+				LOG("Failed to get backbuffer");
 				return false;
 			}
 
@@ -80,6 +92,7 @@ namespace thomas {
 			if (FAILED(hr))
 			{
 				MessageBox(NULL, L"Failed to move backbuffer to GPU", L"Fatal error", MB_OK);
+				LOG("Failed to move backbuffer to GPU Fatal error");
 				return false;
 			}
 			return true;
@@ -101,7 +114,8 @@ namespace thomas {
 		{
 			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
 			context->ClearRenderTargetView(s_backBuffer, color);
-			swapchain->Present(0, 0);
+			HRESULT t = swapchain->Present(0, 0);
+
 		}
 
 		bool D3d::Destroy()
@@ -109,6 +123,37 @@ namespace thomas {
 			s_backBuffer->Release();
 			s_backBuffer = 0;
 
+			return true;
+		}
+
+
+		template<typename T>
+		ID3D11Buffer* D3d::CreateCBufferFromStruct(T dataStruct)
+		{
+			ID3D11Buffer* buffer;
+			D3D11_BUFFER_DESC bufferDesc;
+			bufferDesc.ByteWidth = sizeof(dataStruct);
+			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
+			bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			bufferDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+			bufferDesc.MiscFlags = 0;
+			
+			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
+
+			if (result != S_OK)
+				LOG(result);
+			
+			if (result == S_OK)
+				return buffer;
+
+			return NULL;
+
+		}
+		template<typename T>
+
+		bool D3d::FillBuffer(ID3D11Buffer* buffer, T data)
+		{
+			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, 0, &data, 0, 0);
 			return true;
 		}
 	}

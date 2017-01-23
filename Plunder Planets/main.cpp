@@ -4,8 +4,6 @@
 
 #include "Thomas.h"
 
-#include <string>
-#include <iostream>
 
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
@@ -16,7 +14,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 
-
+	thomas::graphics::shader::Shader("testShader", "../shaders/test.hlsl");
 
 
 	//start

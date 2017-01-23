@@ -75,11 +75,13 @@ namespace thomas
 		s_windowClassInfo.lpfnWndProc = EventHandler; //Callback for EVENTS
 		s_windowClassInfo.hInstance = hInstance;
 		s_windowClassInfo.lpszClassName = L"ThomasWindow";
+		s_windowClassInfo.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(101));
 
 		if (!RegisterClassEx(&s_windowClassInfo))
 			return false;
 
 		s_windowRectangle = { 0, 0, width, height };
+
 
 		//Properties for window
 		AdjustWindowRect(&s_windowRectangle, WS_OVERLAPPEDWINDOW, FALSE);
@@ -97,10 +99,12 @@ namespace thomas
 			hInstance,
 			nullptr);
 
+
 		if (s_windowHandler)
 		{
 			s_initialized = true;
 			ChangeWindowShowState(nCmdShow);
+			LOG("Initiating Window");
 		}
 
 		return s_initialized;
