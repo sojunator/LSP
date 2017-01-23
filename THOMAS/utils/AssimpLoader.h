@@ -1,6 +1,6 @@
 #pragma once
-#include "Mesh.h"
 #include <iostream>
+#include "../graphics/Mesh.h"
 
 namespace thomas
 {
@@ -13,17 +13,13 @@ namespace thomas
 			static void ProcessNode(aiNode* node, const aiScene* scene);
 
 		public:
-			AssimpLoader();
-			~AssimpLoader();
 			static void LoadModel(std::string path);
-
+			
 		private:
 			struct Model
 			{
 				std::vector<Mesh*> meshes;
 			};
-
-
 		};
 	}
 }

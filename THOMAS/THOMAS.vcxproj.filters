@@ -4,7 +4,6 @@
     <ClCompile Include="graphics\shader\Shader.cpp" />
     <ClCompile Include="graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ThomasCore.cpp" />
     <ClCompile Include="utils\D3d.cpp" />
     <ClCompile Include="utils\directXTK\DDSTextureLoader.cpp" />
@@ -15,14 +14,14 @@
     <ClCompile Include="utils\directXTK\SimpleMath.cpp" />
     <ClCompile Include="utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Window.cpp" />
-    <ClCompile Include="AssimpLoader.cpp" />
+    <ClCompile Include="graphics\Mesh.cpp" />
+    <ClCompile Include="utils\AssimpLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="graphics\shader\Shader.h" />
     <ClInclude Include="graphics\shader\ShaderManager.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
     <ClInclude Include="utils\directXTK\dds.h" />
@@ -39,7 +38,8 @@
     <ClInclude Include="utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="utils\Math.h" />
-    <ClInclude Include="AssimpLoader.h" />
+    <ClInclude Include="graphics\Mesh.h" />
+    <ClInclude Include="utils\AssimpLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="utils\directXTK\SimpleMath.inl" />

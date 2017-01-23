@@ -1,11 +1,11 @@
 #pragma once
 #include "../Common.h"
 #include <d3d11.h>
-#include "utils\Math.h"
+#include "../utils/Math.h"
 #include <vector>
-#include "assimpincludes\assimp\Importer.hpp"
-#include "assimpincludes\assimp\scene.h"
-#include "assimpincludes\assimp\postprocess.h"
+#include "../assimpincludes/assimp/Importer.hpp"
+#include "../assimpincludes/assimp/scene.h"
+#include "../assimpincludes/assimp/postprocess.h"
 
 namespace thomas 
 {

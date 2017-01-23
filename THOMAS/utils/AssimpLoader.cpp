@@ -4,16 +4,6 @@ namespace thomas
 {
 	namespace graphics
 	{
-
-		AssimpLoader::AssimpLoader()
-		{
-		}
-
-
-		AssimpLoader::~AssimpLoader()
-		{
-		}
-
 		void AssimpLoader::LoadModel(std::string path)
 		{
 			// Read file via ASSIMP
@@ -22,9 +12,12 @@ namespace thomas
 			// Check for errors
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
-				std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+				LOG("ERROR::ASSIMP" + importer.GetErrorString());
 				return;
 			}
+
+			// Process ASSIMP's root node recursively
+			ProcessNode(scene->mRootNode, scene);
 		}
 
 		Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene * scene)
