@@ -156,7 +156,5 @@ namespace thomas {
 			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, 0, &data, 0, 0);
 			return true;
 		}
-
-
 	}
 }
