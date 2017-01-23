@@ -1,39 +1,42 @@
 #pragma once
 #include "Common.h"
-#include "DirectXMath.h"
-
+#include "utils\Math.h"
+/**
+*Camera class
+*
+*/
 namespace thomas
 {
 	class THOMAS_API Camera
 	{
 	private:
-		void CreateViewMatrix(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt);
-		void CreateProjMatrix(float fov, float near, float far);
+		void CreateViewMatrix(math::Vector3 camPos, math::Vector3 focusAt);
+		void CreateProjMatrix(float fov, float nearPlane, float farPlane);
 		void CreateViewProjMatrix();
 		void Update();
 		
 	public:
-		Camera(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float near, float far);
-		DirectX::XMMATRIX GetViewMatrix();
-		DirectX::XMMATRIX GetProjMatrix();
-		DirectX::XMMATRIX GetViewProjMatrix();
-		DirectX::XMVECTOR GetCamPos();
-		DirectX::XMVECTOR GetFocus();
+		Camera(math::Vector3 camPos, math::Vector3 focusAt, float fov, float nearPlane, float farPlane);
+		math::Matrix GetViewMatrix();
+		math::Matrix GetProjMatrix();
+		math::Matrix GetViewProjMatrix();
+		math::Vector3 GetCamPos();
+		math::Vector3 GetFocus();
 		float GetFov();
 		float GetNear();
 		float GetFar();
-		void SetCamPos(DirectX::XMVECTOR camPos);
-		void SetFocus(DirectX::XMVECTOR focusAt);
+		void SetCamPos(math::Vector3 camPos);
+		void SetFocus(math::Vector3 focusAt);
 		void SetFov(float fov);
 		void SetNear(float viewNear);
 		void SetFar(float viewFar);
 
 	private:
-		DirectX::XMMATRIX m_viewMatrix;
-		DirectX::XMMATRIX m_projMatrix;
-		DirectX::XMMATRIX m_viewProjMatrix;
-		DirectX::XMVECTOR m_camPos;
-		DirectX::XMVECTOR m_focusAt;
+		math::Matrix m_viewMatrix;
+		math::Matrix m_projMatrix;
+		math::Matrix m_viewProjMatrix;
+		math::Vector3 m_camPos;
+		math::Vector3 m_focusAt;
 		float m_fov;
 		float m_near;
 		float m_far;

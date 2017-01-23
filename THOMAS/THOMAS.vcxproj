@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="graphics\shader\Shader.h" />
     <ClInclude Include="math\Functions.h" />
@@ -40,9 +41,11 @@
     <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
     <ClInclude Include="utils\directXTK\SimpleMath.h" />
     <ClInclude Include="utils\directXTK\WICTextureLoader.h" />
+    <ClInclude Include="utils\Math.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="graphics\shader\Shader.cpp" />
     <ClCompile Include="graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="Input.cpp" />

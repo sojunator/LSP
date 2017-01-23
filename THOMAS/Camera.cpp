@@ -1,115 +1,117 @@
 #include "Camera.h"
 #include "Window.h"
-
-thomas::Camera::Camera(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt, float fov, float viewNear, float viewFar)
+namespace thomas
 {
-	m_camPos = camPos;
-	m_focusAt = focusAt;
-	m_fov = fov;
-	m_near = viewNear;
-	m_far = viewFar;
+	Camera::Camera(math::Vector3 camPos, math::Vector3 focusAt, float fov, float nearPlane, float farPlane)
+	{
+		m_camPos = camPos;
+		m_focusAt = focusAt;
+		m_fov = fov;
+		m_near = nearPlane;
+		m_far = farPlane;
 
-	Update();
-}
+		Update();
+	}
 
-void thomas::Camera::CreateViewMatrix(DirectX::XMVECTOR camPos, DirectX::XMVECTOR focusAt)
-{
-	DirectX::XMVECTOR lookVector = DirectX::XMVectorSubtract(focusAt, camPos);
-	DirectX::XMVECTOR tempUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	DirectX::XMVECTOR right = DirectX::XMVector3Cross(tempUp, lookVector);
-	DirectX::XMVECTOR up =  DirectX::XMVector3Cross(lookVector, right);
+	void Camera::CreateViewMatrix(math::Vector3 camPos, math::Vector3 focusAt)
+	{
+		math::Vector3 lookVec = focusAt - camPos;
+		math::Vector3 tempUp = math::Vector3(0.0f, 1.0f, 0.0f);
+		math::Vector3 right = tempUp.Cross(lookVec);
+		math::Vector3 up = lookVec.Cross(right);
 
-	m_viewMatrix = DirectX::XMMatrixLookAtLH(camPos, focusAt, up);
-}
+		m_viewMatrix = math::Matrix::CreateLookAt(camPos, focusAt, up);
+	}
 
-void thomas::Camera::CreateProjMatrix(float fov, float viewNear, float viewFar)
-{
-	m_projMatrix =  DirectX::XMMatrixPerspectiveFovLH(fov, Window::GetWidth() / Window::GetHeight(), viewNear, viewFar);
-}
+	void Camera::CreateProjMatrix(float fov, float viewNear, float viewFar)
+	{
+		m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(fov, Window::GetWidth() / Window::GetHeight(), viewNear, viewFar);
+	}
 
-void thomas::Camera::CreateViewProjMatrix()
-{
-	m_viewProjMatrix = DirectX::XMMatrixMultiply(m_viewMatrix, m_projMatrix);
-}
+	void Camera::CreateViewProjMatrix()
+	{
+		m_viewProjMatrix = m_viewMatrix * m_projMatrix;
+	}
 
-void thomas::Camera::Update()
-{
-	CreateViewMatrix(m_camPos, m_focusAt);
-	CreateProjMatrix(m_fov, m_near, m_far);
-	CreateViewProjMatrix();
-}
+	void Camera::Update()
+	{
+		CreateViewMatrix(m_camPos, m_focusAt);
+		CreateProjMatrix(m_fov, m_near, m_far);
+		CreateViewProjMatrix();
+	}
 
-DirectX::XMMATRIX thomas::Camera::GetViewMatrix()
-{
-	return m_viewMatrix;
-}
+	math::Matrix Camera::GetViewMatrix()
+	{
+		return m_viewMatrix;
+	}
 
-DirectX::XMMATRIX thomas::Camera::GetProjMatrix()
-{
-	return m_projMatrix;
-}
+	math::Matrix Camera::GetProjMatrix()
+	{
+		return m_projMatrix;
+	}
 
-DirectX::XMMATRIX thomas::Camera::GetViewProjMatrix()
-{
-	return m_viewProjMatrix;
-}
+	math::Matrix Camera::GetViewProjMatrix()
+	{
+		return m_viewProjMatrix;
+	}
 
-DirectX::XMVECTOR thomas::Camera::GetCamPos()
-{
-	return m_camPos;
-}
+	math::Vector3 Camera::GetCamPos()
+	{
+		return m_camPos;
+	}
 
-DirectX::XMVECTOR thomas::Camera::GetFocus()
-{
-	return m_focusAt;
-}
+	math::Vector3 Camera::GetFocus()
+	{
+		return m_focusAt;
+	}
 
-float thomas::Camera::GetFov()
-{
-	return m_fov;
-}
+	float Camera::GetFov()
+	{
+		return m_fov;
+	}
 
-float thomas::Camera::GetNear()
-{
-	return m_near;
-}
+	float Camera::GetNear()
+	{
+		return m_near;
+	}
 
-float thomas::Camera::GetFar()
-{
-	return m_far;
-}
+	float Camera::GetFar()
+	{
+		return m_far;
+	}
 
-void thomas::Camera::SetCamPos(DirectX::XMVECTOR camPos)
-{
-	m_camPos = camPos;
-	CreateViewMatrix(m_camPos, m_focusAt);
-	CreateViewProjMatrix();
-}
+	void Camera::SetCamPos(math::Vector3 camPos)
+	{
+		m_camPos = camPos;
+		CreateViewMatrix(m_camPos, m_focusAt);
+		CreateViewProjMatrix();
+	}
 
-void thomas::Camera::SetFocus(DirectX::XMVECTOR focusAt)
-{
-	m_focusAt = focusAt;
-	CreateViewMatrix(m_camPos, m_focusAt);
-	CreateViewProjMatrix();
-}
+	void Camera::SetFocus(math::Vector3 focusAt)
+	{
+		m_focusAt = focusAt;
+		CreateViewMatrix(m_camPos, m_focusAt);
+		CreateViewProjMatrix();
+	}
 
-void thomas::Camera::SetFov(float fov)
-{
-	m_fov = fov;
-	CreateProjMatrix(m_fov, m_near, m_far);
-	CreateViewProjMatrix();
-}
+	void Camera::SetFov(float fov)
+	{
+		m_fov = fov;
+		CreateProjMatrix(m_fov, m_near, m_far);
+		CreateViewProjMatrix();
+	}
 
-void thomas::Camera::SetNear(float viewNear)
-{
-	m_near = viewNear;
-	CreateProjMatrix(m_fov, m_near, m_far);
-	CreateViewProjMatrix();
-}
+	void Camera::SetNear(float viewNear)
+	{
+		m_near = viewNear;
+		CreateProjMatrix(m_fov, m_near, m_far);
+		CreateViewProjMatrix();
+	}
 
-void thomas::Camera::SetFar(float viewFar)
-{
-	m_far = viewFar;
-	CreateProjMatrix(m_fov, m_near, m_far);
-	CreateViewProjMatrix();
+	void Camera::SetFar(float viewFar)
+	{
+		m_far = viewFar;
+		CreateProjMatrix(m_fov, m_near, m_far);
+		CreateViewProjMatrix();
+	}
 }
