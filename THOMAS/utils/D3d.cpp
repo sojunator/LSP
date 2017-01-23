@@ -14,8 +14,8 @@ namespace thomas {
 				return false;
 
 			////Set back buffer texture 
-			//context->OMSetRenderTargets(1, &s_backBuffer, NULL);
-			//CreateViewPort(context, height, width);
+			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
+			CreateViewPort(context, height, width);
 
 			return true;
 
