@@ -25,6 +25,15 @@
     <Filter Include="Source Files\graphics\shader">
       <UniqueIdentifier>{7e777054-5d2e-4657-924a-201eb048ad43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{3fcca899-130f-49de-858e-793d3ef9891a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{a72a4276-57a6-4586-a2bb-57dff39f643f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{5ecd27d0-9612-48f1-887e-1ef0e5e55cec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -41,6 +50,12 @@
     </ClInclude>
     <ClInclude Include="graphics\shader\Shader.h">
       <Filter>Header Files\graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Functions.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector3.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

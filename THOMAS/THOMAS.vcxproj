@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="graphics\shader\Shader.h" />
+    <ClInclude Include="math\Functions.h" />
+    <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
     <ClInclude Include="Window.h" />
