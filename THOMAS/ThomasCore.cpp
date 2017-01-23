@@ -46,7 +46,7 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 		
-		LOG("wow");
+		LOG("update");
 
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();

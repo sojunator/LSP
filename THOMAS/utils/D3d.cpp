@@ -36,17 +36,19 @@ namespace thomas {
 			DXGI_SWAP_CHAIN_DESC scd;
 			ZeroMemory(&scd, sizeof(scd));
 
-			scd.BufferCount = 1;
+			scd.BufferCount = 2;
 			scd.BufferDesc.Height = (float)height;
 			scd.BufferDesc.Width = (float)width;
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			scd.OutputWindow = handle;
+			scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // we recommend using this swap effect for all applications
+			scd.Flags = 0;
 			scd.SampleDesc.Count = 1; // AA times 1
 			scd.SampleDesc.Quality = 0;
 			scd.Windowed = TRUE;
 			scd.BufferDesc.RefreshRate.Numerator = 0; // change 0 to numerator for vsync
-			scd.BufferDesc.RefreshRate.Denominator = 1; // change 1 to denominator for vynsc
+			scd.BufferDesc.RefreshRate.Denominator = 0; // change 1 to denominator for vynsc
 
 			hr = D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
@@ -80,6 +82,7 @@ namespace thomas {
 			if (FAILED(hr))
 			{
 				MessageBox(NULL, L"Failed to get backbuffer", L"Fatal error", MB_OK);
+				LOG("Failed to get backbuffer");
 				return false;
 			}
 
@@ -89,6 +92,7 @@ namespace thomas {
 			if (FAILED(hr))
 			{
 				MessageBox(NULL, L"Failed to move backbuffer to GPU", L"Fatal error", MB_OK);
+				LOG("Failed to move backbuffer to GPU Fatal error");
 				return false;
 			}
 			return true;
@@ -110,7 +114,8 @@ namespace thomas {
 		{
 			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
 			context->ClearRenderTargetView(s_backBuffer, color);
-			swapchain->Present(0, 0);
+			HRESULT t = swapchain->Present(0, 0);
+
 		}
 
 		bool D3d::Destroy()

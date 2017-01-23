@@ -159,6 +159,15 @@
       <Project>{ed0d8681-b384-43d1-8f56-b4145588e20c}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Plunder Planets.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="thomas.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
