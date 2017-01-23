@@ -30,7 +30,7 @@ namespace thomas
 
 	void Camera::CreateViewProjMatrix()
 	{
-		m_viewProjMatrix = m_viewMatrix * m_projMatrix;
+		m_viewProjMatrix = m_viewMatrix * m_projMatrix;		//Need to be tested
 	}
 
 	void Camera::Update()

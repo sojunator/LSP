@@ -18,7 +18,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 
-
 	//start
 	thomas::ThomasCore::Start();
 	return (int)msg.wParam;
