@@ -19,10 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssimpLoader.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="graphics\shader\Shader.h" />
-    <ClInclude Include="math\Functions.h" />
-    <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="graphics\shader\ShaderManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Mesh.h" />
@@ -40,9 +39,11 @@
     <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
     <ClInclude Include="utils\directXTK\SimpleMath.h" />
     <ClInclude Include="utils\directXTK\WICTextureLoader.h" />
+    <ClInclude Include="utils\Math.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssimpLoader.cpp" />
     <ClCompile Include="graphics\shader\Shader.cpp" />
     <ClCompile Include="graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="Input.cpp" />
