@@ -18,6 +18,33 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="graphics\shader\Shader.h" />
+    <ClInclude Include="graphics\shader\ShaderManager.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Thomas.h" />
+    <ClInclude Include="ThomasCore.h" />
+    <ClInclude Include="utils\d3d.h" />
+    <ClInclude Include="utils\directXTK\GamePad.h" />
+    <ClInclude Include="utils\directXTK\Keyboard.h" />
+    <ClInclude Include="utils\directXTK\Mouse.h" />
+    <ClInclude Include="utils\directXTK\pch.h" />
+    <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="graphics\shader\Shader.cpp" />
+    <ClCompile Include="graphics\shader\ShaderManager.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="ThomasCore.cpp" />
+    <ClCompile Include="utils\D3d.cpp" />
+    <ClCompile Include="utils\directXTK\GamePad.cpp" />
+    <ClCompile Include="utils\directXTK\Keyboard.cpp" />
+    <ClCompile Include="utils\directXTK\Mouse.cpp" />
+    <ClCompile Include="utils\directXTK\pch.cpp" />
+    <ClCompile Include="Window.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED0D8681-B384-43D1-8F56-B4145588E20C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -108,7 +135,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,7 +150,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,18 +177,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="ThomasCore.cpp" />
-    <ClCompile Include="utils\D3d.cpp" />
-    <ClCompile Include="Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Common.h" />
-    <ClInclude Include="ThomasCore.h" />
-    <ClInclude Include="Thomas.h" />
-    <ClInclude Include="utils\d3d.h" />
-    <ClInclude Include="Window.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{bddbb53d-7a08-45a0-93a8-6ffa7ba6cab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{1fef4db8-c830-46b7-8962-396049d4ba13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils\DirectXTK">
+      <UniqueIdentifier>{63add5bb-c34a-4347-b51c-418bb48d52f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils\DirectXTK">
+      <UniqueIdentifier>{22a6e519-edde-4bda-9a02-b9755ee7bd69}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\graphics">
       <UniqueIdentifier>{f6a5a7c9-7bfe-44e4-9e25-b54959c447c1}</UniqueIdentifier>
     </Filter>
@@ -25,16 +37,22 @@
     <Filter Include="Source Files\graphics\shader">
       <UniqueIdentifier>{7e777054-5d2e-4657-924a-201eb048ad43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{65e5b938-ecdc-4a86-86bb-1f9cde846c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{690fc504-071b-46a2-90ea-171dd5fb4093}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ThomasCore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils\D3d.cpp">
+    <ClCompile Include="ThomasCore.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\D3d.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,8 +68,26 @@
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\d3d.h">
+    <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\d3d.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\pch.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\PlatformHelpers.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\GamePad.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\Keyboard.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\Mouse.h">
+      <Filter>Header Files\utils\DirectXTK</Filter>
     </ClInclude>
     <ClInclude Include="graphics\shader\Shader.h">
       <Filter>Header Files\graphics\Shader</Filter>
@@ -66,6 +102,24 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\D3d.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\GamePad.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\Keyboard.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\Mouse.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\pch.cpp">
+      <Filter>Source Files\utils\DirectXTK</Filter>
     </ClCompile>
     <ClCompile Include="graphics\shader\Shader.cpp">
       <Filter>Source Files\graphics\shader</Filter>

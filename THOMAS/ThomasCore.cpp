@@ -1,9 +1,13 @@
 #include "ThomasCore.h"
 #include "utils/d3d.h"
+#include "Input.h"
 
 #include "assimpincludes\assimp\Importer.hpp"
 
 namespace thomas {
+	ID3D11Device* ThomasCore::s_device;
+	ID3D11DeviceContext* ThomasCore::s_context;
+	IDXGISwapChain* ThomasCore::s_swapchain;
 	HINSTANCE ThomasCore::s_hInstance;
 	bool ThomasCore::s_initialized;
 
@@ -11,6 +15,12 @@ namespace thomas {
 	{
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
+		if (s_initialized)
+			s_initialized = Input::Init();
+		if (s_initialized)
+		{
+			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
+		}
 		return s_initialized;
 	}
 
@@ -21,6 +31,11 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
+
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Window::Destroy();
+
+		
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
 	}
 
@@ -40,6 +55,7 @@ namespace thomas {
 				}
 				else
 				{
+					Input::Update();
 					Update();
 				}
 			}

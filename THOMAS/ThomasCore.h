@@ -22,6 +22,9 @@ namespace thomas
 	private:
 		static HINSTANCE s_hInstance;
 		static bool s_initialized;
+		static ID3D11Device* s_device;
+		static ID3D11DeviceContext* s_context;
+		static IDXGISwapChain* s_swapchain;
 
 	};
 }
