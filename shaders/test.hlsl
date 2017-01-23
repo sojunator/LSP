@@ -12,15 +12,21 @@ struct VSOutput
 	float2 uv : TEXCOORD;
 };
 
-
-VSOutput VSMain(in VSInput input)
+cbuffer TEST : register(b0)
 {
-	VSOutput output;
-	float4 pos = input.position;
-	pos.z = 1.0f;
-	output.positionCS = pos;
-	output.position = mul(pos, invViewProjMatrix);
-	output.uv = input.uv;
-	return output;
+	float test1;
+	float test2;
+	float test3;
+	float test4;
+};
+
+float4 VSMain(in VSInput input): SV_POSITION
+{
+	return float4(test1, test2, test3, test4);
 }
 
+
+float4 PSMain(in VSInput input) : SV_TARGET
+{
+	return float4(1,1,1,1);
+}

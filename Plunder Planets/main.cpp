@@ -14,7 +14,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 
-	thomas::graphics::shader::Shader("testShader", "shaders/test.hlsl");
+	thomas::graphics::shader::Shader("testShader", "../shaders/test.hlsl");
 
 
 	//start
