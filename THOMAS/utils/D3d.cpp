@@ -1,10 +1,16 @@
 #pragma once
 #include "d3d.h"
+#include "../ThomasCore.h"
 
 namespace thomas {
 	namespace utils
 	{
+
 		ID3D11RenderTargetView* D3d::s_backBuffer;
+
+
+
+
 
 		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
 		{
@@ -111,5 +117,38 @@ namespace thomas {
 
 			return true;
 		}
+
+
+		template<typename T>
+		ID3D11Buffer* D3d::CreateCBufferFromStruct(T dataStruct)
+		{
+			ID3D11Buffer* buffer;
+			D3D11_BUFFER_DESC bufferDesc;
+			bufferDesc.ByteWidth = sizeof(dataStruct);
+			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
+			bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			bufferDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+			bufferDesc.MiscFlags = 0;
+			
+			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
+
+			if (result != S_OK)
+				LOG(result);
+			
+			if (result == S_OK)
+				return buffer;
+
+			return NULL;
+
+		}
+		template<typename T>
+
+		bool D3d::FillBuffer(ID3D11Buffer* buffer, T data)
+		{
+			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, 0, &data, 0, 0);
+			return true;
+		}
+
+
 	}
 }
