@@ -159,12 +159,6 @@
       <Project>{ed0d8681-b384-43d1-8f56-b4145588e20c}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shaders\test.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PSMain</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-    </FxCompile>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

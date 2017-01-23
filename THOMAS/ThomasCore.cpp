@@ -13,6 +13,9 @@ namespace thomas {
 
 	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
+		AllocConsole();
+		freopen("CONOUT$", "w", stdout);
+
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
 		if (s_initialized)
@@ -21,6 +24,17 @@ namespace thomas {
 		{
 			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
 		}
+
+		if (s_initialized)
+		{
+			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo.");
+		}
+			
+		else
+		{
+			LOG("Thomas failed to initiate :(");
+		}
+			
 		return s_initialized;
 	}
 
@@ -31,6 +45,8 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
+		
+		LOG("wow");
 
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();

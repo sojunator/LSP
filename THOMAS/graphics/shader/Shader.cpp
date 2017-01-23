@@ -18,8 +18,11 @@ namespace thomas
 				ID3DBlob* shaderBlob;
 				ID3DBlob* errorBlob;
 				
-				
+			
 				HRESULT status = D3DCompileFromFile(CA2W(source.c_str()), nullptr, nullptr, main.c_str(), profile.c_str(), D3DCOMPILE_DEBUG, 0, &shaderBlob, &errorBlob);
+		
+
+				
 				if (status != S_OK)
 				{
 					LOG(status);
@@ -28,12 +31,16 @@ namespace thomas
 				{
 					if (errorBlob->GetBufferSize())
 					{
-						LOG("Shader Compiler errors:  " + errorBlob->GetBufferPointer());
+						LOG("Shader Compiler errors: " << (char*)errorBlob->GetBufferPointer());
 					}
 					errorBlob->Release();
 				}
 				else if (status == S_OK)
+				{
+					LOG("Shader " << m_name << " " << main << " Sucessfully loaded");
 					return shaderBlob;
+				}
+					
 				return NULL;
 			}
 

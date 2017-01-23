@@ -22,7 +22,7 @@ namespace thomas {
 			////Set back buffer texture 
 			//context->OMSetRenderTargets(1, &s_backBuffer, NULL);
 			//CreateViewPort(context, height, width);
-
+			LOG("Initiating DirectX");
 			return true;
 
 		}
