@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-#include <string>
 #include "Common.h"
 #include "utils\directXTK\GamePad.h"
 #include "utils\directXTK\Keyboard.h"

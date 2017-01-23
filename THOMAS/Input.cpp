@@ -25,6 +25,7 @@ namespace thomas
 
 		s_mouse->SetWindow(Window::GetWindowHandler());
 		s_initialized = Window::Initialized();
+		LOG("Initiating Input");
 		return s_initialized;
 	}
 
