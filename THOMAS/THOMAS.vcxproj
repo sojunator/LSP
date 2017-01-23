@@ -27,10 +27,13 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
+    <ClInclude Include="utils\directXTK\dds.h" />
     <ClInclude Include="utils\directXTK\DDSTextureLoader.h" />
     <ClInclude Include="utils\d3d.h" />
+    <ClInclude Include="utils\directXTK\DirectXHelpers.h" />
     <ClInclude Include="utils\directXTK\GamePad.h" />
     <ClInclude Include="utils\directXTK\Keyboard.h" />
+    <ClInclude Include="utils\directXTK\LoaderHelpers.h" />
     <ClInclude Include="utils\directXTK\Mouse.h" />
     <ClInclude Include="utils\directXTK\pch.h" />
     <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
@@ -52,6 +55,9 @@
     <ClCompile Include="utils\directXTK\SimpleMath.cpp" />
     <ClCompile Include="utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="utils\directXTK\SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED0D8681-B384-43D1-8F56-B4145588E20C}</ProjectGuid>
