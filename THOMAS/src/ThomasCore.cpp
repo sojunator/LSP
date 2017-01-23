@@ -2,7 +2,7 @@
 
 #include "Input.h"
 
-#include "assimpincludes\assimp\Importer.hpp"
+#include <assimp\Importer.hpp>
 
 namespace thomas {
 	ID3D11Device* ThomasCore::s_device;
@@ -27,7 +27,7 @@ namespace thomas {
 
 		if (s_initialized)
 		{
-			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo.");
+			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
 		}
 			
 		else
@@ -46,7 +46,7 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 		
-		LOG("update");
+	//	LOG("update");
 
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();

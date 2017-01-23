@@ -1,41 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{bddbb53d-7a08-45a0-93a8-6ffa7ba6cab0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{1fef4db8-c830-46b7-8962-396049d4ba13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\utils\DirectXTK">
-      <UniqueIdentifier>{63add5bb-c34a-4347-b51c-418bb48d52f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\utils\DirectXTK">
-      <UniqueIdentifier>{22a6e519-edde-4bda-9a02-b9755ee7bd69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\graphics">
-      <UniqueIdentifier>{f6a5a7c9-7bfe-44e4-9e25-b54959c447c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\graphics\Shader">
-      <UniqueIdentifier>{28d99249-2db0-41bb-9893-025973d35506}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\graphics">
-      <UniqueIdentifier>{1c1f1e8b-c8c2-41e2-8141-7be93122f79c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\graphics\shader">
-      <UniqueIdentifier>{7e777054-5d2e-4657-924a-201eb048ad43}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{3fcca899-130f-49de-858e-793d3ef9891a}</UniqueIdentifier>
@@ -43,85 +11,6 @@
     <Filter Include="Header Files\utils">
       <UniqueIdentifier>{a72a4276-57a6-4586-a2bb-57dff39f643f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\math">
-      <UniqueIdentifier>{5ecd27d0-9612-48f1-887e-1ef0e5e55cec}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ThomasCore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\D3d.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Thomas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThomasCore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\d3d.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\pch.h">
-      <Filter>Header Files\utils\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\PlatformHelpers.h">
-      <Filter>Header Files\utils\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\GamePad.h">
-      <Filter>Header Files\utils\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\Keyboard.h">
-      <Filter>Header Files\utils\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\Mouse.h">
-      <Filter>Header Files\utils\DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\shader\Shader.h">
-      <Filter>Header Files\graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\shader\ShaderManager.h">
-      <Filter>Header Files\graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Functions.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Vector3.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\SimpleMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\DDSTextureLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\WICTextureLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\dds.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\DirectXHelpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\directXTK\LoaderHelpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ThomasCore.cpp">
@@ -133,40 +22,42 @@
     <ClCompile Include="utils\D3d.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\GamePad.cpp">
-      <Filter>Source Files\utils\DirectXTK</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\Keyboard.cpp">
-      <Filter>Source Files\utils\DirectXTK</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\Mouse.cpp">
-      <Filter>Source Files\utils\DirectXTK</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\pch.cpp">
-      <Filter>Source Files\utils\DirectXTK</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\shader\Shader.cpp">
-      <Filter>Source Files\graphics\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\shader\ShaderManager.cpp">
-      <Filter>Source Files\graphics\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\SimpleMath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\WICTextureLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\directXTK\DDSTextureLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="src\graphics\shader\Shader.cpp" />
+    <ClCompile Include="src\graphics\shader\ShaderManager.cpp" />
+    <ClCompile Include="src\utils\D3d.cpp" />
+    <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
+    <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
+    <ClCompile Include="src\utils\directXTK\Keyboard.cpp" />
+    <ClCompile Include="src\utils\directXTK\Mouse.cpp" />
+    <ClCompile Include="src\utils\directXTK\pch.cpp" />
+    <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
+    <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\ThomasCore.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="utils\directXTK\SimpleMath.inl">
-      <Filter>Header Files</Filter>
-    </None>
+    <ClInclude Include="src\graphics\shader\Shader.h" />
+    <ClInclude Include="src\graphics\shader\ShaderManager.h" />
+    <ClInclude Include="src\utils\d3d.h" />
+    <ClInclude Include="src\utils\directXTK\dds.h" />
+    <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />
+    <ClInclude Include="src\utils\directXTK\DirectXHelpers.h" />
+    <ClInclude Include="src\utils\directXTK\GamePad.h" />
+    <ClInclude Include="src\utils\directXTK\Keyboard.h" />
+    <ClInclude Include="src\utils\directXTK\LoaderHelpers.h" />
+    <ClInclude Include="src\utils\directXTK\Mouse.h" />
+    <ClInclude Include="src\utils\directXTK\pch.h" />
+    <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
+    <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
+    <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
+    <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Thomas.h" />
+    <ClInclude Include="src\ThomasCore.h" />
+    <ClInclude Include="src\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\utils\directXTK\SimpleMath.inl" />
   </ItemGroup>
 </Project>
