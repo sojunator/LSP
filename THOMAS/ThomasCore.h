@@ -1,9 +1,7 @@
 #pragma once
-#include "Common.h"
+#include "Input.h"
 #include "Window.h"
-#include <d3d11.h>
-#include <d3dcompiler.h>
-
+#include "utils/d3d.h"
 namespace thomas
 {
 	class THOMAS_API ThomasCore
@@ -18,6 +16,10 @@ namespace thomas
 		static void Start();
 		static bool Initialized();
 		static bool Destroy();
+
+
+		static ID3D11Device* GetDevice();
+		static ID3D11DeviceContext* GetDeviceContext();
 
 	private:
 		static HINSTANCE s_hInstance;
