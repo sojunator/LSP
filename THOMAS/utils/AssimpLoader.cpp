@@ -9,7 +9,7 @@ namespace thomas
 			// Read file via ASSIMP
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-			// Check for errors
+			
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
 				LOG("ERROR::ASSIMP" + importer.GetErrorString());
@@ -22,7 +22,6 @@ namespace thomas
 
 		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene * scene)
 		{
-			// Data to fill
 			std::vector <graphics::Vertex> vertices;
 			std::vector <int> indices;
 			std::string name = mesh->mName.C_Str();
@@ -67,7 +66,7 @@ namespace thomas
 			for (int i = 0; i < mesh->mNumFaces; i++)
 			{
 				aiFace face = mesh->mFaces[i];
-				// Retrieve all indices of the face and store them in the indices vector
+			
 				for (int j = 0; j < face.mNumIndices; j++)
 					indices.push_back(face.mIndices[j]);
 			}
@@ -91,7 +90,6 @@ namespace thomas
 			//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 			//}
 
-			// Return a mesh object created from the extracted mesh data
 			return &graphics::Mesh(vertices, indices, name);
 		}
 
