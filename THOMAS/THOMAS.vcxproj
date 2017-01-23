@@ -27,11 +27,14 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
+    <ClInclude Include="utils\directXTK\DDSTextureLoader.h" />
     <ClInclude Include="utils\directXTK\GamePad.h" />
     <ClInclude Include="utils\directXTK\Keyboard.h" />
     <ClInclude Include="utils\directXTK\Mouse.h" />
     <ClInclude Include="utils\directXTK\pch.h" />
     <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
+    <ClInclude Include="utils\directXTK\SimpleMath.h" />
+    <ClInclude Include="utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -39,10 +42,13 @@
     <ClCompile Include="graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="ThomasCore.cpp" />
+    <ClCompile Include="utils\directXTK\DDSTextureLoader.cpp" />
     <ClCompile Include="utils\directXTK\GamePad.cpp" />
     <ClCompile Include="utils\directXTK\Keyboard.cpp" />
     <ClCompile Include="utils\directXTK\Mouse.cpp" />
     <ClCompile Include="utils\directXTK\pch.cpp" />
+    <ClCompile Include="utils\directXTK\SimpleMath.cpp" />
+    <ClCompile Include="utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

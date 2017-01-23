@@ -90,6 +90,15 @@
     <ClInclude Include="math\Vector3.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
+    <ClInclude Include="utils\directXTK\SimpleMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\DDSTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\directXTK\WICTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ThomasCore.cpp">
@@ -118,6 +127,15 @@
     </ClCompile>
     <ClCompile Include="graphics\shader\ShaderManager.cpp">
       <Filter>Source Files\graphics\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\SimpleMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\WICTextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\directXTK\DDSTextureLoader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
