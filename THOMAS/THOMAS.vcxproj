@@ -20,13 +20,44 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="graphics\shader\Shader.h" />
+    <ClInclude Include="math\Functions.h" />
+    <ClInclude Include="math\Vector3.h" />
+    <ClInclude Include="graphics\shader\ShaderManager.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
+    <ClInclude Include="utils\directXTK\dds.h" />
+    <ClInclude Include="utils\directXTK\DDSTextureLoader.h" />
+    <ClInclude Include="utils\d3d.h" />
+    <ClInclude Include="utils\directXTK\DirectXHelpers.h" />
+    <ClInclude Include="utils\directXTK\GamePad.h" />
+    <ClInclude Include="utils\directXTK\Keyboard.h" />
+    <ClInclude Include="utils\directXTK\LoaderHelpers.h" />
+    <ClInclude Include="utils\directXTK\Mouse.h" />
+    <ClInclude Include="utils\directXTK\pch.h" />
+    <ClInclude Include="utils\directXTK\PlatformHelpers.h" />
+    <ClInclude Include="utils\directXTK\SimpleMath.h" />
+    <ClInclude Include="utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="graphics\shader\Shader.cpp" />
+    <ClCompile Include="graphics\shader\ShaderManager.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="ThomasCore.cpp" />
+    <ClCompile Include="utils\D3d.cpp" />
+    <ClCompile Include="utils\directXTK\DDSTextureLoader.cpp" />
+    <ClCompile Include="utils\directXTK\GamePad.cpp" />
+    <ClCompile Include="utils\directXTK\Keyboard.cpp" />
+    <ClCompile Include="utils\directXTK\Mouse.cpp" />
+    <ClCompile Include="utils\directXTK\pch.cpp" />
+    <ClCompile Include="utils\directXTK\SimpleMath.cpp" />
+    <ClCompile Include="utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="utils\directXTK\SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED0D8681-B384-43D1-8F56-B4145588E20C}</ProjectGuid>
@@ -79,7 +110,22 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)assimpincludes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)assimpincludes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)assimpincludes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)assimpincludes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
@@ -87,10 +133,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <Lib>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -99,6 +149,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,6 +170,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -129,6 +183,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

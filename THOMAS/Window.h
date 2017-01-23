@@ -30,14 +30,14 @@ namespace thomas
 		static bool ChangeWindowShowState(int nCmdShow);
 
 	private:
-		static LONG m_width;
-		static LONG m_height;
-		static WNDCLASSEX m_windowClassInfo;
-		static HWND m_windowHandler;
-		static RECT m_windowRectangle;
-		static LPWSTR m_title;
-		static bool m_initialized;
-		static bool m_visibleCursor;
+		static LONG s_width;
+		static LONG s_height;
+		static WNDCLASSEX s_windowClassInfo;
+		static HWND s_windowHandler;
+		static RECT s_windowRectangle;
+		static LPWSTR s_title;
+		static bool s_initialized;
+		static bool s_visibleCursor;
 	};
 }
 
