@@ -10,6 +10,7 @@
 namespace thomas {
 	namespace utils
 	{
+		
 		class THOMAS_API D3d
 		{
 		private:
@@ -21,6 +22,12 @@ namespace thomas {
 			static bool Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
 			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
 			static bool Destroy();
+
+			template<typename T>
+			static ID3D11Buffer* CreateCBufferFromStruct(T dataStruct);
+
+			template<typename T>
+			static bool FillBuffer(ID3D11Buffer* buffer, T data);
 
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;
