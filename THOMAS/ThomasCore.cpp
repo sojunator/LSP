@@ -1,4 +1,5 @@
 #include "ThomasCore.h"
+#include "Input.h"
 
 namespace thomas {
 	HINSTANCE ThomasCore::s_hInstance;
@@ -8,6 +9,8 @@ namespace thomas {
 	{
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
+		if (s_initialized)
+			s_initialized = Input::Init();
 		return s_initialized;
 	}
 
@@ -19,6 +22,10 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Window::Destroy();
+
+		
 	}
 
 	void ThomasCore::Start()
@@ -37,6 +44,7 @@ namespace thomas {
 				}
 				else
 				{
+					Input::Update();
 					Update();
 				}
 			}
