@@ -25,6 +25,7 @@
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="graphics\shader\ShaderManager.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Thomas.h" />
     <ClInclude Include="ThomasCore.h" />
     <ClInclude Include="utils\directXTK\DDSTextureLoader.h" />
@@ -42,6 +43,7 @@
     <ClCompile Include="graphics\shader\Shader.cpp" />
     <ClCompile Include="graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ThomasCore.cpp" />
     <ClCompile Include="utils\D3d.cpp" />
     <ClCompile Include="utils\directXTK\DDSTextureLoader.cpp" />
