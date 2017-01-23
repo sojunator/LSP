@@ -4,26 +4,19 @@
 #include "assimpincludes\assimp\Importer.hpp"
 
 namespace thomas {
-	HINSTANCE ThomasCore::m_hInstance;
-	bool ThomasCore::m_initialized;
-	ID3D11Device* ThomasCore::s_device;
-	ID3D11DeviceContext* ThomasCore::s_context;
-	IDXGISwapChain* ThomasCore::s_swapchain;
+	HINSTANCE ThomasCore::s_hInstance;
+	bool ThomasCore::s_initialized;
 
-	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight)
+	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
-		m_hInstance = hInstance;
-		m_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, L"Thomas test window");
-		if (m_initialized)
-		{
-			m_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
-		}
-		return m_initialized;
+		s_hInstance = hInstance;
+		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
+		return s_initialized;
 	}
 
 	HINSTANCE ThomasCore::GetHInstance()
 	{
-		return m_hInstance;
+		return s_hInstance;
 	}
 
 	void ThomasCore::Update()
@@ -33,9 +26,7 @@ namespace thomas {
 
 	void ThomasCore::Start()
 	{
-
-
-		if (m_initialized)
+		if (s_initialized)
 		{
 			MSG msg = { 0 };
 
@@ -59,7 +50,7 @@ namespace thomas {
 	}
 	bool ThomasCore::Initialized()
 	{
-		return m_initialized;
+		return s_initialized;
 	}
 
 	bool ThomasCore::Destroy()

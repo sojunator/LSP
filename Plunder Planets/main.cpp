@@ -12,11 +12,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 
 	MSG msg = { 0 };
-	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600);
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantets");
 	//init code
-	//Assimp::Importer importer;
-	//Assimp::BaseImporter importer2;
-	//importer2 = importer.GetImporter(size_t(0));
+
+
+
+
+
 	//start
 	thomas::ThomasCore::Start();
 	return (int)msg.wParam;
