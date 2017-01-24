@@ -24,12 +24,12 @@ namespace thomas
 			virtual void FixedUpdate() {}
 			virtual void Render() {}
 
-		private:
-			bool m_active;
-			component::Transform* m_transform;
-			std::vector<component::Component*> m_components;
+		private:		
 			static std::vector<GameObject*> s_gameObjects;
 		protected:
+			bool m_active;
+			std::vector<component::Component*> m_components;
+			component::Transform* m_transform;
 		};
 	}
 }

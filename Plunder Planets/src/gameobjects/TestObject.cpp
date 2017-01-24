@@ -3,6 +3,7 @@
 using namespace thomas::object;
 bool TestObject::Start()
 {
+	m_transform->GetWorldMatrix();
 	return true;
 }
 

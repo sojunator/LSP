@@ -9,13 +9,6 @@
   <ItemGroup>
     <ClCompile Include="src\graphics\shader\Shader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
-    <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
-    <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
-    <ClCompile Include="src\utils\directXTK\Keyboard.cpp" />
-    <ClCompile Include="src\utils\directXTK\Mouse.cpp" />
-    <ClCompile Include="src\utils\directXTK\pch.cpp" />
-    <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
-    <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -24,21 +17,17 @@
     <ClCompile Include="src\object\GameObject.cpp" />
     <ClCompile Include="src\object\Object.cpp" />
     <ClCompile Include="src\object\component\Transform.cpp" />
+    <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
+    <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
+    <ClCompile Include="src\utils\directXTK\Keyboard.cpp" />
+    <ClCompile Include="src\utils\directXTK\Mouse.cpp" />
+    <ClCompile Include="src\utils\directXTK\pch.cpp" />
+    <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
+    <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\shader\Shader.h" />
     <ClInclude Include="src\utils\d3d.h" />
-    <ClInclude Include="src\utils\directXTK\dds.h" />
-    <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />
-    <ClInclude Include="src\utils\directXTK\DirectXHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\GamePad.h" />
-    <ClInclude Include="src\utils\directXTK\Keyboard.h" />
-    <ClInclude Include="src\utils\directXTK\LoaderHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\Mouse.h" />
-    <ClInclude Include="src\utils\directXTK\pch.h" />
-    <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
-    <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Thomas.h" />
@@ -52,6 +41,17 @@
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\utils\Math.h" />
+    <ClInclude Include="src\utils\directXTK\dds.h" />
+    <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />
+    <ClInclude Include="src\utils\directXTK\DirectXHelpers.h" />
+    <ClInclude Include="src\utils\directXTK\GamePad.h" />
+    <ClInclude Include="src\utils\directXTK\Keyboard.h" />
+    <ClInclude Include="src\utils\directXTK\LoaderHelpers.h" />
+    <ClInclude Include="src\utils\directXTK\Mouse.h" />
+    <ClInclude Include="src\utils\directXTK\pch.h" />
+    <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
+    <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
+    <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
