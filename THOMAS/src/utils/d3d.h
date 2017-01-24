@@ -10,7 +10,7 @@
 namespace thomas {
 	namespace utils
 	{
-		
+	
 		class THOMAS_API D3d
 		{
 		private:

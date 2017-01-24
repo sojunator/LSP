@@ -20,6 +20,8 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\graphics\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\shader\Shader.h" />
@@ -41,6 +43,9 @@
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\graphics\Texture\TextureManager.h" />
+    <ClInclude Include="src\graphics\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
