@@ -6,6 +6,12 @@ struct VSInput
 	float3 normal: NORMAL;
 };
 
+
+cbuffer test
+{
+	matrix worldMatrix;
+};
+
 struct VSOutput
 {
 	float4 position : SV_POSITION;
@@ -15,7 +21,7 @@ struct VSOutput
 VSOutput VSMain(in VSInput input)
 {
 	VSOutput output;
-	output.position = input.position;
+	output.position = mul(worldMatrix, input.position);
 	return output;
 }
 
