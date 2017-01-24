@@ -6,6 +6,8 @@
 #include "../include/assimp/Importer.hpp"
 #include "../include/assimp/scene.h"
 #include "../include/assimp/postprocess.h"
+#include "../utils/d3d.h"
+#include "../ThomasCore.h"
 
 namespace thomas 
 {
@@ -21,6 +23,7 @@ namespace thomas
 		class THOMAS_API Mesh
 		{
 		private:
+			void SetupMesh();
 		public:
 			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
 			~Mesh();
@@ -35,6 +38,9 @@ namespace thomas
 			std::vector<int> m_indices;
 			static std::vector<Mesh*> s_meshes;
 			std::string m_name;
+			ID3D11Buffer* m_vertexBuffer;
+			ID3D11Buffer* m_indexBuffer;
+			ID3D11InputLayout* m_inputLayout;
 
 		};
 	}
