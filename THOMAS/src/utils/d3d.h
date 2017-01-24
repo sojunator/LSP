@@ -29,6 +29,7 @@ namespace thomas {
 			static ID3D11Buffer* CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
 			static ID3D11Buffer* CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag);
 
+			static bool Clear();
 
 			template<typename T>
 			static ID3D11Buffer* CreateCBufferFromStruct(T dataStruct);

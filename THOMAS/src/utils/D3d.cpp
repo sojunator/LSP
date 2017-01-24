@@ -35,7 +35,7 @@ namespace thomas {
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			scd.OutputWindow = handle;
-			scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // we recommend using this swap effect for all applications
+			scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // we recommend using this swap effect for all applications
 			scd.Flags = 0;
 			scd.SampleDesc.Count = 1; // AA times 1
 			scd.SampleDesc.Quality = 0;
@@ -103,10 +103,16 @@ namespace thomas {
 		}
 		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
 		{
-			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
-			context->ClearRenderTargetView(s_backBuffer, color);
+
 			HRESULT t = swapchain->Present(0, 0);
 
+		}
+
+		bool D3d::Clear()
+		{
+			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
+			ThomasCore::GetDeviceContext()->ClearRenderTargetView(s_backBuffer, color);
+			return true;
 		}
 
 		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)

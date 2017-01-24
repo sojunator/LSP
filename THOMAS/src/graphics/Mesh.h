@@ -41,6 +41,8 @@ namespace thomas
 			static Mesh* CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
 
 			bool SetName(std::string name);
+
+			MeshData* GetData();
 	
 			std::string GetName();
 

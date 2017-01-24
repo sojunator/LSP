@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\Mesh.cpp" />
-    <ClCompile Include="src\graphics\shader\Shader.cpp" />
+    <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\object\component\Transform.cpp" />
     <ClCompile Include="src\object\GameObject.cpp" />
@@ -40,7 +40,7 @@
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
-    <ClInclude Include="src\graphics\shader\Shader.h" />
+    <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\object\component\Component.h" />
     <ClInclude Include="src\object\component\Components.h" />

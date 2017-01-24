@@ -20,7 +20,8 @@ namespace thomas {
 		Mesh* Mesh::CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
 		{
 			Mesh *mesh = new Mesh(vertices, indices, name);
-			s_meshes.push_back(mesh);
+			if(mesh)
+				s_meshes.push_back(mesh);
 			return mesh;
 		}
 
@@ -28,6 +29,11 @@ namespace thomas {
 		{
 			m_name = name;
 			return false;
+		}
+
+		MeshData* Mesh::GetData()
+		{
+			return &m_data;
 		}
 
 		std::string Mesh::GetName()
@@ -40,8 +46,6 @@ namespace thomas {
 			//HRESULT
 			HRESULT hr;
 
-			//Blobs
-			ID3D10Blob* VS_Buffer = nullptr;
 
 			//Vertex buffer
 			D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -49,7 +53,7 @@ namespace thomas {
 			vertexData.SysMemPitch = 0;
 			vertexData.SysMemSlicePitch = 0;
 
-			m_data.vertexBuffer = utils::D3d::CreateVertexBuffer(sizeof(m_data.vertices), false, false, &vertexData, ThomasCore::GetDevice());
+			m_data.vertexBuffer = utils::D3d::CreateVertexBuffer(sizeof(Vertex)*m_data.vertices.size(), false, false, &vertexData, ThomasCore::GetDevice());
 
 			if (m_data.vertexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::VERTEX::BUFFER");
@@ -59,7 +63,7 @@ namespace thomas {
 			indexData.SysMemPitch = 0;
 			indexData.SysMemSlicePitch = 0;
 
-			m_data.indexBuffer = utils::D3d::CreateIndexBuffer(sizeof(m_data.indices), false, false, &indexData, ThomasCore::GetDevice());
+			m_data.indexBuffer = utils::D3d::CreateIndexBuffer(sizeof(int)*m_data.indices.size(), false, false, &indexData, ThomasCore::GetDevice());
 
 			if (m_data.indexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::INDEX::BUFFER");

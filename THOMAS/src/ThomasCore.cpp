@@ -49,6 +49,7 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 		
+		utils::D3d::Clear();
 	//	LOG("update");
 
 		if (Input::GetButton(Input::Buttons::A))

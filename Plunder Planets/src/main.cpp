@@ -11,10 +11,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::Model model;
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantets");
 	//init code
-	model = thomas::utils::AssimpLoader::LoadModel("objects/sphere1.obj");
 
 	TestObject* t = new TestObject();
-	thomas::graphics::shader::Shader("testShader", "../shaders/test.hlsl", thomas::graphics::shader::InputLayouts::STANDARD);
+
 
 
 	//start
