@@ -9,7 +9,6 @@ namespace thomas
 		GameObject::GameObject(std::string name) : Object(name)
 		{
 			m_transform = AddComponent<component::Transform>();
-			Instantiate(this);
 			s_gameObjects.push_back(this);
 		}
 		GameObject::~GameObject()
@@ -34,7 +33,7 @@ namespace thomas
 		{
 			if (std::is_base_of<component::Component, T>::value)
 			{
-				T* component = new T();
+				T* component = new T(this);
 				m_components.push_back(component);
 				return component;
 			}
