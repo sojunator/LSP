@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "../../Common.h"
 #include "../../utils/d3d.h"
+
 
 namespace thomas
 {
@@ -13,18 +15,22 @@ namespace thomas
 			class THOMAS_API Texture
 			{
 			public:
-				Texture();
-				~Texture();
+				static int LoadTexture(std::string path);
+				static std::string GetFilePath(int index);
+				static ID3D11Resource* getTexture(int index);
+				static ID3D11ShaderResourceView* getTextureView(int index);
 
-				std::string GetName();
-				std::string GetFilePath();
-
-				bool Initialize(std::string name, std::string path, int width, int height);
+				static void Destroy();
 			private:
-				std::string m_name;
-				std::string m_filePath;
-				ID3D11ShaderResourceView* m_textureView;
-				ID3D11Texture2D* m_texture;
+				struct Data
+				{
+					std::string filePath;
+					ID3D11ShaderResourceView* textureView;
+					ID3D11Resource* texture;
+				};
+
+				static Data m_data;
+				static std::vector<Texture*> s_loadedTextures;
 			};
 		}
 	}

@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "../../ThomasCore.h"
 
 namespace thomas
 {
@@ -6,21 +7,40 @@ namespace thomas
 	{
 		namespace texture
 		{
-			std::string graphics::texture::Texture::GetName()
+			int Texture::LoadTexture(std::string fileName)
 			{
-				return m_name;
+				ID3D11ShaderResourceView* textureView;
+				ID3D11Resource* texture;
+				if(utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), fileName, &texture, &textureView, NULL))
+					//do push_back
+
+				return ;
 			}
 
-			std::string graphics::texture::Texture::GetFilePath()
+			std::string Texture::GetFilePath(int index)
 			{
-				return m_filePath;
+				return s_loadedTextures[index]->m_data.filePath;
 			}
 
-			bool graphics::texture::Texture::Initialize(std::string name, std::string path, int width, int height)
+			ID3D11Resource * Texture::getTexture(int index)
 			{
-
-				return false;
+				return s_loadedTextures[index]->m_data.texture;
 			}
+
+			ID3D11ShaderResourceView * Texture::getTextureView(int index)
+			{
+				return s_loadedTextures[index]->m_data.textureView;
+			}
+
+			void Texture::Destroy()
+			{
+				for (int i = 0; i < s_loadedTextures.size(); ++i)
+				{
+					s_loadedTextures[i]->m_data.texture->Release();
+					s_loadedTextures[i]->m_data.textureView->Release();
+				}
+			}
+
 		}
 	}
 }

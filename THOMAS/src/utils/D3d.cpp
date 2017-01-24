@@ -1,6 +1,8 @@
 #pragma once
 #include "d3d.h"
 #include "../ThomasCore.h"
+#include <AtlBase.h>
+#include <atlconv.h>
 
 namespace thomas {
 	namespace utils
@@ -109,9 +111,9 @@ namespace thomas {
 
 		}
 
-		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
+		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
 		{
-			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, fileName, texture, textureView, size);
+			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), texture, textureView, size);
 			if (FAILED(hr))
 			{
 				LOG("Could not create texture");
