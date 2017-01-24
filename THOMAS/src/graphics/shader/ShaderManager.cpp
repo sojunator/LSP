@@ -1,6 +1,5 @@
 #include "ShaderManager.h"
 
-
 namespace thomas
 {
 	namespace graphics
