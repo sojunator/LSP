@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\graphics\shader\Shader.cpp" />
     <ClCompile Include="src\graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -26,6 +27,7 @@
     <ClCompile Include="src\object\GameObject.cpp" />
     <ClCompile Include="src\object\Object.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
+    <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
     <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
@@ -38,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\graphics\shader\Shader.h" />
     <ClInclude Include="src\graphics\shader\ShaderManager.h" />
     <ClInclude Include="src\Input.h" />
@@ -48,6 +51,7 @@
     <ClInclude Include="src\object\Object.h" />
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
+    <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\directXTK\dds.h" />
     <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />
@@ -60,6 +64,7 @@
     <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
     <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
+    <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>

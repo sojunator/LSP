@@ -27,7 +27,17 @@ namespace thomas {
 		{
 			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
 		}
-		
+
+		if (s_initialized)
+		{
+			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
+		}
+			
+		else
+		{
+			LOG("Thomas failed to initiate :(");
+		}
+			
 		return s_initialized;
 	}
 
@@ -80,6 +90,7 @@ namespace thomas {
 		{
 			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
 			MSG msg = { 0 };
+
 
 			while (WM_QUIT != msg.message)
 			{
