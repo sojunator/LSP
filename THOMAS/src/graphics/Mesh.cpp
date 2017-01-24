@@ -6,8 +6,9 @@ namespace thomas {
 
 		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
 		{
-			m_vertices = vertices;
-			m_indices = indices;
+			
+			m_data.vertices = vertices;
+			m_data.indices = indices;
 			m_name = name;
 			SetupMesh();
 		}
@@ -44,45 +45,25 @@ namespace thomas {
 
 			//Vertex buffer
 			D3D11_SUBRESOURCE_DATA vertexData, indexData;
-			vertexData.pSysMem = &m_vertices;
+			vertexData.pSysMem = &m_data.vertices;
 			vertexData.SysMemPitch = 0;
 			vertexData.SysMemSlicePitch = 0;
 
-			m_vertexBuffer = utils::D3d::CreateVertexBuffer(sizeof(m_vertices), false, false, &vertexData, ThomasCore::GetDevice());
+			m_data.vertexBuffer = utils::D3d::CreateVertexBuffer(sizeof(m_data.vertices), false, false, &vertexData, ThomasCore::GetDevice());
 
-			if (m_vertexBuffer == nullptr)
+			if (m_data.vertexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::VERTEX::BUFFER");
 
 			//Index buffer
-			indexData.pSysMem = &m_indices;
+			indexData.pSysMem = &m_data.indices;
 			indexData.SysMemPitch = 0;
 			indexData.SysMemSlicePitch = 0;
 
-			m_indexBuffer = utils::D3d::CreateIndexBuffer(sizeof(m_indices), false, false, &indexData, ThomasCore::GetDevice());
+			m_data.indexBuffer = utils::D3d::CreateIndexBuffer(sizeof(m_data.indices), false, false, &indexData, ThomasCore::GetDevice());
 
-			if (m_indexBuffer == nullptr)
+			if (m_data.indexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::INDEX::BUFFER");
 
-			//Input layout
-			/*D3D11_INPUT_ELEMENT_DESC layout[] =
-			{
-				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-				{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			};
-
-			UINT numElements = ARRAYSIZE(layout);
-
-			hr = ThomasCore::GetDevice()->CreateInputLayout(layout, numElements, VS_Buffer->GetBufferPointer(), VS_Buffer->GetBufferSize(), &m_inputLayout);
-
-			if (FAILED(hr))
-			{
-				LOG("ERROR::FAILED TO CREATE INPUT LAYOUT");
-				return;
-			}
-	
-			ThomasCore::GetDeviceContext()->IASetInputLayout(m_inputLayout);
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);*/
 		}
 	}
 }

@@ -43,51 +43,40 @@ namespace thomas
 				return NULL;
 			}
 
-			ID3D11ShaderReflection * Shader::GetShaderReflection(ID3DBlob* shaderBlob)
-			{
-				ID3D11ShaderReflection* shaderReflection;
-				HRESULT result = D3DReflect(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), IID_ID3D11ShaderReflection, (void**)&shaderReflection);
-				if (result == S_OK)
-				{
-					return shaderReflection;
-				}
-				else
-				{
-					LOG("Shader reflection error");
-				}
-				return NULL;
-			}
-
-			void Shader::CreateBuffers(ID3DBlob* shaderBlob)
+			bool Shader::CreateInputLayout(InputLayouts layout)
 			{
 
-				ID3D11ShaderReflection* shaderReflection = GetShaderReflection(shaderBlob);
+				std::vector<D3D11_INPUT_ELEMENT_DESC> layoutDesc;
 
-				D3D11_SHADER_DESC shaderDesc;
-				shaderReflection->GetDesc(&shaderDesc);
-				HRESULT hr;
-				for (int i = 0; i < shaderDesc.ConstantBuffers; i++)
+				switch (layout)
 				{
-					D3D11_SHADER_BUFFER_DESC bufferDesc;
-					ID3D11ShaderReflectionConstantBuffer* constantBuffer = shaderReflection->GetConstantBufferByIndex(i);
-					hr = constantBuffer->GetDesc(&bufferDesc);
-					
-
-					D3D11_SHADER_INPUT_BIND_DESC bindDesc;
-					hr = shaderReflection->GetResourceBindingDescByName(bufferDesc.Name, &bindDesc);
-
-					for (int j = 0; j < bufferDesc.Variables; j++)
+				case thomas::graphics::shader::InputLayouts::STANDARD:
+					layoutDesc =
 					{
-						ID3D11ShaderReflectionVariable* variable = constantBuffer->GetVariableByIndex(j);
-						D3D11_SHADER_VARIABLE_DESC variableDesc;
-						variable->GetDesc(&variableDesc);
-						std::string name = variableDesc.Name;
-					}
+						{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+						{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+						{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					};
+					break;
+				default:
+					return false;
+					break;
 				}
+				
+
+				HRESULT result = ThomasCore::GetDevice()->CreateInputLayout(&layoutDesc.front(), layoutDesc.size(), m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), &m_data.inputLayout);
+
+				if (FAILED(result))
+				{
+					LOG("ERROR::FAILED TO CREATE INPUT LAYOUT");
+					return false;
+				}
+
+				return true;
 			}
 
 
-			Shader::Shader(std::string name, std::string filePath)
+			Shader::Shader(std::string name, std::string filePath, InputLayouts inputLayout)
 			{
 				m_name = name;
 				m_filePath = filePath;
@@ -101,15 +90,27 @@ namespace thomas
 					ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
 				//ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
 
+				CreateInputLayout(inputLayout);
+
 				s_loadedShaders.push_back(this);
 			}
 
 			Shader::~Shader()
 			{
-				if(m_data.vs)
+				if (m_data.vs)
+				{
 					m_data.vertexShader->Release();
-				if(m_data.ps)
+					m_data.vs->Release();
+				}
+					
+				if (m_data.ps)
+				{
 					m_data.pixelShader->Release();
+					m_data.ps->Release();
+				}
+					
+				m_data.inputLayout->Release();
+					
 			}
 
 			bool Shader::Bind()
@@ -117,6 +118,7 @@ namespace thomas
 				s_currentBoundShader = this;
 				ThomasCore::GetDeviceContext()->VSSetShader(m_data.vertexShader, NULL, 0);
 				ThomasCore::GetDeviceContext()->PSSetShader(m_data.pixelShader, NULL, 0);
+				ThomasCore::GetDeviceContext()->IASetInputLayout(m_data.inputLayout);
 				return true;
 			}
 			bool Shader::Unbind()
@@ -182,6 +184,34 @@ namespace thomas
 				}
 				return false;
 			}
+			bool Shader::SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type)
+			{
+				if (s_currentBoundShader == this)
+					ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(type);
+				return true;
+			}
+			bool Shader::SetVertexBuffer(ID3D11Buffer * vertexBuffer, UINT stride, UINT offset=0)
+			{
+				if (s_currentBoundShader == this)
+					ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+				return true;
+			}
+			bool Shader::SetIndexBuffer(ID3D11Buffer * indexBuffer)
+			{
+				if (s_currentBoundShader == this)
+					ThomasCore::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+				return true;
+			}
+			bool Shader::SetMeshData(MeshData * meshData)
+			{
+				if (s_currentBoundShader == this)
+				{
+					SetVertexBuffer(meshData->vertexBuffer, sizeof(sizeof(meshData->vertices[0])));
+					SetIndexBuffer(meshData->indexBuffer);
+				}
+				return true;
+				
+			}
 			Shader * Shader::GetCurrentBoundShader()
 			{
 				return s_currentBoundShader;
@@ -196,5 +226,7 @@ namespace thomas
 				return NULL;
 			}
 		}
+
+
 	}
 }

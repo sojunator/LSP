@@ -13,11 +13,22 @@ namespace thomas
 {
 	namespace graphics 
 	{
+
+
+		
 		struct Vertex 
 		{
 			math::Vector3 position;
 			math::Vector2 uv;
 			math::Vector3 normal;
+		};
+
+		struct MeshData
+		{
+			std::vector<Vertex> vertices;
+			std::vector<int> indices;
+			ID3D11Buffer* vertexBuffer;
+			ID3D11Buffer* indexBuffer;
 		};
 
 		class THOMAS_API Mesh
@@ -34,13 +45,9 @@ namespace thomas
 			std::string GetName();
 
 		private:
-			std::vector<Vertex> m_vertices;
-			std::vector<int> m_indices;
 			static std::vector<Mesh*> s_meshes;
 			std::string m_name;
-			ID3D11Buffer* m_vertexBuffer;
-			ID3D11Buffer* m_indexBuffer;
-			ID3D11InputLayout* m_inputLayout;
+			MeshData m_data;
 
 		};
 	}

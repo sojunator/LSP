@@ -3,28 +3,32 @@
 #include <string>
 #include "../../utils/d3d.h"
 #include <vector>
+#include "../Mesh.h"
 namespace thomas
 {
 	namespace graphics
 	{
 		namespace shader
 		{
+			enum class InputLayouts
+			{
+				STANDARD = 0
+			};
+			enum class ResourceType
+			{
+				MVP_MATRIX = 0,
+				MATERIAL = 1
+			};
+
 			class THOMAS_API Shader
 			{
 			private:
 				
 				ID3DBlob* Compile(std::string source, std::string profile, std::string main);
-				ID3D11ShaderReflection* GetShaderReflection(ID3DBlob* shaderBlob);
-				void CreateBuffers(ID3DBlob* shaderBlob);
+				bool CreateInputLayout(InputLayouts layout);
 			public:
 
-				enum class ResourceType
-				{
-					MVP_MATRIX = 0,
-					MATERIAL = 1
-				};
-
-				Shader(std::string name, std::string filePath);
+				Shader(std::string name, std::string filePath, InputLayouts inputLayout);
 				~Shader();
 				bool Bind();
 				bool Unbind();
@@ -35,10 +39,15 @@ namespace thomas
 				bool BindBuffer(ID3D11Buffer* resource, int slot);
 				bool BindTextures(ID3D11ShaderResourceView* texture, int slot);
 				bool BindTextureSampler(ID3D11SamplerState* sampler, int slot);
-
+				bool SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type);
+				bool SetVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
+				bool SetIndexBuffer(ID3D11Buffer* indexBuffer);
+				bool SetMeshData(MeshData* meshData);
 
 				static Shader* GetCurrentBoundShader();
 				static Shader* GetShader(std::string name);
+
+				
 				
 			private:
 				struct Data
@@ -47,6 +56,7 @@ namespace thomas
 					ID3D11PixelShader* pixelShader;
 					ID3DBlob* vs;
 					ID3D10Blob* ps;
+					ID3D11InputLayout* inputLayout;
 				};
 
 				Data m_data;
@@ -58,6 +68,7 @@ namespace thomas
 				static Shader* s_currentBoundShader;
 
 				static std::vector<Shader*> s_loadedShaders;
+
 
 				
 			};
