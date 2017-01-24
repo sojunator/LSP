@@ -4,20 +4,21 @@ namespace thomas
 {
 	namespace utils
 	{
-		void AssimpLoader::LoadModel(std::string path)
+		Model AssimpLoader::LoadModel(std::string path)
 		{
 			// Read file via ASSIMP
+			Model model;
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 			
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
 				LOG("ERROR::ASSIMP" + importer.GetErrorString());
-				return;
 			}
 
 			// Process ASSIMP's root node recursively
-			ProcessNode(scene->mRootNode, scene);
+			ProcessNode(scene->mRootNode, scene, model);
+			return model;			
 		}
 
 		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene * scene)
@@ -90,12 +91,11 @@ namespace thomas
 			//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 			//}
 
-			return &graphics::Mesh(vertices, indices, name);
+			return graphics::Mesh::CreateMesh(vertices, indices, name);
 		}
 
-		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene)
+		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, Model &model)
 		{
-			Model model;
 			// Process each mesh located at the current node
 			for (int i = 0; i < node->mNumMeshes; i++)
 			{
@@ -107,7 +107,7 @@ namespace thomas
 			// After we've processed all of the meshes (if any) we then recursively process each of the children nodes
 			for (int i = 0; i < node->mNumChildren; i++)
 			{
-				ProcessNode(node->mChildren[i], scene);
+				ProcessNode(node->mChildren[i], scene, model);
 			}
 		}
 	}

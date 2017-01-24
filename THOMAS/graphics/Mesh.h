@@ -24,6 +24,7 @@ namespace thomas
 		public:
 			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
 			~Mesh();
+			static Mesh* CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
 
 			bool SetName(std::string name);
 	
