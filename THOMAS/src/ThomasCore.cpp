@@ -1,6 +1,7 @@
 #include "ThomasCore.h"
 
 #include "Input.h"
+#include "object\Object.h"
 
 #include <assimp\Importer.hpp>
 
@@ -26,7 +27,6 @@ namespace thomas {
 		{
 			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
 		}
-
 
 		if (s_initialized)
 		{
@@ -58,13 +58,37 @@ namespace thomas {
 			Window::Destroy();
 
 		
+		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
+		{
+			thomas::object::Object::GetObjects()[i]->Update();
+		}
+		
+
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
 	}
 
 	void ThomasCore::Start()
 	{
+
 		if (s_initialized)
 		{
+			for (int i = 0; i < thomas::object::Object::GetObjects().size(); i++)
+			{
+				if (s_initialized)
+				{
+					s_initialized = thomas::object::Object::GetObjects()[i]->Start();
+					LOG("initiating object: " << thomas::object::Object::GetObjects()[i]->GetName());
+				}
+				else
+					break;
+
+			}
+		}
+
+
+		if (s_initialized)
+		{
+			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
 			MSG msg = { 0 };
 
 
@@ -86,6 +110,16 @@ namespace thomas {
 			Window::Destroy();
 
 		}
+		else
+		{
+			LOG("Thomas failed to initiate :(");
+			#ifdef _DEBUG
+			system("pause");
+			#endif // DEBUG
+
+			
+		}
+			
 	}
 	bool ThomasCore::Initialized()
 	{

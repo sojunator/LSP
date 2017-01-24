@@ -3,7 +3,7 @@
 //
 
 #include "Thomas.h"
-
+#include "gameobjects\TestObject.h"
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
@@ -13,6 +13,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 	model = thomas::utils::AssimpLoader::LoadModel("objects/sphere1.obj");
 
+	TestObject* t = new TestObject();
 	thomas::graphics::shader::Shader("testShader", "../shaders/test.hlsl");
 
 
