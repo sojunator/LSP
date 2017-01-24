@@ -27,7 +27,7 @@ namespace thomas {
 			static bool Destroy();
 			static ID3D11Buffer* CreateVertexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
 			static ID3D11Buffer* CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
-			static ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag);
+			
 
 			template<typename T>
 			static ID3D11Buffer* CreateCBufferFromStruct(T dataStruct);
@@ -37,6 +37,7 @@ namespace thomas {
 
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;
+			static ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag);
 
 		};
 	}
