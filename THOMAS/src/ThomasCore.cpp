@@ -13,8 +13,10 @@ namespace thomas {
 
 	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
-		AllocConsole();
-		freopen("CONOUT$", "w", stdout);
+		#ifdef _DEBUG
+				AllocConsole();
+				freopen("CONOUT$", "w", stdout);
+		#endif
 
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
@@ -47,6 +49,9 @@ namespace thomas {
 	{
 		
 	//	LOG("update");
+
+		if (Input::GetButton(Input::Buttons::A))
+			LOG("YAY");
 
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
