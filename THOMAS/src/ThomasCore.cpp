@@ -6,6 +6,7 @@
 #include <assimp\Importer.hpp>
 
 namespace thomas {
+	ID3D11Debug* ThomasCore::s_debug;
 	ID3D11Device* ThomasCore::s_device;
 	ID3D11DeviceContext* ThomasCore::s_context;
 	IDXGISwapChain* ThomasCore::s_swapchain;
@@ -30,14 +31,13 @@ namespace thomas {
 
 		if (s_initialized)
 		{
-			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
+			#ifdef _DEBUG
+			LOG("Initiating debug interface");
+			s_device->QueryInterface(IID_PPV_ARGS(&s_debug));
+			#endif // _DEBUG
+
 		}
-			
-		else
-		{
-			LOG("Thomas failed to initiate :(");
-		}
-			
+		
 		return s_initialized;
 	}
 
@@ -134,9 +134,17 @@ namespace thomas {
 		s_context->Release();
 		s_device->Release();
 
-		s_swapchain = 0;
-		s_context = 0;
-		s_device = 0;
+		s_swapchain = nullptr;
+		s_context = nullptr;
+		s_device = nullptr;
+
+
+		#ifdef _DEBUG
+		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		s_debug = nullptr;
+		#endif // _DEBUG
+
+
 		return true;
 	}
 	ID3D11Device * ThomasCore::GetDevice()
