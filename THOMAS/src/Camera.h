@@ -3,7 +3,6 @@
 #include "../utils/Math.h"
 /**
 *Camera class
-*
 */
 namespace thomas
 {
@@ -19,7 +18,6 @@ namespace thomas
 		Camera(math::Vector3 camPos, math::Vector3 focusAt, float fov, float nearPlane, float farPlane);
 		void MoveCamera(math::Vector3 direction);	///Send 1 or 0 in x,y,z to move or not to move
 		void RotateCamera(math::Vector3 rotate);	///Rotate in radians
-
 		math::Matrix GetViewMatrix();
 		math::Matrix GetProjMatrix();
 		math::Matrix GetViewProjMatrix();
