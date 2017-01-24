@@ -22,13 +22,13 @@ namespace thomas
 		math::Matrix GetProjMatrix();
 		math::Matrix GetViewProjMatrix();
 		math::Vector3 GetCamPos();
-		math::Vector3 GetCamDirection();
+		math::Vector3 GetCamDir();
 		math::Vector3 GetFocus();
 		float GetFov();
 		float GetNear();
 		float GetFar();
 		void SetCamPos(math::Vector3 camPos);
-		void SetCamDirection(math::Vector3 camDir);
+		void SetCamDir(math::Vector3 camDir);
 		void SetFocus(math::Vector3 focusAt);	///Focusing on this point
 		void SetFov(float fov);
 		void SetNear(float viewNear);

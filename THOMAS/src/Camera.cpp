@@ -72,7 +72,7 @@ namespace thomas
 		return m_camPos;
 	}
 
-	math::Vector3 Camera::GetCamDirection()
+	math::Vector3 Camera::GetCamDir()
 	{
 		return m_camDir;
 	}
@@ -104,7 +104,7 @@ namespace thomas
 		CreateViewProjMatrix();
 	}
 
-	void Camera::SetCamDirection(math::Vector3 camDir)
+	void Camera::SetCamDir(math::Vector3 camDir)
 	{
 		m_camDir = camDir;
 	}
