@@ -20,6 +20,9 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\object\GameObject.cpp" />
+    <ClCompile Include="src\object\Object.cpp" />
+    <ClCompile Include="src\object\component\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\shader\Shader.h" />
@@ -41,6 +44,11 @@
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\object\Object.h" />
+    <ClInclude Include="src\object\component\Component.h" />
+    <ClInclude Include="src\object\GameObject.h" />
+    <ClInclude Include="src\object\component\Components.h" />
+    <ClInclude Include="src\object\component\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

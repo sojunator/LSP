@@ -18,5 +18,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\gameobjects\TestObject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\gameobjects\TestObject.h" />
   </ItemGroup>
 </Project>
