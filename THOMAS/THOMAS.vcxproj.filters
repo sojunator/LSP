@@ -8,7 +8,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\shader\Shader.cpp" />
-    <ClCompile Include="src\graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
     <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
@@ -28,7 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\shader\Shader.h" />
-    <ClInclude Include="src\graphics\shader\ShaderManager.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\directXTK\dds.h" />
     <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />

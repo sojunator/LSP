@@ -8,5 +8,5 @@ bool TestObject::Start()
 
 void TestObject::Update()
 {
-	LOG("update");
+	//LOG("update");
 }

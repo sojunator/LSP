@@ -38,7 +38,7 @@ namespace thomas
 
 
 				static Shader* GetCurrentBoundShader();
-
+				static Shader* GetShader(std::string name);
 				
 			private:
 				struct Data
@@ -56,6 +56,8 @@ namespace thomas
 				std::vector<ID3D11Buffer*> m_constantBuffers;
 
 				static Shader* s_currentBoundShader;
+
+				static std::vector<Shader*> s_loadedShaders;
 
 				
 			};

@@ -1,6 +1,5 @@
 #include "Shader.h"
 #include "../../ThomasCore.h"
-#include "ShaderManager.h"
 #include <AtlBase.h>
 #include <atlconv.h>
 namespace thomas
@@ -11,7 +10,7 @@ namespace thomas
 		{
 
 			Shader* Shader::s_currentBoundShader;
-			static Shader* s_currentBoundShader;
+			std::vector<Shader*> Shader::s_loadedShaders;
 
 			ID3DBlob* Shader::Compile(std::string source, std::string profile, std::string main)
 			{
@@ -102,8 +101,7 @@ namespace thomas
 					ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
 				//ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
 
-				//ShaderManager::AddShader(this);
-
+				s_loadedShaders.push_back(this);
 			}
 
 			Shader::~Shader()
@@ -134,11 +132,11 @@ namespace thomas
 			}
 			std::string Shader::GetName()
 			{
-				return std::string();
+				return m_name;
 			}
 			std::string Shader::GetFilePath()
 			{
-				return std::string();
+				return m_filePath;
 			}
 			bool Shader::BindBuffer(ID3D11Buffer * resource, ResourceType type)
 			{
@@ -187,6 +185,15 @@ namespace thomas
 			Shader * Shader::GetCurrentBoundShader()
 			{
 				return s_currentBoundShader;
+			}
+			Shader * Shader::GetShader(std::string name)
+			{
+				for (int i = 0; i < s_loadedShaders.size(); i++)
+				{
+					if (s_loadedShaders[i]->GetName() == name)
+						return s_loadedShaders[i];
+				}
+				return NULL;
 			}
 		}
 	}

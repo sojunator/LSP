@@ -13,7 +13,8 @@ namespace thomas
 			
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
-				LOG("ERROR::ASSIMP" << importer.GetErrorString());
+				LOG("ERROR::ASSIMP " << importer.GetErrorString());
+				return model;
 			}
 
 			else
