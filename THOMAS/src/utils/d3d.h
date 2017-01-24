@@ -25,6 +25,9 @@ namespace thomas {
 			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
 			static bool LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size);
 			static bool Destroy();
+			static ID3D11Buffer* CreateVertexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
+			static ID3D11Buffer* CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
+			static ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag);
 
 			template<typename T>
 			static ID3D11Buffer* CreateCBufferFromStruct(T dataStruct);

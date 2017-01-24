@@ -5,27 +5,20 @@
 namespace thomas {
 	namespace utils
 	{
-
 		ID3D11RenderTargetView* D3d::s_backBuffer;
-
-
-
-
-
 		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
 		{
+			LOG("Initiating DirectX");
 			if (!SwapchainAndDevice(width, height, device, context, swapchain, handle))
 				return false;
 			if (!CreateSwapChainTexture(device, swapchain))
 				return false;
 
 			////Set back buffer texture 
-			//context->OMSetRenderTargets(1, &s_backBuffer, NULL);
-			//CreateViewPort(context, height, width);
-			LOG("Initiating DirectX");
 			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
 			CreateViewPort(context, height, width);
 
+			LOG("DirectX initiated, welcome to the masterace");
 			return true;
 
 		}
@@ -65,7 +58,7 @@ namespace thomas {
 
 			if (FAILED(hr))
 			{
-				MessageBox(handle, L"Failed to init swapchain", L"Fatal error", MB_OK);
+				LOG("Could not create device or swapchain or context");
 				return false;
 			}
 	
@@ -81,7 +74,6 @@ namespace thomas {
 
 			if (FAILED(hr))
 			{
-				MessageBox(NULL, L"Failed to get backbuffer", L"Fatal error", MB_OK);
 				LOG("Failed to get backbuffer");
 				return false;
 			}
@@ -91,7 +83,6 @@ namespace thomas {
 
 			if (FAILED(hr))
 			{
-				MessageBox(NULL, L"Failed to move backbuffer to GPU", L"Fatal error", MB_OK);
 				LOG("Failed to move backbuffer to GPU Fatal error");
 				return false;
 			}
@@ -123,8 +114,7 @@ namespace thomas {
 			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, fileName, texture, textureView, size);
 			if (FAILED(hr))
 			{
-				MessageBox(NULL, L"Could not create texture", fileName, MB_OK);
-		
+				LOG("Could not create texture");
 				return false;
 			}
 			return true;
@@ -138,6 +128,56 @@ namespace thomas {
 			return true;
 		}
 
+		ID3D11Buffer * D3d::CreateVertexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device)
+		{
+			return CreateBuffer(size, dynamic, streamout, data, device, D3D11_BIND_VERTEX_BUFFER);
+		}
+
+		ID3D11Buffer * D3d::CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device)
+		{
+			return CreateBuffer(size, dynamic, streamout, data, device, D3D11_BIND_INDEX_BUFFER);
+		}
+
+		ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag)
+		{
+			D3D11_BUFFER_DESC bufferDesc;
+			ZeroMemory(&bufferDesc, sizeof(bufferDesc));
+			bufferDesc.ByteWidth = size;
+			bufferDesc.MiscFlags = 0;
+			
+			if (streamout)
+			{
+				
+				bufferDesc.BindFlags = bindFlag | D3D11_BIND_STREAM_OUTPUT;
+			}
+			else
+			{
+				bufferDesc.BindFlags = bindFlag;
+			}
+
+			if (dynamic)
+			{
+				bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+				bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+			}
+			else
+			{
+				bufferDesc.CPUAccessFlags = 0;
+				bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+			}
+
+			ID3D11Buffer * buffer = 0;
+			HRESULT hr = device->CreateBuffer(&bufferDesc, data, &buffer);
+
+			if (FAILED(hr))
+			{
+				LOG("Failed to create vertex buffer");
+				return nullptr;
+			}
+
+			return buffer;
+		}
+
 
 		template<typename T>
 		ID3D11Buffer* D3d::CreateCBufferFromStruct(T dataStruct)
@@ -147,7 +187,7 @@ namespace thomas {
 			bufferDesc.ByteWidth = sizeof(dataStruct);
 			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
 			bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			bufferDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+			bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 			bufferDesc.MiscFlags = 0;
 			
 			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
