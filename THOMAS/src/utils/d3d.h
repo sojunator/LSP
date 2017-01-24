@@ -28,7 +28,7 @@ namespace thomas {
 			static bool Destroy();
 			static ID3D11Buffer* CreateVertexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
 			static ID3D11Buffer* CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
-			
+			static ID3D11RenderTargetView* CreateRenderTargetView(ID3D11Resource* buffer);
 
 			template<typename T>
 			static ID3D11Buffer* CreateCBufferFromStruct(T dataStruct);

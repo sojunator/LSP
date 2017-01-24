@@ -21,6 +21,7 @@ namespace thomas {
 #ifdef _DEBUG
 			CreateDebug(device, debug);
 #endif
+
 			LOG("DirectX initiated, welcome to the masterace");
 			return true;
 
@@ -72,8 +73,8 @@ namespace thomas {
 		bool D3d::CreateSwapChainTexture(ID3D11Device *& device, IDXGISwapChain *& swapchain)
 		{
 			HRESULT hr;
-			ID3D11Texture2D* pbackBuffer;
-			hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pbackBuffer);
+			ID3D11Texture2D* backBuffer;
+			hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
 
 			if (FAILED(hr))
 			{
@@ -81,14 +82,13 @@ namespace thomas {
 				return false;
 			}
 
-			hr = device->CreateRenderTargetView(pbackBuffer, NULL, &s_backBuffer); // Move it to the gpu
-			pbackBuffer->Release(); // not needed anymore, its on the gpu
+			s_backBuffer = CreateRenderTargetView(backBuffer); // Move it to the gpu
 
-			if (FAILED(hr))
-			{
-				LOG("Failed to move backbuffer to GPU Fatal error");
+			if (s_backBuffer == nullptr)
 				return false;
-			}
+
+			backBuffer->Release(); // not needed anymore, its on the gpu
+
 			return true;
 		}
 
@@ -108,8 +108,11 @@ namespace thomas {
 		{
 			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
 			context->ClearRenderTargetView(s_backBuffer, color);
-			HRESULT t = swapchain->Present(0, 0);
-
+			HRESULT hr = swapchain->Present(0, 0);
+			if (FAILED(hr))
+			{
+				LOG("Failed to present backbuffer");
+			}
 		}
 
 		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
@@ -139,6 +142,26 @@ namespace thomas {
 		ID3D11Buffer * D3d::CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device)
 		{
 			return CreateBuffer(size, dynamic, streamout, data, device, D3D11_BIND_INDEX_BUFFER);
+		}
+
+		ID3D11RenderTargetView * D3d::CreateRenderTargetView(ID3D11Resource* buffer)
+		{
+			D3D11_RENDER_TARGET_VIEW_DESC desc;
+			ZeroMemory(&desc, sizeof(desc));
+
+			ID3D11RenderTargetView* rtv;
+			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+			desc.Texture2D.MipSlice = 0;
+		
+			HRESULT hr = ThomasCore::GetDevice()->CreateRenderTargetView(buffer, &desc, &rtv);
+			if (FAILED(hr))
+			{
+				LOG("Failed to create renderTargetView");
+				return nullptr;
+			}
+
+			return rtv;
 		}
 
 		ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag)
