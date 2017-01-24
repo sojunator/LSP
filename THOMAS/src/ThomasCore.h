@@ -27,6 +27,7 @@ namespace thomas
 		static ID3D11Device* s_device;
 		static ID3D11DeviceContext* s_context;
 		static IDXGISwapChain* s_swapchain;
+		static ID3D11Debug* s_debug;
 
 	};
 }

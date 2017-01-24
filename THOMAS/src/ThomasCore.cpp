@@ -6,6 +6,7 @@
 
 namespace thomas {
 	ID3D11Device* ThomasCore::s_device;
+	ID3D11Debug* ThomasCore::s_debug;
 	ID3D11DeviceContext* ThomasCore::s_context;
 	IDXGISwapChain* ThomasCore::s_swapchain;
 	HINSTANCE ThomasCore::s_hInstance;
@@ -22,7 +23,7 @@ namespace thomas {
 			s_initialized = Input::Init();
 		if (s_initialized)
 		{
-			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
+			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_debug,s_swapchain, Window::GetWindowHandler());
 		}
 
 
@@ -35,7 +36,7 @@ namespace thomas {
 		{
 			LOG("Thomas failed to initiate :(");
 		}
-			
+		
 		return s_initialized;
 	}
 
@@ -89,10 +90,20 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
+
+
 		utils::D3d::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();
+
+#ifdef _DEBUG
+		HRESULT hr = s_debug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
+		if (FAILED(hr))
+			LOG(hr);
+		
+		s_debug->Release();
+#endif
 
 		s_swapchain = 0;
 		s_context = 0;

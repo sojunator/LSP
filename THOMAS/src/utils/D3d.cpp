@@ -6,7 +6,8 @@ namespace thomas {
 	namespace utils
 	{
 		ID3D11RenderTargetView* D3d::s_backBuffer;
-		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
+
+		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, ID3D11Debug*& debug, IDXGISwapChain*& swapchain, HWND handle)
 		{
 			LOG("Initiating DirectX");
 			if (!SwapchainAndDevice(width, height, device, context, swapchain, handle))
@@ -17,7 +18,9 @@ namespace thomas {
 			////Set back buffer texture 
 			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
 			CreateViewPort(context, height, width);
-
+#ifdef _DEBUG
+			CreateDebug(device, debug);
+#endif
 			LOG("DirectX initiated, welcome to the masterace");
 			return true;
 
@@ -176,6 +179,17 @@ namespace thomas {
 			}
 
 			return buffer;
+		}
+
+		ID3D11Debug * D3d::CreateDebug(ID3D11Device * device, ID3D11Debug*& debug)
+		{
+			HRESULT hr = device->QueryInterface(__uuidof(ID3D11Debug), (void**)&debug);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				return nullptr;
+			}
+			return debug;
 		}
 
 
