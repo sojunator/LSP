@@ -6,11 +6,23 @@ namespace thomas
 	{
 		m_camPos = camPos;
 		m_focusAt = focusAt;
+		m_camDir = focusAt - camPos;
 		m_fov = fov;
 		m_near = nearPlane;
 		m_far = farPlane;
 
 		Update();
+	}
+
+	void Camera::MoveCamera(math::Vector3 direction)
+	{
+		m_camPos += 0.20 * direction;
+	}
+
+	void Camera::RotateCamera(math::Vector3 rotate)
+	{
+		math::Matrix rotation = math::Matrix::CreateFromYawPitchRoll(rotate.y, rotate.y, rotate.z);
+		m_camDir = math::Vector3::Transform(m_camDir, rotation);
 	}
 
 	void Camera::CreateViewMatrix(math::Vector3 camPos, math::Vector3 focusAt)
@@ -60,6 +72,11 @@ namespace thomas
 		return m_camPos;
 	}
 
+	math::Vector3 Camera::GetCamDirection()
+	{
+		return m_camDir;
+	}
+
 	math::Vector3 Camera::GetFocus()
 	{
 		return m_focusAt;
@@ -85,6 +102,11 @@ namespace thomas
 		m_camPos = camPos;
 		CreateViewMatrix(m_camPos, m_focusAt);
 		CreateViewProjMatrix();
+	}
+
+	void Camera::SetCamDirection(math::Vector3 camDir)
+	{
+		m_camDir = camDir;
 	}
 
 	void Camera::SetFocus(math::Vector3 focusAt)

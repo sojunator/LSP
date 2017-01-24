@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\graphics\shader\Shader.cpp" />
     <ClCompile Include="src\graphics\shader\ShaderManager.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\graphics\shader\Shader.h" />
     <ClInclude Include="src\graphics\shader\ShaderManager.h" />
@@ -53,9 +55,6 @@
     <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\utils\directXTK\SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED0D8681-B384-43D1-8F56-B4145588E20C}</ProjectGuid>
