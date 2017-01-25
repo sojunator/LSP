@@ -2,7 +2,6 @@
 
 #include "Input.h"
 #include "object\Object.h"
-#include "graphics\Shader.h"
 
 #include <assimp\Importer.hpp>
 
@@ -23,22 +22,14 @@ namespace thomas {
 
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
+
 		if (s_initialized)
 			s_initialized = Input::Init();
-		if (s_initialized)
-		{
-			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
-		}
 
 		if (s_initialized)
-		{
-			#ifdef _DEBUG
-			LOG("Initiating debug interface");
-			s_device->QueryInterface(IID_PPV_ARGS(&s_debug));
-			#endif // _DEBUG
+			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
+	
 
-		}
-		
 		return s_initialized;
 	}
 
@@ -130,10 +121,6 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
-
-
-		graphics::Shader::Destroy();
-
 		utils::D3d::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
@@ -143,12 +130,11 @@ namespace thomas {
 		s_context = nullptr;
 		s_device = nullptr;
 
-
 		#ifdef _DEBUG
 		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG
-
 
 		return true;
 	}
@@ -161,5 +147,4 @@ namespace thomas {
 		return s_context;
 	}
 }
-
 

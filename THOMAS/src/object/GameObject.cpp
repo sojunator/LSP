@@ -6,6 +6,7 @@ namespace thomas
 	{
 		std::vector<GameObject*> GameObject::s_gameObjects;
 
+
 		GameObject::GameObject(std::string name) : Object(name)
 		{
 			m_transform = AddComponent<component::Transform>();
