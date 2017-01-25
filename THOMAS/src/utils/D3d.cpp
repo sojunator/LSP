@@ -47,10 +47,17 @@ namespace thomas
 			scd.BufferDesc.RefreshRate.Numerator = 0; // change 0 to numerator for vsync
 			scd.BufferDesc.RefreshRate.Denominator = 0; // change 1 to denominator for vynsc
 
+			
+
+
 			hr = D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
 				NULL,
-				D3D11_CREATE_DEVICE_DEBUG,
+				#ifdef _DEBUG
+					D3D11_CREATE_DEVICE_DEBUG,
+				#else
+					NULL,
+				#endif // _DEBUG
 				NULL,
 				NULL,
 				D3D11_SDK_VERSION,
@@ -145,55 +152,6 @@ namespace thomas
 			return true;
 		}
 
-		ID3D11Buffer * D3d::CreateVertexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device)
-		{
-			return CreateBuffer(size, dynamic, streamout, data, device, D3D11_BIND_VERTEX_BUFFER);
-		}
-
-		ID3D11Buffer * D3d::CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device)
-		{
-			return CreateBuffer(size, dynamic, streamout, data, device, D3D11_BIND_INDEX_BUFFER);
-		}
-
-		ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag)
-		{
-			D3D11_BUFFER_DESC bufferDesc;
-			ZeroMemory(&bufferDesc, sizeof(bufferDesc));
-			bufferDesc.ByteWidth = size;
-			bufferDesc.MiscFlags = 0;
-
-			if (streamout)
-			{
-
-				bufferDesc.BindFlags = bindFlag | D3D11_BIND_STREAM_OUTPUT;
-			}
-			else
-			{
-				bufferDesc.BindFlags = bindFlag;
-			}
-
-			if (dynamic)
-			{
-				bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-				bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-			}
-			else
-			{
-				bufferDesc.CPUAccessFlags = 0;
-				bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-			}
-
-			ID3D11Buffer * buffer = 0;
-			HRESULT hr = device->CreateBuffer(&bufferDesc, data, &buffer);
-
-			if (FAILED(hr))
-			{
-				LOG("Failed to create vertex buffer");
-				return nullptr;
-			}
-
-			return buffer;
-		}
 
 		ID3D11RasterizerState * D3d::CreateRasterizer()
 		{

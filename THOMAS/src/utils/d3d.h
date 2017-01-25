@@ -21,14 +21,13 @@ namespace thomas {
 			static bool CreateSwapChainTexture(ID3D11Device*& device, IDXGISwapChain*& swapchain);
 			static void CreateViewPort(ID3D11DeviceContext*& context, LONG height, LONG width);
 
+			static ID3D11Debug* CreateDebug(ID3D11Device* device, ID3D11Debug*& debug);
 		public:
 			static bool Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
 			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
 			static bool LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size);
 			static bool Destroy();
-			static ID3D11Buffer* CreateVertexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
-			static ID3D11Buffer* CreateIndexBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA* data, ID3D11Device* device);
-			static ID3D11Buffer* CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag);
+			static ID3D11RenderTargetView* CreateRenderTargetView(ID3D11Resource* buffer);
 
 			static ID3D11RasterizerState* CreateRasterizer();
 
@@ -49,6 +48,7 @@ namespace thomas {
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;
 			static ID3D11RasterizerState* s_rasterState;
+
 
 		};
 
