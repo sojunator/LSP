@@ -7,10 +7,6 @@ using namespace object;
 class TestObject : public thomas::object::GameObject
 {
 private:
-	struct TestWorldMatrixStruct
-	{
-		math::Matrix worldMatrix;
-	};
 public:
 
 	TestObject() : GameObject("TestObject") {};
@@ -20,6 +16,4 @@ public:
 private:
 	thomas::graphics::Mesh* m_mesh;
 	thomas::graphics::Shader* m_shader;
-	TestWorldMatrixStruct m_wmData;
-	ID3D11Buffer* m_testCBuffer;
 };

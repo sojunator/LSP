@@ -15,6 +15,8 @@ namespace thomas {
 
 		Mesh::~Mesh()
 		{
+			m_data.vertexBuffer->Release();
+			m_data.indexBuffer->Release();
 		}
 
 		Mesh* Mesh::CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)

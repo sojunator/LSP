@@ -94,6 +94,7 @@ namespace thomas
 
 		Shader::~Shader()
 		{
+			Unbind();
 			if (m_data.vs)
 			{
 				m_data.vertexShader->Release();
@@ -107,7 +108,14 @@ namespace thomas
 			}
 
 			m_data.inputLayout->Release();
+		}
 
+		bool Shader::Destroy() {
+			for (int i = 0; i < s_loadedShaders.size(); i++)
+			{
+				delete s_loadedShaders[i];
+			}
+			return true;
 		}
 
 		bool Shader::Bind()

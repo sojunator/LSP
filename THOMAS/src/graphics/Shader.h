@@ -50,7 +50,7 @@ namespace thomas
 			static Shader* CreateShader(std::string name, std::string filePath, InputLayouts inputLayout);
 			static Shader* GetCurrentBoundShader();
 			static Shader* GetShader(std::string name);
-
+			static bool Destroy();
 
 
 		private:
@@ -67,7 +67,6 @@ namespace thomas
 			std::string m_name;
 			std::string m_filePath;
 
-			std::vector<ID3D11Buffer*> m_constantBuffers;
 
 			static Shader* s_currentBoundShader;
 

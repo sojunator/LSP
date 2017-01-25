@@ -2,6 +2,7 @@
 
 #include "Input.h"
 #include "object\Object.h"
+#include "graphics\Shader.h"
 
 #include <assimp\Importer.hpp>
 
@@ -129,6 +130,10 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
+
+
+		graphics::Shader::Destroy();
+
 		utils::D3d::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
