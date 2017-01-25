@@ -69,8 +69,12 @@ namespace thomas {
 			{
 				if (s_initialized)
 				{
-					s_initialized = thomas::object::Object::GetObjects()[i]->Start();
-					LOG("initiating object: " << thomas::object::Object::GetObjects()[i]->GetName());
+					
+					thomas::object::Object* obj = thomas::object::Object::GetObjects()[i];
+					if(obj->GetType() == "GameObject")
+						LOG("initiating " << obj->GetType() << ":" << obj->GetName());
+
+					s_initialized = obj->Start();
 				}
 				else
 					break;

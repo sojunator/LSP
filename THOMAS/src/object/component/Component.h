@@ -12,8 +12,8 @@ namespace thomas
 			{
 			private:
 			public:
-				Component(std::string name, GameObject* gameObject) : Object(name) { m_gameObject = gameObject; }
-				GameObject* GetGameObject() { return m_gameObject; }
+				Component(std::string name, GameObject* gameObject);
+				GameObject* GetGameObject();
 			private:
 			protected:
 				GameObject* m_gameObject;

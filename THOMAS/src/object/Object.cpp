@@ -7,14 +7,19 @@ namespace thomas
 	{
 
 		std::vector<Object*> Object::s_objects;
-		Object::Object(std::string name)
+		Object::Object(std::string type, std::string name)
 		{
 			m_name = name;
+			m_type = type;
 			s_objects.push_back(this);
 		}
 		std::string Object::GetName()
 		{
 			return m_name;
+		}
+		std::string Object::GetType()
+		{
+			return m_type;
 		}
 		bool Object::Destroy(Object  *object)
 		{

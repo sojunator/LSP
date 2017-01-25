@@ -68,9 +68,9 @@ namespace thomas
 				return m_aspectRatio;
 			}
 
-			void Camera::SetAspectRatio()
+			void Camera::SetAspectRatio(float aspectRatio)
 			{
-				m_aspectRatio = Window::GetWidth() / Window::GetHeight();
+				m_aspectRatio = aspectRatio;
 			}
 
 		}

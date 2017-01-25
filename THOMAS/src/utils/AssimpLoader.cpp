@@ -9,7 +9,22 @@ namespace thomas
 			// Read file via ASSIMP
 			Model model;
 			Assimp::Importer importer;
-			const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_GenUVCoords | aiProcess_JoinIdenticalVertices);
+			const aiScene* scene = importer.ReadFile
+			(
+				path, 
+				aiProcess_FindDegenerates |
+				aiProcess_FindInvalidData |
+				aiProcess_ImproveCacheLocality |
+				aiProcess_JoinIdenticalVertices |
+				aiProcess_OptimizeGraph |
+				aiProcess_OptimizeMeshes |
+				aiProcess_RemoveRedundantMaterials |
+				aiProcess_SortByPType |
+				aiProcess_Triangulate |
+				aiProcess_RemoveComponent |
+				aiProcess_ValidateDataStructure |
+				aiProcess_GenSmoothNormals
+			);
 			
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
@@ -25,11 +40,14 @@ namespace thomas
 			return model;			
 		}
 
-		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene * scene)
+		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, std::string nodeName)
 		{
 			std::vector <graphics::Vertex> vertices;
 			std::vector <int> indices;
 			std::string name = mesh->mName.C_Str();
+
+			if (name.empty())
+				name = nodeName;
 			
 			//vector<Texture> textures;
 
@@ -95,6 +113,7 @@ namespace thomas
 			//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 			//}
 
+			LOG("Mesh " << name << " loaded");
 			return graphics::Mesh::CreateMesh(vertices, indices, name);
 		}
 
@@ -106,7 +125,7 @@ namespace thomas
 				// The node object only contains indices to index the actual objects in the scene. 
 				// The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 				aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-				model.meshes.push_back(ProcessMesh(mesh, scene));
+				model.meshes.push_back(ProcessMesh(mesh, node->mName.C_Str()+i));
 			}
 			// After we've processed all of the meshes (if any) we then recursively process each of the children nodes
 			for (int i = 0; i < node->mNumChildren; i++)

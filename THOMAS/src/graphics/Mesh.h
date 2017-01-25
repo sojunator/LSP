@@ -46,6 +46,11 @@ namespace thomas
 	
 			std::string GetName();
 
+			int GetIndexCount();
+			int GetVertexCount();
+			
+			std::vector<Vertex>* GetVertices();
+			std::vector<int>* GetIndices();
 
 			static Mesh* GetMeshByName(std::string name);
 			static std::vector<Mesh*> GetLoadedMeshes();

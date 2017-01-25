@@ -19,6 +19,8 @@
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\object\component\Camera.cpp" />
+    <ClCompile Include="src\object\component\MeshComponent.cpp" />
+    <ClCompile Include="src\object\component\Component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -48,6 +50,7 @@
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\object\component\Camera.h" />
+    <ClInclude Include="src\object\component\MeshComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

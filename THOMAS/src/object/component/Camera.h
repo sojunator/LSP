@@ -31,7 +31,7 @@ namespace thomas
 				void SetFar(float viewFar);
 
 				float GetAspectRatio();
-				void SetAspectRatio();
+				void SetAspectRatio(float aspectRatio);
 				
 			private:
 				math::Matrix m_projMatrix;

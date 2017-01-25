@@ -167,7 +167,6 @@
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gameobjects\TestObject.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

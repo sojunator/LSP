@@ -7,7 +7,7 @@ namespace thomas
 		std::vector<GameObject*> GameObject::s_gameObjects;
 
 
-		GameObject::GameObject(std::string name) : Object(name)
+		GameObject::GameObject(std::string name) : Object("GameObject",name)
 		{
 			m_transform = AddComponent<component::Transform>();
 			s_gameObjects.push_back(this);
@@ -29,25 +29,7 @@ namespace thomas
 			}
 			return NULL;
 		}
-		template<typename T>
-		T* GameObject::AddComponent()
-		{
-			if (std::is_base_of<component::Component, T>::value)
-			{
-				T* component = new T(this);
-				m_components.push_back(component);
-				return component;
-			}
-			return NULL;
-		}
-		template<typename T>
-		T* GameObject::GetComponent()
-		{
-			for (int i = 0; i < m_components.size(); i++)
-			{
-				if (typeid(T) == typeid(m_components[i]));
-			}
-		}
+		
 
 	}
 }

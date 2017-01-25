@@ -19,6 +19,14 @@ namespace thomas
 
 				graphics::MeshData* GetMeshData();
 
+				std::string GetName();
+
+				int GetIndexCount();
+				int GetVertexCount();
+
+				std::vector<graphics::Vertex>* GetVertices();
+				std::vector<int>* GetIndices();
+
 			private:
 				graphics::Mesh* m_mesh;
 			};
