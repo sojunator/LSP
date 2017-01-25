@@ -23,9 +23,16 @@ namespace thomas
 			math::Vector3 normal;
 		};
 
+		struct Texture {
+			int id;
+			std::string type;
+			aiString path;
+		};
+
 		struct MeshData
 		{
 			std::vector<Vertex> vertices;
+			std::vector<Texture> textures;
 			std::vector<int> indices;
 			ID3D11Buffer* vertexBuffer;
 			ID3D11Buffer* indexBuffer;

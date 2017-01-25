@@ -76,24 +76,24 @@ namespace thomas
 					indices.push_back(face.mIndices[j]);
 			}
 
-			// Process materials
-			//if (mesh->mMaterialIndex >= 0)
-			//{
-			//	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-			//	// We assume a convention for sampler names in the shaders. Each diffuse texture should be named
-			//	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-			//	// Same applies to other texture as the following list summarizes:
-			//	// Diffuse: texture_diffuseN
-			//	// Specular: texture_specularN
-			//	// Normal: texture_normalN
+			//Process materials
+			if (mesh->mMaterialIndex >= 0)
+			{
+				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+				// We assume a convention for sampler names in the shaders. Each diffuse texture should be named
+				// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
+				// Same applies to other texture as the following list summarizes:
+				// Diffuse: texture_diffuseN
+				// Specular: texture_specularN
+				// Normal: texture_normalN
 
-			//	// 1. Diffuse maps
-			//	vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-			//	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-			//	// 2. Specular maps
-			//	vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-			//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-			//}
+				// 1. Diffuse maps
+				//vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+				//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+				//// 2. Specular maps
+				//vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+				//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+			}
 
 			return graphics::Mesh::CreateMesh(vertices, indices, name);
 		}
