@@ -2,7 +2,6 @@
 
 #include "ThomasCore.h"
 #include "Input.h"
-#include "Camera.h"
 
 #include "utils\AssimpLoader.h"
 
