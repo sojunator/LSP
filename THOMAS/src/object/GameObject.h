@@ -10,6 +10,8 @@ namespace thomas
 		{
 		private:
 		public:
+			component::Transform* m_transform;
+
 			GameObject(std::string name);
 			~GameObject();
 			template<typename T>
@@ -29,7 +31,7 @@ namespace thomas
 		protected:
 			bool m_active;
 			std::vector<component::Component*> m_components;
-			component::Transform* m_transform;
+			
 		};
 	}
 }

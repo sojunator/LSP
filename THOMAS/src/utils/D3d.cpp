@@ -8,27 +8,32 @@ namespace thomas
 	{
 		ID3D11RenderTargetView* D3d::s_backBuffer;
 		ID3D11RasterizerState* D3d::s_rasterState;
-		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
+		bool D3d::Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug)
 		{
 			LOG("Initiating DirectX");
-			if (!SwapchainAndDevice(width, height, device, context, swapchain, handle))
+
+			if (!CreateSwapchainAndDeviceAndContext(Window::GetWidth(), Window::GetHeight(), device, context, swapchain, Window::GetWindowHandler()))
 				return false;
+
 			if (!CreateSwapChainTexture(device, swapchain))
 				return false;
 
+			#ifdef _DEBUG
+			debug = CreateDebug();
+			if (debug == nullptr)
+				return false;
+			#endif
+
 			////Set back buffer texture 
 			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
-			CreateViewPort(context, height, width);
-
-
+			CreateViewPort(context, Window::GetHeight(), Window::GetWidth());
 			s_rasterState = CreateRasterizer();
 
 			LOG("DirectX initiated, welcome to the masterace");
 			return true;
-
 		}
 
-		bool D3d::SwapchainAndDevice(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
+		bool D3d::CreateSwapchainAndDeviceAndContext(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
 		{
 			HRESULT hr;
 			DXGI_SWAP_CHAIN_DESC scd;
@@ -48,8 +53,6 @@ namespace thomas
 			scd.BufferDesc.RefreshRate.Denominator = 0; // change 1 to denominator for vynsc
 
 			
-
-
 			hr = D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
 				NULL,
@@ -112,6 +115,17 @@ namespace thomas
 
 			context->RSSetViewports(1, &viewport);
 		}
+		ID3D11Debug * D3d::CreateDebug()
+		{
+			ID3D11Debug* debug;
+			HRESULT hr = ThomasCore::GetDevice()->QueryInterface(IID_PPV_ARGS(&debug));
+			if (FAILED(hr))
+			{
+				LOG("Failed to create debug object");
+				return nullptr;
+			}
+			return debug;
+		}
 		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
 		{
 
@@ -148,6 +162,8 @@ namespace thomas
 		{
 			s_backBuffer->Release();
 			s_backBuffer = 0;
+			s_rasterState->Release();
+			s_rasterState = 0;
 
 			return true;
 		}

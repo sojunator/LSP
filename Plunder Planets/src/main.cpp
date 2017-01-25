@@ -15,7 +15,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	TestObject* t = new TestObject();
 
 
-
 	//start
 	thomas::ThomasCore::Start();
 	return (int)msg.wParam;
