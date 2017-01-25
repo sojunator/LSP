@@ -1,7 +1,7 @@
 
 struct VSInput
 {
-	float4 position : POSITION;
+	float3 position : POSITION;
 	float2 uv : TEXCOORD;
 	float3 normal: NORMAL;
 };
@@ -21,7 +21,7 @@ struct VSOutput
 VSOutput VSMain(in VSInput input)
 {
 	VSOutput output;
-	output.position = mul(worldMatrix, input.position);
+    output.position = mul(worldMatrix, float4(input.position, 1));
 	return output;
 }
 

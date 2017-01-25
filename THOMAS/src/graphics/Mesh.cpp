@@ -47,23 +47,13 @@ namespace thomas {
 			HRESULT hr;
 
 
-			//Vertex buffer
-			D3D11_SUBRESOURCE_DATA vertexData, indexData;
-			vertexData.pSysMem = &m_data.vertices;
-			vertexData.SysMemPitch = 0;
-			vertexData.SysMemSlicePitch = 0;
-
-			m_data.vertexBuffer = utils::D3d::CreateVertexBuffer(sizeof(Vertex)*m_data.vertices.size(), false, false, &vertexData, ThomasCore::GetDevice());
+			m_data.vertexBuffer = utils::D3d::CreateBufferFromVector(m_data.vertices, D3D11_BIND_VERTEX_BUFFER);
 
 			if (m_data.vertexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::VERTEX::BUFFER");
 
-			//Index buffer
-			indexData.pSysMem = &m_data.indices;
-			indexData.SysMemPitch = 0;
-			indexData.SysMemSlicePitch = 0;
 
-			m_data.indexBuffer = utils::D3d::CreateIndexBuffer(sizeof(int)*m_data.indices.size(), false, false, &indexData, ThomasCore::GetDevice());
+			m_data.indexBuffer = utils::D3d::CreateBufferFromVector(m_data.indices, D3D11_BIND_INDEX_BUFFER);
 
 			if (m_data.indexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::INDEX::BUFFER");

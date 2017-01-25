@@ -52,8 +52,8 @@ namespace thomas
 				layoutDesc =
 				{
 					{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-					{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-					{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				};
 				break;
 			default:
@@ -208,7 +208,7 @@ namespace thomas
 		{
 			if (s_currentBoundShader == this)
 			{
-				SetVertexBuffer(meshData->vertexBuffer, sizeof(sizeof(meshData->vertices[0])));
+				SetVertexBuffer(meshData->vertexBuffer, sizeof(meshData->vertices[0]));
 				SetIndexBuffer(meshData->indexBuffer);
 			}
 			return true;

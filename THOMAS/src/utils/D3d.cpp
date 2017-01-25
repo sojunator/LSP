@@ -40,7 +40,6 @@ namespace thomas
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			scd.OutputWindow = handle;
-			scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // we recommend using this swap effect for all applications
 			scd.Flags = 0;
 			scd.SampleDesc.Count = 1; // AA times 1
 			scd.SampleDesc.Quality = 0;
@@ -202,12 +201,12 @@ namespace thomas
 
 			D3D11_RASTERIZER_DESC rasterDesc;
 			rasterDesc.AntialiasedLineEnable = false;
-			rasterDesc.CullMode = D3D11_CULL_NONE;
+			rasterDesc.CullMode = D3D11_CULL_BACK;
 			rasterDesc.DepthBias = 0;
 			rasterDesc.DepthBiasClamp = 0.0f;
 			rasterDesc.DepthClipEnable = false;
 			rasterDesc.FillMode = D3D11_FILL_SOLID;
-			rasterDesc.FrontCounterClockwise = false;
+			rasterDesc.FrontCounterClockwise = true;
 			rasterDesc.MultisampleEnable = false;
 			rasterDesc.ScissorEnable = false;
 			rasterDesc.SlopeScaledDepthBias = 0.0f;

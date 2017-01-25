@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <string>
+#include <vector>
 #include "directXTK\WICTextureLoader.h"
 
 #pragma comment (lib, "d3d11.lib")
@@ -34,10 +35,14 @@ namespace thomas {
 			static bool Clear();
 
 			template<typename T>
-			static ID3D11Buffer* CreateCBufferFromStruct(T dataStruct);
+			static ID3D11Buffer* CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
+
+			template <typename T>
+			static ID3D11Buffer* CreateBufferFromVector(const std::vector<T>& vectorData, D3D11_BIND_FLAG bindFlag);
 
 			template<typename T>
 			static bool FillBuffer(ID3D11Buffer* buffer, T data);
+
 
 
 
@@ -49,13 +54,13 @@ namespace thomas {
 
 
 		template<typename T>
-		ID3D11Buffer* D3d::CreateCBufferFromStruct(T dataStruct)
+		ID3D11Buffer* D3d::CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag)
 		{
 			ID3D11Buffer* buffer;
 			D3D11_BUFFER_DESC bufferDesc;
 			bufferDesc.ByteWidth = sizeof(dataStruct);
 			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
-			bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			bufferDesc.BindFlags = bindFlag;
 			bufferDesc.CPUAccessFlags = 0; //CPU if dynamic
 			bufferDesc.MiscFlags = 0;
 
@@ -81,6 +86,38 @@ namespace thomas {
 		{
 			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, 0, &data, 0, 0);
 			return true;
+		}
+
+
+		template <typename T>
+		ID3D11Buffer* D3d::CreateBufferFromVector(const std::vector<T>& vectorData, D3D11_BIND_FLAG bindFlag)
+		{
+			ID3D11Buffer* buffer;
+			D3D11_BUFFER_DESC bufferDesc;
+			bufferDesc.ByteWidth = sizeof(vectorData[0]) * vectorData.size();
+			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
+			bufferDesc.BindFlags = bindFlag;
+			bufferDesc.CPUAccessFlags = 0; //CPU if dynamic
+			bufferDesc.MiscFlags = 0;
+			
+
+			const T* data = &vectorData[0];
+
+			D3D11_SUBRESOURCE_DATA InitData;
+			InitData.pSysMem = data;
+			InitData.SysMemPitch = 0;
+			InitData.SysMemSlicePitch = 0;
+
+			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&bufferDesc, &InitData, &buffer);
+
+			if (result != S_OK)
+				LOG(result);
+
+			if (result == S_OK)
+				return buffer;
+
+			return NULL;
+
 		}
 	}
 
