@@ -34,7 +34,7 @@ namespace thomas
 			//vector<Texture> textures;
 
 			// Walk through each of the mesh's vertices
-			for (int i = 0; i < mesh->mNumVertices; i++)
+			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
 				graphics::Vertex vertex;
 				math::Vector3 vector;
@@ -68,11 +68,11 @@ namespace thomas
 			}
 
 			// Now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
-			for (int i = 0; i < mesh->mNumFaces; i++)
+			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 			{
 				aiFace face = mesh->mFaces[i];
 			
-				for (int j = 0; j < face.mNumIndices; j++)
+				for (unsigned int j = 0; j < face.mNumIndices; j++)
 					indices.push_back(face.mIndices[j]);
 			}
 
@@ -101,7 +101,7 @@ namespace thomas
 		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, Model &model)
 		{
 			// Process each mesh located at the current node
-			for (int i = 0; i < node->mNumMeshes; i++)
+			for (unsigned int i = 0; i < node->mNumMeshes; i++)
 			{
 				// The node object only contains indices to index the actual objects in the scene. 
 				// The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
@@ -109,7 +109,7 @@ namespace thomas
 				model.meshes.push_back(ProcessMesh(mesh, scene));
 			}
 			// After we've processed all of the meshes (if any) we then recursively process each of the children nodes
-			for (int i = 0; i < node->mNumChildren; i++)
+			for (unsigned int i = 0; i < node->mNumChildren; i++)
 			{
 				ProcessNode(node->mChildren[i], scene, model);
 			}

@@ -45,10 +45,6 @@ namespace thomas {
 
 		void Mesh::SetupMesh()
 		{
-			//HRESULT
-			HRESULT hr;
-
-
 			m_data.vertexBuffer = utils::D3d::CreateBufferFromVector(m_data.vertices, D3D11_BIND_VERTEX_BUFFER);
 
 			if (m_data.vertexBuffer == nullptr)
