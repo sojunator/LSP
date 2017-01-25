@@ -1,12 +1,13 @@
 #include "ThomasCore.h"
 
 #include "Input.h"
+#include "object\Object.h"
 
 #include <assimp\Importer.hpp>
 
 namespace thomas {
-	ID3D11Device* ThomasCore::s_device;
 	ID3D11Debug* ThomasCore::s_debug;
+	ID3D11Device* ThomasCore::s_device;
 	ID3D11DeviceContext* ThomasCore::s_context;
 	IDXGISwapChain* ThomasCore::s_swapchain;
 	HINSTANCE ThomasCore::s_hInstance;
@@ -14,8 +15,10 @@ namespace thomas {
 
 	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
-		AllocConsole();
-		freopen("CONOUT$", "w", stdout);
+		#ifdef _DEBUG
+				AllocConsole();
+				freopen("CONOUT$", "w", stdout);
+		#endif
 
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
@@ -23,18 +26,16 @@ namespace thomas {
 			s_initialized = Input::Init();
 		if (s_initialized)
 		{
-			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_debug,s_swapchain, Window::GetWindowHandler());
+			s_initialized = utils::D3d::Init(windowWidth, windowHeight, s_device, s_context, s_swapchain, Window::GetWindowHandler());
 		}
-
 
 		if (s_initialized)
 		{
-			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
-		}
-			
-		else
-		{
-			LOG("Thomas failed to initiate :(");
+			#ifdef _DEBUG
+			LOG("Initiating debug interface");
+			s_device->QueryInterface(IID_PPV_ARGS(&s_debug));
+			#endif // _DEBUG
+
 		}
 		
 		return s_initialized;
@@ -48,19 +49,47 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 		
+		utils::D3d::Clear();
 	//	LOG("update");
+
+		if (Input::GetButton(Input::Buttons::A))
+			LOG("YAY");
 
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
 		
+		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
+		{
+			thomas::object::Object::GetObjects()[i]->Update();
+		}
+		
+
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
 	}
 
 	void ThomasCore::Start()
 	{
+
 		if (s_initialized)
 		{
+			for (int i = 0; i < thomas::object::Object::GetObjects().size(); i++)
+			{
+				if (s_initialized)
+				{
+					s_initialized = thomas::object::Object::GetObjects()[i]->Start();
+					LOG("initiating object: " << thomas::object::Object::GetObjects()[i]->GetName());
+				}
+				else
+					break;
+
+			}
+		}
+
+
+		if (s_initialized)
+		{
+			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
 			MSG msg = { 0 };
 
 
@@ -82,6 +111,16 @@ namespace thomas {
 			Window::Destroy();
 
 		}
+		else
+		{
+			LOG("Thomas failed to initiate :(");
+			#ifdef _DEBUG
+			system("pause");
+			#endif // DEBUG
+
+			
+		}
+			
 	}
 	bool ThomasCore::Initialized()
 	{
@@ -90,24 +129,22 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
-
-
 		utils::D3d::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();
 
-#ifdef _DEBUG
-		HRESULT hr = s_debug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
-		if (FAILED(hr))
-			LOG(hr);
-		
-		s_debug->Release();
-#endif
+		s_swapchain = nullptr;
+		s_context = nullptr;
+		s_device = nullptr;
 
-		s_swapchain = 0;
-		s_context = 0;
-		s_device = 0;
+
+		#ifdef _DEBUG
+		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		s_debug = nullptr;
+		#endif // _DEBUG
+
+
 		return true;
 	}
 	ID3D11Device * ThomasCore::GetDevice()
@@ -119,5 +156,4 @@ namespace thomas {
 		return s_context;
 	}
 }
-
 

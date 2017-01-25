@@ -157,12 +157,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\gameobjects\TestObject.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gameobjects\TestObject.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

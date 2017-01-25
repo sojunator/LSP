@@ -3,4 +3,8 @@
 #include "ThomasCore.h"
 #include "Input.h"
 
-#include "graphics\shader\Shader.h"
+#include "utils\AssimpLoader.h"
+
+#include "graphics\Shader.h"
+
+#include "object\GameObject.h"

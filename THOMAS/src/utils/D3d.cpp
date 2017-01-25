@@ -1,13 +1,14 @@
 #pragma once
 #include "d3d.h"
 #include "../ThomasCore.h"
-
-namespace thomas {
+#include "Math.h"
+namespace thomas
+{
 	namespace utils
 	{
 		ID3D11RenderTargetView* D3d::s_backBuffer;
-
-		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, ID3D11Debug*& debug, IDXGISwapChain*& swapchain, HWND handle)
+		ID3D11RasterizerState* D3d::s_rasterState;
+		bool D3d::Init(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
 		{
 			LOG("Initiating DirectX");
 			if (!SwapchainAndDevice(width, height, device, context, swapchain, handle))
@@ -18,9 +19,9 @@ namespace thomas {
 			////Set back buffer texture 
 			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
 			CreateViewPort(context, height, width);
-#ifdef _DEBUG
-			CreateDebug(device, debug);
-#endif
+
+
+			s_rasterState = CreateRasterizer();
 
 			LOG("DirectX initiated, welcome to the masterace");
 			return true;
@@ -39,7 +40,6 @@ namespace thomas {
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			scd.OutputWindow = handle;
-			scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // we recommend using this swap effect for all applications
 			scd.Flags = 0;
 			scd.SampleDesc.Count = 1; // AA times 1
 			scd.SampleDesc.Quality = 0;
@@ -65,7 +65,7 @@ namespace thomas {
 				LOG("Could not create device or swapchain or context");
 				return false;
 			}
-	
+
 			return true;
 
 		}
@@ -73,8 +73,8 @@ namespace thomas {
 		bool D3d::CreateSwapChainTexture(ID3D11Device *& device, IDXGISwapChain *& swapchain)
 		{
 			HRESULT hr;
-			ID3D11Texture2D* backBuffer;
-			hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+			ID3D11Texture2D* pbackBuffer;
+			hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pbackBuffer);
 
 			if (FAILED(hr))
 			{
@@ -82,13 +82,14 @@ namespace thomas {
 				return false;
 			}
 
-			s_backBuffer = CreateRenderTargetView(backBuffer); // Move it to the gpu
+			hr = device->CreateRenderTargetView(pbackBuffer, NULL, &s_backBuffer); // Move it to the gpu
+			pbackBuffer->Release(); // not needed anymore, its on the gpu
 
-			if (s_backBuffer == nullptr)
+			if (FAILED(hr))
+			{
+				LOG("Failed to move backbuffer to GPU Fatal error");
 				return false;
-
-			backBuffer->Release(); // not needed anymore, its on the gpu
-
+			}
 			return true;
 		}
 
@@ -96,7 +97,7 @@ namespace thomas {
 		{
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(viewport));
-			
+
 			viewport.TopLeftX = 0;
 			viewport.TopLeftY = 0;
 			viewport.Height = height;
@@ -106,13 +107,23 @@ namespace thomas {
 		}
 		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
 		{
+
+
+			
+			HRESULT t = swapchain->Present(0, 0);
+
+		}
+
+		bool D3d::Clear()
+		{
 			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
-			context->ClearRenderTargetView(s_backBuffer, color);
-			HRESULT hr = swapchain->Present(0, 0);
-			if (FAILED(hr))
-			{
-				LOG("Failed to present backbuffer");
-			}
+			ThomasCore::GetDeviceContext()->ClearRenderTargetView(s_backBuffer, color);
+
+			math::Viewport vp(0, 0, Window::GetWidth(), Window::GetHeight());
+			ThomasCore::GetDeviceContext()->RSSetViewports(1, vp.Get11());
+			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+
+			return true;
 		}
 
 		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
@@ -144,36 +155,16 @@ namespace thomas {
 			return CreateBuffer(size, dynamic, streamout, data, device, D3D11_BIND_INDEX_BUFFER);
 		}
 
-		ID3D11RenderTargetView * D3d::CreateRenderTargetView(ID3D11Resource* buffer)
-		{
-			D3D11_RENDER_TARGET_VIEW_DESC desc;
-			ZeroMemory(&desc, sizeof(desc));
-
-			ID3D11RenderTargetView* rtv;
-			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-			desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-			desc.Texture2D.MipSlice = 0;
-		
-			HRESULT hr = ThomasCore::GetDevice()->CreateRenderTargetView(buffer, &desc, &rtv);
-			if (FAILED(hr))
-			{
-				LOG("Failed to create renderTargetView");
-				return nullptr;
-			}
-
-			return rtv;
-		}
-
 		ID3D11Buffer* D3d::CreateBuffer(UINT size, bool dynamic, bool streamout, D3D11_SUBRESOURCE_DATA * data, ID3D11Device * device, D3D11_BIND_FLAG bindFlag)
 		{
 			D3D11_BUFFER_DESC bufferDesc;
 			ZeroMemory(&bufferDesc, sizeof(bufferDesc));
 			bufferDesc.ByteWidth = size;
 			bufferDesc.MiscFlags = 0;
-			
+
 			if (streamout)
 			{
-				
+
 				bufferDesc.BindFlags = bindFlag | D3D11_BIND_STREAM_OUTPUT;
 			}
 			else
@@ -204,46 +195,29 @@ namespace thomas {
 			return buffer;
 		}
 
-		ID3D11Debug * D3d::CreateDebug(ID3D11Device * device, ID3D11Debug*& debug)
+		ID3D11RasterizerState * D3d::CreateRasterizer()
 		{
-			HRESULT hr = device->QueryInterface(__uuidof(ID3D11Debug), (void**)&debug);
-			if (FAILED(hr))
-			{
-				LOG(hr);
-				return nullptr;
-			}
-			return debug;
+			ID3D11RasterizerState* rasterState;
+
+			D3D11_RASTERIZER_DESC rasterDesc;
+			rasterDesc.AntialiasedLineEnable = false;
+			rasterDesc.CullMode = D3D11_CULL_BACK;
+			rasterDesc.DepthBias = 0;
+			rasterDesc.DepthBiasClamp = 0.0f;
+			rasterDesc.DepthClipEnable = false;
+			rasterDesc.FillMode = D3D11_FILL_SOLID;
+			rasterDesc.FrontCounterClockwise = true;
+			rasterDesc.MultisampleEnable = false;
+			rasterDesc.ScissorEnable = false;
+			rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+			ThomasCore::GetDevice()->CreateRasterizerState(&rasterDesc, &rasterState);
+
+			return rasterState;
+
 		}
 
 
-		template<typename T>
-		ID3D11Buffer* D3d::CreateCBufferFromStruct(T dataStruct)
-		{
-			ID3D11Buffer* buffer;
-			D3D11_BUFFER_DESC bufferDesc;
-			bufferDesc.ByteWidth = sizeof(dataStruct);
-			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
-			bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			bufferDesc.MiscFlags = 0;
-			
-			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
 
-			if (result != S_OK)
-				LOG(result);
-			
-			if (result == S_OK)
-				return buffer;
-
-			return NULL;
-
-		}
-		template<typename T>
-
-		bool D3d::FillBuffer(ID3D11Buffer* buffer, T data)
-		{
-			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, 0, &data, 0, 0);
-			return true;
-		}
 	}
 }
