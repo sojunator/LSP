@@ -10,13 +10,14 @@ namespace thomas
 			class THOMAS_API Transform: public Component
 			{
 			private:
+				void Decompose();
 			public:
 
 				math::Quaternion m_localRotation;
 				math::Vector3 m_localPosition;
 				math::Vector3 m_localScale;
 				
-
+				math::Matrix m_localWorldMatrix;
 
 				Transform(GameObject* gameObject);
 
@@ -44,6 +45,7 @@ namespace thomas
 				void SetScale(math::Vector3 scale);
 
 			private:
+				
 				Transform* m_parent;
 			};
 		}

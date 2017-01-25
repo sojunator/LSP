@@ -7,7 +7,7 @@ namespace thomas
 		namespace component
 		{
 
-			Component::Component(std::string name, GameObject * gameObject) : Object("Component", gameObject->GetName() + ":" + name)
+			Component::Component(std::string name, GameObject * gameObject) : Object("Component:"+name, gameObject->GetName())
 			{
 				m_gameObject = gameObject;
 			}

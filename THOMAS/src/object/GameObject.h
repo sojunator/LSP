@@ -51,8 +51,13 @@ namespace thomas
 		{
 			for (int i = 0; i < m_components.size(); i++)
 			{
-				if (typeid(T) == typeid(m_components[i]));
+				T* comp = dynamic_cast<T*>(m_components[i]);
+				if (comp)
+					return comp;
 			}
+			return NULL;
 		}
+
+
 	}
 }

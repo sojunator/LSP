@@ -4,6 +4,7 @@
 
 #include "Thomas.h"
 #include "gameobjects\TestObject.h"
+#include "gameobjects\CameraObject.h"
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
@@ -15,7 +16,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("../res/models/box.obj");
 
 	new TestObject();
-	//CameraObject* c = new CameraObject();
+	CameraObject* c = new CameraObject();
 
 	//start
 	thomas::ThomasCore::Start();

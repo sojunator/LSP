@@ -18,6 +18,7 @@ namespace thomas
 
 			public:
 				Camera(GameObject* gameObject);
+				math::Matrix GetViewMatrix();
 				math::Matrix GetProjMatrix();
 				math::Matrix GetViewProjMatrix();
 
