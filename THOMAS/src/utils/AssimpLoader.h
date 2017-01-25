@@ -14,7 +14,7 @@ namespace thomas
 		class AssimpLoader
 		{
 		private:
-			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string nodeName);
 			static void ProcessNode(aiNode* node, const aiScene* scene, Model &model);
 
 		public:
@@ -23,6 +23,7 @@ namespace thomas
 		private:
 			
 		};
+
 	}
 }
 

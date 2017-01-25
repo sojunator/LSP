@@ -43,6 +43,40 @@ namespace thomas {
 			return m_name;
 		}
 
+		int Mesh::GetIndexCount()
+		{
+			return m_data.indices.size();
+		}
+
+		int Mesh::GetVertexCount()
+		{
+			return m_data.vertices.size();
+		}
+
+		std::vector<Vertex>* Mesh::GetVertices()
+		{
+			return &m_data.vertices;
+		}
+
+		std::vector<int>* Mesh::GetIndices()
+		{
+			return &m_data.indices;
+		}
+
+		Mesh * Mesh::GetMeshByName(std::string name)
+		{
+			for (int i = 0; i < s_meshes.size(); i++) {
+				if (s_meshes[i]->GetName() == name)
+					return s_meshes[i];
+			}
+			return NULL;
+		}
+
+		std::vector<Mesh*> Mesh::GetLoadedMeshes()
+		{
+			return s_meshes;
+		}
+
 		void Mesh::SetupMesh()
 		{
 			m_data.vertexBuffer = utils::D3d::CreateBufferFromVector(m_data.vertices, D3D11_BIND_VERTEX_BUFFER);

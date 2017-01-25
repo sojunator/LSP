@@ -42,8 +42,8 @@ namespace thomas
 		{
 		private:
 			void SetupMesh();
-		public:
 			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
+		public:
 			~Mesh();
 			static Mesh* CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
 
@@ -52,6 +52,15 @@ namespace thomas
 			MeshData* GetData();
 	
 			std::string GetName();
+
+			int GetIndexCount();
+			int GetVertexCount();
+			
+			std::vector<Vertex>* GetVertices();
+			std::vector<int>* GetIndices();
+
+			static Mesh* GetMeshByName(std::string name);
+			static std::vector<Mesh*> GetLoadedMeshes();
 
 		private:
 			static std::vector<Mesh*> s_meshes;

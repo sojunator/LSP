@@ -214,12 +214,13 @@ namespace thomas
 		}
 		bool Shader::SetMeshData(MeshData * meshData)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader == this && meshData)
 			{
 				SetVertexBuffer(meshData->vertexBuffer, sizeof(meshData->vertices[0]));
 				SetIndexBuffer(meshData->indexBuffer);
+				return true;
 			}
-			return true;
+			return false;
 
 		}
 		Shader * Shader::CreateShader(std::string name, std::string filePath, InputLayouts inputLayout)

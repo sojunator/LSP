@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\TestObject.h" />
   </ItemGroup>
   <ItemGroup>
@@ -167,7 +168,6 @@
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gameobjects\TestObject.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

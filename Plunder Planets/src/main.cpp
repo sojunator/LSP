@@ -4,16 +4,19 @@
 
 #include "Thomas.h"
 #include "gameobjects\TestObject.h"
+#include "gameobjects\CameraObject.h"
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
 	MSG msg = { 0 };
 	thomas::utils::Model model;
-	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantets");
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
 	//init code
 
-	TestObject* t = new TestObject();
+	thomas::utils::AssimpLoader::LoadModel("../res/models/box.obj");
 
+	new TestObject();
+	CameraObject* c = new CameraObject();
 
 	//start
 	thomas::ThomasCore::Start();

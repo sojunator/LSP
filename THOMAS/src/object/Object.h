@@ -10,7 +10,7 @@ namespace thomas
 		{
 		private:
 		public:
-			Object(std::string name);
+			Object(std::string type, std::string name);
 
 			virtual bool Start() { return true; }
 			virtual void Update() {}
@@ -18,6 +18,7 @@ namespace thomas
 			virtual void Render() {}
 
 			std::string GetName();
+			std::string GetType();
 
 			static bool Destroy(Object *object);
 			//Clone object
@@ -30,6 +31,7 @@ namespace thomas
 			static std::vector<Object*> s_objects;
 		protected:
 			std::string m_name;
+			std::string m_type;
 		};
 	}
 }

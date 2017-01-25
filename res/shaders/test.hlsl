@@ -7,9 +7,9 @@ struct VSInput
 };
 
 
-cbuffer test
+cbuffer mvp
 {
-	matrix worldMatrix;
+	matrix mvpMatrix;
 };
 
 struct VSOutput
@@ -21,7 +21,7 @@ struct VSOutput
 VSOutput VSMain(in VSInput input)
 {
 	VSOutput output;
-    output.position = float4(input.position, 1);
+    output.position = mul(float4(input.position, 1), mvpMatrix);
 	return output;
 }
 
