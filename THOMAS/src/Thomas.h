@@ -4,4 +4,8 @@
 #include "Input.h"
 #include "Camera.h"
 
-#include "graphics\shader\Shader.h"
+#include "utils\AssimpLoader.h"
+
+#include "graphics\Shader.h"
+
+#include "object\GameObject.h"
