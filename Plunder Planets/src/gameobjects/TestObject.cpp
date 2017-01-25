@@ -5,10 +5,10 @@ using namespace object;
 bool TestObject::Start()
 {
 	utils::Model model = thomas::utils::AssimpLoader::LoadModel("../res/models/sphere1.obj");
-	m_shader = thomas::graphics::Shader::CreateShader("testShader", "../res/shaders/test.hlsl", thomas::graphics::Shader::InputLayouts::STANDARD);
-	m_mesh = model.meshes[0];
-	
+	m_shader = thomas::graphics::Shader::CreateShader("testShader", "../res/shaders/test.hlsl", thomas::graphics::Shader::InputLayouts::STANDARD);	
 	m_transform->SetPosition(math::Vector3(0, 0, 0));
+
+
 
 	return true;
 }

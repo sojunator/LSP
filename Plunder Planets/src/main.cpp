@@ -9,11 +9,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	MSG msg = { 0 };
 	thomas::utils::Model model;
-	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantets");
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
 	//init code
 
 	TestObject* t = new TestObject();
-
+	CameraObject* c = new CameraObject();
 
 
 	//start

@@ -43,6 +43,20 @@ namespace thomas {
 			return m_name;
 		}
 
+		Mesh * Mesh::GetMeshByName(std::string name)
+		{
+			for (int i = 0; i < s_meshes.size(); i++) {
+				if (s_meshes[i]->GetName() == name)
+					return s_meshes[i];
+			}
+			return NULL;
+		}
+
+		std::vector<Mesh*> Mesh::GetLoadedMeshes()
+		{
+			return s_meshes;
+		}
+
 		void Mesh::SetupMesh()
 		{
 			//HRESULT
