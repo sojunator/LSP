@@ -18,15 +18,6 @@ namespace thomas
 			if (!CreateSwapChainTexture(device, swapchain))
 				return false;
 
-			//ID3D11DepthStencilView* depthView;
-			//ID3D11Texture2D* depthBuffer;
-			//ID3D11DepthStencilState* depthState;
-
-			//if (!CreateDepthStencilView(device, depthView, depthBuffer))
-			//	return false;
-
-			//if (!CreateDepthStencilState(device, depthState))
-			//	return false;
 
 			#ifdef _DEBUG
 			debug = CreateDebug();
