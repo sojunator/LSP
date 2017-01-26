@@ -143,17 +143,8 @@ namespace thomas
 			depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 			HRESULT hr = device->CreateDepthStencilState(&depthStencilDesc, &stencil);
-		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
-		{
-			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), texture, textureView, size);
-			if (FAILED(hr))
-			{
-				LOG(hr);
-				return false;
-			}
-			return true;
-
 		}
+		
 		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer)
 		{
 			D3D11_TEXTURE2D_DESC depthBufferDesc;
@@ -230,15 +221,16 @@ namespace thomas
 			return true;
 		}
 
-		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
+		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
 		{
-			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, fileName, texture, textureView, size);
+			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), texture, textureView, size);
 			if (FAILED(hr))
 			{
-				LOG("Could not create texture");
+				LOG(hr);
 				return false;
 			}
 			return true;
+
 		}
 
 		bool D3d::Destroy()
