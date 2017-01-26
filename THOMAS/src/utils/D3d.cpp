@@ -77,7 +77,7 @@ namespace thomas
 
 			if (FAILED(hr))
 			{
-				LOG("Could not create device or swapchain or context");
+				LOG_HR(hr);
 				return false;
 			}
 
@@ -93,7 +93,7 @@ namespace thomas
 
 			if (FAILED(hr))
 			{
-				LOG("Failed to get backbuffer");
+				LOG_HR(hr);
 				return false;
 			}
 
@@ -102,7 +102,7 @@ namespace thomas
 
 			if (FAILED(hr))
 			{
-				LOG("Failed to move backbuffer to GPU Fatal error");
+				LOG_HR(hr);
 				return false;
 			}
 			return true;
@@ -147,7 +147,7 @@ namespace thomas
 			HRESULT hr = device->CreateDepthStencilState(&depthStencilDesc, &stencil);
 			if (FAILED(hr))
 			{
-				LOG(hr);
+				LOG_HR(hr);
 				return false;
 			}
 			return true;
@@ -184,7 +184,7 @@ namespace thomas
 			HRESULT hr = device->CreateTexture2D(&depthBufferDesc, NULL, &depthBuffer);
 			if (FAILED(hr))
 			{
-				LOG(hr);
+				LOG_HR(hr);
 				depthBuffer = nullptr;
 				return false;
 			}
@@ -192,7 +192,7 @@ namespace thomas
 			hr = device->CreateDepthStencilView(depthBuffer, &depthViewDesc, &stencilView);
 			if (FAILED(hr))
 			{
-				LOG(hr);
+				LOG_HR(hr);
 				stencilView = nullptr;
 				return false;
 			}
@@ -206,7 +206,7 @@ namespace thomas
 			HRESULT hr = ThomasCore::GetDevice()->QueryInterface(IID_PPV_ARGS(&debug));
 			if (FAILED(hr))
 			{
-				LOG("Failed to create debug object");
+				LOG_HR(hr);
 				return nullptr;
 			}
 			return debug;
@@ -215,7 +215,9 @@ namespace thomas
 		{
 			HRESULT hr = swapchain->Present(0, 0);
 			if (FAILED(hr))
-				LOG(hr);
+			{
+				LOG_HR(hr);
+			}
 		}
 
 		bool D3d::Clear()
@@ -256,7 +258,7 @@ namespace thomas
 
 			if (FAILED(hr))
 			{
-				LOG(hr);
+				LOG_HR(hr);
 				return false;
 			}
 	
@@ -287,7 +289,7 @@ namespace thomas
 			HRESULT hr = device->CreateRenderTargetView(buffer, &rtvDesc, &rtv);
 			if (FAILED(hr))
 			{
-				LOG(hr);
+				LOG_HR(hr);
 				return nullptr;
 			}
 
