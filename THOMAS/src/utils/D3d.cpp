@@ -83,7 +83,7 @@ namespace thomas
 
 		}
 
-		bool D3d::CreateSwapChainTexture(ID3D11Device *& device, IDXGISwapChain *& swapchain)
+		bool D3d::CreateSwapChainTexture(ID3D11Device * device, IDXGISwapChain * swapchain)
 		{
 			HRESULT hr;
 			ID3D11Texture2D* pbackBuffer;
@@ -95,7 +95,7 @@ namespace thomas
 				return false;
 			}
 
-			hr = device->CreateRenderTargetView(pbackBuffer, NULL, &s_backBuffer); // Move it to the gpu
+			s_backBuffer = CreateRenderTargetViewFromBuffer(device, pbackBuffer);
 			pbackBuffer->Release(); // not needed anymore, its on the gpu
 
 			if (FAILED(hr))
@@ -213,11 +213,9 @@ namespace thomas
 		}
 		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
 		{
-
-
-			
-			HRESULT t = swapchain->Present(0, 0);
-
+			HRESULT hr = swapchain->Present(0, 0);
+			if (FAILED(hr))
+				LOG(hr);
 		}
 
 		bool D3d::Clear()
@@ -251,6 +249,26 @@ namespace thomas
 			s_rasterState = 0;
 
 			return true;
+		}
+
+		ID3D11RenderTargetView * D3d::CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource * buffer)
+		{
+			ID3D11RenderTargetView* rtv;
+			D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+
+			ZeroMemory(&rtvDesc, sizeof(rtvDesc));
+			rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+			rtvDesc.Texture2D.MipSlice = 0;
+
+			HRESULT hr = device->CreateRenderTargetView(buffer, &rtvDesc, &rtv);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				return nullptr;
+			}
+
+			return rtv;
 		}
 
 
