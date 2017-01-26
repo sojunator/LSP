@@ -3,9 +3,9 @@
 namespace thomas {
 	namespace graphics {
 
-		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
+		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, material::Material* material)
 		{
-			
+			m_material = material;
 			m_data.vertices = vertices;
 			m_data.indices = indices;
 			m_name = name;
@@ -18,11 +18,6 @@ namespace thomas {
 			m_data.indexBuffer->Release();
 		}
 
-		Mesh* Mesh::CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
-		{
-			Mesh *mesh = new Mesh(vertices, indices, name);
-			return mesh;
-		}
 
 		bool Mesh::SetName(std::string name)
 		{

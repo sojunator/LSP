@@ -1,57 +1,61 @@
 #include "Texture.h"
+#include "Shader.h"
 #include "../ThomasCore.h"
 
 namespace thomas
 {
 	namespace graphics
 	{
-		Texture::Data Texture::s_data;
 		std::vector<Texture*> Texture::s_loadedTextures;
-		Texture* Texture::CreateTexture(std::string fileName)
+		Texture* Texture::CreateTexture(TextureType type, std::string path)
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				if (fileName == s_loadedTextures[i]->GetFileName())
+				if (s_loadedTextures[i]->GetName() == path)
 					return s_loadedTextures[i];
 			}
-			ID3D11ShaderResourceView* textureView;
-			ID3D11Resource* texture;
-			if (utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), fileName, texture, textureView, NULL))
-			{
-				Texture tex(fileName, textureView, texture);
-				s_loadedTextures.push_back(&tex);
-				return &tex;
-			}
-			return NULL;
+			
+			Texture* texture = new Texture(type, path);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
 		}
 
-		std::string Texture::GetFileName()
+		std::string Texture::GetName()
 		{
-			return s_data.fileName;
+			return m_name;
 		}
 
 		ID3D11Resource * Texture::GetTexture()
 		{
-			return s_data.texture;
+			return m_data.texture;
 		}
 
 		ID3D11ShaderResourceView * Texture::GetTextureView()
 		{
-			return s_data.textureView;
+			return m_data.textureView;
 		}
-		Texture::Texture(std::string fileName, ID3D11ShaderResourceView * textureView,
-			ID3D11Resource * texture)
+		bool Texture::Bind()
 		{
-			s_data.fileName = fileName;
-			s_data.texture = texture;
-			s_data.textureView = textureView;
+			return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
+		}
+		bool Texture::Unbind()
+		{
+			return Shader::GetCurrentBoundShader()->BindTextures(NULL, (int)m_textureType);
+		}
+		Texture::Texture(TextureType type, std::string path)
+		{
+			m_textureType = type;
+			m_name = path;
+			utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+
 		}
 		void Texture::Destroy()
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				s_loadedTextures[i]->s_data.texture->Release();
-				s_loadedTextures[i]->s_data.textureView->Release();
+				s_loadedTextures[i]->m_data.texture->Release();
+				s_loadedTextures[i]->m_data.textureView->Release();
 			}
 		}
 

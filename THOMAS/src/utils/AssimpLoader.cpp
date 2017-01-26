@@ -1,13 +1,15 @@
 #include "AssimpLoader.h"
-
+#include "../graphics/Model.h"
 namespace thomas
 {
 	namespace utils
 	{
-		Model AssimpLoader::LoadModel(std::string path)
+		graphics::Model* AssimpLoader::LoadModel(std::string name, std::string path)
 		{
+
+			LOG("Starting to load model from: " << path);
+
 			// Read file via ASSIMP
-			Model model;
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile
 			(
@@ -29,14 +31,22 @@ namespace thomas
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
 				LOG("ERROR::ASSIMP " << importer.GetErrorString());
-				return model;
+				return NULL;
 			}
 
-			else
-				LOG(path << " Successfully loaded.");
+				
+
+
+			std::vector<graphics::Mesh*> meshes;
 
 			// Process ASSIMP's root node recursively
-			ProcessNode(scene->mRootNode, scene, model);
+			ProcessNode(scene->mRootNode, scene, meshes);
+
+			graphics::Model* model = graphics::Model::CreateModel(name, meshes);
+			
+			if(model)
+				LOG(" Successfully loaded " << name);
+
 			return model;			
 		}
 
@@ -89,15 +99,13 @@ namespace thomas
 			return opacity;
 		}
 
-		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string nodeName)
+		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string meshName)
 		{
 			std::vector <graphics::Vertex> vertices;
 			std::vector <int> indices;
-			std::string name = mesh->mName.C_Str();
+			std::string name = meshName + "-" + std::string(mesh->mName.C_Str());
+			graphics::material::Material* material;
 
-			if (name.empty())
-				name = nodeName;
-			
 			//vector<Texture> textures;
 
 			// Walk through each of the mesh's vertices
@@ -144,43 +152,43 @@ namespace thomas
 			}
 
 			//Process materials
-			if (mesh->mMaterialIndex >= 0)
+			if (mesh->mMaterialIndex > 0)
 			{
-				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-				// We assume a convention for sampler names in the shaders. Each diffuse texture should be named
-				// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-				// Same applies to other texture as the following list summarizes:
-				// Diffuse: texture_diffuseN
-				// Specular: texture_specularN
-				// Normal: texture_normalN
-
-				// 1. Diffuse maps
-				//vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-				//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-				//// 2. Specular maps
-				//vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-				//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+				aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+				material = graphics::material::Material::CreateMaterial(mat);
+			}
+			else{
+				material = NULL;
 			}
 
-			LOG("Mesh " << name << " loaded");
-			return graphics::Mesh::CreateMesh(vertices, indices, name);
+
+			graphics::Mesh* m = new graphics::Mesh(vertices, indices, name, material);
+			return m;
 		}
 
-		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, Model &model)
+		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, std::vector<graphics::Mesh*> &meshes)
 		{
+			std::string modelName(scene->mRootNode->mName.C_Str());
+			std::string nodeName(node->mName.C_Str());
+			if (nodeName == modelName)
+				nodeName = "";
 			// Process each mesh located at the current node
 			for (unsigned int i = 0; i < node->mNumMeshes; i++)
 			{
 				// The node object only contains indices to index the actual objects in the scene. 
 				// The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 				aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-				model.meshes.push_back(ProcessMesh(mesh, scene, node->mName.C_Str()+i));
+				graphics::Mesh* processedMesh = ProcessMesh(mesh, scene, modelName + "-" + nodeName + "-" + std::to_string(i));
+				meshes.push_back(processedMesh);
 			}
 			// After we've processed all of the meshes (if any) we then recursively process each of the children nodes
 			for (unsigned int i = 0; i < node->mNumChildren; i++)
 			{
-				ProcessNode(node->mChildren[i], scene, model);
+				ProcessNode(node->mChildren[i], scene, meshes);
 			}
+		}
+		void AssimpLoader::ProcessMaterials(aiScene * scene)
+		{
 		}
 	}
 }

@@ -231,7 +231,7 @@ namespace thomas
 		}
 
 		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, 
-			ID3D11Resource*& texture, ID3D11ShaderResourceView*& textureView, size_t size)
+			ID3D11Resource*& texture, ID3D11ShaderResourceView*& textureView)
 		{
 			// Convert from string to char in order to split by token
 			// convert back from char, since its easier to compare strings than chars
@@ -247,11 +247,11 @@ namespace thomas
 			HRESULT hr;
 			if (extension_string == ".dds")
 			{
-				hr = DirectX::CreateDDSTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView, size);
+				hr = DirectX::CreateDDSTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView);
 			}
 			else
 			{
-				hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView, size);
+				hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView);
 			}
 
 			if (FAILED(hr))

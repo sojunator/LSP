@@ -1,4 +1,4 @@
-#include "Material.h"
+#include "Materials.h"
 #include "../../utils/AssimpLoader.h"
 namespace thomas
 {
@@ -18,6 +18,7 @@ namespace thomas
 
 			Material::~Material()
 			{
+				m_materialPropertiesBuffer->Release();
 			}
 
 			Material* Material::CreateMaterial(aiMaterial * material)
@@ -35,7 +36,7 @@ namespace thomas
 				switch (materialType)
 				{
 				case aiShadingMode_Phong:
-				//	mat = new PhongMaterial(material);
+					mat = new PhongMaterial(name, material);
 					break;
 				default:
 					break;
@@ -91,6 +92,30 @@ namespace thomas
 					} 
 				}
 				return materials;
+			}
+
+			bool Material::Bind()
+			{
+				bool buffer = m_shader->BindBuffer(m_materialPropertiesBuffer, Shader::ResourceType::MATERIAL);
+				bool texture = true;
+				for (unsigned int i = 0; i < m_textures.size(); i++)
+				{
+					if(texture)
+						texture = m_textures[i]->Bind();
+				}
+				return buffer && texture;
+			}
+
+			bool Material::Unbind()
+			{
+				bool buffer = m_shader->BindBuffer(NULL, Shader::ResourceType::MATERIAL);
+				bool texture = true;
+				for (unsigned int i = 0; i < m_textures.size(); i++)
+				{
+					if (texture)
+						texture = m_textures[i]->Unbind();
+				}
+				return buffer && texture;
 			}
 
 			std::string Material::GetName()

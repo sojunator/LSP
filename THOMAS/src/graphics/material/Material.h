@@ -1,9 +1,7 @@
 #pragma once
 #include "../Shader.h"
 #include "../Texture.h"
-#include "../../../include/assimp/Importer.hpp"
-#include "../../../include/assimp/scene.h"
-#include "../../../include/assimp/postprocess.h"
+#include "../../utils/AssimpLoader.h"
 
 namespace thomas
 {
@@ -14,15 +12,17 @@ namespace thomas
 			class Material
 			{
 			private:
-				Material(std::string name, Shader* shader);
+				
 			public:
+				Material(std::string name, Shader* shader);
+
 				static Material* CreateMaterial(aiMaterial* material);
 				static Material* GetMaterialByName(std::string name);
 				static std::vector<Material*> GetLoadedMaterials();
 				static std::vector<Material*> GetMaterialsByShaders(Shader* shader);
 				static std::vector<Material*> GetMaterialsByShaders(std::string name);
-				virtual bool BindMaterial() = 0;
-				virtual bool UnbindMaterial() = 0;
+				bool Bind();
+				bool Unbind();
 				std::string GetName();
 				Shader* GetShader();
 				
@@ -34,8 +34,8 @@ namespace thomas
 			protected:
 				Shader* m_shader;
 				std::string m_materialName;
-				ID3D11Buffer* materialPropertiesBuffer;
-				std::vector<Texture*> textures;
+				ID3D11Buffer* m_materialPropertiesBuffer;
+				std::vector<Texture*> m_textures;
 			};
 		}
 	}

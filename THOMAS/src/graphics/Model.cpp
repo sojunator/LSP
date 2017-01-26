@@ -4,13 +4,13 @@ namespace thomas {
 	namespace graphics {
 
 		std::vector<Model*> Model::s_loadedModels;
-		Model::Model(std::string name, std::vector<Mesh>& meshes)
+		Model::Model(std::string name, std::vector<Mesh*> meshes)
 		{
 			m_name = name;
 			m_meshes = meshes;
 		}
 
-		Model * Model::CreateModel(std::string name, std::vector<Mesh>& meshes)
+		Model * Model::CreateModel(std::string name, std::vector<Mesh*> meshes)
 		{
 			Model* existingModel = GetModelByName(name);
 			if (existingModel)
@@ -47,8 +47,8 @@ namespace thomas {
 			std::vector<Mesh*> meshes;
 			for (unsigned int i = 0; i < m_meshes.size(); i++)
 			{
-				if (m_meshes[i].GetMaterial() == material)
-					meshes.push_back(&m_meshes[i]);
+				if (m_meshes[i]->GetMaterial() == material)
+					meshes.push_back(m_meshes[i]);
 			}
 			return meshes;
 		}
@@ -58,15 +58,15 @@ namespace thomas {
 			std::vector<Mesh*> meshes;
 			for (unsigned int i = 0; i < m_meshes.size(); i++)
 			{
-				if (m_meshes[i].GetMaterial()->GetName() == name)
-					meshes.push_back(&m_meshes[i]);
+				if (m_meshes[i]->GetMaterial()->GetName() == name)
+					meshes.push_back(m_meshes[i]);
 			}
 			return meshes;
 		}
 
-		std::vector<Mesh>* Model::GetMeshes()
+		std::vector<Mesh*> Model::GetMeshes()
 		{
-			return &m_meshes;
+			return m_meshes;
 		}
 
 	}

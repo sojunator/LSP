@@ -26,6 +26,7 @@
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\graphics\material\Material.cpp" />
+    <ClCompile Include="src\graphics\material\PhongMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -61,6 +62,8 @@
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\graphics\material\Material.h" />
+    <ClInclude Include="src\graphics\material\PhongMaterial.h" />
+    <ClInclude Include="src\graphics\material\Materials.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

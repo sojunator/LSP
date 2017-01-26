@@ -33,11 +33,10 @@ namespace thomas
 		{
 		private:
 			void SetupMesh();
-			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
+			
 		public:
+			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, material::Material* material);
 			~Mesh();
-			static Mesh* CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
-
 			bool SetName(std::string name);
 
 			MeshData* GetData();
