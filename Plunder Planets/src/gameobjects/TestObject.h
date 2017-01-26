@@ -22,7 +22,7 @@ public:
 	bool Start()
 	{
 		m_mesh = AddComponent<component::MeshComponent>();
-		m_mesh->SetMesh("1");
+		m_mesh->SetMesh("g  Mesh Mesh");
 
 		m_cameraObject = (CameraObject*)Find("CameraObject");
 
