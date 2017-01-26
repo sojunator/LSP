@@ -12,7 +12,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
 	//init code
 
-	thomas::utils::AssimpLoader::LoadModel("sphere", "../res/models/sphere1.obj");
+
+
+	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", "../res/shaders/phong.hlsl", thomas::graphics::Shader::InputLayouts::STANDARD);
+	shader->Bind();
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/armchair.obj");
 
 	new TestObject();
 	CameraObject* c = new CameraObject();

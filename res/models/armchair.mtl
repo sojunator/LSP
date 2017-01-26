@@ -1,0 +1,48 @@
+# Blender MTL File: 'armchair.blend'
+# Material Count: 4
+
+newmtl LeatherMaterial
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.037569 1.003082 1.007090
+Ks 0.500000 0.018670 0.064160
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd deep-red-leather-texture.tga
+
+newmtl SeamMaterial.000
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 1.037569 0.003082 0.007090
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd seams.tga
+map_d seams.tga
+
+newmtl SeamMaterial.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.037569 0.003082 1.007090
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd seams2.tga
+map_d seams2.tga
+
+newmtl WoodenMaterial
+Ns 586.274510
+Ka 1.000000 1.000000 1.000000
+Kd 0.008802 1.001536 0.000327
+Ks 0.026912 0.002922 0.000702
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd seamless-wood-texture-free-40.tga

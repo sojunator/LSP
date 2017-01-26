@@ -1,6 +1,5 @@
 #pragma once
 #include "d3d.h"
-#include "../ThomasCore.h"
 #include <AtlBase.h>
 #include <atlconv.h>
 #include "Math.h"

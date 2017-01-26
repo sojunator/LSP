@@ -54,6 +54,8 @@ namespace thomas
 			bool Bind();
 			bool Unbind();
 
+			void Draw();
+
 		private:
 			std::string m_name;
 			MeshData m_data;

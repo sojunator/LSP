@@ -39,6 +39,7 @@ namespace thomas
 					mat = new PhongMaterial(name, material);
 					break;
 				default:
+					mat = new PhongMaterial(name, material);
 					break;
 				}
 

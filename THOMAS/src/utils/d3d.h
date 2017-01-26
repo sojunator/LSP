@@ -4,6 +4,7 @@
 #include <d3dcompiler.h>
 #include <string>
 #include <vector>
+#include "../ThomasCore.h"
 #include "directXTK\WICTextureLoader.h"
 #include "directXTK\DDSTextureLoader.h"
 

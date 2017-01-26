@@ -74,6 +74,11 @@ namespace thomas {
 			return v && i;
 		}
 
+		void Mesh::Draw()
+		{
+			thomas::ThomasCore::GetDeviceContext()->DrawIndexed(GetIndexCount(), 0, 0);
+		}
+
 		void Mesh::SetupMesh()
 		{
 			m_data.vertexBuffer = utils::D3d::CreateBufferFromVector(m_data.vertices, D3D11_BIND_VERTEX_BUFFER);

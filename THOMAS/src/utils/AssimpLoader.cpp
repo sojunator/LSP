@@ -152,14 +152,9 @@ namespace thomas
 			}
 
 			//Process materials
-			if (mesh->mMaterialIndex > 0)
-			{
-				aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-				material = graphics::material::Material::CreateMaterial(mat);
-			}
-			else{
-				material = NULL;
-			}
+
+			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+			material = graphics::material::Material::CreateMaterial(mat);
 
 
 			graphics::Mesh* m = new graphics::Mesh(vertices, indices, name, material);
