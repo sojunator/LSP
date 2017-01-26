@@ -16,19 +16,20 @@ namespace thomas
 	public:
 		static bool Init();
 
-		static void Update();
+		static void Update();		///Updates delta time and FPS
 
-		static LONG GetDT();
+		static float GetDT();		///Delta time
 
-		static float GetFPS();
+		static int GetFPS();
 
+		static void SetTimescale(float timescale);		///The smaller the timescale the slower the time
 		static float GetTimescale();
 
 	private:
-		static LONG s_oldDT;
-		static LONG s_newDT;
-		static LONG s_DT;
-		static float s_FPS;
+		static LONGLONG s_oldDT;
+		static LONGLONG s_newDT;
+		static float s_DT;
+		static int s_FPS;
 		static float s_timescale;
 	public:
 

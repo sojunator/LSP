@@ -28,6 +28,9 @@ namespace thomas {
 
 		if (s_initialized)
 			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
+
+		if (s_initialized)
+			s_initialized = Time::Init();
 	
 
 		return s_initialized;
@@ -100,6 +103,7 @@ namespace thomas {
 				else
 				{
 					Input::Update();
+					Time::Update();
 					Update();
 				}
 			}

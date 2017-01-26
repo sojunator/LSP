@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Window.h"
 #include "utils/d3d.h"
+#include "Time.h"
 namespace thomas
 {
 	class THOMAS_API ThomasCore
