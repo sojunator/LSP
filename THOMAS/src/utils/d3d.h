@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "directXTK\WICTextureLoader.h"
+#include "directXTK\DDSTextureLoader.h"
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "Dxguid.lib")
@@ -28,7 +29,7 @@ namespace thomas
 		public:
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
 			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
-			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource** texture, _Outptr_opt_ ID3D11ShaderResourceView** textureView, size_t size);
+			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView, size_t size);
 			static bool Destroy();
 			static ID3D11RasterizerState* CreateRasterizer();
 			static bool Clear();
