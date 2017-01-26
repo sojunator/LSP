@@ -7,8 +7,15 @@ namespace thomas
 {
 	namespace utils
 	{
+		//TEMP
 		ID3D11RenderTargetView* D3d::s_backBuffer;
 		ID3D11RasterizerState* D3d::s_rasterState;
+
+		//TEMP
+		ID3D11DepthStencilState* D3d::s_depthState;
+		ID3D11DepthStencilView* D3d::s_depthView;
+		ID3D11Texture2D* D3d::s_depthBuffer2D;
+
 		bool D3d::Init(ID3D11Device*& device, ID3D11DeviceContext*& context, 
 			IDXGISwapChain*& swapchain, ID3D11Debug*& debug)
 		{
@@ -27,8 +34,11 @@ namespace thomas
 				return false;
 			#endif
 
+			CreateDepthStencilState(device, s_depthState);
+			CreateDepthStencilView(device, s_depthView, s_depthBuffer2D);
+
 			////Set back buffer texture 
-			context->OMSetRenderTargets(1, &s_backBuffer, NULL);
+			context->OMSetRenderTargets(1, &s_backBuffer, s_depthView);
 			CreateViewPort(context, Window::GetHeight(), Window::GetWidth());
 			s_rasterState = CreateRasterizer();
 
@@ -224,7 +234,7 @@ namespace thomas
 		{
 			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
 			ThomasCore::GetDeviceContext()->ClearRenderTargetView(s_backBuffer, color);
-
+			ThomasCore::GetDeviceContext()->ClearDepthStencilView(s_depthView, D3D11_CLEAR_DEPTH, 1, 0);
 			math::Viewport vp(0, 0, Window::GetWidth(), Window::GetHeight());
 			ThomasCore::GetDeviceContext()->RSSetViewports(1, vp.Get11());
 			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);

@@ -21,8 +21,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 1
-map_Kd seams.tga
-map_d seams.tga
+map_Kd seams.png
+map_d seams.png
 
 newmtl SeamMaterial.001
 Ns 96.078431
@@ -33,8 +33,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 1
-map_Kd seams2.tga
-map_d seams2.tga
+map_Kd seams2.png
+map_d seams2.png
 
 newmtl WoodenMaterial
 Ns 586.274510
@@ -45,4 +45,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd seamless-wood-texture-free-40.tga
+map_Kd seamless-wood-texture-free-40.png
