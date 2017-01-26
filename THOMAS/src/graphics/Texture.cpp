@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "../../ThomasCore.h"
+#include "../ThomasCore.h"
 
 namespace thomas
 {

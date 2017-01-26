@@ -2,8 +2,8 @@
 
 #include <string>
 #include <vector>
-#include "../../Common.h"
-#include "../../utils/d3d.h"
+#include "../Common.h"
+#include "../utils/d3d.h"
 
 
 namespace thomas

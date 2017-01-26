@@ -157,6 +157,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\gameobjects\CameraObject.h" />
+    <ClInclude Include="src\gameobjects\TestObject.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />
   </ItemGroup>
   <ItemGroup>
