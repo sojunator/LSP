@@ -33,6 +33,7 @@
     <ClCompile Include="src\object\GameObject.cpp" />
     <ClCompile Include="src\object\Object.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
+    <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="src\object\Object.h" />
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
+    <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\directXTK\dds.h" />
