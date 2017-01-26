@@ -41,21 +41,22 @@ public:
 	{
 		component::Camera* cam = m_cameraObject->GetComponent<component::Camera>();
 
+		float speed = 10;
 		if (Input::GetKey(Input::Keys::A))
 		{
-			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Right()*0.01);
+			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Right()*speed*Time::GetDeltaTime());
 		}
 		if (Input::GetKey(Input::Keys::D))
 		{
-			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Right()*0.01);
+			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Right()*speed*Time::GetDeltaTime());
 		}
 		if (Input::GetKey(Input::Keys::W))
 		{
-			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Up()*0.01);
+			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Up()*speed*Time::GetDeltaTime());
 		}
 		if (Input::GetKey(Input::Keys::S))
 		{
-			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Up()*0.01);
+			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Up()*speed*Time::GetDeltaTime());
 		}
 
 		m_cameraObject->m_transform->LookAt(m_transform);

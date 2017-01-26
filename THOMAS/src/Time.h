@@ -12,23 +12,25 @@ namespace thomas
 	class THOMAS_API Time
 	{
 	private:
-
+		static double GetElapsedTime();
 	public:
 		static bool Init();
 
 		static void Update();		///Updates delta time and FPS
 
-		static float GetDT();		///Delta time
+		static float GetDeltaTime();		///Delta time
 
 		static int GetFPS();
 
 		static void SetTimescale(float timescale);		///The smaller the timescale the slower the time
 		static float GetTimescale();
 
+		
+
 	private:
-		static LONGLONG s_oldDT;
-		static LONGLONG s_newDT;
-		static float s_DT;
+		static double s_startTime;
+		static double s_timeFreq;
+		static double s_DeltaTime;
 		static int s_FPS;
 		static float s_timescale;
 	public:
