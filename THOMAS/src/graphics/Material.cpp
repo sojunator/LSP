@@ -6,7 +6,7 @@ namespace thomas
 	{
 		namespace material
 		{
-			static std::vector<Material*> s_materials;
+			std::vector<Material*> Material::s_materials;
 
 			Material::Material()
 			{
