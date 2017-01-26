@@ -21,6 +21,7 @@
     <ClCompile Include="src\object\component\Camera.cpp" />
     <ClCompile Include="src\object\component\MeshComponent.cpp" />
     <ClCompile Include="src\object\component\Component.cpp" />
+    <ClCompile Include="src\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\object\component\Camera.h" />
     <ClInclude Include="src\object\component\MeshComponent.h" />
+    <ClInclude Include="src\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
