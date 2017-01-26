@@ -6,7 +6,7 @@ namespace thomas
 {
 	SoundManager::Data SoundManager::s_data;
 	std::vector<SoundManager*> SoundManager::s_music;
-	std::vector<SoundManager*> SoundManager::s_soundEffects;
+	std::vector<SoundManager*> SoundManager::s_soundEffect;
 
 	SoundManager::SoundManager(std::string fileName, DirectX::SoundEffect * sound, DirectX::AudioEngine * audioEngine)
 	{
@@ -17,7 +17,7 @@ namespace thomas
 
 	void SoundManager::Init()
 	{
-		//if win32 desktop app
+		//because win32 desktop app
 		CoInitialize(nullptr);
 
 
