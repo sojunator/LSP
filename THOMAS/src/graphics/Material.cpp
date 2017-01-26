@@ -37,17 +37,35 @@ namespace thomas
 
 			std::vector<Material*> Material::GetLoadedMaterials()
 			{
-				return std::vector<Material*>();
+				return s_materials;
 			}
 
 			std::vector<Material*> Material::GetMaterialsByShaders(Shader * shader)
 			{
-				return std::vector<Material*>();
+				std::vector<Material*> materials;
+
+				for (unsigned int i = 0; i < s_materials.size(); i++)
+				{
+					if (s_materials[i]->GetShader() == shader)
+					{
+						materials.push_back(s_materials[i]);
+					}
+				}
+				return materials;
 			}
 
 			std::vector<Material*> Material::GetMaterialsByShaders(std::string name)
 			{
-				return std::vector<Material*>();
+				std::vector<Material*> materials;
+
+				for (unsigned int i = 0; i < s_materials.size(); i++)
+				{
+					if (s_materials[i]->GetShader()->GetName() == name)
+					{
+						materials.push_back(s_materials[i]);
+					} 
+				}
+				return materials;
 			}
 
 			std::string Material::GetName()
@@ -57,8 +75,7 @@ namespace thomas
 
 			Shader* Material::GetShader()
 			{
-				Shader* shader;
-				return shader;
+				return m_shader;
 			}
 		}
 	}
