@@ -143,6 +143,12 @@ namespace thomas
 			depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 			HRESULT hr = device->CreateDepthStencilState(&depthStencilDesc, &stencil);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				return false;
+			}
+			return true;
 		}
 		
 		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer)
