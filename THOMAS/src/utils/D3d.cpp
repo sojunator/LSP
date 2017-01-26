@@ -1,6 +1,8 @@
 #pragma once
 #include "d3d.h"
 #include "../ThomasCore.h"
+#include <AtlBase.h>
+#include <atlconv.h>
 #include "Math.h"
 namespace thomas
 {
@@ -17,6 +19,7 @@ namespace thomas
 
 			if (!CreateSwapChainTexture(device, swapchain))
 				return false;
+
 
 			#ifdef _DEBUG
 			debug = CreateDebug();
@@ -80,7 +83,7 @@ namespace thomas
 
 		}
 
-		bool D3d::CreateSwapChainTexture(ID3D11Device *& device, IDXGISwapChain *& swapchain)
+		bool D3d::CreateSwapChainTexture(ID3D11Device * device, IDXGISwapChain * swapchain)
 		{
 			HRESULT hr;
 			ID3D11Texture2D* pbackBuffer;
@@ -92,7 +95,7 @@ namespace thomas
 				return false;
 			}
 
-			hr = device->CreateRenderTargetView(pbackBuffer, NULL, &s_backBuffer); // Move it to the gpu
+			s_backBuffer = CreateRenderTargetViewFromBuffer(device, pbackBuffer);
 			pbackBuffer->Release(); // not needed anymore, its on the gpu
 
 			if (FAILED(hr))
@@ -115,6 +118,85 @@ namespace thomas
 
 			context->RSSetViewports(1, &viewport);
 		}
+		bool D3d::CreateDepthStencilState(ID3D11Device * device, ID3D11DepthStencilState*& stencil)
+		{
+			CD3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+			depthStencilDesc.DepthEnable = true;
+			depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+			depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+			depthStencilDesc.StencilReadMask = true;
+			depthStencilDesc.StencilWriteMask = 0xFF;
+			depthStencilDesc.StencilReadMask = 0xFF;
+
+			// if front face
+			depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+			depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+			// if back face
+			depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+			depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+			HRESULT hr = device->CreateDepthStencilState(&depthStencilDesc, &stencil);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				return false;
+			}
+			return true;
+		}
+		
+		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer)
+		{
+			D3D11_TEXTURE2D_DESC depthBufferDesc;
+			D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
+
+			ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
+			ZeroMemory(&depthViewDesc, sizeof(depthViewDesc));
+
+			// Z-buffer texture desc
+			depthBufferDesc.Width = Window::GetWidth();
+			depthBufferDesc.Height = Window::GetHeight();
+			depthBufferDesc.MipLevels = 1;
+			depthBufferDesc.ArraySize = 1;
+			depthBufferDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+			depthBufferDesc.SampleDesc.Count = 1;
+			depthBufferDesc.SampleDesc.Quality = 0;
+			depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			depthBufferDesc.CPUAccessFlags = 0;
+			depthBufferDesc.MiscFlags = 0;
+		
+
+			// Z-buffer view desc
+			depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+			depthViewDesc.Texture2D.MipSlice = 0;
+			depthViewDesc.Flags = 0;
+
+			HRESULT hr = device->CreateTexture2D(&depthBufferDesc, NULL, &depthBuffer);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				depthBuffer = nullptr;
+				return false;
+			}
+
+			hr = device->CreateDepthStencilView(depthBuffer, &depthViewDesc, &stencilView);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				stencilView = nullptr;
+				return false;
+			}
+
+			return true;
+			
+		}
 		ID3D11Debug * D3d::CreateDebug()
 		{
 			ID3D11Debug* debug;
@@ -128,11 +210,9 @@ namespace thomas
 		}
 		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
 		{
-
-
-			
-			HRESULT t = swapchain->Present(0, 0);
-
+			HRESULT hr = swapchain->Present(0, 0);
+			if (FAILED(hr))
+				LOG(hr);
 		}
 
 		bool D3d::Clear()
@@ -147,15 +227,16 @@ namespace thomas
 			return true;
 		}
 
-		bool D3d::LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
+		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
 		{
-			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, fileName, texture, textureView, size);
+			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), texture, textureView, size);
 			if (FAILED(hr))
 			{
-				LOG("Could not create texture");
+				LOG(hr);
 				return false;
 			}
 			return true;
+
 		}
 
 		bool D3d::Destroy()
@@ -166,6 +247,26 @@ namespace thomas
 			s_rasterState = 0;
 
 			return true;
+		}
+
+		ID3D11RenderTargetView * D3d::CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource * buffer)
+		{
+			ID3D11RenderTargetView* rtv;
+			D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+
+			ZeroMemory(&rtvDesc, sizeof(rtvDesc));
+			rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+			rtvDesc.Texture2D.MipSlice = 0;
+
+			HRESULT hr = device->CreateRenderTargetView(buffer, &rtvDesc, &rtv);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				return nullptr;
+			}
+
+			return rtv;
 		}
 
 

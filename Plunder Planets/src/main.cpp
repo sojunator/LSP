@@ -13,7 +13,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
 	//init code
 
-	thomas::utils::AssimpLoader::LoadModel("../res/models/box.obj");
+	thomas::utils::AssimpLoader::LoadModel("../res/models/sphere1.obj");
 
 	new TestObject();
 	CameraObject* c = new CameraObject();

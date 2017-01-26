@@ -10,27 +10,27 @@
 #pragma comment(lib, "Dxguid.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-namespace thomas {
+namespace thomas 
+{
 	namespace utils
-	{
-		
+	{	
 		class THOMAS_API D3d
 		{
 		private:
 			static bool CreateSwapchainAndDeviceAndContext(LONG witdh, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
-			static bool CreateSwapChainTexture(ID3D11Device*& device, IDXGISwapChain*& swapchain);
+			static bool CreateSwapChainTexture(ID3D11Device* device, IDXGISwapChain* swapchain);
 			static void CreateViewPort(ID3D11DeviceContext*& context, LONG height, LONG width);
-
+			static bool CreateDepthStencilState(ID3D11Device* device, ID3D11DepthStencilState*& stencil);
+			static bool CreateDepthStencilView(ID3D11Device* device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer);
+			static ID3D11RenderTargetView* CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource* buffer);
 			static ID3D11Debug* CreateDebug();
+
 		public:
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
 			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
-			static bool LoadTextureFromFile(ID3D11Device*& device, ID3D11DeviceContext*& context, wchar_t* fileName, _In_opt_ ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size);
+			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource** texture, _Outptr_opt_ ID3D11ShaderResourceView** textureView, size_t size);
 			static bool Destroy();
-			static ID3D11RenderTargetView* CreateRenderTargetView(ID3D11Resource* buffer);
-
 			static ID3D11RasterizerState* CreateRasterizer();
-
 			static bool Clear();
 
 			template<typename T>
@@ -41,9 +41,6 @@ namespace thomas {
 
 			template<typename T>
 			static bool FillBuffer(ID3D11Buffer* buffer, T data);
-
-
-
 
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;
