@@ -18,6 +18,16 @@ namespace thomas
 			if (!CreateSwapChainTexture(device, swapchain))
 				return false;
 
+			//ID3D11DepthStencilView* depthView;
+			//ID3D11Texture2D* depthBuffer;
+			//ID3D11DepthStencilState* depthState;
+
+			//if (!CreateDepthStencilView(device, depthView, depthBuffer))
+			//	return false;
+
+			//if (!CreateDepthStencilState(device, depthState))
+			//	return false;
+
 			#ifdef _DEBUG
 			debug = CreateDebug();
 			if (debug == nullptr)
@@ -114,6 +124,85 @@ namespace thomas
 			viewport.Width = width;
 
 			context->RSSetViewports(1, &viewport);
+		}
+		bool D3d::CreateDepthStencilState(ID3D11Device * device, ID3D11DepthStencilState*& stencil)
+		{
+			CD3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+			depthStencilDesc.DepthEnable = true;
+			depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+			depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+			depthStencilDesc.StencilReadMask = true;
+			depthStencilDesc.StencilWriteMask = 0xFF;
+			depthStencilDesc.StencilReadMask = 0xFF;
+
+			// if front face
+			depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+			depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+			// if back face
+			depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+			depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+			HRESULT hr = device->CreateDepthStencilState(&depthStencilDesc, &stencil);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				return false;
+			}
+			return true;
+
+		}
+		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer)
+		{
+			D3D11_TEXTURE2D_DESC depthBufferDesc;
+			D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
+
+			ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
+			ZeroMemory(&depthViewDesc, sizeof(depthViewDesc));
+
+			// Z-buffer texture desc
+			depthBufferDesc.Width = Window::GetWidth();
+			depthBufferDesc.Height = Window::GetHeight();
+			depthBufferDesc.MipLevels = 1;
+			depthBufferDesc.ArraySize = 1;
+			depthBufferDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+			depthBufferDesc.SampleDesc.Count = 1;
+			depthBufferDesc.SampleDesc.Quality = 0;
+			depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			depthBufferDesc.CPUAccessFlags = 0;
+			depthBufferDesc.MiscFlags = 0;
+		
+
+			// Z-buffer view desc
+			depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+			depthViewDesc.Texture2D.MipSlice = 0;
+			depthViewDesc.Flags = 0;
+
+			HRESULT hr = device->CreateTexture2D(&depthBufferDesc, NULL, &depthBuffer);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				depthBuffer = nullptr;
+				return false;
+			}
+
+			hr = device->CreateDepthStencilView(depthBuffer, &depthViewDesc, &stencilView);
+			if (FAILED(hr))
+			{
+				LOG(hr);
+				stencilView = nullptr;
+				return false;
+			}
+
+			return true;
+			
 		}
 		ID3D11Debug * D3d::CreateDebug()
 		{
