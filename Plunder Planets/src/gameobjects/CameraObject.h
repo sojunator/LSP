@@ -10,12 +10,13 @@ class CameraObject : public GameObject
 private:
 
 public:
-	CameraObject() : GameObject("CameraObject") {};
+	CameraObject() : GameObject("CameraObject") 
+	{
+		m_camera = AddComponent<component::Camera>();
+	};
 
 	bool Start()
 	{
-		m_camera = AddComponent<component::Camera>();
-
 		return true;
 	}
 

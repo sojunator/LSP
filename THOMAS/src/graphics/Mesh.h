@@ -8,14 +8,12 @@
 #include "../../include/assimp/postprocess.h"
 #include "../utils/d3d.h"
 #include "../ThomasCore.h"
+#include "Material.h"
 
 namespace thomas 
 {
 	namespace graphics 
 	{
-
-
-		
 		struct Vertex 
 		{
 			math::Vector3 position;
@@ -23,16 +21,9 @@ namespace thomas
 			math::Vector3 normal;
 		};
 
-		struct Texture {
-			int id;
-			std::string type;
-			aiString path;
-		};
-
 		struct MeshData
 		{
 			std::vector<Vertex> vertices;
-			std::vector<Texture> textures;
 			std::vector<int> indices;
 			ID3D11Buffer* vertexBuffer;
 			ID3D11Buffer* indexBuffer;
@@ -59,13 +50,15 @@ namespace thomas
 			std::vector<Vertex>* GetVertices();
 			std::vector<int>* GetIndices();
 
-			static Mesh* GetMeshByName(std::string name);
-			static std::vector<Mesh*> GetLoadedMeshes();
+			material::Material* GetMaterial();
+
+			bool Bind();
+			bool Unbind();
 
 		private:
-			static std::vector<Mesh*> s_meshes;
 			std::string m_name;
 			MeshData m_data;
+			material::Material* m_material;
 
 		};
 	}

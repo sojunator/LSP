@@ -41,10 +41,9 @@ namespace thomas
 			bool BindBuffer(ID3D11Buffer* resource, int slot);
 			bool BindTextures(ID3D11ShaderResourceView* texture, int slot);
 			bool BindTextureSampler(ID3D11SamplerState* sampler, int slot);
-			bool SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type);
-			bool SetVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
-			bool SetIndexBuffer(ID3D11Buffer* indexBuffer);
-			bool SetMeshData(MeshData* meshData);
+			bool BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type);
+			bool BindVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
+			bool BindIndexBuffer(ID3D11Buffer* indexBuffer);
 
 
 			static Shader* CreateShader(std::string name, std::string filePath, InputLayouts inputLayout);

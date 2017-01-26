@@ -194,35 +194,26 @@ namespace thomas
 			}
 			return false;
 		}
-		bool Shader::SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type)
+		bool Shader::BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type)
 		{
 			if (s_currentBoundShader == this)
 				ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(type);
 			return true;
 		}
-		bool Shader::SetVertexBuffer(ID3D11Buffer * vertexBuffer, UINT stride, UINT offset = 0)
+		bool Shader::BindVertexBuffer(ID3D11Buffer * vertexBuffer, UINT stride, UINT offset = 0)
 		{
 			if (s_currentBoundShader == this)
 				ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 			return true;
 		}
-		bool Shader::SetIndexBuffer(ID3D11Buffer * indexBuffer)
+		bool Shader::BindIndexBuffer(ID3D11Buffer * indexBuffer)
 		{
 			if (s_currentBoundShader == this)
 				ThomasCore::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 			return true;
 		}
-		bool Shader::SetMeshData(MeshData * meshData)
-		{
-			if (s_currentBoundShader == this && meshData)
-			{
-				SetVertexBuffer(meshData->vertexBuffer, sizeof(meshData->vertices[0]));
-				SetIndexBuffer(meshData->indexBuffer);
-				return true;
-			}
-			return false;
 
-		}
+		
 		Shader * Shader::CreateShader(std::string name, std::string filePath, InputLayouts inputLayout)
 		{
 			Shader* shader = new Shader(name, filePath, inputLayout);

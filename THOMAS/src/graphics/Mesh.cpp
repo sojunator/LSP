@@ -1,8 +1,7 @@
 #include "Mesh.h"
-
+#include "Shader.h"
 namespace thomas {
 	namespace graphics {
-		std::vector <Mesh*> Mesh::s_meshes;
 
 		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
 		{
@@ -22,8 +21,6 @@ namespace thomas {
 		Mesh* Mesh::CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
 		{
 			Mesh *mesh = new Mesh(vertices, indices, name);
-			if(mesh)
-				s_meshes.push_back(mesh);
 			return mesh;
 		}
 
@@ -63,18 +60,23 @@ namespace thomas {
 			return &m_data.indices;
 		}
 
-		Mesh * Mesh::GetMeshByName(std::string name)
+		material::Material * Mesh::GetMaterial()
 		{
-			for (int i = 0; i < s_meshes.size(); i++) {
-				if (s_meshes[i]->GetName() == name)
-					return s_meshes[i];
-			}
-			return NULL;
+			return m_material;
 		}
 
-		std::vector<Mesh*> Mesh::GetLoadedMeshes()
+		bool Mesh::Bind()
 		{
-			return s_meshes;
+			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(m_data.vertexBuffer, sizeof(Vertex), 0);
+			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(m_data.indexBuffer);
+			return v && i;
+		}
+
+		bool Mesh::Unbind()
+		{
+			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(Vertex), 0);
+			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);
+			return v && i;
 		}
 
 		void Mesh::SetupMesh()
