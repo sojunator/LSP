@@ -5,6 +5,8 @@ namespace thomas
 {
 	namespace graphics
 	{
+		Texture::Data Texture::s_data;
+		std::vector<Texture*> Texture::s_loadedTextures;
 		Texture* Texture::CreateTexture(std::string fileName)
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
