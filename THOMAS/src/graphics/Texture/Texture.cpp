@@ -5,42 +5,53 @@ namespace thomas
 {
 	namespace graphics
 	{
-		namespace texture
+		Texture* Texture::CreateTexture(std::string fileName)
 		{
-			int Texture::LoadTexture(std::string fileName)
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				ID3D11ShaderResourceView* textureView;
-				ID3D11Resource* texture;
-				if(utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), fileName, &texture, &textureView, NULL))
-					//do push_back
-
-				return ;
+				if (fileName == s_loadedTextures[i]->GetFileName())
+					return s_loadedTextures[i];
 			}
-
-			std::string Texture::GetFilePath(int index)
+			ID3D11ShaderResourceView* textureView;
+			ID3D11Resource* texture;
+			if (utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), fileName, &texture, &textureView, NULL))
 			{
-				return s_loadedTextures[index]->m_data.filePath;
+				Texture tex(fileName, textureView, texture);
+				s_loadedTextures.push_back(&tex);
+				return &tex;
 			}
-
-			ID3D11Resource * Texture::getTexture(int index)
-			{
-				return s_loadedTextures[index]->m_data.texture;
-			}
-
-			ID3D11ShaderResourceView * Texture::getTextureView(int index)
-			{
-				return s_loadedTextures[index]->m_data.textureView;
-			}
-
-			void Texture::Destroy()
-			{
-				for (int i = 0; i < s_loadedTextures.size(); ++i)
-				{
-					s_loadedTextures[i]->m_data.texture->Release();
-					s_loadedTextures[i]->m_data.textureView->Release();
-				}
-			}
-
+			return NULL;
 		}
+
+		std::string Texture::GetFileName()
+		{
+			return s_data.fileName;
+		}
+
+		ID3D11Resource * Texture::GetTexture()
+		{
+			return s_data.texture;
+		}
+
+		ID3D11ShaderResourceView * Texture::GetTextureView()
+		{
+			return s_data.textureView;
+		}
+		Texture::Texture(std::string fileName, ID3D11ShaderResourceView * textureView,
+			ID3D11Resource * texture)
+		{
+			s_data.fileName = fileName;
+			s_data.texture = texture;
+			s_data.textureView = textureView;
+		}
+		void Texture::Destroy()
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				s_loadedTextures[i]->s_data.texture->Release();
+				s_loadedTextures[i]->s_data.textureView->Release();
+			}
+		}
+
 	}
 }

@@ -10,28 +10,29 @@ namespace thomas
 {
 	namespace graphics
 	{
-		namespace texture
+		class THOMAS_API Texture
 		{
-			class THOMAS_API Texture
+		private:
+			Texture(std::string fileName, ID3D11ShaderResourceView* textureView,
+				ID3D11Resource* texture);
+		public:
+			static Texture* CreateTexture(std::string fileName);
+			static std::string GetFileName();
+			static ID3D11Resource* GetTexture();
+			static ID3D11ShaderResourceView* GetTextureView();
+
+
+			static void Destroy();
+		private:
+			struct Data
 			{
-			public:
-				static int LoadTexture(std::string path);
-				static std::string GetFilePath(int index);
-				static ID3D11Resource* getTexture(int index);
-				static ID3D11ShaderResourceView* getTextureView(int index);
-
-				static void Destroy();
-			private:
-				struct Data
-				{
-					std::string filePath;
-					ID3D11ShaderResourceView* textureView;
-					ID3D11Resource* texture;
-				};
-
-				static Data m_data;
-				static std::vector<Texture*> s_loadedTextures;
+				std::string fileName;
+				ID3D11ShaderResourceView* textureView;
+				ID3D11Resource* texture;
 			};
-		}
+			static Data s_data;
+			static std::vector<Texture*> s_loadedTextures;
+		};
 	}
+
 }
