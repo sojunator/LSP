@@ -25,7 +25,7 @@
     <ClCompile Include="src\object\component\RenderComponent.cpp" />
     <ClCompile Include="src\graphics\Model.cpp" />
     <ClCompile Include="src\graphics\Renderer.cpp" />
-	<ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -60,7 +60,9 @@
     <ClInclude Include="src\object\component\RenderComponent.h" />
     <ClInclude Include="src\graphics\Model.h" />
     <ClInclude Include="src\graphics\Renderer.h" />
-	<ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\Music.h" />
+    <ClInclude Include="src\SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

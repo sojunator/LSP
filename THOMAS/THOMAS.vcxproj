@@ -61,6 +61,7 @@
     <ClInclude Include="src\object\component\Transform.h" />
     <ClInclude Include="src\object\GameObject.h" />
     <ClInclude Include="src\object\Object.h" />
+    <ClInclude Include="src\Music.h" />
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Time.h" />
@@ -78,6 +79,7 @@
     <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\utils\Math.h" />
+    <ClInclude Include="src\SoundManager.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
