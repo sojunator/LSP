@@ -1,6 +1,5 @@
 #pragma once
-#include <vector>
-#include <string>
+#include "Shader.h"
 #include "../../include/assimp/Importer.hpp"
 #include "../../include/assimp/scene.h"
 #include "../../include/assimp/postprocess.h"
@@ -9,13 +8,12 @@ namespace thomas
 {
 	namespace graphics
 	{
-		class Shader;
 		namespace material
 		{
 			class Material
 			{
 			private:
-				
+
 			public:
 				static Material* CreateMaterial(aiMaterial* material);
 				static Material* GetMaterialByName(std::string name);

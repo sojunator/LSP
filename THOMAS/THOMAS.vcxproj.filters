@@ -19,8 +19,12 @@
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\object\component\Camera.cpp" />
-    <ClCompile Include="src\object\component\MeshComponent.cpp" />
     <ClCompile Include="src\object\component\Component.cpp" />
+    <ClCompile Include="src\graphics\Material.cpp" />
+    <ClCompile Include="src\graphics\Texture.cpp" />
+    <ClCompile Include="src\object\component\RenderComponent.cpp" />
+    <ClCompile Include="src\graphics\Model.cpp" />
+    <ClCompile Include="src\graphics\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -50,7 +54,11 @@
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\object\component\Camera.h" />
-    <ClInclude Include="src\object\component\MeshComponent.h" />
+    <ClInclude Include="src\graphics\Material.h" />
+    <ClInclude Include="src\graphics\Texture.h" />
+    <ClInclude Include="src\object\component\RenderComponent.h" />
+    <ClInclude Include="src\graphics\Model.h" />
+    <ClInclude Include="src\graphics\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

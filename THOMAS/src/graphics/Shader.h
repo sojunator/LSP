@@ -3,7 +3,6 @@
 #include <string>
 #include "../utils/d3d.h"
 #include <vector>
-#include "Mesh.h"
 namespace thomas
 {
 	namespace graphics

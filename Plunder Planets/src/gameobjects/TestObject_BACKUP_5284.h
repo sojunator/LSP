@@ -20,9 +20,14 @@ public:
 
 	bool Start()
 	{
+<<<<<<< HEAD
 		
 
 		//m_renderer->SetModel("g  Mesh Mesh");
+=======
+		m_mesh = AddComponent<component::MeshComponent>();
+		m_mesh->SetMesh("g pSphere1");
+>>>>>>> 004fff8e882543fd6b5ef0427b68bceadb5c9fa9
 
 		m_cameraObject = (CameraObject*)Find("CameraObject");
 
