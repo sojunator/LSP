@@ -19,7 +19,16 @@ namespace thomas
 
 		public:
 			static Model LoadModel(std::string path);
-			
+
+			static std::string GetMaterialName(aiMaterial* material);
+			static int GetMaterialShadingModel(aiMaterial* material);
+			static math::Color GetMaterialColor(aiMaterial* material, const char* pKey, unsigned int type, unsigned int idx);
+			static float GetMaterialShininess(aiMaterial* material);
+			static float GetMaterialShininessStrength(aiMaterial* material);
+			static int GetMaterialBlendMode(aiMaterial* material);
+			static float getMaterialOpacity(aiMaterial* material);
+
+
 		private:
 			
 		};

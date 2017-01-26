@@ -40,6 +40,55 @@ namespace thomas
 			return model;			
 		}
 
+		std::string AssimpLoader::GetMaterialName(aiMaterial * material)
+		{
+			aiString name;
+			material->Get(AI_MATKEY_NAME, name);
+			return std::string(name.C_Str());
+		}
+
+		int AssimpLoader::GetMaterialShadingModel(aiMaterial * material)
+		{
+			int shadingModel;
+			material->Get(AI_MATKEY_SHADING_MODEL, shadingModel);
+			return shadingModel;
+		}
+
+		math::Color AssimpLoader::GetMaterialColor(aiMaterial * material, const char * pKey, unsigned int type, unsigned int idx)
+		{
+			aiColor3D color;
+			material->Get(pKey, type, idx, color);
+			return math::Color(color.r, color.g, color.b);
+		}
+
+		float AssimpLoader::GetMaterialShininess(aiMaterial * material)
+		{
+			float shininess;
+			material->Get(AI_MATKEY_SHININESS, shininess);
+			return shininess;
+		}
+
+		float AssimpLoader::GetMaterialShininessStrength(aiMaterial * material)
+		{
+			float shininessStrength;
+			material->Get(AI_MATKEY_SHININESS_STRENGTH, shininessStrength);
+			return shininessStrength;
+		}
+
+		int AssimpLoader::GetMaterialBlendMode(aiMaterial * material)
+		{
+			int blendMode;
+			material->Get(AI_MATKEY_BLEND_FUNC, blendMode);
+			return blendMode;
+		}
+
+		float AssimpLoader::getMaterialOpacity(aiMaterial * material)
+		{
+			float opacity;
+			material->Get(AI_MATKEY_OPACITY, opacity);
+			return opacity;
+		}
+
 		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string nodeName)
 		{
 			std::vector <graphics::Vertex> vertices;

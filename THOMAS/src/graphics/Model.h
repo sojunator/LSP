@@ -1,7 +1,7 @@
 #pragma once
 #include "../Common.h"
 #include "Mesh.h"
-#include "Material.h"
+#include "material/Material.h"
 namespace thomas {
 	namespace graphics {
 		class THOMAS_API Model {

@@ -47,7 +47,7 @@ namespace thomas
 
 			static Shader* CreateShader(std::string name, std::string filePath, InputLayouts inputLayout);
 			static Shader* GetCurrentBoundShader();
-			static Shader* GetShader(std::string name);
+			static Shader* GetShaderByName(std::string name);
 			static bool Destroy();
 
 

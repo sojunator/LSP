@@ -225,7 +225,7 @@ namespace thomas
 		{
 			return s_currentBoundShader;
 		}
-		Shader * Shader::GetShader(std::string name)
+		Shader * Shader::GetShaderByName(std::string name)
 		{
 			for (int i = 0; i < s_loadedShaders.size(); i++)
 			{
