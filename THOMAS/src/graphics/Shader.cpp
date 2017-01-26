@@ -43,7 +43,8 @@ namespace thomas
 
 		bool Shader::CreateInputLayout(InputLayouts layout)
 		{
-
+			if (!m_data.vs)
+				return false;
 			std::vector<D3D11_INPUT_ELEMENT_DESC> layoutDesc;
 
 			switch (layout)
@@ -121,14 +122,18 @@ namespace thomas
 		bool Shader::Bind()
 		{
 			s_currentBoundShader = this;
-			if(m_data.vs)
+			if (m_data.vs)
+			{
+				ThomasCore::GetDeviceContext()->IASetInputLayout(m_data.inputLayout);
 				ThomasCore::GetDeviceContext()->VSSetShader(m_data.vertexShader, NULL, 0);
+			}
+				
 
 			if(m_data.ps)
 				ThomasCore::GetDeviceContext()->PSSetShader(m_data.pixelShader, NULL, 0);
 
 
-			ThomasCore::GetDeviceContext()->IASetInputLayout(m_data.inputLayout);
+			
 			return true;
 		}
 		bool Shader::Unbind()
@@ -196,19 +201,19 @@ namespace thomas
 		}
 		bool Shader::BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader == this && m_data.vs)
 				ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(type);
 			return true;
 		}
 		bool Shader::BindVertexBuffer(ID3D11Buffer * vertexBuffer, UINT stride, UINT offset = 0)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader == this && m_data.vs)
 				ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 			return true;
 		}
 		bool Shader::BindIndexBuffer(ID3D11Buffer * indexBuffer)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader == this && m_data.vs)
 				ThomasCore::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 			return true;
 		}

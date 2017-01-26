@@ -12,7 +12,7 @@ namespace thomas
 			{
 			private:
 			public:
-				PhongMaterial(std::string name, aiMaterial* material);
+				PhongMaterial(std::string dir, std::string name, aiMaterial* material);
 				~PhongMaterial();
 
 			private:

@@ -14,9 +14,9 @@ namespace thomas
 			private:
 				
 			public:
-				Material(std::string name, Shader* shader);
+				Material(std::string dir, std::string name, Shader* shader, aiMaterial* material);
 
-				static Material* CreateMaterial(aiMaterial* material);
+				static Material* CreateMaterial(std::string dir, aiMaterial* material);
 				static Material* GetMaterialByName(std::string name);
 				static std::vector<Material*> GetLoadedMaterials();
 				static std::vector<Material*> GetMaterialsByShaders(Shader* shader);

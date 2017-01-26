@@ -35,6 +35,10 @@ namespace thomas
 		{
 			return m_data.textureView;
 		}
+		bool Texture::Initialized()
+		{
+			return m_initialized;
+		}
 		bool Texture::Bind()
 		{
 			return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
@@ -47,7 +51,7 @@ namespace thomas
 		{
 			m_textureType = type;
 			m_name = path;
-			utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+			m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
 
 		}
 		void Texture::Destroy()

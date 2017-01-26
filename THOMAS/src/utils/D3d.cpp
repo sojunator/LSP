@@ -258,6 +258,7 @@ namespace thomas
 
 			if (FAILED(hr))
 			{
+				LOG("Failed to load texture: " << fileName);
 				LOG_HR(hr);
 				return false;
 			}

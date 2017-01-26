@@ -13,6 +13,7 @@ namespace thomas
 	{
 		class Mesh;
 		class Model;
+		class Texture;
 	}
 	namespace utils
 	{
@@ -20,9 +21,8 @@ namespace thomas
 		class AssimpLoader
 		{
 		private:
-			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string meshName);
-			static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<graphics::Mesh*> &meshes);
-			static void ProcessMaterials(aiScene* scene);
+			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string meshName, std::string dir);
+			static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<graphics::Mesh*> &meshes, std::string dir);
 		public:
 			static graphics::Model* LoadModel(std::string name, std::string path);
 			
@@ -32,8 +32,9 @@ namespace thomas
 			static float GetMaterialShininess(aiMaterial* material);
 			static float GetMaterialShininessStrength(aiMaterial* material);
 			static int GetMaterialBlendMode(aiMaterial* material);
-			static float getMaterialOpacity(aiMaterial* material);
+			static float GetMaterialOpacity(aiMaterial* material);
 
+			static graphics::Texture* GetMaterialTexture(aiMaterial* material, std::string dir);
 
 		private:
 			

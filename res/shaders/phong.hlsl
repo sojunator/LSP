@@ -40,5 +40,5 @@ VSOutput VSMain(in VSInput input)
 float4 PSMain(VSOutput input) : SV_TARGET
 {
     float4 textureColor = testTexture.Sample(SampleType, input.tex);
-	return ambient;
+	return ambient*textureColor;
 }

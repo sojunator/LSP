@@ -1,12 +1,13 @@
 #include "AssimpLoader.h"
 #include "../graphics/Model.h"
+#include <stdlib.h>
 namespace thomas
 {
 	namespace utils
 	{
 		graphics::Model* AssimpLoader::LoadModel(std::string name, std::string path)
 		{
-
+			std::string dir = path.substr(0, path.find_last_of("\\/"));
 			LOG("Starting to load model from: " << path);
 
 			// Read file via ASSIMP
@@ -40,7 +41,7 @@ namespace thomas
 			std::vector<graphics::Mesh*> meshes;
 
 			// Process ASSIMP's root node recursively
-			ProcessNode(scene->mRootNode, scene, meshes);
+			ProcessNode(scene->mRootNode, scene, meshes, dir);
 
 			graphics::Model* model = graphics::Model::CreateModel(name, meshes);
 			
@@ -92,14 +93,36 @@ namespace thomas
 			return blendMode;
 		}
 
-		float AssimpLoader::getMaterialOpacity(aiMaterial * material)
+		graphics::Texture * AssimpLoader::GetMaterialTexture(aiMaterial * material, std::string dir)
+		{
+			aiString textureNameAiString;
+			graphics::Texture* texture;
+			graphics::Texture::TextureType textureType;
+			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &textureNameAiString) == AI_SUCCESS)
+				textureType = graphics::Texture::TextureType::DIFFUSE;
+			else if (material->GetTexture(aiTextureType_SPECULAR, 0, &textureNameAiString) == AI_SUCCESS)
+				textureType = graphics::Texture::TextureType::SPECULAR;
+			else if (material->GetTexture(aiTextureType_NORMALS, 0, &textureNameAiString) == AI_SUCCESS)
+				textureType = graphics::Texture::TextureType::NORMAL;
+
+			std::string textureName(textureNameAiString.C_Str());
+			if (!textureName.empty())
+			{
+				graphics::Texture* texture = graphics::Texture::CreateTexture(textureType, dir + "/" + textureName);
+				return texture;
+			}
+			else
+				return NULL;
+		}
+
+		float AssimpLoader::GetMaterialOpacity(aiMaterial * material)
 		{
 			float opacity;
 			material->Get(AI_MATKEY_OPACITY, opacity);
 			return opacity;
 		}
 
-		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string meshName)
+		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string meshName, std::string dir)
 		{
 			std::vector <graphics::Vertex> vertices;
 			std::vector <int> indices;
@@ -142,7 +165,7 @@ namespace thomas
 				vertices.push_back(vertex);
 			}
 
-			// Now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+			// Now walk through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 			{
 				aiFace face = mesh->mFaces[i];
@@ -154,14 +177,14 @@ namespace thomas
 			//Process materials
 
 			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-			material = graphics::material::Material::CreateMaterial(mat);
+			material = graphics::material::Material::CreateMaterial(dir,mat);
 
 
 			graphics::Mesh* m = new graphics::Mesh(vertices, indices, name, material);
 			return m;
 		}
 
-		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, std::vector<graphics::Mesh*> &meshes)
+		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, std::vector<graphics::Mesh*> &meshes, std::string dir)
 		{
 			std::string modelName(scene->mRootNode->mName.C_Str());
 			std::string nodeName(node->mName.C_Str());
@@ -173,17 +196,14 @@ namespace thomas
 				// The node object only contains indices to index the actual objects in the scene. 
 				// The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 				aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-				graphics::Mesh* processedMesh = ProcessMesh(mesh, scene, modelName + "-" + nodeName + "-" + std::to_string(i));
+				graphics::Mesh* processedMesh = ProcessMesh(mesh, scene, modelName + "-" + nodeName + "-" + std::to_string(i), dir);
 				meshes.push_back(processedMesh);
 			}
 			// After we've processed all of the meshes (if any) we then recursively process each of the children nodes
 			for (unsigned int i = 0; i < node->mNumChildren; i++)
 			{
-				ProcessNode(node->mChildren[i], scene, meshes);
+				ProcessNode(node->mChildren[i], scene, meshes, dir);
 			}
-		}
-		void AssimpLoader::ProcessMaterials(aiScene * scene)
-		{
 		}
 	}
 }

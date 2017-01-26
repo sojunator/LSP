@@ -13,6 +13,7 @@ namespace thomas
 		class THOMAS_API Texture
 		{
 
+		public:
 			//represents texture slot
 			enum class TextureType
 			{
@@ -33,6 +34,8 @@ namespace thomas
 			ID3D11Resource* GetTexture();
 			ID3D11ShaderResourceView* GetTextureView();
 
+			bool Initialized();
+
 			bool Bind();
 			bool Unbind();
 
@@ -46,8 +49,9 @@ namespace thomas
 
 			std::string m_name;
 			TextureData m_data;
+			bool m_initialized;
 			static std::vector<Texture*> s_loadedTextures;
-
+			
 			TextureType m_textureType;
 		};
 	}

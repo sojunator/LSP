@@ -9,10 +9,16 @@ namespace thomas
 			std::vector<Material*> Material::s_materials;
 
 			
-			Material::Material(std::string name, Shader* shader)
+			Material::Material(std::string dir, std::string name, Shader* shader, aiMaterial* material)
 			{
 				m_materialName = name;
 				m_shader = shader;
+
+				Texture* texture = utils::AssimpLoader::GetMaterialTexture(material, dir);
+
+				if (texture->Initialized())
+					m_textures.push_back(texture);
+
 			}
 
 
@@ -21,7 +27,7 @@ namespace thomas
 				m_materialPropertiesBuffer->Release();
 			}
 
-			Material* Material::CreateMaterial(aiMaterial * material)
+			Material* Material::CreateMaterial(std::string dir, aiMaterial * material)
 			{
 				Material* mat;
 				std::string name = utils::AssimpLoader::GetMaterialName(material);
@@ -36,10 +42,10 @@ namespace thomas
 				switch (materialType)
 				{
 				case aiShadingMode_Phong:
-					mat = new PhongMaterial(name, material);
+					mat = new PhongMaterial(dir, name, material);
 					break;
 				default:
-					mat = new PhongMaterial(name, material);
+					mat = new PhongMaterial(dir, name, material);
 					break;
 				}
 
