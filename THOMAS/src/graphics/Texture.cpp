@@ -16,7 +16,7 @@ namespace thomas
 			}
 			ID3D11ShaderResourceView* textureView;
 			ID3D11Resource* texture;
-			if (utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), fileName, &texture, &textureView, NULL))
+			if (utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), fileName, texture, textureView, NULL))
 			{
 				Texture tex(fileName, textureView, texture);
 				s_loadedTextures.push_back(&tex);

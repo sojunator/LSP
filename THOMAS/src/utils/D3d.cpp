@@ -10,7 +10,8 @@ namespace thomas
 	{
 		ID3D11RenderTargetView* D3d::s_backBuffer;
 		ID3D11RasterizerState* D3d::s_rasterState;
-		bool D3d::Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug)
+		bool D3d::Init(ID3D11Device*& device, ID3D11DeviceContext*& context, 
+			IDXGISwapChain*& swapchain, ID3D11Debug*& debug)
 		{
 			LOG("Initiating DirectX");
 
@@ -36,7 +37,8 @@ namespace thomas
 			return true;
 		}
 
-		bool D3d::CreateSwapchainAndDeviceAndContext(LONG width, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
+		bool D3d::CreateSwapchainAndDeviceAndContext(LONG width, LONG height, ID3D11Device*& device, 
+			ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle)
 		{
 			HRESULT hr;
 			DXGI_SWAP_CHAIN_DESC scd;
@@ -151,7 +153,8 @@ namespace thomas
 			return true;
 		}
 		
-		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer)
+		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, 
+			ID3D11Texture2D*& depthBuffer)
 		{
 			D3D11_TEXTURE2D_DESC depthBufferDesc;
 			D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
@@ -227,16 +230,37 @@ namespace thomas
 			return true;
 		}
 
-		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, ID3D11Resource** texture, ID3D11ShaderResourceView** textureView, size_t size)
+		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, 
+			ID3D11Resource*& texture, ID3D11ShaderResourceView*& textureView, size_t size)
 		{
-			HRESULT hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), texture, textureView, size);
+			// Convert from string to char in order to split by token
+			// convert back from char, since its easier to compare strings than chars
+			// Fuck you, thats why.
+			char* filename_c = new char[fileName.length() + 1];
+			std::strcpy(filename_c, fileName.c_str());
+
+			char * extension_char = PathFindExtensionA(filename_c);
+			std::string extension_string(extension_char);
+
+			delete[] filename_c;
+
+			HRESULT hr;
+			if (extension_string == ".dds")
+			{
+				hr = DirectX::CreateDDSTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView, size);
+			}
+			else
+			{
+				hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView, size);
+			}
+
 			if (FAILED(hr))
 			{
 				LOG(hr);
 				return false;
 			}
+	
 			return true;
-
 		}
 
 		bool D3d::Destroy()
@@ -249,7 +273,8 @@ namespace thomas
 			return true;
 		}
 
-		ID3D11RenderTargetView * D3d::CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource * buffer)
+		ID3D11RenderTargetView * D3d::CreateRenderTargetViewFromBuffer(ID3D11Device* device, 
+			ID3D11Resource * buffer)
 		{
 			ID3D11RenderTargetView* rtv;
 			D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
@@ -273,8 +298,8 @@ namespace thomas
 		ID3D11RasterizerState * D3d::CreateRasterizer()
 		{
 			ID3D11RasterizerState* rasterState;
-
 			D3D11_RASTERIZER_DESC rasterDesc;
+
 			rasterDesc.AntialiasedLineEnable = false;
 			rasterDesc.CullMode = D3D11_CULL_BACK;
 			rasterDesc.DepthBias = 0;
@@ -289,10 +314,6 @@ namespace thomas
 			ThomasCore::GetDevice()->CreateRasterizerState(&rasterDesc, &rasterState);
 
 			return rasterState;
-
 		}
-
-
-
 	}
 }
