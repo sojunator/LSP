@@ -7,6 +7,9 @@ namespace thomas
 	Sound::Data Sound::s_data;
 	std::vector<Sound*> Sound::s_music;
 	std::vector<Sound*> Sound::s_soundEffect;
+	float Sound::s_masterVolume;
+	float Sound::s_fxVolume;
+	float Sound::s_musicVolume;
 
 	Sound::Sound(std::string fileName, std::string name, Type type, DirectX::SoundEffect * sound, DirectX::AudioEngine * audioEngine)
 	{
@@ -15,7 +18,7 @@ namespace thomas
 		s_data.type = type;
 		s_data.sound = sound;
 		s_data.audioEngine = audioEngine;
-		s_data.instance = nullptr;
+		s_data.instance = NULL;
 		if(type == Type::Music)
 			s_data.instance = s_data.sound->CreateInstance();
 	}
@@ -26,6 +29,9 @@ namespace thomas
 		CoInitialize(nullptr);
 
 		s_data.audioEngine = new DirectX::AudioEngine();
+		s_masterVolume = 0.5f;
+		s_fxVolume = 0.5f;
+		s_musicVolume = 0.5f;
 		return true;
 	}
 
@@ -66,16 +72,43 @@ namespace thomas
 	{
 		if (s_data.type == Type::Effect)
 		{
-			s_data.sound->Play();
+			s_data.sound->Play(s_masterVolume * s_fxVolume, 0, 0);
 			return true;
 		}
-		//else if(!s_data.sound->IsInUse()) //is music type and not in use
-		//{
-			//check for audio engine reset?
-			s_data.instance->Play(true);
-			return true;
-		//}
-		//return false;
+		else if(s_data.audioEngine->Reset()) //is music type and not in use
+		{
+			if (!s_data.instance->GetState())
+			{
+				s_data.instance->Play(true);
+				s_data.instance->SetVolume(s_masterVolume * s_musicVolume);
+				return true;
+			}
+			else
+			{
+				s_data.instance->Resume();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void Sound::Pause()
+	{
+		if(s_data.instance)
+			s_data.instance->Pause();
+	}
+	
+	void Sound::SetMasterVolume(float volume)
+	{
+		s_masterVolume = volume;
+	}
+	void Sound::SetFxVolume(float volume)
+	{
+		s_fxVolume = volume;
+	}
+	void Sound::SetMusicVolume(float volume)
+	{
+		s_musicVolume = volume;
 	}
 	void Sound::Destroy()
 	{

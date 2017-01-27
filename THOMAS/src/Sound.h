@@ -24,7 +24,9 @@ namespace thomas
 		std::string GetFileName();
 		bool Play();
 		void Pause();
-		void Update();
+		static void SetMasterVolume(float volume);
+		static void SetFxVolume(float volume);
+		static void SetMusicVolume(float volume);
 		static void Destroy();
 
 	private:
@@ -38,6 +40,9 @@ namespace thomas
 			std::unique_ptr<DirectX::SoundEffectInstance> instance;
 		};
 
+		static float s_masterVolume;
+		static float s_fxVolume;
+		static float s_musicVolume;
 		static Data s_data;
 		static std::vector<Sound*> s_music;
 		static std::vector<Sound*> s_soundEffect;

@@ -13,6 +13,7 @@ namespace thomas {
 	IDXGISwapChain* ThomasCore::s_swapchain;
 	HINSTANCE ThomasCore::s_hInstance;
 	bool ThomasCore::s_initialized;
+	Sound* bajs;
 
 	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
@@ -36,7 +37,7 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Sound::Init();
 
-		Sound* bajs = Sound::CreateSound("../res/sounds/thomas.wav", "Meow", Sound::Type::Music);
+		bajs = Sound::CreateSound("../res/sounds/thomas.wav", "Meow", Sound::Type::Music);
 		
 		if (!bajs->Play())
 			LOG("Sound error");
@@ -69,6 +70,10 @@ namespace thomas {
 		
 
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
+
+		if (Input::GetKeyDown(Input::Keys::A))
+			LOG("Pause music");
+
 
 	}
 
