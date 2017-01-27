@@ -19,6 +19,7 @@ namespace thomas {
 			{
 				Model* newModel = new Model(name, meshes);
 				s_loadedModels.push_back(newModel);
+				return newModel;
 			}
 		}
 
