@@ -21,6 +21,11 @@ namespace thomas
 
 			static GameObject* Find(std::string name);
 
+			template<typename T>
+			static std::vector<GameObject*> FindGameObjectsWithComponent();
+
+			static std::vector<GameObject*> GetGameObjects();
+
 			virtual bool Start() { return true; }
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
@@ -56,6 +61,19 @@ namespace thomas
 					return comp;
 			}
 			return NULL;
+		}
+
+		template<typename T>
+		inline std::vector<GameObject*> GameObject::FindGameObjectsWithComponent()
+		{
+			std::vector<GameObject*> gameObjectsWithComponent;
+			for (int i = 0; i < s_gameObjects.size(); i++)
+			{
+				T* component = s_gameObjects[i]->GetComponent<T>();
+				if (component)
+					gameObjectsWithComponent.push_back(s_gameObjects[i]);
+			}
+			return gameObjectsWithComponent;
 		}
 
 

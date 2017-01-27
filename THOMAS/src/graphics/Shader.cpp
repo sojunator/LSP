@@ -241,6 +241,10 @@ namespace thomas
 			}
 			return NULL;
 		}
+		std::vector<Shader*> Shader::GetLoadedShaders()
+		{
+			return s_loadedShaders;
+		}
 	}
 
 }

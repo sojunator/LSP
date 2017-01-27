@@ -73,7 +73,7 @@ namespace thomas
 				return s_materials;
 			}
 
-			std::vector<Material*> Material::GetMaterialsByShaders(Shader * shader)
+			std::vector<Material*> Material::GetMaterialsByShader(Shader * shader)
 			{
 				std::vector<Material*> materials;
 
@@ -87,7 +87,7 @@ namespace thomas
 				return materials;
 			}
 
-			std::vector<Material*> Material::GetMaterialsByShaders(std::string name)
+			std::vector<Material*> Material::GetMaterialsByShader(std::string name)
 			{
 				std::vector<Material*> materials;
 

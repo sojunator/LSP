@@ -7,14 +7,6 @@ namespace thomas
 {
 	namespace utils
 	{
-		//TEMP
-		ID3D11RenderTargetView* D3d::s_backBuffer;
-		ID3D11RasterizerState* D3d::s_rasterState;
-
-		//TEMP
-		ID3D11DepthStencilState* D3d::s_depthState;
-		ID3D11DepthStencilView* D3d::s_depthView;
-		ID3D11Texture2D* D3d::s_depthBuffer2D;
 
 		bool D3d::Init(ID3D11Device*& device, ID3D11DeviceContext*& context, 
 			IDXGISwapChain*& swapchain, ID3D11Debug*& debug)
@@ -24,25 +16,24 @@ namespace thomas
 			if (!CreateSwapchainAndDeviceAndContext(Window::GetWidth(), Window::GetHeight(), device, context, swapchain, Window::GetWindowHandler()))
 				return false;
 
-			if (!CreateSwapChainTexture(device, swapchain))
-				return false;
-
-
 			#ifdef _DEBUG
 			debug = CreateDebug();
 			if (debug == nullptr)
 				return false;
 			#endif
 
-			CreateDepthStencilState(device, s_depthState);
-			CreateDepthStencilView(device, s_depthView, s_depthBuffer2D);
-
-			////Set back buffer texture 
-			context->OMSetRenderTargets(1, &s_backBuffer, s_depthView);
-			CreateViewPort(context, Window::GetHeight(), Window::GetWidth());
-			s_rasterState = CreateRasterizer();
+			
 
 			LOG("DirectX initiated, welcome to the masterace");
+			return true;
+		}
+
+		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11RasterizerState *& rasterState, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11Texture2D *& depthBuffer)
+		{
+			CreateDepthStencilState(ThomasCore::GetDevice(), depthStencilState);
+			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBuffer);
+			backBuffer = CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain());
+			rasterState = CreateRasterizer();
 			return true;
 		}
 
@@ -64,7 +55,7 @@ namespace thomas
 			scd.SampleDesc.Count = 1; // AA times 1
 			scd.SampleDesc.Quality = 0;
 			scd.Windowed = TRUE;
-			scd.BufferDesc.RefreshRate.Numerator = 30; // change 0 to numerator for vsync
+			scd.BufferDesc.RefreshRate.Numerator = 0; // change 0 to numerator for vsync
 			scd.BufferDesc.RefreshRate.Denominator = 1; // change 1 to denominator for vynsc
 
 			
@@ -95,7 +86,7 @@ namespace thomas
 
 		}
 
-		bool D3d::CreateSwapChainTexture(ID3D11Device * device, IDXGISwapChain * swapchain)
+		ID3D11RenderTargetView* D3d::CreateBackBuffer(ID3D11Device * device, IDXGISwapChain * swapchain)
 		{
 			HRESULT hr;
 			ID3D11Texture2D* pbackBuffer;
@@ -104,21 +95,21 @@ namespace thomas
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
-				return false;
+				return NULL;
 			}
-
-			s_backBuffer = CreateRenderTargetViewFromBuffer(device, pbackBuffer);
+			ID3D11RenderTargetView* backBuffer;
+			backBuffer = CreateRenderTargetViewFromBuffer(device, pbackBuffer);
 			pbackBuffer->Release(); // not needed anymore, its on the gpu
 
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
-				return false;
+				return NULL;
 			}
-			return true;
+			return backBuffer;
 		}
 
-		void D3d::CreateViewPort(ID3D11DeviceContext *& context, LONG height, LONG width)
+		D3D11_VIEWPORT D3d::CreateViewport(int x, int y, int width, int height)
 		{
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(viewport));
@@ -128,8 +119,10 @@ namespace thomas
 			viewport.Height = height;
 			viewport.Width = width;
 
-			context->RSSetViewports(1, &viewport);
+			return viewport;
 		}
+
+
 		bool D3d::CreateDepthStencilState(ID3D11Device * device, ID3D11DepthStencilState*& stencil)
 		{
 			CD3D11_DEPTH_STENCIL_DESC depthStencilDesc;
@@ -141,6 +134,7 @@ namespace thomas
 			depthStencilDesc.StencilReadMask = true;
 			depthStencilDesc.StencilWriteMask = 0xFF;
 			depthStencilDesc.StencilReadMask = 0xFF;
+			depthStencilDesc.StencilEnable = true;
 
 			// if front face
 			depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
@@ -173,23 +167,23 @@ namespace thomas
 			ZeroMemory(&depthViewDesc, sizeof(depthViewDesc));
 
 			// Z-buffer texture desc
-			depthBufferDesc.Width = Window::GetWidth();
-			depthBufferDesc.Height = Window::GetHeight();
+			depthBufferDesc.Width = (float)Window::GetWidth();
+			depthBufferDesc.Height = (float)Window::GetHeight();
 			depthBufferDesc.MipLevels = 1;
 			depthBufferDesc.ArraySize = 1;
-			depthBufferDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+			depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 			depthBufferDesc.SampleDesc.Count = 1;
 			depthBufferDesc.SampleDesc.Quality = 0;
+			depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 			depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 			depthBufferDesc.CPUAccessFlags = 0;
 			depthBufferDesc.MiscFlags = 0;
 		
 
 			// Z-buffer view desc
-			depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
-			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+			depthViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 			depthViewDesc.Texture2D.MipSlice = 0;
-			depthViewDesc.Flags = 0;
 
 			HRESULT hr = device->CreateTexture2D(&depthBufferDesc, NULL, &depthBuffer);
 			if (FAILED(hr))
@@ -199,7 +193,7 @@ namespace thomas
 				return false;
 			}
 
-			hr = device->CreateDepthStencilView(depthBuffer, &depthViewDesc, &stencilView);
+			hr = device->CreateDepthStencilView(depthBuffer, NULL, &stencilView);
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
@@ -220,26 +214,6 @@ namespace thomas
 				return nullptr;
 			}
 			return debug;
-		}
-		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
-		{
-			HRESULT hr = swapchain->Present(0, 0);
-			if (FAILED(hr))
-			{
-				LOG_HR(hr);
-			}
-		}
-
-		bool D3d::Clear()
-		{
-			float color[4] = { 0.3f, 0.4f, 0.3f, 1.0f };
-			ThomasCore::GetDeviceContext()->ClearRenderTargetView(s_backBuffer, color);
-			ThomasCore::GetDeviceContext()->ClearDepthStencilView(s_depthView, D3D11_CLEAR_DEPTH, 1, 0);
-			math::Viewport vp(0, 0, Window::GetWidth(), Window::GetHeight());
-			ThomasCore::GetDeviceContext()->RSSetViewports(1, vp.Get11());
-			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
-
-			return true;
 		}
 
 		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, 
@@ -273,16 +247,6 @@ namespace thomas
 				return false;
 			}
 	
-			return true;
-		}
-
-		bool D3d::Destroy()
-		{
-			s_backBuffer->Release();
-			s_backBuffer = 0;
-			s_rasterState->Release();
-			s_rasterState = 0;
-
 			return true;
 		}
 
@@ -328,5 +292,6 @@ namespace thomas
 
 			return rasterState;
 		}
+
 	}
 }

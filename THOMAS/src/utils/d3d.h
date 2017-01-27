@@ -20,8 +20,8 @@ namespace thomas
 		{
 		private:
 			static bool CreateSwapchainAndDeviceAndContext(LONG witdh, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
-			static bool CreateSwapChainTexture(ID3D11Device* device, IDXGISwapChain* swapchain);
-			static void CreateViewPort(ID3D11DeviceContext*& context, LONG height, LONG width);
+
+			static ID3D11RenderTargetView* CreateBackBuffer(ID3D11Device* device, IDXGISwapChain* swapchain);
 			static bool CreateDepthStencilState(ID3D11Device* device, ID3D11DepthStencilState*& stencil);
 			static bool CreateDepthStencilView(ID3D11Device* device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer);
 			static ID3D11RenderTargetView* CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource* buffer);
@@ -29,11 +29,14 @@ namespace thomas
 
 		public:
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
-			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
+			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11RasterizerState*& rasterState, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11Texture2D*& depthBuffer);
 			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
-			static bool Destroy();
+
 			static ID3D11RasterizerState* CreateRasterizer();
-			static bool Clear();
+
+
+			static D3D11_VIEWPORT CreateViewport(int x, int y, int width, int height);
+
 
 			template<typename T>
 			static ID3D11Buffer* CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
@@ -44,12 +47,6 @@ namespace thomas
 			template<typename T>
 			static bool FillBuffer(ID3D11Buffer* buffer, T data);
 
-		private:
-			static ID3D11RenderTargetView* s_backBuffer;
-			static ID3D11RasterizerState* s_rasterState;
-			static ID3D11DepthStencilState* s_depthState;
-			static ID3D11DepthStencilView* s_depthView;
-			static ID3D11Texture2D* s_depthBuffer2D;
 
 		};
 

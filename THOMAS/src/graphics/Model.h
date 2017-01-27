@@ -15,6 +15,7 @@ namespace thomas {
 			std::vector<Mesh*> GetMeshesByMaterial(material::Material* material);
 			std::vector<Mesh*> GetMeshesByMaterial(std::string name);
 			std::vector<Mesh*> GetMeshes();
+			
 		private:
 			static std::vector<Model*> s_loadedModels;
 			std::vector<Mesh*> m_meshes;

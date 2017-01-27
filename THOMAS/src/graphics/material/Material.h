@@ -19,8 +19,8 @@ namespace thomas
 				static Material* CreateMaterial(std::string dir, aiMaterial* material);
 				static Material* GetMaterialByName(std::string name);
 				static std::vector<Material*> GetLoadedMaterials();
-				static std::vector<Material*> GetMaterialsByShaders(Shader* shader);
-				static std::vector<Material*> GetMaterialsByShaders(std::string name);
+				static std::vector<Material*> GetMaterialsByShader(Shader* shader);
+				static std::vector<Material*> GetMaterialsByShader(std::string name);
 				bool Bind();
 				bool Unbind();
 				std::string GetName();

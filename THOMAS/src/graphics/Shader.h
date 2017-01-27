@@ -47,6 +47,7 @@ namespace thomas
 			static Shader* CreateShader(std::string name, std::string filePath, InputLayouts inputLayout);
 			static Shader* GetCurrentBoundShader();
 			static Shader* GetShaderByName(std::string name);
+			static std::vector<Shader*> GetLoadedShaders();
 			static bool Destroy();
 
 

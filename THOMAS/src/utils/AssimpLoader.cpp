@@ -96,7 +96,6 @@ namespace thomas
 		graphics::Texture * AssimpLoader::GetMaterialTexture(aiMaterial * material, std::string dir)
 		{
 			aiString textureNameAiString;
-			graphics::Texture* texture;
 			graphics::Texture::TextureType textureType;
 			int mappingMode;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &textureNameAiString) == AI_SUCCESS)

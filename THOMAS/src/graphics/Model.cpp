@@ -38,6 +38,7 @@ namespace thomas {
 			return s_loadedModels;
 		}
 
+
 		std::string Model::GetName()
 		{
 			return m_name;

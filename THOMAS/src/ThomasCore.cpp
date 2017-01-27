@@ -3,8 +3,9 @@
 #include "Input.h"
 #include "object\Object.h"
 #include "graphics\Texture.h"
-
+#include "graphics\Renderer.h"
 #include <assimp\Importer.hpp>
+
 
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
@@ -34,6 +35,9 @@ namespace thomas {
 			s_initialized = graphics::Texture::Init();
 
 		if (s_initialized)
+			s_initialized = graphics::Renderer::Init();
+
+		if (s_initialized)
 			s_initialized = Time::Init();
 	
 
@@ -47,8 +51,6 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-	
-		utils::D3d::Clear();
 	//	LOG("update");
 
 		if (Input::GetButton(Input::Buttons::A))
@@ -64,7 +66,7 @@ namespace thomas {
 		}
 		
 
-		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
+		graphics::Renderer::Render();
 	}
 
 	void ThomasCore::Start()
@@ -133,7 +135,7 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
-		utils::D3d::Destroy();
+		graphics::Renderer::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();
@@ -157,6 +159,10 @@ namespace thomas {
 	ID3D11DeviceContext* ThomasCore::GetDeviceContext()
 	{
 		return s_context;
+	}
+	IDXGISwapChain * ThomasCore::GetSwapChain()
+	{
+		return s_swapchain;
 	}
 }
 
