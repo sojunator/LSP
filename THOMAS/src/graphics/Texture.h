@@ -19,7 +19,7 @@ namespace thomas
 			{
 				DIFFUSE = 0,
 				SPECULAR = 1,
-				NORMAL = 2
+				NORMAL = 2,
 			};
 
 			enum class SamplerState {

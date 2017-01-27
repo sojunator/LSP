@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
     <ClCompile Include="src\graphics\material\PhongMaterial.cpp" />
     <ClCompile Include="src\graphics\material\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\CubeMapLoader.h" />
     <ClInclude Include="src\graphics\material\Materials.h" />
     <ClInclude Include="src\graphics\material\PhongMaterial.h" />
     <ClInclude Include="src\graphics\material\Material.h" />
