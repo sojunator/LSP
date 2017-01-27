@@ -17,7 +17,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", "../res/shaders/phong.hlsl", thomas::graphics::Shader::InputLayouts::STANDARD);
 	shader->Bind();
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/armchair.obj");
-
+	thomas::utils::Plane::CreatePlane(256);
 	new TestObject();
 	CameraObject* c = new CameraObject();
 

@@ -22,7 +22,7 @@ public:
 	{
 		
 
-		m_renderer->SetModel("testModel");
+		m_renderer->SetModel("Plane-1");
 		
 		m_cameraObject = (CameraObject*)Find("CameraObject");
 
@@ -74,7 +74,7 @@ public:
 
 		for (int i = 0; i < m_renderer->GetModel()->GetMeshes().size(); i++)
 		{
-			m_renderer->GetModel()->GetMeshes()[i]->GetMaterial()->Bind();
+			//m_renderer->GetModel()->GetMeshes()[i]->GetMaterial()->Bind();
 			m_renderer->GetModel()->GetMeshes()[i]->Bind();
 			m_renderer->GetModel()->GetMeshes()[i]->Draw();
 		}
