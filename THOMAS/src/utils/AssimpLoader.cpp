@@ -98,17 +98,30 @@ namespace thomas
 			aiString textureNameAiString;
 			graphics::Texture* texture;
 			graphics::Texture::TextureType textureType;
+			int mappingMode;
 			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &textureNameAiString) == AI_SUCCESS)
+			{
 				textureType = graphics::Texture::TextureType::DIFFUSE;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_DIFFUSE, 0, mappingMode);
+			}
+				
 			else if (material->GetTexture(aiTextureType_SPECULAR, 0, &textureNameAiString) == AI_SUCCESS)
+			{
 				textureType = graphics::Texture::TextureType::SPECULAR;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_SPECULAR, 0, mappingMode);
+			}
+				
 			else if (material->GetTexture(aiTextureType_NORMALS, 0, &textureNameAiString) == AI_SUCCESS)
+			{
 				textureType = graphics::Texture::TextureType::NORMAL;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_NORMALS, 0, mappingMode);
+			}
+				
 
 			std::string textureName(textureNameAiString.C_Str());
 			if (!textureName.empty())
 			{
-				graphics::Texture* texture = graphics::Texture::CreateTexture(textureType, dir + "/" + textureName);
+				graphics::Texture* texture = graphics::Texture::CreateTexture(mappingMode, textureType, dir + "/" + textureName);
 				return texture;
 			}
 			else

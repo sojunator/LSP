@@ -24,7 +24,6 @@ namespace thomas
 
 			ID3DBlob* Compile(std::string source, std::string profile, std::string main);
 			bool CreateInputLayout(InputLayouts layout);
-
 			Shader(std::string name, std::string filePath, InputLayouts inputLayout);
 		public:
 

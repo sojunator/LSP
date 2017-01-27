@@ -2,6 +2,7 @@
 
 #include "Input.h"
 #include "object\Object.h"
+#include "graphics\Texture.h"
 
 #include <assimp\Importer.hpp>
 
@@ -30,6 +31,9 @@ namespace thomas {
 			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
 
 		if (s_initialized)
+			s_initialized = graphics::Texture::Init();
+
+		if (s_initialized)
 			s_initialized = Time::Init();
 	
 
@@ -43,7 +47,7 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-		
+	
 		utils::D3d::Clear();
 	//	LOG("update");
 

@@ -22,14 +22,23 @@ namespace thomas
 				NORMAL = 2
 			};
 
+			enum class SamplerState {
+				WRAP = 0,
+				CLAMP = 1,
+				DECAL = 2,
+				MIRROR = 3
+			};
+
 
 		private:
-			Texture(TextureType type, std::string path);
+			Texture(int mappingMode, TextureType type, std::string path);
+			static bool CreateTextureSamplers();
+			void SetTextureSampler(int textureMode);
 		public:
 
 
-
-			static Texture* CreateTexture(TextureType type, std::string path);
+			static bool Init();
+			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
 			std::string GetName();
 			ID3D11Resource* GetTexture();
 			ID3D11ShaderResourceView* GetTextureView();
@@ -47,11 +56,19 @@ namespace thomas
 				ID3D11Resource* texture;
 			};
 
+			struct SamplerStates {
+				ID3D11SamplerState* WRAP;
+				ID3D11SamplerState* CLAMP;
+				ID3D11SamplerState* DECAL;
+				ID3D11SamplerState* MIRROR;
+			};
+			
 			std::string m_name;
 			TextureData m_data;
 			bool m_initialized;
 			static std::vector<Texture*> s_loadedTextures;
-			
+			static SamplerStates s_samplerStates;
+			ID3D11SamplerState* m_samplerState;
 			TextureType m_textureType;
 		};
 	}

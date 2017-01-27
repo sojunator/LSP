@@ -75,6 +75,8 @@ namespace thomas
 		}
 
 
+
+
 		Shader::Shader(std::string name, std::string filePath, InputLayouts inputLayout)
 		{
 			m_name = name;
