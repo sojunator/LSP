@@ -92,10 +92,14 @@ namespace thomas
 		return false;
 	}
 
-	void Sound::Pause()
+	bool Sound::Pause()
 	{
-		if(s_data.instance)
+		if (s_data.instance->GetState() == DirectX::PAUSED)
+		{
 			s_data.instance->Pause();
+			return true;
+		}
+		return false;
 	}
 	
 	void Sound::SetMasterVolume(float volume)

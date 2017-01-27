@@ -72,7 +72,11 @@ namespace thomas {
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
 
 		if (Input::GetKeyDown(Input::Keys::A))
+		{
 			LOG("Pause music");
+			if(!bajs->Pause())
+				bajs->Play();
+		}
 
 
 	}

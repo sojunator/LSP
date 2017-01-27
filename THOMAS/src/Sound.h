@@ -23,7 +23,7 @@ namespace thomas
 		static Sound* CreateSound(std::string fileName, std::string name, Type type); //types: "Music" or "Effect"
 		std::string GetFileName();
 		bool Play();
-		void Pause();
+		bool Pause();
 		static void SetMasterVolume(float volume);
 		static void SetFxVolume(float volume);
 		static void SetMusicVolume(float volume);
