@@ -26,9 +26,9 @@
     <ClCompile Include="src\graphics\Model.cpp" />
     <ClCompile Include="src\graphics\Renderer.cpp" />
     <ClCompile Include="src\Time.cpp" />
-    <ClCompile Include="src\SoundManager.cpp" />
     <ClCompile Include="src\utils\directXTK\SoundCommon.cpp" />
     <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
+    <ClCompile Include="src\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -64,9 +64,9 @@
     <ClInclude Include="src\graphics\Model.h" />
     <ClInclude Include="src\graphics\Renderer.h" />
     <ClInclude Include="src\Time.h" />
-    <ClInclude Include="src\SoundManager.h" />
     <ClInclude Include="src\utils\directXTK\SoundCommon.h" />
     <ClInclude Include="src\utils\directXTK\Audio.h" />
+    <ClInclude Include="src\Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

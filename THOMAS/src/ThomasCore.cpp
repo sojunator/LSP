@@ -2,6 +2,7 @@
 
 #include "Input.h"
 #include "object\Object.h"
+#include "Sound.h"
 
 #include <assimp\Importer.hpp>
 
@@ -31,6 +32,9 @@ namespace thomas {
 
 		if (s_initialized)
 			s_initialized = Time::Init();
+
+		if (s_initialized)
+			s_initialized = Sound::Init();
 	
 
 		return s_initialized;
@@ -61,6 +65,8 @@ namespace thomas {
 		
 
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
+
+		Sound Sound;
 	}
 
 	void ThomasCore::Start()

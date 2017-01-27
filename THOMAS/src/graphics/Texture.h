@@ -34,5 +34,4 @@ namespace thomas
 			static std::vector<Texture*> s_loadedTextures;
 		};
 	}
-
 }
