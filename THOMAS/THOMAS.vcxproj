@@ -39,12 +39,18 @@
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
     <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
+    <ClCompile Include="src\utils\directXTK\DynamicSoundEffectInstance.cpp" />
     <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
     <ClCompile Include="src\utils\directXTK\Keyboard.cpp" />
     <ClCompile Include="src\utils\directXTK\Mouse.cpp" />
     <ClCompile Include="src\utils\directXTK\pch.cpp" />
     <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
     <ClCompile Include="src\utils\directXTK\SoundCommon.cpp" />
+    <ClCompile Include="src\utils\directXTK\SoundEffect.cpp" />
+    <ClCompile Include="src\utils\directXTK\SoundEffectInstance.cpp" />
+    <ClCompile Include="src\utils\directXTK\WaveBank.cpp" />
+    <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
+    <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -81,6 +87,8 @@
     <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
     <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
     <ClInclude Include="src\utils\directXTK\SoundCommon.h" />
+    <ClInclude Include="src\utils\directXTK\WaveBankReader.h" />
+    <ClInclude Include="src\utils\directXTK\WAVFileReader.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Sound.h" />

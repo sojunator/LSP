@@ -35,7 +35,11 @@ namespace thomas {
 
 		if (s_initialized)
 			s_initialized = Sound::Init();
-	
+
+		Sound* bajs = Sound::CreateSound("../res/sounds/thomas.wav", "Meow", Sound::Type::Music);
+		
+		if (!bajs->Play())
+			LOG("Sound error");
 
 		return s_initialized;
 	}
@@ -66,7 +70,6 @@ namespace thomas {
 
 		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
 
-		Sound Sound;
 	}
 
 	void ThomasCore::Start()
@@ -90,7 +93,6 @@ namespace thomas {
 
 			}
 		}
-
 
 		if (s_initialized)
 		{
@@ -149,6 +151,8 @@ namespace thomas {
 		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG
+
+		Sound::Destroy();
 
 		return true;
 	}

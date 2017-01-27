@@ -8,13 +8,16 @@ namespace thomas
 	std::vector<Sound*> Sound::s_music;
 	std::vector<Sound*> Sound::s_soundEffect;
 
-	Sound::Sound(std::string fileName, std::string name, int type, DirectX::SoundEffect * sound, DirectX::AudioEngine * audioEngine)
+	Sound::Sound(std::string fileName, std::string name, Type type, DirectX::SoundEffect * sound, DirectX::AudioEngine * audioEngine)
 	{
 		s_data.fileName = fileName;
 		s_data.name = name;
 		s_data.type = type;
 		s_data.sound = sound;
 		s_data.audioEngine = audioEngine;
+		s_data.instance = nullptr;
+		if(type == Type::Music)
+			s_data.instance = s_data.sound->CreateInstance();
 	}
 
 	bool Sound::Init()
@@ -23,30 +26,32 @@ namespace thomas
 		CoInitialize(nullptr);
 
 		s_data.audioEngine = new DirectX::AudioEngine();
+		return true;
 	}
 
-	Sound * thomas::Sound::CreateSound(std::string fileName, std::string name, std::string type)
+	Sound * thomas::Sound::CreateSound(std::string fileName, std::string name, Type type)
 	{
-		if (type == "effect")
+		if (type == Type::Effect)
 		{
 			for (int i = 0; i < s_soundEffect.size(); ++i)
 			{
 				if (fileName == s_soundEffect[i]->s_data.fileName)
 					return s_soundEffect[i];
 			}
-			Sound* newSound = new Sound(fileName, name, 0, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
+			Sound* newSound = new Sound(fileName, name, type, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
 			s_soundEffect.push_back(newSound);
 			return newSound;
 		}
 		
-		else if (type == "music")
+		else if (type == Type::Music)
 		{
 			for (int i = 0; i < s_music.size(); ++i)
 			{
 				if (fileName == s_music[i]->s_data.fileName)
 					return s_music[i];
 			}
-			Sound* newSound = new Sound(fileName, name, 1, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
+			Sound* newSound = new Sound(fileName, name, type, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
+			
 			s_music.push_back(newSound);
 			return newSound;
 		}
@@ -56,20 +61,34 @@ namespace thomas
 	{
 		return s_data.fileName;
 	}
+
 	bool Sound::Play()
 	{
-		if (!s_data.type) //effect
+		if (s_data.type == Type::Effect)
 		{
 			s_data.sound->Play();
 			return true;
 		}
-		else if(!s_data.sound->IsInUse()) //music and not in use
-		{
-			std::unique_ptr<DirectX::SoundEffectInstance> tempInstance = s_data.sound->CreateInstance();
+		//else if(!s_data.sound->IsInUse()) //is music type and not in use
+		//{
 			//check for audio engine reset?
-			tempInstance->Play(true);
+			s_data.instance->Play(true);
 			return true;
+		//}
+		//return false;
+	}
+	void Sound::Destroy()
+	{
+		for (int i = 0; i < s_music.size(); ++i)
+		{
+			delete s_data.sound;
+			s_data.audioEngine->Suspend();
+			s_data.instance.reset();
 		}
-		return false;
+		for (int i = 0; i < s_soundEffect.size(); ++i)
+		{
+			delete s_data.sound;
+			s_data.audioEngine->Suspend();
+		}
 	}
 }

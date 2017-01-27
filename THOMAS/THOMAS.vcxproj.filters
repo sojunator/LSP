@@ -29,6 +29,12 @@
     <ClCompile Include="src\utils\directXTK\SoundCommon.cpp" />
     <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
     <ClCompile Include="src\Sound.cpp" />
+    <ClCompile Include="src\utils\directXTK\DynamicSoundEffectInstance.cpp" />
+    <ClCompile Include="src\utils\directXTK\SoundEffect.cpp" />
+    <ClCompile Include="src\utils\directXTK\SoundEffectInstance.cpp" />
+    <ClCompile Include="src\utils\directXTK\WaveBank.cpp" />
+    <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
+    <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -67,6 +73,8 @@
     <ClInclude Include="src\utils\directXTK\SoundCommon.h" />
     <ClInclude Include="src\utils\directXTK\Audio.h" />
     <ClInclude Include="src\Sound.h" />
+    <ClInclude Include="src\utils\directXTK\WaveBankReader.h" />
+    <ClInclude Include="src\utils\directXTK\WAVFileReader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
