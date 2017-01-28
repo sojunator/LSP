@@ -47,7 +47,7 @@ namespace thomas
 			//TODO: Find out if this is the fastest order of things.
 
 			Clear();
-		//	ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
+			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
 			ThomasCore::GetDeviceContext()->RSSetViewports(1, &s_viewport);
 			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
