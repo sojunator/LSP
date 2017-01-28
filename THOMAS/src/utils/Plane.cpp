@@ -47,7 +47,8 @@ namespace thomas
 			}
 
 			std::vector<thomas::graphics::Mesh* > mesh;
-			mesh.push_back(&graphics::Mesh(verts, indices, "Plane-1", NULL));
+			graphics::Mesh* m = new graphics::Mesh(verts, indices, "Plane-1", NULL);
+			mesh.push_back(m);
 			graphics::Model::CreateModel("Plane-1", mesh);
 		}
 	}
