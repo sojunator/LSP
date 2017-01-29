@@ -1,6 +1,13 @@
 
-Texture2D testTexture : register(t0);
-SamplerState SampleType : register(s0);
+Texture2D diffuseTexture : register(t0);
+SamplerState diffuseSampler : register(s0);
+
+Texture2D specularTexture : register(t0);
+SamplerState specularSampler : register(s0);
+
+Texture2D normalTexture : register(t0);
+SamplerState normalSampler : register(s0);
+
 
 
 struct VSInput

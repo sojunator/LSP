@@ -40,7 +40,6 @@ namespace thomas {
 			static ID3D11DepthStencilState* s_depthStencilState;
 			static ID3D11DepthStencilView* s_depthStencilView;
 			static ID3D11Texture2D* s_depthBuffer;
-			static math::Viewport s_viewport;
 
 			static ID3D11Buffer* s_objectBuffer;
 			static GameObjectBuffer s_objectBufferStruct;

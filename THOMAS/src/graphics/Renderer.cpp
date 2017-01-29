@@ -12,7 +12,6 @@ namespace thomas
 		ID3D11DepthStencilState* Renderer::s_depthStencilState;
 		ID3D11DepthStencilView* Renderer::s_depthStencilView;
 		ID3D11Texture2D* Renderer::s_depthBuffer;
-		math::Viewport Renderer::s_viewport;
 
 		ID3D11Buffer* Renderer::s_objectBuffer;
 		Renderer::GameObjectBuffer Renderer::s_objectBufferStruct;
@@ -31,7 +30,7 @@ namespace thomas
 
 			utils::D3d::InitRenderer(s_backBuffer, s_rasterState, s_depthStencilState, s_depthStencilView, s_depthBuffer);
 			s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-			s_viewport = math::Viewport(0, 0, Window::GetWidth(), Window::GetHeight());
+
 			return true;
 		}
 
@@ -49,12 +48,59 @@ namespace thomas
 
 			//TODO: Find out if this is the fastest order of things.
 
+			for (object::component::Camera* camera : GetCameras()) //Render for every camera;
+			{
+				Clear();
+
+				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
+				ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
+				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
+
+				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
+
+
+
+				//For every shader
+				for (Shader* shader : loadedShaders)
+				{
+					shader->Bind();
+
+					//Get the materials that use the shader
+					for (material::Material* mat : material::Material::GetLoadedMaterials())
+					{
+						mat->Bind(); //Bind material specific buffers/textures
+									 //Get all gameObjects that have a rendererComponent
+						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+						{
+							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+
+
+							BindGameObjectBuffer(camera, gameObject);
+							//Draw every mesh of gameObjects model that has
+							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+							{
+								mesh->Bind(); //bind vertex&index buffer
+								mesh->Draw();
+							}
+
+
+
+						}
+						mat->Unbind();
+					}
+					shader->Unbind();
+				}
+
+				ThomasCore::GetSwapChain()->Present(0, 0);
+			}
+
+
 			Clear();
 
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
 			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
-			ThomasCore::GetDeviceContext()->RSSetViewports(1, s_viewport.Get11());
 
 
 			std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
@@ -77,7 +123,7 @@ namespace thomas
 
 						for (object::component::Camera* camera : GetCameras()) //Render for every camera;
 						{
-
+							ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 							BindGameObjectBuffer(camera, gameObject);
 							//Draw every mesh of gameObjects model that has
 							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))

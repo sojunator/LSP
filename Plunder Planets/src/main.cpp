@@ -19,8 +19,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/armchair.obj");
 
 	new TestObject();
-	CameraObject* c = new CameraObject();
-
+	new CameraObject();
 	//start
 	thomas::ThomasCore::Start();
 	return (int)msg.wParam;

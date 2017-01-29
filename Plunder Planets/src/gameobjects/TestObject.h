@@ -28,7 +28,6 @@ public:
 
 		//m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));
 		m_transform->SetPosition(math::Vector3(0, 0, -5));
-		m_cameraObject->GetComponent<component::Camera>()->SetAspectRatio(16 / 9);
 
 
 		return true;

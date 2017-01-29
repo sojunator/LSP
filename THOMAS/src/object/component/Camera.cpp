@@ -9,7 +9,7 @@ namespace thomas
 		{
 			void Camera::UpdateProjMatrix()
 			{
-				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(m_fov, m_aspectRatio, m_near, m_far);
+				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(m_fov, m_viewport.AspectRatio(), m_near, m_far);
 			}
 
 			Camera::Camera(GameObject* gameObject): Component("CameraObject", gameObject)
@@ -17,7 +17,7 @@ namespace thomas
 				m_fov = 70;
 				m_near = 0.1;
 				m_far = 10;
-				m_aspectRatio = 1;
+				m_viewport = math::Viewport(0, 0, Window::GetWidth(), Window::GetHeight());
 				UpdateProjMatrix();
 			}
 
@@ -75,15 +75,27 @@ namespace thomas
 				UpdateProjMatrix();
 			}
 
-			float Camera::GetAspectRatio()
+			math::Viewport Camera::GetViewport()
 			{
-				return m_aspectRatio;
+				return m_viewport;
 			}
 
-			void Camera::SetAspectRatio(float aspectRatio)
+			void Camera::SetViewport(math::Viewport viewport)
 			{
-				m_aspectRatio = aspectRatio;
+				m_viewport = viewport;
+				UpdateProjMatrix();
 			}
+
+			void Camera::SetViewport(float x, float y, float width, float height)
+			{
+				SetViewport(math::Viewport(x, y, width, height));
+			}
+
+			float Camera::GetAspectRatio()
+			{
+				return m_viewport.AspectRatio();
+			}
+
 
 		}
 	}
