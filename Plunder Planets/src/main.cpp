@@ -19,7 +19,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 	//Init materials
-	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial());
+	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 
 	//Init models
 
