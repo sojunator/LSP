@@ -8,7 +8,7 @@ class PhongMaterial : public Material
 private:
 	Material* CreateInstance(std::string dir, std::string name, aiMaterial* material);
 public:
-	PhongMaterial(std::string shaderName) : Material(shaderName) {}
+	PhongMaterial() : Material("phong") {}
 	PhongMaterial(std::string dir, std::string name, aiMaterial* material);
 
 
