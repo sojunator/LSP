@@ -14,10 +14,8 @@ namespace thomas
 				m_materialName = name;
 				m_shader = shader;
 
-				Texture* texture = utils::AssimpLoader::GetMaterialTexture(material, dir);
+				m_textures = utils::AssimpLoader::GetMaterialTextures(material, dir);
 
-				if (texture->Initialized())
-					m_textures.push_back(texture);
 
 			}
 

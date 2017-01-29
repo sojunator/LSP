@@ -57,10 +57,16 @@ namespace thomas
 			}
 			void Transform::Rotate(math::Vector3 angles)
 			{
+				math::Quaternion rot = math::Quaternion::CreateFromYawPitchRoll(angles.x, angles.y, angles.z);
+				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(m_localRotation), rot);
+				
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
 
-				math::Matrix rot = math::Matrix::CreateFromYawPitchRoll(angles.x, angles.y, angles.z);
-				m_localWorldMatrix *= rot;
 				Decompose();
+			}
+			void Transform::Rotate(float x, float y, float z)
+			{
+				return Rotate(math::Vector3(x, y, z));
 			}
 			void Transform::Translate(math::Vector3 translation)
 			{
@@ -68,6 +74,10 @@ namespace thomas
 				
 				m_localWorldMatrix *= pos;
 				Decompose();
+			}
+			void Transform::Translate(float x, float y, float z)
+			{
+				return Translate(math::Vector3(x, y, z));
 			}
 			Transform * Transform::GetParent()
 			{

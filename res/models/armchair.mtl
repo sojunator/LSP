@@ -11,6 +11,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd deep-red-leather-texture.png
+map_Bump leather_normal.png
 
 newmtl SeamMaterial.000
 Ns 96.078431

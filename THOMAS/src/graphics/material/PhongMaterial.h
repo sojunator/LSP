@@ -19,6 +19,10 @@ namespace thomas
 				struct MaterialProperties 
 				{
 					math::Color ambientColor;
+					math::Color diffuseColor;
+					math::Color specularColor;
+					float specularPower;
+					math::Vector3 padding;
 				};
 
 				MaterialProperties m_materialProperties;

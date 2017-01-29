@@ -26,7 +26,9 @@ namespace thomas
 				aiProcess_Triangulate |
 				aiProcess_RemoveComponent |
 				aiProcess_ValidateDataStructure |
-				aiProcess_GenSmoothNormals
+				aiProcess_GenSmoothNormals |
+				aiProcess_CalcTangentSpace |
+				aiProcess_FlipUVs
 			);
 			
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
@@ -93,38 +95,64 @@ namespace thomas
 			return blendMode;
 		}
 
-		graphics::Texture * AssimpLoader::GetMaterialTexture(aiMaterial * material, std::string dir)
+		std::vector<graphics::Texture*> AssimpLoader::GetMaterialTextures(aiMaterial * material, std::string dir)
 		{
-			aiString textureNameAiString;
-			graphics::Texture::TextureType textureType;
-			int mappingMode;
-			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &textureNameAiString) == AI_SUCCESS)
+			struct TextureInfo {
+				aiString textureNameAiString;
+				graphics::Texture::TextureType textureType;
+				int mappingMode;
+			};
+			std::vector<TextureInfo> textureInfos;
+
+
+			//Get all textures information
+
+
+			TextureInfo texInfo;
+			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texInfo.textureNameAiString) == AI_SUCCESS)
 			{
-				textureType = graphics::Texture::TextureType::DIFFUSE;
-				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_DIFFUSE, 0, mappingMode);
+				texInfo.textureType = graphics::Texture::TextureType::DIFFUSE;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_DIFFUSE, 0, texInfo.mappingMode);
+				textureInfos.push_back(texInfo);
 			}
 				
-			else if (material->GetTexture(aiTextureType_SPECULAR, 0, &textureNameAiString) == AI_SUCCESS)
+			if (material->GetTexture(aiTextureType_SPECULAR, 0, &texInfo.textureNameAiString) == AI_SUCCESS)
 			{
-				textureType = graphics::Texture::TextureType::SPECULAR;
-				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_SPECULAR, 0, mappingMode);
+				texInfo.textureType = graphics::Texture::TextureType::SPECULAR;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_SPECULAR, 0, texInfo.mappingMode);
+				textureInfos.push_back(texInfo);
 			}
 				
-			else if (material->GetTexture(aiTextureType_NORMALS, 0, &textureNameAiString) == AI_SUCCESS)
+			if (material->GetTexture(aiTextureType_NORMALS, 0, &texInfo.textureNameAiString) == AI_SUCCESS)
 			{
-				textureType = graphics::Texture::TextureType::NORMAL;
-				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_NORMALS, 0, mappingMode);
+				texInfo.textureType = graphics::Texture::TextureType::NORMAL;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_NORMALS, 0, texInfo.mappingMode);
+				textureInfos.push_back(texInfo);
+			}
+			else if (material->GetTexture(aiTextureType_HEIGHT, 0, &texInfo.textureNameAiString) == AI_SUCCESS)
+			{
+				texInfo.textureType = graphics::Texture::TextureType::NORMAL;
+				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_NORMALS, 0, texInfo.mappingMode);
+				textureInfos.push_back(texInfo);
 			}
 				
 
-			std::string textureName(textureNameAiString.C_Str());
-			if (!textureName.empty())
+			//Create a texture object for every texture found.
+			std::vector<graphics::Texture*> textures;
+			for (unsigned int i = 0; i < textureInfos.size(); i++)
 			{
-				graphics::Texture* texture = graphics::Texture::CreateTexture(mappingMode, textureType, dir + "/" + textureName);
-				return texture;
+				std::string textureName(textureInfos[i].textureNameAiString.C_Str());
+				graphics::Texture* texture = graphics::Texture::CreateTexture
+				(
+					textureInfos[i].mappingMode,
+					textureInfos[i].textureType,
+					dir + "/" + textureName
+				);
+				if(texture->Initialized())
+					textures.push_back(texture);
 			}
-			else
-				return NULL;
+			return textures;
+			
 		}
 
 		float AssimpLoader::GetMaterialOpacity(aiMaterial * material)
@@ -160,6 +188,17 @@ namespace thomas
 				vector.y = mesh->mNormals[i].y;
 				vector.z = mesh->mNormals[i].z;
 				vertex.normal = vector;
+
+				// Tangents
+				vector.x = mesh->mTangents[i].x;
+				vector.y = mesh->mTangents[i].y;
+				vector.z = mesh->mTangents[i].z;
+				vertex.tangent = vector;
+				// Bitangents
+				vector.x = mesh->mBitangents[i].x;
+				vector.y = mesh->mBitangents[i].y;
+				vector.z = mesh->mBitangents[i].z;
+				vertex.bitangent = vector;
 
 				// Texture Coordinates
 				if (mesh->mTextureCoords[0])

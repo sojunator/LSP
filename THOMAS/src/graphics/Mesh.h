@@ -19,6 +19,8 @@ namespace thomas
 			math::Vector3 position;
 			math::Vector2 uv;
 			math::Vector3 normal;
+			math::Vector3 tangent;
+			math::Vector3 bitangent;
 		};
 
 		struct MeshData

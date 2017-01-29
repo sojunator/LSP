@@ -34,7 +34,7 @@ namespace thomas
 			static int GetMaterialBlendMode(aiMaterial* material);
 			static float GetMaterialOpacity(aiMaterial* material);
 
-			static graphics::Texture* GetMaterialTexture(aiMaterial* material, std::string dir);
+			static std::vector<graphics::Texture*> GetMaterialTextures(aiMaterial* material, std::string dir);
 
 		private:
 			
