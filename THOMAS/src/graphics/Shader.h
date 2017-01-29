@@ -17,7 +17,7 @@ namespace thomas
 			};
 			enum class ResourceType
 			{
-				MVP_MATRIX = 0,
+				GAME_OBJECT = 0,
 				MATERIAL = 1
 			};
 		private:

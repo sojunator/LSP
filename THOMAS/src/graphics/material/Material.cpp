@@ -103,6 +103,7 @@ namespace thomas
 
 			bool Material::Bind()
 			{
+
 				bool buffer = m_shader->BindBuffer(m_materialPropertiesBuffer, Shader::ResourceType::MATERIAL);
 				bool texture = true;
 				for (unsigned int i = 0; i < m_textures.size(); i++)

@@ -11,9 +11,14 @@ namespace thomas {
 			
 		public:
 
-			struct MatrixStruct
+			struct GameObjectBuffer
 			{
-				math::Matrix matrix;
+				math::Matrix worldMatrix;
+				math::Matrix viewMatrix;
+				math::Matrix projectionMatrix;
+				math::Matrix mvpMatrix;
+				math::Vector3 camPos;
+				float buffer;
 			};
 
 
@@ -26,6 +31,8 @@ namespace thomas {
 
 			static std::vector<object::component::Camera*> GetCameras();
 
+			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+
 
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;
@@ -33,10 +40,10 @@ namespace thomas {
 			static ID3D11DepthStencilState* s_depthStencilState;
 			static ID3D11DepthStencilView* s_depthStencilView;
 			static ID3D11Texture2D* s_depthBuffer;
-			static D3D11_VIEWPORT s_viewport;
+			static math::Viewport s_viewport;
 
-			static ID3D11Buffer* s_matrixBuffer;
-			static MatrixStruct s_objectMatrix;
+			static ID3D11Buffer* s_objectBuffer;
+			static GameObjectBuffer s_objectBufferStruct;
 		};
 	}
 }

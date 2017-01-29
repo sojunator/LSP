@@ -16,7 +16,7 @@ namespace thomas
 			{
 				m_fov = 70;
 				m_near = 0.1;
-				m_far = 100;
+				m_far = 10;
 				m_aspectRatio = 1;
 				UpdateProjMatrix();
 			}
@@ -35,6 +35,11 @@ namespace thomas
 			math::Matrix Camera::GetViewProjMatrix()
 			{
 				return GetViewMatrix() * m_projMatrix;
+			}
+
+			math::Vector3 Camera::GetPosition()
+			{
+				return m_gameObject->m_transform->GetPosition();
 			}
 
 			float Camera::GetFov()

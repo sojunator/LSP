@@ -21,6 +21,7 @@ namespace thomas
 				math::Matrix GetViewMatrix();
 				math::Matrix GetProjMatrix();
 				math::Matrix GetViewProjMatrix();
+				math::Vector3 GetPosition();
 
 				float GetFov();
 				void SetFov(float fov);

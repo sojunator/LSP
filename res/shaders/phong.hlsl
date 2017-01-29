@@ -13,7 +13,11 @@ struct VSInput
 
 cbuffer mvp : register(b0)
 {
+	matrix worldMatrix;
+	matrix viewMatrix;
+	matrix projectionMatrix;
 	matrix mvpMatrix;
+	float3 camPosition;
 };
 
 cbuffer material : register(b1)
