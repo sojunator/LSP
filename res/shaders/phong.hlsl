@@ -103,5 +103,5 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		specular = specular * specularIntensity;
 	}
 
-	return ambientColor*textureColor + diffuse*textureColor + specular*specularColor;
+	return ambientColor*textureColor*0.05f + diffuse*textureColor + specular*specularColor;
 }

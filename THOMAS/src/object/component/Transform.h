@@ -19,6 +19,8 @@ namespace thomas
 				
 				math::Matrix m_localWorldMatrix;
 
+				Transform* m_parent;
+
 				Transform(GameObject* gameObject);
 
 
@@ -35,20 +37,22 @@ namespace thomas
 				void Translate(math::Vector3 translation);
 				void Translate(float x, float y, float z);
 
-				Transform* GetParent();
-				void SetParent(Transform* parent);
 
 				math::Vector3 GetPosition();
 				math::Quaternion GetRotation();
 				math::Vector3 GetScale();
 				
 				void SetPosition(math::Vector3 position);
+				void SetPositon(float x, float y, float z);
 				void SetRotation(math::Quaternion rotation);
+				void SetRotation(float x, float y, float z);
 				void SetScale(math::Vector3 scale);
+				void SetScale(float x, float y, float z);
+				void SetScale(float scale);
 
 			private:
 				
-				Transform* m_parent;
+				
 			};
 		}
 	}

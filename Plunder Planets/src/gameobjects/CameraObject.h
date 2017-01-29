@@ -17,7 +17,12 @@ public:
 
 	bool Start()
 	{
+		
 		return true;
+	}
+
+	void Update()
+	{
 	}
 
 	math::Matrix GetCameraMatrix() 

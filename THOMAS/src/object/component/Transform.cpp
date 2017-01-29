@@ -37,7 +37,7 @@ namespace thomas
 			math::Matrix Transform::GetWorldMatrix()
 			{
 				if (m_parent)
-					return m_parent->GetWorldMatrix() * m_localWorldMatrix;
+					return m_localWorldMatrix * m_parent->GetWorldMatrix();
 				else
 					return m_localWorldMatrix;
 			}
@@ -59,7 +59,6 @@ namespace thomas
 			{
 				math::Quaternion rot = math::Quaternion::CreateFromYawPitchRoll(angles.x, angles.y, angles.z);
 				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(m_localRotation), rot);
-				
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
 
 				Decompose();
@@ -79,14 +78,7 @@ namespace thomas
 			{
 				return Translate(math::Vector3(x, y, z));
 			}
-			Transform * Transform::GetParent()
-			{
-				return m_parent;
-			}
-			void Transform::SetParent(Transform * parent)
-			{
-				m_parent = parent;
-			}
+
 			math::Vector3 Transform::GetPosition()
 			{
 				if (m_parent)
@@ -119,6 +111,10 @@ namespace thomas
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(newPosition, math::Vector3::Forward, math::Vector3::Up);
 				Decompose();
 			}
+			void Transform::SetPositon(float x, float y, float z)
+			{
+				SetPosition(math::Vector3(x, y, z));
+			}
 			void Transform::SetRotation(math::Quaternion rotation)
 			{
 				math::Quaternion newRotation;
@@ -132,6 +128,10 @@ namespace thomas
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, rotMatrix.Forward(), rotMatrix.Up());
 				Decompose();
 			}
+			void Transform::SetRotation(float x, float y, float z)
+			{
+				SetRotation(math::Quaternion::CreateFromYawPitchRoll(x, y, z));
+			}
 			void Transform::SetScale(math::Vector3 scale)
 			{
 				math::Vector3 newScale;
@@ -141,6 +141,14 @@ namespace thomas
 					newScale = scale;
 				m_localWorldMatrix = math::Matrix::CreateScale(newScale) * math::Matrix::CreateWorld(m_localPosition, Forward(), Up());
 				Decompose();
+			}
+			void Transform::SetScale(float x, float y, float z)
+			{
+				return SetScale(math::Vector3(x, y, z));
+			}
+			void Transform::SetScale(float scale)
+			{
+				return SetScale(math::Vector3(scale, scale, scale));
 			}
 		}
 	}

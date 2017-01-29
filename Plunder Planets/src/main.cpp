@@ -18,8 +18,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	shader->Bind();
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj");
 
-	new TestObject();
-	new CameraObject();
+	TestObject* t = new TestObject();
+	CameraObject* c = new CameraObject();
+	//c->m_transform->m_parent = t->m_transform;
 	//start
 	thomas::ThomasCore::Start();
 	return (int)msg.wParam;
