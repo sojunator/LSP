@@ -75,6 +75,11 @@ namespace thomas
 		{
 			m_name = name;
 
+			m_data.vs = NULL;
+			m_data.ps = NULL;
+			m_data.gs = NULL;
+			m_data.hs = NULL;
+			m_data.ds = NULL;
 			if(!vertexShader.empty())
 				m_data.vs = Compile(vertexShader, "vs_5_0", "VSMain");
 			if (!geometryShader.empty())
