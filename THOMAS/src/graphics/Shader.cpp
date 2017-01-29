@@ -19,16 +19,11 @@ namespace thomas
 			HRESULT status = D3DCompileFromFile(CA2W(source.c_str()), nullptr, nullptr, main.c_str(), profile.c_str(), D3DCOMPILE_DEBUG, 0, &shaderBlob, &errorBlob);
 
 
-
-			if (status != S_OK)
-			{
-				LOG(status);
-			}
 			if (errorBlob)
 			{
 				if (errorBlob->GetBufferSize())
 				{
-					LOG("Shader Compiler errors: " << (char*)errorBlob->GetBufferPointer());
+					LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
 				}
 				errorBlob->Release();
 			}
@@ -76,22 +71,59 @@ namespace thomas
 			return true;
 		}
 
+		Shader::Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+		{
+			m_name = name;
+
+			if(!vertexShader.empty())
+				m_data.vs = Compile(vertexShader, "vs_5_0", "VSMain");
+			if (!geometryShader.empty())
+				m_data.gs = Compile(geometryShader, "gs_5_0", "GSMain");
+			if (!hullShader.empty())
+				m_data.hs = Compile(hullShader, "hs_5_0", "HSMain");
+			if (!domainShader.empty())
+				m_data.ds = Compile(domainShader, "ds_5_0", "DSMain");
+			if (!pixelShader.empty())
+				m_data.ps = Compile(pixelShader, "ps_5_0", "PSMain");
+
+			if (m_data.vs)
+				ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
+			if (m_data.ps)
+				ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
+			if (m_data.gs)
+				ThomasCore::GetDevice()->CreateGeometryShader(m_data.gs->GetBufferPointer(), m_data.gs->GetBufferSize(), NULL, &m_data.geometryShader);
+			if (m_data.hs)
+				ThomasCore::GetDevice()->CreateHullShader(m_data.hs->GetBufferPointer(), m_data.hs->GetBufferSize(), NULL, &m_data.hullShader);
+			if (m_data.ds)
+				ThomasCore::GetDevice()->CreateDomainShader(m_data.ds->GetBufferPointer(), m_data.ds->GetBufferSize(), NULL, &m_data.domainShader);
+
+			CreateInputLayout(inputLayout);
+		}
 
 
 
-		Shader::Shader(std::string name, std::string filePath, InputLayouts inputLayout)
+
+		Shader::Shader(std::string name, InputLayouts inputLayout, std::string filePath)
 		{
 			m_name = name;
 			m_filePath = filePath;
 
 			m_data.vs = Compile(filePath, "vs_5_0", "VSMain");
 			m_data.ps = Compile(filePath, "ps_5_0", "PSMain");
+			m_data.gs = Compile(filePath, "gs_5_0", "GSMain");
+			m_data.hs = Compile(filePath, "hs_5_0", "HSMain");
+			m_data.ds = Compile(filePath, "ds_5_0", "DSMain");
 
 			if (m_data.vs)
 				ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
 			if (m_data.ps)
 				ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
-			//ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
+			if (m_data.gs)
+				ThomasCore::GetDevice()->CreateGeometryShader(m_data.gs->GetBufferPointer(), m_data.gs->GetBufferSize(), NULL, &m_data.geometryShader);
+			if (m_data.hs)
+				ThomasCore::GetDevice()->CreateHullShader(m_data.hs->GetBufferPointer(), m_data.hs->GetBufferSize(), NULL, &m_data.hullShader);
+			if (m_data.ds)
+				ThomasCore::GetDevice()->CreateDomainShader(m_data.ds->GetBufferPointer(), m_data.ds->GetBufferSize(), NULL, &m_data.domainShader);
 
 			CreateInputLayout(inputLayout);
 
@@ -110,6 +142,24 @@ namespace thomas
 			{
 				m_data.pixelShader->Release();
 				m_data.ps->Release();
+			}
+
+			if (m_data.gs)
+			{
+				m_data.geometryShader->Release();
+				m_data.gs->Release();
+			}
+
+			if (m_data.hs)
+			{
+				m_data.hullShader->Release();
+				m_data.hs->Release();
+			}
+
+			if (m_data.ds)
+			{
+				m_data.domainShader->Release();
+				m_data.ds->Release();
 			}
 
 			m_data.inputLayout->Release();
@@ -132,10 +182,17 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->VSSetShader(m_data.vertexShader, NULL, 0);
 			}
 				
-
 			if(m_data.ps)
 				ThomasCore::GetDeviceContext()->PSSetShader(m_data.pixelShader, NULL, 0);
 
+			if (m_data.gs)
+				ThomasCore::GetDeviceContext()->GSSetShader(m_data.geometryShader, NULL, 0);
+
+			if (m_data.hs)
+				ThomasCore::GetDeviceContext()->HSSetShader(m_data.hullShader, NULL, 0);
+
+			if (m_data.ds)
+				ThomasCore::GetDeviceContext()->DSSetShader(m_data.domainShader, NULL, 0);
 
 			
 			return true;
@@ -146,6 +203,9 @@ namespace thomas
 			{
 				ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
 				ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
+				ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+				ThomasCore::GetDeviceContext()->HSSetShader(NULL, NULL, 0);
+				ThomasCore::GetDeviceContext()->DSSetShader(NULL, NULL, 0);
 				s_currentBoundShader = nullptr;
 				return true;
 			}
@@ -175,6 +235,12 @@ namespace thomas
 					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(slot, 1, &resource);
 				if (m_data.ps)
 					ThomasCore::GetDeviceContext()->PSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.gs)
+					ThomasCore::GetDeviceContext()->GSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.hs)
+					ThomasCore::GetDeviceContext()->HSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.ds)
+					ThomasCore::GetDeviceContext()->PSSetConstantBuffers(slot, 1, &resource);
 				return true;
 			}
 			return false;
@@ -186,6 +252,12 @@ namespace thomas
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetShaderResources(slot, 1, &texture);
 				if (m_data.ps)
+					ThomasCore::GetDeviceContext()->PSSetShaderResources(slot, 1, &texture);
+				if (m_data.gs)
+					ThomasCore::GetDeviceContext()->GSGetShaderResources(slot, 1, &texture);
+				if (m_data.hs)
+					ThomasCore::GetDeviceContext()->HSSetShaderResources(slot, 1, &texture);
+				if (m_data.ds)
 					ThomasCore::GetDeviceContext()->PSSetShaderResources(slot, 1, &texture);
 				return true;
 			}
@@ -199,6 +271,12 @@ namespace thomas
 					ThomasCore::GetDeviceContext()->VSSetSamplers(slot, 1, &sampler);
 				if (m_data.ps)
 					ThomasCore::GetDeviceContext()->PSSetSamplers(slot, 1, &sampler);
+				if (m_data.gs)
+					ThomasCore::GetDeviceContext()->GSSetSamplers(slot, 1, &sampler);
+				if (m_data.hs)
+					ThomasCore::GetDeviceContext()->HSSetSamplers(slot, 1, &sampler);
+				if (m_data.ds)
+					ThomasCore::GetDeviceContext()->DSSetSamplers(slot, 1, &sampler);
 				return true;
 			}
 			return false;
@@ -223,9 +301,16 @@ namespace thomas
 		}
 
 		
-		Shader * Shader::CreateShader(std::string name, std::string filePath, InputLayouts inputLayout)
+		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath)
 		{
-			Shader* shader = new Shader(name, filePath, inputLayout);
+			Shader* shader = new Shader(name, inputLayout, filePath);
+			if (shader)
+				s_loadedShaders.push_back(shader);
+			return shader;
+		}
+		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+		{
+			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader);
 			if (shader)
 				s_loadedShaders.push_back(shader);
 			return shader;

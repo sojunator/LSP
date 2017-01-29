@@ -205,23 +205,12 @@ namespace thomas
 		
 			CreateDepthStencilState(ThomasCore::GetDevice(), depthStencilState);
 
-			rasterState = CreateRasterizer();
+			rasterState = CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 
 			return true;
 		}
 
 
-
-
-
-		void D3d::PresentBackBuffer(ID3D11DeviceContext *& context, IDXGISwapChain *& swapchain)
-		{
-			HRESULT hr = swapchain->Present(0, 0);
-			if (FAILED(hr))
-			{
-				LOG_HR(hr);
-			}
-		}
 
 		bool D3d::LoadTextureFromFile(ID3D11Device* device, ID3D11DeviceContext* context, std::string fileName, 
 			ID3D11Resource*& texture, ID3D11ShaderResourceView*& textureView)
@@ -280,17 +269,17 @@ namespace thomas
 		}
 
 
-		ID3D11RasterizerState * D3d::CreateRasterizer()
+		ID3D11RasterizerState * D3d::CreateRasterizer(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode)
 		{
 			ID3D11RasterizerState* rasterState;
 			D3D11_RASTERIZER_DESC rasterDesc;
 
 			rasterDesc.AntialiasedLineEnable = false;
-			rasterDesc.CullMode = D3D11_CULL_BACK;
+			rasterDesc.CullMode = cullMode;
 			rasterDesc.DepthBias = 0;
 			rasterDesc.DepthBiasClamp = 0.0f;
 			rasterDesc.DepthClipEnable = false;
-			rasterDesc.FillMode = D3D11_FILL_SOLID;
+			rasterDesc.FillMode = fillMode;
 			rasterDesc.FrontCounterClockwise = true;
 			rasterDesc.MultisampleEnable = false;
 			rasterDesc.ScissorEnable = false;

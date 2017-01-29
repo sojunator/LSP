@@ -18,20 +18,15 @@ namespace thomas
 
 		bool thomas::graphics::Renderer::Init()
 		{
-			/*	if (utils::D3d::InitRenderer(s_backBuffer, s_rasterState, s_depthStencilState, s_depthStencilView, s_depthBuffer))
-				{
-					s_viewport = utils::D3d::CreateViewport(0, 0, Window::GetWidth(), Window::GetHeight());
 
-
-
-					return true;
-				}
-				return false;*/
-
-			utils::D3d::InitRenderer(s_backBuffer, s_rasterState, s_depthStencilState, s_depthStencilView, s_depthBuffer);
-			s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-
-			return true;
+			if (utils::D3d::InitRenderer(s_backBuffer, s_rasterState, s_depthStencilState, s_depthStencilView, s_depthBuffer))
+			{
+				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
+				return true;
+				
+			}
+			return false;
 		}
 
 		void thomas::graphics::Renderer::Clear()

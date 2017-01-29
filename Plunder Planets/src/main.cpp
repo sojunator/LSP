@@ -14,7 +14,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 
-	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", "../res/shaders/phong.hlsl", thomas::graphics::Shader::InputLayouts::STANDARD);
+	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader(
+		"Phong", 
+		thomas::graphics::Shader::InputLayouts::STANDARD,
+		"../res/shaders/phong.hlsl");
 	shader->Bind();
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj");
 

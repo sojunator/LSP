@@ -31,9 +31,8 @@ namespace thomas
 
 			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11RasterizerState*& rasterState, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11Texture2D*& depthBuffer);
 
-			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
 			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
-			static ID3D11RasterizerState* CreateRasterizer();
+			static ID3D11RasterizerState* CreateRasterizer(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
 
 			template<typename T>
 			static ID3D11Buffer* CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
