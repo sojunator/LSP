@@ -3,7 +3,7 @@
 namespace thomas {
 	namespace graphics {
 
-		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, material::Material* material)
+		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, Material* material)
 		{
 			m_material = material;
 			m_data.vertices = vertices;
@@ -55,7 +55,7 @@ namespace thomas {
 			return &m_data.indices;
 		}
 
-		material::Material * Mesh::GetMaterial()
+		Material * Mesh::GetMaterial()
 		{
 			return m_material;
 		}

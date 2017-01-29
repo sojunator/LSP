@@ -44,7 +44,7 @@ namespace thomas {
 			return m_name;
 		}
 
-		std::vector<Mesh*> Model::GetMeshesByMaterial(material::Material* material)
+		std::vector<Mesh*> Model::GetMeshesByMaterial(Material* material)
 		{
 			std::vector<Mesh*> meshes;
 			for (unsigned int i = 0; i < m_meshes.size(); i++)

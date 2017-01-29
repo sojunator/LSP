@@ -24,7 +24,7 @@ namespace thomas
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
 				return true;
-				
+
 			}
 			return false;
 		}
@@ -62,7 +62,7 @@ namespace thomas
 					shader->Bind();
 
 					//Get the materials that use the shader
-					for (material::Material* mat : material::Material::GetLoadedMaterials())
+					for (Material* mat : Material::GetLoadedMaterials())
 					{
 						mat->Bind(); //Bind material specific buffers/textures
 									 //Get all gameObjects that have a rendererComponent
@@ -90,52 +90,6 @@ namespace thomas
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
 
-
-			Clear();
-
-			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
-			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
-			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
-
-
-			std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
-
-
-
-			//For every shader
-			for (Shader* shader : loadedShaders)
-			{
-				shader->Bind();
-
-				//Get the materials that use the shader
-				for (material::Material* mat : material::Material::GetLoadedMaterials())
-				{
-					mat->Bind(); //Bind material specific buffers/textures
-					//Get all gameObjects that have a rendererComponent
-					for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-					{
-						object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
-
-						for (object::component::Camera* camera : GetCameras()) //Render for every camera;
-						{
-							ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
-							BindGameObjectBuffer(camera, gameObject);
-							//Draw every mesh of gameObjects model that has
-							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
-							{
-								mesh->Bind(); //bind vertex&index buffer
-								mesh->Draw();
-							}
-						}
-
-
-					}
-					mat->Unbind();
-				}
-				shader->Unbind();
-			}
-
-			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 
 		bool Renderer::Destroy()

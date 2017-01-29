@@ -8,7 +8,7 @@
 #include "../../include/assimp/postprocess.h"
 #include "../utils/d3d.h"
 #include "../ThomasCore.h"
-#include "material/Material.h"
+#include "Material.h"
 
 namespace thomas 
 {
@@ -37,7 +37,7 @@ namespace thomas
 			void SetupMesh();
 			
 		public:
-			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, material::Material* material);
+			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, Material* material);
 			~Mesh();
 			bool SetName(std::string name);
 
@@ -51,7 +51,7 @@ namespace thomas
 			std::vector<Vertex>* GetVertices();
 			std::vector<int>* GetIndices();
 
-			material::Material* GetMaterial();
+			Material* GetMaterial();
 
 			bool Bind();
 			bool Unbind();
@@ -61,7 +61,7 @@ namespace thomas
 		private:
 			std::string m_name;
 			MeshData m_data;
-			material::Material* m_material;
+			Material* m_material;
 
 		};
 	}

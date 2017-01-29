@@ -1,7 +1,7 @@
 #pragma once
 #include "../Common.h"
 #include "Mesh.h"
-#include "material/Material.h"
+#include "Material.h"
 namespace thomas {
 	namespace graphics {
 		class THOMAS_API Model {
@@ -12,7 +12,7 @@ namespace thomas {
 			static Model* GetModelByName(std::string name);
 			static std::vector<Model*> GetLoadedModels();
 			std::string GetName();
-			std::vector<Mesh*> GetMeshesByMaterial(material::Material* material);
+			std::vector<Mesh*> GetMeshesByMaterial(Material* material);
 			std::vector<Mesh*> GetMeshesByMaterial(std::string name);
 			std::vector<Mesh*> GetMeshes();
 			

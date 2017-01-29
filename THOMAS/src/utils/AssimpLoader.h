@@ -21,10 +21,10 @@ namespace thomas
 		class AssimpLoader
 		{
 		private:
-			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string meshName, std::string dir);
-			static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<graphics::Mesh*> &meshes, std::string dir);
+			static graphics::Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string meshName, std::string dir, std::string materialType);
+			static void ProcessNode(aiNode* node, const aiScene* scene, std::vector<graphics::Mesh*> &meshes, std::string dir, std::string materialType);
 		public:
-			static graphics::Model* LoadModel(std::string name, std::string path);
+			static graphics::Model* LoadModel(std::string name, std::string path, std::string materialType);
 			
 			static std::string GetMaterialName(aiMaterial* material);
 			static int GetMaterialShadingModel(aiMaterial* material);

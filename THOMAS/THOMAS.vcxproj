@@ -20,8 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
-    <ClCompile Include="src\graphics\material\PhongMaterial.cpp" />
-    <ClCompile Include="src\graphics\material\Material.cpp" />
+    <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\graphics\Model.cpp" />
     <ClCompile Include="src\graphics\Renderer.cpp" />
@@ -49,9 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\CubeMapLoader.h" />
-    <ClInclude Include="src\graphics\material\Materials.h" />
-    <ClInclude Include="src\graphics\material\PhongMaterial.h" />
-    <ClInclude Include="src\graphics\material\Material.h" />
+    <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\graphics\Model.h" />

@@ -5,7 +5,7 @@ namespace thomas
 {
 	namespace utils
 	{
-		graphics::Model* AssimpLoader::LoadModel(std::string name, std::string path)
+		graphics::Model* AssimpLoader::LoadModel(std::string name, std::string path, std::string materialType)
 		{
 			std::string dir = path.substr(0, path.find_last_of("\\/"));
 			LOG("Starting to load model from: " << path);
@@ -43,7 +43,7 @@ namespace thomas
 			std::vector<graphics::Mesh*> meshes;
 
 			// Process ASSIMP's root node recursively
-			ProcessNode(scene->mRootNode, scene, meshes, dir);
+			ProcessNode(scene->mRootNode, scene, meshes, dir, materialType);
 
 			graphics::Model* model = graphics::Model::CreateModel(name, meshes);
 			
@@ -162,12 +162,12 @@ namespace thomas
 			return opacity;
 		}
 
-		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string meshName, std::string dir)
+		graphics::Mesh* AssimpLoader::ProcessMesh(aiMesh * mesh, const aiScene* scene, std::string meshName, std::string dir, std::string materialType)
 		{
 			std::vector <graphics::Vertex> vertices;
 			std::vector <int> indices;
 			std::string name = meshName + "-" + std::string(mesh->mName.C_Str());
-			graphics::material::Material* material;
+			graphics::Material* material;
 
 			//vector<Texture> textures;
 
@@ -228,14 +228,15 @@ namespace thomas
 			//Process materials
 
 			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-			material = graphics::material::Material::CreateMaterial(dir,mat);
+
+			material = graphics::Material::CreateMaterial(dir, materialType, mat);
 
 
 			graphics::Mesh* m = new graphics::Mesh(vertices, indices, name, material);
 			return m;
 		}
 
-		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, std::vector<graphics::Mesh*> &meshes, std::string dir)
+		void AssimpLoader::ProcessNode(aiNode * node, const aiScene * scene, std::vector<graphics::Mesh*> &meshes, std::string dir, std::string materialType)
 		{
 			std::string modelName(scene->mRootNode->mName.C_Str());
 			std::string nodeName(node->mName.C_Str());
@@ -247,13 +248,13 @@ namespace thomas
 				// The node object only contains indices to index the actual objects in the scene. 
 				// The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 				aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-				graphics::Mesh* processedMesh = ProcessMesh(mesh, scene, modelName + "-" + nodeName + "-" + std::to_string(i), dir);
+				graphics::Mesh* processedMesh = ProcessMesh(mesh, scene, modelName + "-" + nodeName + "-" + std::to_string(i), dir, materialType);
 				meshes.push_back(processedMesh);
 			}
 			// After we've processed all of the meshes (if any) we then recursively process each of the children nodes
 			for (unsigned int i = 0; i < node->mNumChildren; i++)
 			{
-				ProcessNode(node->mChildren[i], scene, meshes, dir);
+				ProcessNode(node->mChildren[i], scene, meshes, dir, materialType);
 			}
 		}
 	}
