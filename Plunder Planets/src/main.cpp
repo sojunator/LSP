@@ -14,12 +14,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 	//Init shaders
-	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/phong.hlsl");
+	thomas::graphics::Shader::CreateShader("phongShader", thomas::graphics::Shader::InputLayouts::STANDARD,"../res/shaders/phong.hlsl");
 
 
 	//Init materials
-	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial());
+	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("phongShader"));
 
 	//Init models
 
