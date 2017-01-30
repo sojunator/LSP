@@ -14,22 +14,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 	//Init shaders
-	//thomas::graphics::Shader::CreateShader("phongShader", thomas::graphics::Shader::InputLayouts::STANDARD,"../res/shaders/tesselationTest.hlsl");
-
-	thomas::graphics::Shader::CreateShader("tesselationShader", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/tesselation/tesselationTestVS.hlsl",
-		"",
-		"../res/shaders/tesselation/tesselationTestHS.hlsl",
-		"../res/shaders/tesselation/tesselationTestDS.hlsl",
-		"../res/shaders/tesselation/tesselationTestPS.hlsl");
+	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
+		"../res/shaders/phong.hlsl");
 
 
 	//Init materials
-	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("tesselationShader"));
+	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 
 	//Init models
 
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/armchair.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 
 
 	//Init gameObjects
