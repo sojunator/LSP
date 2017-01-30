@@ -13,7 +13,7 @@ namespace thomas
 			~Plane();
 
 		public:
-			static void CreatePlane(int size);
+			static void CreatePlane(int size, int detail);
 
 		private:
 

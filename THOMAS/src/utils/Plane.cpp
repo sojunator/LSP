@@ -5,7 +5,7 @@ namespace thomas
 {
 	namespace utils
 	{
-		void Plane::CreatePlane(int size)
+		void Plane::CreatePlane(int size, int detail)
 		{
 			std::vector<graphics::Vertex> verts;
 			std::vector<int> indices;
@@ -20,31 +20,31 @@ namespace thomas
 			temp_vert.normal.z = 0.0f;
 
 			// Create points
-			for (int i = 0; i < size; i++)
+			for (int i = 0; i < size * detail; i++)
 			{
-				for (int j = 0; j < size; j++)
+				for (int j = 0; j < size * detail; j++)
 				{
-					temp_vert.position.x = (float)j;
+					temp_vert.position.x = (float)j / (float)detail;
 					temp_vert.position.y = 0.0f;
-					temp_vert.position.z = (float)i;
+					temp_vert.position.z = (float)i / (float)detail;
 					verts.push_back(temp_vert);
 				}
 			}
 
 			// triangulate points
-			for (int i = 0; i < size - 1; i++)
+			for (int i = 0; i < (size * detail) - 1; i++)
 			{
-				int index = size * (i + 1);
-				for (int j = 0; j < size - 1; j++)
+				int index = size*detail * (i + 1);
+				for (int j = 0; j < (size * detail) - 1; j++)
 				{
 					
-					indices.push_back(j + i * size);
+					indices.push_back(j + i * size*detail);
 					indices.push_back(index);
 					indices.push_back(index + 1);
 
-					indices.push_back(j + i * size);
+					indices.push_back(j + i * size*detail);
 					indices.push_back(index + 1);
-					indices.push_back((j + i * size) + 1);
+					indices.push_back((j + i * size*detail) + 1);
 
 					index++;
 				}
