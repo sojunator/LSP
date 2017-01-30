@@ -9,6 +9,9 @@ SamplerState specularSampler : register(s1);
 Texture2D normalTexture : register(t2);
 SamplerState normalSampler : register(s2);
 
+Texture2D heightTexture : register(t3);
+SamplerState heightSampler : register(s3);
+
 cbuffer mvp : register(b0)
 {
 	matrix worldMatrix;

@@ -20,6 +20,7 @@ namespace thomas
 				DIFFUSE = 0,
 				SPECULAR = 1,
 				NORMAL = 2,
+				HEIGHT_MAP = 3
 			};
 
 			enum class SamplerState {
@@ -32,13 +33,16 @@ namespace thomas
 
 		private:
 			Texture(int mappingMode, TextureType type, std::string path);
+			Texture(SamplerState samplerState, TextureType type, std::string path);
 			static bool CreateTextureSamplers();
 			void SetTextureSampler(int textureMode);
+			void SetTextureSampler(SamplerState samplerState);
 		public:
 
 
 			static bool Init();
 			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
+			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string path);
 			std::string GetName();
 			ID3D11Resource* GetTexture();
 			ID3D11ShaderResourceView* GetTextureView();

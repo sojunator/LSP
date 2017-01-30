@@ -27,6 +27,20 @@ namespace thomas
 			return texture;
 		}
 
+		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string path)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == path)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, type, path);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
 		std::string Texture::GetName()
 		{
 			return m_name;
@@ -63,6 +77,14 @@ namespace thomas
 			if (m_initialized)
 				SetTextureSampler(mappingMode);
 
+		}
+		Texture::Texture(SamplerState samplerState, TextureType type, std::string path)
+		{
+			m_textureType = type;
+			m_name = path;
+			m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+			if (m_initialized)
+				SetTextureSampler(samplerState);
 		}
 		bool Texture::CreateTextureSamplers()
 		{
@@ -134,13 +156,34 @@ namespace thomas
 				break;
 			}
 		}
+		void Texture::SetTextureSampler(SamplerState samplerState)
+		{
+			switch (samplerState)
+			{
+			case SamplerState::WRAP:
+				m_samplerState = s_samplerStates.WRAP;
+				break;
+			case SamplerState::CLAMP:
+				m_samplerState = s_samplerStates.CLAMP;
+				break;
+			case SamplerState::DECAL:
+				m_samplerState = s_samplerStates.DECAL;
+				break;
+			case SamplerState::MIRROR:
+				m_samplerState = s_samplerStates.MIRROR;
+				break;
+			default:
+				m_samplerState = s_samplerStates.WRAP;
+				break;
+			}
+		}
 		void Texture::Destroy()
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				s_loadedTextures[i]->m_data.texture->Release();
 				s_loadedTextures[i]->m_data.textureView->Release();
-				
+
 			}
 			s_samplerStates.CLAMP->Release();
 			s_samplerStates.WRAP->Release();

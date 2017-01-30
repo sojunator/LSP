@@ -29,6 +29,8 @@ WaterMaterial::WaterMaterial(std::string dir, std::string name, aiMaterial * mat
 	m_materialProperties.specularPower = utils::AssimpLoader::GetMaterialShininess(material) / 1000.0;
 	m_materialProperties.tess = 2.0;
 
+	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::CLAMP, Texture::TextureType::HEIGHT_MAP, "../res/height_map.png"));
+
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 }
 
