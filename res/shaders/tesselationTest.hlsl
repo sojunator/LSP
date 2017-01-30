@@ -24,6 +24,7 @@ cbuffer material : register(b1)
 	float4 diffuseColor;
 	float4 specularColor;
 	float specularPower;
+	float tess;
 }
 
 
@@ -95,12 +96,12 @@ HSConstantData PatchConstantFunction(InputPatch<HSInput, 3> inputPatch, uint pat
 
 
 	// Set the tessellation factors for the three edges of the triangle.
-	output.edges[0] = 1.0f;
-	output.edges[1] = 1.0f;
-	output.edges[2] = 1.0f;
+	output.edges[0] = tess;
+	output.edges[1] = tess;
+	output.edges[2] = tess;
 
 	// Set the tessellation factor for tessallating inside the triangle.
-	output.inside = 1.0f;
+	output.inside = tess;
 
 	return output;
 }

@@ -13,6 +13,9 @@ public:
 	WaterMaterial(std::string shader) : Material(shader) {}
 	WaterMaterial(std::string name, Shader* shader);
 	WaterMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
+	
+	void Update();
+
 	~WaterMaterial();
 private:
 	struct MaterialProperties
@@ -21,9 +24,9 @@ private:
 		math::Color diffuseColor;
 		math::Color specularColor;
 		float specularPower;
-		math::Vector3 padding;
+		float tess;
+		math::Vector2 padding;
 	};
-
 	MaterialProperties m_materialProperties;
 
 };

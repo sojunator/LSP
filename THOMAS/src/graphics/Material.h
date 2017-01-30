@@ -35,6 +35,8 @@ namespace thomas
 			bool Bind();
 			bool Unbind();
 
+			virtual void Update() {};
+
 			std::string GetName();
 			Shader* GetShader();
 
