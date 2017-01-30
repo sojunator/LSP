@@ -6,6 +6,8 @@
 
 #include "utils\AssimpLoader.h"
 
+#include "utils\Plane.h"
+
 #include "graphics\Shader.h"
 
 #include "object\GameObject.h"
