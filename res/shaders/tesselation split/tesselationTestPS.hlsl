@@ -67,6 +67,5 @@ float4 PSMain(PSInput input) : SV_TARGET
 		specular = pow(saturate(dot(bumpNormal, reflection)), specularPower) * lightIntensity;
 		specular = specular * specularIntensity;
 	}
-	return textureColor;
 	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular * specularColor;
 }
