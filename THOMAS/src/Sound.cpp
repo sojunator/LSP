@@ -23,6 +23,31 @@ namespace thomas
 			s_data.instance = s_data.sound->CreateInstance();
 	}
 
+	Sound* Sound::FindPlaying()
+	{
+		for (int i = 0; i < s_music.size(); ++i)
+		{
+			if (s_music[i]->s_data.instance->GetState() == DirectX::PLAYING)
+				return s_music[i];
+		}
+		return nullptr;
+	}
+
+	Sound* Sound::FindSound(std::string name)
+	{
+		for (int i = 0; i < s_music.size(); ++i)
+		{
+			if (s_music[i]->s_data.name == name)
+				return s_music[i];
+		}
+		for (int i = 0; i < s_soundEffect.size(); ++i)
+		{
+			if (s_soundEffect[i]->s_data.name == name)
+				return s_soundEffect[i];
+		}
+		return false;
+	}
+
 	bool Sound::Init()
 	{
 		//because win32 desktop app
@@ -35,71 +60,64 @@ namespace thomas
 		return true;
 	}
 
-	Sound * thomas::Sound::CreateSound(std::string fileName, std::string name, Type type)
+	void thomas::Sound::CreateSound(std::string fileName, std::string name, Type type)
 	{
 		if (type == Type::Effect)
 		{
 			for (int i = 0; i < s_soundEffect.size(); ++i)
 			{
 				if (fileName == s_soundEffect[i]->s_data.fileName)
-					return s_soundEffect[i];
+					return;
 			}
 			Sound* newSound = new Sound(fileName, name, type, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
 			s_soundEffect.push_back(newSound);
-			return newSound;
+			return;
 		}
 		
 		else if (type == Type::Music)
 		{
-			for (int i = 0; i < s_music.size(); ++i)
+			for (int i = 0; i < s_music.size(); i++)
 			{
 				if (fileName == s_music[i]->s_data.fileName)
-					return s_music[i];
+					return;
 			}
 			Sound* newSound = new Sound(fileName, name, type, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
-			
 			s_music.push_back(newSound);
-			return newSound;
 		}
-		return nullptr;
-	}
-	std::string Sound::GetFileName()
-	{
-		return s_data.fileName;
+	return;
 	}
 
-	bool Sound::Play()
+	bool Sound::Play(std::string name)
 	{
-		if (s_data.type == Type::Effect)
-		{
-			s_data.sound->Play(s_masterVolume * s_fxVolume, 0, 0);
-			return true;
-		}
-		else if(s_data.audioEngine->Reset()) //is music type and not in use
-		{
-			if (!s_data.instance->GetState())
-			{
-				s_data.instance->Play(true);
-				s_data.instance->SetVolume(s_masterVolume * s_musicVolume);
+		Sound* temp = FindPlaying();
+		if (temp)
+			if (name == temp->s_data.name)
 				return true;
-			}
 			else
-			{
-				s_data.instance->Resume();
-				return true;
-			}
-		}
-		return false;
+				temp->s_data.instance->Pause();
+		temp = FindSound(name);
+		if (temp->s_data.type == Type::Music)
+			temp->s_data.instance->Play(true);
+		else
+			temp->s_data.instance->Play();
+		
 	}
 
-	bool Sound::Pause()
+	void Sound::Pause()
 	{
-		if (s_data.instance->GetState() == DirectX::PAUSED)
-		{
-			s_data.instance->Pause();
-			return true;
-		}
-		return false;
+		Sound* temp = FindPlaying();
+		temp->s_data.instance->Pause();
+	}
+
+	void Sound::Resume(std::string name)
+	{
+		Sound* temp = FindSound(name);
+		temp->s_data.instance->Resume();
+	}
+
+	void Sound::Reset()
+	{
+		s_music[1]->s_data.audioEngine->Reset();
 	}
 	
 	void Sound::SetMasterVolume(float volume)
@@ -116,12 +134,10 @@ namespace thomas
 	}
 	void Sound::Destroy()
 	{
-		for (int i = 0; i < s_music.size(); ++i)
-		{
-			delete s_data.sound;
-			s_data.audioEngine->Suspend();
-			s_data.instance.reset();
-		}
+		delete s_data.sound;
+		s_data.audioEngine->Suspend();
+		s_data.instance.reset();
+
 		for (int i = 0; i < s_soundEffect.size(); ++i)
 		{
 			delete s_data.sound;

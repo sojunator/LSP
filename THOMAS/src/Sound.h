@@ -18,12 +18,15 @@ namespace thomas
 		};
 	private:
 		Sound(std::string fileName, std::string name, Type type, DirectX::SoundEffect* sound, DirectX::AudioEngine* audioEngine);
+		static Sound* FindPlaying();
+		static Sound* FindSound(std::string name);
 	public:
 		static bool Init();
-		static Sound* CreateSound(std::string fileName, std::string name, Type type); //types: "Music" or "Effect"
-		std::string GetFileName();
-		bool Play();
-		bool Pause();
+		static void CreateSound(std::string fileName, std::string name, Type type); //types: "Music" or "Effect"
+		static bool Play(std::string name);
+		static void Pause();
+		static void Resume(std::string name);
+		static void Reset();
 		static void SetMasterVolume(float volume);
 		static void SetFxVolume(float volume);
 		static void SetMusicVolume(float volume);

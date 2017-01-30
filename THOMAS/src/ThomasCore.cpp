@@ -47,6 +47,10 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Sound::Init();
 
+		Sound::CreateSound("../res/sounds/thomas.wav", "Thomas", Sound::Type::Music);
+
+		Sound::Play("Thomas");
+
 		return s_initialized;
 	}
 
@@ -65,7 +69,7 @@ namespace thomas {
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
-		
+
 		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
 		{
 			thomas::object::Object::GetObjects()[i]->Update();
