@@ -5,18 +5,33 @@
 #include "Thomas.h"
 #include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
+#include "materials\PhongMaterial.h"
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
 	MSG msg = { 0 };
-	thomas::utils::Model model;
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
 	//init code
 
-	thomas::utils::AssimpLoader::LoadModel("../res/models/sphere1.obj");
+	//Init shaders
+	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
+		"../res/shaders/phong.hlsl");
 
-	new TestObject();
+
+	//Init materials
+	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
+
+	//Init models
+
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
+
+
+	//Init gameObjects
+
+	TestObject* t = new TestObject();
 	CameraObject* c = new CameraObject();
+
+
 
 	//start
 	thomas::ThomasCore::Start();

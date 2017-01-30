@@ -21,6 +21,7 @@ namespace thomas
 				math::Matrix GetViewMatrix();
 				math::Matrix GetProjMatrix();
 				math::Matrix GetViewProjMatrix();
+				math::Vector3 GetPosition();
 
 				float GetFov();
 				void SetFov(float fov);
@@ -31,15 +32,18 @@ namespace thomas
 				float GetFar();
 				void SetFar(float viewFar);
 
+				math::Viewport GetViewport();
+				void SetViewport(math::Viewport viewport);
+				void SetViewport(float x, float y, float width, float height);
+
 				float GetAspectRatio();
-				void SetAspectRatio(float aspectRatio);
 				
 			private:
 				math::Matrix m_projMatrix;
 				float m_fov;
 				float m_near;
 				float m_far;
-				float m_aspectRatio;
+				math::Viewport m_viewport;
 			};
 		}
 	}

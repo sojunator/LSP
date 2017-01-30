@@ -17,15 +17,18 @@ namespace thomas
 			};
 			enum class ResourceType
 			{
-				MVP_MATRIX = 0,
+				GAME_OBJECT = 0,
 				MATERIAL = 1
 			};
 		private:
 
 			ID3DBlob* Compile(std::string source, std::string profile, std::string main);
 			bool CreateInputLayout(InputLayouts layout);
+			Shader(std::string name, InputLayouts inputLayout, std::string filePath);
 
-			Shader(std::string name, std::string filePath, InputLayouts inputLayout);
+			Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader);
+
+
 		public:
 
 
@@ -45,19 +48,32 @@ namespace thomas
 			bool BindIndexBuffer(ID3D11Buffer* indexBuffer);
 
 
-			static Shader* CreateShader(std::string name, std::string filePath, InputLayouts inputLayout);
+			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string filePath);
+			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader);
 			static Shader* GetCurrentBoundShader();
-			static Shader* GetShader(std::string name);
+			static Shader* GetShaderByName(std::string name);
+			static std::vector<Shader*> GetLoadedShaders();
 			static bool Destroy();
 
 
 		private:
 			struct Data
 			{
-				ID3D11VertexShader* vertexShader;
-				ID3D11PixelShader* pixelShader;
 				ID3DBlob* vs;
-				ID3D10Blob* ps;
+				ID3D11VertexShader* vertexShader;
+
+				ID3DBlob* ps;
+				ID3D11PixelShader* pixelShader;
+				
+				ID3DBlob* gs;
+				ID3D11GeometryShader* geometryShader;
+
+				ID3DBlob* hs;
+				ID3D11HullShader* hullShader;
+
+				ID3DBlob* ds;
+				ID3D11DomainShader* domainShader;
+				
 				ID3D11InputLayout* inputLayout;
 			};
 

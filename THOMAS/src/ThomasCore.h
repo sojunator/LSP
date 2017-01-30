@@ -21,6 +21,7 @@ namespace thomas
 
 		static ID3D11Device* GetDevice();
 		static ID3D11DeviceContext* GetDeviceContext();
+		static IDXGISwapChain* GetSwapChain();
 
 	private:
 		static HINSTANCE s_hInstance;

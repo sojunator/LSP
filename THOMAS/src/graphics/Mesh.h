@@ -19,6 +19,8 @@ namespace thomas
 			math::Vector3 position;
 			math::Vector2 uv;
 			math::Vector3 normal;
+			math::Vector3 tangent;
+			math::Vector3 bitangent;
 		};
 
 		struct MeshData
@@ -33,11 +35,10 @@ namespace thomas
 		{
 		private:
 			void SetupMesh();
-			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
+			
 		public:
+			Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, Material* material);
 			~Mesh();
-			static Mesh* CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name);
-
 			bool SetName(std::string name);
 
 			MeshData* GetData();
@@ -50,15 +51,17 @@ namespace thomas
 			std::vector<Vertex>* GetVertices();
 			std::vector<int>* GetIndices();
 
-			material::Material* GetMaterial();
+			Material* GetMaterial();
 
 			bool Bind();
 			bool Unbind();
 
+			void Draw();
+
 		private:
 			std::string m_name;
 			MeshData m_data;
-			material::Material* m_material;
+			Material* m_material;
 
 		};
 	}

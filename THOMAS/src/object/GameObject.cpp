@@ -29,6 +29,11 @@ namespace thomas
 			}
 			return NULL;
 		}
+
+		std::vector<GameObject*> GameObject::GetGameObjects()
+		{
+			return s_gameObjects;
+		}
 		
 
 	}

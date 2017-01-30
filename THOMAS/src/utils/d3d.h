@@ -4,7 +4,9 @@
 #include <d3dcompiler.h>
 #include <string>
 #include <vector>
+#include "../ThomasCore.h"
 #include "directXTK\WICTextureLoader.h"
+#include "directXTK\DDSTextureLoader.h"
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "Dxguid.lib")
@@ -18,8 +20,7 @@ namespace thomas
 		{
 		private:
 			static bool CreateSwapchainAndDeviceAndContext(LONG witdh, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
-			static bool CreateSwapChainTexture(ID3D11Device* device, IDXGISwapChain* swapchain);
-			static void CreateViewPort(ID3D11DeviceContext*& context, LONG height, LONG width);
+			static bool CreateBackBuffer(ID3D11Device* device, IDXGISwapChain* swapchain, ID3D11RenderTargetView*& backBuffer);
 			static bool CreateDepthStencilState(ID3D11Device* device, ID3D11DepthStencilState*& stencil);
 			static bool CreateDepthStencilView(ID3D11Device* device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer);
 			static ID3D11RenderTargetView* CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource* buffer);
@@ -27,11 +28,11 @@ namespace thomas
 
 		public:
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
-			static void PresentBackBuffer(ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain);
-			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource** texture, _Outptr_opt_ ID3D11ShaderResourceView** textureView, size_t size);
-			static bool Destroy();
-			static ID3D11RasterizerState* CreateRasterizer();
-			static bool Clear();
+
+			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11Texture2D*& depthBuffer);
+
+			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
+			static ID3D11RasterizerState* CreateRasterizer(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
 
 			template<typename T>
 			static ID3D11Buffer* CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
@@ -43,9 +44,6 @@ namespace thomas
 			static bool FillBuffer(ID3D11Buffer* buffer, T data);
 
 		private:
-			static ID3D11RenderTargetView* s_backBuffer;
-			static ID3D11RasterizerState* s_rasterState;
-
 
 		};
 

@@ -2,9 +2,14 @@
 
 #include "Input.h"
 #include "object\Object.h"
+#include "graphics\Texture.h"
+#include "graphics\Renderer.h"
+#include "graphics\Shader.h"
+#include "graphics\Model.h"
+#include "graphics\Material.h"
 #include "Sound.h"
-
 #include <assimp\Importer.hpp>
+
 
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
@@ -31,6 +36,12 @@ namespace thomas {
 			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
 
 		if (s_initialized)
+			s_initialized = graphics::Texture::Init();
+
+		if (s_initialized)
+			s_initialized = graphics::Renderer::Init();
+
+		if (s_initialized)
 			s_initialized = Time::Init();
 
 		if (s_initialized)
@@ -46,8 +57,6 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-		
-		utils::D3d::Clear();
 	//	LOG("update");
 
 		if (Input::GetButton(Input::Buttons::A))
@@ -63,8 +72,7 @@ namespace thomas {
 		}
 		
 
-		utils::D3d::PresentBackBuffer(s_context, s_swapchain);
-
+		graphics::Renderer::Render();
 	}
 
 	void ThomasCore::Start()
@@ -132,7 +140,11 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
-		utils::D3d::Destroy();
+		graphics::Material::Destroy();
+		graphics::Shader::Destroy();
+		graphics::Texture::Destroy();
+		graphics::Model::Destroy();
+		graphics::Renderer::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();
@@ -142,7 +154,7 @@ namespace thomas {
 		s_device = nullptr;
 
 		#ifdef _DEBUG
-		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		//s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG
@@ -158,6 +170,10 @@ namespace thomas {
 	ID3D11DeviceContext* ThomasCore::GetDeviceContext()
 	{
 		return s_context;
+	}
+	IDXGISwapChain * ThomasCore::GetSwapChain()
+	{
+		return s_swapchain;
 	}
 }
 

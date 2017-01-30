@@ -3,9 +3,9 @@
 namespace thomas {
 	namespace graphics {
 
-		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
+		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name, Material* material)
 		{
-			
+			m_material = material;
 			m_data.vertices = vertices;
 			m_data.indices = indices;
 			m_name = name;
@@ -18,11 +18,6 @@ namespace thomas {
 			m_data.indexBuffer->Release();
 		}
 
-		Mesh* Mesh::CreateMesh(std::vector<Vertex> vertices, std::vector<int> indices, std::string name)
-		{
-			Mesh *mesh = new Mesh(vertices, indices, name);
-			return mesh;
-		}
 
 		bool Mesh::SetName(std::string name)
 		{
@@ -60,13 +55,14 @@ namespace thomas {
 			return &m_data.indices;
 		}
 
-		material::Material * Mesh::GetMaterial()
+		Material * Mesh::GetMaterial()
 		{
 			return m_material;
 		}
 
 		bool Mesh::Bind()
 		{
+			thomas::graphics::Shader::GetCurrentBoundShader()->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(m_data.vertexBuffer, sizeof(Vertex), 0);
 			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(m_data.indexBuffer);
 			return v && i;
@@ -77,6 +73,11 @@ namespace thomas {
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(Vertex), 0);
 			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);
 			return v && i;
+		}
+
+		void Mesh::Draw()
+		{
+			thomas::ThomasCore::GetDeviceContext()->DrawIndexed(GetIndexCount(), 0, 0);
 		}
 
 		void Mesh::SetupMesh()
