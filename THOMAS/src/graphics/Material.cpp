@@ -30,7 +30,8 @@ namespace thomas
 
 		Material::~Material()
 		{
-			m_materialPropertiesBuffer->Release();
+			if(m_materialPropertiesBuffer)
+				m_materialPropertiesBuffer->Release();
 		}
 
 		Material * Material::CreateMaterial(Material * material)
@@ -123,6 +124,18 @@ namespace thomas
 				}
 			}
 			return materials;
+		}
+
+		void Material::Destroy()
+		{
+			for (unsigned int i = 0; i < s_materials.size(); i++)
+			{
+				delete s_materials[i];
+			}
+			for (auto const& materialType : s_materialTypes)
+			{
+				delete materialType.second;
+			}
 		}
 
 		bool Material::Bind()
