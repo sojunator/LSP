@@ -1,4 +1,5 @@
 #include "Plane.h"
+#include <time.h>
 
 namespace thomas
 {
@@ -10,7 +11,7 @@ namespace thomas
 			std::vector<int> indices;
 			float x, y, z;
 			graphics::Vertex temp_vert;
-			
+			srand(time(NULL));
 			// Defualt temp values, must be calulated later
 			temp_vert.uv.x = 0.0f;
 			temp_vert.uv.y = 0.0f;
@@ -24,8 +25,8 @@ namespace thomas
 				for (int j = 0; j < size; j++)
 				{
 					temp_vert.position.x = (float)j;
-					temp_vert.position.y = (float)i;
-					temp_vert.position.z = 0.0f;
+					temp_vert.position.y = 0.0f;
+					temp_vert.position.z = (float)i;
 					verts.push_back(temp_vert);
 				}
 			}
@@ -33,16 +34,19 @@ namespace thomas
 			// triangulate points
 			for (int i = 0; i < size - 1; i++)
 			{
+				int index = size * (i + 1);
 				for (int j = 0; j < size - 1; j++)
 				{
-					indices.push_back(j);
-					indices.push_back(size * (i + 1));
-					indices.push_back(size * (i + 1) + 1);
+					
+					indices.push_back(j + i * size);
+					indices.push_back(index);
+					indices.push_back(index + 1);
 
-					indices.push_back(j);
-					indices.push_back(size * (i + 1) + 1);
-					indices.push_back(j + 1);
+					indices.push_back(j + i * size);
+					indices.push_back(index + 1);
+					indices.push_back((j + i * size) + 1);
 
+					index++;
 				}
 			}
 
