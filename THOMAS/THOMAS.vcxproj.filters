@@ -27,6 +27,7 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
+    <ClCompile Include="src\object\component\Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -63,6 +64,7 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\graphics\CubeMapLoader.h" />
     <ClInclude Include="src\graphics\Material.h" />
+    <ClInclude Include="src\object\component\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

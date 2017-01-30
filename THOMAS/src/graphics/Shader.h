@@ -18,7 +18,8 @@ namespace thomas
 			enum class ResourceType
 			{
 				GAME_OBJECT = 0,
-				MATERIAL = 1
+				MATERIAL = 1,
+				LIGHTS = 2
 			};
 		private:
 

@@ -4,6 +4,7 @@
 
 #include "CameraObject.h"
 
+
 using namespace thomas;
 using namespace object;
 class TestObject : public GameObject
@@ -15,7 +16,8 @@ public:
 	TestObject() : GameObject("TestObject") 
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-
+		m_light = AddComponent<component::Light>();
+		
 	}
 
 	bool Start()
@@ -37,6 +39,8 @@ public:
 	void Update()
 	{
 		component::Camera* cam = m_cameraObject->GetComponent<component::Camera>();
+		
+		
 
 		float speed = 10;
 		if (Input::GetKey(Input::Keys::A))
@@ -62,6 +66,7 @@ public:
 
 private:
 	component::RenderComponent* m_renderer;
-	object::GameObject* m_cameraObject;
+	GameObject* m_cameraObject;
+	component::Light* m_light;
 
 };

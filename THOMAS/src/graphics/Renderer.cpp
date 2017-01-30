@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Model.h"
 #include "../object/GameObject.h"
+#include "../object/component/Light.h"
 
 namespace thomas
 {
@@ -53,19 +54,28 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
-
-
+				
+				//thomas::object::component::Light l 
+				
 
 				//For every shader
 				for (Shader* shader : loadedShaders)
 				{
 					shader->Bind();
 
+					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
+					{
+						lightgameObject->GetComponent<object::component::Light>()->Bind();
+
+					}
+
 					//Get the materials that use the shader
 					for (Material* mat : Material::GetLoadedMaterials())
 					{
 						mat->Bind(); //Bind material specific buffers/textures
 									 //Get all gameObjects that have a rendererComponent
+
+
 						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 						{
 							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
