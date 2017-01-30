@@ -87,7 +87,7 @@ namespace thomas
 			result = ThomasCore::GetDevice()->CreateSamplerState(&samplerDesc, &s_samplerStates.WRAP);
 
 
-			if (result)
+			if (SUCCEEDED(result))
 			{
 				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -95,7 +95,7 @@ namespace thomas
 				result = ThomasCore::GetDevice()->CreateSamplerState(&samplerDesc, &s_samplerStates.CLAMP);
 			}
 
-			if (result)
+			if (SUCCEEDED(result))
 			{
 				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
 				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
@@ -103,7 +103,7 @@ namespace thomas
 				result = ThomasCore::GetDevice()->CreateSamplerState(&samplerDesc, &s_samplerStates.DECAL);
 			}
 
-			if (result)
+			if (SUCCEEDED(result))
 			{
 				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
 				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
@@ -111,7 +111,7 @@ namespace thomas
 				result = ThomasCore::GetDevice()->CreateSamplerState(&samplerDesc, &s_samplerStates.MIRROR);
 			}
 
-			return result == S_OK;
+			return SUCCEEDED(result);
 		}
 		void Texture::SetTextureSampler(int textureMode)
 		{
@@ -140,7 +140,12 @@ namespace thomas
 			{
 				s_loadedTextures[i]->m_data.texture->Release();
 				s_loadedTextures[i]->m_data.textureView->Release();
+				
 			}
+			s_samplerStates.CLAMP->Release();
+			s_samplerStates.WRAP->Release();
+			s_samplerStates.DECAL->Release();
+			s_samplerStates.MIRROR->Release();
 		}
 
 	}

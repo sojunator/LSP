@@ -4,6 +4,9 @@
 #include "object\Object.h"
 #include "graphics\Texture.h"
 #include "graphics\Renderer.h"
+#include "graphics\Shader.h"
+#include "graphics\Model.h"
+#include "graphics\Material.h"
 #include <assimp\Importer.hpp>
 
 
@@ -135,6 +138,10 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
+		graphics::Material::Destroy();
+		graphics::Shader::Destroy();
+		graphics::Texture::Destroy();
+		graphics::Model::Destroy();
 		graphics::Renderer::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
@@ -145,7 +152,7 @@ namespace thomas {
 		s_device = nullptr;
 
 		#ifdef _DEBUG
-		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		//s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG

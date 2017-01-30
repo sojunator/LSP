@@ -198,14 +198,13 @@ namespace thomas
 
 
 
-		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11RasterizerState *& rasterState, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11Texture2D *& depthBuffer)
+		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11Texture2D *& depthBuffer)
 		{
 			CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain(), backBuffer);
 			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBuffer);
 		
 			CreateDepthStencilState(ThomasCore::GetDevice(), depthStencilState);
 
-			rasterState = CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 
 			return true;
 		}
