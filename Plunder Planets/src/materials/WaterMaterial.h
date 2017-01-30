@@ -3,18 +3,17 @@
 
 using namespace thomas;
 using namespace graphics;
-class PhongMaterial : public Material
+
+class WaterMaterial : public Material
 {
 private:
+	Material* CreateInstance(std::string name, Shader* shader);
 	Material* CreateInstance(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 public:
-	PhongMaterial(std::string shader) : Material(shader) {}
-	PhongMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
-
-
-
-	~PhongMaterial();
-
+	WaterMaterial(std::string shader) : Material(shader) {}
+	WaterMaterial(std::string name, Shader* shader);
+	WaterMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
+	~WaterMaterial();
 private:
 	struct MaterialProperties
 	{
@@ -26,4 +25,6 @@ private:
 	};
 
 	MaterialProperties m_materialProperties;
+
 };
+

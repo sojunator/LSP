@@ -1,7 +1,7 @@
 #include "PhongMaterial.h"
 
 
-PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* material) : Material(name, Shader::GetShaderByName("Phong"))
+PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader) : Material(name, shader)
 {
 	m_textures = utils::AssimpLoader::GetMaterialTextures(material, dir);
 
@@ -15,7 +15,7 @@ PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* mate
 
 
 }
-Material * PhongMaterial::CreateInstance(std::string dir, std::string name, aiMaterial * material)
+Material * PhongMaterial::CreateInstance(std::string dir, std::string name, aiMaterial * material, Shader* shader)
 {
-	return new PhongMaterial(dir, name, material);
+	return new PhongMaterial(dir, name, material, shader);
 }

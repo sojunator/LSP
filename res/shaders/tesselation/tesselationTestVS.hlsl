@@ -1,16 +1,6 @@
+//Vertex shader
 
 
-
-//Globals
-
-Texture2D diffuseTexture : register(t0);
-SamplerState diffuseSampler : register(s0);
-
-Texture2D specularTexture : register(t1);
-SamplerState specularSampler : register(s1);
-
-Texture2D normalTexture : register(t2);
-SamplerState normalSampler : register(s2);
 
 cbuffer mvp : register(b0)
 {
@@ -21,17 +11,6 @@ cbuffer mvp : register(b0)
 	float3 camPosition;
 };
 
-cbuffer material : register(b1)
-{
-	float4 ambientColor;
-	float4 diffuseColor;
-	float4 specularColor;
-	float specularPower;
-}
-
-
-
-//Vertex shader
 
 struct VSInput
 {
@@ -43,10 +22,9 @@ struct VSInput
 };
 
 
-
 struct VSOutput
 {
-	float4 positionWS : SV_POSITION;
+	float3 position : POSITION;
 	float2 tex : TEXCOORD;
 	float3 normal : NORMAL;
 	float3 tangent : TANGENT;
@@ -58,7 +36,7 @@ VSOutput VSMain(in VSInput input)
 {
 	VSOutput output;
 	
-	output.positionWS = mul(float4(input.position, 1), worldMatrix);
+	output.position = input.position.xyz;
 	output.tex = input.uv;
 	output.normal = input.normal;
 	output.tangent = input.tangent;

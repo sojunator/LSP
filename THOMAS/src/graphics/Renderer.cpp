@@ -62,7 +62,7 @@ namespace thomas
 					shader->Bind();
 
 					//Get the materials that use the shader
-					for (Material* mat : Material::GetLoadedMaterials())
+					for (Material* mat : Material::GetMaterialsByShader(shader))
 					{
 						mat->Bind(); //Bind material specific buffers/textures
 									 //Get all gameObjects that have a rendererComponent
