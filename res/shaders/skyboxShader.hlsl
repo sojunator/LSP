@@ -1,6 +1,6 @@
 
-SamplerState ObjSamplerState : register(s0);
-TextureCube SkyMap : register (t0);
+SamplerState ObjSamplerState : register(s4);
+TextureCube SkyMap : register (t4);
 
 struct VSInput
 {
@@ -10,6 +10,7 @@ struct VSInput
 cbuffer mvp : register(b0)
 {
 	matrix mvpMatrix;
+	matrix viewMatrix;
 };
 
 struct VSOutput
@@ -23,7 +24,7 @@ VSOutput VSMain(in VSInput input)
 	VSOutput output;
 
     output.position = mul(float4(input.position, 1), mvpMatrix).xyww;
-	output.texCoord = input.position;
+	output.texCoord = mul(input.position,(float3x3)viewMatrix);
 
 	return output;
 }

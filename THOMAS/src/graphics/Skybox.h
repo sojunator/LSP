@@ -2,7 +2,6 @@
 #include "../utils/Math.h"
 #include "Shader.h"
 
-
 namespace thomas
 {
 	namespace graphics
@@ -21,7 +20,7 @@ namespace thomas
 		public:
 			Skybox(std::string path, std::string shaderName);
 			~Skybox();
-			bool Bind(math::Matrix mvpMatrix);
+			bool Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix);
 			bool Unbind();
 			void Draw();
 
@@ -43,6 +42,7 @@ namespace thomas
 			struct mvpStruct
 			{
 				math::Matrix mvpMatrix;
+				math::Matrix viewMatrix;
 			};
 
 			std::vector <math::Vector3> vertices =

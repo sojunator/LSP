@@ -78,7 +78,7 @@ namespace thomas
 
 		}
 
-		Material * Material::createMaterial(std::string name, std::string materialType)
+		Material * Material::CreateMaterial(std::string name, std::string materialType)
 		{
 
 			for (unsigned int i = 0; i < s_materials.size(); i++)

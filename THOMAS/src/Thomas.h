@@ -12,5 +12,5 @@
 
 #include "object\GameObject.h"
 
-#include "heightmap\Heightmap.h"
+
 

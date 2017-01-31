@@ -25,13 +25,14 @@ namespace thomas
 			delete m_data.texture;
 		}
 
-		bool Skybox::Bind(math::Matrix mvpMatrix)
+		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)
 		{
 			m_data.shader->Bind();
 			
 			bool v = m_data.shader->BindVertexBuffer(m_data.vertexBuffer, sizeof(math::Vector3), 0);
 			bool i = m_data.shader->BindIndexBuffer(m_data.indexBuffer);
 			m_mvpStruct.mvpMatrix = mvpMatrix;
+			m_mvpStruct.viewMatrix = viewMatrix;
 			utils::D3d::FillBuffer(m_data.constantBuffer, m_mvpStruct);
 
 			ThomasCore::GetDeviceContext()->RSSetState(m_data.rasterizerState);

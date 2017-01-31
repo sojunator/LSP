@@ -16,7 +16,7 @@ namespace thomas
 			{
 				m_fov = 70;
 				m_near = 0.1;
-				m_far = 100;
+				m_far = 1000;
 				m_viewport = math::Viewport(0, 0, Window::GetWidth(), Window::GetHeight());
 				m_skybox = NULL;
 				UpdateProjMatrix();
@@ -107,7 +107,7 @@ namespace thomas
 				if (m_skybox)
 				{
 					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix()).Transpose();
-					m_skybox->Bind(mvpMatrix);
+					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
 				}
 					
 			}
