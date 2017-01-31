@@ -67,11 +67,6 @@ namespace thomas {
 		{
 			thomas::object::Object::GetObjects()[i]->Update();
 		}
-		
-		for (int i = 0; i < thomas::graphics::Material::GetLoadedMaterials().size(); i++)
-		{
-			thomas::graphics::Material::GetLoadedMaterials()[i]->Update();
-		}
 
 		graphics::Renderer::Render();
 	}

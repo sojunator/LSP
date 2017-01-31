@@ -5,7 +5,7 @@ namespace thomas
 {
 	namespace utils
 	{
-		graphics::Mesh& Plane::CreatePlane(int size, int detail, std::string meshName, 
+		std::vector<thomas::graphics::Mesh*> Plane::CreatePlane(int size, int detail, std::string meshName,
 			graphics::Material* mat)
 		{
 			std::vector<graphics::Vertex> verts;
@@ -54,7 +54,7 @@ namespace thomas
 			std::vector<thomas::graphics::Mesh* > mesh;
 			graphics::Mesh* m = new graphics::Mesh(verts, indices, meshName, mat);
 			mesh.push_back(m);
-			return *m;
+			return mesh;
 		}
 	}
 }

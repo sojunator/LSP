@@ -16,7 +16,7 @@ public:
 	
 	void Update();
 
-	~WaterMaterial();
+	~WaterMaterial() {};
 private:
 	struct MaterialProperties
 	{

@@ -5,6 +5,7 @@
 #include "Thomas.h"
 #include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
+#include "gameobjects\WaterObject.h"
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
@@ -24,7 +25,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 
-	thomas::graphics::Material::RegisterNewMaterialType("tessMaterial", new WaterMaterial("tesselationShader"));
+	thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("tesselationShader"));
 
 	//Init models
 
@@ -35,6 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	TestObject* t = new TestObject();
 	CameraObject* c = new CameraObject();
+	new WaterObject();
 
 
 
