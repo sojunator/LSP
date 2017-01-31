@@ -11,43 +11,33 @@ namespace thomas
 	class THOMAS_API Sound
 	{
 	public:
-		enum class Type
+		enum class Effects
 		{
-			Effect = 0,
-			Music = 1
+			fMeow = 0,
+			fSwoosh = 1,
 		};
-	private:
-		Sound(std::string fileName, std::string name, Type type, DirectX::SoundEffect* sound, DirectX::AudioEngine* audioEngine);
-		static Sound* FindPlaying();
-		static Sound* FindSound(std::string name);
+		enum class Music
+		{
+			mStress = 2,
+			mThomas = 3,
+		};
 	public:
 		static bool Init();
-		static void CreateSound(std::string fileName, std::string name, Type type); //types: "Music" or "Effect"
-		static bool Play(std::string name);
+		static bool Play(Sound::Effects name);
+		static bool Play(Sound::Music name);
 		static void Pause();
-		static void Resume(std::string name);
-		static void Reset();
+		static void Resume();
 		static void SetMasterVolume(float volume);
 		static void SetFxVolume(float volume);
 		static void SetMusicVolume(float volume);
 		static void Destroy();
 
 	private:
-		struct Data
-		{
-			std::string fileName;
-			std::string name;
-			Type type;
-			DirectX::SoundEffect* sound;
-			DirectX::AudioEngine* audioEngine;
-			std::unique_ptr<DirectX::SoundEffectInstance> instance;
-		};
-
 		static float s_masterVolume;
 		static float s_fxVolume;
 		static float s_musicVolume;
-		static Data s_data;
-		static std::vector<Sound*> s_music;
-		static std::vector<Sound*> s_soundEffect;
+		static std::unique_ptr<DirectX::SoundEffectInstance> s_instance; //instances for looping
+		static std::unique_ptr<DirectX::WaveBank> s_bank;
+		static std::unique_ptr<DirectX::AudioEngine> s_audioEngine;
 	};
 }

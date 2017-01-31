@@ -1,125 +1,59 @@
 #include "Sound.h"
+#include <string>
 #include <AtlBase.h>
 #include <atlconv.h>
 
 namespace thomas
 {
-	Sound::Data Sound::s_data;
-	std::vector<Sound*> Sound::s_music;
-	std::vector<Sound*> Sound::s_soundEffect;
 	float Sound::s_masterVolume;
 	float Sound::s_fxVolume;
 	float Sound::s_musicVolume;
-
-	Sound::Sound(std::string fileName, std::string name, Type type, DirectX::SoundEffect * sound, DirectX::AudioEngine * audioEngine)
-	{
-		s_data.fileName = fileName;
-		s_data.name = name;
-		s_data.type = type;
-		s_data.sound = sound;
-		s_data.audioEngine = audioEngine;
-		s_data.instance = NULL;
-		if(type == Type::Music)
-			s_data.instance = s_data.sound->CreateInstance();
-	}
-
-	Sound* Sound::FindPlaying()
-	{
-		for (int i = 0; i < s_music.size(); ++i)
-		{
-			if (s_music[i]->s_data.instance->GetState() == DirectX::PLAYING)
-				return s_music[i];
-		}
-		return nullptr;
-	}
-
-	Sound* Sound::FindSound(std::string name)
-	{
-		for (int i = 0; i < s_music.size(); ++i)
-		{
-			if (s_music[i]->s_data.name == name)
-				return s_music[i];
-		}
-		for (int i = 0; i < s_soundEffect.size(); ++i)
-		{
-			if (s_soundEffect[i]->s_data.name == name)
-				return s_soundEffect[i];
-		}
-		return false;
-	}
+	std::unique_ptr<DirectX::WaveBank> Sound::s_bank;
+	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_instance;
+	std::unique_ptr<DirectX::AudioEngine> Sound::s_audioEngine;
 
 	bool Sound::Init()
 	{
 		//because win32 desktop app
 		CoInitialize(nullptr);
+		DirectX::AUDIO_ENGINE_FLAGS aEFlags = DirectX::AudioEngine_Default;
+#ifdef DEBUG
+		aEFlags = aEFlags | DirectX::AudioEngine_Debug;
+#endif // DEBUG
 
-		s_data.audioEngine = new DirectX::AudioEngine();
+		s_audioEngine = std::make_unique<DirectX::AudioEngine>(aEFlags);
 		s_masterVolume = 0.5f;
 		s_fxVolume = 0.5f;
 		s_musicVolume = 0.5f;
+		s_bank = std::make_unique<DirectX::WaveBank>(s_audioEngine.get(), L"../res/sounds/soundlist.xwb");
 		return true;
 	}
 
-	void thomas::Sound::CreateSound(std::string fileName, std::string name, Type type)
+	bool Sound::Play(Sound::Music name)
 	{
-		if (type == Type::Effect)
-		{
-			for (int i = 0; i < s_soundEffect.size(); ++i)
-			{
-				if (fileName == s_soundEffect[i]->s_data.fileName)
-					return;
-			}
-			Sound* newSound = new Sound(fileName, name, type, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
-			s_soundEffect.push_back(newSound);
-			return;
-		}
-		
-		else if (type == Type::Music)
-		{
-			for (int i = 0; i < s_music.size(); i++)
-			{
-				if (fileName == s_music[i]->s_data.fileName)
-					return;
-			}
-			Sound* newSound = new Sound(fileName, name, type, new DirectX::SoundEffect(s_data.audioEngine, CA2W(fileName.c_str())), s_data.audioEngine);
-			s_music.push_back(newSound);
-		}
-	return;
+		s_instance = s_bank->CreateInstance(int(name));
+		if (!s_instance)
+			return false;
+		s_instance->Play(true);
+		s_instance->SetVolume(s_masterVolume * s_musicVolume);
+		return true;
 	}
-
-	bool Sound::Play(std::string name)
+	bool Sound::Play(Sound::Effects name)
 	{
-		Sound* temp = FindPlaying();
-		if (temp)
-			if (name == temp->s_data.name)
-				return true;
-			else
-				temp->s_data.instance->Pause();
-		temp = FindSound(name);
-		if (temp->s_data.type == Type::Music)
-			temp->s_data.instance->Play(true);
-		else
-			temp->s_data.instance->Play();
-		
+		s_bank->Play(int(name), s_masterVolume * s_fxVolume, 0.0f, 0.0f);
+		return true;
 	}
 
 	void Sound::Pause()
 	{
-		Sound* temp = FindPlaying();
-		temp->s_data.instance->Pause();
+		s_instance->Pause();
 	}
 
-	void Sound::Resume(std::string name)
+	void Sound::Resume()
 	{
-		Sound* temp = FindSound(name);
-		temp->s_data.instance->Resume();
+		s_instance->Resume();
 	}
 
-	void Sound::Reset()
-	{
-		s_music[1]->s_data.audioEngine->Reset();
-	}
-	
 	void Sound::SetMasterVolume(float volume)
 	{
 		s_masterVolume = volume;
@@ -134,14 +68,6 @@ namespace thomas
 	}
 	void Sound::Destroy()
 	{
-		delete s_data.sound;
-		s_data.audioEngine->Suspend();
-		s_data.instance.reset();
-
-		for (int i = 0; i < s_soundEffect.size(); ++i)
-		{
-			delete s_data.sound;
-			s_data.audioEngine->Suspend();
-		}
+		s_audioEngine->Suspend();
 	}
 }
