@@ -17,7 +17,7 @@ public:
 
 	bool Start()
 	{
-		
+		m_camera->SetSkybox("../res/textures/test.dds", "skyboxShader");
 		return true;
 	}
 
