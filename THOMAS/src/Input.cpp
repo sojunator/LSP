@@ -15,6 +15,11 @@ namespace thomas
 	DirectX::Mouse::ButtonStateTracker Input::s_mouseTracker;
 	DirectX::GamePad::ButtonStateTracker Input::s_gamePadTracker;
 
+	math::Vector2 Input::s_mousePosition;
+	Input::MouseMode Input::s_mouseMode;
+
+	bool Input::s_recordPosition = true;
+
 	bool Input::s_initialized;
 
 	bool Input::Init()
@@ -22,7 +27,8 @@ namespace thomas
 		s_keyboard = std::make_unique<DirectX::Keyboard>();
 		s_mouse = std::make_unique<DirectX::Mouse>();
 		s_gamePad = std::make_unique<DirectX::GamePad>();
-
+		
+		s_mouseMode = MouseMode::POSITION_ABSOLUTE;
 		s_mouse->SetWindow(Window::GetWindowHandler());
 		s_initialized = Window::Initialized();
 		LOG("Initiating Input");
@@ -40,6 +46,11 @@ namespace thomas
 			s_keyboardTracker.Update(s_keyboardState);
 			s_mouseTracker.Update(s_mouseState);
 			s_gamePadTracker.Update(s_gamePadState);
+
+			
+			s_mousePosition = math::Vector2(s_mouseState.x, s_mouseState.y);
+			if (s_mousePosition == math::Vector2(0, 0))
+				s_recordPosition = true;
 		}
 
 	}
@@ -93,6 +104,28 @@ namespace thomas
 	float Input::GetRightStickX()
 	{
 		return s_gamePadState.thumbSticks.rightX;
+	}
+
+	math::Vector2 Input::GetMousePosition()
+	{
+		if (s_recordPosition)
+			return s_mousePosition;
+		else
+			return math::Vector2(0, 0);
+	}
+
+	void Input::SetMouseMode(MouseMode mode)
+	{
+		if(s_mouseMode == mode)
+			return
+		s_mouse->SetMode((DirectX::Mouse::Mode)mode);
+		s_mouseMode = mode;
+		if (mode == MouseMode::POSITION_RELATIVE)
+		{
+			s_recordPosition = false;
+		}
+		Update();
+			
 	}
 
 	bool Input::GetButtonDown(Buttons button)

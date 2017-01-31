@@ -62,7 +62,6 @@ namespace thomas {
 
 		bool Mesh::Bind()
 		{
-			thomas::graphics::Shader::GetCurrentBoundShader()->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(m_data.vertexBuffer, sizeof(Vertex), 0);
 			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(m_data.indexBuffer);
 			return v && i;

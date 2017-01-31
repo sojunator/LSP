@@ -22,7 +22,7 @@ namespace thomas
 			if (utils::D3d::InitRenderer(s_backBuffer, s_depthStencilState, s_depthStencilView, s_depthBuffer))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID , D3D11_CULL_BACK);
 				return true;
 
 			}
@@ -47,10 +47,12 @@ namespace thomas
 			{
 				Clear();
 
-				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 				ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
-				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
+
+				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
+				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+				
 
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
 
@@ -62,7 +64,7 @@ namespace thomas
 					shader->Bind();
 
 					//Get the materials that use the shader
-					for (Material* mat : Material::GetLoadedMaterials())
+					for (Material* mat : Material::GetMaterialsByShader(shader))
 					{
 						mat->Bind(); //Bind material specific buffers/textures
 									 //Get all gameObjects that have a rendererComponent
@@ -86,7 +88,8 @@ namespace thomas
 					}
 					shader->Unbind();
 				}
-
+				camera->BindSkybox();
+				camera->UnbindSkybox();
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
 
