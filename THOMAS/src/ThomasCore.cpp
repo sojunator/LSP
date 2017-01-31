@@ -44,10 +44,10 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Time::Init();
 
-		if (s_initialized)
-			s_initialized = Sound::Init();
+		//if (s_initialized)
+		//	s_initialized = Sound::Init();
 
-		Sound::Play(Sound::Music::mThomas);
+		//Sound::Play(Sound::Music::mThomas);
 
 		return s_initialized;
 	}

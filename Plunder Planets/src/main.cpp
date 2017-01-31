@@ -46,6 +46,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 
+
 	//Init gameObjects
 
 	TestObject* t = new TestObject();
