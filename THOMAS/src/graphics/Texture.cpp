@@ -78,6 +78,7 @@ namespace thomas
 			m_textureType = type;
 			m_name = path;
 			m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+
 			if (m_initialized)
 				SetTextureSampler(mappingMode);
 
@@ -86,10 +87,21 @@ namespace thomas
 		{
 			m_textureType = type;
 			m_name = path;
-			m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+
+			switch (type)
+			{
+			case TextureType::CUBEMAP:
+				m_initialized = utils::D3d::LoadCubeTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+				break;
+			default:
+				m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+				break;
+			}
+
 			if (m_initialized)
 				SetTextureSampler(samplerState);
 		}
+
 		bool Texture::CreateTextureSamplers()
 		{
 			D3D11_SAMPLER_DESC samplerDesc;

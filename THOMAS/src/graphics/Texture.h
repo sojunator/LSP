@@ -20,7 +20,8 @@ namespace thomas
 				DIFFUSE = 0,
 				SPECULAR = 1,
 				NORMAL = 2,
-				HEIGHT_MAP = 3
+				HEIGHT_MAP = 3,
+				CUBEMAP = 4
 			};
 
 			enum class SamplerState {
@@ -38,8 +39,6 @@ namespace thomas
 			void SetTextureSampler(int textureMode);
 			void SetTextureSampler(SamplerState samplerState);
 		public:
-
-
 			static bool Init();
 			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
 			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string path);
@@ -77,5 +76,4 @@ namespace thomas
 			TextureType m_textureType;
 		};
 	}
-
 }

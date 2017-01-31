@@ -8,6 +8,7 @@
 #include "graphics\Model.h"
 #include "graphics\Material.h"
 #include <assimp\Importer.hpp>
+#include "Sound.h"
 
 
 namespace thomas {
@@ -42,7 +43,11 @@ namespace thomas {
 
 		if (s_initialized)
 			s_initialized = Time::Init();
-	
+
+		if (s_initialized)
+			s_initialized = Sound::Init();
+
+		Sound::Play(Sound::Music::mThomas);
 
 		return s_initialized;
 	}
@@ -62,7 +67,7 @@ namespace thomas {
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
-
+		
 		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
 		{
 			thomas::object::Object::GetObjects()[i]->Update();
@@ -92,7 +97,6 @@ namespace thomas {
 
 			}
 		}
-
 
 		if (s_initialized)
 		{
@@ -155,6 +159,8 @@ namespace thomas {
 		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG
+
+		Sound::Destroy();
 
 		return true;
 	}

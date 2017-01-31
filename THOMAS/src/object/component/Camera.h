@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "../../utils/Math.h"
-
+#include "../../graphics/Skybox.h"
 /**
 *Camera class
 */
@@ -37,6 +37,11 @@ namespace thomas
 				void SetViewport(float x, float y, float width, float height);
 
 				float GetAspectRatio();
+
+				void SetSkybox(std::string path, std::string shaderName);
+
+				void BindSkybox();
+				void UnbindSkybox();
 				
 			private:
 				math::Matrix m_projMatrix;
@@ -44,6 +49,8 @@ namespace thomas
 				float m_near;
 				float m_far;
 				math::Viewport m_viewport;
+				graphics::Skybox* m_skybox;
+
 			};
 		}
 	}
