@@ -4,19 +4,19 @@
 using namespace thomas;
 using namespace graphics;
 
-class WaterMaterial : public Material
+class TerrainMaterial : public Material
 {
 private:
 	Material* CreateInstance(std::string name, Shader* shader);
 	Material* CreateInstance(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 public:
-	WaterMaterial(std::string shader) : Material(shader) {}
-	WaterMaterial(std::string name, Shader* shader);
-	WaterMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
-	
+	TerrainMaterial(std::string shader) : Material(shader) {}
+	TerrainMaterial(std::string name, Shader* shader);
+	TerrainMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
+
 	void Update();
 
-	~WaterMaterial() {};
+	~TerrainMaterial();
 private:
 	struct MaterialProperties
 	{
@@ -25,8 +25,7 @@ private:
 		math::Color specularColor;
 		float specularPower;
 		float tess;
-		float time;
-		float padding;
+		math::Vector2 padding;
 	};
 	MaterialProperties m_materialProperties;
 

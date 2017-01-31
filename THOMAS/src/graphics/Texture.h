@@ -46,6 +46,7 @@ namespace thomas
 			std::string GetName();
 			ID3D11Resource* GetTexture();
 			ID3D11ShaderResourceView* GetTextureView();
+			TextureType GetTextureType();
 
 			bool Initialized();
 
