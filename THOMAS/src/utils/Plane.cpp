@@ -21,15 +21,15 @@ namespace thomas
 			temp_vert.normal.z = 0.0f;
 
 			// Create points
-			for (int i = 0; i < size * detail; i++)
+			for (int j = 0; j < size * detail; j++)
 			{
-				for (int j = 0; j < size * detail; j++)
+				for (int i = 0; i < size * detail; i++)
 				{
 					temp_vert.position.x = (float)j / detail;
 					temp_vert.position.y = 0.0f;
-					temp_vert.position.z = (float)i / detail;
+					temp_vert.position.z = -(float)i / detail;
 					temp_vert.uv.x = j / ((float)size * detail);
-					temp_vert.uv.y = (i - (float)size * detail) / ((float)size * detail);
+					temp_vert.uv.y = 1-(i - (float)size * detail) / ((float)size * detail);
 					verts.push_back(temp_vert);
 				}
 			}
