@@ -41,6 +41,18 @@ namespace thomas
 		{
 
 
+			if (Input::GetKeyDown(Input::Keys::X))
+			{
+				s_rasterState->Release();
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
+			}
+			else if (Input::GetKeyUp(Input::Keys::X))
+			{
+				s_rasterState->Release();
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+			}
+
+
 			//TODO: Find out if this is the fastest order of things.
 
 			for (object::component::Camera* camera : GetCameras()) //Render for every camera;

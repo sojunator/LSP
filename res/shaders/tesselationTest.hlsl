@@ -110,7 +110,7 @@ HSConstantData PatchConstantFunction(InputPatch<HSInput, 3> inputPatch, uint pat
 }
 
 [domain("tri")]
-[partitioning("fractional_even")]
+[partitioning("integer")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("PatchConstantFunction")]
@@ -139,12 +139,23 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	float3 binormal;
 	PSInput output;
 
+
+	output.tex = uvwCoord.x * patch[0].tex + uvwCoord.y * patch[1].tex + uvwCoord.z * patch[2].tex;
+
+	normal = uvwCoord.x * patch[0].normal + uvwCoord.y * patch[1].normal + uvwCoord.z * patch[2].normal;
+	normal = normalize(normal);
+	output.normal = mul(normal, (float3x3) worldMatrix);
+
+	float h = heightTexture.SampleLevel(heightSampler, output.tex, 0).r;
+
 	vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
+
+	vertexPosition += (5.0f * (h - 1.0)) * normal;
+
 	output.position = mul(float4(vertexPosition, 1), mvpMatrix);
 	output.positionWS = mul(vertexPosition, (float3x3) worldMatrix);
 
-	normal = uvwCoord.x * patch[0].normal + uvwCoord.y * patch[1].normal + uvwCoord.z * patch[2].normal;
-	output.normal = mul(normal, (float3x3) worldMatrix);
+	
 
 	tangent = uvwCoord.x * patch[0].tangent + uvwCoord.y * patch[1].tangent + uvwCoord.z * patch[2].tangent;
 	output.tangent = mul(tangent, (float3x3) worldMatrix);
@@ -152,7 +163,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	binormal = uvwCoord.x * patch[0].binormal + uvwCoord.y * patch[1].binormal + uvwCoord.z * patch[2].binormal;
 	output.binormal = mul(binormal, (float3x3) worldMatrix);
 
-	output.tex = uvwCoord.x * patch[0].tex + uvwCoord.y * patch[1].tex + uvwCoord.z * patch[2].tex;
+	
 
 	return output;
 }
@@ -162,7 +173,6 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-
 	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
 
 
@@ -190,5 +200,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 		specular = pow(saturate(dot(bumpNormal, reflection)), specularPower) * lightIntensity;
 		specular = specular * specularIntensity;
 	}
+	return heightTexture.Sample(heightSampler, input.tex);
 	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular * specularColor;
 }

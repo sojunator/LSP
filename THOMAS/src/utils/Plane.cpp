@@ -5,7 +5,7 @@ namespace thomas
 {
 	namespace utils
 	{
-		std::vector<thomas::graphics::Mesh*> Plane::CreatePlane(int size, int detail, std::string meshName,
+		std::vector<thomas::graphics::Mesh*> Plane::CreatePlane(int size, float detail, std::string meshName,
 			graphics::Material* mat)
 		{
 			std::vector<graphics::Vertex> verts;
