@@ -16,7 +16,7 @@ public:
 	TestObject() : GameObject("TestObject") 
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_light = AddComponent<component::Light>();
+		m_light = AddComponent<component::DirectionalLight>();
 		
 	}
 

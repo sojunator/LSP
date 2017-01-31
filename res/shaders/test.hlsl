@@ -39,17 +39,28 @@ cbuffer material : register(b1)
 
 struct DirLight
 {
+
 	float4 ambientColor;
 	float4 diffuseColor;
 	float4 specularColor;
-	float3 lightDir;
-	float padding;
+	float4 lightDir;
+};
+struct PointLight
+{
+	float4 ambientColor;
+	float4 diffuseColor;
+	float4 specularColor;
+	float4 position;
 };
 
 cbuffer lightBuffer : register(b2)
 {
-	DirLight lighttt;
-	
+	uint nrOfDirectionalLights;
+	uint nrOfPointLights;
+	int padding1;
+	int padding2;
+	DirLight directionalLights[3];
+	PointLight pointLights[1];
 }
 
 struct VSOutput
@@ -89,36 +100,60 @@ VSOutput VSMain(in VSInput input)
 float4 PSMain(VSOutput input) : SV_TARGET
 {
 
-
-	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
-
-
     float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
 
 	float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
-
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
-
 	bumpNormal = normalize(bumpNormal);
 
-	lightDir = -lightDir;
-	float lightIntensity = saturate(dot(bumpNormal, lighttt.lightDir));
+	float4 outputTest = float4(0,0,0,0);
 
-	float4 diffuseColor = float4(0.5, 0, 0, 1);
-
-	float4 diffuse = saturate(diffuseColor*lightIntensity);
-	float4 specular = float4(0,0,0,0);
-	if (lightIntensity > 0.0f)
+	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{
+		float lightIntensity = saturate(dot(bumpNormal, -directionalLights[i].lightDir.xyz));
 
-		float3 viewDirection = camPosition - input.positionWS;
 
-		float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-		float3 reflection = normalize(lightDir + viewDirection);
-		specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
-		specular = specular * specularIntensity;
+		float4 diffuse = saturate(directionalLights[i].diffuseColor*lightIntensity);
+		float4 specular = float4(0,0,0,0);
+
+		if (lightIntensity > 0.0f)
+		{
+
+			float3 viewDirection = camPosition - input.positionWS;
+
+			float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
+			float3 reflection = normalize(-directionalLights[i].lightDir.xyz + viewDirection);
+			specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
+			specular = specular * specularIntensity;
+		}
+	
+		outputTest += directionalLights[i].ambientColor*textureColor*0.05f + diffuse*textureColor + specular*directionalLights[i].specularColor;
+
+	}
+	for (uint p = 0; p < nrOfPointLights; p++)
+	{
+		float4 temppl = mul(pointLights[0].position, worldMatrix);
+		float3 pointlightdir = temppl.xyz - input.positionWS;
+		normalize(pointlightdir);
+		float lightIntensity = saturate(dot(bumpNormal, pointlightdir));
+
+		float4 diffuse = saturate(pointLights[0].diffuseColor*lightIntensity);
+		float4 specular = float4(0, 0, 0, 0);
+
+		if (lightIntensity > 0.0f)
+		{
+
+			float3 viewDirection = camPosition - input.positionWS;
+
+			float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
+			float3 reflection = normalize(temppl.xyz + viewDirection);
+			specular = pow(saturate(dot(bumpNormal, reflection)), specularPower)*lightIntensity;
+			specular = specular * specularIntensity;
+		}
+
+		outputTest += pointLights[i].ambientColor*textureColor*0.05f + diffuse*textureColor +specular*pointLights[i].specularColor;
 	}
 
-	return lighttt.ambientColor*textureColor*0.05f + diffuse*textureColor + specular*specularColor;
+	return outputTest;
 }

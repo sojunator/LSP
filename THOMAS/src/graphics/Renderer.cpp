@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "../object/GameObject.h"
 #include "../object/component/Light.h"
+#include "LightManager.h"
 
 namespace thomas
 {
@@ -55,7 +56,7 @@ namespace thomas
 
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
 				
-				//thomas::object::component::Light l 
+				
 				
 
 				//For every shader
@@ -63,36 +64,41 @@ namespace thomas
 				{
 					shader->Bind();
 
+					//For every light
 					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
 					{
-						lightgameObject->GetComponent<object::component::Light>()->Bind();
-
-					}
-
-					//Get the materials that use the shader
-					for (Material* mat : Material::GetLoadedMaterials())
-					{
-						mat->Bind(); //Bind material specific buffers/textures
-									 //Get all gameObjects that have a rendererComponent
+						LightManager::BindAllLights();
 
 
-						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+
+						//Get the materials that use the shader
+						for (Material* mat : Material::GetLoadedMaterials())
 						{
-							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+							mat->Bind(); //Bind material specific buffers/textures
+										 //Get all gameObjects that have a rendererComponent
 
 
-							BindGameObjectBuffer(camera, gameObject);
-							//Draw every mesh of gameObjects model that has
-							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 							{
-								mesh->Bind(); //bind vertex&index buffer
-								mesh->Draw();
+								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+
+
+								BindGameObjectBuffer(camera, gameObject);
+								//Draw every mesh of gameObjects model that has
+								for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+								{
+									mesh->Bind(); //bind vertex&index buffer
+									mesh->Draw();
+								}
+
+
+
 							}
-
-
-
+							mat->Unbind();
 						}
-						mat->Unbind();
+
+						LightManager::Unbind();
+
 					}
 					shader->Unbind();
 				}
