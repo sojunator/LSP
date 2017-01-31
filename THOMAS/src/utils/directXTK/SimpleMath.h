@@ -35,7 +35,7 @@ namespace DirectX
 
 namespace SimpleMath
 {
-
+const float PI = 3.141592654f;
 struct Vector2;
 struct Vector4;
 struct Matrix;
