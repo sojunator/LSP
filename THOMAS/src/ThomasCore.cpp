@@ -160,7 +160,7 @@ namespace thomas {
 		s_debug = nullptr;
 		#endif // _DEBUG
 
-		Sound::Destroy();
+		//Sound::Destroy();
 
 		return true;
 	}

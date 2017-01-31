@@ -20,6 +20,14 @@ namespace thomas
 			temp_vert.normal.y = 1.0f;
 			temp_vert.normal.z = 0.0f;
 
+			temp_vert.tangent.x = 0.0f;
+			temp_vert.tangent.y = 0.0f;
+			temp_vert.tangent.z = -1.0f;
+
+			temp_vert.bitangent.x = 1.0f;
+			temp_vert.bitangent.y = 0.0f;
+			temp_vert.bitangent.z = 0.0f;
+
 			// Create points
 			for (int j = 0; j < size * detail; j++)
 			{
