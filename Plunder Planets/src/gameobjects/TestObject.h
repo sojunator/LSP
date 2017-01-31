@@ -36,27 +36,7 @@ public:
 
 	void Update()
 	{
-		component::Camera* cam = m_cameraObject->GetComponent<component::Camera>();
 
-		float speed = 10;
-		if (Input::GetKey(Input::Keys::A))
-		{
-			m_transform->Rotate(-speed*Time::GetDeltaTime(), 0, 0);
-		}
-		if (Input::GetKey(Input::Keys::D))
-		{
-			m_transform->Rotate(speed*Time::GetDeltaTime(), 0, 0);
-		}
-		if (Input::GetKey(Input::Keys::W))
-		{
-			m_transform->Rotate(0, -speed*Time::GetDeltaTime(), 0);
-		}
-		if (Input::GetKey(Input::Keys::S))
-		{
-			m_transform->Rotate(0, speed*Time::GetDeltaTime(), 0);
-		}
-
-	//	m_cameraObject->m_transform->LookAt(m_transform);
 
 	}
 
