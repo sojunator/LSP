@@ -29,7 +29,7 @@ namespace thomas
 		return true;
 	}
 
-	bool Sound::Play(std::string name)
+	bool Sound::Play(std::string name, float volume)
 	{
 		if (name[0] == 'm')
 		{
@@ -40,12 +40,12 @@ namespace thomas
 				return false;
 			}
 			s_instance->Play(true);
-			s_instance->SetVolume(s_masterVolume * s_musicVolume);
+			s_instance->SetVolume(s_masterVolume * s_musicVolume * volume);
 			return true;
 		}
 		else if (name[0] == 'f')
 		{
-			s_bank->Play(int(name.c_str()), s_masterVolume * s_fxVolume, 0.0f, 0.0f);
+			s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
 			return true;
 		}
 		return false;

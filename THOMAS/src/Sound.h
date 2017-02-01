@@ -23,7 +23,7 @@ namespace thomas
 		};
 	public:
 		static bool Init();
-		static bool Play(std::string name);
+		static bool Play(std::string name, float volume);
 		static void Pause();
 		static void Resume();
 		static void SetMasterVolume(float volume);

@@ -15,7 +15,7 @@ public:
 	TestObject() : GameObject("TestObject") 
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-
+		m_sound = AddComponent<component::SoundComponent>();
 	}
 
 	bool Start()
@@ -26,6 +26,7 @@ public:
 		
 		m_cameraObject = Find("CameraObject");
 
+		m_sound->SetName("fMeow");
 
 		//m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));
 		m_transform->SetPosition(math::Vector3(0, -3, -10));
@@ -37,12 +38,14 @@ public:
 
 	void Update()
 	{
-
+		if (Input::GetKeyDown(Input::Keys::P))
+			m_sound->Play();
 
 	}
 
 private:
 	component::RenderComponent* m_renderer;
 	object::GameObject* m_cameraObject;
+	component::SoundComponent* m_sound;
 
 };
