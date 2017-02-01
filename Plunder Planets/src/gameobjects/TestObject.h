@@ -16,7 +16,8 @@ public:
 	TestObject() : GameObject("TestObject") 
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_light = AddComponent<component::DirectionalLight>();
+		m_light = AddComponent<component::PointLight>();
+		m_secondLight = AddComponent<component::DirectionalLight>();
 		
 	}
 
@@ -28,6 +29,9 @@ public:
 		
 		m_cameraObject = Find("CameraObject");
 
+		m_light->SetDiffuseColor(thomas::math::Vector4(0, 0, 1, 1));
+		m_secondLight->SetDiffuseColor(thomas::math::Vector4(1, 0, 0, 1));
+		
 		//m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));
 		m_transform->SetPosition(math::Vector3(0, -3, -10));
 
@@ -68,5 +72,6 @@ private:
 	component::RenderComponent* m_renderer;
 	GameObject* m_cameraObject;
 	component::Light* m_light;
+	component::Light* m_secondLight;
 
 };

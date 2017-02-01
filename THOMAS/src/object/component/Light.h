@@ -25,10 +25,14 @@ namespace thomas
 			private:
 
 			public:
+				virtual bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor) = 0;
+				virtual bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor) = 0;
+				virtual bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor) = 0;
+
+				virtual bool Bind() = 0;
+			protected:
 				Light(GameObject* gameObject);
 				~Light();
-
-				
 				
 			};
 
@@ -39,13 +43,31 @@ namespace thomas
 				DirectionalLight(GameObject* gameObject);
 				~DirectionalLight();
 
-				//bindDirectionalLights()
+				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
+				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
+				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
+
+				bool Bind();
 			private:
-				
-				graphics::LightManager::DirectionalLightStruct thisLight;
+				int m_index;
+				graphics::LightManager::DirectionalLightStruct m_thisLight;
 			};
 
-			
+			class THOMAS_API PointLight : public Light
+			{
+			public:
+				PointLight(GameObject* gameObject);
+				~PointLight();
+
+				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
+				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
+				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
+
+				bool Bind();
+			private:
+				int m_index;
+				graphics::LightManager::PointLightStruct m_thisLight;
+			};
 			
 		}
 	}

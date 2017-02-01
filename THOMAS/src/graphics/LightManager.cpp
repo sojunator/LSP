@@ -11,6 +11,8 @@ namespace thomas
 
 		LightManager::~LightManager()
 		{
+			s_lightBuffer->Release();
+
 		}
 
 		LightManager::LightBufferStruct LightManager::s_lightstruct;
@@ -36,7 +38,7 @@ namespace thomas
 			return graphics::Shader::GetCurrentBoundShader()->BindBuffer(NULL, thomas::graphics::Shader::ResourceType::LIGHTS);
 		}
 
-		bool LightManager::AddDirectionalLight(DirectionalLightStruct directionalLight)
+		int LightManager::AddDirectionalLight(DirectionalLightStruct directionalLight)
 		{
 			int maxlength = sizeof(s_lightstruct.directionalLights) / sizeof(DirectionalLightStruct);
 			if (maxlength > s_lightstruct.nrOfDirectionalLights)
@@ -44,16 +46,47 @@ namespace thomas
 				s_lightstruct.directionalLights[s_lightstruct.nrOfDirectionalLights] = directionalLight;
 				s_lightstruct.nrOfDirectionalLights++;
 				UpdateLightBuffer();
-				return true;
+				return s_lightstruct.nrOfDirectionalLights - 1;
 			}
-			else//to many lights
-				return false;
+			else//log - to many lights
+				return -1;
 
 		}
 
-		bool LightManager::AddPointLight()
+		bool LightManager::UpdateDirectionalLight(DirectionalLightStruct other, int index)
 		{
-			return true;
+			s_lightstruct.directionalLights[index] = other;
+			
+			return UpdateLightBuffer();
+		}
+		bool LightManager::UpdatePointLight(PointLightStruct other, int index)
+		{
+			s_lightstruct.pointLights[index] = other;
+
+			return UpdateLightBuffer();
+		}
+
+		int LightManager::AddPointLight(PointLightStruct pointLight)
+		{
+			int maxlength = sizeof(s_lightstruct.pointLights) / sizeof(PointLightStruct);
+			if (maxlength > s_lightstruct.nrOfPointLights)
+			{
+				s_lightstruct.pointLights[s_lightstruct.nrOfPointLights] = pointLight;
+				s_lightstruct.nrOfPointLights++;
+				UpdateLightBuffer();
+				return s_lightstruct.nrOfPointLights - 1;
+			}
+			else//log - to many lights
+				return -1;
+		}
+
+		bool LightManager::BindDierctionalLight(unsigned int index)
+		{
+			return false;
+		}
+		bool LightManager::BindPointLight(unsigned int index)
+		{
+			return false;
 		}
 	}
 }

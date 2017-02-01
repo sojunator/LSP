@@ -2,6 +2,7 @@
 #include "../utils/Math.h"
 #include "../utils/d3d.h"
 #include "../graphics/Shader.h"
+
 namespace thomas
 {
 	namespace graphics
@@ -12,6 +13,11 @@ namespace thomas
 		private:
 			static bool UpdateLightBuffer();
 		public:
+			//make struct for colors?
+			//struct....
+
+
+			//match these structs on the graphicscard
 			struct DirectionalLightStruct
 			{
 				thomas::math::Vector4 ambientColor;
@@ -35,23 +41,47 @@ namespace thomas
 				int padding1;
 				int padding2;
 				DirectionalLightStruct directionalLights[3];
-				PointLightStruct pointLights[1];
+				PointLightStruct pointLights[3];
 			} static s_lightstruct;
 
-			static ID3D11Buffer* s_lightBuffer;//<-----------------------------------------------------------release
+			
 
 			
 			LightManager();
 			~LightManager();
-			static bool AddDirectionalLight(DirectionalLightStruct directionalLight);
-			static bool AddPointLight();
+			static int AddDirectionalLight(DirectionalLightStruct directionalLight);
+			
+			static int AddPointLight(PointLightStruct pointLight);
+
+			static bool UpdateDirectionalLight(DirectionalLightStruct other, int index);
+			static bool UpdatePointLight(PointLightStruct other, int index);
+			/*template<typename T>
+			static bool UpdateLight(T lightStruct, int index)
+			{
+				if (dynamic_cast<DirectionalLightStruct*>(lightStruct))
+				{
+					s_lightstruct.directionalLights[index] = *lightStruct;
+				}
+				else if (dynamic_cast<PointLightStruct*>(lightStruct))
+				{
+					s_lightstruct.pointLights[index] = *lightStruct;
+				}
+				else
+				{
+					LOG("Invalid lighttype");
+					return false;
+				}
+			}*/
 
 			static bool BindAllLights();
 			static bool Unbind();
 
+			static bool BindDierctionalLight(unsigned int index);
+			static bool BindPointLight(unsigned int index);
+
 			
 		private:
-
+			static ID3D11Buffer* s_lightBuffer;
 		};
 
 		

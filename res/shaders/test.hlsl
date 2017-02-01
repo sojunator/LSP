@@ -37,14 +37,15 @@ cbuffer material : register(b1)
 	float specularPower;
 };
 
+//Struct coupled with LightManager
 struct DirLight
 {
-
 	float4 ambientColor;
 	float4 diffuseColor;
 	float4 specularColor;
 	float4 lightDir;
 };
+//Struct coupled with LightManager
 struct PointLight
 {
 	float4 ambientColor;
@@ -52,7 +53,7 @@ struct PointLight
 	float4 specularColor;
 	float4 position;
 };
-
+//Buffer coupled with LightManager
 cbuffer lightBuffer : register(b2)
 {
 	uint nrOfDirectionalLights;
@@ -60,7 +61,7 @@ cbuffer lightBuffer : register(b2)
 	int padding1;
 	int padding2;
 	DirLight directionalLights[3];
-	PointLight pointLights[1];
+	PointLight pointLights[3];
 }
 
 struct VSOutput
@@ -133,12 +134,12 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	}
 	for (uint p = 0; p < nrOfPointLights; p++)
 	{
-		float4 temppl = mul(pointLights[0].position, worldMatrix);
+		float4 temppl = pointLights[p].position;// mul(pointLights[p].position, worldMatrix);
 		float3 pointlightdir = temppl.xyz - input.positionWS;
 		normalize(pointlightdir);
 		float lightIntensity = saturate(dot(bumpNormal, pointlightdir));
 
-		float4 diffuse = saturate(pointLights[0].diffuseColor*lightIntensity);
+		float4 diffuse = saturate(pointLights[p].diffuseColor*lightIntensity);
 		float4 specular = float4(0, 0, 0, 0);
 
 		if (lightIntensity > 0.0f)
@@ -152,7 +153,7 @@ float4 PSMain(VSOutput input) : SV_TARGET
 			specular = specular * specularIntensity;
 		}
 
-		outputTest += pointLights[i].ambientColor*textureColor*0.05f + diffuse*textureColor +specular*pointLights[i].specularColor;
+		outputTest += pointLights[p].ambientColor*textureColor*0.05f + diffuse*textureColor + specular*pointLights[p].specularColor;
 	}
 
 	return outputTest;
