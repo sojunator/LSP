@@ -11,6 +11,8 @@
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
 
+#include "gameobjects\TestDirectionalLight.h"
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
@@ -54,6 +56,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init gameObjects
 
 	TestObject* t = new TestObject();
+	TestDirectionalLight* dirLight = new TestDirectionalLight();
 	CameraObject* c = new CameraObject();
 	new WaterObject();
 

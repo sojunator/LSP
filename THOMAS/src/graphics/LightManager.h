@@ -24,7 +24,8 @@ namespace thomas
 				thomas::math::Vector4 diffuseColor;
 				thomas::math::Vector4 specularColor;
 
-				thomas::math::Vector4 lightDirection;
+				thomas::math::Vector3 lightDirection;
+				float padding;
 			};
 			struct PointLightStruct
 			{
@@ -59,28 +60,12 @@ namespace thomas
 
 			static bool UpdateDirectionalLight(DirectionalLightStruct other, int index);
 			static bool UpdatePointLight(PointLightStruct other, int index);
-			/*template<typename T>
-			static bool UpdateLight(T lightStruct, int index)
-			{
-				if (dynamic_cast<DirectionalLightStruct*>(lightStruct))
-				{
-					s_lightstruct.directionalLights[index] = *lightStruct;
-				}
-				else if (dynamic_cast<PointLightStruct*>(lightStruct))
-				{
-					s_lightstruct.pointLights[index] = *lightStruct;
-				}
-				else
-				{
-					LOG("Invalid lighttype");
-					return false;
-				}
-			}*/
+			
 
 			static bool BindAllLights();
 			static bool Unbind();
 
-			static bool BindDierctionalLight(unsigned int index);
+			static bool BindDirectionalLight(unsigned int index);
 			static bool BindPointLight(unsigned int index);
 
 			

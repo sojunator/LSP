@@ -43,7 +43,8 @@ struct DirLight
 	float4 ambientColor;
 	float4 diffuseColor;
 	float4 specularColor;
-	float4 lightDir;
+	float3 lightDir;
+	float padding;
 };
 //Struct coupled with LightManager
 struct PointLight
@@ -110,7 +111,7 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
 	bumpNormal = normalize(bumpNormal);
 
-	float4 outputColor = float4(0,0,0,0);
+	float4 outputColor = float4(0,0,0,1);
 
 	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{

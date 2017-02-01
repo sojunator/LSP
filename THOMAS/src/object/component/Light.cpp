@@ -21,7 +21,7 @@ namespace thomas
 			DirectionalLight::DirectionalLight(GameObject* gameObject) : Light(gameObject)
 			{
 				//standard init of light
-				m_thisLight.lightDirection = thomas::math::Vector4(0, 0, -1, 0);
+				m_thisLight.lightDirection = m_gameObject->m_transform->Forward();
 				m_thisLight.ambientColor = thomas::math::Vector4(0, 0, 0, 1);
 				m_thisLight.diffuseColor = thomas::math::Vector4(1, 1, 1, 1);
 				m_thisLight.specularColor = thomas::math::Vector4(1, 1, 1, 1);
@@ -62,12 +62,21 @@ namespace thomas
 				m_thisLight.specularColor = otherSpecularColor;
 				return thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
 			}
-
-			bool DirectionalLight::SetDirection(thomas::math::Vector4 otherLightDirection)
+		
+	
+			bool DirectionalLight::SetDirection(thomas::math::Vector3 otherLightDirection)
 			{
 				m_thisLight.lightDirection = otherLightDirection;
 				return thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
 			}
+			void DirectionalLight::Update()
+			{
+				//m_thisLight.lightDirection 
+				m_thisLight.lightDirection = m_gameObject->m_transform->Forward();
+				thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
+				return;
+			}
+			
 
 			/**
 			POINT LIGHT
@@ -118,6 +127,11 @@ namespace thomas
 			{
 				m_thisLight.attenuationFactor = otherAttenuationFactor;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
+			}
+
+			void PointLight::Update()
+			{
+				return;
 			}
 		}
 	}

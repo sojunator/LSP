@@ -78,42 +78,35 @@ namespace thomas
 				{
 					shader->Bind();
 
-					//For every light
-					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
+					LightManager::BindAllLights();
+
+					//Get the materials that use the shader
+					for (Material* mat : Material::GetMaterialsByShader(shader))
 					{
-						LightManager::BindAllLights();
+						mat->Bind(); //Bind material specific buffers/textures
+										//Get all gameObjects that have a rendererComponent
 
 
-
-						//Get the materials that use the shader
-						for (Material* mat : Material::GetMaterialsByShader(shader))
+						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 						{
-							mat->Bind(); //Bind material specific buffers/textures
-										 //Get all gameObjects that have a rendererComponent
+							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 
 
-							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+							BindGameObjectBuffer(camera, gameObject);
+							//Draw every mesh of gameObjects model that has
+							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
 							{
-								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
-
-
-								BindGameObjectBuffer(camera, gameObject);
-								//Draw every mesh of gameObjects model that has
-								for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
-								{
-									mesh->Bind(); //bind vertex&index buffer
-									mesh->Draw();
-								}
-
-
-
+								mesh->Bind(); //bind vertex&index buffer
+								mesh->Draw();
 							}
-							mat->Unbind();
+
+
 						}
-
-						LightManager::Unbind();
-
+						mat->Unbind();
 					}
+
+					LightManager::Unbind();
+
 					shader->Unbind();
 				}
 				camera->BindSkybox();

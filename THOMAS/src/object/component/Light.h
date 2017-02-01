@@ -23,7 +23,7 @@ namespace thomas
 			{
 
 			private:
-
+				
 			public:
 				virtual bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor) = 0;
 				virtual bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor) = 0;
@@ -46,9 +46,11 @@ namespace thomas
 				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
 				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
 				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
-				bool SetDirection(thomas::math::Vector4 otherLightDirection);
+				bool SetDirection(thomas::math::Vector3 otherLightDirection);
 
 				bool Bind();
+
+				void Update();
 			private:
 				int m_index;
 				graphics::LightManager::DirectionalLightStruct m_thisLight;
@@ -67,6 +69,10 @@ namespace thomas
 				bool SetAttenuationFactor(int otherAttenuationFactor);
 
 				bool Bind();
+
+				void Update();
+				
+
 			private:
 				int m_index;
 				graphics::LightManager::PointLightStruct m_thisLight;

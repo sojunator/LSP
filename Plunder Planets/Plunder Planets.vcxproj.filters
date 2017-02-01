@@ -36,6 +36,9 @@
     <ClInclude Include="src\gameobjects\TerrainObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gameobjects\WaterObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc">
