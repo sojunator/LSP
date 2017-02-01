@@ -21,17 +21,17 @@ namespace thomas
 		private:
 			static bool CreateSwapchainAndDeviceAndContext(LONG witdh, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
 			static bool CreateBackBuffer(ID3D11Device* device, IDXGISwapChain* swapchain, ID3D11RenderTargetView*& backBuffer);
-			static bool CreateDepthStencilState(ID3D11Device* device, ID3D11DepthStencilState*& stencil);
 			static bool CreateDepthStencilView(ID3D11Device* device, ID3D11DepthStencilView *& stencilView, ID3D11Texture2D*& depthBuffer);
 			static ID3D11RenderTargetView* CreateRenderTargetViewFromBuffer(ID3D11Device* device, ID3D11Resource* buffer);
 			static ID3D11Debug* CreateDebug();
 
 		public:
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
-
+			static ID3D11DepthStencilState* CreateDepthStencilState(D3D11_COMPARISON_FUNC func);
 			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11Texture2D*& depthBuffer);
 
 			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
+			static bool LoadCubeTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
 			static ID3D11RasterizerState* CreateRasterizer(D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode);
 
 			template<typename T>

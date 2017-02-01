@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
+    <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\graphics\Model.cpp" />
@@ -54,10 +54,11 @@
     <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="src\utils\Plane.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\graphics\CubeMapLoader.h" />
+    <ClInclude Include="src\graphics\Skybox.h" />
     <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="src\utils\directXTK\WAVFileReader.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\utils\Math.h" />
+    <ClInclude Include="src\utils\Plane.h" />
     <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>

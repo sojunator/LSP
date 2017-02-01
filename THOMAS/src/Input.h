@@ -4,8 +4,7 @@
 #include "utils\directXTK\GamePad.h"
 #include "utils\directXTK\Keyboard.h"
 #include "utils\directXTK\Mouse.h"
-
-
+#include "utils\Math.h"
 
 /*
 This class is a wrapper for handling all the inputs from the different DirectXTK input methods.
@@ -17,6 +16,7 @@ The other Get function returns true while the button/key is pressed.
 
 namespace thomas
 {
+
 	class Input
 	{
 	public:
@@ -26,6 +26,13 @@ namespace thomas
 			RIGHT,
 			MIDDLE
 		};
+
+		enum class MouseMode
+		{
+			POSITION_ABSOLUTE,
+			POSITION_RELATIVE
+		};
+
 		enum class Keys
 		{
 			None = 0,
@@ -233,6 +240,7 @@ namespace thomas
 		};
 
 
+
 		static bool Init();
 		static void Update();
 		static void ProcessKeyboard(UINT message, WPARAM wParam, LPARAM lParam);
@@ -260,6 +268,10 @@ namespace thomas
 		static float GetLeftStickX();
 		static float GetRightStickY();
 		static float GetRightStickX();
+
+		static math::Vector2 GetMousePosition();
+
+		static void SetMouseMode(MouseMode mode);
 		
 
 	private:
@@ -276,5 +288,9 @@ namespace thomas
 		static DirectX::GamePad::ButtonStateTracker s_gamePadTracker;
 
 		static bool s_initialized;
+
+		static MouseMode s_mouseMode;
+		static bool s_recordPosition;
+		static math::Vector2 s_mousePosition;
 	};
 }
