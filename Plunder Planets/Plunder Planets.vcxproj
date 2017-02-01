@@ -161,6 +161,7 @@
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestObject.h" />
+    <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />

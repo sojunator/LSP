@@ -6,6 +6,7 @@
 #include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
 #include "gameobjects\TerrainObject.h"
+#include "gameobjects\WaterObject.h"
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
@@ -35,7 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 
-	thomas::graphics::Material::RegisterNewMaterialType("tessMaterial", new WaterMaterial("tesselationShader"));
+	thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("tesselationShader"));
 
 	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
@@ -52,14 +53,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init gameObjects
 
 	TestObject* t = new TestObject();
-	TerrainObject* terrainMap = new TerrainObject();
 	CameraObject* c = new CameraObject();
+	new WaterObject();
 
 
 
 	//start
 	thomas::ThomasCore::Start();
-	delete terrainMap;
 	delete c;
 
 	return (int)msg.wParam;

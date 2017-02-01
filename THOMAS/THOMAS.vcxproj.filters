@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\graphics\Model.cpp" />
@@ -39,10 +38,10 @@
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\Sound.cpp" />
+    <ClCompile Include="src\graphics\Bitmap.cpp" />
     <ClCompile Include="src\object\component\SoundComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\graphics\CubeMapLoader.h" />
     <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
@@ -84,6 +83,7 @@
     <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\graphics\Skybox.h" />
     <ClInclude Include="src\Sound.h" />
+    <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\object\component\SoundComponent.h" />
   </ItemGroup>
   <ItemGroup>

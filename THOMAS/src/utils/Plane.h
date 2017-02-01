@@ -13,7 +13,7 @@ namespace thomas
 			~Plane();
 
 		public:
-			static std::vector<thomas::graphics::Mesh*> CreatePlane(int size, float detail, std::string meshName, graphics::Material* mat);
+			static std::vector<thomas::graphics::Mesh* > CreatePlane(int size, float detail, std::string meshName, graphics::Material* mat);
 
 		private:
 

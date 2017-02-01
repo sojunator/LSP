@@ -31,7 +31,7 @@ namespace thomas
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				if (s_loadedTextures[i]->GetName() == path)
+				if (s_loadedTextures[i]->GetName() == path && s_loadedTextures[i]->GetTextureType() == type)
 					return s_loadedTextures[i];
 			}
 
@@ -54,6 +54,10 @@ namespace thomas
 		ID3D11ShaderResourceView * Texture::GetTextureView()
 		{
 			return m_data.textureView;
+		}
+		Texture::TextureType Texture::GetTextureType()
+		{
+			return m_textureType;
 		}
 		bool Texture::Initialized()
 		{

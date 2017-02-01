@@ -44,8 +44,8 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Time::Init();
 
-		if (s_initialized)
-			s_initialized = Sound::Init();
+		//if (s_initialized)
+		//	s_initialized = Sound::Init();
 
 		return s_initialized;
 	}
@@ -69,11 +69,6 @@ namespace thomas {
 		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
 		{
 			thomas::object::Object::GetObjects()[i]->Update();
-		}
-		
-		for (int i = 0; i < thomas::graphics::Material::GetLoadedMaterials().size(); i++)
-		{
-			thomas::graphics::Material::GetLoadedMaterials()[i]->Update();
 		}
 
 		graphics::Renderer::Render();
@@ -163,7 +158,7 @@ namespace thomas {
 		s_debug = nullptr;
 		#endif // _DEBUG
 
-		Sound::Destroy();
+		//Sound::Destroy();
 
 		return true;
 	}

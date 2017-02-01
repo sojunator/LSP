@@ -28,6 +28,7 @@ cbuffer material : register(b1)
 	float4 specularColor;
 	float specularPower;
 	float tess;
+	float time;
 }
 
 
@@ -48,6 +49,7 @@ struct HSInput
 	float3 normal : NORMAL;
 	float3 tangent : TANGENT;
 	float3 binormal : BINORMAL;
+	float tessFactor : TESS;
 };
 
 struct DSinput
@@ -78,9 +80,9 @@ struct PSInput
 
 //Vertex shader
 
-DSinput VSMain(in VSInput input)
+HSInput VSMain(in VSInput input)
 {
-	DSinput output;
+	HSInput output;
 	
 	output.position = input.position.xyz;
 	output.tex = input.uv;
@@ -88,29 +90,46 @@ DSinput VSMain(in VSInput input)
 	output.tangent = input.tangent;
 	output.binormal = input.binormal;
 
+
+	float3 posW = mul(input.position, (float3x3) worldMatrix);
+	float d = distance(camPosition, posW);
+
+
+	float minTessDistance = 1;
+	float maxTessDistance = 100;
+
+	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
+
+	float minTessFactor = 64.0f;
+	float maxTessFactor = 1.0f;
+
+	output.tessFactor = minTessFactor + (tess * (maxTessFactor - minTessFactor));
+
+
+
 	return output;
 }
 
 //Hull shader
 
-HSConstantData PatchConstantFunction(InputPatch<HSInput, 3> inputPatch, uint patchId : SV_PrimitiveID)
+HSConstantData PatchConstantFunction(InputPatch<HSInput, 3> patch, uint patchId : SV_PrimitiveID)
 {
 	HSConstantData output;
 
 
 	// Set the tessellation factors for the three edges of the triangle.
-	output.edges[0] = tess;
-	output.edges[1] = tess;
-	output.edges[2] = tess;
+	output.edges[0] = 0.5f * (patch[1].tessFactor + patch[2].tessFactor);
+	output.edges[1] = 0.5f * (patch[2].tessFactor + patch[0].tessFactor);
+	output.edges[2] = 0.5f * (patch[0].tessFactor + patch[1].tessFactor);
 
 	// Set the tessellation factor for tessallating inside the triangle.
-	output.inside = tess;
+	output.inside = output.edges[0];
 
 	return output;
 }
 
 [domain("tri")]
-[partitioning("fractional_even")]
+[partitioning("integer")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("PatchConstantFunction")]
@@ -139,12 +158,25 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	float3 binormal;
 	PSInput output;
 
+
+	output.tex = uvwCoord.x * patch[0].tex + uvwCoord.y * patch[1].tex + uvwCoord.z * patch[2].tex;
+
+	normal = uvwCoord.x * patch[0].normal + uvwCoord.y * patch[1].normal + uvwCoord.z * patch[2].normal;
+	normal = normalize(normal);
+	output.normal = mul(normal, (float3x3) worldMatrix);
+
+	output.tex.x += time;
+	output.tex.y += time;
+	float h = heightTexture.SampleLevel(heightSampler, output.tex, 0).r;
+
 	vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
+
+	vertexPosition += (1.0f * (h - 1.0)) * normal;
+
 	output.position = mul(float4(vertexPosition, 1), mvpMatrix);
 	output.positionWS = mul(vertexPosition, (float3x3) worldMatrix);
 
-	normal = uvwCoord.x * patch[0].normal + uvwCoord.y * patch[1].normal + uvwCoord.z * patch[2].normal;
-	output.normal = mul(normal, (float3x3) worldMatrix);
+	
 
 	tangent = uvwCoord.x * patch[0].tangent + uvwCoord.y * patch[1].tangent + uvwCoord.z * patch[2].tangent;
 	output.tangent = mul(tangent, (float3x3) worldMatrix);
@@ -152,7 +184,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	binormal = uvwCoord.x * patch[0].binormal + uvwCoord.y * patch[1].binormal + uvwCoord.z * patch[2].binormal;
 	output.binormal = mul(binormal, (float3x3) worldMatrix);
 
-	output.tex = uvwCoord.x * patch[0].tex + uvwCoord.y * patch[1].tex + uvwCoord.z * patch[2].tex;
+	
 
 	return output;
 }
@@ -162,7 +194,6 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-
 	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
 
 
@@ -190,5 +221,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 		specular = pow(saturate(dot(bumpNormal, reflection)), specularPower) * lightIntensity;
 		specular = specular * specularIntensity;
 	}
+	return heightTexture.Sample(heightSampler, input.tex);
 	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular * specularColor;
 }

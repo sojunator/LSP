@@ -16,7 +16,7 @@ public:
 	
 	void Update();
 
-	~WaterMaterial();
+	~WaterMaterial() {};
 private:
 	struct MaterialProperties
 	{
@@ -25,7 +25,8 @@ private:
 		math::Color specularColor;
 		float specularPower;
 		float tess;
-		math::Vector2 padding;
+		float time;
+		float padding;
 	};
 	MaterialProperties m_materialProperties;
 

@@ -27,7 +27,7 @@ namespace thomas
 
 		public:
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
-			static ID3D11DepthStencilState* CreateDepthStencilState(D3D11_COMPARISON_FUNC func);
+			static ID3D11DepthStencilState* CreateDepthStencilState(D3D11_COMPARISON_FUNC func, bool depth);
 			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11Texture2D*& depthBuffer);
 
 			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);

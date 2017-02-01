@@ -103,13 +103,13 @@ namespace thomas
 		}
 
 	
-		ID3D11DepthStencilState* D3d::CreateDepthStencilState(D3D11_COMPARISON_FUNC func)
+		ID3D11DepthStencilState* D3d::CreateDepthStencilState(D3D11_COMPARISON_FUNC func, bool depth)
 		{
 			ID3D11DepthStencilState* stencilState;
 			CD3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
-			depthStencilDesc.DepthEnable = true;
+			depthStencilDesc.DepthEnable = depth;
 			depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 			depthStencilDesc.DepthFunc = func;
 			depthStencilDesc.StencilReadMask = true;
@@ -204,7 +204,7 @@ namespace thomas
 			CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain(), backBuffer);
 			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBuffer);
 		
-			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS);
+			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS, true);
 
 
 			return true;
