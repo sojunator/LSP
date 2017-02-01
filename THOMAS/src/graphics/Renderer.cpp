@@ -74,6 +74,7 @@ namespace thomas
 				for (Shader* shader : loadedShaders)
 				{
 					shader->Bind();
+					camera->BindReflection();
 
 					//Get the materials that use the shader
 					for (Material* mat : Material::GetMaterialsByShader(shader))

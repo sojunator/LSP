@@ -14,9 +14,18 @@ Material * WaterMaterial::CreateInstance(std::string dir, std::string name, aiMa
 WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, shader)
 {
 	m_shaderTopology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "../res/height_map.jpg"));
-	m_materialProperties.tess = 1.0;
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "../res/textures/Wavy_Water - Height.png"));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/textures/Wavy_Water - Color Map.png"));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "../res/textures/Wavy_Water - Height (Normal Map).png"));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::SPECULAR, "../res/textures/Wavy_Water - Specular.png"));
 	m_materialProperties.time = 0.0;
+
+
+	m_materialProperties.ambientColor = math::Color(1.0, 1.0, 1.0);
+	m_materialProperties.diffuseColor = math::Color(1.0, 1.0, 1.0);
+	m_materialProperties.specularColor = math::Color(1.0, 1.0, 1.0);
+	m_materialProperties.specularPower = 100.0 / 1000.0;
+
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 }
 

@@ -42,7 +42,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init models
 
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/vase/vase.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 

@@ -100,8 +100,9 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
 		float3 reflection = normalize(lightDir + viewDirection);
 		specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
-		specular = specular * specularIntensity;
+		specular = specular*specularIntensity;
+
 	}
 
-	return ambientColor*textureColor*0.05f + diffuse*textureColor + specular*specularColor;
+	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular*specularColor;
 }

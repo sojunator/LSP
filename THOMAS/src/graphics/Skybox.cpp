@@ -46,6 +46,12 @@ namespace thomas
 			return v && i;
 		}
 
+		bool Skybox::BindCubemap()
+		{
+			m_data.texture->Bind();
+			return true;
+		}
+
 		bool Skybox::Unbind()
 		{
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(math::Vector3), 0);

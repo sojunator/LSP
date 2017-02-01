@@ -12,6 +12,9 @@ SamplerState normalSampler : register(s2);
 Texture2D heightTexture : register(t3);
 SamplerState heightSampler : register(s3);
 
+TextureCube reflectionTexture : register(t4);
+SamplerState reflectionSampler : register(s4);
+
 cbuffer mvp : register(b0)
 {
 	matrix worldMatrix;
@@ -96,7 +99,7 @@ HSInput VSMain(in VSInput input)
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 100;
+	float maxTessDistance = 10;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 
@@ -171,7 +174,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 	vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
 
-	vertexPosition += (1.0f * (h - 1.0)) * normal;
+	vertexPosition += (0.4f * (h - 1.0)) * normal;
 
 	output.position = mul(float4(vertexPosition, 1), mvpMatrix);
 	output.positionWS = mul(vertexPosition, (float3x3) worldMatrix);
@@ -196,10 +199,11 @@ float4 PSMain(PSInput input) : SV_TARGET
 {
 	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
 
+	float2 tex = input.tex;
 
-	float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
+	float4 textureColor = diffuseTexture.Sample(diffuseSampler, tex);
 
-	float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
+	float4 bumpMap = normalTexture.Sample(normalSampler, tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
 	float3 bumpNormal = (bumpMap.x * input.tangent) + (bumpMap.y * input.binormal) + (bumpMap.z * input.normal);
@@ -211,16 +215,20 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float4 diffuse = saturate(diffuseColor * lightIntensity);
 	float4 specular = float4(0, 0, 0, 0);
+	float4 reflectionColor = float4(0, 0, 0, 1);
 	if (lightIntensity > 0.0f)
 	{
 
 		float3 viewDirection = camPosition - input.positionWS;
 
-		float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
+		float4 specularIntensity = specularTexture.Sample(specularSampler, tex);
 		float3 reflection = normalize(lightDir + viewDirection);
 		specular = pow(saturate(dot(bumpNormal, reflection)), specularPower) * lightIntensity;
 		specular = specular * specularIntensity;
+
+		float3 r = reflect(viewDirection, bumpNormal);
+		reflectionColor = reflectionTexture.Sample(reflectionSampler, r);
+
 	}
-	return heightTexture.Sample(heightSampler, input.tex);
-	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular * specularColor;
+	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular * specularColor + reflectionColor;
 }
