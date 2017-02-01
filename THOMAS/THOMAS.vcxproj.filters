@@ -36,6 +36,7 @@
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Sound.cpp" />
+    <ClCompile Include="src\object\component\SoundComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\CubeMapLoader.h" />
@@ -77,6 +78,7 @@
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Sound.h" />
+    <ClInclude Include="src\object\component\SoundComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

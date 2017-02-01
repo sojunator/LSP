@@ -25,6 +25,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 
+	//Init wavebank
+	thomas::Sound::LoadWaveBank("../res/sounds/soundlist.xwb");
+
 
 	//Init gameObjects
 
