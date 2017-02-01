@@ -316,5 +316,81 @@ namespace thomas
 
 			return rasterState;
 		}
+		void D3d::CreateTextureAndViews(UINT width, UINT height, DXGI_FORMAT format, ID3D11Texture2D *& tex, ID3D11ShaderResourceView *& SRV, ID3D11RenderTargetView *& RTV)
+		{
+			// Create 2D texture
+			D3D11_TEXTURE2D_DESC tex_desc;
+			tex_desc.Width = width;
+			tex_desc.Height = height;
+			tex_desc.MipLevels = 0;
+			tex_desc.ArraySize = 1;
+			tex_desc.Format = format;
+			tex_desc.SampleDesc.Count = 1;
+			tex_desc.SampleDesc.Quality = 0;
+			tex_desc.Usage = D3D11_USAGE_DEFAULT;
+			tex_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+			tex_desc.CPUAccessFlags = 0;
+			tex_desc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+
+			ThomasCore::GetDevice()->CreateTexture2D(&tex_desc, NULL, &tex);
+
+			// Create shader resource view
+			tex->GetDesc(&tex_desc);
+			if (SRV)
+			{
+				D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
+				srv_desc.Format = format;
+				srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+				srv_desc.Texture2D.MipLevels = tex_desc.MipLevels;
+				srv_desc.Texture2D.MostDetailedMip = 0;
+
+				ThomasCore::GetDevice()->CreateShaderResourceView(tex, &srv_desc, &SRV);
+			}
+
+			// Create render target view
+			if (RTV)
+			{
+				D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
+				rtv_desc.Format = format;
+				rtv_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+				rtv_desc.Texture2D.MipSlice = 0;
+
+				ThomasCore::GetDevice()->CreateRenderTargetView(tex, &rtv_desc, &RTV);
+			}
+		}
+		void D3d::CreateBufferAndUAV(void * data, UINT byte_width, UINT byte_stride, ID3D11Buffer *& buffer, ID3D11UnorderedAccessView *& UAV, ID3D11ShaderResourceView *& SRV)
+		{
+			// Create buffer
+			D3D11_BUFFER_DESC buf_desc;
+			buf_desc.ByteWidth = byte_width;
+			buf_desc.Usage = D3D11_USAGE_DEFAULT;
+			buf_desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+			buf_desc.CPUAccessFlags = 0;
+			buf_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			buf_desc.StructureByteStride = byte_stride;
+
+			D3D11_SUBRESOURCE_DATA init_data = { data, 0, 0 };
+
+			ThomasCore::GetDevice()->CreateBuffer(&buf_desc, data != NULL ? &init_data : NULL, &buffer);
+
+			// Create undordered access view
+			D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc;
+			uav_desc.Format = DXGI_FORMAT_UNKNOWN;
+			uav_desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+			uav_desc.Buffer.FirstElement = 0;
+			uav_desc.Buffer.NumElements = byte_width / byte_stride;
+			uav_desc.Buffer.Flags = 0;
+
+			ThomasCore::GetDevice()->CreateUnorderedAccessView(buffer, &uav_desc, &UAV);
+
+			// Create shader resource view
+			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
+			srv_desc.Format = DXGI_FORMAT_UNKNOWN;
+			srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+			srv_desc.Buffer.FirstElement = 0;
+			srv_desc.Buffer.NumElements = byte_width / byte_stride;
+
+			ThomasCore::GetDevice()->CreateShaderResourceView(buffer, &srv_desc, &SRV);
+		}
 	}
 }

@@ -155,7 +155,7 @@ namespace thomas {
 		s_device = nullptr;
 
 		#ifdef _DEBUG
-		//s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG

@@ -24,7 +24,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.ambientColor = math::Color(1.0, 1.0, 1.0);
 	m_materialProperties.diffuseColor = math::Color(1.0, 1.0, 1.0);
 	m_materialProperties.specularColor = math::Color(1.0, 1.0, 1.0);
-	m_materialProperties.specularPower = 100.0 / 1000.0;
+	m_materialProperties.specularPower = 10.0 / 1000.0;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 }

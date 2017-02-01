@@ -84,7 +84,6 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
-
 	bumpNormal = normalize(bumpNormal);
 
 	lightDir = -lightDir;
