@@ -1,0 +1,16 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl orig_10_-_Defaul.001
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.449020 0.449020 0.449020
+Ke 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd UBot-Diff.png
+map_Bump UBot-Norm.png
+map_Ke UBot-Glow.png
+map_Ks UBot-Spec.png
