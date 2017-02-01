@@ -44,8 +44,8 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Time::Init();
 
-		//if (s_initialized)
-		//	s_initialized = Sound::Init();
+		if (s_initialized)
+			s_initialized = Sound::Init();
 
 		return s_initialized;
 	}
