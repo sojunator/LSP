@@ -86,6 +86,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
-    <None Include="..\res\fonts\myfile.spritefont" />
   </ItemGroup>
 </Project>

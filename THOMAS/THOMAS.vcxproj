@@ -101,7 +101,6 @@
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\res\fonts\myfile.spritefont" />
     <None Include="src\utils\directXTK\SimpleMath.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
