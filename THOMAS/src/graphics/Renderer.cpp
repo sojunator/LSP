@@ -93,7 +93,7 @@ namespace thomas
 								mesh->Bind(); //bind vertex&index buffer
 								mesh->Draw();
 							}
-
+							UnBindGameObjectBuffer();
 
 
 						}
@@ -146,6 +146,10 @@ namespace thomas
 
 			//Bind gameObject specific buffers
 			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(s_objectBuffer, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
+		}
+		void Renderer::UnBindGameObjectBuffer()
+		{
+			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(NULL, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
 		}
 	}
 }

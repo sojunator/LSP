@@ -174,7 +174,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 	vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
 
-	vertexPosition += (0.4f * (h - 1.0)) * normal;
+//	vertexPosition += (0.4f * (h - 1.0)) * normal;
 
 	output.position = mul(float4(vertexPosition, 1), mvpMatrix);
 	output.positionWS = mul(vertexPosition, (float3x3) worldMatrix);
@@ -230,5 +230,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 		reflectionColor = reflectionTexture.Sample(reflectionSampler, r);
 
 	}
+	return textureColor;
 	return ambientColor * textureColor * 0.05f + diffuse * textureColor + specular * specularColor + reflectionColor;
 }

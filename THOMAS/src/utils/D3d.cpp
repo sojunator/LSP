@@ -336,7 +336,7 @@ namespace thomas
 
 			// Create shader resource view
 			tex->GetDesc(&tex_desc);
-			if (SRV)
+			if (tex)
 			{
 				D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
 				srv_desc.Format = format;
@@ -348,7 +348,7 @@ namespace thomas
 			}
 
 			// Create render target view
-			if (RTV)
+			if (SRV)
 			{
 				D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
 				rtv_desc.Format = format;

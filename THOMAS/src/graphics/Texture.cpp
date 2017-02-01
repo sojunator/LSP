@@ -41,6 +41,20 @@ namespace thomas
 			return texture;
 		}
 
+		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView, ID3D11Resource * textureRes)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == name && s_loadedTextures[i]->GetTextureType() == type)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, type, name, textureView, textureRes);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
 		std::string Texture::GetName()
 		{
 			return m_name;
@@ -100,6 +114,16 @@ namespace thomas
 
 			if (m_initialized)
 				SetTextureSampler(samplerState);
+		}
+
+		Texture::Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView, ID3D11Resource * texture)
+		{
+			m_textureType = type;
+			m_name = name;
+			SetTextureSampler(samplerState);
+			m_initialized = true;
+			m_data.texture = texture;
+			m_data.textureView = textureView;
 		}
 
 		bool Texture::CreateTextureSamplers()
@@ -197,7 +221,8 @@ namespace thomas
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				s_loadedTextures[i]->m_data.texture->Release();
+				if(s_loadedTextures[i]->m_data.texture)
+					s_loadedTextures[i]->m_data.texture->Release();
 				s_loadedTextures[i]->m_data.textureView->Release();
 
 			}

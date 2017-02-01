@@ -21,11 +21,17 @@ namespace thomas
 
 			if (errorBlob)
 			{
+				if (status != S_OK)
+				{
+					LOG("SHADER ERROR : " << source);
+					LOG_HR(status);
+				}
 				if (errorBlob->GetBufferSize())
 				{
 					LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
+					errorBlob->Release();
 				}
-				errorBlob->Release();
+				
 			}
 			else if (status == S_OK)
 			{

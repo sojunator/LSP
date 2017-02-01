@@ -32,7 +32,7 @@ namespace thomas {
 			static std::vector<object::component::Camera*> GetCameras();
 
 			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
-
+			static void UnBindGameObjectBuffer();
 
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;

@@ -11,23 +11,23 @@ namespace thomas
 			struct OceanSettings
 			{
 				// Must be power of 2.
-				int mapDimension;
+				int mapDimension = 512;
 				// Typical value is 1000 ~ 2000
-				float patchLength;
+				float patchLength = 2000.0;
 
 				// Adjust the time interval for simulation.
-				float timeScale;
+				float timeScale = 0.8f;
 				// Amplitude for transverse wave. Around 1.0
-				float waveAmplitude;
+				float waveAmplitude = 0.35f;
 				// Wind direction. Normalization not required.
-				math::Vector2 windDir;
+				math::Vector2 windDir = math::Vector2(0.8, 0.6);
 				// Around 100 ~ 1000
-				float windSpeed;
+				float windSpeed = 600;
 				// This value damps out the waves against the wind direction.
 				// Smaller value means higher wind dependency.
-				float windDependency;
+				float windDependency = 0.07f;
 				// The amplitude for longitudinal wave. Must be positive.
-				float choppyScale;
+				float choppyScale = 1.3f;
 
 				//Gravity in cm/s^2
 				float gravity = 981;
@@ -36,20 +36,19 @@ namespace thomas
 			struct CSFFT512x512Plan
 			{
 				// D3D11 objects
-				ID3D11DeviceContext* pd3dImmediateContext;
-				ID3D11ComputeShader* pRadix008A_CS;
-				ID3D11ComputeShader* pRadix008A_CS2;
+				ID3D11ComputeShader* radix008ACS;
+				ID3D11ComputeShader* radix008ACS2;
 
 				// More than one array can be transformed at same time
 				UINT slices;
 
 				// For 512x512 config, we need 6 constant buffers
-				ID3D11Buffer* pRadix008A_CB[6];
+				ID3D11Buffer* radix008ACB[6];
 
 				// Temporary buffers
-				ID3D11Buffer* pBuffer_Tmp;
-				ID3D11UnorderedAccessView* pUAV_Tmp;
-				ID3D11ShaderResourceView* pSRV_Tmp;
+				ID3D11Buffer* tmpBuffer;
+				ID3D11UnorderedAccessView* tmpUAV;
+				ID3D11ShaderResourceView* tmpSRV;
 			};
 
 		private:
@@ -65,9 +64,12 @@ namespace thomas
 
 			void FFT512x512CreatePlan(CSFFT512x512Plan* plan, UINT slices);
 			void FFT512x512DestroyPlan(CSFFT512x512Plan* plan);
+			void FFT512x512CreateCBuffers(CSFFT512x512Plan* plan, UINT slices);
+			void FFT512x512Calc(CSFFT512x512Plan* plan, ID3D11UnorderedAccessView* UAVDest,
+				ID3D11ShaderResourceView* SRVDest, ID3D11ShaderResourceView* SRVSrc);
 
-			void FFT512x512Calc(CSFFT512x512Plan* plan, ID3D11UnorderedAccessView* UAVDest, ID3D11ShaderResourceView* SRVDest, ID3D11ShaderResourceView* SRVSrc);
-
+			void FFT512x512Radix(CSFFT512x512Plan* plan, ID3D11UnorderedAccessView* UAVDest,
+				ID3D11ShaderResourceView* SRVSrc, UINT threadCount, UINT iStride);
 
 
 		public:
@@ -135,7 +137,7 @@ namespace thomas
 
 			// FFT wrap-up
 			CSFFT512x512Plan m_fftPlan;
-
+			
 		};
 	}
 }
