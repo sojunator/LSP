@@ -12,25 +12,22 @@ namespace thomas
 		class Bitmap
 		{
 		private:
-			bool InitializeBuffers(ID3D11Device*);
-			void ShutdownBuffers();
-			bool UpdateBuffers(ID3D11DeviceContext*, int, int);
-			void RenderBuffers(ID3D11DeviceContext*);
-
-			bool LoadTexture(ID3D11Device*, WCHAR*);
-			void ReleaseTexture();
+			bool InitializeBuffers();
+			bool UpdateBuffers(int, int);
+			void RenderBuffers();
+			void CreateDepthStencilState();
+			bool LoadTexture(std::string path);
 
 		public:
 			Bitmap();
 			~Bitmap();
-			Bitmap(const Bitmap&);
 
-			bool Initialize(ID3D11Device*, WCHAR*, int, int);
-			void Shutdown();
-			bool Render(ID3D11DeviceContext*, int, int);
-
+			bool Initialize(int, int, std::string);
+			bool Render(int, int);
 			int GetIndexCount();
-			ID3D11ShaderResourceView* GetTexture();
+			void Draw();
+			bool Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix);
+			bool Unbind();
 
 		private:
 			struct VertexType
@@ -41,9 +38,12 @@ namespace thomas
 
 			struct BitmapData
 			{
-				ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-				int m_vertexCount, m_indexCount;
-				//TextureClass* m_Texture;
+				ID3D11Buffer *vertexBuffer, *indexBuffer;
+				int vertexCount, indexCount;
+				ID3D11DepthStencilState* depthStencilState;
+				Shader* shader;
+				Window* window;
+				Texture* texture;
 			};
 
 		private:
@@ -51,8 +51,6 @@ namespace thomas
 			int m_bitmapWidth, m_bitmapHeight;
 			int m_previousPosX, m_previousPosY;
 			BitmapData m_data;
-			Window* m_window;
-			Texture* m_texture;
 		};
 	}
 }
