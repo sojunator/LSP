@@ -48,6 +48,8 @@ struct DirLight
 //Struct coupled with LightManager
 struct PointLight
 {
+	float attenuationFactor;
+	float3 padding;
 	float4 ambientColor;
 	float4 diffuseColor;
 	float4 specularColor;
@@ -108,7 +110,7 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
 	bumpNormal = normalize(bumpNormal);
 
-	float4 outputTest = float4(0,0,0,0);
+	float4 outputColor = float4(0,0,0,0);
 
 	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{
@@ -129,13 +131,13 @@ float4 PSMain(VSOutput input) : SV_TARGET
 			specular = specular * specularIntensity;
 		}
 	
-		outputTest += directionalLights[i].ambientColor*textureColor*0.05f + diffuse*textureColor + specular*directionalLights[i].specularColor;
+		outputColor += directionalLights[i].ambientColor*ambientColor*0.05f + diffuse*textureColor + specular*directionalLights[i].specularColor;
 
 	}
 	for (uint p = 0; p < nrOfPointLights; p++)
 	{
-		float4 temppl = pointLights[p].position;// mul(pointLights[p].position, worldMatrix);
-		float3 pointlightdir = temppl.xyz - input.positionWS;
+		float3 pointlightdir = pointLights[p].position.xyz - input.positionWS;
+		float distanceSquared = dot(pointlightdir, pointlightdir);
 		normalize(pointlightdir);
 		float lightIntensity = saturate(dot(bumpNormal, pointlightdir));
 
@@ -148,13 +150,13 @@ float4 PSMain(VSOutput input) : SV_TARGET
 			float3 viewDirection = camPosition - input.positionWS;
 
 			float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-			float3 reflection = normalize(temppl.xyz + viewDirection);
+			float3 reflection = normalize(pointLights[p].position.xyz + viewDirection);
 			specular = pow(saturate(dot(bumpNormal, reflection)), specularPower)*lightIntensity;
 			specular = specular * specularIntensity;
 		}
 
-		outputTest += pointLights[p].ambientColor*textureColor*0.05f + diffuse*textureColor + specular*pointLights[p].specularColor;
+		outputColor += (pointLights[p].ambientColor*ambientColor*textureColor*0.05f + diffuse*textureColor + specular*pointLights[p].specularColor) * pointLights[p].attenuationFactor / distanceSquared;
 	}
 
-	return outputTest;
+	return outputColor;
 }

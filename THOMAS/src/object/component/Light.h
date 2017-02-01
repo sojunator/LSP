@@ -46,6 +46,7 @@ namespace thomas
 				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
 				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
 				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
+				bool SetDirection(thomas::math::Vector4 otherLightDirection);
 
 				bool Bind();
 			private:
@@ -62,6 +63,8 @@ namespace thomas
 				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
 				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
 				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
+				bool SetPosition(thomas::math::Vector4 otherPosition);
+				bool SetAttenuationFactor(int otherAttenuationFactor);
 
 				bool Bind();
 			private:

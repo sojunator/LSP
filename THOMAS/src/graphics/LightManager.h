@@ -28,6 +28,10 @@ namespace thomas
 			};
 			struct PointLightStruct
 			{
+				float attenuationFactor;
+				int padding;
+				int paading;
+				int aasdf;
 				thomas::math::Vector4 ambientColor;
 				thomas::math::Vector4 diffuseColor;
 				thomas::math::Vector4 specularColor;
