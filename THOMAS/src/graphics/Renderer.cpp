@@ -21,10 +21,10 @@ namespace thomas
 		bool thomas::graphics::Renderer::Init()
 		{
 
-			if (utils::D3d::InitRenderer(s_backBuffer, s_rasterState, s_depthStencilState, s_depthStencilView, s_depthBuffer))
+			if (utils::D3d::InitRenderer(s_backBuffer, s_depthStencilState, s_depthStencilView, s_depthBuffer))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID , D3D11_CULL_BACK);
 				return true;
 
 			}
@@ -43,21 +43,35 @@ namespace thomas
 		{
 
 
+			if (Input::GetKeyDown(Input::Keys::X))
+			{
+				s_rasterState->Release();
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
+			}
+			else if (Input::GetKeyUp(Input::Keys::X))
+			{
+				s_rasterState->Release();
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+			}
+
+
 			//TODO: Find out if this is the fastest order of things.
 
 			for (object::component::Camera* camera : GetCameras()) //Render for every camera;
 			{
 				Clear();
 
-				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 				ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
-				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
+				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
+				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+				
+
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
-				
-				
-				
+
+
+
 
 				//For every shader
 				for (Shader* shader : loadedShaders)
@@ -71,38 +85,39 @@ namespace thomas
 
 
 
-						//Get the materials that use the shader
-						for (Material* mat : Material::GetLoadedMaterials())
+					//Get the materials that use the shader
+					for (Material* mat : Material::GetMaterialsByShader(shader))
+					{
+						mat->Bind(); //Bind material specific buffers/textures
+									 //Get all gameObjects that have a rendererComponent
+
+
+						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 						{
-							mat->Bind(); //Bind material specific buffers/textures
-										 //Get all gameObjects that have a rendererComponent
+							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 
 
-							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+							BindGameObjectBuffer(camera, gameObject);
+							//Draw every mesh of gameObjects model that has
+							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
 							{
-								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
-
-
-								BindGameObjectBuffer(camera, gameObject);
-								//Draw every mesh of gameObjects model that has
-								for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
-								{
-									mesh->Bind(); //bind vertex&index buffer
-									mesh->Draw();
-								}
-
-
-
+								mesh->Bind(); //bind vertex&index buffer
+								mesh->Draw();
 							}
-							mat->Unbind();
+
+
+
 						}
+						mat->Unbind();
+					}
 
 						LightManager::Unbind();
 
 					}
 					shader->Unbind();
 				}
-
+				camera->BindSkybox();
+				camera->UnbindSkybox();
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
 

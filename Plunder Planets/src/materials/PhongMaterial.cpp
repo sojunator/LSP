@@ -1,7 +1,7 @@
 #include "PhongMaterial.h"
 
 
-PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* material) : Material(name, Shader::GetShaderByName("Phong"))
+PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader) : Material(name, shader)
 {
 	m_textures = utils::AssimpLoader::GetMaterialTextures(material, dir);
 
@@ -13,9 +13,8 @@ PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* mate
 
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 
-
 }
-Material * PhongMaterial::CreateInstance(std::string dir, std::string name, aiMaterial * material)
+Material * PhongMaterial::CreateInstance(std::string dir, std::string name, aiMaterial * material, Shader* shader)
 {
-	return new PhongMaterial(dir, name, material);
+	return new PhongMaterial(dir, name, material, shader);
 }

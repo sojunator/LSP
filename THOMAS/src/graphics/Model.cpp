@@ -71,5 +71,21 @@ namespace thomas {
 			return m_meshes;
 		}
 
+		void Model::Destroy()
+		{
+			for (unsigned int i = 0; i < s_loadedModels.size(); i++)
+			{
+				delete s_loadedModels[i];
+			}
+		}
+
+		Model::~Model()
+		{
+			for (unsigned int i = 0; i < m_meshes.size(); i++)
+			{
+				delete m_meshes[i];
+			}
+		}
+
 	}
 }

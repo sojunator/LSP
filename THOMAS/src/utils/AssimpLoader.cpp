@@ -190,15 +190,19 @@ namespace thomas
 				vertex.normal = vector;
 
 				// Tangents
-				vector.x = mesh->mTangents[i].x;
-				vector.y = mesh->mTangents[i].y;
-				vector.z = mesh->mTangents[i].z;
-				vertex.tangent = vector;
-				// Bitangents
-				vector.x = mesh->mBitangents[i].x;
-				vector.y = mesh->mBitangents[i].y;
-				vector.z = mesh->mBitangents[i].z;
-				vertex.bitangent = vector;
+				if (mesh->HasTangentsAndBitangents())
+				{
+					vector.x = mesh->mTangents[i].x;
+					vector.y = mesh->mTangents[i].y;
+					vector.z = mesh->mTangents[i].z;
+					vertex.tangent = vector;
+					// Bitangents
+					vector.x = mesh->mBitangents[i].x;
+					vector.y = mesh->mBitangents[i].y;
+					vector.z = mesh->mBitangents[i].z;
+					vertex.bitangent = vector;
+				}
+				
 
 				// Texture Coordinates
 				if (mesh->mTextureCoords[0])

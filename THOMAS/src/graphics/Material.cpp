@@ -27,10 +27,19 @@ namespace thomas
 
 		}
 
+		Material::Material(std::string name, std::string shader)
+		{
+			m_materialName = name;
+			m_shader = Shader::GetShaderByName(shader);
+			if (!m_shader)
+				LOG("Failed to create material with shader: " << shader);
+		}
+
 
 		Material::~Material()
 		{
-			m_materialPropertiesBuffer->Release();
+			if(m_materialPropertiesBuffer)
+				m_materialPropertiesBuffer->Release();
 		}
 
 		Material * Material::CreateMaterial(Material * material)
@@ -59,7 +68,7 @@ namespace thomas
 			if (s_materialTypes.find(materialType) != s_materialTypes.end()) //Material was found. So now we create a new copy of it.
 			{
 				Material* matTemplate = s_materialTypes.find(materialType)->second;
-				instancedMaterial = matTemplate->CreateInstance(dir, name, assimpMaterial);
+				instancedMaterial = matTemplate->CreateInstance(dir, name, assimpMaterial, matTemplate->m_shader);
 				s_materials.push_back(instancedMaterial);
 				return instancedMaterial;
 			}
@@ -67,6 +76,29 @@ namespace thomas
 			LOG("No material of type: " << materialType << " exists.");
 			return NULL;
 
+		}
+
+		Material * Material::CreateMaterial(std::string name, std::string materialType)
+		{
+
+			for (unsigned int i = 0; i < s_materials.size(); i++)
+			{
+				if (s_materials[i]->GetName() == name)
+					return s_materials[i];
+			}
+
+
+			Material* instancedMaterial;
+			if (s_materialTypes.find(materialType) != s_materialTypes.end()) //Material was found. So now we create a new copy of it.
+			{
+				Material* matTemplate = s_materialTypes.find(materialType)->second;
+				instancedMaterial = matTemplate->CreateInstance(name, matTemplate->m_shader);
+				s_materials.push_back(instancedMaterial);
+				return instancedMaterial;
+			}
+
+			LOG("No material of type: " << materialType << " exists.");
+			return NULL;
 		}
 
 		Material* Material::GetMaterialByName(std::string name)
@@ -125,9 +157,21 @@ namespace thomas
 			return materials;
 		}
 
+		void Material::Destroy()
+		{
+			for (unsigned int i = 0; i < s_materials.size(); i++)
+			{
+				delete s_materials[i];
+			}
+			for (auto const& materialType : s_materialTypes)
+			{
+				delete materialType.second;
+			}
+		}
+
 		bool Material::Bind()
 		{
-
+			m_shader->BindPrimitiveTopology(m_shaderTopology);
 			bool buffer = m_shader->BindBuffer(m_materialPropertiesBuffer, Shader::ResourceType::MATERIAL);
 			bool texture = true;
 			for (unsigned int i = 0; i < m_textures.size(); i++)

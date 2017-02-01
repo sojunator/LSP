@@ -4,3 +4,4 @@
 #include "Camera.h"
 #include "RenderComponent.h"
 #include "Light.h"
+#include "SoundComponent.h"

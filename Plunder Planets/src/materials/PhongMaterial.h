@@ -6,10 +6,10 @@ using namespace graphics;
 class PhongMaterial : public Material
 {
 private:
-	Material* CreateInstance(std::string dir, std::string name, aiMaterial* material);
+	Material* CreateInstance(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 public:
 	PhongMaterial(std::string shader) : Material(shader) {}
-	PhongMaterial(std::string dir, std::string name, aiMaterial* material);
+	PhongMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 
 
 

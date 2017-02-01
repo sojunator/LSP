@@ -16,6 +16,7 @@ public:
 	TestObject() : GameObject("TestObject") 
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
+		m_sound = AddComponent<component::SoundComponent>();
 		m_light = AddComponent<component::PointLight>();
 		m_lightTheSecond = AddComponent<component::DirectionalLight>();
 		
@@ -33,6 +34,8 @@ public:
 		m_lightTheSecond->SetDiffuseColor(thomas::math::Vector4(0, 0, 0.25, 1));
 		
 		
+		m_sound->SetName("fMeow");
+
 		//m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));
 		m_transform->SetPosition(math::Vector3(0, -3, -10));
 
@@ -74,5 +77,7 @@ private:
 	GameObject* m_cameraObject;
 	component::Light* m_light;
 	component::DirectionalLight* m_lightTheSecond;
+	object::GameObject* m_cameraObject;
+	component::SoundComponent* m_sound;
 
 };

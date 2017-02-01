@@ -103,14 +103,15 @@ namespace thomas
 		}
 
 	
-		bool D3d::CreateDepthStencilState(ID3D11Device * device, ID3D11DepthStencilState*& stencil)
+		ID3D11DepthStencilState* D3d::CreateDepthStencilState(D3D11_COMPARISON_FUNC func, bool depth)
 		{
+			ID3D11DepthStencilState* stencilState;
 			CD3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
-			depthStencilDesc.DepthEnable = true;
+			depthStencilDesc.DepthEnable = depth;
 			depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-			depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+			depthStencilDesc.DepthFunc = func;
 			depthStencilDesc.StencilReadMask = true;
 			depthStencilDesc.StencilWriteMask = 0xFF;
 			depthStencilDesc.StencilReadMask = 0xFF;
@@ -127,13 +128,13 @@ namespace thomas
 			depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 			depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-			HRESULT hr = device->CreateDepthStencilState(&depthStencilDesc, &stencil);
+			HRESULT hr = ThomasCore::GetDevice()->CreateDepthStencilState(&depthStencilDesc, &stencilState);
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
-				return false;
+				return NULL;
 			}
-			return true;
+			return stencilState;
 		}
 		
 		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, 
@@ -198,14 +199,13 @@ namespace thomas
 
 
 
-		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11RasterizerState *& rasterState, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11Texture2D *& depthBuffer)
+		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11Texture2D *& depthBuffer)
 		{
 			CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain(), backBuffer);
 			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBuffer);
 		
-			CreateDepthStencilState(ThomasCore::GetDevice(), depthStencilState);
+			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS, true);
 
-			rasterState = CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 
 			return true;
 		}
@@ -243,6 +243,33 @@ namespace thomas
 				return false;
 			}
 	
+			return true;
+		}
+
+		bool D3d::LoadCubeTextureFromFile(ID3D11Device * device, ID3D11DeviceContext * context, std::string fileName, ID3D11Resource *& texture, ID3D11ShaderResourceView *& textureView)
+		{
+			char* filename_c = new char[fileName.length() + 1];
+			std::strcpy(filename_c, fileName.c_str());
+
+			char * extension_char = PathFindExtensionA(filename_c);
+			std::string extension_string(extension_char);
+
+			delete[] filename_c;
+
+			HRESULT hr;
+			if (extension_string == ".dds")
+			{
+				hr = DirectX::CreateDDSTextureFromFileEx(device, CA2W(fileName.c_str()), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0,
+					D3D11_RESOURCE_MISC_TEXTURECUBE, false, (ID3D11Resource**)&texture, &textureView, nullptr);
+			}
+	
+			if (FAILED(hr))
+			{
+				LOG("Failed to load cubemap texture: " << fileName);
+				LOG_HR(hr);
+				return false;
+			}
+
 			return true;
 		}
 

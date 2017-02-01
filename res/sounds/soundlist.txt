@@ -1,0 +1,6 @@
+soundlist.xwb contains
+
+fMeow
+fSwoosh
+mStress
+mThomas
