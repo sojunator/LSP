@@ -22,7 +22,6 @@ namespace thomas
 			};
 		private:
 
-			ID3DBlob* Compile(std::string source, std::string profile, std::string main);
 			bool CreateInputLayout(InputLayouts layout);
 			Shader(std::string name, InputLayouts inputLayout, std::string filePath);
 
@@ -46,8 +45,9 @@ namespace thomas
 			bool BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type);
 			bool BindVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
 			bool BindIndexBuffer(ID3D11Buffer* indexBuffer);
+			
 
-
+			static ID3DBlob* Compile(std::string source, std::string profile, std::string main);
 			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string filePath);
 			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader);
 			static Shader* GetCurrentBoundShader();

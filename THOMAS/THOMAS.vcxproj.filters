@@ -38,6 +38,7 @@
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\Sound.cpp" />
+    <ClCompile Include="src\utils\OceanSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Material.h" />

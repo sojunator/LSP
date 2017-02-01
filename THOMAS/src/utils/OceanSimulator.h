@@ -30,7 +30,26 @@ namespace thomas
 				float choppyScale;
 
 				//Gravity in cm/s^2
-				float gravity = 981 
+				float gravity = 981;
+			};
+
+			struct CSFFT512x512Plan
+			{
+				// D3D11 objects
+				ID3D11DeviceContext* pd3dImmediateContext;
+				ID3D11ComputeShader* pRadix008A_CS;
+				ID3D11ComputeShader* pRadix008A_CS2;
+
+				// More than one array can be transformed at same time
+				UINT slices;
+
+				// For 512x512 config, we need 6 constant buffers
+				ID3D11Buffer* pRadix008A_CB[6];
+
+				// Temporary buffers
+				ID3D11Buffer* pBuffer_Tmp;
+				ID3D11UnorderedAccessView* pUAV_Tmp;
+				ID3D11ShaderResourceView* pSRV_Tmp;
 			};
 
 		private:
@@ -43,14 +62,22 @@ namespace thomas
 			// K: normalized wave vector, W: wind direction, v: wind velocity, a: amplitude constant
 			float Phillips(math::Vector2 k, math::Vector2 w, float v, float a, float dir_depend);
 
+
+			void FFT512x512CreatePlan(CSFFT512x512Plan* plan, UINT slices);
+			void FFT512x512DestroyPlan(CSFFT512x512Plan* plan);
+
+			void FFT512x512Calc(CSFFT512x512Plan* plan, ID3D11UnorderedAccessView* UAVDest, ID3D11ShaderResourceView* SRVDest, ID3D11ShaderResourceView* SRVSrc);
+
+
+
 		public:
 			OceanSimulator(OceanSettings& settings);
-			OceanSimulator();
+			~OceanSimulator();
 
 			void Update();
 
 			ID3D11ShaderResourceView* GetDisplacementMap();
-			ID3D10ShaderResourceView* GetNormalMap();
+			ID3D11ShaderResourceView* GetNormalMap();
 
 			OceanSettings& GetSettings();
 		private:
@@ -104,8 +131,10 @@ namespace thomas
 			ID3D11Buffer* m_immutableCB;
 			ID3D11Buffer* m_perFrameCB;
 
+			float m_timePassed;
+
 			// FFT wrap-up
-		//	CSFFT512x512_Plan m_fft_plan;
+			CSFFT512x512Plan m_fftPlan;
 
 		};
 	}

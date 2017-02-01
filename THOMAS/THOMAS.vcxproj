@@ -53,6 +53,7 @@
     <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="src\utils\OceanSimulator.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>

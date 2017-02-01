@@ -29,7 +29,7 @@ namespace thomas
 			}
 			else if (status == S_OK)
 			{
-				LOG("Shader " << m_name << " " << main << " Sucessfully loaded");
+				LOG("Shader " << source << " " << main << " Sucessfully loaded");
 				return shaderBlob;
 			}
 
