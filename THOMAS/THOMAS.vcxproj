@@ -23,7 +23,6 @@
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\graphics\LightManager.cpp" />
     <ClCompile Include="src\object\component\Light.cpp" />
-    <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\graphics\Model.cpp" />
@@ -64,7 +63,6 @@
   <ItemGroup>
     <ClInclude Include="src\graphics\LightManager.h" />
     <ClInclude Include="src\object\component\Light.h" />
-    <ClInclude Include="src\graphics\CubeMapLoader.h" />
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\graphics\Skybox.h" />
     <ClInclude Include="src\graphics\Material.h" />

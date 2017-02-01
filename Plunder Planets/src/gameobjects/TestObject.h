@@ -30,8 +30,8 @@ public:
 		
 		m_cameraObject = Find("CameraObject");
 
-		m_lightTheSecond->SetDirection(thomas::math::Vector4(-1, 0, 1, 0));
-		m_lightTheSecond->SetDiffuseColor(thomas::math::Vector4(0, 0, 0.25, 1));
+		m_lightTheSecond->SetDirection(thomas::math::Vector4(0, 0, -1, 0));
+		//m_lightTheSecond->SetDiffuseColor(thomas::math::Vector4(0, 0, 0.25, 1));
 		
 		
 		m_sound->SetName("fMeow");
@@ -46,35 +46,12 @@ public:
 
 	void Update()
 	{
-		component::Camera* cam = m_cameraObject->GetComponent<component::Camera>();
-		
-		
 
-		float speed = 10;
-		if (Input::GetKey(Input::Keys::A))
-		{
-			m_transform->Rotate(-speed*Time::GetDeltaTime(), 0, 0);
-		}
-		if (Input::GetKey(Input::Keys::D))
-		{
-			m_transform->Rotate(speed*Time::GetDeltaTime(), 0, 0);
-		}
-		if (Input::GetKey(Input::Keys::W))
-		{
-			m_transform->Rotate(0, -speed*Time::GetDeltaTime(), 0);
-		}
-		if (Input::GetKey(Input::Keys::S))
-		{
-			m_transform->Rotate(0, speed*Time::GetDeltaTime(), 0);
-		}
-
-	//	m_cameraObject->m_transform->LookAt(m_transform);
 
 	}
 
 private:
 	component::RenderComponent* m_renderer;
-	GameObject* m_cameraObject;
 	component::Light* m_light;
 	component::DirectionalLight* m_lightTheSecond;
 	object::GameObject* m_cameraObject;
