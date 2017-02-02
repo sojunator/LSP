@@ -16,6 +16,7 @@ namespace thomas
 			bool UpdateBuffers(int, int);
 			void CreateDepthStencilState();
 			bool LoadTexture(std::string path);
+			void CreateRasterizer();
 
 		public:
 			Bitmap(std::string path, std::string shaderName, int bitmapWidth, int bitmapHeight);
@@ -39,6 +40,7 @@ namespace thomas
 				ID3D11Buffer *vertexBuffer, *indexBuffer, *constantBuffer;
 				int vertexCount, indexCount;
 				ID3D11DepthStencilState* depthStencilState;
+				ID3D11RasterizerState* rasterizerState;
 				Shader* shader;
 				Texture* texture;
 			};

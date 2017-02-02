@@ -20,6 +20,7 @@ public:
 	{
 
 		m_camera->SetSkybox("../res/textures/test.dds", "skyboxShader");
+		m_camera->SetGUI("../res/dearleader.jpg", "GUIShader", Window::GetWidth(), 100);
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 10.0f;
 		m_fastSpeed = 30.0f;

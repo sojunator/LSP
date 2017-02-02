@@ -116,8 +116,11 @@ namespace thomas
 					}
 					shader->Unbind();
 				}
+
 				camera->BindSkybox();
 				camera->UnbindSkybox();
+				camera->BindGUI();
+				camera->UnbindGUI();
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
 

@@ -15,7 +15,7 @@ namespace thomas
 			int i;
 
 			// Set the number of vertices in the vertex array.
-			m_data.vertexCount = 6;
+			m_data.vertexCount = 4;
 
 			// Set the number of indices in the index array.
 			m_data.indexCount = m_data.vertexCount;
@@ -135,24 +135,17 @@ namespace thomas
 
 			// Load the vertex array with data.
 			// First triangle.
-			vertices[0].position = math::Vector3(left, top, 0.0f);  // Top left.
-			vertices[0].texture = math::Vector2(0.0f, 0.0f);
+			vertices[1].position = math::Vector3(left, top, 0.0f);  // Top left.
+			vertices[1].texture = math::Vector2(0.0f, 0.0f);
 
-			vertices[1].position = math::Vector3(right, bottom, 0.0f);  // Bottom right.
-			vertices[1].texture = math::Vector2(1.0f, 1.0f);
+			vertices[2].position = math::Vector3(right, bottom, 0.0f);  // Bottom right.
+			vertices[2].texture = math::Vector2(1.0f, 1.0f);
 
-			vertices[2].position = math::Vector3(left, bottom, 0.0f);  // Bottom left.
-			vertices[2].texture = math::Vector2(0.0f, 1.0f);
+			vertices[0].position = math::Vector3(left, bottom, 0.0f);  // Bottom left.
+			vertices[0].texture = math::Vector2(0.0f, 1.0f);
 
-			// Second triangle.
-			vertices[3].position = math::Vector3(left, top, 0.0f);  // Top left.
-			vertices[3].texture = math::Vector2(0.0f, 0.0f);
-
-			vertices[4].position = math::Vector3(right, top, 0.0f);  // Top right.
-			vertices[4].texture = math::Vector2(1.0f, 0.0f);
-
-			vertices[5].position = math::Vector3(right, bottom, 0.0f);  // Bottom right.
-			vertices[5].texture = math::Vector2(1.0f, 1.0f);
+			vertices[3].position = math::Vector3(right, top, 0.0f);  // Top right.
+			vertices[3].texture = math::Vector2(1.0f, 0.0f);
 
 			// Lock the vertex buffer so it can be written to.
 			result = ThomasCore::GetDeviceContext()->Map(m_data.vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -188,11 +181,17 @@ namespace thomas
 			return true;
 		}
 
+		void Bitmap::CreateRasterizer()
+		{
+			m_data.rasterizerState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_FRONT);
+		}
+
 		Bitmap::Bitmap(std::string path, std::string shaderName, int bitmapWidth, int bitmapHeight)
 		{
 			Initialize(bitmapWidth, bitmapHeight);
 			InitializeBuffers();
 			LoadTexture(path);
+			CreateRasterizer();
 			CreateDepthStencilState();
 			m_data.shader = Shader::GetShaderByName(shaderName);
 		}
@@ -201,6 +200,7 @@ namespace thomas
 		{
 			m_data.indexBuffer->Release();
 			m_data.vertexBuffer->Release();
+			m_data.rasterizerState->Release();
 			m_data.depthStencilState->Release();
 			delete m_data.texture;
 		}
@@ -242,9 +242,11 @@ namespace thomas
 			m_constBuffer.orthMatrix = m_orthographic;
 			utils::D3d::FillBuffer(m_data.constantBuffer, m_constBuffer);
 
+			ThomasCore::GetDeviceContext()->RSSetState(m_data.rasterizerState);
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_data.depthStencilState, 1);
 
 			m_data.shader->BindBuffer(m_data.constantBuffer, Shader::ResourceType::GAME_OBJECT);
+			m_data.shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 			m_data.texture->Bind();
 
 			Draw();
@@ -257,6 +259,7 @@ namespace thomas
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(VertexType), 0);
 			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);
 
+			ThomasCore::GetDeviceContext()->RSSetState(NULL);
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(NULL, 1);
 
 			m_data.texture->Unbind();

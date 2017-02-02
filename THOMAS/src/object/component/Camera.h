@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "../../utils/Math.h"
 #include "../../graphics/Skybox.h"
+#include "../../graphics/Bitmap.h"
 /**
 *Camera class
 */
@@ -42,6 +43,11 @@ namespace thomas
 
 				void BindSkybox();
 				void UnbindSkybox();
+
+				void SetGUI(std::string path, std::string shaderName, int, int);
+
+				void BindGUI();
+				void UnbindGUI();
 				
 			private:
 				math::Matrix m_projMatrix;
@@ -50,6 +56,7 @@ namespace thomas
 				float m_far;
 				math::Viewport m_viewport;
 				graphics::Skybox* m_skybox;
+				graphics::Bitmap* m_bitmap;
 
 			};
 		}
