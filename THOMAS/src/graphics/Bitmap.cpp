@@ -90,6 +90,8 @@ namespace thomas
 			delete[] indices;
 			indices = 0;
 
+			m_data.constantBuffer = utils::D3d::CreateBufferFromStruct(m_constBuffer, D3D11_BIND_CONSTANT_BUFFER);
+
 			return true;
 		}
 
@@ -174,28 +176,6 @@ namespace thomas
 
 			return true;
 		}
-		
-		void Bitmap::RenderBuffers()
-		{
-			unsigned int stride;
-			unsigned int offset;
-
-
-			// Set vertex buffer stride and offset.
-			stride = sizeof(VertexType);
-			offset = 0;
-
-			// Set the vertex buffer to active in the input assembler so it can be rendered.
-			ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_data.vertexBuffer, &stride, &offset);
-
-			// Set the index buffer to active in the input assembler so it can be rendered.
-			ThomasCore::GetDeviceContext()->IASetIndexBuffer(m_data.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-			// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-			return;
-		}
 
 		void Bitmap::CreateDepthStencilState()
 		{
@@ -208,24 +188,29 @@ namespace thomas
 			return true;
 		}
 
-		Bitmap::Bitmap()
+		Bitmap::Bitmap(std::string path, std::string shaderName, int bitmapWidth, int bitmapHeight)
 		{
+			Initialize(bitmapWidth, bitmapHeight);
+			InitializeBuffers();
+			LoadTexture(path);
+			CreateDepthStencilState();
+			m_data.shader = Shader::GetShaderByName(shaderName);
 		}
-
 
 		Bitmap::~Bitmap()
 		{
 			m_data.indexBuffer->Release();
 			m_data.vertexBuffer->Release();
 			m_data.depthStencilState->Release();
+			delete m_data.texture;
 		}
 
-		bool Bitmap::Initialize(int bitmapWidth, int bitmapHeight, std::string path)
+		bool Bitmap::Initialize(int bitmapWidth, int bitmapHeight)
 		{
 			bool result;
 
-			m_screenWidth = m_data.window->GetWidth();
-			m_screenHeight = m_data.window->GetHeight();
+			m_screenWidth = Window::GetWidth();
+			m_screenHeight = Window::GetHeight();
 
 			m_bitmapWidth = bitmapWidth;
 			m_bitmapHeight = bitmapHeight;
@@ -233,39 +218,6 @@ namespace thomas
 			// Initialize the previous rendering position to negative one.
 			m_previousPosX = -1;
 			m_previousPosY = -1;
-
-			// Initialize the vertex and index buffers.
-			result = InitializeBuffers();
-			if (!result)
-			{
-				return false;
-			}
-
-			// Load the texture for this model.
-			result = LoadTexture(path);
-			if (!result)
-			{
-				return false;
-			}
-
-
-			return true;
-		}
-
-		bool Bitmap::Render(int positionX, int positionY)
-		{
-			bool result;
-
-			// Re-build the dynamic vertex buffer for rendering to possibly a different location on the screen.
-			result = UpdateBuffers(positionX, positionY);
-			if (!result)
-			{
-				return false;
-			}
-
-			// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
-			RenderBuffers();
-
 			return true;
 		}
 
@@ -279,41 +231,38 @@ namespace thomas
 			thomas::ThomasCore::GetDeviceContext()->DrawIndexed(GetIndexCount(), 0, 0);
 		}
 
-		bool Bitmap::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)
+		bool Bitmap::Bind(int positionX, int positionY)
 		{
 			m_data.shader->Bind();
 
-		/*	bool v = m_data.shader->BindVertexBuffer(m_data.vertexBuffer, sizeof(math::Vector3), 0);
+			UpdateBuffers(positionX, positionY);
+			bool v = m_data.shader->BindVertexBuffer(m_data.vertexBuffer, sizeof(VertexType), 0);
 			bool i = m_data.shader->BindIndexBuffer(m_data.indexBuffer);
-			m_mvpStruct.mvpMatrix = mvpMatrix;
-			m_mvpStruct.viewMatrix = viewMatrix;
-			utils::D3d::FillBuffer(m_data.constantBuffer, m_mvpStruct);*/
+			m_orthographic = math::Matrix::CreateOrthographic(Window::GetWidth(), Window::GetHeight(), 0.1f, 1000.f);
+			m_constBuffer.orthMatrix = m_orthographic;
+			utils::D3d::FillBuffer(m_data.constantBuffer, m_constBuffer);
 
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_data.depthStencilState, 1);
 
-			//m_data.shader->BindBuffer(m_data.constantBuffer, Shader::ResourceType::GAME_OBJECT);
-			//m_data.texture->Bind();
+			m_data.shader->BindBuffer(m_data.constantBuffer, Shader::ResourceType::GAME_OBJECT);
+			m_data.texture->Bind();
 
 			Draw();
 
-			/*return v && i;*/
-			return false;
+			return v && i;
 		}
 
 		bool Bitmap::Unbind()
 		{
-			/*bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(math::Vector3), 0);
-			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);*/
+			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(VertexType), 0);
+			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);
 
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(NULL, 1);
 
-		/*	m_data.texture->Unbind();
+			m_data.texture->Unbind();
 			m_data.shader->Unbind();
 
-			return v && i;*/
-			return false;
+			return v && i;
 		}
-
-
 	}
 }
