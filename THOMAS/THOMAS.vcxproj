@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="src\graphics\Bitmap.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
+    <ClCompile Include="src\graphics\LightManager.cpp" />
+    <ClCompile Include="src\object\component\Light.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\graphics\Model.cpp" />
@@ -31,6 +33,7 @@
     <ClCompile Include="src\object\component\Camera.cpp" />
     <ClCompile Include="src\object\component\Component.cpp" />
     <ClCompile Include="src\object\component\RenderComponent.cpp" />
+    <ClCompile Include="src\object\component\SoundComponent.cpp" />
     <ClCompile Include="src\object\component\Transform.cpp" />
     <ClCompile Include="src\object\GameObject.cpp" />
     <ClCompile Include="src\object\Object.cpp" />
@@ -58,6 +61,8 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\LightManager.h" />
+    <ClInclude Include="src\object\component\Light.h" />
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\graphics\Skybox.h" />
     <ClInclude Include="src\graphics\Material.h" />
@@ -72,6 +77,7 @@
     <ClInclude Include="src\object\component\Component.h" />
     <ClInclude Include="src\object\component\Components.h" />
     <ClInclude Include="src\object\component\RenderComponent.h" />
+    <ClInclude Include="src\object\component\SoundComponent.h" />
     <ClInclude Include="src\object\component\Transform.h" />
     <ClInclude Include="src\object\GameObject.h" />
     <ClInclude Include="src\object\Object.h" />

@@ -23,13 +23,13 @@ namespace thomas
 		};
 	public:
 		static bool Init();
-		static bool Play(Sound::Effects name);
-		static bool Play(Sound::Music name);
+		static bool Play(std::string name, float volume);
 		static void Pause();
 		static void Resume();
 		static void SetMasterVolume(float volume);
 		static void SetFxVolume(float volume);
 		static void SetMusicVolume(float volume);
+		static bool LoadWaveBank(std::string name);
 		static void Destroy();
 
 	private:

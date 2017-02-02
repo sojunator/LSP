@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "Model.h"
 #include "../object/GameObject.h"
+#include "../object/component/Light.h"
+#include "LightManager.h"
 
 namespace thomas
 {
@@ -70,33 +72,47 @@ namespace thomas
 
 
 
+
 				//For every shader
 				for (Shader* shader : loadedShaders)
 				{
 					shader->Bind();
 
-					//Get the materials that use the shader
-					for (Material* mat : Material::GetMaterialsByShader(shader))
+					//For every light
+					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
 					{
-						mat->Bind(); //Bind material specific buffers/textures
-									 //Get all gameObjects that have a rendererComponent
-						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+						LightManager::BindAllLights();
+
+
+
+						//Get the materials that use the shader
+						for (Material* mat : Material::GetMaterialsByShader(shader))
 						{
-							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+							mat->Bind(); //Bind material specific buffers/textures
+										 //Get all gameObjects that have a rendererComponent
 
 
-							BindGameObjectBuffer(camera, gameObject);
-							//Draw every mesh of gameObjects model that has
-							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 							{
-								mesh->Bind(); //bind vertex&index buffer
-								mesh->Draw();
+								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+
+
+								BindGameObjectBuffer(camera, gameObject);
+								//Draw every mesh of gameObjects model that has
+								for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+								{
+									mesh->Bind(); //bind vertex&index buffer
+									mesh->Draw();
+								}
+
+
+
 							}
-
-
-
+							mat->Unbind();
 						}
-						mat->Unbind();
+
+						LightManager::Unbind();
+
 					}
 					shader->Unbind();
 				}

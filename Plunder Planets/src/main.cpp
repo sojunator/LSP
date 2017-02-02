@@ -19,8 +19,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 	//Init shaders
-	 thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/phong.hlsl");
+	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
+		"../res/shaders/test.hlsl");
+
 
 	 thomas::graphics::Shader::CreateShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD,
 		 "../res/shaders/skyboxShader.hlsl");
@@ -45,6 +46,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
+
+	//Init wavebank
+	thomas::Sound::LoadWaveBank("../res/sounds/soundlist.xwb");
 
 
 	//Init gameObjects
