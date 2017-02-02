@@ -71,7 +71,7 @@ namespace thomas
 				m_thisLight.constantAttenuation = 0.6;
 				m_thisLight.linearAttenuation = 0.3;
 				m_thisLight.quadraticAttenuation = 0.1;
-				m_thisLight.lightRange = 5;
+				m_thisLight.power = 5;
 				
 				m_thisLight.position = thomas::math::Vector3(0, 0, 0);
 				m_thisLight.lightColor = thomas::math::Vector4(1, 1, 1, 1);
@@ -94,19 +94,26 @@ namespace thomas
 			}
 			
 
-			
-			bool PointLight::SetAttenuation(float otherConstantAttenuation, float otherLinearAttenuation, float otherQuadraticAttenuation)
+			bool PointLight::SetConstantAttenuation(float other)
 			{
-				m_thisLight.constantAttenuation = otherConstantAttenuation;
-				m_thisLight.linearAttenuation = otherLinearAttenuation;
-				m_thisLight.quadraticAttenuation = otherQuadraticAttenuation;
+				m_thisLight.constantAttenuation = other;
+				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
+			}
+			bool PointLight::SetLinearAttenuation(float other)
+			{
+				m_thisLight.constantAttenuation = other;
+				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
+			}
+			bool PointLight::SetQuadraticAttenuation(float other)
+			{
+				m_thisLight.constantAttenuation = other;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
 			}
 
 			
-			bool PointLight::SetLightRange(float otherLightRange)
+			bool PointLight::SetPower(float other)
 			{
-				m_thisLight.lightRange = otherLightRange;
+				m_thisLight.power = other;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
 			}
 			void PointLight::Update()

@@ -51,7 +51,7 @@ struct PointLight
 	float constantAttenuation;
 	float linearAttenuation;
 	float quadraticAttenuation;
-	float lightRange;
+	float power;
 	float4 lightColor;
 	float3 position;
 	float padding;
@@ -145,11 +145,7 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		float distance = length(pointLightDir);
 		float distanceSquared = distance * distance;
 
-		float lightRange = 5;
-		float attenuationconst = 0.6f;
-		float attenuationlin = 0.3f;
-		float attenuationquad = 0.1f;
-		float attenuation = pointLights[p].lightRange / (pointLights[p].constantAttenuation + pointLights[p].linearAttenuation * distance + pointLights[p].quadraticAttenuation * distanceSquared);
+		float attenuation = pointLights[p].power / (pointLights[p].constantAttenuation + pointLights[p].linearAttenuation * distance + pointLights[p].quadraticAttenuation * distanceSquared);
 
 		normalize(pointLightDir);
 

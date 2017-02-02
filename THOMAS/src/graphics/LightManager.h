@@ -29,7 +29,7 @@ namespace thomas
 				float constantAttenuation;
 				float linearAttenuation;
 				float quadraticAttenuation;
-				float lightRange;
+				float power;
 				thomas::math::Vector4 lightColor;
 				thomas::math::Vector3 position;
 				float padding;

@@ -58,8 +58,10 @@ namespace thomas
 				~PointLight();
 
 				bool SetLightColor(thomas::math::Vector4 other);
-				bool SetAttenuation(float otherConstantAttenuation, float otherLinearAttenuation, float otherQuadraticAttenuation);
-				bool SetLightRange(float otherLightRange);
+				bool SetConstantAttenuation(float other);
+				bool SetLinearAttenuation(float other);
+				bool SetQuadraticAttenuation(float other);
+				bool SetPower(float other);
 
 				bool Bind();
 
