@@ -26,8 +26,8 @@ private:
 		float uvOffset;
 		float texelLengthX2;
 	};
-	
-	utils::OceanSimulator::OceanSettings m_oceanSettings;
+	float time;
+	utils::OceanParameter m_oceanSettings;
 	utils::OceanSimulator* m_oceanSim;
 	MaterialProperties m_materialProperties;
 

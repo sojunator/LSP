@@ -9,21 +9,40 @@ Material * WaterMaterial::CreateInstance(std::string name, Shader * shader)
 WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, shader)
 {
 
+	// The size of displacement map. In this sample, it's fixed to 512.
+	m_oceanSettings.dmap_dim = 512;
+	// The side length (world space) of square patch
+	m_oceanSettings.patch_length = 2000.0f;
+	// Adjust this parameter to control the simulation speed
+	m_oceanSettings.time_scale = 0.8f;
+	// A scale to control the amplitude. Not the world space height
+	m_oceanSettings.wave_amplitude = 0.35f;
+	// 2D wind direction. No need to be normalized
+	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
+	// The bigger the wind speed, the larger scale of wave crest.
+	// But the wave scale can be no larger than patch_length
+	m_oceanSettings.wind_speed = 600.0f;
+	// Damp out the components opposite to wind direction.
+	// The smaller the value, the higher wind dependency
+	m_oceanSettings.wind_dependency = 0.07f;
+	// Control the scale of horizontal movement. Higher value creates
+	// pointy crests.
+	m_oceanSettings.choppy_scale = 1.3f;
 
-	m_oceanSim = new utils::OceanSimulator(m_oceanSettings);
+	m_oceanSim = new utils::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 	
-	m_oceanSim->Update(0);
+	m_oceanSim->updateDisplacementMap(0);
 //	m_shaderTopology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
 	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "../res/textures/Wavy_Water - Height.png"));
 
 
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "Ocean", m_oceanSim->GetDisplacementMap(), NULL));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "Ocean", m_oceanSim->getD3D11DisplacementMap(), NULL));
 
 	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "../res/textures/Wavy_Water - Height (Normal Map).png"));
 //	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/textures/Wavy_Water - Specular.png"));
-	m_materialProperties.uvScale = 1.0/ m_oceanSettings.patchLength;
-	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.mapDimension;
-	m_materialProperties.texelLengthX2 = m_oceanSettings.patchLength / m_oceanSettings.mapDimension * 2;
+	m_materialProperties.uvScale = 1.0/ m_oceanSettings.patch_length;
+	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.dmap_dim;
+	m_materialProperties.texelLengthX2 = m_oceanSettings.patch_length / m_oceanSettings.dmap_dim * 2;
 
 	m_materialProperties.ambientColor = math::Color(1.0, 1.0, 1.0);
 	m_materialProperties.diffuseColor = math::Color(1.0, 1.0, 1.0);
@@ -36,9 +55,9 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 void WaterMaterial::Update()
 {
 	//m_materialProperties.time += Time::GetDeltaTime()*0.01f;
-
-	m_oceanSim->Update(Time::GetDeltaTime());
-	m_textures[0]->SetTextureView(m_oceanSim->GetDisplacementMap());
+	time += Time::GetDeltaTime();
+	m_oceanSim->updateDisplacementMap(time);
+	m_textures[0]->SetTextureView(m_oceanSim->getD3D11DisplacementMap());
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 }
 

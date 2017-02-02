@@ -34,4 +34,5 @@ public:
 private:
 	component::RenderComponent* m_renderer;
 	Material* m_waterMaterial;
+	
 };
