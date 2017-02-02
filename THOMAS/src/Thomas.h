@@ -7,6 +7,7 @@
 #include "utils\AssimpLoader.h"
 
 #include "utils\Plane.h"
+#include "utils\HeightMap.h"
 
 #include "graphics\Shader.h"
 

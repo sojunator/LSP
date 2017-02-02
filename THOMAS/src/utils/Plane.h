@@ -2,7 +2,7 @@
 
 #include "../graphics/Model.h"
 #include "../Common.h"
-#include "noise\noise.h"
+//#include "noise\noise.h"
 
 
 namespace thomas
@@ -16,11 +16,8 @@ namespace thomas
 			~Plane();
 
 		public:
-			static std::vector<thomas::graphics::Mesh*> CreatePlane(int size, float detail, std::string meshName, graphics::Material* mat);
-
+			static std::vector<thomas::graphics::Mesh*> CreatePlane(int size, float detail, std::string meshName, graphics::Material* mat, std::vector<float> &heightMap);
 		private:
-
-
 		};
 	}
 }

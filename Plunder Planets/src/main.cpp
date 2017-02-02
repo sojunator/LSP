@@ -40,7 +40,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(1024, 0.125, "Plane-1", m));
+	thomas::utils::HeightMap::GenerateHeightMap(1024, 0.125);
+	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(1024, 0.125, "Plane-1", m, thomas::utils::HeightMap::GetHeight()));
+
 
 	//Init gameObjects
 

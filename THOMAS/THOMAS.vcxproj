@@ -45,6 +45,7 @@
     <ClCompile Include="src\utils\directXTK\pch.cpp" />
     <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="src\utils\HeightMap.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -82,6 +83,7 @@
     <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
     <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
+    <ClInclude Include="src\utils\HeightMap.h" />
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\utils\Plane.h" />
     <ClInclude Include="src\Window.h" />

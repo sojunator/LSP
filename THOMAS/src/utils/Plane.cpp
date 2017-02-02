@@ -7,7 +7,7 @@ namespace thomas
 	namespace utils
 	{
 		std::vector<thomas::graphics::Mesh*> Plane::CreatePlane(int size, float detail, std::string meshName,
-			graphics::Material* mat)
+			graphics::Material* mat, std::vector<float> &heightMap)
 		{
 			std::vector<graphics::Vertex> verts;
 			std::vector<int> indices;
@@ -28,31 +28,32 @@ namespace thomas
 			temp_vert.tangent.y = 0.0f;
 			temp_vert.tangent.z = 0.0f;
 
-			noise::module::Perlin myModule;
+			//noise::module::Perlin myModule;
 
-			myModule.SetNoiseQuality(noise::NoiseQuality::QUALITY_BEST);
+			//myModule.SetNoiseQuality(noise::NoiseQuality::QUALITY_BEST);
 
-			myModule.SetFrequency(1.f);
-			myModule.SetSeed(5);
+			//myModule.SetFrequency(1.f);
+			//myModule.SetSeed(5);
 	
-			double e = 0.0f;
+			//double e = 0.0f;
 			// Create points
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
 				{
-					e = 0.0f;
-					double nx = x / width - 0.5,
-						ny = y / height - 0.5;
+					//e = 0.0f;
+					//double nx = x / width - 0.5,
+					//	ny = y / height - 0.5;
 
 
-					e += myModule.GetValue(nx, ny, 0) / 2.0 + 0.5;
-					e += myModule.GetValue(2 * nx, 2 * ny, 0) / 2.0 + 0.5;
-					e += myModule.GetValue(4* nx, 2*  ny, 0) / 2.0 + 0.5;
-					e += myModule.GetValue(8*nx, 4*ny, 0) / 2.0 + 0.5;
-					e = pow(e, 5.3);
-					
-					temp_vert.position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
+					//e += myModule.GetValue(nx, ny, 0) / 2.0 + 0.5;
+					//e += myModule.GetValue(2 * nx, 2 * ny, 0) / 2.0 + 0.5;
+					//e += myModule.GetValue(4* nx, 2*  ny, 0) / 2.0 + 0.5;
+					//e += myModule.GetValue(8*nx, 4*ny, 0) / 2.0 + 0.5;
+					//e = pow(e, 5.3);
+					//
+					//temp_vert.position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
+					temp_vert.position.y = heightMap[(y*size*detail) + x];
 					temp_vert.position.x = (float)y / detail;
 					temp_vert.position.z = -(float)x / detail;
 					temp_vert.uv.x = y / ((float)size * detail);
