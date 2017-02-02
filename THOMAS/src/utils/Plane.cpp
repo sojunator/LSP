@@ -1,6 +1,7 @@
 #include "Plane.h"
 #include <time.h>
-
+#include <cmath>
+#include <algorithm>
 namespace thomas
 {
 	namespace utils
@@ -10,26 +11,52 @@ namespace thomas
 		{
 			std::vector<graphics::Vertex> verts;
 			std::vector<int> indices;
+			float width = (float)size * detail;
+			float height = width;
+
 			float x, y, z;
 			graphics::Vertex temp_vert;
 			srand(time(NULL));
 			// Defualt temp values, must be calulated later
-			temp_vert.uv.x = 0.0f;
-			temp_vert.uv.y = 0.0f;
 			temp_vert.normal.x = 0.0f;
 			temp_vert.normal.y = 1.0f;
 			temp_vert.normal.z = 0.0f;
+			temp_vert.bitangent.x = 0.0f;
+			temp_vert.bitangent.y = 0.0f;
+			temp_vert.bitangent.z = -1.0f;
+			temp_vert.tangent.x = 1.0f;
+			temp_vert.tangent.y = 0.0f;
+			temp_vert.tangent.z = 0.0f;
 
+			noise::module::Perlin myModule;
+
+			myModule.SetNoiseQuality(noise::NoiseQuality::QUALITY_BEST);
+
+			myModule.SetFrequency(1.f);
+			myModule.SetSeed(5);
+	
+			double e = 0.0f;
 			// Create points
-			for (int j = 0; j < size * detail; j++)
+			for (int y = 0; y < height; y++)
 			{
-				for (int i = 0; i < size * detail; i++)
+				for (int x = 0; x < width; x++)
 				{
-					temp_vert.position.x = (float)j / detail;
-					temp_vert.position.y = 0.0f;
-					temp_vert.position.z = -(float)i / detail;
-					temp_vert.uv.x = j / ((float)size * detail);
-					temp_vert.uv.y = 1-(i - (float)size * detail) / ((float)size * detail);
+					e = 0.0f;
+					double nx = x / width - 0.5,
+						ny = y / height - 0.5;
+
+
+					e += myModule.GetValue(nx, ny, 0) / 2.0 + 0.5;
+					e += myModule.GetValue(2 * nx, 2 * ny, 0) / 2.0 + 0.5;
+					e += myModule.GetValue(4* nx, 2*  ny, 0) / 2.0 + 0.5;
+					e += myModule.GetValue(8*nx, 4*ny, 0) / 2.0 + 0.5;
+					e = pow(e, 5.3);
+					
+					temp_vert.position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
+					temp_vert.position.x = (float)y / detail;
+					temp_vert.position.z = -(float)x / detail;
+					temp_vert.uv.x = y / ((float)size * detail);
+					temp_vert.uv.y = 1.0f - (x - (height) / (height));
 					verts.push_back(temp_vert);
 				}
 			}

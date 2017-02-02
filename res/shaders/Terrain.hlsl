@@ -62,9 +62,21 @@ VSOutput VSMain(in VSInput input)
 	return output;
 }
 
+float4 TerrainColour(float y)
+{
+    if (y < 0.5f)
+        return float4(0, 0/*102.0f / 255.0*/, 1, 1.0);
+    else if (y < 1.5)
+        return float4(0.0f, 1.0f, 0/*102.0f / 255.0f*/, 1.0f);
+    else
+        return float4(1.0f, 0.0f, 0.0f /*204.f / 255.0f*/, 1.0f);
+}
+
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-    float4 tex = diffuseTexture.Sample(diffuseSampler, input.tex);
-    return tex;
+    return float4(input.positionWS.y / 100, input.positionWS.y / 100, input.positionWS.y / 100, 1.0f);
+   return TerrainColour(input.positionWS.y);
+   float color = saturate(input.positionWS.y);
+   return float4(color, color, color, 1.0f);
 }
