@@ -27,7 +27,6 @@ public:
 
 	void Update()
 	{
-		m_waterMaterial->Update();
 	}
 
 

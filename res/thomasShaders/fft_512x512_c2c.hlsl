@@ -120,20 +120,20 @@ void Radix008A_CS(uint3 thread_id : SV_DispatchThreadID)
 	float2 D[8];
 
 	uint i;
-	uint imod = thread_id.x & (istride - 1);
-	uint iaddr = ((thread_id.x - imod) << 3) + imod;
+	uint imod = thread_id & (istride - 1);
+	uint iaddr = ((thread_id - imod) << 3) + imod;
 	for (i = 0; i < 8; i++)
 		D[i] = g_SrcData[iaddr + i * istride];
 
 	// Math
 	FFT_forward_8(D);
-	uint p = thread_id.x & (istride - pstride);
+	uint p = thread_id & (istride - pstride);
 	float phase = phase_base * (float)p;
 	TWIDDLE_8(D, phase);
 
 	// Store the result
-	uint omod = thread_id.x & (ostride - 1);
-	uint oaddr = ((thread_id.x - omod) << 3) + omod;
+	uint omod = thread_id & (ostride - 1);
+	uint oaddr = ((thread_id - omod) << 3) + omod;
     g_DstData[oaddr + 0 * ostride] = D[0];
     g_DstData[oaddr + 1 * ostride] = D[4];
     g_DstData[oaddr + 2 * ostride] = D[2];
@@ -154,7 +154,7 @@ void Radix008A_CS2(uint3 thread_id : SV_DispatchThreadID)
 	// Fetch 8 complex numbers
 	uint i;
 	float2 D[8];
-	uint iaddr = thread_id.x << 3;
+	uint iaddr = thread_id << 3;
 	for (i = 0; i < 8; i++)
 		D[i] = g_SrcData[iaddr + i];
 
@@ -162,8 +162,8 @@ void Radix008A_CS2(uint3 thread_id : SV_DispatchThreadID)
 	FFT_forward_8(D);
 
 	// Store the result
-	uint omod = thread_id.x & (ostride - 1);
-	uint oaddr = ((thread_id.x - omod) << 3) + omod;
+	uint omod = thread_id & (ostride - 1);
+	uint oaddr = ((thread_id - omod) << 3) + omod;
 	g_DstData[oaddr + 0 * ostride] = D[0];
 	g_DstData[oaddr + 1 * ostride] = D[4];
 	g_DstData[oaddr + 2 * ostride] = D[2];

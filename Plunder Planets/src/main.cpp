@@ -37,7 +37,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 	//Init materials
-	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("testShader"));
+	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 
 	thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("testShader"));
 

@@ -63,12 +63,15 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
 				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
-				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+				//ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 				
 
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
 
-
+				for (Material* mat : Material::GetLoadedMaterials())
+				{
+					mat->Update();
+				}
 
 				//For every shader
 				for (Shader* shader : loadedShaders)

@@ -27,6 +27,9 @@ cbuffer material : register(b1)
 	float4 diffuseColor;
 	float4 specularColor;
 	float specularPower;
+	float uvScale;
+	float uvOffset;
+	float texelLengthX2;
 }
 
 struct VSOutput
@@ -48,8 +51,7 @@ VSOutput VSMain(in VSInput input)
 
 	output.positionWS = mul(input.position, (float3x3) worldMatrix);
 
-	output.tex = input.uv;
-
+	output.tex = output.positionWS.xy * uvScale + uvOffset;
 	output.normal = mul(input.normal, (float3x3) worldMatrix);
 	output.normal = normalize(output.normal);
 
@@ -65,7 +67,6 @@ VSOutput VSMain(in VSInput input)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-
 	float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
 	return textureColor;
 }

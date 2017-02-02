@@ -24,6 +24,7 @@ cbuffer cbImmutable : register(b0)
 	uint g_OutHeight;
 	uint g_DtxAddressOffset;
 	uint g_DtyAddressOffset;
+	uint2 padding;
 };
 
 cbuffer cbChangePerFrame : register(b1)

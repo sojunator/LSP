@@ -73,6 +73,10 @@ namespace thomas
 		{
 			return m_textureType;
 		}
+		void Texture::SetTextureView(ID3D11ShaderResourceView * view)
+		{
+			m_data.textureView = view;
+		}
 		bool Texture::Initialized()
 		{
 			return m_initialized;

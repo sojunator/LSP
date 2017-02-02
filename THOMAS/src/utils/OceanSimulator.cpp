@@ -6,55 +6,15 @@ namespace thomas
 {
 	namespace utils
 	{
-		void thomas::utils::OceanSimulator::InitHeightMap(math::Vector2 * outH0, float * outOmega)
-		{
-			float halfSqrt2 = 0.7071068f;
-			int i, j;
-			math::Vector2 k, kn;
-
-			m_settings.windDir.Normalize();
-			math::Vector2 windDir = m_settings.windDir;
-
-			float a = m_settings.waveAmplitude * 1e-7f;	// It is too small. We must scale it for editing.
-			float v = m_settings.windSpeed;
-
-			//Init random generator
-			srand(0);
-
-
-			for (i = 0; i <= m_settings.mapDimension; i++)
-			{
-				// K is wave-vector, range [-|DX/W, |DX/W], [-|DY/H, |DY/H]
-				k.y = (-m_settings.mapDimension / 2.0f + i) * (2 * math::PI / m_settings.patchLength);
-
-				for (j = 0; j <= m_settings.mapDimension; j++)
-				{
-					k.x = (-m_settings.mapDimension / 2.0f + j) * (2 * math::PI / m_settings.patchLength);
-
-					float phil = (k.x == 0 && k.y == 0) ? 0 : sqrtf(Phillips(k, windDir, v, a, m_settings.windDependency));
-					outH0[i*(m_settings.mapDimension + 4) + j].x = float(phil*Gauss()*halfSqrt2);
-					outH0[i*(m_settings.mapDimension + 4) + j].y = float(phil*Gauss()*halfSqrt2);
-
-					// The angular frequency is following the dispersion relation:
-					//            out_omega^2 = g*k
-					// The equation of Gerstner wave:
-					//            x = x0 - K/k * A * sin(dot(K, x0) - sqrt(g * k) * t), x is a 2D vector.
-					//            z = A * cos(dot(K, x0) - sqrt(g * k) * t)
-					// Gerstner wave shows that a point on a simple sinusoid wave is doing a uniform circular
-					// motion with the center (x0, y0, z0), radius A, and the circular plane is parallel to
-					// vector K.
-					outOmega[i * (m_settings.mapDimension + 4) + j] = sqrtf(m_settings.gravity * sqrtf(k.x * k.x + k.y * k.y));
-				}
-			}
-		}
-
+		
+		#define PAD16(n) (((n)+15)/16*16)
 		float OceanSimulator::Gauss()
 		{
 			float u1 = rand() / (float)RAND_MAX;
 			float u2 = rand() / (float)RAND_MAX;
 			if (u1 < 1e-6f)
 				u1 = 1e-6f;
-			return (sqrtf(-2 * logf(u1))*cosf(2 * math::PI*u2));
+			return sqrtf(-2 * logf(u1))*cosf(2 * math::PI*u2);
 		}
 
 		float OceanSimulator::Phillips(math::Vector2 k, math::Vector2 w, float v, float a, float dir_depend)
@@ -64,7 +24,7 @@ namespace thomas
 			// damp out waves with very small length w << l
 			float damp = l / 1000;
 
-			float kSqr = k.x * k.x + k.y * w.y;
+			float kSqr = k.x * k.x + k.y * k.y;
 			float kCos = k.x * w.x + k.y * w.y;
 			float phillips = a * expf(-1 / (l * l * kSqr)) / (kSqr * kSqr * kSqr) * (kCos * kCos);
 
@@ -72,7 +32,7 @@ namespace thomas
 			if (kCos < 0)
 				phillips *= dir_depend;
 
-			// damp out waves with very small length w << l
+			// damp out waves with very small length damp << l
 			return phillips * expf(-kSqr * damp * damp);
 		}
 
@@ -87,22 +47,18 @@ namespace thomas
 			blobCS = graphics::Shader::Compile("../res/thomasShaders/fft_512x512_c2c.hlsl", "cs_4_0", "Radix008A_CS");
 			blobCS2 = graphics::Shader::Compile("../res/thomasShaders/fft_512x512_c2c.hlsl", "cs_4_0", "Radix008A_CS2");
 
-			if (blobCS)
-			{
-				ThomasCore::GetDevice()->CreateComputeShader(blobCS->GetBufferPointer(), blobCS->GetBufferSize(), NULL, &plan->radix008ACS);
-			}
 
-			if (blobCS2)
-			{
-				ThomasCore::GetDevice()->CreateComputeShader(blobCS2->GetBufferPointer(), blobCS2->GetBufferSize(), NULL, &plan->radix008ACS2);
-			}
+			ThomasCore::GetDevice()->CreateComputeShader(blobCS->GetBufferPointer(), blobCS->GetBufferSize(), NULL, &plan->radix008ACS);
+
+			ThomasCore::GetDevice()->CreateComputeShader(blobCS2->GetBufferPointer(), blobCS2->GetBufferSize(), NULL, &plan->radix008ACS2);
+			
 		
 			SAFE_RELEASE(blobCS);
 			SAFE_RELEASE(blobCS2);
 
 			// Constants
 			// Create 6 cbuffers for 512x512 transform
-		//	create_cbuffers_512x512(plan, pd3dDevice, slices);
+			FFT512x512CreateCBuffers(plan, slices);
 
 			// Temp buffer
 			D3D11_BUFFER_DESC buffDesc;
@@ -173,13 +129,13 @@ namespace thomas
 				float phaseBase;
 			};
 
-			float TWO_PI = 6.283185307179586476925286766559;
+	//		 TWO_PI = 6.283185307179586476925286766559;
 
 			// Buffer 0
 			const UINT threadCount = slices * (512 * 512) / 8;
 			UINT oStride = 512 * 512 / 8;
 			UINT iStride = oStride;
-			double phaseBase = -TWO_PI / (512.0 * 512.0);
+			double phaseBase = -6.283185307179586476925286766559 / (512.0 * 512.0);
 
 			CB_Structure cbDataBuf0 = { threadCount, oStride, iStride, 512, (float)phaseBase };
 			cbData.pSysMem = &cbDataBuf0;
@@ -305,6 +261,7 @@ namespace thomas
 		{
 			m_settings = settings;
 			m_timePassed = 0;
+
 			// Height map H(0)
 			int heightMapSize = (settings.mapDimension + 4) * (settings.mapDimension + 1);
 			math::Vector2* h0Data = new math::Vector2[heightMapSize * sizeof(math::Vector2)];
@@ -371,35 +328,24 @@ namespace thomas
 
 			blobUpdateSpectrumCS = graphics::Shader::Compile("../res/thomasShaders/ocean_simulator_cs.hlsl", "cs_4_0", "UpdateSpectrumCS");
 
-			if (blobUpdateSpectrumCS)
-			{
-				ThomasCore::GetDevice()->CreateComputeShader(blobUpdateSpectrumCS->GetBufferPointer(), blobUpdateSpectrumCS->GetBufferSize(), NULL, &m_updateSpectrumCS);
-				blobUpdateSpectrumCS->Release();
-			}
+			ThomasCore::GetDevice()->CreateComputeShader(blobUpdateSpectrumCS->GetBufferPointer(), blobUpdateSpectrumCS->GetBufferSize(), NULL, &m_updateSpectrumCS);
+			SAFE_RELEASE(blobUpdateSpectrumCS);
+
 			// Vertex & pixel shaders
 			ID3DBlob* blobQuadVS = NULL;
 			ID3DBlob* blobUpdateDisplacementPS = NULL;
-			ID3DBlob* blobGenGradientFoldingPS = NULL;
+			ID3DBlob* blobGenNormalPS = NULL;
 
 			blobQuadVS = graphics::Shader::Compile("../res/thomasShaders/ocean_simulator_vs_ps.hlsl", "vs_4_0", "QuadVS");
 			blobUpdateDisplacementPS = graphics::Shader::Compile("../res/thomasShaders/ocean_simulator_vs_ps.hlsl", "ps_4_0", "UpdateDisplacementPS");
-			blobGenGradientFoldingPS = graphics::Shader::Compile("../res/thomasShaders/ocean_simulator_vs_ps.hlsl", "ps_4_0", "GenGradientFoldingPS");
+			blobGenNormalPS = graphics::Shader::Compile("../res/thomasShaders/ocean_simulator_vs_ps.hlsl", "ps_4_0", "GenGradientFoldingPS");
 
-			if (blobQuadVS)
-			{
-				ThomasCore::GetDevice()->CreateVertexShader(blobQuadVS->GetBufferPointer(), blobQuadVS->GetBufferSize(), NULL, &m_quadVS);
-				
-			}
-			if (blobUpdateDisplacementPS)
-			{
-				ThomasCore::GetDevice()->CreatePixelShader(blobUpdateDisplacementPS->GetBufferPointer(), blobUpdateDisplacementPS->GetBufferSize(), NULL, &m_updateDisplacementPS);
-				blobUpdateDisplacementPS->Release();
-			}
-			if (blobGenGradientFoldingPS)
-			{
-				ThomasCore::GetDevice()->CreatePixelShader(blobGenGradientFoldingPS->GetBufferPointer(), blobGenGradientFoldingPS->GetBufferSize(), NULL, &m_genNormalsPS);
-				blobGenGradientFoldingPS->Release();
-			}
+			ThomasCore::GetDevice()->CreateVertexShader(blobQuadVS->GetBufferPointer(), blobQuadVS->GetBufferSize(), NULL, &m_quadVS);
+			ThomasCore::GetDevice()->CreatePixelShader(blobUpdateDisplacementPS->GetBufferPointer(), blobUpdateDisplacementPS->GetBufferSize(), NULL, &m_updateDisplacementPS);
+			ThomasCore::GetDevice()->CreatePixelShader(blobGenNormalPS->GetBufferPointer(), blobGenNormalPS->GetBufferSize(), NULL, &m_genNormalsPS);
+
+			SAFE_RELEASE(blobUpdateDisplacementPS);
+			SAFE_RELEASE(blobGenNormalPS);
 
 			// Input layout
 			D3D11_INPUT_ELEMENT_DESC quadLayoutDesc[] =
@@ -410,6 +356,8 @@ namespace thomas
 			{
 				ThomasCore::GetDevice()->CreateInputLayout(quadLayoutDesc, 1, blobQuadVS->GetBufferPointer(), blobQuadVS->GetBufferSize(), &m_quadLayout);
 			}
+
+			SAFE_RELEASE(blobQuadVS);
 
 			// Quad vertex buffer
 			D3D11_BUFFER_DESC vbDesc;
@@ -442,16 +390,19 @@ namespace thomas
 			UINT outputHeight = actualDim;
 			UINT dtxOffset = actualDim * actualDim;
 			UINT dtyOffset = actualDim * actualDim * 2;
-			UINT immutableConsts[] = { actualDim, inputWidth, outputWidth, outputHeight, dtxOffset, dtyOffset };
+			UINT pad1 = dtyOffset;
+			UINT pad2 = dtxOffset;
+			UINT immutableConsts[] = { actualDim, inputWidth, outputWidth, outputHeight, dtxOffset, dtyOffset, pad1, pad2 };
 			D3D11_SUBRESOURCE_DATA initCB0 = { &immutableConsts[0], 0, 0 };
 
+			
 
 			D3D11_BUFFER_DESC cbDesc;
 			cbDesc.Usage = D3D11_USAGE_IMMUTABLE;
 			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			cbDesc.CPUAccessFlags = 0;
 			cbDesc.MiscFlags = 0;
-			cbDesc.ByteWidth = (((sizeof(immutableConsts)) + 15) / 16 * 16);
+			cbDesc.ByteWidth = sizeof(immutableConsts);
 			ThomasCore::GetDevice()->CreateBuffer(&cbDesc, &initCB0, &m_immutableCB);
 
 			ID3D11Buffer* cbs[1] = { m_immutableCB };
@@ -462,7 +413,7 @@ namespace thomas
 			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 			cbDesc.MiscFlags = 0;
-			cbDesc.ByteWidth = (((sizeof(float)*3) + 15) / 16 * 16);
+			cbDesc.ByteWidth = sizeof(float)*4;
 			ThomasCore::GetDevice()->CreateBuffer(&cbDesc, NULL, &m_perFrameCB);
 
 			// FFT
@@ -512,9 +463,51 @@ namespace thomas
 			SAFE_RELEASE(m_perFrameCB);
 		}
 
-		void thomas::utils::OceanSimulator::Update()
+		void thomas::utils::OceanSimulator::InitHeightMap(math::Vector2 * outH0, float * outOmega)
 		{
-			m_timePassed += Time::GetDeltaTime();
+			#define HALF_SQRT_2 0.7071068f
+			int i, j;
+			math::Vector2 k, kn;
+
+			m_settings.windDir.Normalize();
+			math::Vector2 windDir = m_settings.windDir;
+
+			float a = m_settings.waveAmplitude * 1e-7f;	// It is too small. We must scale it for editing.
+			float v = m_settings.windSpeed;
+
+			//Init random generator
+			srand(0);
+
+			for (i = 0; i <= m_settings.mapDimension; i++)
+			{
+				// K is wave-vector, range [-|DX/W, |DX/W], [-|DY/H, |DY/H]
+				k.y = (-m_settings.mapDimension / 2.0f + i) * (2 * math::PI / m_settings.patchLength);
+
+				for (j = 0; j <= m_settings.mapDimension; j++)
+				{
+					k.x = (-m_settings.mapDimension / 2.0f + j) * (2 * math::PI / m_settings.patchLength);
+
+					float phil = (k.x == 0 && k.y == 0) ? 0 : sqrtf(Phillips(k, windDir, v, a, m_settings.windDependency));
+
+					outH0[i*(m_settings.mapDimension + 4) + j].x = float(phil*Gauss()*HALF_SQRT_2);
+					outH0[i*(m_settings.mapDimension + 4) + j].y = float(phil*Gauss()*HALF_SQRT_2);
+
+					// The angular frequency is following the dispersion relation:
+					//            out_omega^2 = g*k
+					// The equation of Gerstner wave:
+					//            x = x0 - K/k * A * sin(dot(K, x0) - sqrt(g * k) * t), x is a 2D vector.
+					//            z = A * cos(dot(K, x0) - sqrt(g * k) * t)
+					// Gerstner wave shows that a point on a simple sinusoid wave is doing a uniform circular
+					// motion with the center (x0, y0, z0), radius A, and the circular plane is parallel to
+					// vector K.
+					outOmega[i * (m_settings.mapDimension + 4) + j] = sqrtf(m_settings.gravity * sqrtf(k.x * k.x + k.y * k.y));
+				}
+			}
+		}
+
+		void thomas::utils::OceanSimulator::Update(float dt)
+		{
+			m_timePassed += dt;
 
 			// ---------------------------- H(0) -> H(t), D(x, t), D(y, t) --------------------------------
 			// Compute shader

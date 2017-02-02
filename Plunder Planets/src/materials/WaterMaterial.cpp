@@ -12,6 +12,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 	m_oceanSim = new utils::OceanSimulator(m_oceanSettings);
 	
+	m_oceanSim->Update(0);
 //	m_shaderTopology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
 	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "../res/textures/Wavy_Water - Height.png"));
 
@@ -20,7 +21,9 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "../res/textures/Wavy_Water - Height (Normal Map).png"));
 //	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/textures/Wavy_Water - Specular.png"));
-	m_materialProperties.time = 0.0;
+	m_materialProperties.uvScale = 1.0/ m_oceanSettings.patchLength;
+	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.mapDimension;
+	m_materialProperties.texelLengthX2 = m_oceanSettings.patchLength / m_oceanSettings.mapDimension * 2;
 
 	m_materialProperties.ambientColor = math::Color(1.0, 1.0, 1.0);
 	m_materialProperties.diffuseColor = math::Color(1.0, 1.0, 1.0);
@@ -33,13 +36,9 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 void WaterMaterial::Update()
 {
 	//m_materialProperties.time += Time::GetDeltaTime()*0.01f;
-	if (Input::GetKeyDown(Input::Keys::K))
-	{
-		m_materialProperties.tess += 1.0;
-	}
 
-	m_oceanSim->Update();
-
+	m_oceanSim->Update(Time::GetDeltaTime());
+	m_textures[0]->SetTextureView(m_oceanSim->GetDisplacementMap());
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 }
 

@@ -22,9 +22,9 @@ private:
 		math::Color diffuseColor;
 		math::Color specularColor;
 		float specularPower;
-		float tess;
-		float time;
-		float padding;
+		float uvScale;
+		float uvOffset;
+		float texelLengthX2;
 	};
 	
 	utils::OceanSimulator::OceanSettings m_oceanSettings;

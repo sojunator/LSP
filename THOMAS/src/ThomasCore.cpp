@@ -49,6 +49,7 @@ namespace thomas {
 
 		//Sound::Play(Sound::Music::mThomas);
 
+
 		return s_initialized;
 	}
 

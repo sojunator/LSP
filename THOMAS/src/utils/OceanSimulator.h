@@ -76,7 +76,7 @@ namespace thomas
 			OceanSimulator(OceanSettings& settings);
 			~OceanSimulator();
 
-			void Update();
+			void Update(float dt);
 
 			ID3D11ShaderResourceView* GetDisplacementMap();
 			ID3D11ShaderResourceView* GetNormalMap();

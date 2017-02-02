@@ -49,6 +49,7 @@ namespace thomas
 			ID3D11ShaderResourceView* GetTextureView();
 			TextureType GetTextureType();
 
+			void SetTextureView(ID3D11ShaderResourceView* view);
 			bool Initialized();
 
 			bool Bind();
