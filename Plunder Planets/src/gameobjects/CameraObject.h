@@ -26,13 +26,17 @@ public:
 		m_flySpeed = m_normalSpeed;
 		m_jaw = 0;
 		m_pitch = 0;
+
+		
+		
+
 		return true;
 	}
 
 	void Update()
 	{
 
-
+		
 		
 		if (Input::GetKey(Input::Keys::A))
 		{

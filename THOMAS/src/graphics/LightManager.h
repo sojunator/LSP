@@ -20,24 +20,20 @@ namespace thomas
 			//match these structs on the graphicscard
 			struct DirectionalLightStruct
 			{
-				thomas::math::Vector4 ambientColor;
-				thomas::math::Vector4 diffuseColor;
-				thomas::math::Vector4 specularColor;
-
+				thomas::math::Vector4 lightColor;
 				thomas::math::Vector3 lightDirection;
 				float padding;
 			};
 			struct PointLightStruct
 			{
-				float attenuationFactor;
-				int padding;
-				int paading;
-				int aasdf;
-				thomas::math::Vector4 ambientColor;
-				thomas::math::Vector4 diffuseColor;
-				thomas::math::Vector4 specularColor;
-
-				thomas::math::Vector4 position;
+				float constantAttenuation;
+				float linearAttenuation;
+				float quadraticAttenuation;
+				float lightRange;
+				thomas::math::Vector4 lightColor;
+				thomas::math::Vector3 position;
+				float padding;
+				
 			};
 			struct LightBufferStruct
 			{
@@ -46,7 +42,8 @@ namespace thomas
 				int padding1;
 				int padding2;
 				DirectionalLightStruct directionalLights[3];
-				PointLightStruct pointLights[3];
+				PointLightStruct pointLights[20];
+				
 			} static s_lightstruct;
 
 			

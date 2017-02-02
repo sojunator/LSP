@@ -8,8 +8,7 @@ SamplerState specularSampler : register(s1);
 Texture2D normalTexture : register(t2);
 SamplerState normalSampler : register(s2);
 
-SamplerState ObjSamplerState : register(s4);
-TextureCube SkyMap : register (t4);
+
 
 struct VSInput
 {
@@ -41,20 +40,20 @@ cbuffer material : register(b1)
 //Struct coupled with LightManager
 struct DirLight
 {
-	float4 lightColor;
+	float4 ambientColor;
+	float4 diffuseColor;
+	float4 specularColor;
 	float3 lightDir;
 	float padding;
 };
 //Struct coupled with LightManager
 struct PointLight
 {
-	float constantAttenuation;
-	float linearAttenuation;
-	float quadraticAttenuation;
-	float lightRange;
-	float4 lightColor;
+	float attenuationFactor;
 	float3 position;
-	float padding;
+	float4 ambientColor;
+	float4 diffuseColor;
+	float4 specularColor;
 };
 //Buffer coupled with LightManager
 cbuffer lightBuffer : register(b2)
@@ -64,7 +63,7 @@ cbuffer lightBuffer : register(b2)
 	int padding1;
 	int padding2;
 	DirLight directionalLights[3];
-	PointLight pointLights[20];
+	PointLight pointLights[3];
 }
 
 struct VSOutput
@@ -103,73 +102,62 @@ VSOutput VSMain(in VSInput input)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-	float4 globalAmbientColor = float4(0.05, 0.05, 0.05, 1) * ambientColor;//materal and global specific. TODO:add ambient to lights instead of global
+
     float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
 
-	//bumpnormals
 	float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
 	bumpNormal = normalize(bumpNormal);
 
-
-	float4 outputColor = float4(0,0,0,0);
+	float4 outputColor = float4(0,0,0,1);
 
 	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{
 		float lightIntensity = saturate(dot(bumpNormal, -directionalLights[i].lightDir));
 
 
-		float4 diffuse = textureColor*lightIntensity*directionalLights[i].lightColor;
-		float4 specular = float4(0, 0, 0, 0);
+		float4 diffuse = saturate(directionalLights[i].diffuseColor*lightIntensity);
+		float4 specular = float4(0,0,0,0);
 
 		if (lightIntensity > 0.0f)
 		{
+
 			float3 viewDirection = camPosition - input.positionWS;
 
 			float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-			float3 halfwayVector = normalize(-directionalLights[i].lightDir + viewDirection);
-			specular = pow(saturate(dot(bumpNormal, halfwayVector)), specularPower);// *lightIntensity;
+			float3 reflection = normalize(-directionalLights[i].lightDir + viewDirection);
+			specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
 			specular = specular * specularIntensity;
 		}
 	
-		outputColor += diffuse + specular;
+		outputColor += directionalLights[i].ambientColor*ambientColor*0.05f + diffuse*textureColor + specular*directionalLights[i].specularColor;
 
 	}
-	
 	for (uint p = 0; p < nrOfPointLights; p++)
 	{
-		float3 pointLightDir = pointLights[p].position - input.positionWS;
-
-		//calculate attenuation
-		float distance = length(pointLightDir);
+		float3 pointlightdir = pointLights[p].position - input.positionWS;
+		float distance = length(pointlightdir);
 		float distanceSquared = distance * distance;
+		normalize(pointlightdir);
+		float lightIntensity = saturate(dot(bumpNormal, pointlightdir));
 
-		float lightRange = 5;
-		float attenuationconst = 0.6f;
-		float attenuationlin = 0.3f;
-		float attenuationquad = 0.1f;
-		float attenuation = pointLights[p].lightRange / (pointLights[p].constantAttenuation + pointLights[p].linearAttenuation * distance + pointLights[p].quadraticAttenuation * distanceSquared);
-
-		normalize(pointLightDir);
-
-		float lightIntensity = saturate(dot(bumpNormal, pointLightDir));
-
-		float4 diffuse = textureColor*lightIntensity*pointLights[p].lightColor;
+		float4 diffuse = saturate(pointLights[p].diffuseColor*lightIntensity);
 		float4 specular = float4(0, 0, 0, 0);
 
 		if (lightIntensity > 0.0f)
 		{
+
 			float3 viewDirection = camPosition - input.positionWS;
 
 			float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-			float3 halfwayVector = normalize(pointLightDir + viewDirection);
-			specular = pow(saturate(dot(bumpNormal, halfwayVector)), specularPower);// *lightIntensity;
+			float3 reflection = normalize(pointLights[p].position + viewDirection);
+			specular = pow(saturate(dot(bumpNormal, reflection)), specularPower)*lightIntensity;
 			specular = specular * specularIntensity;
 		}
 
-		outputColor += (diffuse + specular) * attenuation;
+		outputColor += (pointLights[p].ambientColor*ambientColor*textureColor*0.05f + diffuse*textureColor + specular*pointLights[p].specularColor) * pointLights[p].attenuationFactor / distanceSquared;
 	}
-	
-	return outputColor + globalAmbientColor;
+
+	return outputColor;
 }

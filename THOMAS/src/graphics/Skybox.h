@@ -23,6 +23,7 @@ namespace thomas
 			bool Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix);
 			bool Unbind();
 			void Draw();
+			void BindSkyboxTexture();
 
 		private:
 

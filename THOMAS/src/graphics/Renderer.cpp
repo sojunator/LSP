@@ -76,8 +76,9 @@ namespace thomas
 				//For every shader
 				for (Shader* shader : loadedShaders)
 				{
+					
 					shader->Bind();
-
+					
 					LightManager::BindAllLights();
 
 					//Get the materials that use the shader
