@@ -12,8 +12,6 @@ public:
 	TestDirectionalLight() : GameObject("TestDirectionalLight")
 	{
 		m_dirLight = AddComponent<component::DirectionalLight>();
-		m_dirLight2 = AddComponent<component::DirectionalLight>();
-		m_dirLight3 = AddComponent<component::DirectionalLight>();
 		
 	}
 
@@ -38,7 +36,5 @@ public:
 	}
 private:
 	component::DirectionalLight* m_dirLight;
-	component::DirectionalLight* m_dirLight2;
-	component::DirectionalLight* m_dirLight3;
 	float m_rot;
 };
