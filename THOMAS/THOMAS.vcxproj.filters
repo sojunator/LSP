@@ -42,7 +42,6 @@
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\graphics\Bitmap.cpp" />
     <ClCompile Include="src\object\component\SoundComponent.cpp" />
-    <ClCompile Include="src\graphics\TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Material.h" />
@@ -90,9 +89,9 @@
     <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\object\component\SoundComponent.h" />
-    <ClInclude Include="src\graphics\TextRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
