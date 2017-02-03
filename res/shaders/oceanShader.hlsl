@@ -53,17 +53,17 @@ VSOutput VSMain(in VSInput input)
 {
 	VSOutput output;
 
-	float4 pos = float4(input.position,1 );
+	float4 pos = float4(input.position.xz,0, 1 );
 
-	output.tex = input.uv;
+	output.tex = pos.xy*uvScale+uvOffset;
 
 	float3 displacement = displacementTexture.SampleLevel(displacementSampler, output.tex, 0).xyz;
-
+	 
 	pos.xyz += displacement;
 
-	output.positionWS = mul(pos, worldMatrix).xyz;
+	output.positionWS = mul(pos.xzyw, worldMatrix).xyz;
 
-	output.position = mul(pos, mvpMatrix);
+	output.position = mul(pos.xzyw, mvpMatrix);
 
 	output.normal = mul(input.normal, (float3x3) worldMatrix);
 	output.normal = normalize(output.normal);
@@ -96,12 +96,12 @@ float4 PSMain(VSOutput input) : SV_TARGET
 
 	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
-	float3 waterColor = lerp(float3(0.0, 0.1, 0.9), reflection, 0.5);
+	float3 waterColor = lerp(float3(0.0, 0.1, 0.9), reflection, 0.1);
 
 	float cosSpec = clamp(dot(reflectVec, sunDir), 0, 1);
 	float sunSpot = pow(cosSpec, 400); //shiny
 
 	waterColor += float3(0.9, 0.7, 0.07) * sunSpot;
 	
-	return float4(normal, 1);
+	return float4(waterColor, 1);
 }

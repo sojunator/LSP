@@ -29,17 +29,14 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// pointy crests.
 	m_oceanSettings.choppy_scale = 1.3f;
 
-	m_oceanSim = new utils::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
+	m_oceanSim = new utils::ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 	
 	m_oceanSim->updateDisplacementMap(0);
-//	m_shaderTopology = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
-	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "../res/textures/Wavy_Water - Height.png"));
+
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "OceanDisplacement", m_oceanSim->getD3D11DisplacementMap(), NULL));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "OceanNormal", m_oceanSim->getD3D11GradientMap(), NULL));
 
 
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "Ocean", m_oceanSim->getD3D11DisplacementMap(), NULL));
-
-	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "../res/textures/Wavy_Water - Height (Normal Map).png"));
-//	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/textures/Wavy_Water - Specular.png"));
 	m_materialProperties.uvScale = 1.0/ m_oceanSettings.patch_length;
 	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.dmap_dim;
 	m_materialProperties.texelLengthX2 = m_oceanSettings.patch_length / m_oceanSettings.dmap_dim * 2;
@@ -49,6 +46,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.specularColor = math::Color(1.0, 1.0, 1.0);
 	m_materialProperties.specularPower = 10.0 / 1000.0;
 
+
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 }
 
@@ -57,7 +55,6 @@ void WaterMaterial::Update()
 	//m_materialProperties.time += Time::GetDeltaTime()*0.01f;
 	time += Time::GetDeltaTime();
 	m_oceanSim->updateDisplacementMap(time);
-	m_textures[0]->SetTextureView(m_oceanSim->getD3D11DisplacementMap());
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 }
 

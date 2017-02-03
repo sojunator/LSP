@@ -1,6 +1,6 @@
 #pragma once
 #include "Thomas.h"
-#include "utils\OceanSimulator.h"
+#include "utils/Ocean/OceanSimulator.h"
 using namespace thomas;
 using namespace graphics;
 
@@ -27,8 +27,8 @@ private:
 		float texelLengthX2;
 	};
 	float time;
-	utils::OceanParameter m_oceanSettings;
-	utils::OceanSimulator* m_oceanSim;
+	utils::ocean::OceanParameter m_oceanSettings;
+	utils::ocean::OceanSimulator* m_oceanSim;
 	MaterialProperties m_materialProperties;
 
 };

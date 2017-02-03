@@ -38,8 +38,8 @@
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\Sound.cpp" />
-    <ClCompile Include="src\utils\OceanSimulator.cpp" />
-    <ClCompile Include="src\utils\FFT\fft_512x512_c2c.cpp" />
+    <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
+    <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Material.h" />
@@ -83,8 +83,8 @@
     <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\graphics\Skybox.h" />
     <ClInclude Include="src\Sound.h" />
-    <ClInclude Include="src\utils\OceanSimulator.h" />
-    <ClInclude Include="src\utils\FFT\fft_512x512.h" />
+    <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />
+    <ClInclude Include="src\utils\Ocean\OceanSimulator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
