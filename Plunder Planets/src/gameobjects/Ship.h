@@ -38,7 +38,9 @@ public:
 
 		m_controlSensitivity = 0.1;
 
+		m_cameraSpeed = 3;
 
+		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 25 + math::Vector3(0, 15, 0));
 		return true;
 	}
 
@@ -96,9 +98,14 @@ public:
 
 		}
 		float right_x = Input::GetRightStickX();
+		float right_y = Input::GetRightStickY();
 		if (std::abs(right_x) > m_controlSensitivity)
 		{
-			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Right()  * dt * right_x * 25);
+			math::Vector3 v = m_transform->GetPosition() - m_cameraObject->m_transform->GetPosition();
+			m_cameraObject->m_transform->Translate(v);
+			m_cameraObject->m_transform->Rotate(m_cameraSpeed * right_x * dt, 0, 0);
+			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * v.Length());
+			
 		}
 		else
 		{
@@ -116,6 +123,8 @@ private:
 	float m_accelerationSpeed;
 	float m_retardationSpeed;
 	float m_maxSpeed;
+
+	float m_cameraSpeed;
 
 
 	component::RenderComponent* m_renderer;
