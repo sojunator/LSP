@@ -15,8 +15,6 @@
 #include "gameobjects\TestPointLight.h"
 #include "gameobjects\Ship.h"
 
-//TODO
-//Switch to OpenGL instead of being faggots
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -27,7 +25,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init shaders
 	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/test.hlsl");
+		"../res/shaders/phong.hlsl");
 
 
 	 thomas::graphics::Shader::CreateShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD,
@@ -52,7 +50,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ship/ship.fbx", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
+
+	//utils::Plane::PlaneData plane = utils::Plane::CreatePlane(128, 1);
+
+	thomas::Islands islands(3, m, 1024/4, 0.125, 1024, 20);
+	Model * model = Model::CreateModel("Plane-1", islands.GetIsland(0));
+	Model * model1 = Model::CreateModel("Plane-2", islands.GetIsland(1));
+	Model * model2 = Model::CreateModel("Plane-3", islands.GetIsland(2));
+
+
+
 
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
@@ -62,6 +69,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//TestObject* t = new TestObject();
 	
+	new TerrainObject();
 	TestDirectionalLight* dirLight = new TestDirectionalLight();
 	//TestPointLight* pointLight = new TestPointLight();
 	CameraObject* c = new CameraObject();

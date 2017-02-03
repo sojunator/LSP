@@ -13,7 +13,7 @@ Material * TerrainMaterial::CreateInstance(std::string dir, std::string name, ai
 
 TerrainMaterial::TerrainMaterial(std::string name, Shader* shader) : Material(name, shader)
 {
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/dearleader.jpg"));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/dearleader.png"));
 }
 
 TerrainMaterial::TerrainMaterial(std::string dir, std::string name, aiMaterial * material, Shader * shader) : Material(name, shader)

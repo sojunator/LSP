@@ -50,6 +50,7 @@ namespace thomas
 				ID3D11ShaderResourceView* getD3D11GradientMap();
 
 				const OceanParameter& getParameters();
+				void SetParameters(OceanParameter& param);
 
 
 			protected:

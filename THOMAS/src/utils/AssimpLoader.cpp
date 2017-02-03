@@ -135,6 +135,7 @@ namespace thomas
 				material->Get(_AI_MATKEY_MAPPING_BASE, aiTextureType_NORMALS, 0, texInfo.mappingMode);
 				textureInfos.push_back(texInfo);
 			}
+
 				
 
 			//Create a texture object for every texture found.

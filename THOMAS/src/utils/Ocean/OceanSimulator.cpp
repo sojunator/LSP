@@ -576,6 +576,11 @@ namespace thomas
 				return m_param;
 			}
 
+			void OceanSimulator::SetParameters(OceanParameter & param)
+			{
+				this->m_param = param;
+			}
+
 		}
 	}
 }

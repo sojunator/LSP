@@ -25,8 +25,8 @@ namespace thomas
 			if (utils::D3d::InitRenderer(s_backBuffer, s_depthStencilState, s_depthStencilView, s_depthBuffer))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID , D3D11_CULL_BACK);
-				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_NONE);
+				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
 				return true;
 
 			}
@@ -45,7 +45,7 @@ namespace thomas
 		{
 
 
-			
+
 
 			//TODO: Find out if this is the fastest order of things.
 
@@ -59,6 +59,20 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 
 
+				
+
+
+
+
+
+				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
+
+				for (Material* mat : Material::GetLoadedMaterials())
+				{
+					ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+					mat->Update();
+				}
+
 				if (Input::GetKey(Input::Keys::X))
 				{
 					ThomasCore::GetDeviceContext()->RSSetState(s_wireframeRasterState);
@@ -68,23 +82,12 @@ namespace thomas
 					ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 				}
 
-
-				
-				
-
-				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
-
-				for (Material* mat : Material::GetLoadedMaterials())
-				{
-					mat->Update();
-				}
-
 				//For every shader
 				for (Shader* shader : loadedShaders)
 				{
-					
+
 					shader->Bind();
-					
+
 					LightManager::BindAllLights();
 					camera->BindReflection();
 					//Get the materials that use the shader
@@ -97,14 +100,17 @@ namespace thomas
 						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 						{
 							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
-
+							Model* model = renderComponent->GetModel();
 
 							BindGameObjectBuffer(camera, gameObject);
 							//Draw every mesh of gameObjects model that has
-							for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+							if (model)
 							{
-								mesh->Bind(); //bind vertex&index buffer
-								mesh->Draw();
+								for (Mesh* mesh : model->GetMeshesByMaterial(mat))
+								{
+									mesh->Bind(); //bind vertex&index buffer
+									mesh->Draw();
+								}
 							}
 							UnBindGameObjectBuffer();
 

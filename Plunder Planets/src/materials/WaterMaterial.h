@@ -25,7 +25,15 @@ private:
 		float uvOffset;
 		float texelLengthX2;
 		math::Vector3 bendParam;
-		float padding;
+		float g_PerlinSize;
+		math::Vector3 g_PerlinAmplitude;
+		float pad1;
+		math::Vector3 g_PerlinOctave;
+		float pad2;
+		math::Vector3 g_PerlinGradient;
+		float pad3;
+		math::Vector2 perlinMovement;
+		math::Vector2 pad4;
 	};
 	float time;
 	utils::ocean::OceanParameter m_oceanSettings;

@@ -9,13 +9,18 @@ private:
 public:
 	WaterObject() : GameObject("WaterObject")
 	{
-		int dim = 8000;
+		int dim = 2000;
 
 		m_waterMaterial = (Material::CreateMaterial("waterMat", "waterMaterial"));
-		Model::CreateModel("waterModel", utils::Plane::CreatePlane(dim, 1.0/16, "waterPlane", m_waterMaterial));
+
+		utils::Plane::PlaneData pData =  utils::Plane::CreatePlane(dim, 1.0 / 8);
+		Mesh* m = new Mesh(pData.verts, pData.indices, "oceanMesh", m_waterMaterial);
+		std::vector<Mesh*> meshes;
+		meshes.push_back(m);
+		Model::CreateModel("ocean", meshes);
 
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("waterModel");
+		m_renderer->SetModel("ocean");
 
 		
 		//m_transform->SetScale(0.05);

@@ -1,7 +1,7 @@
 //Globals
 
-Texture2D diffuseTexture : register(t0);
-SamplerState diffuseSampler : register(s0);
+Texture2D perlinTexture : register(t0);
+SamplerState perlinSampler : register(s0);
 
 Texture1D fresnelTexture : register(t1);
 SamplerState fresnelSampler : register(s1);
@@ -16,6 +16,8 @@ TextureCube reflectionTexture : register(t4);
 SamplerState reflectionSampler : register(s4);
 
 
+#define PATCH_BLEND_BEGIN		100
+#define PATCH_BLEND_END			50000
 
 cbuffer mvp : register(b0)
 {
@@ -35,7 +37,15 @@ cbuffer material : register(b1)
 	float uvOffset;
 	float texelLengthX2;
 	float3 bendParam;
-	float padding;
+	float perlinSize;
+	float3 perlinAmp;
+	float pad;
+	float3 perlinOctave;
+	float pad2;
+	float3 perlinGradient;
+	float pad3;
+	float2 perlinMovement;
+	float2 pad4;
 }
 
 
@@ -105,7 +115,7 @@ HSInput VSMain(in VSInput input)
 {
 	HSInput output;
 	
-	output.position = mul(float4(input.position, 1), worldMatrix);
+	output.position = mul(float4(input.position, 1), worldMatrix).xyz;
 
 
 	float3 posW = output.position.xyz;
@@ -113,11 +123,11 @@ HSInput VSMain(in VSInput input)
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 100;
+	float maxTessDistance = 500;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 
-	float minTessFactor = 16.0f;
+	float minTessFactor = 8.0f;
 	float maxTessFactor = 1.0f;
 
 	output.tessFactor = minTessFactor + (tess * (maxTessFactor - minTessFactor));
@@ -159,8 +169,6 @@ DSinput HSMain(InputPatch<HSInput, 3> patch, uint pointId : SV_OutputControlPoin
 }
 
 
-#define PATCH_BLEND_BEGIN		800
-#define PATCH_BLEND_END			20000
 
 
 //Domain shader
@@ -180,7 +188,32 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 	output.tex = pos.xy * uvScale + uvOffset;
 
-	float3 displacement = displacementTexture.SampleLevel(displacementSampler, output.tex, 0).xyz;
+	float3 eyeVec = pos.xyz - camPosition;
+
+	float dist2d = length(eyeVec.xy);
+
+	float blendFactor = (PATCH_BLEND_END - dist2d) / (PATCH_BLEND_END - PATCH_BLEND_BEGIN);
+	blendFactor = clamp(blendFactor, 0, 1);
+
+	float perlin = 0;
+	if(blendFactor < 1)
+	{
+		
+		float2 perlinTC = output.tex * perlinSize + (pos.xy % 256) - 128;
+		float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
+		float perlin1 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.y + perlinMovement, 0).w;
+		float perlin2 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.z + perlinMovement, 0).w;
+		perlin = perlin0 * perlinAmp.x + perlin1 * perlinAmp.y + perlin2 * perlinAmp.z;
+		
+	}
+
+	float3 displacement = 0;
+	if(blendFactor > 0)
+	{
+		displacement = displacementTexture.SampleLevel(displacementSampler, output.tex, 0).xyz;
+	}
+	displacement = lerp(float3(0, 0, perlin), displacement, blendFactor);
+
 
 	pos.xyz += displacement;
 
@@ -204,8 +237,22 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float3 eyeVec = camPosition - input.positionWS;
 	float3 eyeDir = normalize(eyeVec);
 
+	float dist2d = length(eyeVec.xz);
 
-	float2 grad = normalTexture.Sample(normalSampler, input.tex).xy;
+	float blendFactor = (PATCH_BLEND_END - dist2d) / (PATCH_BLEND_END - PATCH_BLEND_BEGIN);
+	blendFactor = clamp(blendFactor*blendFactor*blendFactor, 0, 1);
+
+	float2 perlinTC = input.tex * perlinSize + (input.positionWS.xz % 256) - 128;
+	float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
+	float perlin1 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.y + perlinMovement, 0).w;
+	float perlin2 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.z + perlinMovement, 0).w;
+	float2 perlin = (perlin0 * perlinGradient.x + perlin1 * perlinGradient.y + perlin2 * perlinGradient.z);
+
+
+
+	float2 fftTC = (blendFactor > 0) ? input.tex: 0;
+	float2 grad = normalTexture.Sample(normalSampler, fftTC).xy;
+	grad = lerp(perlin, grad, blendFactor);
 	float3 normal = normalize(float3(grad, texelLengthX2));
 
 
@@ -225,7 +272,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
 
-	float3 reflectedColor = lerp(skyColor.rgb, reflection, ramp.y);
+	float3 reflectedColor = reflection;
 
 	float3 waterColor = lerp(baseWaterColor.rgb, reflection, ramp.x);
 
@@ -234,7 +281,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
 	
-
 
 	return float4(waterColor, 1);
 }

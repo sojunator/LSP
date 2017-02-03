@@ -137,10 +137,10 @@ namespace thomas
 			samplerDesc.MipLODBias = 0.0f;
 			samplerDesc.MaxAnisotropy = 1;
 			samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-			samplerDesc.BorderColor[0] = 0;
-			samplerDesc.BorderColor[1] = 0;
-			samplerDesc.BorderColor[2] = 0;
-			samplerDesc.BorderColor[3] = 0;
+			samplerDesc.BorderColor[0] = 1;
+			samplerDesc.BorderColor[1] = 1;
+			samplerDesc.BorderColor[2] = 1;
+			samplerDesc.BorderColor[3] = 1;
 			samplerDesc.MinLOD = 0;
 			samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 

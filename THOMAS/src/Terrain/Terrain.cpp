@@ -6,7 +6,7 @@ namespace thomas
 		m_size(size), 
 		m_modelName(modelName)
 	{
-		m_mesh = utils::Plane::CreatePlane(size, detail, modelName, mat);
+		//m_mesh = utils::Plane::CreatePlane(size, detail, modelName, mat);
 
 	}
 
