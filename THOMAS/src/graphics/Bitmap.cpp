@@ -1,7 +1,5 @@
 #include "Bitmap.h"
 #include "Texture.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H 
 
 namespace thomas
 {

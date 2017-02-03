@@ -59,6 +59,7 @@
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\graphics\TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\LightManager.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="src\utils\Plane.h" />
     <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\graphics\TextRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

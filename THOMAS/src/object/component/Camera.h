@@ -48,6 +48,9 @@ namespace thomas
 
 				void BindGUI();
 				void UnbindGUI();
+
+				void ReleaseGUI();
+				void ReleaseSkybox();
 				
 			private:
 				math::Matrix m_projMatrix;

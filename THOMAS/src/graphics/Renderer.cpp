@@ -121,20 +121,20 @@ namespace thomas
 				camera->UnbindSkybox();
 				camera->BindGUI();
 				camera->UnbindGUI();
+				
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
-
 		}
 
 		bool Renderer::Destroy()
 		{
-
 			s_backBuffer->Release();
 			s_rasterState->Release();
 			s_depthStencilState->Release();
 			s_depthStencilView->Release();
 			s_depthBuffer->Release();
 			s_objectBuffer->Release();
+			
 
 			return true;
 

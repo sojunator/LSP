@@ -138,6 +138,16 @@ namespace thomas
 					m_bitmap->Unbind();
 			}
 
+			void Camera::ReleaseGUI()
+			{
+				m_bitmap->~Bitmap();
+			}
+
+			void Camera::ReleaseSkybox()
+			{
+				m_skybox->~Skybox();
+			}
+
 
 		}
 	}
