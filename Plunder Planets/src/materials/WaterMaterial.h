@@ -18,10 +18,9 @@ public:
 private:
 	struct MaterialProperties
 	{
-		math::Color ambientColor;
-		math::Color diffuseColor;
-		math::Color specularColor;
-		float specularPower;
+		math::Color waterColor;
+		math::Color skyColor;
+		float shininess;
 		float uvScale;
 		float uvOffset;
 		float texelLengthX2;

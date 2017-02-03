@@ -94,7 +94,7 @@ namespace thomas
 
 		void Skybox::CreateDepthStencilState()
 		{
-			m_data.depthStencilState = utils::D3d::CreateDepthStencilState(D3D11_COMPARISON_LESS_EQUAL);
+			m_data.depthStencilState = utils::D3d::CreateDepthStencilState(D3D11_COMPARISON_LESS_EQUAL, true);
 		}
 
 		void Skybox::LoadCubeMap(std::string path)

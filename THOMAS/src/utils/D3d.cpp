@@ -103,13 +103,13 @@ namespace thomas
 		}
 
 	
-		ID3D11DepthStencilState* D3d::CreateDepthStencilState(D3D11_COMPARISON_FUNC func)
+		ID3D11DepthStencilState* D3d::CreateDepthStencilState(D3D11_COMPARISON_FUNC func, bool depth)
 		{
 			ID3D11DepthStencilState* stencilState;
 			CD3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 			ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
-			depthStencilDesc.DepthEnable = true;
+			depthStencilDesc.DepthEnable = depth;
 			depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 			depthStencilDesc.DepthFunc = func;
 			depthStencilDesc.StencilReadMask = true;
@@ -204,7 +204,7 @@ namespace thomas
 			CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain(), backBuffer);
 			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBuffer);
 		
-			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS);
+			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS, true);
 
 
 			return true;
@@ -315,6 +315,56 @@ namespace thomas
 			ThomasCore::GetDevice()->CreateRasterizerState(&rasterDesc, &rasterState);
 
 			return rasterState;
+		}
+		ID3D11ShaderResourceView * D3d::CreateFresnel(int fresnelTexSize, float blending)
+		{
+			DWORD* buffer = new DWORD[fresnelTexSize];
+			for (int i = 0; i < fresnelTexSize; i++)
+			{
+				float cos_a = i / (FLOAT)fresnelTexSize;
+				// Using water's refraction index 1.33
+			
+
+				DWORD fresnel = math::Vector2(DirectX::XMFresnelTerm(math::Vector2(cos_a), math::Vector2(1.33))).x*255;
+
+				DWORD sky_blend = (DWORD)(powf(1 / (1 + cos_a), blending) * 255);
+
+				buffer[i] = (sky_blend << 8) | fresnel;
+			}
+
+			D3D11_TEXTURE1D_DESC tex_desc;
+			tex_desc.Width = fresnelTexSize;
+			tex_desc.MipLevels = 1;
+			tex_desc.ArraySize = 1;
+			tex_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			tex_desc.Usage = D3D11_USAGE_IMMUTABLE;
+			tex_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+			tex_desc.CPUAccessFlags = 0;
+			tex_desc.MiscFlags = 0;
+
+			D3D11_SUBRESOURCE_DATA init_data;
+			init_data.pSysMem = buffer;
+			init_data.SysMemPitch = 0;
+			init_data.SysMemSlicePitch = 0;
+
+			ID3D11Texture1D* fresnelMap;
+
+			ThomasCore::GetDevice()->CreateTexture1D(&tex_desc, &init_data, &fresnelMap);
+
+			delete buffer;
+
+			// Create shader resource
+			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
+			srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
+			srv_desc.Texture1D.MipLevels = 1;
+			srv_desc.Texture1D.MostDetailedMip = 0;
+
+			ID3D11ShaderResourceView* fresnelSRV;
+
+			ThomasCore::GetDevice()->CreateShaderResourceView(fresnelMap, &srv_desc, &fresnelSRV);
+			
+			return fresnelSRV;
 		}
 		void D3d::CreateTextureAndViews(UINT width, UINT height, DXGI_FORMAT format, ID3D11Texture2D *& tex, ID3D11ShaderResourceView *& SRV, ID3D11RenderTargetView *& RTV)
 		{

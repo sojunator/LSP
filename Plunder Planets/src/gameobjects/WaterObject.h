@@ -10,7 +10,7 @@ public:
 	WaterObject() : GameObject("WaterObject")
 	{
 		m_waterMaterial = (Material::CreateMaterial("waterMat", "waterMaterial"));
-		Model::CreateModel("waterModel", utils::Plane::CreatePlane(8192, 1.0f, "waterPlane", m_waterMaterial));
+		Model::CreateModel("waterModel", utils::Plane::CreatePlane(512*16, 1.0/64.0, "waterPlane", m_waterMaterial));
 
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("waterModel");

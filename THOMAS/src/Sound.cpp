@@ -25,23 +25,30 @@ namespace thomas
 		s_masterVolume = 0.5f;
 		s_fxVolume = 0.5f;
 		s_musicVolume = 0.5f;
-		s_bank = std::make_unique<DirectX::WaveBank>(s_audioEngine.get(), L"../res/sounds/soundlist.xwb");
+		s_bank = NULL;
 		return true;
 	}
 
-	bool Sound::Play(Sound::Music name)
+	bool Sound::Play(std::string name, float volume)
 	{
-		s_instance = s_bank->CreateInstance(int(name));
-		if (!s_instance)
-			return false;
-		s_instance->Play(true);
-		s_instance->SetVolume(s_masterVolume * s_musicVolume);
-		return true;
-	}
-	bool Sound::Play(Sound::Effects name)
-	{
-		s_bank->Play(int(name), s_masterVolume * s_fxVolume, 0.0f, 0.0f);
-		return true;
+		if (name[0] == 'm')
+		{
+			s_instance = s_bank->CreateInstance(name.c_str());
+			if (!s_instance)
+			{
+				LOG("No instance of sound was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
+				return false;
+			}
+			s_instance->Play(true);
+			s_instance->SetVolume(s_masterVolume * s_musicVolume * volume);
+			return true;
+		}
+		else if (name[0] == 'f')
+		{
+			s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
+			return true;
+		}
+		return false;
 	}
 
 	void Sound::Pause()
@@ -65,6 +72,16 @@ namespace thomas
 	void Sound::SetMusicVolume(float volume)
 	{
 		s_musicVolume = volume;
+	}
+	bool Sound::LoadWaveBank(std::string name)
+	{
+		s_bank = std::make_unique<DirectX::WaveBank>(s_audioEngine.get(), CA2W(name.c_str()));
+		if (!s_bank)
+		{
+			LOG("Unable to load wavebank, probably invalid path and/or name");
+			return false;
+		}
+		return true;
 	}
 	void Sound::Destroy()
 	{

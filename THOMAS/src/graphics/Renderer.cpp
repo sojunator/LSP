@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "Model.h"
 #include "../object/GameObject.h"
+#include "../object/component/Light.h"
+#include "LightManager.h"
 
 namespace thomas
 {
@@ -9,6 +11,7 @@ namespace thomas
 
 		ID3D11RenderTargetView* Renderer::s_backBuffer;
 		ID3D11RasterizerState* Renderer::s_rasterState;
+		ID3D11RasterizerState* Renderer::s_wireframeRasterState;
 		ID3D11DepthStencilState* Renderer::s_depthStencilState;
 		ID3D11DepthStencilView* Renderer::s_depthStencilView;
 		ID3D11Texture2D* Renderer::s_depthBuffer;
@@ -23,6 +26,7 @@ namespace thomas
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID , D3D11_CULL_BACK);
+				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
 				return true;
 
 			}
@@ -41,17 +45,7 @@ namespace thomas
 		{
 
 
-			if (Input::GetKeyDown(Input::Keys::X))
-			{
-				s_rasterState->Release();
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
-			}
-			else if (Input::GetKeyUp(Input::Keys::X))
-			{
-				s_rasterState->Release();
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
-			}
-
+			
 
 			//TODO: Find out if this is the fastest order of things.
 
@@ -63,7 +57,19 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
 				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
-				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+
+
+				if (Input::GetKey(Input::Keys::X))
+				{
+					ThomasCore::GetDeviceContext()->RSSetState(s_wireframeRasterState);
+				}
+				else
+				{
+					ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+				}
+
+
+				
 				
 
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
@@ -79,14 +85,23 @@ namespace thomas
 					shader->Bind();
 					camera->BindReflection();
 
-					//Get the materials that use the shader
-					for (Material* mat : Material::GetMaterialsByShader(shader))
+					//For every light
+					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
 					{
-						mat->Bind(); //Bind material specific buffers/textures
-									 //Get all gameObjects that have a rendererComponent
-						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+						LightManager::BindAllLights();
+
+
+
+						//Get the materials that use the shader
+						for (Material* mat : Material::GetMaterialsByShader(shader))
 						{
-							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+							mat->Bind(); //Bind material specific buffers/textures
+										 //Get all gameObjects that have a rendererComponent
+
+
+							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+							{
+								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 
 
 							BindGameObjectBuffer(camera, gameObject);
@@ -99,8 +114,12 @@ namespace thomas
 							UnBindGameObjectBuffer();
 
 
+							}
+							mat->Unbind();
 						}
-						mat->Unbind();
+
+						LightManager::Unbind();
+
 					}
 					shader->Unbind();
 				}

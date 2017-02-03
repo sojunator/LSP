@@ -21,8 +21,8 @@ public:
 
 		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
-		m_normalSpeed = 10.0f;
-		m_fastSpeed = 30.0f;
+		m_normalSpeed = 30.0f;
+		m_fastSpeed = 80.0f;
 		m_flySpeed = m_normalSpeed;
 		m_jaw = 0;
 		m_pitch = 0;
