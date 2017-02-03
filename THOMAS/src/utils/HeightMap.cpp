@@ -41,7 +41,7 @@ namespace thomas
 				e += myModule.GetValue(8*nx, 4*ny, 0) / 2.0 + 0.5;
 				e = pow(e, 1.7f);
 				
-				plane.verts[i].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
+				plane.verts[i].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40)) * 4.0;
 			}
 
 			std::vector<thomas::graphics::Mesh*> mesh;

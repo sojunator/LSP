@@ -42,11 +42,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 
-	utils::Plane::PlaneData plane = utils::Plane::CreatePlane(1024, 0.125, "Plane-1", m);
+	utils::Plane::PlaneData plane = utils::Plane::CreatePlane(128, 1, "Plane-1", m);
 
 	
 
-	Model * model = Model::CreateModel("Plane-1", thomas::utils::HeightMap::ApplyHeightMap(1024, 0.125f, plane, m));
+	Model * model = Model::CreateModel("Plane-1", thomas::utils::HeightMap::ApplyHeightMap(128, 1, plane, m));
 
 
 
