@@ -30,8 +30,6 @@ namespace thomas
 				graphics::Material* mat);
 
 		private:
-
-
 		};
 	}
 }
