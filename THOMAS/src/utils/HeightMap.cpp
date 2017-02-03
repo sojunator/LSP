@@ -7,7 +7,7 @@ namespace thomas
 
 		std::vector<float> HeightMap::s_height;
 
-		std::vector<graphics::Mesh*> HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, graphics::Material* mat)
+		std::vector<graphics::Mesh*> HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, graphics::Material* mat, math::Vector2 offset)
 		{
 			float width = size * detail;
 			float height = width;
@@ -27,8 +27,8 @@ namespace thomas
 			float x, y;
 			for (int i = 0; i < plane.verts.size(); i++)
 			{
-				x = -plane.verts[i].position.z * detail;
-				y = plane.verts[i].position.x * detail;
+				x = -(plane.verts[i].position.z - 0) * detail;
+				y = (plane.verts[i].position.x - 0) * detail;
 
 				double e = 0.0f;
 				double nx = x / width - 0.5,

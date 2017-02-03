@@ -26,8 +26,8 @@ namespace thomas
 		public:
 
 
-			static PlaneData Plane::CreatePlane(int size, float detail, std::string meshName,
-				graphics::Material* mat);
+			static PlaneData Plane::CreatePlane(int size, float detail);
+			static PlaneData Plane::CreatePlane(int size, float detail, math::Vector2 offSet);
 
 		private:
 		};

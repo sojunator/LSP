@@ -19,8 +19,8 @@ public:
 	bool Start()
 	{
 		m_sensitivity = 0.5f;
-		m_normalSpeed = 10.0f;
-		m_fastSpeed = 3000.0f / 2.0f;
+		m_normalSpeed = 50.0f;
+		m_fastSpeed = 300.0f / 2.0f;
 		m_flySpeed = m_normalSpeed;
 		m_jaw = 0;
 		m_pitch = 0;

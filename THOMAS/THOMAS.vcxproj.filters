@@ -30,6 +30,7 @@
     <ClCompile Include="src\Terrain\Terrain.cpp" />
     <ClCompile Include="src\utils\HeightMap.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
+    <ClCompile Include="src\Islands.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
