@@ -20,6 +20,11 @@ namespace thomas
 		return NULL;
 	}
 
+	Scene * Scene::CreateScene(std::string name)
+	{
+		s_scenes.push_back(Scene(name));
+		return &s_scenes.back();
+	}
 	bool Scene::UnLoadScene()
 	{
 		m_objects.clear();

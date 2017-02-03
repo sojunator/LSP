@@ -7,9 +7,12 @@ namespace thomas
 {
 	class THOMAS_API Scene
 	{
+	private:
+		Scene(std::string name);
 	public:
 		static bool Init();
 		static Scene* LoadScene(std::string name);
+		static Scene* CreateScene(std::string name);
 		bool UnLoadScene();
 		void static Update();
 		void LoadObject(object::Object* object);
@@ -19,7 +22,7 @@ namespace thomas
 	private:
 		std::vector<object::Object*> m_objects;
 		std::string m_name;
-		static std::vector<Scene> s_scenes;
+		static std::vector<Scene> s_scenes; //TODO: Loadscreen, menu etc always first?
 		static Scene* s_currentScene;
 	};
 }
