@@ -80,7 +80,7 @@ namespace thomas
 				return -1;
 		}
 
-		bool LightManager::BindDierctionalLight(unsigned int index)
+		bool LightManager::BindDirectionalLight(unsigned int index)
 		{
 			return false;
 		}

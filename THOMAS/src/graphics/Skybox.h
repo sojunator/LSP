@@ -24,6 +24,7 @@ namespace thomas
 			bool BindCubemap();
 			bool Unbind();
 			void Draw();
+			void BindSkyboxTexture();
 
 		private:
 

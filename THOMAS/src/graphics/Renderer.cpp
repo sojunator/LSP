@@ -82,26 +82,21 @@ namespace thomas
 				//For every shader
 				for (Shader* shader : loadedShaders)
 				{
+					
 					shader->Bind();
-					camera->BindReflection();
+					
+					LightManager::BindAllLights();
 
-					//For every light
-					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
+					//Get the materials that use the shader
+					for (Material* mat : Material::GetMaterialsByShader(shader))
 					{
-						LightManager::BindAllLights();
+						mat->Bind(); //Bind material specific buffers/textures
+										//Get all gameObjects that have a rendererComponent
 
 
-
-						//Get the materials that use the shader
-						for (Material* mat : Material::GetMaterialsByShader(shader))
+						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 						{
-							mat->Bind(); //Bind material specific buffers/textures
-										 //Get all gameObjects that have a rendererComponent
-
-
-							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-							{
-								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 
 
 							BindGameObjectBuffer(camera, gameObject);
@@ -113,14 +108,12 @@ namespace thomas
 							}
 							UnBindGameObjectBuffer();
 
-
-							}
-							mat->Unbind();
 						}
-
-						LightManager::Unbind();
-
+						mat->Unbind();
 					}
+
+					LightManager::Unbind();
+
 					shader->Unbind();
 				}
 				camera->BindSkybox();

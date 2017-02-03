@@ -37,23 +37,22 @@ cbuffer material : register(b1)
 }
 
 
-//Struct coupled with LightManager
 struct DirLight
 {
-	float4 ambientColor;
-	float4 diffuseColor;
-	float4 specularColor;
-	float4 lightDir;
+	float4 lightColor;
+	float3 lightDir;
+	float padding;
 };
 //Struct coupled with LightManager
 struct PointLight
 {
-	float attenuationFactor;
-	float3 padding;
-	float4 ambientColor;
-	float4 diffuseColor;
-	float4 specularColor;
-	float4 position;
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
+	float power;
+	float4 lightColor;
+	float3 position;
+	float padding;
 };
 //Buffer coupled with LightManager
 cbuffer lightBuffer : register(b2)
@@ -63,7 +62,7 @@ cbuffer lightBuffer : register(b2)
 	int padding1;
 	int padding2;
 	DirLight directionalLights[3];
-	PointLight pointLights[3];
+	PointLight pointLights[20];
 }
 
 
@@ -222,7 +221,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float cosSpec = clamp(dot(reflectVec, sunDir), 0, 1);
 	float sunSpot = pow(cosSpec, shininess); //shiny
 
-	waterColor += float3(directionalLights[0].lightColor) * sunSpot;
+	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
 	
 	return float4(waterColor, 1);
 }

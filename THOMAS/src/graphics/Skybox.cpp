@@ -101,5 +101,10 @@ namespace thomas
 		{
 			m_data.texture = Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::CUBEMAP, path);
 		}
+		void Skybox::BindSkyboxTexture()
+		{
+			m_data.texture->Bind();
+			return;
+		}
 	}
 }

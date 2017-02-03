@@ -17,14 +17,13 @@ namespace thomas
 			
 			/**
 			DIRECTIONAL LIGHT
+			The light look down its forward transformation
 			*/
 			DirectionalLight::DirectionalLight(GameObject* gameObject) : Light(gameObject)
 			{
 				//standard init of light
-				m_thisLight.lightDirection = thomas::math::Vector4(0, 0, -1, 0);
-				m_thisLight.ambientColor = thomas::math::Vector4(0, 0, 0, 1);
-				m_thisLight.diffuseColor = thomas::math::Vector4(1, 1, 1, 1);
-				m_thisLight.specularColor = thomas::math::Vector4(1, 1, 1, 1);
+				m_thisLight.lightDirection = m_gameObject->m_transform->Forward();
+				m_thisLight.lightColor = thomas::math::Vector4(1, 1, 1, 1);
 
 				m_index = graphics::LightManager::AddDirectionalLight(m_thisLight);
 
@@ -46,28 +45,22 @@ namespace thomas
 				return true;
 			}
 
-			bool DirectionalLight::SetAmbientColor(thomas::math::Vector4 otherAmbientColor)
+			bool DirectionalLight::SetLightColor(thomas::math::Vector4 other)
 			{
-				m_thisLight.ambientColor = otherAmbientColor;
+				m_thisLight.lightColor = other;
 				return thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
 				
 			}
-			bool DirectionalLight::SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor)
+			
+			
+			void DirectionalLight::Update()
 			{
-				m_thisLight.diffuseColor = otherDiffuseColor;
-				return thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
+				
+				m_thisLight.lightDirection = m_gameObject->m_transform->Forward();
+				thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
+				return;
 			}
-			bool DirectionalLight::SetSpecularColor(thomas::math::Vector4 otherSpecularColor)
-			{
-				m_thisLight.specularColor = otherSpecularColor;
-				return thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
-			}
-
-			bool DirectionalLight::SetDirection(thomas::math::Vector4 otherLightDirection)
-			{
-				m_thisLight.lightDirection = otherLightDirection;
-				return thomas::graphics::LightManager::UpdateDirectionalLight(m_thisLight, m_index);
-			}
+			
 
 			/**
 			POINT LIGHT
@@ -75,12 +68,13 @@ namespace thomas
 			PointLight::PointLight(GameObject* gameObject) : Light(gameObject)
 			{
 				//standard init of light
-				m_thisLight.attenuationFactor = 5;
+				m_thisLight.constantAttenuation = 0.6;
+				m_thisLight.linearAttenuation = 0.3;
+				m_thisLight.quadraticAttenuation = 0.1;
+				m_thisLight.power = 5;
 				
-				m_thisLight.position = thomas::math::Vector4(3, 3, 3, 0);
-				m_thisLight.ambientColor = thomas::math::Vector4(0, 0, 0, 1);
-				m_thisLight.diffuseColor = thomas::math::Vector4(1, 1, 1, 1);
-				m_thisLight.specularColor = thomas::math::Vector4(1, 1, 1, 1);
+				m_thisLight.position = thomas::math::Vector3(0, 0, 0);
+				m_thisLight.lightColor = thomas::math::Vector4(1, 1, 1, 1);
 
 				m_index = graphics::LightManager::AddPointLight(m_thisLight);
 			}
@@ -93,31 +87,41 @@ namespace thomas
 				return true;
 			}
 
-			bool PointLight::SetAmbientColor(thomas::math::Vector4 otherAmbientColor)
+			bool PointLight::SetLightColor(thomas::math::Vector4 other)
 			{
-				m_thisLight.ambientColor = otherAmbientColor;
+				m_thisLight.lightColor = other;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
 			}
-			bool PointLight::SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor)
+			
+
+			bool PointLight::SetConstantAttenuation(float other)
 			{
-				m_thisLight.diffuseColor = otherDiffuseColor;
+				m_thisLight.constantAttenuation = other;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
 			}
-			bool PointLight::SetSpecularColor(thomas::math::Vector4 otherSpecularColor)
+			bool PointLight::SetLinearAttenuation(float other)
 			{
-				m_thisLight.specularColor = otherSpecularColor;
+				m_thisLight.constantAttenuation = other;
+				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
+			}
+			bool PointLight::SetQuadraticAttenuation(float other)
+			{
+				m_thisLight.constantAttenuation = other;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
 			}
 
-			bool PointLight::SetPosition(thomas::math::Vector4 otherPosition)
+			
+			bool PointLight::SetPower(float other)
 			{
-				m_thisLight.position = otherPosition;
+				m_thisLight.power = other;
 				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
 			}
-			bool PointLight::SetAttenuationFactor(int otherAttenuationFactor)
+			void PointLight::Update()
 			{
-				m_thisLight.attenuationFactor = otherAttenuationFactor;
-				return thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
+				m_thisLight.position = m_gameObject->m_transform->GetPosition();
+				
+				thomas::graphics::LightManager::UpdatePointLight(m_thisLight, m_index);
+				return;
 			}
 		}
 	}
