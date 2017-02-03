@@ -13,6 +13,7 @@
 
 #include "gameobjects\TestDirectionalLight.h"
 #include "gameobjects\TestPointLight.h"
+#include "gameobjects\Ship.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -46,7 +47,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init models
 
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/BOJJANBOATBABYWEDONDEUPINDISBITCH.fbx", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 
@@ -56,9 +57,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init gameObjects
 
-	TestObject* t = new TestObject();
-	//TestDirectionalLight* dirLight = new TestDirectionalLight();
-	TestPointLight* pointLight = new TestPointLight();
+	//TestObject* t = new TestObject();
+	Ship* ship = new Ship();
+	TestDirectionalLight* dirLight = new TestDirectionalLight();
+	//TestPointLight* pointLight = new TestPointLight();
 	CameraObject* c = new CameraObject();
 	new WaterObject();
 

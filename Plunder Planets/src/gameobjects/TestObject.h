@@ -33,7 +33,7 @@ public:
 		m_sound->SetName("fMeow");
 
 		//m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));
-		m_transform->SetPosition(math::Vector3(0, -3, -10));
+		m_transform->SetPosition(math::Vector3(0, 0, 0));
 
 
 		return true;

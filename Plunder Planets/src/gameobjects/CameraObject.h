@@ -38,7 +38,7 @@ public:
 
 		
 		
-		if (Input::GetKey(Input::Keys::A))
+		/*if (Input::GetKey(Input::Keys::A))
 		{
 			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
 		}
@@ -53,7 +53,7 @@ public:
 		if (Input::GetKey(Input::Keys::S))
 		{
 			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}
+		}*/
 
 
 
