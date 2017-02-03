@@ -10,6 +10,8 @@
 #include <assimp\Importer.hpp>
 #include "Sound.h"
 
+#include <AtlBase.h>
+#include <atlconv.h>
 
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
@@ -58,6 +60,10 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
+
+		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " DT: " + std::to_string(Time::GetDeltaTime());
+		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
+
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 

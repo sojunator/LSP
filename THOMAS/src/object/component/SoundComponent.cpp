@@ -8,18 +8,13 @@ thomas::object::component::SoundComponent::SoundComponent(GameObject * gameObjec
 
 bool thomas::object::component::SoundComponent::SetName(std::string name)
 {
-	if (name[0] == 'm')
+	if (name[0] != 'a' && name[0] != 'f' && name[0] != 'm')
 	{
-		m_name = name;
-		return true;
+		LOG("'" + name + "' is not an accepted name format.");
+		return false;
 	}
-	else if (name[0] == 'f')
-	{
-		m_name = name;
-		return true;
-	}
-	LOG("'" + name + "' is not an accepted nameformat.");
-	return false;
+	m_name = name;
+	return true;
 }
 
 std::string thomas::object::component::SoundComponent::GetName()

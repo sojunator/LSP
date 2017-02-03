@@ -12,7 +12,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// The size of displacement map. In this sample, it's fixed to 512.
 	m_oceanSettings.dmap_dim = 512;
 	// The side length (world space) of square patch
-	m_oceanSettings.patch_length = 2000.0f;
+	m_oceanSettings.patch_length = 500.0f;
 	// Adjust this parameter to control the simulation speed
 	m_oceanSettings.time_scale = 0.8f;
 	// A scale to control the amplitude. Not the world space height
@@ -39,7 +39,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "OceanDisplacement", m_oceanSim->getD3D11DisplacementMap(), NULL));
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "OceanNormal", m_oceanSim->getD3D11GradientMap(), NULL));
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::SPECULAR, "OceanFresnel", utils::D3d::CreateFresnel(256, 16.0), NULL));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::SPECULAR, "OceanFresnel", utils::D3d::CreateFresnel(128, 16.0), NULL));
 
 	m_materialProperties.uvScale = 1.0/ m_oceanSettings.patch_length;
 	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.dmap_dim;

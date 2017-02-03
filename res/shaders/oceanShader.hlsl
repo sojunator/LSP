@@ -113,7 +113,7 @@ HSInput VSMain(in VSInput input)
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 2000;
+	float maxTessDistance = 100;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 

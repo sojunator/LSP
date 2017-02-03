@@ -22,7 +22,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 
 	MSG msg = { 0 };
-	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder plantits");
 	//init code
 
 	//Init shaders
@@ -55,7 +55,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 
 	//Init wavebank
-	thomas::Sound::LoadWaveBank("../res/sounds/soundlist.xwb");
+	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
 
 	//Init gameObjects

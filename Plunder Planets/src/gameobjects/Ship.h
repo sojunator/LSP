@@ -17,7 +17,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
-		m_transform->SetScale(100);
+
 	}
 
 	bool Start()
