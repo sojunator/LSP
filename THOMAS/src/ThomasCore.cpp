@@ -9,6 +9,7 @@
 #include "graphics\Material.h"
 #include <assimp\Importer.hpp>
 #include "Sound.h"
+#include "Scene.h"
 
 
 namespace thomas {
@@ -65,6 +66,7 @@ namespace thomas {
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
+		Scene::Update();
 		
 		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
 		{

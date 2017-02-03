@@ -15,7 +15,6 @@ namespace thomas
 				void SetModel(std::string name);
 				graphics::Model * GetModel();
 			private:
-
 				graphics::Model* m_model;
 			};
 		}
