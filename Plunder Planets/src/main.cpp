@@ -6,6 +6,7 @@
 #include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
 #include "gameobjects\TerrainObject.h"
+
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
@@ -40,7 +41,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(1024, 0.125, "Plane-1", m));
+
+	utils::Plane::PlaneData plane = utils::Plane::CreatePlane(1024, 0.125, "Plane-1", m);
+
+	
+
+	Model * model = Model::CreateModel("Plane-1", thomas::utils::HeightMap::ApplyHeightMap(1024, 0.125f, plane, m));
+
+
+
 
 	//Init gameObjects
 
