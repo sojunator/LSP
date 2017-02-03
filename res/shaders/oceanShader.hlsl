@@ -28,12 +28,14 @@ cbuffer mvp : register(b0)
 
 cbuffer material : register(b1)
 {
-	float4 waterColor;
+	float4 baseWaterColor;
 	float4 skyColor;
 	float shininess;
 	float uvScale;
 	float uvOffset;
 	float texelLengthX2;
+	float3 bendParam;
+	float padding;
 }
 
 
@@ -103,15 +105,15 @@ HSInput VSMain(in VSInput input)
 {
 	HSInput output;
 	
-	output.position = input.position.xyz;
+	output.position = mul(float4(input.position, 1), worldMatrix);
 
 
-	float3 posW = mul(input.position, (float3x3) worldMatrix);
+	float3 posW = output.position.xyz;
 	float d = distance(camPosition, posW);
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 512;
+	float maxTessDistance = 2000;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 
@@ -156,6 +158,11 @@ DSinput HSMain(InputPatch<HSInput, 3> patch, uint pointId : SV_OutputControlPoin
 
 }
 
+
+#define PATCH_BLEND_BEGIN		800
+#define PATCH_BLEND_END			20000
+
+
 //Domain shader
 
 [domain("tri")]
@@ -177,8 +184,9 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 	pos.xyz += displacement;
 
-	output.position = mul(pos.xzyw, mvpMatrix);
-	output.positionWS = mul(pos.xzy, (float3x3) worldMatrix);
+	output.position = mul(pos.xzyw, viewMatrix);
+	output.position = mul(output.position, projectionMatrix);
+	output.positionWS = pos.xzy;
 
 	
 
@@ -207,6 +215,9 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float4 ramp = fresnelTexture.Sample(fresnelSampler, cosAngle);
 
+	if (reflectVec.z < bendParam.x)
+		ramp = lerp(ramp, bendParam.z, (bendParam.x - reflectVec.z) / (bendParam.x - bendParam.y));
+
 	reflectVec.z = max(0, reflectVec.z);
 
 
@@ -216,12 +227,14 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float3 reflectedColor = lerp(skyColor.rgb, reflection, ramp.y);
 
-	float3 waterColor = lerp(waterColor.rgb, reflection, ramp.x);
+	float3 waterColor = lerp(baseWaterColor.rgb, reflection, ramp.x);
 
 	float cosSpec = clamp(dot(reflectVec, sunDir), 0, 1);
 	float sunSpot = pow(cosSpec, shininess); //shiny
 
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
 	
+
+
 	return float4(waterColor, 1);
 }

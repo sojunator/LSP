@@ -58,11 +58,6 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-	//	LOG("update");
-
-		if (Input::GetButton(Input::Buttons::A))
-			LOG("YAY");
-
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 

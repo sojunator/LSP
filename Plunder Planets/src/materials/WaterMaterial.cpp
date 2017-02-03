@@ -45,7 +45,10 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.dmap_dim;
 	m_materialProperties.texelLengthX2 = m_oceanSettings.patch_length / m_oceanSettings.dmap_dim * 2;
 
-
+	m_materialProperties.skyColor = math::Color(0.38f, 0.45f, 0.56f);
+	m_materialProperties.waterColor = math::Color(0.07f, 0.15f, 0.2f, 1.0);
+	m_materialProperties.shininess = 400;
+	m_materialProperties.bendParam = math::Vector3(0.1f, -0.4f, 0.2f);
 
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 }

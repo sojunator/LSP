@@ -24,6 +24,8 @@ private:
 		float uvScale;
 		float uvOffset;
 		float texelLengthX2;
+		math::Vector3 bendParam;
+		float padding;
 	};
 	float time;
 	utils::ocean::OceanParameter m_oceanSettings;

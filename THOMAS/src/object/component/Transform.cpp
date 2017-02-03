@@ -67,6 +67,7 @@ namespace thomas
 			{
 				return Rotate(math::Vector3(x, y, z));
 			}
+			
 			void Transform::Translate(math::Vector3 translation)
 			{
 				math::Matrix pos = math::Matrix::CreateTranslation(translation);
