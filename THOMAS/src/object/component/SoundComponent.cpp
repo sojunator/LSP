@@ -18,7 +18,12 @@ bool thomas::object::component::SoundComponent::SetName(std::string name)
 		m_name = name;
 		return true;
 	}
-	LOG("'" + name + "' is not an accepted nameformat.");
+	else if (name[0] == 'a')
+	{
+		m_name = name;
+		return true;
+	}
+	LOG("'" + name + "' is not an accepted name format.");
 	return false;
 }
 

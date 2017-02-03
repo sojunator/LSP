@@ -9,7 +9,8 @@ namespace thomas
 	float Sound::s_fxVolume;
 	float Sound::s_musicVolume;
 	std::unique_ptr<DirectX::WaveBank> Sound::s_bank;
-	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_instance;
+	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_mInstance;
+	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_aInstance;
 	std::unique_ptr<DirectX::AudioEngine> Sound::s_audioEngine;
 
 	bool Sound::Init()
@@ -33,14 +34,15 @@ namespace thomas
 	{
 		if (name[0] == 'm')
 		{
-			s_instance = s_bank->CreateInstance(name.c_str());
-			if (!s_instance)
+			
+			s_mInstance = s_bank->CreateInstance(name.c_str());
+			if (!s_mInstance)
 			{
-				LOG("No instance of sound was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
+				LOG("No instance was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
 				return false;
 			}
-			s_instance->Play(true);
-			s_instance->SetVolume(s_masterVolume * s_musicVolume * volume);
+			s_mInstance->Play(true);
+			s_mInstance->SetVolume(s_masterVolume * s_musicVolume * volume);
 			return true;
 		}
 		else if (name[0] == 'f')
@@ -48,17 +50,31 @@ namespace thomas
 			s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
 			return true;
 		}
+		else if (name[0] == 'a')
+		{
+			s_aInstance = s_bank->CreateInstance(name.c_str());
+			if (!s_aInstance)
+			{
+				LOG("No instance was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
+				return false;
+			}
+			s_aInstance->Play(true);
+			s_aInstance->SetVolume(s_masterVolume * s_musicVolume * volume);
+			return true;
+		}
 		return false;
 	}
 
 	void Sound::Pause()
 	{
-		s_instance->Pause();
+		s_mInstance->Pause();
+		s_aInstance->Pause();
 	}
 
 	void Sound::Resume()
 	{
-		s_instance->Resume();
+		s_mInstance->Resume();
+		s_aInstance->Resume();
 	}
 
 	void Sound::SetMasterVolume(float volume)

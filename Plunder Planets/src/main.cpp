@@ -48,7 +48,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 
 	//Init wavebank
-	thomas::Sound::LoadWaveBank("../res/sounds/soundlist.xwb");
+	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
 
 	//Init gameObjects
