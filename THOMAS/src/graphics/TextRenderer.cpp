@@ -55,6 +55,7 @@ namespace thomas
 				desc.MiscFlags = 0;
 
 				//Binda textur?
+				//Kalla på loadfromMemory/Ex
 
 				Character character
 				{
@@ -75,6 +76,17 @@ namespace thomas
 		void TextRenderer::RenderText(std::string text, float x, float y, float scaleFactor, math::Vector3 color)
 		{
 
+
+		}
+
+		bool TextRenderer::Bind()
+		{
+			return false;
+		}
+
+		bool TextRenderer::Unbind()
+		{
+			return false;
 		}
 
 	}

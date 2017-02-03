@@ -19,6 +19,8 @@ namespace thomas
 			~TextRenderer();
 			void Load(std::string font, int fontSize);
 			void RenderText(std::string text, float x, float y, float scaleFactor, math::Vector3 color);
+			bool Bind();
+			bool Unbind();
 
 		private:
 			struct Character
@@ -38,9 +40,18 @@ namespace thomas
 				Shader* shader;
 				//Texture* texture;
 			};
+
+			struct matrixStruct
+			{
+				math::Matrix orthMatrix;
+				math::Vector3 color;
+			};
 			
 		private:
 			std::map <char, Character> m_characters;
+			textData m_data;
+			matrixStruct m_constBuffer;
+
 		};
 	}
 }
