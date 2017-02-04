@@ -3,6 +3,7 @@
 #include "../../utils/Math.h"
 #include "../../graphics/Skybox.h"
 #include "../../graphics/Bitmap.h"
+#include "../../graphics/TextRender.h"
 /**
 *Camera class
 */
@@ -51,6 +52,11 @@ namespace thomas
 
 				void ReleaseGUI();
 				void ReleaseSkybox();
+
+				//Text
+				void SetTextFont(std::wstring font);
+				void OutputText(std::wstring output, float posX, float posY, float r, float g, float b);
+				void ReleaseText();
 				
 			private:
 				math::Matrix m_projMatrix;
@@ -60,6 +66,7 @@ namespace thomas
 				math::Viewport m_viewport;
 				graphics::Skybox* m_skybox;
 				graphics::Bitmap* m_bitmap;
+				graphics::TextRender* m_text;
 
 			};
 		}
