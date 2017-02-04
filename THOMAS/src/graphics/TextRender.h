@@ -1,9 +1,8 @@
 #pragma once
 #include "../utils/Math.h"
-#include "../Window.h"
 #include "../ThomasCore.h"
-#include "../../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteBatch.h"
-#include "../../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteFont.h"
+#include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteBatch.h"
+#include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteFont.h"
 
 namespace thomas
 {
@@ -17,9 +16,10 @@ namespace thomas
 			math::Vector2 GetFontPos();
 
 		public:
-			TextRender(std::wstring font);
+			TextRender(std::string font);
 			~TextRender();
-			void RenderText(std::wstring output, float posX, float posY, float r, float g, float b);
+			void RenderText(std::string output, float posX, float posY, float scale, float rotation,
+							math::Vector3 color, bool dropShadow, bool outline);
 
 		private:
 			std::unique_ptr<DirectX::SpriteFont> m_font;
