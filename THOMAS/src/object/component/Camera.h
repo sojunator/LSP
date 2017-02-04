@@ -67,7 +67,6 @@ namespace thomas
 				math::Viewport m_viewport;
 				graphics::Skybox* m_skybox;
 				graphics::Bitmap* m_bitmap;
-				graphics::TextRender* m_text;
 
 			};
 		}

@@ -150,7 +150,7 @@ namespace thomas
 
 			void Camera::SetTextFont(std::string font)
 			{
-				//m_text = new graphics::TextRender(font);
+				//graphics::TextRender::LoadFont(font);
 			}
 
 			void Camera::OutputText(std::string output, float posX, float posY, float scale, float rotation,
