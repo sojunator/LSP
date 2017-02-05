@@ -1,4 +1,5 @@
-
+Texture2D backBufferTexture : register(t0);
+SamplerState backBufferSampler : register(s0);
 
 struct VS_OUT
 {
@@ -15,4 +16,9 @@ VS_OUT VSMain( /*VS_IN input,*/uint id : SV_VERTEXID)
 	output.Tex = float2((id == 0 || id == 1), (id == 1 || id == 3));
 
 	return output;
+}
+
+float4 PSMain(VS_OUT input) : SV_Target
+{
+	return backBufferTexture.Sample(backBufferSampler, input.Tex);
 }

@@ -55,6 +55,30 @@ namespace thomas
 			return texture;
 		}
 
+		ID3D11SamplerState * Texture::GetSamplerState(SamplerState samplerState)
+		{
+			ID3D11SamplerState* sampler;
+			switch (samplerState)
+			{
+			case SamplerState::WRAP:
+				sampler = s_samplerStates.WRAP;
+				break;
+			case SamplerState::CLAMP:
+				sampler = s_samplerStates.CLAMP;
+				break;
+			case SamplerState::DECAL:
+				sampler = s_samplerStates.DECAL;
+				break;
+			case SamplerState::MIRROR:
+				sampler = s_samplerStates.MIRROR;
+				break;
+			default:
+				sampler = s_samplerStates.WRAP;
+				break;
+			}
+			return sampler;
+		}
+
 		std::string Texture::GetName()
 		{
 			return m_name;

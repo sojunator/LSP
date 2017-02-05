@@ -38,7 +38,7 @@ namespace thomas {
 
 		private:
 			static ID3D11RenderTargetView* s_backBuffer;
-			static ID3D11ShaderResourceView* s_backBufferRTV;
+			static ID3D11ShaderResourceView* s_backBufferSRV;
 			static ID3D11RasterizerState* s_rasterState;
 			static ID3D11DepthStencilState* s_depthStencilState;
 			static ID3D11DepthStencilView* s_depthStencilView;

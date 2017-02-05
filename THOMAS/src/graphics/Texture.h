@@ -45,6 +45,9 @@ namespace thomas
 			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
 			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string path);
 			static Texture* CreateTexture(SamplerState samplerState, int slot, std::string path);
+
+			static ID3D11SamplerState* GetSamplerState(SamplerState samplerState);
+
 			std::string GetName();
 			ID3D11Resource* GetTexture();
 			ID3D11ShaderResourceView* GetTextureView();

@@ -7,17 +7,17 @@ namespace thomas
 		std::vector<PostEffect*> PostEffect::s_loadedEffects;
 		std::map<std::string, PostEffect*> PostEffect::s_postEffectTypes;
 		ID3D11Buffer* PostEffect::s_quadVertexBuffer;
+		PostEffect* PostEffect::s_renderToBackBuffer;
 		PostEffect::PostEffect(std::string shader)
 		{
 			m_shader = Shader::GetShaderByName(shader);
 		}
 
-		PostEffect::PostEffect(std::string name, std::string shader)
+		PostEffect::PostEffect(std::string name, Shader* shader)
 		{
-			m_shader = Shader::GetShaderByName(shader);
+			m_shader = shader;
 			m_name = name;
-
-
+			m_effectProperties = NULL;
 			utils::D3d::CreateRenderTargetView(m_renderTarget, m_shaderResource);
 
 		}
@@ -31,6 +31,15 @@ namespace thomas
 			m_shaderResource->Release();
 		}
 
+		bool PostEffect::Init()
+		{	
+			Shader* renderToBackBufferShader = thomas::graphics::Shader::CreateShader("RenderToBackBuffer", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
+				"../res/thomasShaders/postEffect.hlsl");
+			
+			s_renderToBackBuffer = new PostEffect("renderToBackBuffer", renderToBackBufferShader);
+			return true;
+		}
+
 		PostEffect * PostEffect::CreatePostEffect(std::string name, std::string postEffectType)
 		{
 			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
@@ -38,7 +47,6 @@ namespace thomas
 				if (s_loadedEffects[i]->GetName() == name)
 					return s_loadedEffects[i];
 			}
-
 
 
 			if (s_postEffectTypes.find(postEffectType) != s_postEffectTypes.end())
@@ -54,6 +62,11 @@ namespace thomas
 
 		bool PostEffect::RegisterNewPostEffectType(std::string type, PostEffect * postFX)
 		{
+			if (s_postEffectTypes.find(type) == s_postEffectTypes.end()) //Material is not already registered.
+			{
+				s_postEffectTypes[type] = postFX;
+				return true;
+			}
 			return false;
 		}
 
@@ -84,9 +97,12 @@ namespace thomas
 
 		void PostEffect::Render(ID3D11ShaderResourceView * prePostFXRender, ID3D11RenderTargetView * backBuffer)
 		{
-			int numberOfPostEffects = s_loadedEffects.size();
+			if (s_loadedEffects.empty())
+				return;
+
+			Clear();
 			ID3D11ShaderResourceView* prevRender = prePostFXRender;
-			for (unsigned int i = 0; i < numberOfPostEffects - 1; i++)
+			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
 			{
 
 				s_loadedEffects[i]->GetShader()->Bind();
@@ -94,8 +110,8 @@ namespace thomas
 				prevRender = s_loadedEffects[i]->GetShaderResource();
 			}
 
-			//Render the last effect to the back buffer
-			s_loadedEffects[numberOfPostEffects-1]->RenderPostEffect(prevRender, backBuffer);
+			s_renderToBackBuffer->RenderPostEffect(prevRender, backBuffer);
+		
 		}
 
 		void PostEffect::Clear()
@@ -132,11 +148,14 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &m_renderTarget, NULL);
 			}
 			
+			m_shader->BindTextureSampler(Texture::GetSamplerState(Texture::SamplerState::WRAP), 0);
 			m_shader->BindTextures(prevRender, 0);
 			
 			Bind();
 			thomas::ThomasCore::GetDeviceContext()->Draw(4, 0);
 			Unbind();
+			m_shader->BindTextures(NULL, 0);
+			m_shader->Unbind();
 			return true;
 		}
 
@@ -144,7 +163,8 @@ namespace thomas
 		{
 			m_shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 			m_shader->BindVertexBuffer(s_quadVertexBuffer, sizeof(float) * 5, 0);
-			m_shader->BindBuffer(m_effectProperties, Shader::ResourceType::MATERIAL);
+			if(m_effectProperties)
+				m_shader->BindBuffer(m_effectProperties, Shader::ResourceType::MATERIAL);
 
 			for (unsigned int i = 0; i < m_textures.size(); i++)
 			{

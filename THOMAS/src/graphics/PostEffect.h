@@ -10,10 +10,15 @@ namespace thomas
 		{
 		private:
 			virtual PostEffect* CreateInstance(std::string name, Shader* shader) { return NULL; }
-			PostEffect(std::string shader);
-			PostEffect(std::string name, std::string shader);
-			~PostEffect();
+
 		public:
+
+			PostEffect(std::string shader);
+			PostEffect(std::string name, Shader* shader);
+			~PostEffect();
+
+
+			static bool Init();
 			static PostEffect* CreatePostEffect(std::string name, std::string postEffectType);
 			static bool RegisterNewPostEffectType(std::string type, PostEffect* postFX);
 
@@ -42,6 +47,7 @@ namespace thomas
 			static std::vector<PostEffect*> s_loadedEffects;
 			static std::map<std::string, PostEffect*> s_postEffectTypes;
 			static ID3D11Buffer* s_quadVertexBuffer;
+			static PostEffect* s_renderToBackBuffer;
 		protected:
 			Shader* m_shader;
 			std::string m_name;
@@ -49,6 +55,7 @@ namespace thomas
 			std::vector<Texture*> m_textures;
 			ID3D11RenderTargetView* m_renderTarget;
 			ID3D11ShaderResourceView* m_shaderResource;
+
 		};
 	}
 }
