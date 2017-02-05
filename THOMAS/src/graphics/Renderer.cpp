@@ -10,13 +10,13 @@ namespace thomas
 	namespace graphics
 	{
 
-		ID3D11RenderTargetView* Renderer::s_backBuffer;
-		ID3D11ShaderResourceView* Renderer::s_backBufferSRV;
-		ID3D11RasterizerState* Renderer::s_rasterState;
-		ID3D11RasterizerState* Renderer::s_wireframeRasterState;
-		ID3D11DepthStencilState* Renderer::s_depthStencilState;
-		ID3D11DepthStencilView* Renderer::s_depthStencilView;
-		ID3D11ShaderResourceView* Renderer::s_depthBufferSRV;
+		ID3D11RenderTargetView* Renderer::s_backBuffer = NULL;
+		ID3D11ShaderResourceView* Renderer::s_backBufferSRV = NULL;
+		ID3D11RasterizerState* Renderer::s_rasterState = NULL;
+		ID3D11RasterizerState* Renderer::s_wireframeRasterState = NULL;
+		ID3D11DepthStencilState* Renderer::s_depthStencilState = NULL;
+		ID3D11DepthStencilView* Renderer::s_depthStencilView = NULL;
+		ID3D11ShaderResourceView* Renderer::s_depthBufferSRV = NULL;
 
 		ID3D11Buffer* Renderer::s_objectBuffer;
 		Renderer::GameObjectBuffer Renderer::s_objectBufferStruct;
@@ -137,13 +137,11 @@ namespace thomas
 
 		bool Renderer::Destroy()
 		{
-
-			s_backBuffer->Release();
-			s_rasterState->Release();
-			s_depthStencilState->Release();
-			s_depthStencilView->Release();
-			s_depthBufferSRV->Release();
-			s_objectBuffer->Release();
+			SAFE_RELEASE(s_backBuffer);
+			SAFE_RELEASE(s_rasterState);
+			SAFE_RELEASE(s_depthStencilState);
+			SAFE_RELEASE(s_depthStencilView);
+			SAFE_RELEASE(s_objectBuffer);
 
 			return true;
 

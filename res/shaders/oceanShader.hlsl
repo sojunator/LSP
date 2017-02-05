@@ -265,7 +265,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	if (reflectVec.z < bendParam.x)
 		ramp = lerp(ramp, bendParam.z, (bendParam.x - reflectVec.z) / (bendParam.x - bendParam.y));
 
-	reflectVec.z = max(0, reflectVec.z);
+//	reflectVec.z = max(0, reflectVec.z);
 
 
 

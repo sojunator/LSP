@@ -36,7 +36,8 @@ namespace thomas
 		private:
 			Texture(int mappingMode, TextureType type, std::string path);
 			Texture(SamplerState samplerState, TextureType type, std::string path);
-			Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView* textureView, ID3D11Resource* textureRes);
+			Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView* textureView);
+			Texture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView* textureView);
 			Texture(SamplerState samplerState, int slot, std::string path);
 			static bool CreateTextureSamplers();
 			void SetTextureSampler(int textureMode);
@@ -45,7 +46,8 @@ namespace thomas
 			static bool Init();
 			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
 			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string path);
-			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView* textureView, ID3D11Resource* texture);
+			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView* textureView);
+			static Texture* CreateTexture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView* textureView);
 			static Texture* CreateTexture(SamplerState samplerState, int slot, std::string path);
 
 			static ID3D11SamplerState* GetSamplerState(SamplerState samplerState);

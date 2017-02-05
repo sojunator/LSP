@@ -1,4 +1,7 @@
 
+Texture2D backBufferTexture : register(t1);
+SamplerState backBufferSamplerState : register(s1);
+
 struct VS_OUT
 {
 	float4 Pos : SV_POSITION;

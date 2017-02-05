@@ -43,7 +43,7 @@ namespace thomas
 				math::Vector3 GetScale();
 				
 				void SetPosition(math::Vector3 position);
-				void SetPositon(float x, float y, float z);
+				void SetPosition(float x, float y, float z);
 				void SetRotation(math::Quaternion rotation);
 				void SetRotation(float yaw, float pitch, float roll);
 				void SetScale(math::Vector3 scale);

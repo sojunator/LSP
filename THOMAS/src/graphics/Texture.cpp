@@ -41,6 +41,20 @@ namespace thomas
 			return texture;
 		}
 
+		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView * textureView)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == name && s_loadedTextures[i]->GetTextureType() == TextureType::UNDEFINED)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, slot, name, textureView);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
 		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string path)
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
@@ -79,7 +93,7 @@ namespace thomas
 			return sampler;
 		}
 
-		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView, ID3D11Resource * textureRes)
+		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView)
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
@@ -87,7 +101,7 @@ namespace thomas
 					return s_loadedTextures[i];
 			}
 
-			Texture* texture = new Texture(samplerState, type, name, textureView, textureRes);
+			Texture* texture = new Texture(samplerState, type, name, textureView);
 			if (texture)
 				s_loadedTextures.push_back(texture);
 			return texture;
@@ -186,13 +200,24 @@ namespace thomas
 				SetTextureSampler(samplerState);
 		}
 
-		Texture::Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView, ID3D11Resource * texture)
+		Texture::Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView)
 		{
 			m_textureType = type;
 			m_name = name;
 			SetTextureSampler(samplerState);
 			m_initialized = true;
-			m_data.texture = texture;
+			m_data.texture = NULL;
+			m_data.textureView = textureView;
+		}
+
+		Texture::Texture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView * textureView)
+		{
+			m_textureType = TextureType::UNDEFINED;
+			m_resourceSlot = slot;
+			m_name = name;
+			SetTextureSampler(samplerState);
+			m_initialized = true;
+			m_data.texture = NULL;
 			m_data.textureView = textureView;
 		}
 
