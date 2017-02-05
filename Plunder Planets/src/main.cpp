@@ -16,6 +16,8 @@
 #include "gameobjects\Ship.h"
 
 
+#include "postEffects\testEffect.h"
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
@@ -38,6 +40,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Shader::CreateShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD,
 		"../res/shaders/Terrain.hlsl");
 
+
+	//PostFX test shader
+	thomas::graphics::Shader::CreateShader("PostFXTest", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
+		"../res/shaders/postFXTest.hlsl");
+
+	thomas::graphics::PostEffect::RegisterNewPostEffectType("testFX", new TestEffect("PostFXTest"));
+
+//	thomas::graphics::PostEffect::CreatePostEffect("test", "testFX");
 
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));

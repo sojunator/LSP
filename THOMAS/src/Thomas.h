@@ -15,4 +15,4 @@
 
 #include "object\GameObject.h"
 
-
+#include "graphics\PostEffect.h"

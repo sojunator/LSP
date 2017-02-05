@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\Bitmap.cpp" />
+    <ClCompile Include="src\graphics\PostEffect.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\graphics\LightManager.cpp" />
     <ClCompile Include="src\object\component\Light.cpp" />
@@ -68,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\LightManager.h" />
+    <ClInclude Include="src\graphics\PostEffect.h" />
     <ClInclude Include="src\object\component\Light.h" />
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\graphics\Skybox.h" />

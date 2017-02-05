@@ -7,6 +7,7 @@
 #include "graphics\Shader.h"
 #include "graphics\Model.h"
 #include "graphics\Material.h"
+#include "graphics\PostEffect.h"
 #include <assimp\Importer.hpp>
 #include "Sound.h"
 
@@ -49,6 +50,8 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Sound::Init();
 
+		if (s_initialized)
+			s_initialized = graphics::PostEffect::Init();
 
 		return s_initialized;
 	}

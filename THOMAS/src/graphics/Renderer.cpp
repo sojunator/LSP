@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "../object/GameObject.h"
 #include "../object/component/Light.h"
+#include "PostEffect.h"
 #include "LightManager.h"
 
 namespace thomas
@@ -10,11 +11,12 @@ namespace thomas
 	{
 
 		ID3D11RenderTargetView* Renderer::s_backBuffer;
+		ID3D11ShaderResourceView* Renderer::s_backBufferSRV;
 		ID3D11RasterizerState* Renderer::s_rasterState;
 		ID3D11RasterizerState* Renderer::s_wireframeRasterState;
 		ID3D11DepthStencilState* Renderer::s_depthStencilState;
 		ID3D11DepthStencilView* Renderer::s_depthStencilView;
-		ID3D11Texture2D* Renderer::s_depthBuffer;
+		ID3D11ShaderResourceView* Renderer::s_depthBufferSRV;
 
 		ID3D11Buffer* Renderer::s_objectBuffer;
 		Renderer::GameObjectBuffer Renderer::s_objectBufferStruct;
@@ -22,7 +24,7 @@ namespace thomas
 		bool thomas::graphics::Renderer::Init()
 		{
 
-			if (utils::D3d::InitRenderer(s_backBuffer, s_depthStencilState, s_depthStencilView, s_depthBuffer))
+			if (utils::D3d::InitRenderer(s_backBuffer,s_backBufferSRV, s_depthStencilState, s_depthStencilView, s_depthBufferSRV))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_NONE);
@@ -124,6 +126,10 @@ namespace thomas
 				}
 				camera->BindSkybox();
 				camera->UnbindSkybox();
+
+
+				PostEffect::Render(s_backBufferSRV, s_backBuffer);
+
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
 
@@ -136,7 +142,7 @@ namespace thomas
 			s_rasterState->Release();
 			s_depthStencilState->Release();
 			s_depthStencilView->Release();
-			s_depthBuffer->Release();
+			s_depthBufferSRV->Release();
 			s_objectBuffer->Release();
 
 			return true;
@@ -167,6 +173,10 @@ namespace thomas
 
 			//Bind gameObject specific buffers
 			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(s_objectBuffer, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
+		}
+		ID3D11ShaderResourceView * Renderer::GetDepthBufferSRV()
+		{
+			return s_depthBufferSRV;
 		}
 		void Renderer::UnBindGameObjectBuffer()
 		{
