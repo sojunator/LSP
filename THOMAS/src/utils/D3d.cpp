@@ -187,42 +187,58 @@ namespace thomas
 		}
 		
 		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, 
-			ID3D11Texture2D*& depthBuffer)
+			ID3D11ShaderResourceView *& depthBufferSRV)
 		{
-			D3D11_TEXTURE2D_DESC depthBufferDesc;
+			D3D11_TEXTURE2D_DESC depthStencilBufferDesc;
 			D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
 
-			ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
+			ZeroMemory(&depthStencilBufferDesc, sizeof(depthStencilBufferDesc));
 			ZeroMemory(&depthViewDesc, sizeof(depthViewDesc));
 
 			// Z-buffer texture desc
-			depthBufferDesc.Width = Window::GetWidth();
-			depthBufferDesc.Height = Window::GetHeight();
-			depthBufferDesc.MipLevels = 1;
-			depthBufferDesc.ArraySize = 1;
-			depthBufferDesc.Format = DXGI_FORMAT_R32_TYPELESS;
-			depthBufferDesc.SampleDesc.Count = 1;
-			depthBufferDesc.SampleDesc.Quality = 0;
-			depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-			depthBufferDesc.CPUAccessFlags = 0;
-			depthBufferDesc.MiscFlags = 0;
+			depthStencilBufferDesc.Width = Window::GetWidth();
+			depthStencilBufferDesc.Height = Window::GetHeight();
+			depthStencilBufferDesc.MipLevels = 1;
+			depthStencilBufferDesc.ArraySize = 1;
+			depthStencilBufferDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+			depthStencilBufferDesc.SampleDesc.Count = 1;
+			depthStencilBufferDesc.SampleDesc.Quality = 0;
+			depthStencilBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+			depthStencilBufferDesc.CPUAccessFlags = 0;
+			depthStencilBufferDesc.MiscFlags = 0;
 		
 
 			// Z-buffer view desc
-			depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+			depthViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 			depthViewDesc.Texture2D.MipSlice = 0;
 			depthViewDesc.Flags = 0;
 
-			HRESULT hr = device->CreateTexture2D(&depthBufferDesc, NULL, &depthBuffer);
+			ID3D11Texture2D* depthStencilBuffer;
+
+			HRESULT hr = device->CreateTexture2D(&depthStencilBufferDesc, NULL, &depthStencilBuffer);
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
-				depthBuffer = nullptr;
 				return false;
 			}
 
-			hr = device->CreateDepthStencilView(depthBuffer, &depthViewDesc, &stencilView);
+			hr = device->CreateDepthStencilView(depthStencilBuffer, &depthViewDesc, &stencilView);
+			if (FAILED(hr))
+			{
+				LOG_HR(hr);
+				stencilView = nullptr;
+				return false;
+			}
+
+			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+			ZeroMemory(&srvDesc, sizeof(srvDesc));
+			srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.Texture2D.MostDetailedMip = 0;
+			srvDesc.Texture2D.MipLevels = -1;
+
+			hr = device->CreateShaderResourceView(depthStencilBuffer, &srvDesc, &depthBufferSRV);
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
@@ -248,10 +264,10 @@ namespace thomas
 
 
 
-		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11ShaderResourceView *& backBufferSRV, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11Texture2D *& depthBuffer)
+		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11ShaderResourceView *& backBufferSRV, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11ShaderResourceView *& depthBufferSRV)
 		{
 			CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain(), backBuffer, backBufferSRV);
-			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBuffer);
+			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBufferSRV);
 		
 			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS, true);
 

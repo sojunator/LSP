@@ -15,6 +15,5 @@ public:
 	TestEffect(std::string shader) : PostEffect(shader) {}
 	TestEffect(std::string name, Shader* shader) : PostEffect(name, shader)
 	{
-
 	}
 };
