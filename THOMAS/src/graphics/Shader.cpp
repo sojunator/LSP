@@ -54,6 +54,8 @@ namespace thomas
 					{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 				};
 				break;
+			case InputLayouts::POST_EFFECT:
+				layoutDesc = {};
 			default:
 				return false;
 				break;
@@ -308,7 +310,15 @@ namespace thomas
 		
 		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath)
 		{
-			Shader* shader = new Shader(name, inputLayout, filePath);
+			Shader* shader;
+			if (inputLayout == InputLayouts::POST_EFFECT)
+			{
+				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffectVS.hlsl", "", "", "", filePath);
+			}
+			else
+			{
+				shader = new Shader(name, inputLayout, filePath);
+			}	
 			if (shader)
 				s_loadedShaders.push_back(shader);
 			return shader;

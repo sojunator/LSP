@@ -41,6 +41,20 @@ namespace thomas
 			return texture;
 		}
 
+		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string path)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == path && s_loadedTextures[i]->GetTextureType() == TextureType::UNDEFINED)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, slot, path);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
 		std::string Texture::GetName()
 		{
 			return m_name;
@@ -65,12 +79,30 @@ namespace thomas
 		}
 		bool Texture::Bind()
 		{
-			Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, (int)m_textureType);
-			return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
+			if (m_textureType == TextureType::UNDEFINED)
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, m_resourceSlot);
+			}
+			else
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, (int)m_textureType);
+				return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
+			}
+			
 		}
 		bool Texture::Unbind()
 		{
-			return Shader::GetCurrentBoundShader()->BindTextures(NULL, (int)m_textureType);
+			if (m_textureType == TextureType::UNDEFINED)
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindTextures(NULL, m_resourceSlot);
+			}
+			else
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, (int)m_textureType);
+				return Shader::GetCurrentBoundShader()->BindTextures(NULL, (int)m_textureType);
+			}
 		}
 		Texture::Texture(int mappingMode, TextureType type, std::string path)
 		{
@@ -98,6 +130,16 @@ namespace thomas
 				break;
 			}
 
+			if (m_initialized)
+				SetTextureSampler(samplerState);
+		}
+
+		Texture::Texture(SamplerState samplerState, int slot, std::string path)
+		{
+			m_textureType = TextureType::UNDEFINED;
+			m_resourceSlot = slot;
+			m_name = path;
+			m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
 			if (m_initialized)
 				SetTextureSampler(samplerState);
 		}

@@ -48,12 +48,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 
 	//Init wavebank
-	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
+//	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
 
 	//Init gameObjects
 
-	TestObject* t = new TestObject();
+	//TestObject* t = new TestObject();
 	CameraObject* c = new CameraObject();
 	new WaterObject();
 

@@ -13,7 +13,8 @@ namespace thomas
 		public:
 			enum class InputLayouts
 			{
-				STANDARD = 0
+				STANDARD = 0,
+				POST_EFFECT = 1
 			};
 			enum class ResourceType
 			{
@@ -81,7 +82,6 @@ namespace thomas
 			Data m_data;
 			std::string m_name;
 			std::string m_filePath;
-
 
 			static Shader* s_currentBoundShader;
 
