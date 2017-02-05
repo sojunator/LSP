@@ -150,21 +150,18 @@ namespace thomas
 
 			void Camera::SetTextFont(std::string font)
 			{
-				//graphics::TextRender::LoadFont(font);
+				graphics::TextRender::LoadFont(font);
 			}
 
 			void Camera::OutputText(std::string output, float posX, float posY, float scale, float rotation,
 									math::Vector3 color, bool dropShadow, bool outline)
 			{
-				/*if (m_text)
-				{
-					m_text->RenderText(output, posX, posY, r, g, b);
-				}*/
+				graphics::TextRender::RenderText(output, posX, posY, scale, rotation, color, dropShadow, outline);
 			}
 
 			void Camera::ReleaseText()
 			{
-				//m_text->~TextRender();
+				graphics::TextRender::Destroy();
 			}
 
 		}

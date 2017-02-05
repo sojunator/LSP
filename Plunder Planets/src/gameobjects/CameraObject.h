@@ -18,9 +18,9 @@ public:
 
 	bool Start()
 	{
-
 		m_camera->SetSkybox("../res/textures/test.dds", "skyboxShader");
 		m_camera->SetGUI("../res/tempGUI.png", "GUIShader", Window::GetWidth(), 60);
+		m_camera->SetTextFont("../res/font/myfile.spritefont");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 10.0f;
 		m_fastSpeed = 30.0f;

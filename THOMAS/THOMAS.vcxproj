@@ -193,7 +193,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -210,7 +210,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -230,7 +230,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -250,7 +250,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

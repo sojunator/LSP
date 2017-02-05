@@ -121,6 +121,7 @@ namespace thomas
 				camera->UnbindSkybox();
 				camera->BindGUI();
 				camera->UnbindGUI();
+				camera->OutputText("Gold collected:", 400, 400, 0.7f, 0.0f, math::Vector3(1.0f, 0.0f, 0.0f), false, false);
 				
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
