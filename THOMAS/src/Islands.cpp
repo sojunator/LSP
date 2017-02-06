@@ -66,8 +66,11 @@ namespace thomas
 
 					for (int k = 0; k < distance.size(); ++k)
 					{
-						if (distance[k] < m_minDistance)
+						if (distance[k] < m_minDistance*m_minDistance)
+						{
+							posNotFound = true;
 							break;
+						}
 						else
 							posNotFound = false;
 					}
