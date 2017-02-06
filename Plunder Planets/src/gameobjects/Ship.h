@@ -70,7 +70,7 @@ public:
 		}
 		
 		
-		if (Input::GetLeftStickY() > m_controlSensitivity || Input::GetButton(Input::Buttons::A))
+		if (/*Input::GetLeftStickY() > m_controlSensitivity ||*/ Input::GetButton(Input::Buttons::RT))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -99,6 +99,7 @@ public:
 		}
 		float right_x = Input::GetRightStickX();
 		float right_y = Input::GetRightStickY();
+		float left_y = Input::GetLeftStickY();
 		if (std::abs(right_x) > m_controlSensitivity)
 		{
 			math::Vector3 v = m_transform->GetPosition() - m_cameraObject->m_transform->GetPosition();
@@ -107,11 +108,19 @@ public:
 			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * v.Length());
 			
 		}
-		else
+		if (std::abs(right_y > m_controlSensitivity))
+		{
+			m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * 20 * dt);
+		}
+		if (std::abs(left_y) > m_controlSensitivity)
+		{
+			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Forward() * left_y * 20 * dt);
+		}
+		/*else
 		{
 			m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 25 + math::Vector3(0, 15, 0));
 			
-		}
+		}*/
 		m_cameraObject->m_transform->LookAt(m_transform);
 	}
 
