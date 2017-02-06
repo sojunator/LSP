@@ -15,6 +15,7 @@ public:
 	{
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
+		
 	};
 
 	bool Start()

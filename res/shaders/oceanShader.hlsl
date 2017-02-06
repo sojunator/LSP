@@ -123,11 +123,11 @@ HSInput VSMain(in VSInput input)
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 500;
+	float maxTessDistance = 100;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 
-	float minTessFactor = 8.0f;
+	float minTessFactor = 16.0f;
 	float maxTessFactor = 1.0f;
 
 	output.tessFactor = minTessFactor + (tess * (maxTessFactor - minTessFactor));
@@ -227,6 +227,8 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 }
 
 
+
+
 //Pixel shader
 
 float4 PSMain(PSInput input) : SV_TARGET
@@ -265,7 +267,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	if (reflectVec.z < bendParam.x)
 		ramp = lerp(ramp, bendParam.z, (bendParam.x - reflectVec.z) / (bendParam.x - bendParam.y));
 
-//	reflectVec.z = max(0, reflectVec.z);
+	reflectVec.z = max(0, reflectVec.z);
 
 
 
