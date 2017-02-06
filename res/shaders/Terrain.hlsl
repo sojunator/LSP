@@ -75,7 +75,6 @@ float4 TerrainColour(float y)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-   return TerrainColour(input.positionWS.y);
-   float color = saturate(input.positionWS.y);
-   return float4(color, color, color, 1.0f);
+    return float4(input.normal, 1.0f);
+    return TerrainColour(input.positionWS.y);
 }

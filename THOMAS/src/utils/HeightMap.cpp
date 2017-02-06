@@ -41,13 +41,88 @@ namespace thomas
 				e += myModule.GetValue(8 * nx, 4 * ny, 0) / 2.0 + 0.5;
 				e = pow(e, 1.7f);
 
-				plane.verts[i].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40)) * 4.0;
+				plane.verts[i].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40)) * 16.0;
 			}
+
+			CalculateNormals(size, detail, plane);
 
 			std::vector<thomas::graphics::Mesh*> mesh;
 			graphics::Mesh* m = new graphics::Mesh(plane.verts, plane.indices, "Plane-1", mat);
 			mesh.push_back(m);
 			return mesh;
+		}
+
+		void HeightMap::CalculateNormals(int size, float detail, Plane::PlaneData & plane)
+		{
+			int width = size * detail;
+			int height = width;
+
+			math::Vector3 bottomLeft, upperLeft, upperRight;
+			math::Vector3 vec1, vec2;
+
+			for (int y = 0; y < height - 1; y++)
+			{
+				for (int x = 0; x < width - 1; x++)
+				{
+					int index1 = ((y + 1) * width) + x;
+					int index2 = ((y + 1) * width) + (x + 1);
+					int index3 = ((y * width) + x);
+
+					bottomLeft = plane.verts[index1].position;
+					upperLeft = plane.verts[index2].position;
+					upperRight = plane.verts[index3].position;
+
+					vec1 = bottomLeft - upperLeft;
+					vec2 = bottomLeft - upperRight;
+
+					int index = (y * width) + x;
+
+					plane.verts[index].normal = vec1.Cross(vec2);
+					float lenght = (plane.verts[index].normal.Length());
+					plane.verts[index].normal = plane.verts[index].normal * (1 / lenght);
+				}
+			}
+
+			math::Vector3 sum;
+			int index = 0;
+			float length;
+			//// now sum that shit up
+			for (int y = 0; y < height; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					sum = math::Vector3(0.0f);
+					if (((x - 1) >= 0) && ((y - 1) >= 0))
+					{
+						index = ((x - 1) * (width - 1)) + (x - 1);
+						sum = sum + plane.verts[index].normal;
+					}
+
+					if ((x < (width - 1)) && ((y - 1) >= 0))
+					{
+						index = ((y - 1) * (width - 1)) + x;
+						sum = sum + plane.verts[index].normal;
+					}
+
+					if (((x - 1) >= 0) && (y < (height - 1)))
+					{
+						index = (y * (width - 1)) + (x - 1);
+						sum = sum + plane.verts[index].normal;
+					}
+
+					if ((x < (width - 1)) && (y < (height - 1)))
+					{
+						index = (y * (width - 1)) + x;
+						sum = sum + plane.verts[index].normal;
+					}
+					
+					length = sum.Length();
+					index = (y * width) + x;
+
+					plane.verts[index].normal = sum / length;
+				}
+			}
+
 		}
 
 		std::vector<float> HeightMap::GetHeight()
