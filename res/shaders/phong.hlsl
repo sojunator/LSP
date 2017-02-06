@@ -34,6 +34,7 @@ cbuffer material : register(b1)
     float4 ambientColor;
 	float4 diffuseColor;
 	float4 specularColor;
+	float4 materialProperty;
 	float specularPower;
 }
 
@@ -73,14 +74,12 @@ VSOutput VSMain(in VSInput input)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-
-
 	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
-
 
     float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
 
 	float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
+
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
@@ -102,6 +101,11 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		specular = specular*specularIntensity;
 
 	}
-	return diffuseColor;
-	return ambientColor * 0.05f + diffuse  + specular*specularColor;
+
+	if (materialProperty.x == 0) //currently calculating color of diffuse
+		return diffuseColor + ambientColor * 0.05f; //+diffuse when normal maps working, specular still not working
+	else //currently calculating color of texture
+		return textureColor + ambientColor * 0.05f;
+
+	//return ambientColor * 0.05f + diffuse  + specular*specularColor;
 }

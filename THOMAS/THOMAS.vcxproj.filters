@@ -48,7 +48,7 @@
     <ClCompile Include="src\object\component\SoundComponent.cpp" />
     <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
     <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
-    <ClCompile Include="src\utils\BezierCurve.cpp" />
+    
     <ClCompile Include="src\graphics\PostEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,7 +103,7 @@
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\object\component\SoundComponent.h" />
     <ClInclude Include="src\graphics\PostEffect.h" />
-    <ClInclude Include="src\utils\BezierCurve.h" />
+    
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

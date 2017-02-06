@@ -34,6 +34,7 @@ namespace thomas
 				void LookAt(Transform* target);
 				void Rotate(math::Vector3 angles);
 				void Rotate(float x, float y, float z);
+				void RotateByAxis(math::Vector3 axis, float angle);
 				void Translate(math::Vector3 translation);
 				void Translate(float x, float y, float z);
 
