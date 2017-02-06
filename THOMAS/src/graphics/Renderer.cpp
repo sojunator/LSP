@@ -3,6 +3,7 @@
 #include "../object/GameObject.h"
 #include "../object/component/Light.h"
 #include "LightManager.h"
+#include "../Scene.h"
 
 namespace thomas
 {
@@ -68,10 +69,7 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 				
 
-				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
-
-
-
+				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders(); //Ändra till att ladda de shaders som finns i nuvarande scenen
 
 				//For every shader
 				for (Shader* shader : loadedShaders)
@@ -86,16 +84,14 @@ namespace thomas
 
 
 						//Get the materials that use the shader
-						for (Material* mat : Material::GetMaterialsByShader(shader))
+						for (Material* mat : Material::GetMaterialsByShader(shader)) //ändra till att leta material i scenen? Är det lönt änz?
 						{
 							mat->Bind(); //Bind material specific buffers/textures
-										 //Get all gameObjects that have a rendererComponent
-
-
-							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+								 
+							//Get all gameObjects that have a rendererComponent
+							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>()) //ändra till att leta ur objekt i scenen
 							{
 								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
-
 
 								BindGameObjectBuffer(camera, gameObject);
 								//Draw every mesh of gameObjects model that has
@@ -104,15 +100,10 @@ namespace thomas
 									mesh->Bind(); //bind vertex&index buffer
 									mesh->Draw();
 								}
-
-
-
 							}
 							mat->Unbind();
 						}
-
 						LightManager::Unbind();
-
 					}
 					shader->Unbind();
 				}
@@ -120,7 +111,6 @@ namespace thomas
 				camera->UnbindSkybox();
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
-
 		}
 
 		bool Renderer::Destroy()

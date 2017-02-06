@@ -29,12 +29,12 @@ class GameScene : public thomas::Scene
 
 		//Init models
 		m_models.push_back(thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial"));
-		Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial"); //push_back här eller under init? Fattar inte användning.
+		Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial"); //push_back här eller under init? Fattar inte användning av material.
 		m_models.push_back(thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m)));
 
 		//Init gameObjects
-		TestObject* t = new TestObject();
-		CameraObject* c = new CameraObject();
-		new WaterObject();
+		m_objects.push_back(new TestObject());
+		m_objects.push_back(new CameraObject());
+		m_objects.push_back(new WaterObject());
 	};
 };

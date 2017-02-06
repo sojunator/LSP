@@ -15,6 +15,7 @@ namespace thomas
 		static bool DestroyScene(Scene* scene);
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static Update();
+		std::vector<graphics::Shader*> GetShaders();
 		void RemoveObject(std::string name);
 		void RemoveMaterial(std::string name);
 		void RemoveShader(std::string name);

@@ -38,6 +38,10 @@ namespace thomas
 		for (int i = 0; i < s_currentScene->m_objects.size(); ++i)
 			s_currentScene->m_objects[i]->Update();
 	}
+	std::vector<graphics::Shader*> Scene::GetShaders()
+	{
+		return m_shaders;
+	}
 	void Scene::RemoveObject(std::string name)
 	{
 		for (int i = 0; i < m_objects.size(); ++i)
