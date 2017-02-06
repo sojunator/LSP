@@ -1,67 +1,88 @@
-
 // main.cpp : Defines the entry point for the console application.
 //
-
 #include "Thomas.h"
 #include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
 #include "gameobjects\TerrainObject.h"
-
+#include "gameobjects\WaterObject.h"
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
 
-#include <time.h>
+#include "gameobjects\TestDirectionalLight.h"
+#include "gameobjects\TestPointLight.h"
+#include "gameobjects\Ship.h"
+
+
+#include "postEffects\testEffect.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+
 	srand(8);
 
 	MSG msg = { 0 };
-	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder plantits");
 	//init code
-
+	
 	//Init shaders
-	thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
+	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
 		"../res/shaders/phong.hlsl");
 
-	thomas::graphics::Shader::CreateShader("tesselationShader", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/tesselationTest.hlsl");
+
+	 thomas::graphics::Shader::CreateShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD,
+		 "../res/shaders/oceanShader.hlsl");
+
+	 thomas::graphics::Shader::CreateShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD,
+		 "../res/shaders/skyboxShader.hlsl");
 
 
 	thomas::graphics::Shader::CreateShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD,
 		"../res/shaders/Terrain.hlsl");
 
 
+	//PostFX test shader
+	thomas::graphics::Shader::CreateShader("PostFXTest", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
+		"../res/shaders/postFXTest.hlsl");
+
+	thomas::graphics::PostEffect::RegisterNewPostEffectType("testFX", new TestEffect("PostFXTest"));
+
+	//thomas::graphics::PostEffect::CreatePostEffect("test", "testFX");
+
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 
-	thomas::graphics::Material::RegisterNewMaterialType("tessMaterial", new WaterMaterial("tesselationShader"));
+	thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
 
 	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
 	//Init models
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ship/ship.fbx", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 4, 0.125, 1024/2, 100);
-
+	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
 	Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
 
 
 
 
+	//Init wavebank
+	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
+
+
 	//Init gameObjects
-	TestObject* t = new TestObject();
-	TerrainObject* terrainMap = new TerrainObject();
+
+	//TestObject* t = new TestObject();
+	
+	new TerrainObject();
+	TestDirectionalLight* dirLight = new TestDirectionalLight();
+	//TestPointLight* pointLight = new TestPointLight();
 	CameraObject* c = new CameraObject();
-
-
+	Ship* ship = new Ship();
+	new WaterObject();
 
 	//start
 	thomas::ThomasCore::Start();
-	delete terrainMap;
 	delete c;
 
 	return (int)msg.wParam;
 }
-

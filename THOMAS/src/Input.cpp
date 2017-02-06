@@ -221,7 +221,8 @@ namespace thomas
 		switch (button)
 		{
 		case Buttons::A:
-			return s_gamePadState.IsAPressed();
+			//return s_gamePadState.IsAPressed();
+			return (s_gamePadTracker.a == s_gamePadTracker.HELD);
 		case Buttons::B:
 			return s_gamePadState.IsBPressed();
 		case Buttons::X:
