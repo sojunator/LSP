@@ -153,23 +153,6 @@ namespace thomas
 			{
 				m_skybox->~Skybox();
 			}
-
-			void Camera::SetTextFont(std::string font)
-			{
-				graphics::TextRender::LoadFont(font);
-			}
-
-			void Camera::OutputText(std::string output, float posX, float posY, float scale, float rotation,
-									math::Vector3 color, bool dropShadow, bool outline)
-			{
-				graphics::TextRender::RenderText(output, posX, posY, scale, rotation, color, dropShadow, outline);
-			}
-
-			void Camera::ReleaseText()
-			{
-				graphics::TextRender::Destroy();
-			}
-
 		}
 	}
 }

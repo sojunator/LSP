@@ -53,12 +53,6 @@ namespace thomas
 
 				void ReleaseGUI();
 				void ReleaseSkybox();
-
-				//Text
-				void SetTextFont(std::string font);
-				void OutputText(std::string output, float posX, float posY, float scale, float rotation,
-								math::Vector3 color, bool dropShadow, bool outline);
-				void ReleaseText();
 				
 			private:
 				math::Matrix m_projMatrix;

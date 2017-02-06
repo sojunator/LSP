@@ -11,9 +11,21 @@ class CameraObject : public GameObject
 private:
 
 public:
-	CameraObject() : GameObject("CameraObject") 
+	CameraObject() : GameObject("CameraObject")
 	{
 		m_camera = AddComponent<component::Camera>();
+		m_text = AddComponent<component::TextComponent>();
+
+		m_text->SetFont("Gold");
+		m_text->SetOutput("Hello");
+		m_text->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
+		m_text->SetRotation(0.0f);
+		m_text->SetScale(1.0f);
+		m_text->SetPositionX(400.f);
+		m_text->SetPositionY(300.f);
+		m_text->SetDropshadow(false);
+		m_text->SetOutline(true);
+
 		m_transform->SetPosition(0, 1, 3);
 	};
 
@@ -37,7 +49,7 @@ public:
 	void Update()
 	{
 
-		
+		m_text->SetOutput(std::to_string(Time::GetFPS()));
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
@@ -97,6 +109,7 @@ public:
 
 private:
 	component::Camera* m_camera;
+	component::TextComponent* m_text;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

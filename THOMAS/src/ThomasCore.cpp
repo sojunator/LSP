@@ -53,6 +53,9 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = graphics::PostEffect::Init();
 
+		if(s_initialized)
+			s_initialized = graphics::TextRender::Initialize();
+
 		return s_initialized;
 	}
 
@@ -144,6 +147,7 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
+		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
 		graphics::Texture::Destroy();

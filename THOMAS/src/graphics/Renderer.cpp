@@ -4,6 +4,7 @@
 #include "../object/component/Light.h"
 #include "PostEffect.h"
 #include "LightManager.h"
+#include "TextRender.h"
 
 namespace thomas
 {
@@ -130,6 +131,14 @@ namespace thomas
 
 
 				PostEffect::Render(s_backBufferSRV, s_backBuffer);
+
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::TextComponent>())
+				{
+					object::component::TextComponent* textComponent = gameObject->GetComponent<object::component::TextComponent>();
+					TextRender::RenderText(textComponent);
+					
+				}
+
 
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
