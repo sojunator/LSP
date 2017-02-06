@@ -112,6 +112,12 @@ namespace thomas
 					
 			}
 
+			void Camera::BindReflection()
+			{
+				if (m_skybox)
+					m_skybox->BindCubemap();
+			}
+
 			void Camera::UnbindSkybox()
 			{
 				if (m_skybox)

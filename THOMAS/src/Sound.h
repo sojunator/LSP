@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 #include <string>
+#include <vector>
 
 #include "utils\directXTK\SoundCommon.h"
 
@@ -36,7 +37,8 @@ namespace thomas
 		static float s_masterVolume;
 		static float s_fxVolume;
 		static float s_musicVolume;
-		static std::unique_ptr<DirectX::SoundEffectInstance> s_instance; //instances for looping
+		static std::unique_ptr<DirectX::SoundEffectInstance> s_mInstance;
+		static std::unique_ptr<DirectX::SoundEffectInstance> s_aInstance;
 		static std::unique_ptr<DirectX::WaveBank> s_bank;
 		static std::unique_ptr<DirectX::AudioEngine> s_audioEngine;
 	};

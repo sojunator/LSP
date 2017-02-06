@@ -43,6 +43,7 @@ namespace thomas
 				void SetSkybox(std::string path, std::string shaderName);
 
 				void BindSkybox();
+				void BindReflection();
 				void UnbindSkybox();
 
 				void SetGUI(std::string path, std::string shaderName, int, int);

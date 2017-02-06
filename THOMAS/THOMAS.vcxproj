@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\Bitmap.cpp" />
+    <ClCompile Include="src\graphics\PostEffect.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\graphics\LightManager.cpp" />
     <ClCompile Include="src\object\component\Light.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\Texture.cpp" />
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Islands.cpp" />
     <ClCompile Include="src\object\component\Camera.cpp" />
     <ClCompile Include="src\object\component\Component.cpp" />
     <ClCompile Include="src\object\component\RenderComponent.cpp" />
@@ -38,10 +40,12 @@
     <ClCompile Include="src\object\component\Transform.cpp" />
     <ClCompile Include="src\object\GameObject.cpp" />
     <ClCompile Include="src\object\Object.cpp" />
+    <ClCompile Include="src\Terrain\Terrain.cpp" />
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
+    <ClCompile Include="src\utils\BezierCurve.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
     <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
@@ -58,12 +62,16 @@
     <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
+    <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
+    <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
+    <ClCompile Include="src\utils\HeightMap.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\graphics\TextRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\LightManager.h" />
+    <ClInclude Include="src\graphics\PostEffect.h" />
     <ClInclude Include="src\object\component\Light.h" />
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\graphics\Skybox.h" />
@@ -75,6 +83,7 @@
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\graphics\Texture.h" />
     <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Islands.h" />
     <ClInclude Include="src\object\component\Camera.h" />
     <ClInclude Include="src\object\component\Component.h" />
     <ClInclude Include="src\object\component\Components.h" />
@@ -83,10 +92,12 @@
     <ClInclude Include="src\object\component\Transform.h" />
     <ClInclude Include="src\object\GameObject.h" />
     <ClInclude Include="src\object\Object.h" />
+    <ClInclude Include="src\Terrain\Terrain.h" />
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
+    <ClInclude Include="src\utils\BezierCurve.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\directXTK\Audio.h" />
     <ClInclude Include="src\utils\directXTK\dds.h" />
@@ -103,7 +114,10 @@
     <ClInclude Include="src\utils\directXTK\WaveBankReader.h" />
     <ClInclude Include="src\utils\directXTK\WAVFileReader.h" />
     <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
+    <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />
+    <ClInclude Include="src\utils\HeightMap.h" />
     <ClInclude Include="src\utils\Math.h" />
+    <ClInclude Include="src\utils\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\utils\Plane.h" />
     <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\Window.h" />
@@ -193,7 +207,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -210,7 +224,8 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -230,7 +245,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -250,7 +266,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

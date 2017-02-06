@@ -13,7 +13,7 @@ Material * TerrainMaterial::CreateInstance(std::string dir, std::string name, ai
 
 TerrainMaterial::TerrainMaterial(std::string name, Shader* shader) : Material(name, shader)
 {
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/dearleader.jpg"));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/dearleader.png"));
 }
 
 TerrainMaterial::TerrainMaterial(std::string dir, std::string name, aiMaterial * material, Shader * shader) : Material(name, shader)
@@ -26,7 +26,6 @@ TerrainMaterial::TerrainMaterial(std::string dir, std::string name, aiMaterial *
 	m_materialProperties.diffuseColor = utils::AssimpLoader::GetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE);
 	m_materialProperties.specularColor = utils::AssimpLoader::GetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR);
 	m_materialProperties.specularPower = utils::AssimpLoader::GetMaterialShininess(material) / 1000.0;
-	m_materialProperties.tess = 2.0;
 
 	//m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::CLAMP, Texture::TextureType::HEIGHT_MAP, "../res/height_map.png"));
 

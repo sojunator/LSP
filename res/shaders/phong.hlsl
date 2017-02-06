@@ -84,7 +84,6 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
-
 	bumpNormal = normalize(bumpNormal);
 
 	lightDir = -lightDir;
@@ -100,8 +99,9 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
 		float3 reflection = normalize(lightDir + viewDirection);
 		specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
-		specular = specular * specularIntensity;
-	}
+		specular = specular*specularIntensity;
 
-	return ambientColor*textureColor*0.05f + diffuse*textureColor + specular*specularColor;
+	}
+	return diffuseColor;
+	return ambientColor * 0.05f + diffuse  + specular*specularColor;
 }

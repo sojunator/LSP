@@ -23,11 +23,9 @@ namespace thomas
 			{
 
 			private:
-
+				
 			public:
-				virtual bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor) = 0;
-				virtual bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor) = 0;
-				virtual bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor) = 0;
+				virtual bool SetLightColor(thomas::math::Vector4 other) = 0;
 
 				virtual bool Bind() = 0;
 			protected:
@@ -43,12 +41,11 @@ namespace thomas
 				DirectionalLight(GameObject* gameObject);
 				~DirectionalLight();
 
-				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
-				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
-				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
-				bool SetDirection(thomas::math::Vector4 otherLightDirection);
+				bool SetLightColor(thomas::math::Vector4 other);
 
 				bool Bind();
+
+				void Update();
 			private:
 				int m_index;
 				graphics::LightManager::DirectionalLightStruct m_thisLight;
@@ -60,13 +57,17 @@ namespace thomas
 				PointLight(GameObject* gameObject);
 				~PointLight();
 
-				bool SetAmbientColor(thomas::math::Vector4 otherAmbientColor);
-				bool SetDiffuseColor(thomas::math::Vector4 otherDiffuseColor);
-				bool SetSpecularColor(thomas::math::Vector4 otherSpecularColor);
-				bool SetPosition(thomas::math::Vector4 otherPosition);
-				bool SetAttenuationFactor(int otherAttenuationFactor);
+				bool SetLightColor(thomas::math::Vector4 other);
+				bool SetConstantAttenuation(float other);
+				bool SetLinearAttenuation(float other);
+				bool SetQuadraticAttenuation(float other);
+				bool SetPower(float other);
 
 				bool Bind();
+
+				void Update();
+				
+
 			private:
 				int m_index;
 				graphics::LightManager::PointLightStruct m_thisLight;

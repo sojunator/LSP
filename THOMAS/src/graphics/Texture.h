@@ -21,7 +21,8 @@ namespace thomas
 				SPECULAR = 1,
 				NORMAL = 2,
 				HEIGHT_MAP = 3,
-				CUBEMAP = 4
+				CUBEMAP = 4,
+				UNDEFINED = 100
 			};
 
 			enum class SamplerState {
@@ -35,6 +36,9 @@ namespace thomas
 		private:
 			Texture(int mappingMode, TextureType type, std::string path);
 			Texture(SamplerState samplerState, TextureType type, std::string path);
+			Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView* textureView);
+			Texture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView* textureView);
+			Texture(SamplerState samplerState, int slot, std::string path);
 			static bool CreateTextureSamplers();
 			void SetTextureSampler(int textureMode);
 			void SetTextureSampler(SamplerState samplerState);
@@ -42,11 +46,18 @@ namespace thomas
 			static bool Init();
 			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
 			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string path);
+			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView* textureView);
+			static Texture* CreateTexture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView* textureView);
+			static Texture* CreateTexture(SamplerState samplerState, int slot, std::string path);
+
+			static ID3D11SamplerState* GetSamplerState(SamplerState samplerState);
+
 			std::string GetName();
 			ID3D11Resource* GetTexture();
 			ID3D11ShaderResourceView* GetTextureView();
 			TextureType GetTextureType();
 
+			void SetTextureView(ID3D11ShaderResourceView* view);
 			bool Initialized();
 
 			bool Bind();
@@ -67,6 +78,7 @@ namespace thomas
 				ID3D11SamplerState* MIRROR;
 			};
 			
+			int m_resourceSlot;
 			std::string m_name;
 			TextureData m_data;
 			bool m_initialized;
