@@ -23,13 +23,14 @@ namespace thomas
 				return false;
 			}
 
-		/*	Microsoft::WRL::ComPtr<ID3D11Texture2D> image;
+			Microsoft::WRL::ComPtr<ID3D11Texture2D> image;
+			resource.As(&image);
 			
 			CD3D11_TEXTURE2D_DESC imageDesc;	
 			image->GetDesc(&imageDesc);
 
 			s_origin.x = float(imageDesc.Width / 2);
-			s_origin.y = float(imageDesc.Height / 2);*/
+			s_origin.y = float(imageDesc.Height / 2);
 
 			return true;
 		}
@@ -66,7 +67,6 @@ namespace thomas
 		{
 			SetImagePosX(posX);
 			SetImagePosY(posY);
-			s_origin = math::Vector2(50, 50);
 
 			s_spriteBatch->Begin();
 

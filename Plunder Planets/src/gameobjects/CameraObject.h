@@ -18,18 +18,18 @@ public:
 		m_sprite = AddComponent<component::SpriteComponent>();
 
 		//GUI images
-		m_sprite->SetPositionX(200.f);
-		m_sprite->SetPositionY(300.f);
+		m_sprite->SetPositionX(400.f);
+		m_sprite->SetPositionY(20.f);
 		m_sprite->SetScale(1.0f);
 
 		//Text
 		m_text->SetFont("Gold");
-		m_text->SetOutput("Hello");
+		m_text->SetOutput("Hello...");
 		m_text->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
 		m_text->SetRotation(0.0f);
 		m_text->SetScale(1.0f);
 		m_text->SetPositionX(400.f);
-		m_text->SetPositionY(300.f);
+		m_text->SetPositionY(30.f);
 		m_text->SetDropshadow(false);
 		m_text->SetOutline(true);
 

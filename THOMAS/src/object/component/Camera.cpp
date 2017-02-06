@@ -124,31 +124,6 @@ namespace thomas
 					m_skybox->Unbind();
 			}
 
-			void Camera::SetGUI(std::string path, std::string shaderName, int bitmapWidth, int bitmapHeight)
-			{
-				m_bitmap = new graphics::Bitmap(path, shaderName, bitmapWidth, bitmapHeight);
-			}
-
-			void Camera::BindGUI()
-			{
-				if (m_bitmap)
-				{
-					//math::Matrix mvoMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix()).Transpose();
-					m_bitmap->Bind(0, 0); //GUI top left position
-				}
-			}
-
-			void Camera::UnbindGUI()
-			{
-				if (m_bitmap)
-					m_bitmap->Unbind();
-			}
-
-			void Camera::ReleaseGUI()
-			{
-				m_bitmap->~Bitmap();
-			}
-
 			void Camera::ReleaseSkybox()
 			{
 				m_skybox->~Skybox();

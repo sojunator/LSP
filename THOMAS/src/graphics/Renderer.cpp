@@ -47,10 +47,6 @@ namespace thomas
 
 		void thomas::graphics::Renderer::Render()
 		{
-
-
-
-
 			//TODO: Find out if this is the fastest order of things.
 
 			for (object::component::Camera* camera : GetCameras()) //Render for every camera;
@@ -61,13 +57,6 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
 				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
-
-
-				
-
-
-
-
 
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
 
@@ -148,7 +137,6 @@ namespace thomas
 					TextRender::RenderText(textComponent);
 					
 				}
-
 
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
