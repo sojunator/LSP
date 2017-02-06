@@ -47,7 +47,7 @@ struct VS_OUT
 
 float3 GetWorldPositionFromDepth(float2 texCoord)
 {
-	float depth = depthBufferTexture.Sample(depthBufferSampler, texCoord).r;
+	float depth = depthBufferTexture.Load(float3(texCoord, 0)).r;
 	float4 clipSpace;
 	clipSpace.x = texCoord.x * 2.0 - 1.0;
 	clipSpace.y = -texCoord.y * 2.0 - 1.0;
@@ -64,14 +64,13 @@ float4 PSMain(VS_OUT input) : SV_Target
 {
 
 	float waterLevel = 0.0;
-	float waveAmplitude = 1.0;
+	float waveAmplitude = 3.0;
 
-	float3 color2 = backBufferTexture.Sample(backBufferSampler, input.Tex).rgb;
+	float3 color2 = backBufferTexture.Load(float3(input.Tex.xy, 0)).rgb;
 	float3 color = color2;
-
-	float3 position = GetWorldPositionFromDepth(input.Tex);
+	float3 position = GetWorldPositionFromDepth(input.Tex.xy);
 	
-	return float4(position.y, position.y, position.y, 1);
+
 
 	if(waterLevel >= camPosition.y)
 		return float4(color2*float3(0,0,0.2), 1);
@@ -86,14 +85,9 @@ float4 PSMain(VS_OUT input) : SV_Target
 		float3 eyeVecNorm = normalize(eyeVec);
 		float t = (waterLevel - camPosition.y) / eyeVecNorm.y;
 		float3 surfacePoint = camPosition + eyeVecNorm * t;
-		
-
-		
 			
-		color = float3(diff, diff, diff);
-		
 
-	//	float2 texCoord = (surfacePoint.xz + eyeVecNorm.xz * 0.1f) * uvScale + uvOffset;
+		float2 texCoord = (surfacePoint.xz * uvScale + uvOffset);
 
 		//float2 texCoord;
 		//for (int i = 0; i < 10; ++i)
@@ -109,9 +103,9 @@ float4 PSMain(VS_OUT input) : SV_Target
 		//}
 
 
-	//	surfacePoint = displacementTexture.Sample(displacementSampler, texCoord).rgb;
+		surfacePoint = displacementTexture.Sample(displacementSampler, texCoord).rgb;
 
-	//	color = surfacePoint;
+		color = surfacePoint;
 
 		//float depth = length(position - surfacePoint);
 		//float depth2 = surfacePoint.y - position.y;
