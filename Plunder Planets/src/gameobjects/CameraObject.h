@@ -14,15 +14,16 @@ public:
 	CameraObject() : GameObject("CameraObject") 
 	{
 		m_camera = AddComponent<component::Camera>();
+		m_transform->SetPosition(0, 1, 3);
 	};
 
 	bool Start()
 	{
 
-		m_camera->SetSkybox("../res/textures/test.dds", "skyboxShader");
+		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
-		m_normalSpeed = 10.0f;
-		m_fastSpeed = 30.0f;
+		m_normalSpeed = 50.0f;
+		m_fastSpeed = 100.0f;
 		m_flySpeed = m_normalSpeed;
 		m_jaw = 0;
 		m_pitch = 0;
@@ -38,7 +39,7 @@ public:
 
 		
 		
-		/*if (Input::GetKey(Input::Keys::A))
+		if (Input::GetKey(Input::Keys::A))
 		{
 			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
 		}
@@ -53,7 +54,7 @@ public:
 		if (Input::GetKey(Input::Keys::S))
 		{
 			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}*/
+		}
 
 
 

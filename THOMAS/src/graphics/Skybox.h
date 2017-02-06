@@ -21,6 +21,7 @@ namespace thomas
 			Skybox(std::string path, std::string shaderName);
 			~Skybox();
 			bool Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix);
+			bool BindCubemap();
 			bool Unbind();
 			void Draw();
 			void BindSkyboxTexture();

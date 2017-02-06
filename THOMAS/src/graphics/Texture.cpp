@@ -41,6 +41,72 @@ namespace thomas
 			return texture;
 		}
 
+		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView * textureView)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == name && s_loadedTextures[i]->GetTextureType() == TextureType::UNDEFINED)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, slot, name, textureView);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
+		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string path)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == path && s_loadedTextures[i]->GetTextureType() == TextureType::UNDEFINED)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, slot, path);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
+		ID3D11SamplerState * Texture::GetSamplerState(SamplerState samplerState)
+		{
+			ID3D11SamplerState* sampler;
+			switch (samplerState)
+			{
+			case SamplerState::WRAP:
+				sampler = s_samplerStates.WRAP;
+				break;
+			case SamplerState::CLAMP:
+				sampler = s_samplerStates.CLAMP;
+				break;
+			case SamplerState::DECAL:
+				sampler = s_samplerStates.DECAL;
+				break;
+			case SamplerState::MIRROR:
+				sampler = s_samplerStates.MIRROR;
+				break;
+			default:
+				sampler = s_samplerStates.WRAP;
+				break;
+			}
+			return sampler;
+		}
+
+		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView)
+		{
+			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == name && s_loadedTextures[i]->GetTextureType() == type)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, type, name, textureView);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
 		std::string Texture::GetName()
 		{
 			return m_name;
@@ -59,18 +125,40 @@ namespace thomas
 		{
 			return m_textureType;
 		}
+		void Texture::SetTextureView(ID3D11ShaderResourceView * view)
+		{
+			m_data.textureView = view;
+		}
 		bool Texture::Initialized()
 		{
 			return m_initialized;
 		}
 		bool Texture::Bind()
 		{
-			Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, (int)m_textureType);
-			return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
+			if (m_textureType == TextureType::UNDEFINED)
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, m_resourceSlot);
+			}
+			else
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, (int)m_textureType);
+				return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
+			}
+			
 		}
 		bool Texture::Unbind()
 		{
-			return Shader::GetCurrentBoundShader()->BindTextures(NULL, (int)m_textureType);
+			if (m_textureType == TextureType::UNDEFINED)
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindTextures(NULL, m_resourceSlot);
+			}
+			else
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, (int)m_textureType);
+				return Shader::GetCurrentBoundShader()->BindTextures(NULL, (int)m_textureType);
+			}
 		}
 		Texture::Texture(int mappingMode, TextureType type, std::string path)
 		{
@@ -102,17 +190,48 @@ namespace thomas
 				SetTextureSampler(samplerState);
 		}
 
+		Texture::Texture(SamplerState samplerState, int slot, std::string path)
+		{
+			m_textureType = TextureType::UNDEFINED;
+			m_resourceSlot = slot;
+			m_name = path;
+			m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+			if (m_initialized)
+				SetTextureSampler(samplerState);
+		}
+
+		Texture::Texture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView)
+		{
+			m_textureType = type;
+			m_name = name;
+			SetTextureSampler(samplerState);
+			m_initialized = true;
+			m_data.texture = NULL;
+			m_data.textureView = textureView;
+		}
+
+		Texture::Texture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView * textureView)
+		{
+			m_textureType = TextureType::UNDEFINED;
+			m_resourceSlot = slot;
+			m_name = name;
+			SetTextureSampler(samplerState);
+			m_initialized = true;
+			m_data.texture = NULL;
+			m_data.textureView = textureView;
+		}
+
 		bool Texture::CreateTextureSamplers()
 		{
 			D3D11_SAMPLER_DESC samplerDesc;
-			samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 			samplerDesc.MipLODBias = 0.0f;
 			samplerDesc.MaxAnisotropy = 1;
-			samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-			samplerDesc.BorderColor[0] = 0;
-			samplerDesc.BorderColor[1] = 0;
-			samplerDesc.BorderColor[2] = 0;
-			samplerDesc.BorderColor[3] = 0;
+			samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+			samplerDesc.BorderColor[0] = 1;
+			samplerDesc.BorderColor[1] = 1;
+			samplerDesc.BorderColor[2] = 1;
+			samplerDesc.BorderColor[3] = 1;
 			samplerDesc.MinLOD = 0;
 			samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
@@ -197,7 +316,8 @@ namespace thomas
 		{
 			for (int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				s_loadedTextures[i]->m_data.texture->Release();
+				if(s_loadedTextures[i]->m_data.texture)
+					s_loadedTextures[i]->m_data.texture->Release();
 				s_loadedTextures[i]->m_data.textureView->Release();
 
 			}

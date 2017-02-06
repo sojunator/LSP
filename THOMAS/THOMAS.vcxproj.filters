@@ -34,14 +34,22 @@
     <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
     <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
-    <ClCompile Include="src\utils\Plane.cpp" />
+    <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
+    <ClCompile Include="src\Terrain\Terrain.cpp" />
+    <ClCompile Include="src\utils\HeightMap.cpp" />
+    <ClCompile Include="src\utils\Plane.cpp" />
+    <ClCompile Include="src\Islands.cpp" />
     <ClCompile Include="src\object\component\Light.cpp" />
     <ClCompile Include="src\graphics\LightManager.cpp" />
     <ClCompile Include="src\graphics\Skybox.cpp" />
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\graphics\Bitmap.cpp" />
     <ClCompile Include="src\object\component\SoundComponent.cpp" />
+    <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
+    <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
+    
+    <ClCompile Include="src\graphics\PostEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Material.h" />
@@ -83,12 +91,19 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\utils\Plane.h" />
     <ClInclude Include="src\graphics\Material.h" />
+    <ClInclude Include="src\Terrain\Terrain.h" />
+    <ClInclude Include="src\utils\HeightMap.h" />
+    <ClInclude Include="src\Islands.h" />
     <ClInclude Include="src\object\component\Light.h" />
     <ClInclude Include="src\graphics\LightManager.h" />
     <ClInclude Include="src\graphics\Skybox.h" />
     <ClInclude Include="src\Sound.h" />
+    <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />
+    <ClInclude Include="src\utils\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\graphics\Bitmap.h" />
     <ClInclude Include="src\object\component\SoundComponent.h" />
+    <ClInclude Include="src\graphics\PostEffect.h" />
+    
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />

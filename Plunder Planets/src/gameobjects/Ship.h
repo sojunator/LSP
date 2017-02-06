@@ -30,13 +30,13 @@ public:
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
 
 		m_forwardSpeed = 0;
-		m_rotationSpeed = 0.1;
+		m_rotationSpeed = 5.0f;
 
-		m_accelerationSpeed = 1.5;
-		m_retardationSpeed = 0.8;
+		m_accelerationSpeed = 1.5f;
+		m_retardationSpeed = 0.8f;
 		m_maxSpeed = 25;
 
-		m_controlSensitivity = 0.1;
+		m_controlSensitivity = 0.13f;
 
 		m_cameraSpeed = 3;
 
@@ -49,26 +49,6 @@ public:
 	{
 		float dt = Time::GetDeltaTime();
 		//ship controls
-		if (Input::GetKey(Input::Keys::D))//Constrols inverted, since ship object comes from maya
-		{
-			//m_transform->Translate(-m_transform->Right()*m_forwardSpeed*dt);
-			m_transform->Rotate(m_rotationSpeed * dt, 0, 0);
-		}
-		if (Input::GetKey(Input::Keys::A))
-		{
-			
-			//m_transform->Translate(m_transform->Right()*m_forwardSpeed*dt);
-			m_transform->Rotate(-m_rotationSpeed * dt, 0, 0);
-		}
-		if (Input::GetKey(Input::Keys::S))
-		{
-			m_transform->Translate(m_transform->Forward()*m_forwardSpeed*dt);
-		}
-		if (Input::GetKey(Input::Keys::W))
-		{
-			m_transform->Translate(-m_transform->Forward()*m_forwardSpeed*dt);
-		}
-		
 		
 		if (/*Input::GetLeftStickY() > m_controlSensitivity ||*/ Input::GetButton(Input::Buttons::RT))
 		{
@@ -87,34 +67,30 @@ public:
 			m_transform->Translate(-m_transform->Forward() * m_forwardSpeed * dt);
 		}
 
-		if (m_forwardSpeed > 0)
-		{
-			float left_x = Input::GetLeftStickX();
-			if (std::abs(left_x) > m_controlSensitivity)
-			{
-				m_transform->Rotate(-left_x * m_rotationSpeed * dt, 0, 0);
-			}
-			
-
-		}
+		
 		float right_x = Input::GetRightStickX();
 		float right_y = Input::GetRightStickY();
-		float left_y = Input::GetLeftStickY();
+
+		math::Vector3 distanceVector = m_transform->GetPosition() - m_cameraObject->m_transform->GetPosition();
 		if (std::abs(right_x) > m_controlSensitivity)
 		{
-			math::Vector3 v = m_transform->GetPosition() - m_cameraObject->m_transform->GetPosition();
-			m_cameraObject->m_transform->Translate(v);
-			m_cameraObject->m_transform->Rotate(m_cameraSpeed * right_x * dt, 0, 0);
-			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * v.Length());
+			
+			m_cameraObject->m_transform->Translate(distanceVector);
+			m_cameraObject->m_transform->Rotate(m_rotationSpeed * right_x * dt, 0, 0);
+			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * distanceVector.Length());
 			
 		}
-		if (std::abs(right_y > m_controlSensitivity))
+		if (std::abs(right_y) > m_controlSensitivity)
 		{
 			m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * 20 * dt);
 		}
-		if (std::abs(left_y) > m_controlSensitivity)
+		if (Input::GetButton(Input::Buttons::RB) && distanceVector.Length() > 10)
 		{
-			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Forward() * left_y * 20 * dt);
+			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Forward() * 20 * dt);
+		}
+		else if (Input::GetButton(Input::Buttons::LB) && distanceVector.Length() < 250)
+		{
+			m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * 20 * dt);
 		}
 		/*else
 		{

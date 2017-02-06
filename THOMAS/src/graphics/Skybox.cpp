@@ -28,7 +28,7 @@ namespace thomas
 		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)
 		{
 			m_data.shader->Bind();
-			
+			m_data.shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			bool v = m_data.shader->BindVertexBuffer(m_data.vertexBuffer, sizeof(math::Vector3), 0);
 			bool i = m_data.shader->BindIndexBuffer(m_data.indexBuffer);
 			m_mvpStruct.mvpMatrix = mvpMatrix;
@@ -44,6 +44,12 @@ namespace thomas
 			Draw();
 
 			return v && i;
+		}
+
+		bool Skybox::BindCubemap()
+		{
+			m_data.texture->Bind();
+			return true;
 		}
 
 		bool Skybox::Unbind()

@@ -7,9 +7,12 @@
 #include "graphics\Shader.h"
 #include "graphics\Model.h"
 #include "graphics\Material.h"
+#include "graphics\PostEffect.h"
 #include <assimp\Importer.hpp>
 #include "Sound.h"
 
+#include <AtlBase.h>
+#include <atlconv.h>
 
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
@@ -47,6 +50,9 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Sound::Init();
 
+		if (s_initialized)
+			s_initialized = graphics::PostEffect::Init();
+
 		return s_initialized;
 	}
 
@@ -57,6 +63,10 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
+
+		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " DT: " + std::to_string(Time::GetDeltaTime());
+		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
+
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
@@ -148,7 +158,7 @@ namespace thomas {
 		s_device = nullptr;
 
 		#ifdef _DEBUG
-		//s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		s_debug->Release();
 		s_debug = nullptr;
 		#endif // _DEBUG

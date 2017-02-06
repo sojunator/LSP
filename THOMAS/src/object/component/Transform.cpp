@@ -112,7 +112,7 @@ namespace thomas
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(newPosition, math::Vector3::Forward, math::Vector3::Up);
 				Decompose();
 			}
-			void Transform::SetPositon(float x, float y, float z)
+			void Transform::SetPosition(float x, float y, float z)
 			{
 				SetPosition(math::Vector3(x, y, z));
 			}

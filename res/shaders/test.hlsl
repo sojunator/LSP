@@ -167,5 +167,5 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		outputColor += (diffuse + specular) * attenuation;
 	}
 	
-	return textureColor;//outputColor + globalAmbientColor;
+	return outputColor;//outputColor + globalAmbientColor;
 }
