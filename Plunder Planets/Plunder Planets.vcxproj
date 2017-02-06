@@ -167,6 +167,7 @@
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />
+    <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +181,7 @@
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
+    <ClCompile Include="src\postEffects\OceanPostProcess.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

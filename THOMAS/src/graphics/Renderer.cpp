@@ -27,8 +27,8 @@ namespace thomas
 			if (utils::D3d::InitRenderer(s_backBuffer,s_backBufferSRV, s_depthStencilState, s_depthStencilView, s_depthBufferSRV))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_NONE);
-				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE);
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
 				return true;
 
 			}
@@ -61,18 +61,18 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 
 
-				
-
-
-
-
-
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
+
+				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 
 				for (Material* mat : Material::GetLoadedMaterials())
 				{
-					ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 					mat->Update();
+				}
+
+				for (PostEffect* fx : PostEffect::GetLoadedPostEffects())
+				{
+					fx->Update();
 				}
 
 				if (Input::GetKey(Input::Keys::X))
@@ -127,8 +127,7 @@ namespace thomas
 				camera->BindSkybox();
 				camera->UnbindSkybox();
 
-
-				PostEffect::Render(s_backBufferSRV, s_backBuffer);
+				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
@@ -151,7 +150,6 @@ namespace thomas
 			std::vector<object::component::Camera*> cameras;
 			for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Camera>())
 			{
-
 				cameras.push_back(gameObject->GetComponent<object::component::Camera>());
 			}
 			return cameras;
@@ -165,7 +163,6 @@ namespace thomas
 			s_objectBufferStruct.projectionMatrix = camera->GetProjMatrix().Transpose();
 			s_objectBufferStruct.mvpMatrix = s_objectBufferStruct.projectionMatrix * s_objectBufferStruct.viewMatrix * s_objectBufferStruct.worldMatrix;
 			s_objectBufferStruct.camPos = camera->GetPosition();
-
 
 			utils::D3d::FillBuffer(s_objectBuffer, s_objectBufferStruct);
 
