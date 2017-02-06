@@ -34,6 +34,7 @@ cbuffer material : register(b1)
     float4 ambientColor;
 	float4 diffuseColor;
 	float4 specularColor;
+	float4 materialProperty;
 	float specularPower;
 }
 
@@ -74,9 +75,7 @@ VSOutput VSMain(in VSInput input)
 float4 PSMain(VSOutput input) : SV_TARGET
 {
 
-
 	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
-
 
     float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
 
@@ -102,6 +101,11 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		specular = specular*specularIntensity;
 
 	}
-	return diffuseColor;
+
+	if (materialProperty.x == 0) //currently calculating color of diffuse
+		return diffuseColor + ambientColor * 0.05f;
+	else //currently calculating color of texture
+		return textureColor + ambientColor * 0.05f; 
+
 	return ambientColor * 0.05f + diffuse  + specular*specularColor;
 }
