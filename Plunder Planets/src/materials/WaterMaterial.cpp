@@ -55,7 +55,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 	m_materialProperties.g_PerlinSize = 1.0;
 	m_materialProperties.g_PerlinAmplitude = math::Vector3(35, 42, 57);
-	m_materialProperties.g_PerlinOctave = math::Vector3(1.12f, 0.59f, 0.23f)*0.016;
+	m_materialProperties.g_PerlinOctave = math::Vector3(1.12f, 0.59f, 0.23f)*0.01;
 	m_materialProperties.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
