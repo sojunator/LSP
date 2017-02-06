@@ -11,7 +11,7 @@ public:
 	{
 		int dim = 2000;
 
-		m_waterMaterial = (Material::CreateMaterial("waterMat", "waterMaterial"));
+		m_waterMaterial = (Material::CreateMaterial("waterMat", "terrainMaterial"));
 
 		utils::Plane::PlaneData pData =  utils::Plane::CreatePlane(dim, 1.0 / 10);
 		Mesh* m = new Mesh(pData.verts, pData.indices, "oceanMesh", m_waterMaterial);
@@ -23,7 +23,7 @@ public:
 		m_renderer->SetModel("ocean");
 
 		//m_transform->SetScale(0.05);
-		m_transform->SetPosition(math::Vector3(-dim / 2, 0, dim / 2));
+		m_transform->SetPosition(math::Vector3(-dim / 2, -1, dim / 2));
 		
 	};
 
