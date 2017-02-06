@@ -16,7 +16,7 @@
 #include "gameobjects\Ship.h"
 
 
-#include "postEffects\testEffect.h"
+#include "postEffects\OceanPostProcess.h"	
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -42,12 +42,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 	//PostFX test shader
-	thomas::graphics::Shader::CreateShader("PostFXTest", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
-		"../res/shaders/postFXTest.hlsl");
+	thomas::graphics::Shader::CreateShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
+		"../res/shaders/oceanPostProcess.hlsl");
 
-	thomas::graphics::PostEffect::RegisterNewPostEffectType("testFX", new TestEffect("PostFXTest"));
+//	thomas::graphics::PostEffect::RegisterNewPostEffectType("oceanEffect", new OceanPostProcess("OceanFX"));
 
-	//thomas::graphics::PostEffect::CreatePostEffect("test", "testFX");
+//	thomas::graphics::PostEffect::CreatePostEffect("test", "oceanEffect");
 
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));

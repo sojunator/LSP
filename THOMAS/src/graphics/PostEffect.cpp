@@ -8,6 +8,16 @@ namespace thomas
 		std::map<std::string, PostEffect*> PostEffect::s_postEffectTypes;
 		ID3D11Buffer* PostEffect::s_quadVertexBuffer;
 		PostEffect* PostEffect::s_renderToBackBuffer;
+		PostEffect::CameraBufferStruct PostEffect::s_cameraBufferStruct;
+		ID3D11Buffer* PostEffect::s_cameraBuffer;
+		void PostEffect::UpdateCameraBuffer(object::component::Camera * camera)
+		{
+			s_cameraBufferStruct.camPos = camera->GetPosition();
+			s_cameraBufferStruct.viewMatrixInv = camera->GetViewMatrix().Invert().Transpose();
+			s_cameraBufferStruct.projectionMatrixInv = camera->GetProjMatrix().Invert().Transpose();
+
+			utils::D3d::FillBuffer(s_cameraBuffer, s_cameraBufferStruct);
+		}
 		PostEffect::PostEffect(std::string shader)
 		{
 			m_shader = Shader::GetShaderByName(shader);
@@ -37,6 +47,9 @@ namespace thomas
 				"../res/thomasShaders/postEffect.hlsl");
 			
 			s_renderToBackBuffer = new PostEffect("renderToBackBuffer", renderToBackBufferShader);
+
+			s_cameraBuffer = utils::D3d::CreateBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+
 			return true;
 		}
 
@@ -95,12 +108,15 @@ namespace thomas
 			return postEffects;
 		}
 
-		void PostEffect::Render(ID3D11ShaderResourceView * prePostFXRender, ID3D11RenderTargetView * backBuffer)
+		void PostEffect::Render(ID3D11ShaderResourceView * prePostFXRender, ID3D11RenderTargetView * backBuffer, object::component::Camera* camera)
 		{
 			if (s_loadedEffects.empty())
 				return;
 
 			Clear();
+
+			UpdateCameraBuffer(camera);
+
 			ID3D11ShaderResourceView* prevRender = prePostFXRender;
 			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
 			{
@@ -133,7 +149,7 @@ namespace thomas
 			for (auto const& effectTypes : s_postEffectTypes)
 			{
 				delete effectTypes.second;
-			}
+			}	
 		}
 
 		bool PostEffect::RenderPostEffect(ID3D11ShaderResourceView* prevRender, ID3D11RenderTargetView* backBuffer)
@@ -151,9 +167,12 @@ namespace thomas
 			m_shader->BindTextureSampler(Texture::GetSamplerState(Texture::SamplerState::WRAP), 0);
 			m_shader->BindTextures(prevRender, 0);
 			
+			m_shader->BindBuffer(s_cameraBuffer, Shader::ResourceType::GAME_OBJECT);
+
 			Bind();
 			thomas::ThomasCore::GetDeviceContext()->Draw(4, 0);
 			Unbind();
+			m_shader->BindBuffer(NULL, Shader::ResourceType::GAME_OBJECT);
 			m_shader->BindTextures(NULL, 0);
 			m_shader->Unbind();
 			return true;
