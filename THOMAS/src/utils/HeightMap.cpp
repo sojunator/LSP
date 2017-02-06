@@ -27,8 +27,8 @@ namespace thomas
 			float x, y;
 			for (int i = 0; i < plane.verts.size(); i++)
 			{
-				x = -(plane.verts[i].position.z - 0) * detail;
-				y = (plane.verts[i].position.x - 0) * detail;
+				x = -(((plane.verts[i].position.z) * detail)  + offset.x);
+				y = (((plane.verts[i].position.x) * detail) - offset.y);
 
 				double e = 0.0f;
 				double nx = x / width - 0.5,
