@@ -43,18 +43,7 @@ struct VSOutput
 	float3 positionWS : POSITION;
     float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
-    float WorldY : WORLDY;
 };
-
-float4 TerrainColour(float y)
-{
-    if (y < 0.5f * 2)
-        return float4(0, 1.0f - y * 0.2, 1.0f, 1.0);
-    else if (y < 1.1 * 2)
-        return float4(0.749f, 0.749f, 0.749f - y * 0.2, 1.0f);
-    else
-        return float4(0.24f - y * 0.02, 0.74f - y * 0.02, 0.49f - y * 0.02, 1.0f);
-}
 
 
 VSOutput VSMain(in VSInput input)
@@ -69,14 +58,24 @@ VSOutput VSMain(in VSInput input)
 
 	output.normal = mul(input.normal, (float3x3)worldMatrix);
 	output.normal = normalize(output.normal);
-    output.WorldY = input.position.y;
 
 	return output;
 }
 
+float4 TerrainColour(float y)
+{
+    if (y < 0.5f * 2)
+        return float4(0, 1.0f - y*0.2, 1.0f, 1.0);
+    else if (y < 1.1 * 2)
+        return float4(0.749f, 0.749f, 0.749f - y * 0.2, 1.0f);
+    else
+        return float4(0.24f - y * 0.02, 0.74f - y * 0.02, 0.49f - y * 0.02, 1.0f);
+}
 
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-    return TerrainColour(input.WorldY);
+   return TerrainColour(input.positionWS.y);
+   float color = saturate(input.positionWS.y);
+   return float4(color, color, color, 1.0f);
 }
