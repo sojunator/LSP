@@ -22,22 +22,24 @@ public:
 
 	bool Start()
 	{
-		m_renderer->SetModel("testModel");
+
+		m_modelIndex = 0;
+		m_renderer->SetModel("testModel0");
 
 		m_sound->SetName("fMeow");
 
-		m_transform->SetPosition(math::Vector3(0, 0, 0));
+		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
 
 		m_forwardSpeed = 0;
 		
-		m_accelerationSpeed = 1.5f;
+		m_accelerationSpeed = 9.5f;
 		m_retardationSpeed = 0.8f;
-		m_maxSpeed = 5.0f;
+		m_maxSpeed = 30.0f;
 		
 		m_rotationSpeed = 0.0f;
-		m_rotationAccelerationSpeed = 0.1f;
-		m_rotationMaxSpeed = 0.9f;
+		m_rotationAccelerationSpeed = 0.5f;
+		m_rotationMaxSpeed = 4.9f;
 
 		m_controlSensitivity = 0.13f;
 
@@ -56,6 +58,12 @@ public:
 	{
 		float dt = Time::GetDeltaTime();
 		
+		m_modelIndex = (m_modelIndex + 1) % 3;
+		
+
+		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+
+
 		//ship controlls
 		if (Input::GetButton(Input::Buttons::RT))
 		{
@@ -161,4 +169,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	GameObject* m_cameraObject;
+
+	int m_modelIndex;
+
 };
