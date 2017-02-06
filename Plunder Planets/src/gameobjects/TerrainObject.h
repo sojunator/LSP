@@ -16,7 +16,6 @@ public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-
 	}
 
 	bool Start()
