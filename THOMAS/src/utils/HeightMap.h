@@ -12,7 +12,7 @@ namespace thomas
 		class HeightMap
 		{
 		public:
-			static std::vector<graphics::Mesh*> HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, graphics::Material* mat);
+			static std::vector<graphics::Mesh*> HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, graphics::Material* mat, math::Vector2 offset);
 			static std::vector<float> GetHeight();
 		private:
 			static std::vector<float> s_height;

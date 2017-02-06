@@ -27,6 +27,7 @@
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\Texture.cpp" />
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Islands.cpp" />
     <ClCompile Include="src\object\component\Camera.cpp" />
     <ClCompile Include="src\object\component\Component.cpp" />
     <ClCompile Include="src\object\component\RenderComponent.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\graphics\Texture.h" />
     <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Islands.h" />
     <ClInclude Include="src\object\component\Camera.h" />
     <ClInclude Include="src\object\component\Component.h" />
     <ClInclude Include="src\object\component\Components.h" />

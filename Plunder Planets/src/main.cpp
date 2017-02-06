@@ -19,7 +19,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 	//Init shaders
-	 thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
+	thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
 		"../res/shaders/phong.hlsl");
 
 	thomas::graphics::Shader::CreateShader("tesselationShader", thomas::graphics::Shader::InputLayouts::STANDARD,
@@ -42,11 +42,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 
-	utils::Plane::PlaneData plane = utils::Plane::CreatePlane(128, 1, "Plane-1", m);
+	//utils::Plane::PlaneData plane = utils::Plane::CreatePlane(128, 1);
 
-	
+	thomas::Islands islands(3, m, 1024 / 4, 0.125, 1024, 20);
 
-	Model * model = Model::CreateModel("Plane-1", thomas::utils::HeightMap::ApplyHeightMap(128, 1, plane, m));
+	Model * model = Model::CreateModel("Plane-1", islands.GetIsland(0));
+	Model * model1 = Model::CreateModel("Plane-2", islands.GetIsland(1));
+	Model * model2 = Model::CreateModel("Plane-3", islands.GetIsland(2));
 
 
 

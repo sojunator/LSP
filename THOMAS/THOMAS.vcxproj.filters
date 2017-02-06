@@ -30,6 +30,7 @@
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\Terrain\Terrain.cpp" />
     <ClCompile Include="src\utils\HeightMap.cpp" />
+    <ClCompile Include="src\Islands.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -69,6 +70,7 @@
     <ClInclude Include="src\graphics\Material.h" />
     <ClInclude Include="src\Terrain\Terrain.h" />
     <ClInclude Include="src\utils\HeightMap.h" />
+    <ClInclude Include="src\Islands.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\utils\directXTK\SimpleMath.inl" />
