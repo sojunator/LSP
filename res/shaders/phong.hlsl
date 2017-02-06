@@ -103,9 +103,9 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	}
 
 	if (materialProperty.x == 0) //currently calculating color of diffuse
-		return diffuseColor + ambientColor * 0.05f;
+		return diffuseColor + ambientColor * 0.05f; //+diffuse when normal maps working, specular still not working
 	else //currently calculating color of texture
-		return textureColor + ambientColor * 0.05f; 
+		return textureColor + ambientColor * 0.05f;
 
-	return ambientColor * 0.05f + diffuse  + specular*specularColor;
+	//return ambientColor * 0.05f + diffuse  + specular*specularColor;
 }
