@@ -165,6 +165,9 @@
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />
+    <ClInclude Include="src\scenes\GameScene.h" />
+    <ClInclude Include="src\scenes\LoadScreenScene.h" />
+    <ClInclude Include="src\scenes\MenuScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />
