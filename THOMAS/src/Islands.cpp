@@ -17,7 +17,7 @@ namespace thomas
 			m_size.push_back(size);
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
-			m_islandCenter.push_back(math::Vector2(size / 2, size / 2));
+			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + (size / 2), m_worldPosOffset[i].y + (size / 2)));
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail, m_worldPosOffset[i]));
 			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
 		}
