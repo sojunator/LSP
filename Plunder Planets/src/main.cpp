@@ -18,13 +18,14 @@
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-
-	srand(8);
-
 	MSG msg = { 0 };
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder plantits");
 	//init code
-	
+	double time = thomas::Time::GetInitTime();
+	srand(time);
+
+
+
 	//Init shaders
 	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
 		"../res/shaders/phong.hlsl");

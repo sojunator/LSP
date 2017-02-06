@@ -21,7 +21,7 @@ namespace thomas
 			myModule.SetNoiseQuality(noise::NoiseQuality::QUALITY_BEST);
 
 			myModule.SetFrequency(1.f);
-			
+
 			myModule.SetSeed(rand() % 1000);
 
 			float x, y;

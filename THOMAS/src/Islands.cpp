@@ -17,7 +17,7 @@ namespace thomas
 			m_size.push_back(size);
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
-			m_islandCenter.push_back(math::Vector2(size/2, size/2));
+			m_islandCenter.push_back(math::Vector2(size / 2, size / 2));
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail, m_worldPosOffset[i]));
 			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
 		}
@@ -63,19 +63,16 @@ namespace thomas
 					std::vector<float> distance;
 					for (int j = 0; j < m_worldPosOffset.size(); j++)
 						distance.push_back((m_worldPosOffset[j].x - xy.x) * (m_worldPosOffset[j].x - xy.x) + (m_worldPosOffset[j].y - xy.y) * (m_worldPosOffset[j].y - xy.y));
-					
-					for (int k = 0; k < distance.size() && posNotFound; k++)
+
+					for (int k = 0; k < distance.size(); ++k)
 					{
-						if (distance[k] < m_minDistance * m_minDistance)
-						{
+						if (distance[k] < m_minDistance)
 							break;
-						}
 						else
-						{
-							m_worldPosOffset.push_back(xy);
 							posNotFound = false;
-						}
 					}
+					if (!posNotFound)
+						m_worldPosOffset.push_back(xy);
 				}
 			}
 		}
