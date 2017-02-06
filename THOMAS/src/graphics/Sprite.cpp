@@ -25,7 +25,7 @@ namespace thomas
 
 		/*	Microsoft::WRL::ComPtr<ID3D11Texture2D> image;
 			
-			CD3D11_TEXTURE2D_DESC imageDesc;
+			CD3D11_TEXTURE2D_DESC imageDesc;	
 			image->GetDesc(&imageDesc);
 
 			s_origin.x = float(imageDesc.Width / 2);
