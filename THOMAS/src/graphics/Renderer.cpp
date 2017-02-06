@@ -5,6 +5,7 @@
 #include "PostEffect.h"
 #include "LightManager.h"
 #include "TextRender.h"
+#include "Sprite.h"
 
 namespace thomas
 {
@@ -132,6 +133,15 @@ namespace thomas
 
 				PostEffect::Render(s_backBufferSRV, s_backBuffer);
 
+				//GUI
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::SpriteComponent>())
+				{
+					object::component::SpriteComponent* spriteComponent = gameObject->GetComponent<object::component::SpriteComponent>();
+					Sprite::RenderImage(spriteComponent);
+
+				}
+
+				//Text
 				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::TextComponent>())
 				{
 					object::component::TextComponent* textComponent = gameObject->GetComponent<object::component::TextComponent>();

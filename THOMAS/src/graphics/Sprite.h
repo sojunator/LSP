@@ -4,6 +4,7 @@
 #include <wrl.h>
 #include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteBatch.h"
 #include "../utils/directXTK/WICTextureLoader.h"
+#include "../object/component/SpriteComponent.h"
 
 namespace thomas
 {
@@ -18,12 +19,11 @@ namespace thomas
 			static void SetImagePosX(float posX);
 			static void SetImagePosY(float posY);
 			static void RenderImage(float posX, float posY, float scale);
+			static void RenderImage(object::component::SpriteComponent* sprite);
 			static math::Vector2 GetImagePos();
 
 		private:
 			static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> s_texture;
-			static Microsoft::WRL::ComPtr<ID3D11Resource> s_resource;
-			static Microsoft::WRL::ComPtr<ID3D11Texture2D> s_image;
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;

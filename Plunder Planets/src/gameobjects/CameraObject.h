@@ -15,7 +15,14 @@ public:
 	{
 		m_camera = AddComponent<component::Camera>();
 		m_text = AddComponent<component::TextComponent>();
+		m_sprite = AddComponent<component::SpriteComponent>();
 
+		//GUI images
+		m_sprite->SetPositionX(200.f);
+		m_sprite->SetPositionY(300.f);
+		m_sprite->SetScale(1.0f);
+
+		//Text
 		m_text->SetFont("Gold");
 		m_text->SetOutput("Hello");
 		m_text->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
@@ -104,6 +111,7 @@ public:
 private:
 	component::Camera* m_camera;
 	component::TextComponent* m_text;
+	component::SpriteComponent* m_sprite;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

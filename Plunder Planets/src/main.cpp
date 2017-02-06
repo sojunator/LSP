@@ -15,6 +15,7 @@
 #include "gameobjects\TestPointLight.h"
 #include "gameobjects\Ship.h"
 #include "graphics\TextRender.h"
+#include "graphics\Sprite.h"
 
 
 #include "postEffects\testEffect.h"
@@ -74,6 +75,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
+
+	//Init 2D-images for GUI
+	thomas::graphics::Sprite::LoadTexture("../res/GUI/cat.png");
 
 	//Init text
 	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");

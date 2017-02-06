@@ -12,6 +12,16 @@ namespace thomas
 			{
 			public:
 				SpriteComponent(GameObject* gameObject);
+				math::Vector2 GetPosition();
+				float GetScale();
+
+				void SetPositionX(float posX);
+				void SetPositionY(float posY);
+				void SetScale(float scale);
+				
+			private:
+				math::Vector2 m_imagePos;			
+				float m_scale;	
 			};
 		}
 	}

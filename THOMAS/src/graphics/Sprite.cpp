@@ -5,7 +5,6 @@ namespace thomas
 	namespace graphics
 	{
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> Sprite::s_texture;
-		Microsoft::WRL::ComPtr<ID3D11Resource> Sprite::s_resource;
 		std::unique_ptr<DirectX::SpriteBatch> Sprite::s_spriteBatch;
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
@@ -15,7 +14,8 @@ namespace thomas
 			std::wstring holder = std::wstring(texture.begin(), texture.end());
 			const wchar_t* result = holder.c_str();
 
-			HRESULT hr = DirectX::CreateWICTextureFromFile(ThomasCore::GetDevice(), result, s_resource.GetAddressOf(), s_texture.ReleaseAndGetAddressOf());
+			Microsoft::WRL::ComPtr<ID3D11Resource> resource;
+			HRESULT hr = DirectX::CreateWICTextureFromFile(ThomasCore::GetDevice(), result, resource.GetAddressOf(), s_texture.ReleaseAndGetAddressOf());
 
 			if (FAILED(hr))
 			{
@@ -23,11 +23,13 @@ namespace thomas
 				return false;
 			}
 
+		/*	Microsoft::WRL::ComPtr<ID3D11Texture2D> image;
+			
 			CD3D11_TEXTURE2D_DESC imageDesc;
-			s_image->GetDesc(&imageDesc);
+			image->GetDesc(&imageDesc);
 
 			s_origin.x = float(imageDesc.Width / 2);
-			s_origin.y = float(imageDesc.Height / 2);
+			s_origin.y = float(imageDesc.Height / 2);*/
 
 			return true;
 		}
@@ -35,8 +37,6 @@ namespace thomas
 		void Sprite::Destroy()
 		{
 			s_texture.Reset();
-			s_image.Reset();
-			s_resource.Reset();
 			s_spriteBatch.reset();
 		}
 
@@ -66,6 +66,7 @@ namespace thomas
 		{
 			SetImagePosX(posX);
 			SetImagePosY(posY);
+			s_origin = math::Vector2(50, 50);
 
 			s_spriteBatch->Begin();
 
@@ -73,6 +74,11 @@ namespace thomas
 				0.f, s_origin, scale);
 
 			s_spriteBatch->End();
+		}
+
+		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
+		{
+			RenderImage(sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
 		}
 
 		math::Vector2 Sprite::GetImagePos()
