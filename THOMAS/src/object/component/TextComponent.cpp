@@ -1,5 +1,4 @@
 #include "TextComponent.h"
-#include "../../graphics/TextRender.h"
 
 namespace thomas
 {

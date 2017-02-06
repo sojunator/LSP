@@ -31,7 +31,6 @@ public:
 
 	bool Start()
 	{
-
 		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
@@ -40,16 +39,11 @@ public:
 		m_jaw = 0;
 		m_pitch = 0;
 
-		
-		
-
 		return true;
 	}
 
 	void Update()
 	{
-
-		m_text->SetOutput(std::to_string(Time::GetFPS()));
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
