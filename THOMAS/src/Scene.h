@@ -1,18 +1,13 @@
 #pragma once
-#include "Common.h"
-#include "object\GameObject.h"
-#include "graphics\Material.h"
 #include "graphics\Renderer.h"
-#include <vector>
 
 namespace thomas
 {
 	class THOMAS_API Scene
 	{
-	private:
 	public:
 		static bool Init();
-		static void AddScene(Scene* scene);
+		static Scene* AddScene(Scene* scene);
 		static bool DestroyScene(Scene* scene);
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static Update();
@@ -36,4 +31,16 @@ namespace thomas
 		std::vector<graphics::Model*> m_models;
 		std::vector<object::component::Camera*> m_cameras;
 	};
+	template<typename T>
+	inline std::vector<object::GameObject*> Scene::GetObjectsByComponent()
+	{
+		std::vector<object::GameObject*> output;
+		for (int i = 0; i < m_gameObjects.size(); ++i)
+		{
+			T* component = m_gameObjects[i]->GetComponent<T>();
+			if (component)
+				output.push_back(m_gameObjects[i]);
+		}
+		return output;
+	}
 }

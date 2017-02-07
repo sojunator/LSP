@@ -2,8 +2,8 @@
 #include "../Common.h"
 #include "../utils/d3d.h"
 #include "../utils/Math.h"
+#include "../object/GameObject.h"
 #include "../object/component/Camera.h"
-#include "../object/component/Light.h"
 
 namespace thomas {
 	namespace graphics

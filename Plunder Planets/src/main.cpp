@@ -10,6 +10,7 @@
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
+#include "scenes\GameScene.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -19,49 +20,41 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code
 
 	//Init shaders
-	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/test.hlsl");
+	//thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
+	//	"../res/shaders/test.hlsl");
+	// thomas::graphics::Shader::CreateShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD,
+	//	 "../res/shaders/skyboxShader.hlsl");
+	//thomas::graphics::Shader::CreateShader("tesselationShader", thomas::graphics::Shader::InputLayouts::STANDARD,
+	//	"../res/shaders/tesselationTest.hlsl");
+	//thomas::graphics::Shader::CreateShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD,
+	//	"../res/shaders/Terrain.hlsl");
 
 
-	 thomas::graphics::Shader::CreateShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD,
-		 "../res/shaders/skyboxShader.hlsl");
+	////Init materials
+	//thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
+	//thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("tesselationShader"));
+	//thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
-	thomas::graphics::Shader::CreateShader("tesselationShader", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/tesselationTest.hlsl");
-
-
-	thomas::graphics::Shader::CreateShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD,
-		"../res/shaders/Terrain.hlsl");
-
-
-	//Init materials
-	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
-
-	thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("tesselationShader"));
-
-	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
-
-	//Init models
-
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
-	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
+	////Init models
+	//thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial");
+	//Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
+	//thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m));
 
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
-
 	//Init gameObjects
 
-	TestObject* t = new TestObject();
+	/*TestObject* t = new TestObject();
 	CameraObject* c = new CameraObject();
-	new WaterObject();
+	new WaterObject();*/
 
-
+	Scene* gameScene = Scene::AddScene(new GameScene());
+	Scene::Init();
 
 	//start
 	thomas::ThomasCore::Start();
-	delete c;
+	//delete c;
 
 	return (int)msg.wParam;
 }

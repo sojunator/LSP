@@ -10,6 +10,7 @@
 
 class GameScene : public thomas::Scene
 {
+public:
 	GameScene() : Scene()
 	{
 		//Init shaders
@@ -29,12 +30,15 @@ class GameScene : public thomas::Scene
 
 		//Init models
 		m_models.push_back(thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial"));
-		Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial"); //push_back här eller under init? Fattar inte användning av material.
+		Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_models.push_back(thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m)));
 
 		//Init gameObjects
-		m_objects.push_back(new TestObject());
-		m_objects.push_back(new CameraObject());
-		m_objects.push_back(new WaterObject());
+		m_gameObjects.push_back(new TestObject());
+		m_gameObjects.push_back(new CameraObject());
+		m_gameObjects.push_back(new WaterObject());
+
+		//Init Cameras
+		m_cameras.push_back(m_gameObjects[1]->GetComponent<object::component::Camera>());
 	};
 };

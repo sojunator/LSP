@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "Model.h"
-#include "../object/GameObject.h"
+
 #include "../object/component/Light.h"
 #include "LightManager.h"
 #include "../Scene.h"
@@ -55,62 +55,62 @@ namespace thomas
 				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 			}
 
-
+			Scene::Render();
 			//TODO: Find out if this is the fastest order of things.
 
-			for (object::component::Camera* camera : GetCameras()) //Render for every camera;
-			{
-				Clear();
+			//for (object::component::Camera* camera : GetCameras()) //Render for every camera;
+			//{
+			//	Clear();
 
-				ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
-				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
+			//	ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
+			//	ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
-				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
-				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
-				
+			//	ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
+			//	ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+			//	
 
-				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders(); //Ändra till att ladda de shaders som finns i nuvarande scenen
+			//	std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders(); //Ändra till att ladda de shaders som finns i nuvarande scenen
 
-				//For every shader
-				for (Shader* shader : loadedShaders)
-				{
-					shader->Bind();
+			//	//For every shader
+			//	for (Shader* shader : loadedShaders)
+			//	{
+			//		shader->Bind();
 
-					//For every light
-					for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
-					{
-						LightManager::BindAllLights();
+			//		//For every light
+			//		for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
+			//		{
+			//			LightManager::BindAllLights();
 
 
 
-						//Get the materials that use the shader
-						for (Material* mat : Material::GetMaterialsByShader(shader)) //ändra till att leta material i scenen? Är det lönt änz?
-						{
-							mat->Bind(); //Bind material specific buffers/textures
-								 
-							//Get all gameObjects that have a rendererComponent
-							for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>()) //ändra till att leta ur objekt i scenen
-							{
-								object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+			//			//Get the materials that use the shader
+			//			for (Material* mat : Material::GetMaterialsByShader(shader)) //ändra till att leta material i scenen? Är det lönt änz?
+			//			{
+			//				mat->Bind(); //Bind material specific buffers/textures
+			//					 
+			//				//Get all gameObjects that have a rendererComponent
+			//				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>()) //ändra till att leta ur objekt i scenen
+			//				{
+			//					object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 
-								BindGameObjectBuffer(camera, gameObject);
-								//Draw every mesh of gameObjects model that has
-								for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
-								{
-									mesh->Bind(); //bind vertex&index buffer
-									mesh->Draw();
-								}
-							}
-							mat->Unbind();
-						}
-						LightManager::Unbind();
-					}
-					shader->Unbind();
-				}
-				camera->BindSkybox();
-				camera->UnbindSkybox();
-				ThomasCore::GetSwapChain()->Present(0, 0);
-			}
+			//					BindGameObjectBuffer(camera, gameObject);
+			//					//Draw every mesh of gameObjects model that has
+			//					for (Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(mat))
+			//					{
+			//						mesh->Bind(); //bind vertex&index buffer
+			//						mesh->Draw();
+			//					}
+			//				}
+			//				mat->Unbind();
+			//			}
+			//			LightManager::Unbind();
+			//		}
+			//		shader->Unbind();
+			//	}
+			//	camera->BindSkybox();
+			//	camera->UnbindSkybox();
+			//	ThomasCore::GetSwapChain()->Present(0, 0);
+			//}
 		}
 
 		bool Renderer::Destroy()

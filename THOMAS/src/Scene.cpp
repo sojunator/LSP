@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "object/component/Light.h"
 #include "graphics/LightManager.h"
 
 namespace thomas
@@ -8,12 +9,19 @@ namespace thomas
 
 	bool Scene::Init()
 	{
-		s_currentScene = s_scenes[0];
-		return true;
+		if (s_scenes[0])
+		{
+			s_currentScene = s_scenes[0];
+			LOG("Scene set");
+			return true;
+		}
+		LOG("No scenes");
+			return false;
 	}
-	void Scene::AddScene(Scene* scene)
+	Scene* Scene::AddScene(Scene* scene)
 	{
 		s_scenes.push_back(scene);
+		return scene;
 	}
 	bool Scene::DestroyScene(Scene* scene)
 	{
@@ -53,20 +61,13 @@ namespace thomas
 		}
 		return output;
 	}
-	template<typename T>
-	std::vector<object::GameObject*> Scene::GetObjectByComponent()
-	{
-		std::vector<object::GameObject*> output;
-		for (int i = 0; i < m_gameObjects.size(); ++i)
-		{
-			T* component = m_gameObjects[i]->GetComponent<T>();
-			if (component)
-				output.push_back(m_gameObjects[i]);
-		}
-		return output;
-	}
 	void Scene::Render()
 	{
+		if (s_currentScene == NULL)
+		{
+			LOG("No scene set")
+			return;
+		}
 		for (object::component::Camera* camera : s_currentScene->m_cameras)
 		{
 			graphics::Renderer::Clear();
@@ -76,7 +77,7 @@ namespace thomas
 				shader->Bind();
 				for (object::GameObject* lightGameObject : s_currentScene->GetObjectsByComponent<object::component::Light>())
 				{
-					graphics::LightManager::BindAllLights();
+					graphics::LightManager::BindAllLights(); //lägga lights i scene också?
 					for (graphics::Material* material : s_currentScene->GetMaterialsByShader(shader))
 					{
 						material->Bind();
