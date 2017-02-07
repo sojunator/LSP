@@ -37,47 +37,79 @@ public:
 		m_forwardSpeed = 0;
 		
 		m_accelerationSpeed = 9.5f;
-		m_retardationSpeed = 0.8f;
+		m_retardationSpeed = 6.5f;
 		m_maxSpeed = 30.0f;
+
+		m_nonBoostMaxSpeed = m_maxSpeed;
+		m_nonBoostAcceleration = m_accelerationSpeed;
+		m_boostAcceleration = m_accelerationSpeed * 3;
+		m_boostMaxSpeed = m_maxSpeed * 2;
 		
-		m_rotationSpeed = 0.0f;
-		m_rotationAccelerationSpeed = 0.5f;
-		m_rotationMaxSpeed = 4.9f;
+		m_rotationSpeed = 0.1f;
+		m_minmaxRotFactor = 0.45f;
+		m_rotation = 0.0f;
 
 		m_controlSensitivity = 0.13f;
 
-		m_camZoomSpeed = 25;
-		m_camRotationSpeed = 5.0f;
-		m_camMinDistanceFromBoat = 10;
-		m_camMaxDistanceFromBoat = 55;
+		m_elevateCamSpeed = 38;
+		m_camZoomSpeed = 45.0f;
+		m_camRotationSpeed = 2.0f;
+		m_camMinDistanceFromBoat = 20.0f;
+		m_camMaxDistanceFromBoat = 120.0f;
 
-		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 25 + math::Vector3(0, 15, 0));
-		m_cameraObject->m_transform->LookAt(m_transform);
+		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 50 + math::Vector3(0, 25, 0));
+		m_lookAtOffset = math::Vector3(0, 25, 0);
+		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 		return true;
 	}
 
+	math::Vector3 project(math::Vector3 v1, math::Vector3 v2)
+	{
+		return (v1.Dot(v2)/v2.Length()) * v2;
+	}
 
 	void Update()
 	{
 		float dt = Time::GetDeltaTime();
-		
+		float right_x = Input::GetRightStickX();
+		float right_y = Input::GetRightStickY();
+		float left_x = Input::GetLeftStickX();
+		float left_y = Input::GetLeftStickY();
+
 		m_modelIndex = (m_modelIndex + 1) % 3;
-		
 
 		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 
+		if (Input::GetButton(Input::Buttons::A))
+		{
+			m_maxSpeed = m_boostMaxSpeed;
+			m_accelerationSpeed = m_boostAcceleration;
+		}
+		else
+		{
+			m_accelerationSpeed = m_nonBoostAcceleration;
+			if (m_nonBoostMaxSpeed < m_forwardSpeed)
+			{
+				m_forwardSpeed -= m_retardationSpeed * dt;
+				m_maxSpeed = m_forwardSpeed;
+			}
+			else
+			{
+				m_maxSpeed = m_nonBoostMaxSpeed;
+			}
+			
+		}
 
-
-		
-
-
+		/*math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->GetPosition().x, 0, m_cameraObject->m_transform->GetPosition().z);
+		camForwardXZ.Normalize();
+		math::Vector3 moveForward = project(camForwardXZ, m_transform->Forward());
+		math::Vector3 moveRight = project(camForwardXZ, m_transform->Right());*/
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RT))
+		if (Input::GetButton(Input::Buttons::Y) || left_y > m_controlSensitivity)
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
-			
-			m_transform->Translate(-m_transform->Forward() * m_forwardSpeed * dt);
 			
 		}
 		else
@@ -85,30 +117,49 @@ public:
 			m_forwardSpeed -= m_retardationSpeed * dt;
 			m_forwardSpeed = std::fmaxf(m_forwardSpeed, 0);
 
-			m_transform->Translate(-m_transform->Forward() * m_forwardSpeed * dt);
 		}
-
-		float left_x = Input::GetLeftStickX();
-		if (m_forwardSpeed > 1.0f)
+		//move the ship
+		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
+		m_transform->Translate(moveVec);
+		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
+		
+		if (left_x > m_controlSensitivity)
 		{
-			if (std::abs(left_x) > m_controlSensitivity)
+			m_rotation -= m_rotationSpeed *dt;
+			m_rotation = std::fmaxf(m_rotation, -m_minmaxRotFactor);
+		}
+		else if (left_x < -m_controlSensitivity)
+		{
+			m_rotation += m_rotationSpeed *dt;
+			m_rotation = std::fminf(m_rotation, m_minmaxRotFactor);
+		}
+		else
+		{
+			if (m_rotation * m_rotation < 0.004)
 			{
-				m_rotationSpeed += m_rotationAccelerationSpeed *dt;
-				m_rotationSpeed = std::fminf(m_rotationSpeed, m_rotationMaxSpeed);
-				m_transform->Rotate(-left_x * m_rotationSpeed * dt, 0, 0);
+				m_rotation = 0;
 			}
 			else
 			{
-				m_rotationSpeed -= m_rotationAccelerationSpeed *dt;
-				m_rotationSpeed = std::fmaxf(m_rotationSpeed, 0);
-				m_transform->Rotate(-left_x * m_rotationSpeed * dt, 0, 0);
+				if (m_rotation < 0)
+				{
+					m_rotation += m_rotationSpeed * 1.7f * dt;
+				}
+				else
+				{
+					m_rotation -= m_rotationSpeed * 1.7f * dt;
+				}
 			}
 		}
+		if (m_forwardSpeed > 0.01)
+		{
+			m_transform->Rotate(m_rotation * dt, 0, 0);
+		}
 		
-		float right_x = Input::GetRightStickX();
-		float right_y = Input::GetRightStickY();
+		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+		math::Vector3 distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
-		math::Vector3 distanceVector = m_transform->GetPosition() - m_cameraObject->m_transform->GetPosition();
+		m_lookAtOffset = math::Vector3(0, distanceVector.Length() / 4, 0);//recalculate lookatoffset depending on camera range from boat
 		
 		m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations!
 
@@ -121,10 +172,17 @@ public:
 		
 		if (std::abs(right_y) > m_controlSensitivity)
 		{
-			m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * 20 * dt);//move camera up and down
+			if (m_cameraObject->m_transform->GetPosition().y > 3)
+			{
+				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
+			}
+			else if (right_y > m_controlSensitivity)
+			{
+				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
+			}
 		}
 
-		m_cameraObject->m_transform->LookAt(m_transform);//reset orientation of camera with lookat
+		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset orientation of camera with lookat
 		
 
 		//zoom camera in or out. Also make sure that the camera dont get to close to the boat.
@@ -162,19 +220,28 @@ private:
 	float m_forwardSpeed;
 	
 	float m_accelerationSpeed;
-	float m_retardationSpeed;
+	float m_retardationSpeed;//reverse acceleration is called retardation
 	float m_maxSpeed;
+	//for the boost
+	float m_boostMaxSpeed;
+	float m_nonBoostMaxSpeed;
+	float m_boostAcceleration;
+	float m_nonBoostAcceleration;
 
 	float m_rotationSpeed;
-	float m_rotationAccelerationSpeed;
-	float m_rotationMaxSpeed;
+	float m_rotation;//rodret
+	float m_minmaxRotFactor;
 	//used for the camera
-	float m_camZoomSpeed;
+	float m_elevateCamSpeed;//for moving cam up and down
 	float m_camRotationSpeed;
+	float m_camZoomSpeed;
 	float m_camMinDistanceFromBoat;
 	float m_camMaxDistanceFromBoat;
 	//used for both
 	float m_controlSensitivity;
+
+	math::Vector3 m_lookAtPoint;//point slightly above the boat
+	math::Vector3 m_lookAtOffset;
 
 	//components
 	component::RenderComponent* m_renderer;
