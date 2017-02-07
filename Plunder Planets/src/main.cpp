@@ -67,15 +67,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
 	Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
 
-
-
-
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
 	//Init 2D-images for GUI
 	thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/tempGUI.png");
-	thomas::graphics::Sprite::LoadTexture("Cat", "../res/GUI/cat.png");
+	//thomas::graphics::Sprite::LoadTexture("Cat", "../res/GUI/cat.png");
 
 	//Init text
 	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");

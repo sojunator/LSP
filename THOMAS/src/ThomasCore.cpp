@@ -58,9 +58,7 @@ namespace thomas {
 			s_initialized = graphics::TextRender::Initialize();
 
 		if (s_initialized)
-			s_initialized = graphics::Sprite::Initialize();
-			
-			
+			s_initialized = graphics::Sprite::Initialize();		
 
 		return s_initialized;
 	}

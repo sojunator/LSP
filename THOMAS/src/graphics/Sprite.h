@@ -28,7 +28,6 @@ namespace thomas
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;
 			static std::string s_name;
-
 		};
 	}
 }
