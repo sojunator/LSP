@@ -1,6 +1,4 @@
 #include "Scene.h"
-#include "object/component/Light.h"
-#include "graphics/LightManager.h"
 
 namespace thomas
 {
@@ -99,7 +97,8 @@ namespace thomas
 			}
 			camera->BindSkybox();
 			camera->UnbindSkybox();
-			ThomasCore::GetSwapChain()->Present(0, 0);
+			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
+			//ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 	}
 	void Scene::RemoveObject(std::string name)

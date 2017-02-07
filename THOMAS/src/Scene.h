@@ -25,7 +25,7 @@ namespace thomas
 		static std::vector<Scene*> s_scenes;
 		static Scene* s_currentScene;
 	protected:
-		std::vector<object::GameObject*> m_gameObjects;
+		std::vector<object::GameObject*> m_gameObjects; //actually object*, should only contain gameObjects, might rename
 		std::vector<graphics::Material*> m_materials;
 		std::vector<graphics::Shader*> m_shaders;
 		std::vector<graphics::Model*> m_models;

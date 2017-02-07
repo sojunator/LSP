@@ -93,8 +93,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//TestObject* t = new TestObject();
 	
-	new TerrainObject();
-	TestDirectionalLight* dirLight = new TestDirectionalLight();
+	/*new TerrainObject();
+	TestDirectionalLight* dirLight = new TestDirectionalLight();*/
 	//TestPointLight* pointLight = new TestPointLight();
 	/*TestObject* t = new TestObject();
 	CameraObject* c = new CameraObject();

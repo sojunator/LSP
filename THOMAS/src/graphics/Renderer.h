@@ -11,7 +11,7 @@ namespace thomas {
 		class THOMAS_API Renderer {
 		private:
 			
-			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			//static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
 			static void UnBindGameObjectBuffer();
 		public:
 
@@ -26,6 +26,7 @@ namespace thomas {
 			static std::vector<object::component::Camera*> GetCameras();
 			
 			static ID3D11ShaderResourceView* GetDepthBufferSRV();
+			static ID3D11RenderTargetView* GetBackBuffer();
 
 			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
 			static void RenderSetup(object::component::Camera* camera);

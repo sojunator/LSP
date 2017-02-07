@@ -1,10 +1,10 @@
 #include "Renderer.h"
 #include "Model.h"
-#include "../object/GameObject.h"
 #include "../object/component/Light.h"
-#include "PostEffect.h"
-#include "LightManager.h"
 #include "../Scene.h"
+#include "LightManager.h"
+#include "PostEffect.h"
+
 
 namespace thomas
 {
@@ -115,49 +115,49 @@ namespace thomas
 			//				{
 			//					object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 
-					LightManager::BindAllLights();
-					camera->BindReflection();
-					//Get the materials that use the shader
-					for (Material* mat : Material::GetMaterialsByShader(shader))
-					{
-						mat->Bind(); //Bind material specific buffers/textures
-										//Get all gameObjects that have a rendererComponent
+				//	LightManager::BindAllLights();
+				//	camera->BindReflection();
+				//	//Get the materials that use the shader
+				//	for (Material* mat : Material::GetMaterialsByShader(shader))
+				//	{
+				//		mat->Bind(); //Bind material specific buffers/textures
+				//						//Get all gameObjects that have a rendererComponent
 
 
-						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-						{
-							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
-							Model* model = renderComponent->GetModel();
+				//		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+				//		{
+				//			object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+				//			Model* model = renderComponent->GetModel();
 
-							BindGameObjectBuffer(camera, gameObject);
-							//Draw every mesh of gameObjects model that has
-							if (model)
-							{
-								for (Mesh* mesh : model->GetMeshesByMaterial(mat))
-								{
-									mesh->Bind(); //bind vertex&index buffer
-									mesh->Draw();
-								}
-							}
-							UnBindGameObjectBuffer();
+				//			BindGameObjectBuffer(camera, gameObject);
+				//			//Draw every mesh of gameObjects model that has
+				//			if (model)
+				//			{
+				//				for (Mesh* mesh : model->GetMeshesByMaterial(mat))
+				//				{
+				//					mesh->Bind(); //bind vertex&index buffer
+				//					mesh->Draw();
+				//				}
+				//			}
+				//			UnBindGameObjectBuffer();
 
-						}
-						mat->Unbind();
-					}
+				//		}
+				//		mat->Unbind();
+				//	}
 
-					LightManager::Unbind();
+				//	LightManager::Unbind();
 
-					shader->Unbind();
-				}
-				camera->BindSkybox();
-				camera->UnbindSkybox();
+				//	shader->Unbind();
+				//}
+				//camera->BindSkybox();
+				//camera->UnbindSkybox();
 
 			
 
-				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
+				//PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
 				ThomasCore::GetSwapChain()->Present(0, 0);
-			}
+			//}
 
 			//					BindGameObjectBuffer(camera, gameObject);
 			//					//Draw every mesh of gameObjects model that has
