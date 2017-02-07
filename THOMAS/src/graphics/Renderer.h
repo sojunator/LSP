@@ -34,6 +34,7 @@ namespace thomas {
 			static std::vector<object::component::Camera*> GetCameras();
 
 			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void RenderSetup(object::component::Camera* camera);
 
 
 		private:
