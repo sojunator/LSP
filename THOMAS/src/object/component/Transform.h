@@ -32,6 +32,7 @@ namespace thomas
 				math::Matrix GetWorldMatrix();
 
 				void LookAt(Transform* target);
+				void LookAt(math::Vector3 target);
 				void Rotate(math::Vector3 angles);
 				void Rotate(float x, float y, float z);
 				void RotateByAxis(math::Vector3 axis, float angle);
