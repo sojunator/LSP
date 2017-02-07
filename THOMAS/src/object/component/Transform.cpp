@@ -55,6 +55,19 @@ namespace thomas
 				Decompose();
 
 			}
+			void Transform::LookAt(math::Vector3 target)
+			{
+				if (target == GetPosition())
+					return;
+				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target, Up());
+
+				lookAt = lookAt.Invert();
+
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, lookAt.Forward(), lookAt.Up());
+
+				Decompose();
+
+			}
 			void Transform::Rotate(math::Vector3 angles)
 			{
 				math::Quaternion rot = math::Quaternion::CreateFromYawPitchRoll(angles.x, angles.y, angles.z);
