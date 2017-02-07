@@ -1,24 +1,30 @@
 #include "Plane.h"
-#include <time.h>
-
+#include <cmath>
+#include <algorithm>
 namespace thomas
 {
 	namespace utils
 	{
-		std::vector<thomas::graphics::Mesh*> Plane::CreatePlane(int size, float detail, std::string meshName,
-			graphics::Material* mat)
+		Plane::PlaneData Plane::CreatePlane(int size, float detail)
 		{
 			std::vector<graphics::Vertex> verts;
 			std::vector<int> indices;
+			float width = (float)size * detail;
+			float height = width;
+
 			float x, y, z;
 			graphics::Vertex temp_vert;
-			srand(time(NULL));
+
 			// Defualt temp values, must be calulated later
-			temp_vert.uv.x = 0.0f;
-			temp_vert.uv.y = 0.0f;
 			temp_vert.normal.x = 0.0f;
 			temp_vert.normal.y = 1.0f;
 			temp_vert.normal.z = 0.0f;
+			temp_vert.bitangent.x = 0.0f;
+			temp_vert.bitangent.y = 0.0f;
+			temp_vert.bitangent.z = -1.0f;
+			temp_vert.tangent.x = 1.0f;
+			temp_vert.tangent.y = 0.0f;
+			temp_vert.tangent.z = 0.0f;
 
 			temp_vert.tangent.x = 0.0f;
 			temp_vert.tangent.y = 0.0f;
@@ -29,15 +35,15 @@ namespace thomas
 			temp_vert.bitangent.z = 0.0f;
 
 			// Create points
-			for (int j = 0; j < size * detail; j++)
+			for (int y = 0; y < height; y++)
 			{
-				for (int i = 0; i < size * detail; i++)
+				for (int x = 0; x < width; x++)
 				{
-					temp_vert.position.x = (float)j / detail;
 					temp_vert.position.y = 0.0f;
-					temp_vert.position.z = -(float)i / detail;
-					temp_vert.uv.x = j / ((float)size * detail);
-					temp_vert.uv.y = 1-(i - (float)size * detail) / ((float)size * detail);
+					temp_vert.position.x = (float)y / detail;
+					temp_vert.position.z = -(float)x / detail;
+					temp_vert.uv.x = y / ((float)size * detail);
+					temp_vert.uv.y = 1.0f - (x - (height) / (height));
 					verts.push_back(temp_vert);
 				}
 			}
@@ -48,7 +54,7 @@ namespace thomas
 				int index = size*detail * (i + 1);
 				for (int j = 0; j < (size * detail) - 1; j++)
 				{
-					
+
 					indices.push_back(j + i * size*detail);
 					indices.push_back(index);
 					indices.push_back(index + 1);
@@ -61,10 +67,71 @@ namespace thomas
 				}
 			}
 
-			std::vector<thomas::graphics::Mesh*> mesh;
-			graphics::Mesh* m = new graphics::Mesh(verts, indices, meshName, mat);
-			mesh.push_back(m);
-			return mesh;
+			Plane::PlaneData plane;
+			plane.verts = verts;
+			plane.indices = indices;
+			return plane;
 		}
+
+		Plane::PlaneData Plane::CreatePlane(int size, float detail, math::Vector2 offSet)
+		{
+			std::vector<graphics::Vertex> verts;
+			std::vector<int> indices;
+			float width = (float)size * detail;
+			float height = width;
+
+			float x, y, z;
+			graphics::Vertex temp_vert;
+
+			// Defualt temp values, must be calulated later
+			temp_vert.normal.x = 0.0f;
+			temp_vert.normal.y = 1.0f;
+			temp_vert.normal.z = 0.0f;
+			temp_vert.bitangent.x = 0.0f;
+			temp_vert.bitangent.y = 0.0f;
+			temp_vert.bitangent.z = -1.0f;
+			temp_vert.tangent.x = 1.0f;
+			temp_vert.tangent.y = 0.0f;
+			temp_vert.tangent.z = 0.0f;
+
+			// Create points
+			for (int y = 0; y < height; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					temp_vert.position.y = 0.0f;
+					temp_vert.position.x = (y + offSet.y) / detail;
+					temp_vert.position.z = -(x + offSet.x) / detail;
+					temp_vert.uv.x = y / ((float)size * detail);
+					temp_vert.uv.y = 1.0f - (x - (height) / (height));
+					verts.push_back(temp_vert);
+				}
+			}
+
+			// triangulate points
+			for (int i = 0; i < (size * detail) - 1; i++)
+			{
+				int index = size*detail * (i + 1);
+				for (int j = 0; j < (size * detail) - 1; j++)
+				{
+
+					indices.push_back(j + i * size*detail);
+					indices.push_back(index);
+					indices.push_back(index + 1);
+
+					indices.push_back(j + i * size*detail);
+					indices.push_back(index + 1);
+					indices.push_back((j + i * size*detail) + 1);
+
+					index++;
+				}
+			}
+
+			Plane::PlaneData plane;
+			plane.verts = verts;
+			plane.indices = indices;
+			return plane;
+		}
+
 	}
 }

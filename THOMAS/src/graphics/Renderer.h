@@ -11,8 +11,26 @@ namespace thomas {
 		class THOMAS_API Renderer {
 		private:
 			
+			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void UnBindGameObjectBuffer();
 		public:
 
+			
+			static bool Init();
+
+			static void Clear();
+			static void Render();
+
+			static bool Destroy();
+
+			static std::vector<object::component::Camera*> GetCameras();
+			
+			static ID3D11ShaderResourceView* GetDepthBufferSRV();
+
+			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void RenderSetup(object::component::Camera* camera);
+
+		private:
 			struct GameObjectBuffer
 			{
 				math::Matrix worldMatrix;
@@ -22,27 +40,13 @@ namespace thomas {
 				math::Vector3 camPos;
 				float buffer;
 			};
-
-
-			static bool Init();
-
-			static void Clear();
-			static void Render();
-
-			static bool Destroy();
-
-			static std::vector<object::component::Camera*> GetCameras();
-
-			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
-			static void RenderSetup(object::component::Camera* camera);
-
-
-		private:
 			static ID3D11RenderTargetView* s_backBuffer;
+			static ID3D11ShaderResourceView* s_backBufferSRV;
 			static ID3D11RasterizerState* s_rasterState;
+			static ID3D11RasterizerState* s_wireframeRasterState;
 			static ID3D11DepthStencilState* s_depthStencilState;
 			static ID3D11DepthStencilView* s_depthStencilView;
-			static ID3D11Texture2D* s_depthBuffer;
+			static ID3D11ShaderResourceView* s_depthBufferSRV;
 
 			static ID3D11Buffer* s_objectBuffer;
 			static GameObjectBuffer s_objectBufferStruct;

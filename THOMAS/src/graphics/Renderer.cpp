@@ -1,7 +1,8 @@
 #include "Renderer.h"
 #include "Model.h"
-
+#include "../object/GameObject.h"
 #include "../object/component/Light.h"
+#include "PostEffect.h"
 #include "LightManager.h"
 #include "../Scene.h"
 
@@ -10,11 +11,13 @@ namespace thomas
 	namespace graphics
 	{
 
-		ID3D11RenderTargetView* Renderer::s_backBuffer;
-		ID3D11RasterizerState* Renderer::s_rasterState;
-		ID3D11DepthStencilState* Renderer::s_depthStencilState;
-		ID3D11DepthStencilView* Renderer::s_depthStencilView;
-		ID3D11Texture2D* Renderer::s_depthBuffer;
+		ID3D11RenderTargetView* Renderer::s_backBuffer = NULL;
+		ID3D11ShaderResourceView* Renderer::s_backBufferSRV = NULL;
+		ID3D11RasterizerState* Renderer::s_rasterState = NULL;
+		ID3D11RasterizerState* Renderer::s_wireframeRasterState = NULL;
+		ID3D11DepthStencilState* Renderer::s_depthStencilState = NULL;
+		ID3D11DepthStencilView* Renderer::s_depthStencilView = NULL;
+		ID3D11ShaderResourceView* Renderer::s_depthBufferSRV = NULL;
 
 		ID3D11Buffer* Renderer::s_objectBuffer;
 		Renderer::GameObjectBuffer Renderer::s_objectBufferStruct;
@@ -22,10 +25,11 @@ namespace thomas
 		bool thomas::graphics::Renderer::Init()
 		{
 
-			if (utils::D3d::InitRenderer(s_backBuffer, s_depthStencilState, s_depthStencilView, s_depthBuffer))
+			if (utils::D3d::InitRenderer(s_backBuffer,s_backBufferSRV, s_depthStencilState, s_depthStencilView, s_depthBufferSRV))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID , D3D11_CULL_BACK);
+				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
+				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
 				return true;
 
 			}
@@ -76,12 +80,30 @@ namespace thomas
 			//	{
 			//		shader->Bind();
 
+				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+
+				for (Material* mat : Material::GetLoadedMaterials())
+				{
+					mat->Update();
+				}
 			//		//For every light
 			//		for (object::GameObject* lightgameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
 			//		{
 			//			LightManager::BindAllLights();
 
+				for (PostEffect* fx : PostEffect::GetLoadedPostEffects())
+				{
+					fx->Update();
+				}
 
+				if (Input::GetKey(Input::Keys::X))
+				{
+					ThomasCore::GetDeviceContext()->RSSetState(s_wireframeRasterState);
+				}
+				else
+				{
+					ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+				}
 
 			//			//Get the materials that use the shader
 			//			for (Material* mat : Material::GetMaterialsByShader(shader)) //ändra till att leta material i scenen? Är det lönt änz?
@@ -92,6 +114,50 @@ namespace thomas
 			//				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>()) //ändra till att leta ur objekt i scenen
 			//				{
 			//					object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+
+					LightManager::BindAllLights();
+					camera->BindReflection();
+					//Get the materials that use the shader
+					for (Material* mat : Material::GetMaterialsByShader(shader))
+					{
+						mat->Bind(); //Bind material specific buffers/textures
+										//Get all gameObjects that have a rendererComponent
+
+
+						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+						{
+							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
+							Model* model = renderComponent->GetModel();
+
+							BindGameObjectBuffer(camera, gameObject);
+							//Draw every mesh of gameObjects model that has
+							if (model)
+							{
+								for (Mesh* mesh : model->GetMeshesByMaterial(mat))
+								{
+									mesh->Bind(); //bind vertex&index buffer
+									mesh->Draw();
+								}
+							}
+							UnBindGameObjectBuffer();
+
+						}
+						mat->Unbind();
+					}
+
+					LightManager::Unbind();
+
+					shader->Unbind();
+				}
+				camera->BindSkybox();
+				camera->UnbindSkybox();
+
+			
+
+				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
+
+				ThomasCore::GetSwapChain()->Present(0, 0);
+			}
 
 			//					BindGameObjectBuffer(camera, gameObject);
 			//					//Draw every mesh of gameObjects model that has
@@ -115,13 +181,11 @@ namespace thomas
 
 		bool Renderer::Destroy()
 		{
-
-			s_backBuffer->Release();
-			s_rasterState->Release();
-			s_depthStencilState->Release();
-			s_depthStencilView->Release();
-			s_depthBuffer->Release();
-			s_objectBuffer->Release();
+			SAFE_RELEASE(s_backBuffer);
+			SAFE_RELEASE(s_rasterState);
+			SAFE_RELEASE(s_depthStencilState);
+			SAFE_RELEASE(s_depthStencilView);
+			SAFE_RELEASE(s_objectBuffer);
 
 			return true;
 
@@ -131,7 +195,6 @@ namespace thomas
 			std::vector<object::component::Camera*> cameras;
 			for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Camera>())
 			{
-
 				cameras.push_back(gameObject->GetComponent<object::component::Camera>());
 			}
 			return cameras;
@@ -146,11 +209,18 @@ namespace thomas
 			s_objectBufferStruct.mvpMatrix = s_objectBufferStruct.projectionMatrix * s_objectBufferStruct.viewMatrix * s_objectBufferStruct.worldMatrix;
 			s_objectBufferStruct.camPos = camera->GetPosition();
 
-
 			utils::D3d::FillBuffer(s_objectBuffer, s_objectBufferStruct);
 
 			//Bind gameObject specific buffers
 			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(s_objectBuffer, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
+		}
+		ID3D11ShaderResourceView * Renderer::GetDepthBufferSRV()
+		{
+			return s_depthBufferSRV;
+		}
+		void Renderer::UnBindGameObjectBuffer()
+		{
+			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(NULL, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
 		}
 		void Renderer::RenderSetup(object::component::Camera* camera)
 		{

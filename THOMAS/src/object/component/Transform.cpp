@@ -67,6 +67,14 @@ namespace thomas
 			{
 				return Rotate(math::Vector3(x, y, z));
 			}
+			void Transform::RotateByAxis(math::Vector3 axis, float angle)
+			{
+				math::Quaternion rot = math::Quaternion::CreateFromAxisAngle(axis, angle);
+				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(m_localRotation), rot);
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
+
+				Decompose();
+			}
 			void Transform::Translate(math::Vector3 translation)
 			{
 				math::Matrix pos = math::Matrix::CreateTranslation(translation);
@@ -111,7 +119,7 @@ namespace thomas
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(newPosition, math::Vector3::Forward, math::Vector3::Up);
 				Decompose();
 			}
-			void Transform::SetPositon(float x, float y, float z)
+			void Transform::SetPosition(float x, float y, float z)
 			{
 				SetPosition(math::Vector3(x, y, z));
 			}
@@ -128,9 +136,9 @@ namespace thomas
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, rotMatrix.Forward(), rotMatrix.Up());
 				Decompose();
 			}
-			void Transform::SetRotation(float x, float y, float z)
+			void Transform::SetRotation(float yaw, float pitch, float roll)
 			{
-				SetRotation(math::Quaternion::CreateFromYawPitchRoll(x, y, z));
+				SetRotation(math::Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll));
 			}
 			void Transform::SetScale(math::Vector3 scale)
 			{

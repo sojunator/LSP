@@ -91,10 +91,14 @@ namespace thomas
 	}
 	bool Sound::LoadWaveBank(std::string name)
 	{
-		s_bank = std::make_unique<DirectX::WaveBank>(s_audioEngine.get(), CA2W(name.c_str()));
-		if (!s_bank)
+		try
+		{
+			s_bank = std::make_unique<DirectX::WaveBank>(s_audioEngine.get(), CA2W(name.c_str()));
+		}
+		catch (std::exception ex)
 		{
 			LOG("Unable to load wavebank, probably invalid path and/or name");
+			
 			return false;
 		}
 		return true;

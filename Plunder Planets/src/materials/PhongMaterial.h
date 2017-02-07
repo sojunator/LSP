@@ -11,8 +11,6 @@ public:
 	PhongMaterial(std::string shader) : Material(shader) {}
 	PhongMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 
-
-
 	~PhongMaterial();
 
 private:
@@ -21,6 +19,7 @@ private:
 		math::Color ambientColor;
 		math::Color diffuseColor;
 		math::Color specularColor;
+		math::Color materialProperty;
 		float specularPower;
 		math::Vector3 padding;
 	};

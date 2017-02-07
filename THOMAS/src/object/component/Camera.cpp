@@ -16,7 +16,7 @@ namespace thomas
 			{
 				m_fov = 70;
 				m_near = 0.1;
-				m_far = 1000;
+				m_far = 3000;
 				m_viewport = math::Viewport(0, 0, Window::GetWidth(), Window::GetHeight());
 				m_skybox = NULL;
 				UpdateProjMatrix();
@@ -110,6 +110,12 @@ namespace thomas
 					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
 				}
 					
+			}
+
+			void Camera::BindReflection()
+			{
+				if (m_skybox)
+					m_skybox->BindCubemap();
 			}
 
 			void Camera::UnbindSkybox()

@@ -20,23 +20,20 @@ namespace thomas
 			//match these structs on the graphicscard
 			struct DirectionalLightStruct
 			{
-				thomas::math::Vector4 ambientColor;
-				thomas::math::Vector4 diffuseColor;
-				thomas::math::Vector4 specularColor;
-
-				thomas::math::Vector4 lightDirection;
+				thomas::math::Vector4 lightColor;
+				thomas::math::Vector3 lightDirection;
+				float padding;
 			};
 			struct PointLightStruct
 			{
-				float attenuationFactor;
-				int padding;
-				int paading;
-				int aasdf;
-				thomas::math::Vector4 ambientColor;
-				thomas::math::Vector4 diffuseColor;
-				thomas::math::Vector4 specularColor;
-
-				thomas::math::Vector4 position;
+				float constantAttenuation;
+				float linearAttenuation;
+				float quadraticAttenuation;
+				float power;
+				thomas::math::Vector4 lightColor;
+				thomas::math::Vector3 position;
+				float padding;
+				
 			};
 			struct LightBufferStruct
 			{
@@ -45,7 +42,8 @@ namespace thomas
 				int padding1;
 				int padding2;
 				DirectionalLightStruct directionalLights[3];
-				PointLightStruct pointLights[3];
+				PointLightStruct pointLights[20];
+				
 			} static s_lightstruct;
 
 			
@@ -59,28 +57,12 @@ namespace thomas
 
 			static bool UpdateDirectionalLight(DirectionalLightStruct other, int index);
 			static bool UpdatePointLight(PointLightStruct other, int index);
-			/*template<typename T>
-			static bool UpdateLight(T lightStruct, int index)
-			{
-				if (dynamic_cast<DirectionalLightStruct*>(lightStruct))
-				{
-					s_lightstruct.directionalLights[index] = *lightStruct;
-				}
-				else if (dynamic_cast<PointLightStruct*>(lightStruct))
-				{
-					s_lightstruct.pointLights[index] = *lightStruct;
-				}
-				else
-				{
-					LOG("Invalid lighttype");
-					return false;
-				}
-			}*/
+			
 
 			static bool BindAllLights();
 			static bool Unbind();
 
-			static bool BindDierctionalLight(unsigned int index);
+			static bool BindDirectionalLight(unsigned int index);
 			static bool BindPointLight(unsigned int index);
 
 			
