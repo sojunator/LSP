@@ -22,8 +22,8 @@ public:
 
 	bool Start()
 	{
-		m_broadSideLeft = (Broadside*)Instantiate(new Broadside(), math::Vector3(-3, 2.7, -0.8), math::Quaternion::CreateFromYawPitchRoll(thomas::math::PI/2, math::DegreesToradians(-5), 0), m_transform);
-		m_broadSideRight = (Broadside*)Instantiate(new Broadside(), math::Vector3(3, 2.7, -0.8), math::Quaternion::CreateFromYawPitchRoll(-thomas::math::PI/2, math::DegreesToradians(-5), 0), m_transform);
+		m_broadSideLeft = (Broadside*)Instantiate(new Broadside(), math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform);
+		m_broadSideRight = (Broadside*)Instantiate(new Broadside(), math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform);
 
 
 		m_modelIndex = 0;
@@ -210,8 +210,11 @@ public:
 		}
 
 
-		if (Input::GetKeyDown(Input::Keys::Space))
-			m_broadSideRight->Fire(m_forwardSpeed);
+		if(Input::GetButtonDown(Input::Buttons::RT))
+			m_broadSideRight->Fire(-m_forwardSpeed);
+
+		if (Input::GetButtonDown(Input::Buttons::LT))
+			m_broadSideLeft->Fire(m_forwardSpeed);
 	}
 
 private:

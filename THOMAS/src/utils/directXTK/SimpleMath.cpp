@@ -91,7 +91,7 @@ namespace DirectX
     #endif
 		float DegreesToradians(float degree)
 		{
-			return degree*PI / 180.0;
+			return degree* (PI / 180.0);
 		}
 	}
 }

@@ -12,6 +12,8 @@ private:
 public:
 	Broadside() : GameObject("BroadSide")
 	{
+		m_delay = 0.8;
+		m_delayLeft = 0;
 	}
 
 	bool Start()
@@ -22,25 +24,32 @@ public:
 
 	void Fire(float forwardSpeed)
 	{
-		float spacing = 2.3;
-		for (int i = -2; i <= 2; i++)
+		if (m_delayLeft <= 0)
 		{
-			LOG("fire");
-			math::Vector3 pos = m_transform->GetPosition();
-			math::Quaternion rot = m_transform->GetRotation();
-			rot += math::Quaternion::CreateFromAxisAngle(m_transform->Up(), math::DegreesToradians(i));
-			pos += m_transform->Right()*i*spacing;
-			Projectile* p = (Projectile*)Instantiate(new Projectile(), pos, rot);
-			p->forwardSpeed = forwardSpeed;
+			float spacing = 2.3;
+			for (int i = -2; i <= 2; i++)
+			{
+				math::Vector3 pos = m_transform->GetPosition();
+				math::Quaternion rot = m_transform->GetRotation();
+				rot *= math::Quaternion::CreateFromAxisAngle(m_transform->Up(), math::DegreesToradians(-i));
+				pos += m_transform->Right()*i*spacing;
+				Projectile* p = (Projectile*)Instantiate(new Projectile(), pos, rot);
+				p->forwardSpeed = forwardSpeed;
+			}
+			m_delayLeft = m_delay;
 		}
+
+		
 		
 	}
 
 	void Update()
 	{
 		float dt = Time::GetDeltaTime();
+		m_delayLeft -= dt;
 	}
 
 private:
-
+	float m_delay;
+	float m_delayLeft;
 };

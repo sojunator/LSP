@@ -31,6 +31,7 @@ public:
 		m_transform->Translate(m_transform->Right()*dt*forwardSpeed/2);
 		m_transform->Translate(math::Vector3::Down*m_downSpeed*dt);
 
+
 		if (m_transform->GetPosition().y < 0.0)
 			Destroy(this);
 	}
