@@ -32,6 +32,7 @@ namespace thomas
 		std::vector<int> m_treasure;
 		std::vector<int> m_size;
 		std::vector<float> m_detail;
+		std::vector<float> m_radius;
 		std::vector<math::Vector2> m_islandCenterWorldPos;
 		std::vector<math::Vector2> m_worldPosOffset;
 		std::vector<std::vector<graphics::Mesh*>> m_mesh;
