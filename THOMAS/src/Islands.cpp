@@ -5,19 +5,21 @@ namespace thomas
 {
 	Islands::Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance)
 	{
+		std::srand(time(NULL));
 		std::vector<utils::Plane::PlaneData> tempPlane;
 		std::vector<graphics::Mesh*> mesh;
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;
-
+		m_plunderRate = 30;
 		GeneratePos();
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			m_size.push_back(size);
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
-			m_radius.push_back(size*2);
+			m_totalTreasure.push_back(1000);
+			m_radius.push_back(size*detail*1.5);
 			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + (size / 2), m_worldPosOffset[i].y + (size / 2)));
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail, m_worldPosOffset[i]));
 			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
@@ -36,9 +38,92 @@ namespace thomas
 		m_mesh.push_back(mesh);
 	}
 
-	std::vector<graphics::Mesh*> Islands::GetIsland(int island)
+	Islands::~Islands()
+	{
+		for (int i = 0; i < m_mesh.size(); ++i)
+		{
+			for (int j = 0; j < m_mesh[i].size(); ++j)
+			{
+				delete m_mesh[i][j];
+			}
+		}
+	}
+
+	std::vector<graphics::Mesh*> Islands::GetIslands(int island)
 	{
 		return m_mesh[island];
+	}
+
+	int Islands::GetPlunderRate()
+	{
+		return m_plunderRate;
+	}
+
+	int Islands::GetNrOfIslands()
+	{
+		return m_nrOfIslands;
+	}
+
+	int Islands::GetMapSize()
+	{
+		return m_mapSize;
+	}
+
+	int Islands::GetMinDistance()
+	{
+		return m_minDistance;
+	}
+
+	math::Vector2 Islands::GetCenter(int island)
+	{
+		return m_islandCenterWorldPos[island];
+	}
+
+	math::Vector2 Islands::GetOffSet(int island)
+	{
+		return m_worldPosOffset[island];
+	}
+
+	float Islands::GetRadius(int island)
+	{
+		return m_radius[island];
+	}
+
+	float Islands::GetRadiusSquared(int island)
+	{
+		return m_radius[island]*m_radius[island];
+	}
+
+	float Islands::GetTreasure(int island)
+	{
+		return m_treasure[island];
+	}
+
+	int Islands::GetTotalTreasure(int island)
+	{
+		return m_totalTreasure[island];
+	}
+
+	int Islands::GetSize(int island)
+	{
+		return m_size[island];
+	}
+
+	int Islands::GetDetail(int island)
+	{
+		return m_detail[island];
+	}
+
+	float Islands::StealTreasure(int island)
+	{
+		float dt = Time::GetDeltaTime();
+		m_treasure[island] -= dt*m_plunderRate;
+		return m_totalTreasure[island] - m_treasure[island];
+	}
+
+	int Islands::GetSizeOFIsland(int island)
+	{
+		return m_size[island] * m_detail[island];
 	}
 
 	void Islands::GeneratePos()
@@ -49,8 +134,8 @@ namespace thomas
 			while (posNotFound)
 			{
 				math::Vector2 xy;
-				xy.x = rand() % m_mapSize;
-				xy.y = rand() % m_mapSize;
+				xy.x = rand() % 200 - 100;
+				xy.y = rand() % 200 - 100;
 				float distPrev = 0.0f;
 
 				if (m_worldPosOffset.size() == 0)
