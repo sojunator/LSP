@@ -76,7 +76,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init text
 	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
-	thomas::graphics::TextRender::LoadFont("Test", "../res/font/myfilei.spritefont");
+	thomas::graphics::TextRender::LoadFont("Test", "../res/font/myfi.spritefont");
 
 	//Init gameObjects
 

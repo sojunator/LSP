@@ -25,10 +25,10 @@ public:
 
 		//Text
 		m_text->SetFont("Test");
-		m_text->SetOutput("Hello bitches...");
+		m_text->SetOutput("Plunder Planets");
 		m_text->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
 		m_text->SetRotation(0.0f);
-		m_text->SetScale(1.0f);
+		m_text->SetScale(1.5f);
 		m_text->SetPositionX(400.f);
 		m_text->SetPositionY(30.f);
 		m_text->SetDropshadow(false);
