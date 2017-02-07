@@ -33,7 +33,7 @@ namespace thomas
 			static void Clear();
 			static void Destroy();
 
-			bool RenderPostEffect(ID3D11ShaderResourceView* prevRender, ID3D11RenderTargetView* backBuffer=NULL);
+			bool RenderPostEffect(ID3D11ShaderResourceView* prevRender, object::component::Camera* camera, ID3D11RenderTargetView* backBuffer=NULL);
 			bool Bind();
 			bool Unbind();
 

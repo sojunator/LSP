@@ -1,5 +1,5 @@
 #include "PostEffect.h"
-
+#include "LightManager.h"
 namespace thomas
 {
 	namespace graphics
@@ -122,11 +122,11 @@ namespace thomas
 			{
 
 				s_loadedEffects[i]->GetShader()->Bind();
-				s_loadedEffects[i]->RenderPostEffect(prevRender);
+				s_loadedEffects[i]->RenderPostEffect(prevRender, camera);
 				prevRender = s_loadedEffects[i]->GetShaderResource();
 			}
 
-			s_renderToBackBuffer->RenderPostEffect(prevRender, backBuffer);
+			s_renderToBackBuffer->RenderPostEffect(prevRender, camera, backBuffer);
 		
 		}
 
@@ -152,7 +152,7 @@ namespace thomas
 			}	
 		}
 
-		bool PostEffect::RenderPostEffect(ID3D11ShaderResourceView* prevRender, ID3D11RenderTargetView* backBuffer)
+		bool PostEffect::RenderPostEffect(ID3D11ShaderResourceView* prevRender, object::component::Camera* camera, ID3D11RenderTargetView* backBuffer)
 		{
 			m_shader->Bind();
 			if (backBuffer) //Last fx so should be backbuffer
@@ -168,7 +168,7 @@ namespace thomas
 			m_shader->BindTextures(prevRender, 0);
 			
 			m_shader->BindBuffer(s_cameraBuffer, Shader::ResourceType::GAME_OBJECT);
-
+			camera->BindReflection();
 			Bind();
 			thomas::ThomasCore::GetDeviceContext()->Draw(4, 0);
 			Unbind();
@@ -191,6 +191,8 @@ namespace thomas
 
 			}
 
+			LightManager::BindAllLights();
+
 			return true;
 		}
 
@@ -200,6 +202,7 @@ namespace thomas
 			{
 				m_textures[i]->Unbind();
 			}
+			LightManager::Unbind();
 			return true;
 		}
 

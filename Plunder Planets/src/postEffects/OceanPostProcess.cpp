@@ -60,6 +60,7 @@ OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffe
 void OceanPostProcess::Update()
 {
 	time += Time::GetDeltaTime();
+	m_oceanPropertiesStruct.pad1 = time;
 	m_oceanSim->updateDisplacementMap(time);
 	utils::D3d::FillBuffer(m_effectProperties, m_oceanPropertiesStruct);
 }

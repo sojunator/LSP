@@ -127,8 +127,8 @@ namespace thomas
 				camera->UnbindSkybox();
 
 			
-
-				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
+				if(!Input::GetKey(Input::Keys::C))
+					PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}

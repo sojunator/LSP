@@ -56,6 +56,7 @@ public:
 
 	void Update()
 	{
+		return;
 		float dt = Time::GetDeltaTime();
 		
 		m_modelIndex = (m_modelIndex + 1) % 3;
