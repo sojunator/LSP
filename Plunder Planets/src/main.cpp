@@ -53,7 +53,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::PostEffect::CreatePostEffect("test", "oceanEffect");
 
 	thomas::graphics::PostEffect::RegisterNewPostEffectType("fog", new TestEffect("Fog"));
-
+//	thomas::graphics::PostEffect::CreatePostEffect("testFog", "fog");
 
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));

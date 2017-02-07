@@ -20,5 +20,5 @@ VS_OUT VSMain( /*VS_IN input,*/uint id : SV_VERTEXID)
 
 float4 PSMain(VS_OUT input) : SV_Target
 {
-	return backBufferTexture.Sample(backBufferSampler, input.Tex);
+	return backBufferTexture.Load(float3(input.Pos.xy, 0));
 }

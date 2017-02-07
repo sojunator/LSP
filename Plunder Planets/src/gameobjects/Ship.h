@@ -28,7 +28,7 @@ public:
 
 		m_sound->SetName("fMeow");
 
-		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
+		m_transform->SetPosition(math::Vector3(0, -1.5, 0));
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
 
 		m_forwardSpeed = 0;

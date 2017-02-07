@@ -14,6 +14,9 @@ SamplerState normalSampler : register(s3);
 TextureCube reflectionTexture : register(t4);
 SamplerState reflectionSampler : register(s4);
 
+Texture2D foamTexture : register(t5);
+SamplerState foamSampler : register(s5);
+
 
 cbuffer mvp : register(b0)
 {
@@ -105,13 +108,13 @@ float3 GetWorldPositionFromDepth(float2 texCoord)
 float4 PSMain(VS_OUT input) : SV_Target
 {
 	// Level at which water surface begins
-	float waterLevel = 0.0f;
+	float waterLevel = 1.0f;
 
 
 // How fast will colours fade out. You can also think about this
 // values as how clear water is. Therefore use smaller values (eg. 0.05f)
 // to have crystal clear water and bigger to achieve "muddy" water.
-	float fadeSpeed = 0.15f;
+	float fadeSpeed = 0.05f;
 
 // Timer
 	float timer = pad;
@@ -123,7 +126,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 // It should be computed on the CPU and passed to the shader.
 
 // Maximum waves amplitude
-	float maxAmplitude = 0.35;
+	float maxAmplitude = 1.35;
 
 // Direction of the light
 	float3 lightDir = directionalLights[0].lightDir;
@@ -134,7 +137,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 // The smaller this value is, the more soft the transition between
 // shore and water. If you want hard edges use very big value.
 // Default is 1.0f.
-	float shoreHardness = 1.0f;
+	float shoreHardness = 0.8f;
 
 // This value modifies current fresnel term. If you want to weaken
 // reflections use bigger value. If you want to empasize them use
@@ -146,7 +149,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 // Describes at what depth foam starts to fade out and
 // at what it is completely invisible. The fird value is at
 // what height foam for waves appear (+ waterLevel).
-	float3 foamExistence = { 0.65f, 1.35f, 0.5f };
+	float3 foamExistence = { 0.65f, 1.35f, 0.9f };
 
 	float sunScale = 3.0f;
 
@@ -160,7 +163,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 	float3 extinction = { 7.0f, 30.0f, 40.0f }; // Horizontal
 
 // Water transparency along eye vector.
-	float visibility = 4.0f;
+	float visibility = 200.0f;
 
 	float refractionScale = 0.005f;
 
@@ -209,7 +212,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 			level += bias * maxAmplitude;
 			t = (level - cameraPos.y) / eyeVecNorm.y;
 			surfacePoint = cameraPos + eyeVecNorm * t;
-			surfacePoint += float3(d.r * 1 / samSize, 0, d.b * 1 / samSize);
+		//	surfacePoint += float3(d.r * 1 / samSize, 0, d.b * 1 / samSize);
 		}
 		
 		color = d;
@@ -233,7 +236,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 	//	float4x4 matTextureProj = mul(matViewProj, matReflection);
 				
 		float3 reflectVector = reflect(eyeVecNorm, normal);
-		//reflectVector.z = max(0, reflectVector.z);
+		reflectVector.z = max(0, reflectVector.z);
 
 		float3 waterPosition = surfacePoint.xyz;
 		waterPosition.y -= (level - waterLevel);
@@ -256,21 +259,24 @@ float4 PSMain(VS_OUT input) : SV_Target
 
 		float foam = 0.0f;
 
-		texCoord = (surfacePoint.xz + eyeVecNorm.xz * 0.1) * 0.05 + timer * 0.00001f * wind + sin(timer * 0.001 + position.x) * 0.005;
-		float2 texCoord2 = (surfacePoint.xz + eyeVecNorm.xz * 0.1) * 0.05 + timer * 0.00002f * wind + sin(timer * 0.001 + position.z) * 0.005;
+		texCoord = (surfacePoint.xz + eyeVecNorm.xz * 0.1) * 0.05 + timer * 0.0001f + sin(timer * 0.001 + position.x) * 0.005;
+		float2 texCoord2 = (surfacePoint.xz + eyeVecNorm.xz * 0.1) * 0.05 + timer * 0.001f + sin(timer * 0.001 + position.z) * 0.005;
 		
+		float3 f1 = foamTexture.Sample(foamSampler, texCoord).rgb;
+		float3 f2 = foamTexture.Sample(foamSampler, texCoord2).rgb;
+
 		if (depth2 < foamExistence.x)
-			foam = (float3(0.5, 0.5, 0.5)) * 0.5f;
+			foam = (f1 + f2) * 0.5f;
 		else if (depth2 < foamExistence.y)
 		{
-			foam = lerp(float3(0.5,0.5,0.5) * 0.5f, 0.0f,
+			foam = lerp((f1 + f2) * 0.5f, 0.0f,
 						 (depth2 - foamExistence.x) / (foamExistence.y - foamExistence.x));
 			
 		}
 		
 		if (maxAmplitude - foamExistence.z > 0.0001f)
 		{
-			foam += (float3(0.5, 0.5, 0.5)) * 0.5f *
+			foam += (f1 + f2) * 0.5f *
 				saturate((level - (waterLevel + foamExistence.z)) / (maxAmplitude - foamExistence.z));
 		}
 

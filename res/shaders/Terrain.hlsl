@@ -65,7 +65,7 @@ VSOutput VSMain(in VSInput input)
 float4 TerrainColour(float y)
 {
 	if (y < 4)
-        return float4(0.749f, 0.749f, 0.349f - clamp(y,0,4) * 0.2, 1.0f);
+        return float4(0.749f, 0.749f, 0.549f - clamp(y,0,4) * 0.01, 1.0f);
     else
         return float4(0.24f - y * 0.02, 0.74f - y * 0.02, 0.49f - y * 0.02, 1.0f);
 }

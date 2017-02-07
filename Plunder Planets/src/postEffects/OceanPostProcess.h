@@ -36,6 +36,7 @@ private:
 		math::Vector2 pad4;
 	};
 	float time;
+	float timeDelay;
 	OceanProperties m_oceanPropertiesStruct;
 	utils::ocean::OceanParameter m_oceanSettings;
 	utils::ocean::OceanSimulator* m_oceanSim;
