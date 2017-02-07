@@ -121,7 +121,8 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	float lightIntensity = saturate(dot(input.normal, lightDir));
 	//return float4(lightIntensity, 0, 0, 0);
 
-	float4 diffuse = saturate(diffuseColor*lightIntensity);
+	float4 diffuse = saturate((diffuseColor+textureColor)*lightIntensity);
+
 	float4 specular = float4(0,0,0,0);
 	if (lightIntensity > 0.0f)
 	{
@@ -137,9 +138,9 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	}
 
 	if (materialProperty.x == 0) //currently calculating color of diffuse
-		return diffuseColor + ambientColor * 0.05f; //+diffuse when normal maps working, specular still not working
+		return diffuse + ambientColor * 0.05f + specular*specularColor; //+diffuse when normal maps working, specular still not working
 	else //currently calculating color of texture
-		return textureColor + ambientColor * 0.05f;
+		return diffuse + ambientColor * 0.05f + specular*specularColor;
 
 	//return ambientColor * 0.05f + diffuse  + specular*specularColor;
 }
