@@ -38,6 +38,35 @@ cbuffer material : register(b1)
 	float specularPower;
 }
 
+//Struct coupled with LightManager
+struct DirLight
+{
+	float4 lightColor;
+	float3 lightDir;
+	float padding;
+};
+//Struct coupled with LightManager
+struct PointLight
+{
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
+	float power;
+	float4 lightColor;
+	float3 position;
+	float padding;
+};
+//Buffer coupled with LightManager
+cbuffer lightBuffer : register(b2)
+{
+	uint nrOfDirectionalLights;
+	uint nrOfPointLights;
+	int padding1;
+	int padding2;
+	DirLight directionalLights[3];
+	PointLight pointLights[20];
+}
+
 struct VSOutput
 {
 	float4 position : SV_POSITION;
@@ -78,15 +107,19 @@ float4 PSMain(VSOutput input) : SV_TARGET
 
     float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
 
-	float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
+	//CURRENTLY NO NORMAL MAP
+	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
 
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
-	bumpNormal = normalize(bumpNormal);
+	bumpNormal = normalize(bumpNormal);*/
 
 	lightDir = -lightDir;
-	float lightIntensity = saturate(dot(bumpNormal, lightDir));
+	//float lightIntensity = saturate(dot(bumpNormal, lightDir));
+
+	float lightIntensity = saturate(dot(input.normal, lightDir));
+	//return float4(lightIntensity, 0, 0, 0);
 
 	float4 diffuse = saturate(diffuseColor*lightIntensity);
 	float4 specular = float4(0,0,0,0);
@@ -97,7 +130,8 @@ float4 PSMain(VSOutput input) : SV_TARGET
 
 		float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
 		float3 reflection = normalize(lightDir + viewDirection);
-		specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
+		//specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity; //NO WORKING NORMAL MEP YET
+		specular = pow(saturate(dot(input.normal, reflection)), specularPower)*lightIntensity;
 		specular = specular*specularIntensity;
 
 	}
