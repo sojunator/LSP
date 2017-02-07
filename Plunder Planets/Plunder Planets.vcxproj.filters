@@ -20,6 +20,8 @@
     <ClInclude Include="src\materials\WaterMaterial.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
+    <ClInclude Include="src\gameobjects\Broadside.h" />
+    <ClInclude Include="src\gameobjects\Projectile.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

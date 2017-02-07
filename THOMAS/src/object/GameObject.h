@@ -28,6 +28,13 @@ namespace thomas
 
 			static std::vector<GameObject*> GetGameObjects();
 
+			static bool Destroy(GameObject *object);
+
+			static GameObject* Instantiate(GameObject* gameObject);
+			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent);
+
 			virtual bool Start() { return true; }
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
@@ -47,6 +54,7 @@ namespace thomas
 			if (std::is_base_of<component::Component, T>::value)
 			{
 				T* component = new T(this);
+				Object::Instantiate(component);
 				m_components.push_back(component);
 				return component;
 			}
