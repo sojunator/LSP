@@ -7,10 +7,13 @@ namespace thomas
 		std::map<std::string, std::unique_ptr<DirectX::SpriteFont>> TextRender::s_fonts;
 		math::Vector2 TextRender::s_fontPos;
 		std::unique_ptr<DirectX::SpriteBatch> TextRender::s_spriteBatch;
+		std::unique_ptr<DirectX::CommonStates> TextRender::s_states;
 
 		void TextRender::RenderText(std::string name, std::string output, float posX, float posY, float scale, float rotation,
 									math::Vector3 color, bool dropShadow, bool outline)
 		{
+			ThomasCore::GetDeviceContext()->OMSetBlendState(s_states->Opaque(), DirectX::Colors::Black, 0xFFFFFFFF);
+
 			SetFontPosX(posX);
 			SetFontPosY(posY);
 
@@ -39,8 +42,10 @@ namespace thomas
 			}
 
 			s_fonts[name]->DrawString(s_spriteBatch.get(), result, GetFontPos(), color, rotation, origin, scale);
-
+			
 			s_spriteBatch->End();
+
+			ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, DirectX::Colors::Black, 0xFFFFFFFF);
 		}
 
 		void TextRender::SetFontPosX(float posX)
@@ -70,6 +75,7 @@ namespace thomas
 		bool TextRender::Initialize()
 		{
 			s_spriteBatch = std::make_unique<DirectX::SpriteBatch>(ThomasCore::GetDeviceContext());
+			s_states = std::make_unique<DirectX::CommonStates>(ThomasCore::GetDevice());
 
 			if (!s_spriteBatch)
 			{
@@ -95,6 +101,7 @@ namespace thomas
 			}
 			
 			s_spriteBatch.reset();
+			s_states.reset();
 		}
 
 		void TextRender::RenderText(object::component::TextComponent* text)

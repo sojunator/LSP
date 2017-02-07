@@ -4,6 +4,7 @@
 #include <map>
 #include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteBatch.h"
 #include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteFont.h"
+#include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/Commonstates.h"
 #include "../object/component/TextComponent.h"
 
 namespace thomas
@@ -27,6 +28,7 @@ namespace thomas
 			static std::map<std::string, std::unique_ptr<DirectX::SpriteFont>> s_fonts;
 			static math::Vector2 s_fontPos;
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
+			static std::unique_ptr<DirectX::CommonStates> s_states;
 		};
 	}
 }

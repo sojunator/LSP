@@ -124,8 +124,6 @@ namespace thomas
 				camera->BindSkybox();
 				camera->UnbindSkybox();
 
-			
-
 				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
 				//GUI
