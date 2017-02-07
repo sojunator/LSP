@@ -24,8 +24,8 @@ public:
 		m_sprite->SetScale(1.0f);
 
 		//Text
-		m_text->SetFont("Gold");
-		m_text->SetOutput("Hello...");
+		m_text->SetFont("Test");
+		m_text->SetOutput("Hello bitches...");
 		m_text->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
 		m_text->SetRotation(0.0f);
 		m_text->SetScale(1.0f);
