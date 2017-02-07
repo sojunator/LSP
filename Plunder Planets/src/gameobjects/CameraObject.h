@@ -19,8 +19,8 @@ public:
 
 		//GUI images
 		m_sprite->SetName("GUI");
-		m_sprite->SetPositionX(400.f);
-		m_sprite->SetPositionY(20.f);
+		m_sprite->SetPositionX(50.f);
+		m_sprite->SetPositionY(40.f);
 		m_sprite->SetScale(1.0f);
 
 		//Text

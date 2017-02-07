@@ -21,6 +21,11 @@ namespace thomas
 				return m_scale;
 			}
 
+			std::string SpriteComponent::GetSignature()
+			{
+				return m_name;
+			}
+
 			void SpriteComponent::SetName(std::string name)
 			{
 				m_name = name;

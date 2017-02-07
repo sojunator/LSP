@@ -5,6 +5,7 @@
 #include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteBatch.h"
 #include "../utils/directXTK/WICTextureLoader.h"
 #include "../object/component/SpriteComponent.h"
+#include <map>
 
 namespace thomas
 {
@@ -23,11 +24,10 @@ namespace thomas
 			static math::Vector2 GetImagePos();
 
 		private:
-			static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> s_texture;
+			static std::map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> s_texture;
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;
-			static std::string s_name;
 		};
 	}
 }

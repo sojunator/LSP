@@ -14,6 +14,7 @@ namespace thomas
 				SpriteComponent(GameObject* gameObject);
 				math::Vector2 GetPosition();
 				float GetScale();
+				std::string GetSignature();
 
 				void SetName(std::string name);
 				void SetPositionX(float posX);

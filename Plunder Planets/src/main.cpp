@@ -72,7 +72,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init 2D-images for GUI
 	thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/tempGUI.png");
-	//thomas::graphics::Sprite::LoadTexture("Cat", "../res/GUI/cat.png");
+	thomas::graphics::Sprite::LoadTexture("Cat", "../res/GUI/cat.png");
 
 	//Init text
 	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
