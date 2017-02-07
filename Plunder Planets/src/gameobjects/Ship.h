@@ -63,7 +63,7 @@ public:
 
 	math::Vector3 project(math::Vector3 v1, math::Vector3 v2)
 	{
-		return (v1.Dot(v2)/v2.Length()) * v2;
+		return (v1.Dot(v2)/(v2.Length() * v2.Length())) * v2;
 	}
 
 	void Update()
@@ -97,17 +97,31 @@ public:
 			}
 			
 		}
+		//calculate forward and right contribution of the cam, with the boat, and the controllers left stick
+		float forwardFactor = 0;
+		float rightFactor = 0;
+		if (left_x != 0 || left_y != 0)
+		{
+			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
 
-		/*math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->GetPosition().x, 0, m_cameraObject->m_transform->GetPosition().z);
-		camForwardXZ.Normalize();
-		math::Vector3 moveForward = project(camForwardXZ, m_transform->Forward());
-		math::Vector3 moveRight = project(camForwardXZ, m_transform->Right());*/
+			camForwardXZ.Normalize();
+
+			forwardFactor = camForwardXZ.Dot(m_transform->Forward()) * -left_y + camForwardXZ.Dot(m_transform->Right()) * left_x;
+			
+			rightFactor = camForwardXZ.Dot(m_transform->Forward()) * left_x + camForwardXZ.Dot(m_transform->Right()) * left_y;
+			
+		}
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::Y) || left_y > m_controlSensitivity)
+		if (Input::GetButton(Input::Buttons::Y))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
 			
+		}
+		else if (std::abs(forwardFactor) > 0.01f)
+		{
+			m_forwardSpeed += m_accelerationSpeed * forwardFactor * dt;
+			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
 		}
 		else
 		{
@@ -120,14 +134,11 @@ public:
 		m_transform->Translate(moveVec);
 		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
 		
-		if (left_x > m_controlSensitivity)
+
+		if (std::abs(rightFactor) > 0.01)
 		{
-			m_rotation -= m_rotationSpeed *dt;
+			m_rotation += m_rotationSpeed * rightFactor * dt;
 			m_rotation = std::fmaxf(m_rotation, -m_minmaxRotFactor);
-		}
-		else if (left_x < -m_controlSensitivity)
-		{
-			m_rotation += m_rotationSpeed *dt;
 			m_rotation = std::fminf(m_rotation, m_minmaxRotFactor);
 		}
 		else
