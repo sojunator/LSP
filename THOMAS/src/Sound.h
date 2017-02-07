@@ -2,8 +2,7 @@
 #include "common.h"
 #include <string>
 #include <vector>
-
-#include "utils\directXTK\SoundCommon.h"
+#include "../../DirectXTK-dec2016/Audio/SoundCommon.h"
 
 
 

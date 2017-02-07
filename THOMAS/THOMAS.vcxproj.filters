@@ -18,24 +18,8 @@
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
-    <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
-    <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
-    <ClCompile Include="src\utils\directXTK\DynamicSoundEffectInstance.cpp" />
-    <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
-    <ClCompile Include="src\utils\directXTK\Keyboard.cpp" />
-    <ClCompile Include="src\utils\directXTK\Mouse.cpp" />
-    <ClCompile Include="src\utils\directXTK\pch.cpp" />
-    <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
-    <ClCompile Include="src\utils\directXTK\SoundCommon.cpp" />
-    <ClCompile Include="src\utils\directXTK\SoundEffect.cpp" />
-    <ClCompile Include="src\utils\directXTK\SoundEffectInstance.cpp" />
-    <ClCompile Include="src\utils\directXTK\WaveBank.cpp" />
-    <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
-    <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
-    <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
-    <ClCompile Include="src\graphics\CubeMapLoader.cpp" />
     <ClCompile Include="src\graphics\Material.cpp" />
     <ClCompile Include="src\Terrain\Terrain.cpp" />
     <ClCompile Include="src\utils\HeightMap.cpp" />
@@ -47,7 +31,6 @@
     <ClCompile Include="src\object\component\SoundComponent.cpp" />
     <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
     <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
-    
     <ClCompile Include="src\graphics\PostEffect.cpp" />
     <ClCompile Include="src\graphics\TextRender.cpp" />
     <ClCompile Include="src\object\component\TextComponent.cpp" />
@@ -75,21 +58,6 @@
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
-    <ClInclude Include="src\utils\directXTK\Audio.h" />
-    <ClInclude Include="src\utils\directXTK\dds.h" />
-    <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />
-    <ClInclude Include="src\utils\directXTK\DirectXHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\GamePad.h" />
-    <ClInclude Include="src\utils\directXTK\Keyboard.h" />
-    <ClInclude Include="src\utils\directXTK\LoaderHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\Mouse.h" />
-    <ClInclude Include="src\utils\directXTK\pch.h" />
-    <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
-    <ClInclude Include="src\utils\directXTK\SoundCommon.h" />
-    <ClInclude Include="src\utils\directXTK\WaveBankReader.h" />
-    <ClInclude Include="src\utils\directXTK\WAVFileReader.h" />
-    <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\utils\Plane.h" />
@@ -105,14 +73,9 @@
     <ClInclude Include="src\utils\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\object\component\SoundComponent.h" />
     <ClInclude Include="src\graphics\PostEffect.h" />
-    <ClInclude Include="src\utils\BezierCurve.h" />
     <ClInclude Include="src\graphics\TextRender.h" />
     <ClInclude Include="src\object\component\TextComponent.h" />
     <ClInclude Include="src\graphics\Sprite.h" />
     <ClInclude Include="src\object\component\SpriteComponent.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\utils\directXTK\SimpleMath.inl" />
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

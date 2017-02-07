@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 #include "../ThomasCore.h"
-#include "directXTK\WICTextureLoader.h"
-#include "directXTK\DDSTextureLoader.h"
+#include "../../../DirectXTK-dec2016/Inc/WICTextureLoader.h"
+#include "../../../DirectXTK-dec2016/Inc/DDSTextureLoader.h"
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "Dxguid.lib")

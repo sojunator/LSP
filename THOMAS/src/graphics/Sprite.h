@@ -2,8 +2,8 @@
 #include "../utils/Math.h"
 #include "../ThomasCore.h"
 #include <wrl.h>
-#include "../../packages/directxtk_desktop_2015.2016.12.5.1/build/native/include/SpriteBatch.h"
-#include "../utils/directXTK/WICTextureLoader.h"
+#include "../../../DirectXTK-dec2016/Inc/SpriteBatch.h"
+#include "../../../DirectXTK-dec2016/Inc/WICTextureLoader.h"
 #include "../object/component/SpriteComponent.h"
 #include <map>
 

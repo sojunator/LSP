@@ -48,21 +48,6 @@
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
-    <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
-    <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
-    <ClCompile Include="src\utils\directXTK\DynamicSoundEffectInstance.cpp" />
-    <ClCompile Include="src\utils\directXTK\GamePad.cpp" />
-    <ClCompile Include="src\utils\directXTK\Keyboard.cpp" />
-    <ClCompile Include="src\utils\directXTK\Mouse.cpp" />
-    <ClCompile Include="src\utils\directXTK\pch.cpp" />
-    <ClCompile Include="src\utils\directXTK\SimpleMath.cpp" />
-    <ClCompile Include="src\utils\directXTK\SoundCommon.cpp" />
-    <ClCompile Include="src\utils\directXTK\SoundEffect.cpp" />
-    <ClCompile Include="src\utils\directXTK\SoundEffectInstance.cpp" />
-    <ClCompile Include="src\utils\directXTK\WaveBank.cpp" />
-    <ClCompile Include="src\utils\directXTK\WaveBankReader.cpp" />
-    <ClCompile Include="src\utils\directXTK\WAVFileReader.cpp" />
-    <ClCompile Include="src\utils\directXTK\WICTextureLoader.cpp" />
     <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
     <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
     <ClCompile Include="src\utils\HeightMap.cpp" />
@@ -101,21 +86,6 @@
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
-    <ClInclude Include="src\utils\directXTK\Audio.h" />
-    <ClInclude Include="src\utils\directXTK\dds.h" />
-    <ClInclude Include="src\utils\directXTK\DDSTextureLoader.h" />
-    <ClInclude Include="src\utils\directXTK\DirectXHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\GamePad.h" />
-    <ClInclude Include="src\utils\directXTK\Keyboard.h" />
-    <ClInclude Include="src\utils\directXTK\LoaderHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\Mouse.h" />
-    <ClInclude Include="src\utils\directXTK\pch.h" />
-    <ClInclude Include="src\utils\directXTK\PlatformHelpers.h" />
-    <ClInclude Include="src\utils\directXTK\SimpleMath.h" />
-    <ClInclude Include="src\utils\directXTK\SoundCommon.h" />
-    <ClInclude Include="src\utils\directXTK\WaveBankReader.h" />
-    <ClInclude Include="src\utils\directXTK\WAVFileReader.h" />
-    <ClInclude Include="src\utils\directXTK\WICTextureLoader.h" />
     <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\utils\HeightMap.h" />
     <ClInclude Include="src\utils\Math.h" />
@@ -126,8 +96,9 @@
     <ClInclude Include="src\graphics\TextRender.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="src\utils\directXTK\SimpleMath.inl" />
+    <ProjectReference Include="..\DirectXTK-dec2016\DirectXTK_Desktop_2015.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED0D8681-B384-43D1-8F56-B4145588E20C}</ProjectGuid>
@@ -209,7 +180,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -248,7 +219,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\DirectXTK.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -273,13 +244,5 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.props'))" />
-    <Error Condition="!Exists('..\packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_2015.2016.12.5.1\build\native\directxtk_desktop_2015.targets'))" />
-  </Target>
 </Project>
