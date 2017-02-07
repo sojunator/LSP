@@ -224,35 +224,35 @@ namespace thomas
 			//return s_gamePadState.IsAPressed();
 			return (s_gamePadTracker.a == s_gamePadTracker.HELD);
 		case Buttons::B:
-			return s_gamePadState.IsBPressed();
+			return (s_gamePadTracker.b == s_gamePadTracker.HELD);
 		case Buttons::X:
-			return s_gamePadState.IsXPressed();
+			return (s_gamePadTracker.x == s_gamePadTracker.HELD);
 		case Buttons::Y:
-			return s_gamePadState.IsYPressed();
+			return (s_gamePadTracker.y == s_gamePadTracker.HELD);
 		case Buttons::DPAD_UP:
-			return s_gamePadState.IsDPadUpPressed();
+			return (s_gamePadTracker.dpadUp == s_gamePadTracker.HELD);
 		case Buttons::DPAD_DOWN:
-			return s_gamePadState.IsDPadDownPressed();
+			return (s_gamePadTracker.dpadDown == s_gamePadTracker.HELD);
 		case Buttons::DPAD_LEFT:
-			return s_gamePadState.IsDPadLeftPressed();
+			return (s_gamePadTracker.dpadLeft == s_gamePadTracker.HELD);
 		case Buttons::DPAD_RIGHT:
-			return s_gamePadState.IsDPadRightPressed();
+			return (s_gamePadTracker.dpadRight == s_gamePadTracker.HELD);
 		case Buttons::LS:
-			return s_gamePadState.IsLeftStickPressed();
+			return (s_gamePadTracker.leftStick == s_gamePadTracker.HELD);
 		case Buttons::RS:
-			return s_gamePadState.IsRightStickPressed();
+			return (s_gamePadTracker.rightStick == s_gamePadTracker.HELD);
 		case Buttons::LB:
-			return s_gamePadState.IsLeftShoulderPressed();
+			return (s_gamePadTracker.leftShoulder == s_gamePadTracker.HELD);
 		case Buttons::RB:
-			return s_gamePadState.IsRightShoulderPressed();
+			return (s_gamePadTracker.rightShoulder == s_gamePadTracker.HELD);
 		case Buttons::LT:
-			return s_gamePadState.IsLeftTriggerPressed();
+			return (s_gamePadTracker.leftTrigger == s_gamePadTracker.HELD);
 		case Buttons::RT:
-			return s_gamePadState.IsRightTriggerPressed();
+			return (s_gamePadTracker.rightTrigger == s_gamePadTracker.HELD);
 		case Buttons::START:
-			return s_gamePadState.IsStartPressed();
+			return (s_gamePadTracker.start == s_gamePadTracker.HELD);
 		case Buttons::BACK:
-			return s_gamePadState.IsBackPressed();
+			return (s_gamePadTracker.back == s_gamePadTracker.HELD);
 
 		}
 		return false;

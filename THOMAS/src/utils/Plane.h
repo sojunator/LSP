@@ -2,7 +2,6 @@
 
 #include "../graphics/Model.h"
 #include "../Common.h"
-#include "noise\noise.h"
 
 
 namespace thomas

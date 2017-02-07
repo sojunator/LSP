@@ -54,7 +54,7 @@ namespace thomas
 				int index = size*detail * (i + 1);
 				for (int j = 0; j < (size * detail) - 1; j++)
 				{
-					
+
 					indices.push_back(j + i * size*detail);
 					indices.push_back(index);
 					indices.push_back(index + 1);

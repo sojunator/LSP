@@ -250,7 +250,7 @@ namespace thomas
 		}
 		bool Shader::BindBuffer(ID3D11Buffer * resource, int slot)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader && s_currentBoundShader == this)
 			{
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(slot, 1, &resource);

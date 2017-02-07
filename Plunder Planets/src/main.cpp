@@ -1,7 +1,5 @@
-
 // main.cpp : Defines the entry point for the console application.
 //
-
 #include "Thomas.h"
 #include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
@@ -18,14 +16,17 @@
 #include "graphics\Sprite.h"
 
 
-#include "postEffects\testEffect.h"
+#include "postEffects\OceanPostProcess.h"	
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-
 	MSG msg = { 0 };
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 800, 600, L"Plunder plantits");
 	//init code
+	double time = thomas::Time::GetInitTime();
+	srand(time);
+
+
 
 	//Init shaders
 	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
@@ -44,12 +45,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 	//PostFX test shader
-	thomas::graphics::Shader::CreateShader("PostFXTest", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
-		"../res/shaders/postFXTest.hlsl");
+	thomas::graphics::Shader::CreateShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
+		"../res/shaders/oceanPostProcess.hlsl");
 
-	thomas::graphics::PostEffect::RegisterNewPostEffectType("testFX", new TestEffect("PostFXTest"));
+//	thomas::graphics::PostEffect::RegisterNewPostEffectType("oceanEffect", new OceanPostProcess("OceanFX"));
 
-	//thomas::graphics::PostEffect::CreatePostEffect("test", "testFX");
+//	thomas::graphics::PostEffect::CreatePostEffect("test", "oceanEffect");
 
 	//Init materials
 	thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
@@ -59,16 +60,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
 	//Init models
-
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ship/ship.fbx", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel0", "../res/models/Boat/ship.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel1", "../res/models/Boat/ship1.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel2", "../res/models/Boat/ship2.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-
-	//utils::Plane::PlaneData plane = utils::Plane::CreatePlane(128, 1);
-
-	thomas::Islands islands(3, m, 1024/4, 0.125, 1024, 20);
-	Model * model = Model::CreateModel("Plane-1", islands.GetIsland(0));
-	Model * model1 = Model::CreateModel("Plane-2", islands.GetIsland(1));
-	Model * model2 = Model::CreateModel("Plane-3", islands.GetIsland(2));
+	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
+	Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
 
 
 
@@ -95,12 +92,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	Ship* ship = new Ship();
 	new WaterObject();
 
-
-
 	//start
 	thomas::ThomasCore::Start();
 	delete c;
 
 	return (int)msg.wParam;
 }
-

@@ -19,7 +19,7 @@ namespace thomas
 		static void Update();		///Updates delta time and FPS
 
 		static float GetDeltaTime();		///Delta time
-
+		static double GetInitTime();
 		static int GetFPS();
 
 		static void SetTimescale(float timescale);		///The smaller the timescale the slower the time
@@ -28,6 +28,7 @@ namespace thomas
 		
 
 	private:
+		static double s_initTime;
 		static double s_startTime;
 		static double s_timeFreq;
 		static double s_DeltaTime;

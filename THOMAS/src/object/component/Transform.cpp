@@ -67,7 +67,14 @@ namespace thomas
 			{
 				return Rotate(math::Vector3(x, y, z));
 			}
-			
+			void Transform::RotateByAxis(math::Vector3 axis, float angle)
+			{
+				math::Quaternion rot = math::Quaternion::CreateFromAxisAngle(axis, angle);
+				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(m_localRotation), rot);
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
+
+				Decompose();
+			}
 			void Transform::Translate(math::Vector3 translation)
 			{
 				math::Matrix pos = math::Matrix::CreateTranslation(translation);

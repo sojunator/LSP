@@ -1,22 +1,22 @@
 #pragma once
 #include "Thomas.h"
-#include "utils/Ocean/OceanSimulator.h"
+#include "graphics\Renderer.h"
+#include "utils\Ocean\OceanSimulator.h"
 using namespace thomas;
 using namespace graphics;
-
-class WaterMaterial : public Material
+class OceanPostProcess : public PostEffect
 {
 private:
-	Material* CreateInstance(std::string name, Shader* shader);
+	OceanPostProcess* CreateInstance(std::string name, Shader* shader)
+	{
+		return new OceanPostProcess(name, shader);
+	}
 public:
-	WaterMaterial(std::string shader) : Material(shader) {}
-	WaterMaterial(std::string name, Shader* shader);
-	
+	OceanPostProcess(std::string shader) : PostEffect(shader) {}
+	OceanPostProcess(std::string name, Shader* shader);
 	void Update();
-
-	~WaterMaterial();
 private:
-	struct MaterialProperties
+	struct OceanProperties
 	{
 		math::Color waterColor;
 		math::Color skyColor;
@@ -36,10 +36,7 @@ private:
 		math::Vector2 pad4;
 	};
 	float time;
-	float timeSinceLastUpdate;
+	OceanProperties m_oceanPropertiesStruct;
 	utils::ocean::OceanParameter m_oceanSettings;
 	utils::ocean::OceanSimulator* m_oceanSim;
-	MaterialProperties m_materialProperties;
-
 };
-

@@ -15,7 +15,6 @@ public:
 	{
 		m_camera = AddComponent<component::Camera>();
 		m_text = AddComponent<component::TextComponent>();
-		m_test = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 
 		//GUI images
@@ -35,17 +34,8 @@ public:
 		m_text->SetDropshadow(false);
 		m_text->SetOutline(true);
 
-		m_test->SetFont("Gold");
-		m_test->SetOutput("Namnam..");
-		m_test->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
-		m_test->SetRotation(0.0f);
-		m_test->SetScale(1.0f);
-		m_test->SetPositionX(200.f);
-		m_test->SetPositionY(30.f);
-		m_test->SetDropshadow(false);
-		m_test->SetOutline(true);
-
 		m_transform->SetPosition(0, 1, 3);
+		
 	};
 
 	bool Start()
@@ -53,7 +43,7 @@ public:
 		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
-		m_fastSpeed = 100.0f;
+		m_fastSpeed = 300.0f;
 		m_flySpeed = m_normalSpeed;
 		m_jaw = 0;
 		m_pitch = 0;
@@ -123,7 +113,6 @@ public:
 private:
 	component::Camera* m_camera;
 	component::TextComponent* m_text;
-	component::TextComponent* m_test;
 	component::SpriteComponent* m_sprite;
 	float m_sensitivity;
 	float m_normalSpeed;

@@ -47,7 +47,6 @@
     <ClCompile Include="src\ThomasCore.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
-    <ClCompile Include="src\utils\BezierCurve.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\directXTK\AudioEngine.cpp" />
     <ClCompile Include="src\utils\directXTK\DDSTextureLoader.cpp" />
@@ -101,7 +100,6 @@
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
-    <ClInclude Include="src\utils\BezierCurve.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\directXTK\Audio.h" />
     <ClInclude Include="src\utils\directXTK\dds.h" />

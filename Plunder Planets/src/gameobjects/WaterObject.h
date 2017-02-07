@@ -13,7 +13,7 @@ public:
 
 		m_waterMaterial = (Material::CreateMaterial("waterMat", "waterMaterial"));
 
-		utils::Plane::PlaneData pData =  utils::Plane::CreatePlane(dim, 1.0 / 8);
+		utils::Plane::PlaneData pData =  utils::Plane::CreatePlane(dim, 1.0 / 10);
 		Mesh* m = new Mesh(pData.verts, pData.indices, "oceanMesh", m_waterMaterial);
 		std::vector<Mesh*> meshes;
 		meshes.push_back(m);
@@ -22,7 +22,6 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("ocean");
 
-		
 		//m_transform->SetScale(0.05);
 		m_transform->SetPosition(math::Vector3(-dim / 2, 0, dim / 2));
 		
