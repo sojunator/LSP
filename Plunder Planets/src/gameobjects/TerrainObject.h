@@ -22,7 +22,7 @@ public:
 	bool Start()
 	{
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(1, mat, 1024 / 8, 0.125, 1024 / 8, 30);
+		m_islands = new thomas::Islands(1, mat, 1024 / 16, 1, 1024 / 2, 100);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 		m_shipPos = math::Vector2(m_shipObject->m_transform->GetPosition().x, m_shipObject->m_transform->GetPosition().z);
 
@@ -40,7 +40,7 @@ public:
 
 	void Update()
 	{
-		m_shipPos = m_shipPos = math::Vector2(m_shipObject->m_transform->GetPosition().x, m_shipObject->m_transform->GetPosition().z);
+		m_shipPos = math::Vector2(m_shipObject->m_transform->GetPosition().x, m_shipObject->m_transform->GetPosition().z);
 		math::Vector2 center;
 		float distance;
 		float treasure;

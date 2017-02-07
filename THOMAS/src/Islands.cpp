@@ -19,10 +19,10 @@ namespace thomas
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
-			m_radius.push_back(size*detail*1.5);
-			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + (size / 2), m_worldPosOffset[i].y + (size / 2)));
-			tempPlane.push_back(utils::Plane::CreatePlane(size, detail, m_worldPosOffset[i]));
-			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
+			m_radius.push_back(size*1*1.5);
+			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), -(m_worldPosOffset[i].y + ((size*detail) / 2))));
+			tempPlane.push_back(utils::Plane::CreatePlane(size, 1, m_worldPosOffset[i]));
+			utils::HeightMap::ApplyHeightMap(size, 1, tempPlane[i], m_worldPosOffset[i]);
 		}
 		GenerateMesh(tempPlane, m);
 	}
@@ -134,8 +134,8 @@ namespace thomas
 			while (posNotFound)
 			{
 				math::Vector2 xy;
-				xy.x = rand() % 200 - 100;
-				xy.y = rand() % 200 - 100;
+				xy.x = rand() % m_mapSize * 2 - m_mapSize;
+				xy.y = rand() % m_mapSize * 2 - m_mapSize;
 				float distPrev = 0.0f;
 
 				if (m_worldPosOffset.size() == 0)
