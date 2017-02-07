@@ -1,5 +1,5 @@
 #include "SpriteComponent.h"
-
+#include "../../Window.h"
 namespace thomas
 {
 	namespace object
@@ -33,12 +33,12 @@ namespace thomas
 
 			void SpriteComponent::SetPositionX(float posX)
 			{
-				m_imagePos.x = posX;
+				m_imagePos.x = posX * Window::GetWidth();
 			}
 
 			void SpriteComponent::SetPositionY(float posY)
 			{
-				m_imagePos.y = posY;
+				m_imagePos.y = posY * Window::GetHeight();
 			}
 
 			void SpriteComponent::SetScale(float scale)

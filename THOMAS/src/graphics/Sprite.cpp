@@ -29,8 +29,8 @@ namespace thomas
 			CD3D11_TEXTURE2D_DESC imageDesc;
 			image->GetDesc(&imageDesc);
 
-			s_origin.x = float(imageDesc.Width / 2);
-			s_origin.y = float(imageDesc.Height / 2);
+			s_origin.x = 0;
+			s_origin.y = 0;
 
 			return true;
 		}
