@@ -100,10 +100,10 @@ namespace thomas
 				for (int x = 0; x < width; x++)
 				{
 					temp_vert.position.y = 0.0f;
-					temp_vert.position.x = (y + offSet.y) / detail;
-					temp_vert.position.z = -(x + offSet.x) / detail;
-					temp_vert.uv.x = y / ((float)size * detail);
-					temp_vert.uv.y = 1.0f - (x - (height) / (height));
+					temp_vert.position.x = (x + offSet.x) / detail;
+					temp_vert.position.z = (y + offSet.y) / detail;
+					temp_vert.uv.x = 1.0f - (x - (height) / (height));
+					temp_vert.uv.y = y / ((float)size * detail);
 					verts.push_back(temp_vert);
 				}
 			}

@@ -19,10 +19,11 @@ namespace thomas
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
-			m_radius.push_back(size*1*1.5);
-			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), -(m_worldPosOffset[i].y + ((size*detail) / 2))));
-			tempPlane.push_back(utils::Plane::CreatePlane(size, 1, m_worldPosOffset[i]));
-			utils::HeightMap::ApplyHeightMap(size, 1, tempPlane[i], m_worldPosOffset[i]);
+			m_radius.push_back(size*detail*1.5);
+			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
+			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
+			ApplyOffSet(i, tempPlane[i]);
+			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
 		}
 		GenerateMesh(tempPlane, m);
 	}
@@ -36,6 +37,15 @@ namespace thomas
 
 		}
 		m_mesh.push_back(mesh);
+	}
+
+	void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
+	{
+		for (int i = 0; i < tempPlanes.verts.size(); ++i)
+		{
+			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
+			tempPlanes.verts[i].position.z += m_worldPosOffset[island].y;
+		}
 	}
 
 	Islands::~Islands()
@@ -117,8 +127,17 @@ namespace thomas
 	float Islands::StealTreasure(int island)
 	{
 		float dt = Time::GetDeltaTime();
-		m_treasure[island] -= dt*m_plunderRate;
-		return m_totalTreasure[island] - m_treasure[island];
+		if (m_treasure[island] < m_plunderRate*dt)
+		{
+			float temp = m_treasure[island];
+			m_treasure[island] -= m_treasure[island];
+			return temp;
+		}
+		else
+		{
+			m_treasure[island] -= dt*m_plunderRate;
+			return m_totalTreasure[island] - m_treasure[island];
+		}
 	}
 
 	int Islands::GetSizeOFIsland(int island)

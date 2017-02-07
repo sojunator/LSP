@@ -78,7 +78,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	CameraObject* c = new CameraObject();
 	Ship* ship = new Ship();
 	TerrainObject* terrain = new TerrainObject();
-	new WaterObject();
+	//new WaterObject();
 
 	//start
 	thomas::ThomasCore::Start();

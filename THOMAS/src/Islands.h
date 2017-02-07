@@ -11,24 +11,25 @@ namespace thomas
 	public:
 		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance);
 		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlanes, graphics::Material* m);
+		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
 		~Islands();
 
-		int GetPlunderRate();								//GetplunderRate
-		int GetNrOfIslands();								//Get nr of islands
-		int GetMapSize();									//Get size of the whole play area
-		int GetMinDistance();								//Get minimum allowed distance between islands
-		float GetTreasure(int island);						//Get treasure for specific island
-		int GetTotalTreasure(int island);					//Get totala amount of treasure for specific island
-		int GetSize(int island);							//Get size of specific island
-		int GetDetail(int island);							//Get detail level of specific island
-		float GetRadius(int island);						//Get radius for specific island
-		math::Vector2 GetCenter(int island);				//Get m_islandCenterWorldPos for specific island
-		math::Vector2 GetOffSet(int island);				//Get offset for specific island	
-		std::vector<graphics::Mesh*> GetIslands(int island);//Get mesh of all islands on a map
+		int GetPlunderRate();									//GetplunderRate
+		int GetNrOfIslands();									//Get nr of islands
+		int GetMapSize();										//Get size of the whole play area
+		int GetMinDistance();									//Get minimum allowed distance between islands
+		float GetTreasure(int island);							//Get treasure for specific island
+		int GetTotalTreasure(int island);						//Get totala amount of treasure for specific island
+		int GetSize(int island);								//Get size of specific island
+		int GetDetail(int island);								//Get detail level of specific island
+		float GetRadius(int island);							//Get radius for specific island
+		math::Vector2 GetCenter(int island);					//Get m_islandCenterWorldPos for specific island
+		math::Vector2 GetOffSet(int island);					//Get offset for specific island	
+		std::vector<graphics::Mesh*> GetIslands(int island);	//Get mesh of all islands on a map
 
-		float GetRadiusSquared(int island);					//Get radius squared for specific island
-		float StealTreasure(int island);					//Get stolen treasure for specific island
-		int GetSizeOFIsland(int island);					//Get size of specific island
+		float GetRadiusSquared(int island);						//Get radius squared for specific island
+		float StealTreasure(int island);						//Get stolen treasure for specific island
+		int GetSizeOFIsland(int island);						//Get size of specific island
 
 	private:
 		void GeneratePos();
