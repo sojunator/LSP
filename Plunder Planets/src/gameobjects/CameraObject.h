@@ -15,9 +15,11 @@ public:
 	{
 		m_camera = AddComponent<component::Camera>();
 		m_text = AddComponent<component::TextComponent>();
+		m_test = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 
 		//GUI images
+		m_sprite->SetName("GUI");
 		m_sprite->SetPositionX(400.f);
 		m_sprite->SetPositionY(20.f);
 		m_sprite->SetScale(1.0f);
@@ -32,6 +34,16 @@ public:
 		m_text->SetPositionY(30.f);
 		m_text->SetDropshadow(false);
 		m_text->SetOutline(true);
+
+		m_test->SetFont("Gold");
+		m_test->SetOutput("Namnam..");
+		m_test->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
+		m_test->SetRotation(0.0f);
+		m_test->SetScale(1.0f);
+		m_test->SetPositionX(200.f);
+		m_test->SetPositionY(30.f);
+		m_test->SetDropshadow(false);
+		m_test->SetOutline(true);
 
 		m_transform->SetPosition(0, 1, 3);
 	};
@@ -111,6 +123,7 @@ public:
 private:
 	component::Camera* m_camera;
 	component::TextComponent* m_text;
+	component::TextComponent* m_test;
 	component::SpriteComponent* m_sprite;
 	float m_sensitivity;
 	float m_normalSpeed;

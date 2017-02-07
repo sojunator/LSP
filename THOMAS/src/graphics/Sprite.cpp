@@ -8,9 +8,12 @@ namespace thomas
 		std::unique_ptr<DirectX::SpriteBatch> Sprite::s_spriteBatch;
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
+		std::string Sprite::s_name;
 
-		bool Sprite::LoadTexture(std::string texture)
+		bool Sprite::LoadTexture(std::string name, std::string texture)
 		{
+			s_name = name;
+
 			std::wstring holder = std::wstring(texture.begin(), texture.end());
 			const wchar_t* result = holder.c_str();
 
@@ -63,8 +66,9 @@ namespace thomas
 			s_screenPos.y = posY;
 		}
 
-		void Sprite::RenderImage(float posX, float posY, float scale)
+		void Sprite::RenderImage(std::string name, float posX, float posY, float scale)
 		{
+			s_name = name;
 			SetImagePosX(posX);
 			SetImagePosY(posY);
 
@@ -78,7 +82,7 @@ namespace thomas
 
 		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
 		{
-			RenderImage(sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
+			RenderImage(sprite->GetName(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
 		}
 
 		math::Vector2 Sprite::GetImagePos()

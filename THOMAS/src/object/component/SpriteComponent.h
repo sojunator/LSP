@@ -15,12 +15,14 @@ namespace thomas
 				math::Vector2 GetPosition();
 				float GetScale();
 
+				void SetName(std::string name);
 				void SetPositionX(float posX);
 				void SetPositionY(float posY);
 				void SetScale(float scale);
 				
 			private:
-				math::Vector2 m_imagePos;			
+				math::Vector2 m_imagePos;
+				std::string m_name;
 				float m_scale;	
 			};
 		}

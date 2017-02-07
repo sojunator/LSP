@@ -21,6 +21,11 @@ namespace thomas
 				return m_scale;
 			}
 
+			void SpriteComponent::SetName(std::string name)
+			{
+				m_name = name;
+			}
+
 			void SpriteComponent::SetPositionX(float posX)
 			{
 				m_imagePos.x = posX;
