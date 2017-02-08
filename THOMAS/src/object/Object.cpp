@@ -35,9 +35,10 @@ namespace thomas
 			return false;
 		}
 
-		Object * Object::Instantiate(Object *object)
+		Object * Object::Instantiate(Object *object, Scene* scene)
 		{
 			s_objects.push_back(object);
+			object->m_scene = scene;
 			return object;
 		}
 

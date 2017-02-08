@@ -1,5 +1,4 @@
 #include "Renderer.h"
-#include "Model.h"
 #include "../object/component/Light.h"
 #include "../Scene.h"
 #include "LightManager.h"
@@ -156,7 +155,7 @@ namespace thomas
 
 				//PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
-				ThomasCore::GetSwapChain()->Present(0, 0);
+				//ThomasCore::GetSwapChain()->Present(0, 0);
 			//}
 
 			//					BindGameObjectBuffer(camera, gameObject);
@@ -217,6 +216,10 @@ namespace thomas
 		ID3D11ShaderResourceView * Renderer::GetDepthBufferSRV()
 		{
 			return s_depthBufferSRV;
+		}
+		ID3D11RenderTargetView * Renderer::GetBackBuffer()
+		{
+			return nullptr;
 		}
 		void Renderer::UnBindGameObjectBuffer()
 		{

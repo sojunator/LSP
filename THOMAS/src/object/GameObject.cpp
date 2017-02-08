@@ -34,6 +34,13 @@ namespace thomas
 		{
 			return s_gameObjects;
 		}
+
+		void GameObject::SceneUpdate()
+		{
+			Update();
+			for (object::component::Component* component : m_components)
+				component->Update();
+		}
 		
 
 	}

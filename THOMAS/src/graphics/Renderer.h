@@ -12,7 +12,6 @@ namespace thomas {
 		private:
 			
 			//static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
-			static void UnBindGameObjectBuffer();
 		public:
 
 			
@@ -29,6 +28,7 @@ namespace thomas {
 			static ID3D11RenderTargetView* GetBackBuffer();
 
 			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void UnBindGameObjectBuffer();
 			static void RenderSetup(object::component::Camera* camera);
 
 		private:

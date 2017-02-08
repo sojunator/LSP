@@ -28,6 +28,8 @@ namespace thomas
 
 			static std::vector<GameObject*> GetGameObjects();
 
+			void SceneUpdate();
+
 			virtual bool Start() { return true; }
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
@@ -68,7 +70,7 @@ namespace thomas
 		template<typename T>
 		inline std::vector<T*> GameObject::GetComponents()
 		{
-			std::vector<component::Component*> components;
+			std::vector<T*> components;
 			for (int i = 0; i < m_components.size(); i++)
 			{
 				T* comp = dynamic_cast<T*>(m_components[i]);
