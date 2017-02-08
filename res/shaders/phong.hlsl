@@ -105,8 +105,6 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	float4 outputColor = float4(0, 0, 0, 0);
 	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular
 
-	float3 sunDir = normalize(-directionalLights[0].lightDir);
-
 	ambientColor = (diffuseColor + textureColor) * 0.5f; //0.5 is a scalefactor for how strong the ambient will be
 	//CURRENTLY NO NORMAL MAP
 	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
@@ -119,7 +117,8 @@ float4 PSMain(VSOutput input) : SV_TARGET
 
 	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{
-		//float3 tempLightDir = float3(0, 0, 1); //for testing
+		float3 sunDir = normalize(-directionalLights[i].lightDir);
+		//sunDir = normalize(float3(-1, 0, 1)); //testing
 		float lightIntensity = saturate(dot(input.normal, sunDir));
 		//float lightIntensity = saturate(dot(input.normal, tempLightDir));
 
@@ -131,13 +130,15 @@ float4 PSMain(VSOutput input) : SV_TARGET
 			float3 viewDirection = camPosition - input.positionWS;
 
 			//float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex); //specularTexture gives a 0,0,0,0 float4 somehow
-			float3 reflection = normalize(directionalLights[i].lightDir + viewDirection);
-			//float3 reflection = normalize(tempLightDir + viewDirection); //for testing
+			float3 reflection = normalize(reflect(-viewDirection, input.normal)); //normalize(sunDir + viewDirection);
+			//float3 reflection = normalize(sunDir - viewDirection);
 			//specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity; //NO WORKING NORMAL MEP YET
-			specular = pow(saturate(dot(input.normal, reflection)), specularPower) * specularColor;// * lightIntensity; //specularPower = shiny
+			float specularPower2 = specularPower;
+			specularPower2 += 0.000000001f; //because we can't pow with a value of 0
+			specular = pow(saturate(dot(input.normal, reflection)), specularPower2) * specularColor; //specularPower = shiny
 			//specular = specular * specularIntensity;
 		}
-		outputColor += diffuse + specular;
+		outputColor += (diffuse + specular);
 	}
 
 	return outputColor + ambientColor;
