@@ -11,7 +11,7 @@ namespace thomas
 		private:
 		public:
 			Object(std::string type, std::string name);
-
+			~Object();
 			virtual bool Start() { return true; }
 			virtual void Update() {}
 			virtual void FixedUpdate() {}

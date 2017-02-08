@@ -233,7 +233,8 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-	float3 sunDir = normalize(directionalLights[0].lightDir);
+
+	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z));//lightDir needs to be upside down for some reason
 
 
 	float3 eyeVec = camPosition - input.positionWS;

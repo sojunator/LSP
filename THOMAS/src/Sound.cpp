@@ -9,8 +9,6 @@ namespace thomas
 	float Sound::s_fxVolume;
 	float Sound::s_musicVolume;
 	std::unique_ptr<DirectX::WaveBank> Sound::s_bank;
-	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_mInstance;
-	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_aInstance;
 	std::unique_ptr<DirectX::AudioEngine> Sound::s_audioEngine;
 
 	bool Sound::Init()
@@ -32,49 +30,26 @@ namespace thomas
 
 	bool Sound::Play(std::string name, float volume)
 	{
-		if (name[0] == 'm')
-		{
-			
-			s_mInstance = s_bank->CreateInstance(name.c_str());
-			if (!s_mInstance)
-			{
-				LOG("No instance was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
-				return false;
-			}
-			s_mInstance->Play(true);
-			s_mInstance->SetVolume(s_masterVolume * s_musicVolume * volume);
-			return true;
-		}
-		else if (name[0] == 'f')
-		{
+		if(s_bank)
 			s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
-			return true;
-		}
-		else if (name[0] == 'a')
+		return true;
+	}
+
+	std::unique_ptr<DirectX::SoundEffectInstance> Sound::CreateInstance(std::string clipName)
+	{
+		if (!s_bank)
+			return NULL;
+		std::unique_ptr<DirectX::SoundEffectInstance> instance = s_bank->CreateInstance(clipName.c_str());
+		if (instance)
 		{
-			s_aInstance = s_bank->CreateInstance(name.c_str());
-			if (!s_aInstance)
-			{
-				LOG("No instance was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
-				return false;
-			}
-			s_aInstance->Play(true);
-			s_aInstance->SetVolume(s_masterVolume * s_musicVolume * volume);
-			return true;
+			return instance;
 		}
-		return false;
-	}
-
-	void Sound::Pause()
-	{
-		s_mInstance->Pause();
-		s_aInstance->Pause();
-	}
-
-	void Sound::Resume()
-	{
-		s_mInstance->Resume();
-		s_aInstance->Resume();
+		else
+		{
+			LOG("Failed to find sound clip: " << clipName);
+			return NULL;
+		}
+		
 	}
 
 	void Sound::SetMasterVolume(float volume)
@@ -89,6 +64,10 @@ namespace thomas
 	{
 		s_musicVolume = volume;
 	}
+	float Sound::GetMusicVolume()
+	{
+		return s_masterVolume*s_musicVolume;
+	}
 	bool Sound::LoadWaveBank(std::string name)
 	{
 		try
@@ -98,7 +77,7 @@ namespace thomas
 		catch (std::exception ex)
 		{
 			LOG("Unable to load wavebank, probably invalid path and/or name");
-			
+			s_bank = NULL;
 			return false;
 		}
 		return true;

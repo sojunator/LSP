@@ -2,6 +2,7 @@
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
+#include "Ship.h"
 
 using namespace thomas;
 using namespace object;
@@ -14,11 +15,14 @@ public:
 	CameraObject() : GameObject("CameraObject")
 	{
 		m_camera = AddComponent<component::Camera>();
+		m_transform->SetPosition(0, 1, 3);
+		m_music = AddComponent<component::SoundComponent>();
+		m_pirateMusic = AddComponent<component::SoundComponent>();
 		m_text = AddComponent<component::TextComponent>();
-		//m_gold = AddComponent<component::TextComponent>();
+		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_chest = AddComponent<component::SpriteComponent>();
-
+	
 		//GUI images
 		m_sprite->SetName("GUI");	
 		m_sprite->SetPositionX(400);
@@ -42,21 +46,22 @@ public:
 		m_text->SetOutline(true);
 
 		//Gold font
-		/*m_gold->SetFont("Test");
-		m_gold->SetOutput("Gold ");
+		m_gold->SetFont("Test");
+		m_gold->SetOutput("0");
 		m_gold->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_gold->SetRotation(0.0f);
 		m_gold->SetScale(2.0f);
-		m_gold->SetPositionX(100.f);
+		m_gold->SetPositionX(300.f);
 		m_gold->SetPositionY(30.f);
 		m_gold->SetDropshadow(true);
-		m_gold->SetOutline(true);*/
+		m_gold->SetOutline(true);
 
 		m_transform->SetPosition(0, 1, 3);	
 	};
 
 	bool Start()
 	{
+		//m_ship = (Ship*)Find("Ship");
 		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
@@ -65,11 +70,22 @@ public:
 		m_jaw = 0;
 		m_pitch = 0;
 
+		
+		m_music->SetClip("aOceanAmbient");
+		m_music->SetVolume(0.3);
+		m_music->Play();
+		
+		m_pirateMusic->SetClip("mSeaChanty");
+		m_pirateMusic->SetVolume(0.9);
+		m_pirateMusic->Play();
+		
 		return true;
 	}
 
 	void Update()
-	{		
+	{
+		//m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
+		
 		if (Input::GetKey(Input::Keys::A))
 		{
 			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
@@ -127,9 +143,12 @@ public:
 
 
 private:
+	//Ship* m_ship;
 	component::Camera* m_camera;
+	component::SoundComponent* m_music;
+	component::SoundComponent* m_pirateMusic;
 	component::TextComponent* m_text;
-	//component::TextComponent* m_gold;
+	component::TextComponent* m_gold;
 	component::SpriteComponent* m_sprite;
 	component::SpriteComponent* m_chest;
 	float m_sensitivity;

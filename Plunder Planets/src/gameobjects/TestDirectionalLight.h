@@ -19,6 +19,8 @@ public:
 	bool Start()
 	{
 		m_rot = 0;
+		m_transform->SetPosition(math::Vector3(50, 50, 50));
+		m_transform->LookAt(m_transform);
 		return true;
 	}
 	void Update()

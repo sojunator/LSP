@@ -42,6 +42,9 @@ struct Matrix;
 struct Quaternion;
 struct Plane;
 
+
+float DegreesToradians(float degree);
+
 //------------------------------------------------------------------------------
 // 2D rectangle
 struct Rectangle

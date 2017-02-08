@@ -1,3 +1,4 @@
+aOceanAmbient.wav
 aWindLong.wav
 fCannon1.wav
 fCannon2.wav
@@ -14,4 +15,5 @@ fSlowCreak2.wav
 fSplash1.wav
 fSplash2.wav
 fSplash3.wav
+mSeaChanty.wav
 mThomas.wav
