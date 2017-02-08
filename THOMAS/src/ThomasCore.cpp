@@ -73,9 +73,10 @@ namespace thomas {
 
 		Scene::Update();
 		
-		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
+		for (object::Object* object : thomas::object::Object::GetObjects())
 		{
-			thomas::object::Object::GetObjects()[i]->Update();
+ 			if(object)
+				object->Update();
 		}
 
 		graphics::Renderer::Render();
@@ -84,24 +85,6 @@ namespace thomas {
 	void ThomasCore::Start()
 	{
 
-		if (s_initialized)
-		{
-			for (int i = 0; i < thomas::object::Object::GetObjects().size(); i++)
-			{
-				if (s_initialized)
-				{
-					
-					thomas::object::Object* obj = thomas::object::Object::GetObjects()[i];
-					if(obj->GetType() == "GameObject")
-						LOG("initiating " << obj->GetType() << ":" << obj->GetName());
-
-					s_initialized = obj->Start();
-				}
-				else
-					break;
-
-			}
-		}
 
 		if (s_initialized)
 		{
