@@ -13,7 +13,7 @@ namespace thomas
 									math::Vector3 color, bool dropShadow, bool outline)
 		{
 			ThomasCore::GetDeviceContext()->OMSetBlendState(s_states->Opaque(), DirectX::Colors::Black, 0xFFFFFFFF);
-
+			
 			SetFontPosX(posX);
 			SetFontPosY(posY);
 
@@ -56,6 +56,12 @@ namespace thomas
 		void TextRender::SetFontPosY(float posY)
 		{
 			s_fontPos.y = posY;
+		}
+
+		void TextRender::SetFontPosCentered()
+		{			
+			s_fontPos.x = Window::GetWidth() / 2.f;
+			s_fontPos.y = Window::GetHeight() / 2.f;		
 		}
 
 		bool TextRender::LoadFont(std::string name, std::string font)

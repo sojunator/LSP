@@ -8,6 +8,7 @@ namespace thomas
 		std::unique_ptr<DirectX::SpriteBatch> Sprite::s_spriteBatch;
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
+		std::unique_ptr<DirectX::CommonStates> Sprite::s_states;
 
 		bool Sprite::LoadTexture(std::string name, std::string texture)
 		{
@@ -45,11 +46,13 @@ namespace thomas
 				itr = s_texture.erase(itr);
 			}
 			s_spriteBatch.reset();
+			s_states.reset();
 		}
 
 		bool Sprite::Initialize()
 		{
 			s_spriteBatch = std::make_unique<DirectX::SpriteBatch>(ThomasCore::GetDeviceContext());
+			s_states = std::make_unique<DirectX::CommonStates>(ThomasCore::GetDevice());
 
 			if (!s_spriteBatch)
 			{
@@ -74,7 +77,7 @@ namespace thomas
 			SetImagePosX(posX);
 			SetImagePosY(posY);
 
-			s_spriteBatch->Begin();
+			s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 			
 			s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
 				0.f, s_origin, scale);

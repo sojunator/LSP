@@ -71,8 +71,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
 	//Init 2D-images for GUI
-	thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/tempGUI.png");
-	thomas::graphics::Sprite::LoadTexture("Cat", "../res/GUI/cat.png");
+	thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/scroll.png");
+	thomas::graphics::Sprite::LoadTexture("Chest", "../res/GUI/chest.png");
 
 	//Init text
 	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");

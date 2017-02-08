@@ -15,27 +15,44 @@ public:
 	{
 		m_camera = AddComponent<component::Camera>();
 		m_text = AddComponent<component::TextComponent>();
+		//m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
+		m_chest = AddComponent<component::SpriteComponent>();
 
 		//GUI images
 		m_sprite->SetName("GUI");	
 		m_sprite->SetPositionX(400);
-		m_sprite->SetPositionY(200);
+		m_sprite->SetPositionY(270);
 		m_sprite->SetScale(1.0f);
 
-		//Text
+		m_chest->SetName("Chest");
+		m_chest->SetPositionX(120);
+		m_chest->SetPositionY(30);
+		m_chest->SetScale(0.09f);
+
+		//Simple font
 		m_text->SetFont("Test");
 		m_text->SetOutput("Plunder Planets");
-		m_text->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
+		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_text->SetRotation(0.0f);
-		m_text->SetScale(1.5f);
-		m_text->SetPositionX(400.f);
+		m_text->SetScale(2.0f);
+		m_text->SetPositionX(960.f);
 		m_text->SetPositionY(30.f);
-		m_text->SetDropshadow(false);
+		m_text->SetDropshadow(true);
 		m_text->SetOutline(true);
 
-		m_transform->SetPosition(0, 1, 3);
-		
+		//Gold font
+		/*m_gold->SetFont("Test");
+		m_gold->SetOutput("Gold ");
+		m_gold->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
+		m_gold->SetRotation(0.0f);
+		m_gold->SetScale(2.0f);
+		m_gold->SetPositionX(100.f);
+		m_gold->SetPositionY(30.f);
+		m_gold->SetDropshadow(true);
+		m_gold->SetOutline(true);*/
+
+		m_transform->SetPosition(0, 1, 3);	
 	};
 
 	bool Start()
@@ -52,8 +69,7 @@ public:
 	}
 
 	void Update()
-	{
-		
+	{		
 		if (Input::GetKey(Input::Keys::A))
 		{
 			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
@@ -113,7 +129,9 @@ public:
 private:
 	component::Camera* m_camera;
 	component::TextComponent* m_text;
+	//component::TextComponent* m_gold;
 	component::SpriteComponent* m_sprite;
+	component::SpriteComponent* m_chest;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

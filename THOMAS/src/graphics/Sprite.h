@@ -6,6 +6,7 @@
 #include "../../../DirectXTK-dec2016/Inc/WICTextureLoader.h"
 #include "../object/component/SpriteComponent.h"
 #include <map>
+#include "../../../DirectXTK-dec2016/Inc/CommonStates.h"
 
 namespace thomas
 {
@@ -28,6 +29,7 @@ namespace thomas
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;
+			static std::unique_ptr<DirectX::CommonStates> s_states;
 		};
 	}
 }
