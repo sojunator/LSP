@@ -18,15 +18,15 @@ namespace thomas
 			}
 			math::Vector3 Transform::Forward()
 			{
-				return m_localWorldMatrix.Forward();
+				return GetWorldMatrix().Forward();
 			}
 			math::Vector3 Transform::Up()
 			{
-				return m_localWorldMatrix.Up();
+				return GetWorldMatrix().Up();
 			}
 			math::Vector3 Transform::Right()
 			{
-				return m_localWorldMatrix.Right();
+				return GetWorldMatrix().Right();
 			}
 
 			math::Matrix Transform::GetLocalWorldMatrix()
@@ -50,6 +50,19 @@ namespace thomas
 
 				lookAt = lookAt.Invert();
 				
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, lookAt.Forward(), lookAt.Up());
+
+				Decompose();
+
+			}
+			void Transform::LookAt(math::Vector3 target)
+			{
+				if (target == GetPosition())
+					return;
+				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target, Up());
+
+				lookAt = lookAt.Invert();
+
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, lookAt.Forward(), lookAt.Up());
 
 				Decompose();
@@ -90,7 +103,7 @@ namespace thomas
 			math::Vector3 Transform::GetPosition()
 			{
 				if (m_parent)
-					return m_parent->GetPosition()*m_localPosition;
+					return m_parent->GetPosition()+m_localPosition;
 				else
 					return m_localPosition;
 			}

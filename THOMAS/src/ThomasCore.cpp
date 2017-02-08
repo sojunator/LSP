@@ -71,9 +71,10 @@ namespace thomas {
 			Window::Destroy();
 
 		
-		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
+		for (object::Object* object : thomas::object::Object::GetObjects())
 		{
-			thomas::object::Object::GetObjects()[i]->Update();
+ 			if(object)
+				object->Update();
 		}
 
 		graphics::Renderer::Render();
