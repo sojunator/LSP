@@ -102,10 +102,14 @@ public:
 		{
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
+			if (m_modelIndex == 0) //måste finnas bättre lösning för att undvika testmodel0
+				m_modelIndex = 1;
+			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 		}
 		else
 		{
 			m_accelerationSpeed = m_nonBoostAcceleration;
+			m_renderer->SetModel("testModel0"); //reset to default Mesh
 			if (m_nonBoostMaxSpeed < m_forwardSpeed)
 			{
 				m_forwardSpeed -= m_retardationSpeed * dt;
