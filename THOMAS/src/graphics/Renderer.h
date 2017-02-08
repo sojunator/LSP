@@ -3,7 +3,6 @@
 #include "../utils/d3d.h"
 #include "../utils/Math.h"
 #include "../object/GameObject.h"
-#include "../object/component/Camera.h"
 
 namespace thomas {
 	namespace graphics
@@ -12,7 +11,6 @@ namespace thomas {
 		private:
 			
 			//static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
-			static void UnBindGameObjectBuffer();
 		public:
 
 			
@@ -29,6 +27,7 @@ namespace thomas {
 			static ID3D11RenderTargetView* GetBackBuffer();
 
 			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void UnBindGameObjectBuffer();
 			static void RenderSetup(object::component::Camera* camera);
 
 		private:

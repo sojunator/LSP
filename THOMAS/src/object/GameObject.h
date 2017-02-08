@@ -1,9 +1,11 @@
 #pragma once
 #include "component\Components.h"
-#include "Object.h"
 #include <vector>
+#include "Object.h"
+
 namespace thomas
 {
+	class Scene;
 	namespace object
 	{
 		class THOMAS_API GameObject : public Object
@@ -30,22 +32,27 @@ namespace thomas
 
 			static bool Destroy(GameObject *object);
 
-			static GameObject* Instantiate(GameObject* gameObject);
-			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent);
-			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation);
-			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent);
+			static GameObject* Instantiate(GameObject* gameObject, Scene* scene);
+			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent, Scene* scene);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, Scene* scene);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent, Scene* scene);
+
+			std::vector<GameObject*> GetAllGameObjectsInScene(std::string sceneName);
+			std::vector<GameObject*> GetAllGameObjectsInScene(Scene * scene);
+
+			static void SceneUpdate(Scene* scene);
 
 			virtual bool Start() { return true; }
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
 			virtual void Render() {}
 
-		private:		
+		private:
 			static std::vector<GameObject*> s_gameObjects;
 		protected:
 			bool m_active;
 			std::vector<component::Component*> m_components;
-			
+
 		};
 
 		template<typename T>

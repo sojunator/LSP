@@ -1,5 +1,5 @@
 #include "GameObject.h"
-
+#include "../Scene.h"
 namespace thomas
 {
 	namespace object
@@ -50,33 +50,59 @@ namespace thomas
 			return true;
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, Scene* scene)
 		{
-			Object::Instantiate(gameObject);
+			Object::Instantiate(gameObject, scene);
 			s_gameObjects.push_back(gameObject);
 			return gameObject;
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject, component::Transform * parent)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, component::Transform * parent, Scene* scene)
 		{
 			gameObject->m_transform->m_parent = parent;
-			return Instantiate(gameObject);
+			return Instantiate(gameObject, scene);
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation, Scene* scene)
 		{
 			gameObject->m_transform->SetPosition(position);
 			gameObject->m_transform->SetRotation(rotation);
-			return Instantiate(gameObject);
+			return Instantiate(gameObject, scene);
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform * parent)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform * parent, Scene* scene)
 		{
 			gameObject->m_transform->SetPosition(position);
 			gameObject->m_transform->SetRotation(rotation);
-			return Instantiate(gameObject, parent);
+			return Instantiate(gameObject, parent, scene);
 		}
-		
 
+		std::vector<GameObject*> GameObject::GetAllGameObjectsInScene(std::string sceneName)
+		{
+			std::vector<GameObject*> output;
+			for (GameObject* gameObject : s_gameObjects)
+				if (gameObject->m_scene->GetName() == sceneName)
+					output.push_back(gameObject);
+			return output;
+		}
+		std::vector<GameObject*> GameObject::GetAllGameObjectsInScene(Scene * scene)
+		{
+			std::vector<GameObject*> output;
+			for (GameObject* gameObject : s_gameObjects)
+				if (gameObject->m_scene == scene)
+					output.push_back(gameObject);
+			return output;
+		}
+
+		void GameObject::SceneUpdate(Scene* scene)
+		{
+			for (GameObject* gameObject : s_gameObjects)
+				if (gameObject->m_scene == scene)
+				{
+					gameObject->Update();
+					for (component::Component* component :gameObject->m_components)
+						component->Update();
+				}
+		}
 	}
 }

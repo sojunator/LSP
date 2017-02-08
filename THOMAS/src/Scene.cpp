@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "graphics\PostEffect.h"
-#include "graphics\Model.h"
+
 
 namespace thomas
 {
@@ -36,31 +36,21 @@ namespace thomas
 		}
 		return true;
 	}
-	void Scene::LoadScene(Scene* scene)
+	void Scene::LoadScene(std::string name)
 	{
-		s_currentScene = scene;
+		for (Scene* scene : s_scenes)
+			if (scene->m_name == name)
+				scene->LoadScene();
 	}
-	void Scene::Update()
+	void Scene::UpdateCurrentScene()
 	{
-		//for (int i = 0; i < s_currentScene->m_gameObjects.size(); ++i)
-			//s_currentScene->m_gameObjects[i]->SceneUpdate();
+		for (int i = 0; i < s_currentScene->m_gameObjects.size(); ++i)
+			object::GameObject::SceneUpdate(s_currentScene);
 	}
 	std::vector<graphics::Shader*> Scene::GetShaders()
 	{
 		return m_shaders;
 	}
-	/*std::vector<graphics::Material*> Scene::GetMaterialsByShader(graphics::Shader * shader)
-	{
-		std::vector<graphics::Material*> output;
-		for (graphics::Material* material : m_materials)
-		{
-			if (material->GetShader() == shader)
-			{
-				output.push_back(material);
-			}
-		}
-		return output;
-	}*/
 	void Scene::Render()
 	{
 		if (s_currentScene == NULL)
@@ -97,7 +87,7 @@ namespace thomas
 									mesh->Draw();
 								}
 							}
-							//graphics::Renderer::UnBindGameObjectBuffer();
+							graphics::Renderer::UnBindGameObjectBuffer();
 						}
 						material->Unbind();
 					}
@@ -110,11 +100,31 @@ namespace thomas
 			//graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
 			ThomasCore::GetSwapChain()->Present(0, 0);
 	}
+	graphics::Material* Scene::LoadMaterialType(std::string name, graphics::Material* material)
+	{
+		graphics::Material::RegisterNewMaterialType(name, material);
+	}
+	graphics::Shader* Scene::LoadShader(std::string name, graphics::Shader::InputLayouts inputLayout, std::string path)
+	{
+		m_shaders.push_back(graphics::Shader::CreateShader(name, inputLayout, path));
+	}
+	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string materialName)
+	{
+		utils::AssimpLoader::LoadModel(name, path, materialName);
+	}
 	Scene * Scene::GetCurrentScene()
 	{
 		if (s_currentScene)
 			return s_currentScene;
 		LOG("No scene set")
 		return NULL;
+	}
+	std::string Scene::GetName()
+	{
+		return m_name;
+	}
+	Scene::Scene(std::string name)
+	{
+		m_name = name;
 	}
 }

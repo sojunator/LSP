@@ -2,6 +2,8 @@
 #include "../Common.h"
 #include <string>
 #include <vector>
+#include "..\Scene.h"
+
 namespace thomas
 {
 	namespace object
@@ -22,14 +24,17 @@ namespace thomas
 
 			static bool Destroy(Object *object);
 			//Clone object
-			static Object* Instantiate(Object *object);
+			static Object* Instantiate(Object *object, Scene* scene);
 
 			static std::vector<Object*> GetObjects();
 			static Object* GetObjectByName(std::string name);
 
+			static std::vector<Object*> GetAllObjectsInScene(std::string sceneName);
+			static std::vector<Object*> GetAllObjectsInScene(Scene* scene);
 		private:
 			static std::vector<Object*> s_objects;
 		protected:
+			Scene* m_scene;
 			std::string m_name;
 			std::string m_type;
 		};

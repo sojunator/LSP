@@ -36,10 +36,11 @@ namespace thomas
 			return true;
 		}
 
-		Object * Object::Instantiate(Object *object)
+		Object * Object::Instantiate(Object *object, Scene* scene)
 		{
 			s_objects.push_back(object);
 			object->Start();
+			object->m_scene = scene;
 			return object;
 		}
 
@@ -55,6 +56,22 @@ namespace thomas
 					return s_objects[i];
 			}
 			return NULL;
+		}
+		std::vector<Object*> Object::GetAllObjectsInScene(std::string sceneName)
+		{
+			std::vector<Object*> output;
+			for (Object* object : s_objects)
+				if (object->m_scene->GetName() == sceneName)
+					output.push_back(object);
+			return output;
+		}
+		std::vector<Object*> Object::GetAllObjectsInScene(Scene * scene)
+		{
+			std::vector<Object*> output;
+			for (Object* object : s_objects)
+				if (object->m_scene == scene)
+					output.push_back(object);
+			return output;
 		}
 	}
 }
