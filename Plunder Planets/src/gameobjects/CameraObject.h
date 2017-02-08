@@ -18,10 +18,9 @@ public:
 		m_sprite = AddComponent<component::SpriteComponent>();
 
 		//GUI images
-		m_sprite->SetName("GUI");
-		
-		m_sprite->SetPositionX(0.5);
-		m_sprite->SetPositionY(0);
+		m_sprite->SetName("GUI");	
+		m_sprite->SetPositionX(400);
+		m_sprite->SetPositionY(200);
 		m_sprite->SetScale(1.0f);
 
 		//Text

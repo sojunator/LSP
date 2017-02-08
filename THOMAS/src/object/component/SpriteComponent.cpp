@@ -33,12 +33,12 @@ namespace thomas
 
 			void SpriteComponent::SetPositionX(float posX)
 			{
-				m_imagePos.x = posX * Window::GetWidth();
+				m_imagePos.x = posX;
 			}
 
 			void SpriteComponent::SetPositionY(float posY)
 			{
-				m_imagePos.y = posY * Window::GetHeight();
+				m_imagePos.y = posY;
 			}
 
 			void SpriteComponent::SetScale(float scale)
