@@ -76,6 +76,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
 	//Init models
+	thomas::utils::AssimpLoader::LoadModel("box", "../res/models/box.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
 	thomas::utils::AssimpLoader::LoadModel("testModel0", "../res/models/Boat/ship.obj", "phongMaterial");
 	thomas::utils::AssimpLoader::LoadModel("testModel1", "../res/models/Boat/ship1.obj", "phongMaterial");
 	thomas::utils::AssimpLoader::LoadModel("testModel2", "../res/models/Boat/ship2.obj", "phongMaterial");
@@ -93,13 +95,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//TestObject* t = new TestObject();
 	
-	/*new TerrainObject();
-	TestDirectionalLight* dirLight = new TestDirectionalLight();*/
+	thomas::object::GameObject::Instantiate(new TerrainObject());
+	thomas::object::GameObject::Instantiate(new TestDirectionalLight());
 	//TestPointLight* pointLight = new TestPointLight();
-	/*TestObject* t = new TestObject();
-	CameraObject* c = new CameraObject();
-	Ship* ship = new Ship();
-	new WaterObject();
+	thomas::object::GameObject::Instantiate(new CameraObject());
+	thomas::object::GameObject::Instantiate(new Ship());
+	thomas::object::GameObject::Instantiate(new WaterObject());
 
 	new WaterObject();*/
 
@@ -108,7 +109,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//start
 	thomas::ThomasCore::Start();
-	//delete c;
 
 	return (int)msg.wParam;
 }
