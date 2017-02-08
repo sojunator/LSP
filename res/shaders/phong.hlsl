@@ -105,6 +105,8 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	float4 outputColor = float4(0, 0, 0, 0);
 	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular
 
+	float3 sunDir = normalize(-directionalLights[0].lightDir);
+
 	ambientColor = (diffuseColor + textureColor) * 0.5f; //0.5 is a scalefactor for how strong the ambient will be
 	//CURRENTLY NO NORMAL MAP
 	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
@@ -118,7 +120,7 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{
 		//float3 tempLightDir = float3(0, 0, 1); //for testing
-		float lightIntensity = saturate(dot(input.normal, directionalLights[i].lightDir));
+		float lightIntensity = saturate(dot(input.normal, sunDir));
 		//float lightIntensity = saturate(dot(input.normal, tempLightDir));
 
 		float4 diffuse = saturate((diffuseColor + textureColor)*lightIntensity) * directionalLights[i].lightColor;
