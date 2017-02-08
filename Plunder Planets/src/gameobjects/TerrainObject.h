@@ -2,6 +2,7 @@
 #pragma once
 #include <Thomas.h>
 #include <string>
+#include "Ship.h"
 
 #include "CameraObject.h"
 
@@ -14,7 +15,7 @@ public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_shipObject = Find("Ship");
+		m_shipObject = (Ship*)Find("Ship");
 	}
 
 	bool Start()
@@ -26,9 +27,6 @@ public:
 
 		m_renderer->SetModel("Plane-1");
 
-		m_cameraObject = Find("CameraObject");
-
-		/*m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));*/
 		m_transform->SetPosition(math::Vector3(0, -1, 0));
 
 
@@ -50,11 +48,7 @@ public:
 			if (distance <= m_islands->GetRadiusSquared(i) && m_islands->GetTreasure(i))
 			{
 				treasure = m_islands->StealTreasure(i);
-				LOG(m_islands->GetTreasure(i));
-				/*
-				Can plunder
-				m_ship->UpdateTreasure(treasure)
-				*/
+				m_shipObject->UpdateTreasure(treasure);
 			}
 		}
 	}
@@ -66,6 +60,5 @@ private:
 	thomas::graphics::Model* m_model;
 
 	component::RenderComponent* m_renderer;
-	object::GameObject* m_cameraObject;
-	object::GameObject* m_shipObject;
+	Ship* m_shipObject;
 };

@@ -136,7 +136,7 @@ namespace thomas
 		else
 		{
 			m_treasure[island] -= dt*m_plunderRate;
-			return m_totalTreasure[island] - m_treasure[island];
+			return dt*m_plunderRate;
 		}
 	}
 

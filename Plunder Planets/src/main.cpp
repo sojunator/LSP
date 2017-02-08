@@ -1,7 +1,6 @@
 // main.cpp : Defines the entry point for the console application.
 //
 #include "Thomas.h"
-#include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
 #include "gameobjects\TerrainObject.h"
 #include "gameobjects\WaterObject.h"
@@ -55,10 +54,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
 	//Init models
-	thomas::utils::AssimpLoader::LoadModel("testModel0", "../res/models/Boat/ship.obj", "phongMaterial");
-	thomas::utils::AssimpLoader::LoadModel("testModel1", "../res/models/Boat/ship1.obj", "phongMaterial");
-	thomas::utils::AssimpLoader::LoadModel("testModel2", "../res/models/Boat/ship2.obj", "phongMaterial");
-	
+	thomas::utils::AssimpLoader::LoadModel("box", "../res/models/box.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
+
 
 
 
@@ -69,20 +71,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init gameObjects
 
-	//TestObject* t = new TestObject();
 	
-
-	
-	TestDirectionalLight* dirLight = new TestDirectionalLight();
+	thomas::object::GameObject::Instantiate(new TestDirectionalLight());
 	//TestPointLight* pointLight = new TestPointLight();
-	CameraObject* c = new CameraObject();
-	Ship* ship = new Ship();
-	TerrainObject* terrain = new TerrainObject();
-	//new WaterObject();
+	thomas::object::GameObject::Instantiate(new CameraObject());
+	thomas::object::GameObject::Instantiate(new Ship());
+	thomas::object::GameObject::Instantiate(new WaterObject());
+	thomas::object::GameObject::Instantiate(new TerrainObject());
 
 	//start
 	thomas::ThomasCore::Start();
-	delete c;
 
 	return (int)msg.wParam;
 }

@@ -318,7 +318,8 @@ namespace thomas
 			{
 				if(s_loadedTextures[i]->m_data.texture)
 					s_loadedTextures[i]->m_data.texture->Release();
-				s_loadedTextures[i]->m_data.textureView->Release();
+				if(s_loadedTextures[i]->m_data.textureView)
+					s_loadedTextures[i]->m_data.textureView->Release();
 
 			}
 			s_samplerStates.CLAMP->Release();

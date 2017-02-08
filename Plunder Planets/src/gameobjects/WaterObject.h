@@ -25,6 +25,8 @@ public:
 		//m_transform->SetScale(0.05);
 		m_transform->SetPosition(math::Vector3(-dim / 2, 0, dim / 2));
 		
+		m_oceanSounds = AddComponent<component::SoundComponent>();
+
 	};
 
 	bool Start()
@@ -34,12 +36,23 @@ public:
 
 	void Update()
 	{
+		delayLeft -= Time::GetDeltaTime();
+
+		if (delayLeft < 0)
+		{
+			delayLeft = soundEffectDelay;
+
+		}
 	}
 
 
 
 private:
+	float soundEffectDelay = 3;
+	float delayLeft = soundEffectDelay;
 	component::RenderComponent* m_renderer;
+	component::SoundComponent* m_oceanSounds;
 	Material* m_waterMaterial;
+
 	
 };
