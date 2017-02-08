@@ -94,76 +94,87 @@ VSOutput VSMain(in VSInput input)
 	return output;
 }
 
-float4 TerrainColour(float y)
+float4 TerrainColour(VSOutput input)
 {
-    if (y < 0.5f * 2)
-        return float4(0, 1.0f - y*0.2, 1.0f, 1.0);
-    else if (y < 1.1 * 2)
-        return float4(0.749f, 0.749f, 0.749f - y * 0.2, 1.0f);
-    else
-        return float4(0.24f - y * 0.02, 0.74f - y * 0.02, 0.49f - y * 0.02, 1.0f);
+    float slope, blendAmount;
+    float2 tex = input.tex;
+    float4 grass = diffuseTexture.Sample(diffuseSampler, tex);
+    float4 sand = specularTexture.Sample(specularSampler, tex);
+    float4 hills = normalTexture.Sample(normalSampler, tex);
+    slope = 1.0f - input.normal.y;
+
+    return sand;
+        // Determine which texture to use based on height.
+    if (slope < 0.2)
+    {
+        blendAmount = slope / 0.2f;
+        return lerp(grass, sand, blendAmount);
+    }
+	
+    if ((slope < 0.7) && (slope >= 0.2f))
+    {
+        blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+        return lerp(grass, hills, blendAmount);
+    }
+
+    if (slope >= 0.7)
+    {
+        return hills;
+    }
+    return hills;
+    //if (y < 1.1 * 4)
+
+    //    return float4(0.749f, 0.749f, 0.749f - y * 0.2, 1.0f);
+    //else if (y < 2.0 * 4)
+    //    return float4(0.24f - y * 0.02, 0.74f - y * 0.02, 0.49f - y * 0.02, 1.0f);
+    //else
+    //    return float4(0.8 - 0.002 * y, 0.8 - 0.002 * y, 0.8 - 0.002 * y, 1.0);
 }
 
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-    float4 globalAmbientColor = float4(0.05, 0.05, 0.05, 1) * ambientColor; //materal and global specific. TODO:add ambient to lights instead of global
-    float4 textureColor = TerrainColour(input.position.y);
 
+    float4 textureColor = TerrainColour(input);
+    return textureColor;
+    float4 ambientColor = float4(0, 0, 0, 1);
+    float4 outputColor = float4(0, 0, 0, 1);
+	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular
 
-    float4 outputColor = float4(0, 0, 0, 0);
+    float3 sunDir = normalize(-directionalLights[0].lightDir);
+
+    ambientColor = (diffuseColor + textureColor) * 0.5f; //0.5 is a scalefactor for how strong the ambient will be
+	//CURRENTLY NO NORMAL MAP
+	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
+
+	bumpMap = (bumpMap * 2.0f) - 1.0f;
+
+	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
+	bumpNormal = normalize(bumpNormal);*/
+	//float lightIntensity = saturate(dot(bumpNormal, lightDir));
 
     for (uint i = 0; i < nrOfDirectionalLights; i++)
     {
-        float lightIntensity = saturate(dot(input.normal, -normalize(directionalLights[i].lightDir)));
+		//float3 tempLightDir = float3(0, 0, 1); //for testing
+        float lightIntensity = saturate(dot(input.normal, sunDir));
+		//float lightIntensity = saturate(dot(input.normal, tempLightDir));
 
+        float4 diffuse = saturate((diffuseColor + textureColor) * lightIntensity) * directionalLights[i].lightColor;
 
-        float4 diffuse = textureColor * lightIntensity * directionalLights[i].lightColor;
         float4 specular = float4(0, 0, 0, 0);
-        return diffuse;
         if (lightIntensity > 0.0f)
         {
             float3 viewDirection = camPosition - input.positionWS;
 
-            float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-            float3 halfwayVector = normalize(-directionalLights[i].lightDir + viewDirection);
-            specular = pow(saturate(dot(input.normal, halfwayVector)), specularPower); // *lightIntensity;
-            specular = specular * specularIntensity;
+			//float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex); //specularTexture gives a 0,0,0,0 float4 somehow
+            float3 reflection = normalize(directionalLights[i].lightDir + viewDirection);
+			//float3 reflection = normalize(tempLightDir + viewDirection); //for testing
+			//specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity; //NO WORKING NORMAL MEP YET
+            specular = pow(saturate(dot(input.normal, reflection)), specularPower) * specularColor; // * lightIntensity; //specularPower = shiny
+			//specular = specular * specularIntensity;
         }
-	
         outputColor += diffuse + specular;
-
     }
-	
-    for (uint p = 0; p < nrOfPointLights; p++)
-    {
-        float3 pointLightDir = pointLights[p].position - input.positionWS;
 
-		//calculate attenuation
-        float distance = length(pointLightDir);
-        float distanceSquared = distance * distance;
-
-        float attenuation = pointLights[p].power / (pointLights[p].constantAttenuation + pointLights[p].linearAttenuation * distance + pointLights[p].quadraticAttenuation * distanceSquared);
-
-        normalize(pointLightDir);
-
-        float lightIntensity = saturate(dot(input.normal, pointLightDir));
-
-        float4 diffuse = textureColor * lightIntensity * pointLights[p].lightColor;
-        float4 specular = float4(0, 0, 0, 0);
-
-        if (lightIntensity > 0.0f)
-        {
-            float3 viewDirection = camPosition - input.positionWS;
-
-            float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-            float3 halfwayVector = normalize(pointLightDir + viewDirection);
-            specular = pow(saturate(dot(input.normal, halfwayVector)), specularPower); // *lightIntensity;
-            specular = specular * specularIntensity;
-        }
-
-        outputColor += (diffuse + specular) * attenuation;
-    }
-	
-    return outputColor; //outputColor + globalAmbientColor;
+    return float4((outputColor + ambientColor).rgb, 1);
 }

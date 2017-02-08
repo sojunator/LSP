@@ -88,6 +88,7 @@ public:
 
 	void Update()
 	{
+		return;
 		float dt = Time::GetDeltaTime();
 		float right_x = Input::GetRightStickX();
 		float right_y = Input::GetRightStickY();
