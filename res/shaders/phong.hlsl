@@ -101,7 +101,7 @@ VSOutput VSMain(in VSInput input)
 float4 PSMain(VSOutput input) : SV_TARGET
 {
 	float3 textureColor = float3(1,1,1);
-	if(materialProperty.x == 1)
+	if(materialProperty.x >= 1)
 		textureColor = diffuseTexture.Sample(diffuseSampler, input.tex).rgb;
 	float3 ambientColor = float3(0,0,0);
 	float3 outputColor = float3(0,0,0);

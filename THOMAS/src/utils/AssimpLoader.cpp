@@ -8,7 +8,6 @@ namespace thomas
 		graphics::Model* AssimpLoader::LoadModel(std::string name, std::string path, std::string materialType)
 		{
 			std::string dir = path.substr(0, path.find_last_of("\\/"));
-			LOG("Starting to load model from: " << path);
 
 			// Read file via ASSIMP
 			Assimp::Importer importer;
@@ -47,8 +46,6 @@ namespace thomas
 
 			graphics::Model* model = graphics::Model::CreateModel(name, meshes);
 			
-			if(model)
-				LOG(" Successfully loaded " << name);
 
 			return model;			
 		}
