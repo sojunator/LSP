@@ -44,7 +44,7 @@ public:
 		m_boostAcceleration = m_accelerationSpeed * 3;
 		m_boostMaxSpeed = m_maxSpeed * 2;
 		
-		m_rotationSpeed = 0.1f;
+		m_rotationSpeed = 0.3f;
 		m_minmaxRotFactor = 0.45f;
 		m_rotation = 0.0f;
 
@@ -98,7 +98,7 @@ public:
 		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 
 		//for the boost
-		if (Input::GetButton(Input::Buttons::LB))
+		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
@@ -127,7 +127,7 @@ public:
 		}
 		
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RB))
+		if (Input::GetButton(Input::Buttons::RT))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -166,11 +166,11 @@ public:
 			{
 				if (m_rotation < 0)
 				{
-					m_rotation += m_rotationSpeed * 1.7f * dt;
+					m_rotation += m_rotationSpeed * dt;
 				}
 				else
 				{
-					m_rotation -= m_rotationSpeed * 1.7f * dt;
+					m_rotation -= m_rotationSpeed * dt;
 				}
 			}
 		}
@@ -233,10 +233,10 @@ public:
 		}
 
 
-		if(Input::GetButtonDown(Input::Buttons::RT))
+		if(Input::GetButtonDown(Input::Buttons::RB))
 			m_broadSideRight->Fire(-m_forwardSpeed);
 
-		if (Input::GetButtonDown(Input::Buttons::LT))
+		if (Input::GetButtonDown(Input::Buttons::LB))
 			m_broadSideLeft->Fire(m_forwardSpeed);
 
 
