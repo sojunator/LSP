@@ -95,7 +95,7 @@ public:
 
 		m_modelIndex = (m_modelIndex + 1) % 3;
 
-		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 
 		//for the boost
 		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
