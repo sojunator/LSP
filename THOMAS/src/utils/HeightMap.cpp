@@ -43,6 +43,7 @@ namespace thomas
 
 				plane.verts[i].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40)) * 16.0;
 			}
+			CalculateNormals(size, detail, plane);
 		}
 
 		void HeightMap::CalculateNormals(int size, float detail, Plane::PlaneData & plane)
@@ -80,7 +81,7 @@ namespace thomas
 			int index = 0;
 			float length;
 			//// now sum that shit up
-			for (int y = 0; y < height; y++)
+			/*for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
 				{
@@ -114,7 +115,7 @@ namespace thomas
 
 					plane.verts[index].normal = sum / length;
 				}
-			}
+			}*/
 
 		}
 

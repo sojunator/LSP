@@ -27,7 +27,7 @@ public:
 		m_cameraObject = Find("CameraObject");
 
 		/*m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));*/
-		m_transform->SetPosition(math::Vector3(0, 10, -20));
+		m_transform->SetPosition(math::Vector3(0, 0, 0));
 
 
 		return true;

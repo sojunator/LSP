@@ -13,6 +13,7 @@ namespace thomas
 		{
 		public:
 			static void HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, math::Vector2 offset);
+			static void HeightMap::CalculateNormals(int size, float detail, Plane::PlaneData & plane);
 			static std::vector<float> GetHeight();
 		private:
 			static std::vector<float> s_height;

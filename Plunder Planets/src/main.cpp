@@ -58,9 +58,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 
 	//Init models
-	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ship/ship.fbx", "phongMaterial");
+	thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Boat/ship.obj", "phongMaterial");
 	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
+	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 1, 1024 / 4, 30);
 	Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
 
 
