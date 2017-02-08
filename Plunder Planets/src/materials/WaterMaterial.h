@@ -1,6 +1,6 @@
 #pragma once
 #include "Thomas.h"
-
+#include "utils/Ocean/OceanSimulator.h"
 using namespace thomas;
 using namespace graphics;
 
@@ -8,11 +8,9 @@ class WaterMaterial : public Material
 {
 private:
 	Material* CreateInstance(std::string name, Shader* shader);
-	Material* CreateInstance(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 public:
 	WaterMaterial(std::string shader) : Material(shader) {}
 	WaterMaterial(std::string name, Shader* shader);
-	WaterMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader);
 	
 	void Update();
 
@@ -20,13 +18,26 @@ public:
 private:
 	struct MaterialProperties
 	{
-		math::Color ambientColor;
-		math::Color diffuseColor;
-		math::Color specularColor;
-		float specularPower;
-		float tess;
-		math::Vector2 padding;
+		math::Color waterColor;
+		math::Color skyColor;
+		float shininess;
+		float uvScale;
+		float uvOffset;
+		float texelLengthX2;
+		math::Vector3 bendParam;
+		float g_PerlinSize;
+		math::Vector3 g_PerlinAmplitude;
+		float pad1;
+		math::Vector3 g_PerlinOctave;
+		float pad2;
+		math::Vector3 g_PerlinGradient;
+		float pad3;
+		math::Vector2 perlinMovement;
+		math::Vector2 pad4;
 	};
+	float time;
+	utils::ocean::OceanParameter m_oceanSettings;
+	utils::ocean::OceanSimulator* m_oceanSim;
 	MaterialProperties m_materialProperties;
 
 };

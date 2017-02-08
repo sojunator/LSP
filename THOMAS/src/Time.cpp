@@ -2,6 +2,7 @@
 #include <Windows.h>
 namespace thomas
 {
+	double Time::s_initTime;
 	double Time::s_startTime;
 	double Time::s_timeFreq;
 	double Time::s_DeltaTime;
@@ -18,6 +19,7 @@ namespace thomas
 
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
+		s_initTime = double(currentTime.QuadPart);
 		s_startTime = double(currentTime.QuadPart);
 		s_FPS = 0;
 		s_timescale = 1;
@@ -34,6 +36,11 @@ namespace thomas
 	float Time::GetDeltaTime()
 	{
 		return s_DeltaTime * s_timescale;
+	}
+
+	double Time::GetInitTime()
+	{
+		return s_initTime;
 	}
 
 	int Time::GetFPS()

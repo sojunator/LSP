@@ -16,8 +16,9 @@ namespace thomas
 			{
 				m_fov = 70;
 				m_near = 0.1;
-				m_far = 10000;
+				m_far = 3000;
 				m_viewport = math::Viewport(0, 0, Window::GetWidth(), Window::GetHeight());
+				m_skybox = NULL;
 				UpdateProjMatrix();
 			}
 
@@ -94,6 +95,33 @@ namespace thomas
 			float Camera::GetAspectRatio()
 			{
 				return m_viewport.AspectRatio();
+			}
+
+			void Camera::SetSkybox(std::string path, std::string shaderName)
+			{
+				m_skybox = new graphics::Skybox(path, shaderName);
+			}
+
+			void Camera::BindSkybox()
+			{
+				if (m_skybox)
+				{
+					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix()).Transpose();
+					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
+				}
+					
+			}
+
+			void Camera::BindReflection()
+			{
+				if (m_skybox)
+					m_skybox->BindCubemap();
+			}
+
+			void Camera::UnbindSkybox()
+			{
+				if (m_skybox)
+					m_skybox->Unbind();
 			}
 
 

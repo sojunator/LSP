@@ -7,7 +7,7 @@ namespace thomas
 
 		std::vector<float> HeightMap::s_height;
 
-		std::vector<graphics::Mesh*> HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, graphics::Material* mat, math::Vector2 offset)
+		void HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane, math::Vector2 offset)
 		{
 			float width = size * detail;
 			float height = width;
@@ -15,13 +15,13 @@ namespace thomas
 			float d = 0;
 			float n = 0;
 
-			srand(time(NULL));
 
 			noise::module::Perlin myModule;
 
 			myModule.SetNoiseQuality(noise::NoiseQuality::QUALITY_BEST);
 
 			myModule.SetFrequency(1.f);
+
 			myModule.SetSeed(rand() % 1000);
 
 			float x, y;
@@ -43,13 +43,6 @@ namespace thomas
 
 				plane.verts[i].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40)) * 16.0;
 			}
-
-			CalculateNormals(size, detail, plane);
-
-			std::vector<thomas::graphics::Mesh*> mesh;
-			graphics::Mesh* m = new graphics::Mesh(plane.verts, plane.indices, "Plane-1", mat);
-			mesh.push_back(m);
-			return mesh;
 		}
 
 		void HeightMap::CalculateNormals(int size, float detail, Plane::PlaneData & plane)

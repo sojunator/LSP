@@ -19,17 +19,30 @@ namespace thomas
 			HRESULT status = D3DCompileFromFile(CA2W(source.c_str()), nullptr, nullptr, main.c_str(), profile.c_str(), D3DCOMPILE_DEBUG, 0, &shaderBlob, &errorBlob);
 
 
-			if (errorBlob)
+			if (status != S_OK)
 			{
-				if (errorBlob->GetBufferSize())
+				LOG("SHADER ERROR : " << source);
+				LOG_HR(status);
+				if (errorBlob)
 				{
-					LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
+					if (errorBlob->GetBufferSize())
+					{
+						LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
+						errorBlob->Release();
+					}
 				}
-				errorBlob->Release();
 			}
 			else if (status == S_OK)
 			{
-				LOG("Shader " << m_name << " " << main << " Sucessfully loaded");
+				if (errorBlob)
+				{
+					if (errorBlob->GetBufferSize())
+					{
+						LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
+						errorBlob->Release();
+					}
+				}
+				LOG("Shader " << source << " " << main << " Sucessfully loaded");
 				return shaderBlob;
 			}
 
@@ -53,6 +66,9 @@ namespace thomas
 					{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 					{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 				};
+				break;
+			case InputLayouts::POST_EFFECT:
+				layoutDesc = { { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 } };
 				break;
 			default:
 				return false;
@@ -234,7 +250,7 @@ namespace thomas
 		}
 		bool Shader::BindBuffer(ID3D11Buffer * resource, int slot)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader && s_currentBoundShader == this)
 			{
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(slot, 1, &resource);
@@ -308,7 +324,15 @@ namespace thomas
 		
 		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath)
 		{
-			Shader* shader = new Shader(name, inputLayout, filePath);
+			Shader* shader;
+			if (inputLayout == InputLayouts::POST_EFFECT)
+			{
+				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffect.hlsl", "", "", "", filePath);
+			}
+			else
+			{
+				shader = new Shader(name, inputLayout, filePath);
+			}	
 			if (shader)
 				s_loadedShaders.push_back(shader);
 			return shader;

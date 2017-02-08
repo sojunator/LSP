@@ -10,6 +10,7 @@ namespace thomas
 	{
 	public:
 		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance);
+		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlanes, graphics::Material* m);
 		//~Islands();
 		//std::vector<std::vector<graphics::Mesh*>> GetIslands();
 		std::vector<graphics::Mesh*> GetIsland(int island);
@@ -31,7 +32,7 @@ namespace thomas
 		std::vector<int> m_treasure;
 		std::vector<int> m_size;
 		std::vector<float> m_detail;
-		std::vector<math::Vector2> m_islandCenter;
+		std::vector<math::Vector2> m_islandCenterWorldPos;
 		std::vector<math::Vector2> m_worldPosOffset;
 		std::vector<std::vector<graphics::Mesh*>> m_mesh;
 	};
