@@ -261,7 +261,6 @@ public:
 	void UpdateTreasure(float treasure)
 	{
 		m_treasure += treasure;
-		LOG(m_treasure);
 	}
 
 	int GetTreasure()
