@@ -72,4 +72,5 @@ namespace thomas
 			plane.indices = indices;
 			return plane;
 		}
+	}
 }
