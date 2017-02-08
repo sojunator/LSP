@@ -98,7 +98,7 @@ public:
 		float left_x = Input::GetLeftStickX();
 		float left_y = Input::GetLeftStickY();
 
-		m_modelIndex = (m_modelIndex + 1) % 3;
+		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
 		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 
@@ -108,8 +108,6 @@ public:
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
-			if (m_modelIndex == 0) //måste finnas bättre lösning för att undvika testmodel0
-				m_modelIndex = 1;
 			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 		}
 		else
