@@ -30,10 +30,10 @@ public:
 			"../res/shaders/oceanPostProcess.hlsl");
 
 		//Init materials
-		m_materials.push_back(thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong")));
+		//m_materials.push_back(thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong")));
 		//m_materials.push_back(thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("tesselationShader")));
 		thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
-		m_materials.push_back(thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain")));
+		//m_materials.push_back(thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain")));
 
 		//Init models
 		//m_models.push_back(thomas::utils::AssimpLoader::LoadModel("testModel", "../res/models/Ubot/Ubot.obj", "phongMaterial"));

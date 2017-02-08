@@ -1,4 +1,6 @@
 #include "Scene.h"
+#include "graphics\PostEffect.h"
+#include "graphics\Model.h"
 
 namespace thomas
 {
@@ -40,14 +42,14 @@ namespace thomas
 	}
 	void Scene::Update()
 	{
-		for (int i = 0; i < s_currentScene->m_gameObjects.size(); ++i)
-			s_currentScene->m_gameObjects[i]->Update();
+		//for (int i = 0; i < s_currentScene->m_gameObjects.size(); ++i)
+			//s_currentScene->m_gameObjects[i]->SceneUpdate();
 	}
 	std::vector<graphics::Shader*> Scene::GetShaders()
 	{
 		return m_shaders;
 	}
-	std::vector<graphics::Material*> Scene::GetMaterialsByShader(graphics::Shader * shader)
+	/*std::vector<graphics::Material*> Scene::GetMaterialsByShader(graphics::Shader * shader)
 	{
 		std::vector<graphics::Material*> output;
 		for (graphics::Material* material : m_materials)
@@ -58,7 +60,7 @@ namespace thomas
 			}
 		}
 		return output;
-	}
+	}*/
 	void Scene::Render()
 	{
 		if (s_currentScene == NULL)
@@ -66,28 +68,36 @@ namespace thomas
 			LOG("No scene set")
 			return;
 		}
-		for (object::component::Camera* camera : s_currentScene->m_cameras)
+		for(object::component::Camera* camera : s_currentScene->m_cameras)
 		{
+			s_currentScene->Render(camera);
+		}
+	}
+	void Scene::Render(object::component::Camera * camera)
+	{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
-			for (graphics::Shader* shader : s_currentScene->m_shaders)
+			for (graphics::Shader* shader : m_shaders)
 			{
 				shader->Bind();
-				for (object::GameObject* lightGameObject : s_currentScene->GetObjectsByComponent<object::component::Light>())
+				for (object::GameObject* lightGameObject : GetObjectsByComponent<object::component::Light>())
 				{
-					graphics::LightManager::BindAllLights(); //lägga lights i scene också?
-					for (graphics::Material* material : s_currentScene->GetMaterialsByShader(shader))
+					graphics::LightManager::BindAllLights();
+					for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
 					{
 						material->Bind();
-						for (object::GameObject* gameObject : s_currentScene->GetObjectsByComponent<object::component::RenderComponent>())
+						for (object::GameObject* gameObject : GetObjectsByComponent<object::component::RenderComponent>())
 						{
-							object::component::RenderComponent* renderComponent = gameObject->GetComponent<object::component::RenderComponent>();
 							graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+							for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 							{
-								mesh->Bind();
-								mesh->Draw();
+								for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+								{
+									mesh->Bind();
+									mesh->Draw();
+								}
 							}
+							//graphics::Renderer::UnBindGameObjectBuffer();
 						}
 						material->Unbind();
 					}
@@ -97,17 +107,8 @@ namespace thomas
 			}
 			camera->BindSkybox();
 			camera->UnbindSkybox();
-			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
-			//ThomasCore::GetSwapChain()->Present(0, 0);
-		}
-	}
-	void Scene::RemoveObject(std::string name)
-	{
-		for (int i = 0; i < m_gameObjects.size(); ++i)
-		{
-			if (m_gameObjects[i]->GetName() == name)
-				m_gameObjects.erase(m_gameObjects.begin() + i);
-		}
+			//graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
+			ThomasCore::GetSwapChain()->Present(0, 0);
 	}
 	Scene * Scene::GetCurrentScene()
 	{
