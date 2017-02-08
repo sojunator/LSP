@@ -30,12 +30,15 @@ namespace thomas
 
 	bool Sound::Play(std::string name, float volume)
 	{
-		s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
+		if(s_bank)
+			s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
 		return true;
 	}
 
 	std::unique_ptr<DirectX::SoundEffectInstance> Sound::CreateInstance(std::string clipName)
 	{
+		if (!s_bank)
+			return NULL;
 		std::unique_ptr<DirectX::SoundEffectInstance> instance = s_bank->CreateInstance(clipName.c_str());
 		if (instance)
 		{
@@ -74,7 +77,7 @@ namespace thomas
 		catch (std::exception ex)
 		{
 			LOG("Unable to load wavebank, probably invalid path and/or name");
-			
+			s_bank = NULL;
 			return false;
 		}
 		return true;
