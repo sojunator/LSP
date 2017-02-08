@@ -11,7 +11,16 @@ namespace thomas
 		{
 			m_name = name;
 			m_type = type;
-			s_objects.push_back(this);
+		}
+		Object::~Object()
+		{
+			for (int i = 0; i < s_objects.size(); i++)
+			{
+				if (s_objects[i] == this)
+				{
+					s_objects.erase(s_objects.begin() + i);
+				}
+			}
 		}
 		std::string Object::GetName()
 		{
@@ -21,23 +30,16 @@ namespace thomas
 		{
 			return m_type;
 		}
-		bool Object::Destroy(Object  *object)
+		bool Object::Destroy(Object *object)
 		{
-			for (int i = 0; i < s_objects.size(); i++)
-			{
-				if (s_objects[i] == object)
-				{
-					s_objects.erase(s_objects.begin() + i);
-					delete object;
-					return true;
-				}
-			}
-			return false;
+			delete object;
+			return true;
 		}
 
 		Object * Object::Instantiate(Object *object)
 		{
 			s_objects.push_back(object);
+			object->Start();
 			return object;
 		}
 

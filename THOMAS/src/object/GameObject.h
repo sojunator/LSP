@@ -18,6 +18,8 @@ namespace thomas
 			T* AddComponent();
 			template<typename T>
 			T* GetComponent();
+			template<typename T>
+			std::vector<T*> GetComponents();
 
 			static GameObject* Find(std::string name);
 
@@ -25,6 +27,13 @@ namespace thomas
 			static std::vector<GameObject*> FindGameObjectsWithComponent();
 
 			static std::vector<GameObject*> GetGameObjects();
+
+			static bool Destroy(GameObject *object);
+
+			static GameObject* Instantiate(GameObject* gameObject);
+			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent);
 
 			virtual bool Start() { return true; }
 			virtual void Update() {}
@@ -45,6 +54,7 @@ namespace thomas
 			if (std::is_base_of<component::Component, T>::value)
 			{
 				T* component = new T(this);
+				Object::Instantiate(component);
 				m_components.push_back(component);
 				return component;
 			}
@@ -61,6 +71,19 @@ namespace thomas
 					return comp;
 			}
 			return NULL;
+		}
+
+		template<typename T>
+		inline std::vector<T*> GameObject::GetComponents()
+		{
+			std::vector<component::Component*> components;
+			for (int i = 0; i < m_components.size(); i++)
+			{
+				T* comp = dynamic_cast<T*>(m_components[i]);
+				if (comp)
+					components.push_back(comp);
+			}
+			return components;
 		}
 
 		template<typename T>

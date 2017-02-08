@@ -2,7 +2,7 @@
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
-
+#include "Broadside.h"
 
 using namespace thomas;
 using namespace object;
@@ -22,6 +22,9 @@ public:
 
 	bool Start()
 	{
+		m_broadSideLeft = (Broadside*)Instantiate(new Broadside(), math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform);
+		m_broadSideRight = (Broadside*)Instantiate(new Broadside(), math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform);
+
 
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
@@ -229,6 +232,13 @@ public:
 		{
 			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Forward() * (distanceVector.Length() - m_camMaxDistanceFromBoat));
 		}
+
+
+		if(Input::GetButtonDown(Input::Buttons::RT))
+			m_broadSideRight->Fire(-m_forwardSpeed);
+
+		if (Input::GetButtonDown(Input::Buttons::LT))
+			m_broadSideLeft->Fire(m_forwardSpeed);
 	}
 
 private:
@@ -265,6 +275,9 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	GameObject* m_cameraObject;
+
+	Broadside* m_broadSideLeft;
+	Broadside* m_broadSideRight;
 
 	int m_modelIndex;
 

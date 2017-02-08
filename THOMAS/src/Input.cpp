@@ -75,7 +75,10 @@ namespace thomas
 			{
 
 			case WM_SETFOCUS:
+			{
 				s_gamePad->Resume();
+			}
+				
 			case WM_KILLFOCUS:
 				s_gamePad->Suspend();
 				break;
