@@ -35,22 +35,22 @@ public:
 		m_chest->SetScale(0.09f);
 
 		//Simple font
-		m_text->SetFont("Test");
+		m_text->SetFont("Name");
 		m_text->SetOutput("Plunder Planets");
 		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_text->SetRotation(0.0f);
-		m_text->SetScale(2.0f);
+		m_text->SetScale(1.0f);
 		m_text->SetPositionX(960.f);
 		m_text->SetPositionY(30.f);
 		m_text->SetDropshadow(true);
 		m_text->SetOutline(true);
 
 		//Gold font
-		m_gold->SetFont("Test");
+		m_gold->SetFont("Gold");
 		m_gold->SetOutput("0");
 		m_gold->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_gold->SetRotation(0.0f);
-		m_gold->SetScale(2.0f);
+		m_gold->SetScale(1.0f);
 		m_gold->SetPositionX(300.f);
 		m_gold->SetPositionY(30.f);
 		m_gold->SetDropshadow(true);

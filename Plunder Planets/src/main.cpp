@@ -72,8 +72,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::graphics::Sprite::LoadTexture("Chest", "../res/GUI/chest.png");
 
 	//Init text
+	thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
 	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
-	thomas::graphics::TextRender::LoadFont("Test", "../res/font/myfi.spritefont");
 
 	//Init gameObjects
 
