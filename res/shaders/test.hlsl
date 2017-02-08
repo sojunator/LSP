@@ -1,4 +1,3 @@
-
 Texture2D diffuseTexture : register(t0);
 SamplerState diffuseSampler : register(s0);
 
@@ -127,10 +126,10 @@ float4 PSMain(VSOutput input) : SV_TARGET
 		{
 			float3 viewDirection = camPosition - input.positionWS;
 
-			float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
+			//float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex); //is a float4(0,0,0,0)
 			float3 halfwayVector = normalize(-directionalLights[i].lightDir + viewDirection);
 			specular = pow(saturate(dot(bumpNormal, halfwayVector)), specularPower);// *lightIntensity;
-			specular = specular * specularIntensity;
+			//specular = specular * specularIntensity;
 		}
 	
 		outputColor += diffuse + specular;

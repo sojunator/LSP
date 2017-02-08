@@ -87,7 +87,6 @@ namespace thomas
 				//For every shader
 				for (Shader* shader : loadedShaders)
 				{
-
 					shader->Bind();
 
 					LightManager::BindAllLights();
@@ -126,6 +125,8 @@ namespace thomas
 				}
 				camera->BindSkybox();
 				camera->UnbindSkybox();
+
+			
 
 				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
