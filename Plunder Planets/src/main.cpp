@@ -1,7 +1,6 @@
 // main.cpp : Defines the entry point for the console application.
 //
 #include "Thomas.h"
-#include "gameobjects\TestObject.h"
 #include "gameobjects\CameraObject.h"
 #include "gameobjects\TerrainObject.h"
 #include "gameobjects\WaterObject.h"
@@ -76,7 +75,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init gameObjects
 
-	//TestObject* t = new TestObject();
 	
 	thomas::object::GameObject::Instantiate(new TerrainObject());
 	thomas::object::GameObject::Instantiate(new TestDirectionalLight());

@@ -9,8 +9,6 @@ namespace thomas
 	float Sound::s_fxVolume;
 	float Sound::s_musicVolume;
 	std::unique_ptr<DirectX::WaveBank> Sound::s_bank;
-	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_mInstance;
-	std::unique_ptr<DirectX::SoundEffectInstance> Sound::s_aInstance;
 	std::unique_ptr<DirectX::AudioEngine> Sound::s_audioEngine;
 
 	bool Sound::Init()
@@ -32,49 +30,23 @@ namespace thomas
 
 	bool Sound::Play(std::string name, float volume)
 	{
-		if (name[0] == 'm')
-		{
-			
-			s_mInstance = s_bank->CreateInstance(name.c_str());
-			if (!s_mInstance)
-			{
-				LOG("No instance was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
-				return false;
-			}
-			s_mInstance->Play(true);
-			s_mInstance->SetVolume(s_masterVolume * s_musicVolume * volume);
-			return true;
-		}
-		else if (name[0] == 'f')
-		{
-			s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
-			return true;
-		}
-		else if (name[0] == 'a')
-		{
-			s_aInstance = s_bank->CreateInstance(name.c_str());
-			if (!s_aInstance)
-			{
-				LOG("No instance was created for name: '" + name + "', probably invalid name. Check .txt file that comes with the wavebank.");
-				return false;
-			}
-			s_aInstance->Play(true);
-			s_aInstance->SetVolume(s_masterVolume * s_musicVolume * volume);
-			return true;
-		}
-		return false;
+		s_bank->Play(name.c_str(), s_masterVolume * s_fxVolume * volume, 0.0f, 0.0f);
+		return true;
 	}
 
-	void Sound::Pause()
+	std::unique_ptr<DirectX::SoundEffectInstance> Sound::CreateInstance(std::string clipName)
 	{
-		s_mInstance->Pause();
-		s_aInstance->Pause();
-	}
-
-	void Sound::Resume()
-	{
-		s_mInstance->Resume();
-		s_aInstance->Resume();
+		std::unique_ptr<DirectX::SoundEffectInstance> instance = s_bank->CreateInstance(clipName.c_str());
+		if (instance)
+		{
+			return instance;
+		}
+		else
+		{
+			LOG("Failed to find sound clip: " << clipName);
+			return NULL;
+		}
+		
 	}
 
 	void Sound::SetMasterVolume(float volume)
@@ -88,6 +60,10 @@ namespace thomas
 	void Sound::SetMusicVolume(float volume)
 	{
 		s_musicVolume = volume;
+	}
+	float Sound::GetMusicVolume()
+	{
+		return s_masterVolume*s_musicVolume;
 	}
 	bool Sound::LoadWaveBank(std::string name)
 	{

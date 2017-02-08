@@ -15,7 +15,8 @@ public:
 	{
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
-		
+		m_music = AddComponent<component::SoundComponent>();
+		m_pirateMusic = AddComponent<component::SoundComponent>();
 	};
 
 	bool Start()
@@ -29,8 +30,14 @@ public:
 		m_jaw = 0;
 		m_pitch = 0;
 
+		LOG("wow");
 		
+		m_music->SetClip("aOceanAmbient");
+		m_music->SetVolume(0.5);
+		m_music->Play();
 		
+		m_pirateMusic->SetClip("mSeaChanty");
+		m_pirateMusic->Play();
 
 		return true;
 	}
@@ -98,6 +105,8 @@ public:
 
 private:
 	component::Camera* m_camera;
+	component::SoundComponent* m_music;
+	component::SoundComponent* m_pirateMusic;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

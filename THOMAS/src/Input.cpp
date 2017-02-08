@@ -71,7 +71,8 @@ namespace thomas
 	{
 		if (s_initialized)
 		{
-			switch (message)
+			//Needs fixing
+	/*		switch (message)
 			{
 
 			case WM_SETFOCUS:
@@ -82,7 +83,7 @@ namespace thomas
 			case WM_KILLFOCUS:
 				s_gamePad->Suspend();
 				break;
-			}
+			}*/
 		}
 
 	}

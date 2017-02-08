@@ -29,7 +29,6 @@ public:
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
 
-		m_sound->SetName("fMeow");
 
 		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
@@ -239,6 +238,15 @@ public:
 
 		if (Input::GetButtonDown(Input::Buttons::LT))
 			m_broadSideLeft->Fire(m_forwardSpeed);
+
+
+		m_soundDelayLeft -= dt;
+		if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
+		{
+			m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
+			m_soundDelayLeft = m_soundDelay;
+		}
+
 	}
 
 private:
@@ -280,5 +288,20 @@ private:
 	Broadside* m_broadSideRight;
 
 	int m_modelIndex;
+
+	float m_soundDelay = 5;
+	float m_soundDelayLeft = 5;
+
+	std::string m_SFXs[9] = {
+		"fCreak1",
+		"fCreak2",
+		"fCreak3",
+		"fCreak4",
+		"fDoubleCreak1",
+		"fDoubleCreak2",
+		"fDoubleCreak3",
+		"fSlowCreak1",
+		"fSlowCreak2"
+	};
 
 };
