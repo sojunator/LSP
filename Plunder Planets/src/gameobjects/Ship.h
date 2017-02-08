@@ -16,8 +16,9 @@ public:
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
+		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
-
+		m_treasure = 0;
 	}
 
 	bool Start()
@@ -29,7 +30,9 @@ public:
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
 
-		m_sound->SetName("fMeow");
+		m_boostSound->SetClip("mThomas");
+		m_boostSound->SetVolume(0.9);
+
 
 		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
@@ -45,7 +48,7 @@ public:
 		m_boostAcceleration = m_accelerationSpeed * 3;
 		m_boostMaxSpeed = m_maxSpeed * 2;
 		
-		m_rotationSpeed = 0.1f;
+		m_rotationSpeed = 0.3f;
 		m_minmaxRotFactor = 0.45f;
 		m_rotation = 0.0f;
 
@@ -64,6 +67,7 @@ public:
 
 		m_vulkanControllsOn = false;
 
+		
 
 		return true;
 	}
@@ -95,19 +99,23 @@ public:
 		float left_x = Input::GetLeftStickX();
 		float left_y = Input::GetLeftStickY();
 
-		m_modelIndex = (m_modelIndex + 1) % 3;
+		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
 		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 
 		//for the boost
-		if (Input::GetButton(Input::Buttons::LB))
+		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
+			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
+			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 		}
 		else
 		{
+			m_boostSound->Pause();
 			m_accelerationSpeed = m_nonBoostAcceleration;
+			m_renderer->SetModel("testModel0"); //reset to default Mesh
 			if (m_nonBoostMaxSpeed < m_forwardSpeed)
 			{
 				m_forwardSpeed -= m_retardationSpeed * dt;
@@ -129,7 +137,7 @@ public:
 		}
 		
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RB))
+		if (Input::GetButton(Input::Buttons::RT))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -168,11 +176,11 @@ public:
 			{
 				if (m_rotation < 0)
 				{
-					m_rotation += m_rotationSpeed * 1.7f * dt;
+					m_rotation += m_rotationSpeed * dt;
 				}
 				else
 				{
-					m_rotation -= m_rotationSpeed * 1.7f * dt;
+					m_rotation -= m_rotationSpeed * dt;
 				}
 			}
 		}
@@ -235,13 +243,31 @@ public:
 		}
 
 
-		if(Input::GetButtonDown(Input::Buttons::RT))
+		if(Input::GetButtonDown(Input::Buttons::RB))
 			m_broadSideRight->Fire(-m_forwardSpeed);
 
-		if (Input::GetButtonDown(Input::Buttons::LT))
+		if (Input::GetButtonDown(Input::Buttons::LB))
 			m_broadSideLeft->Fire(m_forwardSpeed);
+
+
+		m_soundDelayLeft -= dt;
+		if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
+		{
+			m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
+			m_soundDelayLeft = m_soundDelay;
+		}
+
 	}
 
+	void UpdateTreasure(float treasure)
+	{
+		m_treasure += treasure;
+	}
+
+	int GetTreasure()
+	{
+		return (int)m_treasure;
+	}
 private:
 	
 	//used for the boat
@@ -250,6 +276,9 @@ private:
 	float m_accelerationSpeed;
 	float m_retardationSpeed;//reverse acceleration is called retardation
 	float m_maxSpeed;
+
+	float m_treasure;
+
 	//for the boost
 	float m_boostMaxSpeed;
 	float m_nonBoostMaxSpeed;
@@ -275,11 +304,27 @@ private:
 	//components
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
+	component::SoundComponent* m_boostSound;
 	GameObject* m_cameraObject;
 
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRight;
 
 	int m_modelIndex;
+
+	float m_soundDelay = 5;
+	float m_soundDelayLeft = 5;
+
+	std::string m_SFXs[9] = {
+		"fCreak1",
+		"fCreak2",
+		"fCreak3",
+		"fCreak4",
+		"fDoubleCreak1",
+		"fDoubleCreak2",
+		"fDoubleCreak3",
+		"fSlowCreak1",
+		"fSlowCreak2"
+	};
 
 };

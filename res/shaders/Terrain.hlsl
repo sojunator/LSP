@@ -1,11 +1,11 @@
 
-Texture2D diffuseTexture : register(t0);
+Texture2D sandTexture : register(t0);
 SamplerState diffuseSampler : register(s0);
 
-Texture2D specularTexture : register(t1);
+Texture2D grassTexture : register(t1);
 SamplerState specularSampler : register(s1);
 
-Texture2D normalTexture : register(t2);
+Texture2D hillsTexture : register(t2);
 SamplerState normalSampler : register(s2);
 
 
@@ -98,29 +98,25 @@ float4 TerrainColour(VSOutput input)
 {
     float slope, blendAmount;
     float2 tex = input.tex;
-    float4 grass = diffuseTexture.Sample(diffuseSampler, tex);
-    float4 sand = specularTexture.Sample(specularSampler, tex);
-    float4 hills = normalTexture.Sample(normalSampler, tex);
+    float4 sand = sandTexture.Sample(diffuseSampler, tex);
+    float4 grass = grassTexture.Sample(specularSampler, tex);
+    float4 hills = hillsTexture.Sample(normalSampler, tex);
     slope = 1.0f - input.normal.y;
 
-    return sand;
         // Determine which texture to use based on height.
-    if (slope < 0.2)
+    if (input.positionWS.y < 1.1 * 4)
     {
         blendAmount = slope / 0.2f;
         return lerp(grass, sand, blendAmount);
     }
 	
-    if ((slope < 0.7) && (slope >= 0.2f))
+    if (input.positionWS.y < 2.0 * 4)
     {
         blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
         return lerp(grass, hills, blendAmount);
     }
 
-    if (slope >= 0.7)
-    {
-        return hills;
-    }
+ 
     return hills;
     //if (y < 1.1 * 4)
 
@@ -136,7 +132,6 @@ float4 PSMain(VSOutput input) : SV_TARGET
 {
 
     float4 textureColor = TerrainColour(input);
-    return textureColor;
     float4 ambientColor = float4(0, 0, 0, 1);
     float4 outputColor = float4(0, 0, 0, 1);
 	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular

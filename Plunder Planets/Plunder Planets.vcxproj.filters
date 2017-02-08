@@ -13,7 +13,6 @@
     <ClInclude Include="src\gameobjects\Ship.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
-    <ClInclude Include="src\gameobjects\TestObject.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />

@@ -12,12 +12,14 @@ private:
 public:
 	Broadside() : GameObject("BroadSide")
 	{
-		m_delay = 0.8;
+		m_delay = 1.5;
 		m_delayLeft = 0;
+		m_fireSFX = AddComponent<component::SoundComponent>();
 	}
 
 	bool Start()
 	{
+		
 		return true;
 	}
 
@@ -29,6 +31,7 @@ public:
 			float spacing = 2.3;
 			for (int i = -2; i <= 2; i++)
 			{
+				m_fireSFX->PlayOneShot(m_SFXs[rand()%2],1);
 				math::Vector3 pos = m_transform->GetPosition();
 				math::Quaternion rot = m_transform->GetRotation();
 				rot *= math::Quaternion::CreateFromAxisAngle(m_transform->Up(), math::DegreesToradians(-i));
@@ -36,6 +39,7 @@ public:
 				Projectile* p = (Projectile*)Instantiate(new Projectile(), pos, rot);
 				p->forwardSpeed = forwardSpeed;
 			}
+			
 			m_delayLeft = m_delay;
 		}
 
@@ -52,4 +56,6 @@ public:
 private:
 	float m_delay;
 	float m_delayLeft;
+	component::SoundComponent* m_fireSFX;
+	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
 };

@@ -15,6 +15,7 @@ public:
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
+		m_splashSound = AddComponent<component::SoundComponent>();
 	}
 
 	bool Start()
@@ -33,11 +34,16 @@ public:
 
 
 		if (m_transform->GetPosition().y < 0.0)
+		{
+			m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 			Destroy(this);
+		}
+			
 	}
 
 private:
 	float m_downSpeed;
+	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
-
+	std::string m_SFXs[3] = { "fSplash1", "fSplash2", "fSplash3" };
 };

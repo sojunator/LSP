@@ -26,7 +26,6 @@ namespace thomas
 
 
 			static PlaneData Plane::CreatePlane(int size, float detail);
-			static PlaneData Plane::CreatePlane(int size, float detail, math::Vector2 offSet);
 
 		private:
 		};
