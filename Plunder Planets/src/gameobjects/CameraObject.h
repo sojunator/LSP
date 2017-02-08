@@ -30,22 +30,20 @@ public:
 		m_jaw = 0;
 		m_pitch = 0;
 
-		LOG("wow");
 		
 		m_music->SetClip("aOceanAmbient");
-		m_music->SetVolume(0.5);
+		m_music->SetVolume(0.3);
 		m_music->Play();
 		
 		m_pirateMusic->SetClip("mSeaChanty");
+		m_pirateMusic->SetVolume(0.9);
 		m_pirateMusic->Play();
-
+		
 		return true;
 	}
 
 	void Update()
 	{
-
-		
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
