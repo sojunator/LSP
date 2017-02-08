@@ -16,8 +16,9 @@ public:
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
+		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
-
+		m_treasure = 0;
 	}
 
 	bool Start()
@@ -28,6 +29,9 @@ public:
 
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
+
+		m_boostSound->SetClip("mThomas");
+		m_boostSound->SetVolume(0.9);
 
 
 		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
@@ -63,6 +67,7 @@ public:
 
 		m_vulkanControllsOn = false;
 
+		
 
 		return true;
 	}
@@ -93,21 +98,21 @@ public:
 		float left_x = Input::GetLeftStickX();
 		float left_y = Input::GetLeftStickY();
 
-		m_modelIndex = (m_modelIndex + 1) % 3;
+		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
 		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 
 		//for the boost
 		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
+			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
-			if (m_modelIndex == 0) //måste finnas bättre lösning för att undvika testmodel0
-				m_modelIndex = 1;
 			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 		}
 		else
 		{
+			m_boostSound->Pause();
 			m_accelerationSpeed = m_nonBoostAcceleration;
 			m_renderer->SetModel("testModel0"); //reset to default Mesh
 			if (m_nonBoostMaxSpeed < m_forwardSpeed)
@@ -253,6 +258,15 @@ public:
 
 	}
 
+	void UpdateTreasure(float treasure)
+	{
+		m_treasure += treasure;
+	}
+
+	int GetTreasure()
+	{
+		return (int)m_treasure;
+	}
 private:
 	
 	//used for the boat
@@ -261,6 +275,9 @@ private:
 	float m_accelerationSpeed;
 	float m_retardationSpeed;//reverse acceleration is called retardation
 	float m_maxSpeed;
+
+	float m_treasure;
+
 	//for the boost
 	float m_boostMaxSpeed;
 	float m_nonBoostMaxSpeed;
@@ -286,6 +303,7 @@ private:
 	//components
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
+	component::SoundComponent* m_boostSound;
 	GameObject* m_cameraObject;
 
 	Broadside* m_broadSideLeft;

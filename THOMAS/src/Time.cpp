@@ -14,7 +14,6 @@ namespace thomas
 		LARGE_INTEGER freq;
 	//	timeBeginPeriod(1);
 		if (!QueryPerformanceFrequency(&freq))LOG("QueryPerformanceFrequency failed!!!!");
-
 		s_timeFreq = double(freq.QuadPart);
 
 		LARGE_INTEGER currentTime;

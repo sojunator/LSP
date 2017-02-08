@@ -12,16 +12,13 @@
 #include "gameobjects\TestPointLight.h"
 #include "gameobjects\Ship.h"
 
-
 #include "postEffects\OceanPostProcess.h"	
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg = { 0 };
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder plantits");
-	//init code
-	double time = thomas::Time::GetInitTime();
-	srand(time);
+	//init code	
 
 
 
@@ -64,9 +61,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 	thomas::utils::AssimpLoader::LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
 
-	Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
-	thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
-	Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
 
 
 
@@ -78,12 +72,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init gameObjects
 
 	
-	thomas::object::GameObject::Instantiate(new TerrainObject());
 	thomas::object::GameObject::Instantiate(new TestDirectionalLight());
 	//TestPointLight* pointLight = new TestPointLight();
 	thomas::object::GameObject::Instantiate(new CameraObject());
 	thomas::object::GameObject::Instantiate(new Ship());
 	thomas::object::GameObject::Instantiate(new WaterObject());
+	thomas::object::GameObject::Instantiate(new TerrainObject());
 
 	//start
 	thomas::ThomasCore::Start();
