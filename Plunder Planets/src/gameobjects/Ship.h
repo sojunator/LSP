@@ -58,12 +58,29 @@ public:
 		m_lookAtOffset = math::Vector3(0, 25, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
+
+		m_vulkanControllsOn = false;
+
+
 		return true;
 	}
 
-	math::Vector3 project(math::Vector3 v1, math::Vector3 v2)
+	void VulkanControls(float& forwardFactor, float& rightFactor, float const left_x, float const left_y)
 	{
-		return (v1.Dot(v2)/(v2.Length() * v2.Length())) * v2;
+		//calculate forward and right contribution of the cam, with the boat, and the controllers left stick
+		//these controlls makes for the left stick to match the coordinates of the boat
+		//no matter what direction the camera is pointing, the stick will serve in the boats coordinates
+		if (left_x != 0 || left_y != 0)
+		{
+			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
+
+			camForwardXZ.Normalize();
+
+			forwardFactor = camForwardXZ.Dot(m_transform->Forward()) * -left_y + camForwardXZ.Dot(m_transform->Right()) * left_x;
+
+			rightFactor = camForwardXZ.Dot(m_transform->Forward()) * left_x + camForwardXZ.Dot(m_transform->Right()) * left_y;
+
+		}
 	}
 
 	void Update()
@@ -78,7 +95,8 @@ public:
 
 		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 
-		if (Input::GetButton(Input::Buttons::A))
+		//for the boost
+		if (Input::GetButton(Input::Buttons::LB))
 		{
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
@@ -97,28 +115,23 @@ public:
 			}
 			
 		}
-		//calculate forward and right contribution of the cam, with the boat, and the controllers left stick
-		float forwardFactor = 0;
-		float rightFactor = 0;
-		if (left_x != 0 || left_y != 0)
+		//get forward and right contrib
+		float forwardFactor = left_y;
+		float rightFactor = -left_x;
+
+		if (m_vulkanControllsOn)
 		{
-			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
-
-			camForwardXZ.Normalize();
-
-			forwardFactor = camForwardXZ.Dot(m_transform->Forward()) * -left_y + camForwardXZ.Dot(m_transform->Right()) * left_x;
-			
-			rightFactor = camForwardXZ.Dot(m_transform->Forward()) * left_x + camForwardXZ.Dot(m_transform->Right()) * left_y;
-			
+			VulkanControls(forwardFactor, rightFactor, left_x, left_y);
 		}
+		
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::Y))
+		if (Input::GetButton(Input::Buttons::RB))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
 			
 		}
-		else if (std::abs(forwardFactor) > 0.01f)
+		else if (forwardFactor > 0.01f)
 		{
 			m_forwardSpeed += m_accelerationSpeed * forwardFactor * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -196,7 +209,7 @@ public:
 		//zoom camera in or out. Also make sure that the camera dont get to close to the boat.
 		if (distanceVector.Length() > m_camMinDistanceFromBoat)
 		{
-			if (Input::GetButton(Input::Buttons::RB))
+			if (Input::GetButton(Input::Buttons::DPAD_UP))
 			{
 				m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Forward() * m_camZoomSpeed * dt);
 			}
@@ -207,7 +220,7 @@ public:
 		}
 		if (distanceVector.Length() < m_camMaxDistanceFromBoat)
 		{
-			if (Input::GetButton(Input::Buttons::LB))
+			if (Input::GetButton(Input::Buttons::DPAD_DOWN))
 			{
 				m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * m_camZoomSpeed * dt);
 			}
@@ -243,6 +256,7 @@ private:
 	float m_camMaxDistanceFromBoat;
 	//used for both
 	float m_controlSensitivity;
+	bool m_vulkanControllsOn;
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
