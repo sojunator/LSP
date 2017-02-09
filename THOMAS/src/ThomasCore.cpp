@@ -65,7 +65,7 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 
-		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " DT: " + std::to_string(Time::GetDeltaTime());
+		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " FrameTime: " + std::to_string(Time::GetFrameTime());
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
 
 		if (Input::GetKeyDown(Input::Keys::Escape))

@@ -105,6 +105,7 @@ public:
 		//for the boost
 		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
+			m_boostRot = 1;
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
@@ -112,6 +113,7 @@ public:
 		}
 		else
 		{
+			m_boostRot = 0;
 			m_boostSound->Pause();
 			m_accelerationSpeed = m_nonBoostAcceleration;
 			m_renderer->SetModel("testModel0"); //reset to default Mesh
@@ -185,7 +187,27 @@ public:
 		}
 		if (m_forwardSpeed > 0.01)
 		{
-			m_transform->Rotate(m_rotation * dt, 0, 0);
+			float boostDir = left_y;
+			if (m_transform->GetPosition().y < -0.8 && boostDir < 0)
+				boostDir = 0;
+			m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(boostDir * 3), 0);
+		}
+
+		if (m_boostRot == 0 && m_transform->GetPosition().y > -0.8)
+		{
+			m_fallSpeed += -9.82 * dt;
+			m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
+		}
+		else if (m_boostRot == 0)
+		{
+			m_fallSpeed = 0;
+			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
+			newForward.Normalize();
+			m_transform->SetRotation(0, 0, 0);
+			m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
+			
+			float rollAngle = m_transform->Up().Dot(math::Vector3(0, 1, 0));
+			
 		}
 		
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
@@ -313,6 +335,10 @@ private:
 
 	float m_soundDelay = 5;
 	float m_soundDelayLeft = 5;
+
+
+	float m_boostRot = 0;
+	float m_fallSpeed = 0;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",

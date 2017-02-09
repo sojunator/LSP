@@ -21,6 +21,7 @@ namespace thomas
 		static float GetDeltaTime();		///Delta time
 		static double GetInitTime();
 		static int GetFPS();
+		static float GetFrameTime();
 
 		static void SetTimescale(float timescale);		///The smaller the timescale the slower the time
 		static float GetTimescale();
@@ -32,7 +33,8 @@ namespace thomas
 		static double s_startTime;
 		static double s_timeFreq;
 		static double s_DeltaTime;
-		static int s_FPS;
+		static float s_FPS;
+		static float s_FrameTime;
 		static float s_timescale;
 	public:
 

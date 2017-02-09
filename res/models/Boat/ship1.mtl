@@ -49,7 +49,7 @@ Tf 1.00 1.00 1.00
 Ni 1.00
 newmtl lambert14SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd pirate.jpg
@@ -70,7 +70,7 @@ Ks 0.09 0.07 0.06
 Ns 21.50
 newmtl phong2SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd engine.jpg
@@ -87,7 +87,7 @@ Ks 0.68 0.68 0.68
 Ns 6.32
 newmtl phong4SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd copper.jpg
@@ -96,7 +96,7 @@ Ks 0.79 0.79 0.79
 Ns 22.13
 newmtl phong5SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd pp.png
@@ -105,7 +105,7 @@ Ks 0.06 0.06 0.06
 Ns 3.79
 newmtl phong7SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd boatwood.jpg

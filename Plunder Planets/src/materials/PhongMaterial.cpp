@@ -4,7 +4,7 @@
 PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* material, Shader* shader) : Material(name, shader)
 {
 	m_textures = utils::AssimpLoader::GetMaterialTextures(material, dir);
-	m_materialProperties.materialProperty = math::Color(0, 0, 0, 0);
+	m_materialProperties.materialProperty = math::Vector4(0, 0, 0, 0);
 
 	for (int i = 0; i < m_textures.size(); i++)
 	{
