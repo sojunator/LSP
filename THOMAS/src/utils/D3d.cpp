@@ -77,11 +77,12 @@ namespace thomas
 			scd.OutputWindow = handle;
 			scd.Flags = 0;
 			
-			scd.SampleDesc.Count = 1; // AA times 1
-			scd.SampleDesc.Quality = 0;
+			scd.SampleDesc.Count = THOMAS_AA_COUNT; // AA times 1
+			scd.SampleDesc.Quality = THOMAS_AA_QUALITY;
 			scd.Windowed = TRUE;
 			scd.BufferDesc.RefreshRate.Numerator = 0; // change 0 to numerator for vsync
 			scd.BufferDesc.RefreshRate.Denominator = 1; // change 1 to denominator for vynsc
+			
 			
 			
 			hr = D3D11CreateDeviceAndSwapChain(NULL,
@@ -201,8 +202,8 @@ namespace thomas
 			depthStencilBufferDesc.MipLevels = 1;
 			depthStencilBufferDesc.ArraySize = 1;
 			depthStencilBufferDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-			depthStencilBufferDesc.SampleDesc.Count = 1;
-			depthStencilBufferDesc.SampleDesc.Quality = 0;
+			depthStencilBufferDesc.SampleDesc.Count = THOMAS_AA_COUNT;
+			depthStencilBufferDesc.SampleDesc.Quality = THOMAS_AA_QUALITY;
 			depthStencilBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 			depthStencilBufferDesc.CPUAccessFlags = 0;
 			depthStencilBufferDesc.MiscFlags = 0;
@@ -210,7 +211,7 @@ namespace thomas
 
 			// Z-buffer view desc
 			depthViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 			depthViewDesc.Texture2D.MipSlice = 0;
 			depthViewDesc.Flags = 0;
 
@@ -234,7 +235,7 @@ namespace thomas
 			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 			ZeroMemory(&srvDesc, sizeof(srvDesc));
 			srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 			srvDesc.Texture2D.MostDetailedMip = 0;
 			srvDesc.Texture2D.MipLevels = -1;
 

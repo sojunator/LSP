@@ -76,7 +76,7 @@ namespace thomas
 		}
 		catch (std::exception ex)
 		{
-			LOG("Unable to load wavebank, probably invalid path and/or name");
+			LOG("Unable to load wavebank: " << name << " .Probably invalid path and/or name");
 			s_bank = NULL;
 			return false;
 		}

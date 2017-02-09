@@ -6,7 +6,8 @@ namespace thomas
 	double Time::s_startTime;
 	double Time::s_timeFreq;
 	double Time::s_DeltaTime;
-	int Time::s_FPS;
+	float Time::s_FPS;
+	float Time::s_FrameTime;
 	float Time::s_timescale;
 
 	bool Time::Init()
@@ -30,6 +31,7 @@ namespace thomas
 
 		s_DeltaTime = GetElapsedTime();	
 		s_FPS = 1.0 / s_DeltaTime;
+		s_FrameTime = 1000.0 / s_FPS;
 	}
 
 	float Time::GetDeltaTime()
@@ -45,6 +47,11 @@ namespace thomas
 	int Time::GetFPS()
 	{
 		return s_FPS;
+	}
+
+	float Time::GetFrameTime()
+	{
+		return 1000.0 / s_FPS;
 	}
 
 	void Time::SetTimescale(float timescale)
