@@ -287,7 +287,7 @@ public:
 
 	int GetTreasure()
 	{
-		return m_treasure;
+		return m_treasure + 0.5;
 	}
 private:
 	

@@ -30,8 +30,8 @@ namespace thomas
 			CD3D11_TEXTURE2D_DESC imageDesc;
 			image->GetDesc(&imageDesc);
 
-			s_origin.x = float(imageDesc.Width / 2);
-			s_origin.y = float(imageDesc.Height / 2);
+			s_origin.x = 0;
+			s_origin.y = 0;
 
 			return true;
 		}
@@ -76,9 +76,9 @@ namespace thomas
 		{
 			SetImagePosX(posX);
 			SetImagePosY(posY);
-
-			s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 			
+			s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
+						
 			s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
 				0.f, s_origin, scale);
 

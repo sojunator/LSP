@@ -21,18 +21,12 @@ public:
 		m_text = AddComponent<component::TextComponent>();
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
-		m_chest = AddComponent<component::SpriteComponent>();
 	
 		//GUI images
 		m_sprite->SetName("GUI");	
-		m_sprite->SetPositionX(400);
-		m_sprite->SetPositionY(270);
+		m_sprite->SetPositionX(0); //Offset from top left corner
+		m_sprite->SetPositionY(0);
 		m_sprite->SetScale(1.0f);
-
-		m_chest->SetName("Chest");
-		m_chest->SetPositionX(120);
-		m_chest->SetPositionY(30);
-		m_chest->SetScale(0.09f);
 
 		//Simple font
 		m_text->SetFont("Name");
@@ -40,19 +34,26 @@ public:
 		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_text->SetRotation(0.0f);
 		m_text->SetScale(1.0f);
-		m_text->SetPositionX(960.f);
-		m_text->SetPositionY(30.f);
+		m_text->SetPositionX(Window::GetWidth() / 2.f);
+		m_text->SetPositionY(Window::GetHeight() / 21.5f);
 		m_text->SetDropshadow(true);
 		m_text->SetOutline(true);
 
 		//Gold font
 		m_gold->SetFont("Gold");
 		m_gold->SetOutput("0");
-		m_gold->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
+		m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
 		m_gold->SetRotation(0.0f);
 		m_gold->SetScale(1.0f);
-		m_gold->SetPositionX(300.f);
-		m_gold->SetPositionY(30.f);
+
+		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+			m_gold->SetPositionX(Window::GetWidth() / 7.6f);
+		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+			m_gold->SetPositionX(Window::GetWidth() / 7.2f);
+		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+			m_gold->SetPositionX(Window::GetWidth() / 6.5f);
+
+		m_gold->SetPositionY(Window::GetHeight() / 21.5f);
 		m_gold->SetDropshadow(true);
 		m_gold->SetOutline(true);
 
@@ -157,7 +158,6 @@ private:
 	component::TextComponent* m_text;
 	component::TextComponent* m_gold;
 	component::SpriteComponent* m_sprite;
-	component::SpriteComponent* m_chest;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

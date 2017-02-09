@@ -23,7 +23,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//init code	
 
 
-
 	//Init shaders
 	thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
 		"../res/shaders/phong.hlsl");
@@ -67,8 +66,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
 	//Init 2D-images for GUI
-	thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/scroll.png");
-	thomas::graphics::Sprite::LoadTexture("Chest", "../res/GUI/chest.png");
+	if(Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+		thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
+	else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+		thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
+	else if(Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+		thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
 
 	//Init text
 	thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
