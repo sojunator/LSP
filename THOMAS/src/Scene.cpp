@@ -23,18 +23,8 @@ namespace thomas
 		s_scenes.push_back(scene);
 		return scene;
 	}
-	bool Scene::DestroyScene(Scene* scene)
+	void Scene::Destroy(Scene* scene)
 	{
-		for (int i = 0; i < s_scenes.size(); ++i)
-		{
-			if (s_scenes[i] == scene)
-			{
-				s_scenes[i]->m_gameObjects.clear();
-				s_scenes[i]->m_shaders.clear();
-				s_scenes.erase(s_scenes.begin() + i);
-			}
-		}
-		return true;
 	}
 	void Scene::LoadScene(Scene* scene)
 	{
@@ -43,7 +33,8 @@ namespace thomas
 	void Scene::UpdateCurrentScene()
 	{
 		if (s_currentScene)
-			object::Object::GetAllObjectsInScene(s_currentScene);
+			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
+				object->Update();
 		else
 			LOG("No scene set");
 	}
@@ -51,18 +42,6 @@ namespace thomas
 	{
 		return m_shaders;
 	}
-	/*std::vector<graphics::Material*> Scene::GetMaterialsByShader(graphics::Shader * shader)
-	{
-		std::vector<graphics::Material*> output;
-		for (graphics::Material* material : m_materials)
-		{
-			if (material->GetShader() == shader)
-			{
-				output.push_back(material);
-			}
-		}
-		return output;
-	}*/
 	void Scene::Render()
 	{
 		if (s_currentScene == NULL)
@@ -82,13 +61,13 @@ namespace thomas
 			for (graphics::Shader* shader : m_shaders)
 			{
 				shader->Bind();
-				for (object::GameObject* lightGameObject : GetObjectsByComponent<object::component::Light>())
+				for (object::GameObject* lightGameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
 				{
 					graphics::LightManager::BindAllLights();
 					for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
 					{
 						material->Bind();
-						for (object::GameObject* gameObject : GetObjectsByComponent<object::component::RenderComponent>())
+						for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 						{
 							graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
 							for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())

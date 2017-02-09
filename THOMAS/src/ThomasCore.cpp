@@ -79,7 +79,8 @@ namespace thomas {
 				object->Update();
 		}
 
-		graphics::Renderer::Render();
+		//graphics::Renderer::Render();
+		Scene::Render();
 	}
 
 	void ThomasCore::Start()

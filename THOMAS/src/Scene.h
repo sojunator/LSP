@@ -8,12 +8,10 @@ namespace thomas
 	public:
 		static bool Init();
 		static Scene* AddScene(Scene* scene);
-		static bool DestroyScene(Scene* scene);
+		static void Destroy(Scene* scene);
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static UpdateCurrentScene();
 		std::vector<graphics::Shader*> GetShaders();
-		template<typename T>
-		std::vector<object::GameObject*> GetObjectsByComponent();
 		static void Render();
 		void Render(object::component::Camera* camera);
 		graphics::Material* LoadMaterial(std::string type, graphics::Material* material);
@@ -27,22 +25,10 @@ namespace thomas
 		static std::vector<Scene*> s_scenes;
 		static Scene* s_currentScene;
 	protected:
-		std::vector<object::GameObject*> m_gameObjects;
-		std::vector<object::Object*> m_objects;
 		std::vector<graphics::Shader*> m_shaders;
-		std::vector<graphics::Model*> m_models;
 		std::vector<object::component::Camera*> m_cameras;
+		std::string m_name;
+		Scene(std::string name) { m_name = name; }
+		Scene() { m_name = "You forgot to name your scene, loser-Preben"; }
 	};
-	template<typename T>
-	inline std::vector<object::GameObject*> Scene::GetObjectsByComponent()
-	{
-		std::vector<object::GameObject*> output;
-		for (int i = 0; i < m_gameObjects.size(); ++i)
-		{
-			T* component = m_gameObjects[i]->GetComponent<T>();
-			if (component)
-				output.push_back(m_gameObjects[i]);
-		}
-		return output;
-	}
 }
