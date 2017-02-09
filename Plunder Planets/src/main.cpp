@@ -19,7 +19,7 @@
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg = { 0 };
-	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder plantits");
+	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder Planets");
 	//init code	
 
 
@@ -83,9 +83,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::object::GameObject::Instantiate(new TestDirectionalLight());
 	//TestPointLight* pointLight = new TestPointLight();
 	thomas::object::GameObject::Instantiate(new CameraObject());
+	thomas::object::GameObject::Instantiate(new TerrainObject());
 	thomas::object::GameObject::Instantiate(new Ship());
 	thomas::object::GameObject::Instantiate(new WaterObject());
-	thomas::object::GameObject::Instantiate(new TerrainObject());
+	
 
 	//start
 	thomas::ThomasCore::Start();

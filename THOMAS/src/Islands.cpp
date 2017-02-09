@@ -19,9 +19,10 @@ namespace thomas
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
-			m_radius.push_back(size*detail*1.5);
+			m_plunderRadius.push_back(size*detail*1.3);
+			m_collisionRadius.push_back(size*detail*0.6);
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
+			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i]);
 			ApplyOffSet(i, tempPlane[i]);
 			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
 		}
@@ -94,14 +95,24 @@ namespace thomas
 		return m_worldPosOffset[island];
 	}
 
-	float Islands::GetRadius(int island)
+	float Islands::GetPlunderRadius(int island)
 	{
-		return m_radius[island];
+		return m_plunderRadius[island];
 	}
 
-	float Islands::GetRadiusSquared(int island)
+	float Islands::GetCollisionRadius(int island)
 	{
-		return m_radius[island]*m_radius[island];
+		return m_collisionRadius[island];
+	}
+
+	float Islands::GetPlunderRadiusSquared(int island)
+	{
+		return m_plunderRadius[island] * m_plunderRadius[island];
+	}
+
+	float Islands::GetCollisionRadiusSquared(int island)
+	{
+		return m_collisionRadius[island] * m_collisionRadius[island];
 	}
 
 	float Islands::GetTreasure(int island)
