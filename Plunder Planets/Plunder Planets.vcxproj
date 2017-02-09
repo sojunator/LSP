@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)THOMAS/src;$(SolutionDir)THOMAS/src/utils/directXTK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)THOMAS/src;$(SolutionDir)THOMAS/src/utils/directXTK;%(AdditionalIncludeDirectories);$(SolutionDir)\DirectXTK\Inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,7 +122,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)THOMAS/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)THOMAS/src;$(SolutionDir)THOMAS/src/utils/directXTK;%(AdditionalIncludeDirectories);$(SolutionDir)\DirectXTK\Inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -130,6 +130,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,6 +153,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DirectXTK-dec2016\Audio\DirectXTKAudio_Desktop_2015_Win8.vcxproj">
+      <Project>{4f150a30-cecb-49d1-8283-6a3f57438cf5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\DirectXTK-dec2016\DirectXTK_Desktop_2015.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\THOMAS\THOMAS.vcxproj">
       <Project>{ed0d8681-b384-43d1-8f56-b4145588e20c}</Project>
     </ProjectReference>
@@ -159,10 +166,11 @@
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\gameobjects\CameraObject.h" />
+    <ClInclude Include="src\gameobjects\Broadside.h" />
+    <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
-    <ClInclude Include="src\gameobjects\TestObject.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />

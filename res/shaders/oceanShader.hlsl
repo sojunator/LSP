@@ -233,7 +233,8 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
-	float3 sunDir = normalize(directionalLights[0].lightDir);
+
+	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z));//lightDir needs to be upside down for some reason
 
 
 	float3 eyeVec = camPosition - input.positionWS;
@@ -242,7 +243,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float dist2d = length(eyeVec.xz);
 
 	float blendFactor = (PATCH_BLEND_END - dist2d) / (PATCH_BLEND_END - PATCH_BLEND_BEGIN);
-	blendFactor = clamp(blendFactor*blendFactor*blendFactor, 0, 1);
+	blendFactor = saturate(blendFactor*blendFactor*blendFactor);
 
 	float2 perlinTC = input.tex * perlinSize + (input.positionWS.xz % 256) - 128;
 	float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
@@ -261,24 +262,14 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float3 reflectVec = reflect(-eyeDir, normal);
 	float cosAngle = dot(normal, eyeDir);
 
-
-	float4 ramp = fresnelTexture.Sample(fresnelSampler, cosAngle);
-
-	if (reflectVec.z < bendParam.x)
-		ramp = lerp(ramp, bendParam.z, (bendParam.x - reflectVec.z) / (bendParam.x - bendParam.y));
-
-	reflectVec.z = max(0, reflectVec.z);
-
-
-
 	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
+	float reflectContrib = 0.15f;//hardcoded lerpfactor between watercolor and the sampled reflection
 
-	float3 reflectedColor = reflection;
 
-	float3 waterColor = lerp(baseWaterColor.rgb, reflection, ramp.x);
+	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
 
-	float cosSpec = clamp(dot(reflectVec, sunDir), 0, 1);
+	float cosSpec = saturate(dot(reflectVec, sunDir));
 	float sunSpot = pow(cosSpec, shininess); //shiny
 
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;

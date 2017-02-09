@@ -4,6 +4,8 @@
 #include "../object/component/Light.h"
 #include "PostEffect.h"
 #include "LightManager.h"
+#include "TextRender.h"
+#include "Sprite.h"
 
 namespace thomas
 {
@@ -45,10 +47,6 @@ namespace thomas
 
 		void thomas::graphics::Renderer::Render()
 		{
-
-
-
-
 			//TODO: Find out if this is the fastest order of things.
 
 			for (object::component::Camera* camera : GetCameras()) //Render for every camera;
@@ -60,14 +58,14 @@ namespace thomas
 
 				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 
-
 				std::vector<Shader*> loadedShaders = Shader::GetLoadedShaders();
 
 				ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 
 				for (Material* mat : Material::GetLoadedMaterials())
 				{
-					mat->Update();
+					if(mat)
+						mat->Update();
 				}
 
 				for (PostEffect* fx : PostEffect::GetLoadedPostEffects())
@@ -123,16 +121,36 @@ namespace thomas
 
 					shader->Unbind();
 				}
+
 				camera->BindSkybox();
 				camera->UnbindSkybox();
 
-			
-				if(!Input::GetKey(Input::Keys::C))
-					PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
+				PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
+
+				//GUI
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::SpriteComponent>())
+				{
+					std::vector <object::component::SpriteComponent*> spriteComponent = gameObject->GetComponents<object::component::SpriteComponent>();
+
+					for (object::component::SpriteComponent* sprite : gameObject->GetComponents<object::component::SpriteComponent>())
+					{
+						Sprite::RenderImage(sprite);
+					}
+				}
+
+				//Text
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::TextComponent>())
+				{
+					std::vector <object::component::TextComponent*> textComponent = gameObject->GetComponents<object::component::TextComponent>();
+
+					for (object::component::TextComponent* text : gameObject->GetComponents<object::component::TextComponent>())
+					{
+						TextRender::RenderText(text);
+					}	
+				}
 
 				ThomasCore::GetSwapChain()->Present(0, 0);
 			}
-
 		}
 
 		bool Renderer::Destroy()

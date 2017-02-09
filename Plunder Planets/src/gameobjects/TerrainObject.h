@@ -3,10 +3,6 @@
 #include <Thomas.h>
 #include <string>
 
-#include "CameraObject.h"
-
-using namespace thomas;
-using namespace object;
 class TerrainObject : public GameObject
 {
 
@@ -17,30 +13,67 @@ public:
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 	}
+	~TerrainObject()
+	{
+		delete m_islands;
+		delete m_model;
+		delete m_renderer;
+	}
 
 	bool Start()
 	{
-
+		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
+		m_islands = new thomas::Islands(3, mat, 1024 / 4, 1, 1024, 100);
+		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Plane-1");
 
-		m_cameraObject = Find("CameraObject");
-
-		/*m_cameraObject->m_transform->SetPosition(math::Vector3(0, 0, 50));*/
-		m_transform->SetPosition(math::Vector3(-1000, -3, 1000));
+		m_transform->SetPosition(math::Vector3(0, -1, 0));
 
 
 		return true;
+
 	}
 
 
 	void Update()
 	{
+	}
 
+	float Plunder(math::Vector2 pos)
+	{
+		math::Vector2 center;
+		float distance = 0;
+		float treasure = 0;
+		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
+		{
+			center = m_islands->GetCenter(i);
+			distance = math::Vector2::DistanceSquared(pos, center);
+			if (distance <= m_islands->GetPlunderRadiusSquared(i) && m_islands->GetTreasure(i))
+				treasure = m_islands->StealTreasure(i);
+		}
+		return treasure;
+	}
+
+	bool Collision(math::Vector2 pos)
+	{
+		math::Vector2 center;
+		float distance = 0;
+		for (int i = 0; i < m_islands->GetNrOfIslands(); i++)
+		{
+			center = m_islands->GetCenter(i);
+			distance = math::Vector2::DistanceSquared(pos, center);
+			if (distance <= m_islands->GetCollisionRadiusSquared(i))
+				return true;
+		}
+		return false;
 	}
 
 private:
-	component::RenderComponent* m_renderer;
-	object::GameObject* m_cameraObject;
+	math::Vector2 m_shipPos;
 
+	thomas::Islands* m_islands;
+	thomas::graphics::Model* m_model;
+
+	component::RenderComponent* m_renderer;
 };

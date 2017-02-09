@@ -2,6 +2,8 @@
 #include "../ThomasCore.h"
 #include <AtlBase.h>
 #include <atlconv.h>
+
+#pragma warning(disable: 3501)
 namespace thomas
 {
 	namespace graphics
@@ -21,15 +23,28 @@ namespace thomas
 
 			if (status != S_OK)
 			{
-				LOG("SHADER ERROR : " << source);
-				LOG_HR(status);
+				
 				if (errorBlob)
 				{
 					if (errorBlob->GetBufferSize())
 					{
-						LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
+						std::string error((char*)errorBlob->GetBufferPointer());
+
+						#ifndef THOMAS_SHOW_ALL_ERRORS
+							if (error.find("X3501") == std::string::npos) { //ignore annoying errors.
+								LOG("SHADER ERROR : " << source << " errorBlob:" << error);
+							}	
+						#else
+							LOG("SHADER ERROR : " << source << " errorBlob:" << error);
+						#endif
+
 						errorBlob->Release();
 					}
+				}
+				else
+				{
+					LOG("SHADER ERROR : " << source);
+					LOG_HR(status);
 				}
 			}
 			else if (status == S_OK)
@@ -38,11 +53,10 @@ namespace thomas
 				{
 					if (errorBlob->GetBufferSize())
 					{
-						LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
+						//LOG("Shader Compiler : " << (char*)errorBlob->GetBufferPointer());
 						errorBlob->Release();
 					}
 				}
-				LOG("Shader " << source << " " << main << " Sucessfully loaded");
 				return shaderBlob;
 			}
 

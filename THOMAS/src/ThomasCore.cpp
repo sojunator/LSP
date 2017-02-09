@@ -10,6 +10,7 @@
 #include "graphics\PostEffect.h"
 #include <assimp\Importer.hpp>
 #include "Sound.h"
+#include "graphics\Sprite.h"
 
 #include <AtlBase.h>
 #include <atlconv.h>
@@ -53,6 +54,12 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = graphics::PostEffect::Init();
 
+		if(s_initialized)
+			s_initialized = graphics::TextRender::Initialize();
+
+		if (s_initialized)
+			s_initialized = graphics::Sprite::Initialize();		
+
 		return s_initialized;
 	}
 
@@ -64,16 +71,17 @@ namespace thomas {
 	void ThomasCore::Update()
 	{
 
-		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " DT: " + std::to_string(Time::GetDeltaTime());
+		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " FrameTime: " + std::to_string(Time::GetFrameTime());
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
 
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
 		
-		for (int i = 0; i < thomas::object::Object::GetObjects().size();i++)
+		for (object::Object* object : thomas::object::Object::GetObjects())
 		{
-			thomas::object::Object::GetObjects()[i]->Update();
+ 			if(object)
+				object->Update();
 		}
 
 		graphics::Renderer::Render();
@@ -82,24 +90,6 @@ namespace thomas {
 	void ThomasCore::Start()
 	{
 
-		if (s_initialized)
-		{
-			for (int i = 0; i < thomas::object::Object::GetObjects().size(); i++)
-			{
-				if (s_initialized)
-				{
-					
-					thomas::object::Object* obj = thomas::object::Object::GetObjects()[i];
-					if(obj->GetType() == "GameObject")
-						LOG("initiating " << obj->GetType() << ":" << obj->GetName());
-
-					s_initialized = obj->Start();
-				}
-				else
-					break;
-
-			}
-		}
 
 		if (s_initialized)
 		{
@@ -144,6 +134,8 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
+		graphics::Sprite::Destroy();
+		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
 		graphics::Texture::Destroy();

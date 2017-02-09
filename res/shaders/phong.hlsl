@@ -1,13 +1,11 @@
-
 Texture2D diffuseTexture : register(t0);
 SamplerState diffuseSampler : register(s0);
 
-Texture2D specularTexture : register(t1);
+Texture2D specularTexture : register(t1); //Gör ingenting
 SamplerState specularSampler : register(s1);
 
 Texture2D normalTexture : register(t2);
 SamplerState normalSampler : register(s2);
-
 
 
 struct VSInput
@@ -18,7 +16,6 @@ struct VSInput
 	float3 tangent : TANGENT;
 	float3 binormal : BINORMAL;
 };
-
 
 cbuffer mvp : register(b0)
 {
@@ -35,7 +32,36 @@ cbuffer material : register(b1)
 	float4 diffuseColor;
 	float4 specularColor;
 	float4 materialProperty;
-	float specularPower;
+	float specularPower; //shiny
+}
+
+//Struct coupled with LightManager
+struct DirLight
+{
+	float4 lightColor;
+	float3 lightDir;
+	float padding;
+};
+//Struct coupled with LightManager
+struct PointLight
+{
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
+	float power;
+	float4 lightColor;
+	float3 position;
+	float padding;
+};
+//Buffer coupled with LightManager
+cbuffer lightBuffer : register(b2)
+{
+	uint nrOfDirectionalLights;
+	uint nrOfPointLights;
+	int padding1;
+	int padding2;
+	DirLight directionalLights[3];
+	PointLight pointLights[20];
 }
 
 struct VSOutput
@@ -74,38 +100,57 @@ VSOutput VSMain(in VSInput input)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-	float3 lightDir = normalize(float3(1, 0, -1)); //TEMP
+	float3 textureColor = float3(1,1,1);
+	if(materialProperty.x >= 1)
+		textureColor = diffuseTexture.Sample(diffuseSampler, input.tex).rgb;
+	float3 ambientColor = float3(0,0,0);
+	float3 outputColor = float3(0,0,0);
+	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular
 
-    float4 textureColor = diffuseTexture.Sample(diffuseSampler, input.tex);
-
-	float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
+	ambientColor = (diffuseColor.rgb * textureColor) * 0.5f; //0.5 is a scalefactor for how strong the ambient will be
+	//CURRENTLY NO NORMAL MAP
+	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
 
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
 	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
-	bumpNormal = normalize(bumpNormal);
+	bumpNormal = normalize(bumpNormal);*/
+	//float lightIntensity = saturate(dot(bumpNormal, lightDir));
 
-	lightDir = -lightDir;
-	float lightIntensity = saturate(dot(bumpNormal, lightDir));
-
-	float4 diffuse = saturate(diffuseColor*lightIntensity);
-	float4 specular = float4(0,0,0,0);
-	if (lightIntensity > 0.0f)
+	for (uint i = 0; i < nrOfDirectionalLights; i++)
 	{
+		DirLight light = directionalLights[i];
+		float3 lightColor = light.lightColor.rgb;
+		float lightStrenght = light.lightColor.w;
 
-		float3 viewDirection = camPosition - input.positionWS;
+		float3 sunDir = normalize(-light.lightDir);
+		//sunDir = normalize(float3(-1, 0, 1)); //testing
+		float lightIntensity = saturate(dot(input.normal, sunDir));
+		//float lightIntensity = saturate(dot(input.normal, tempLightDir));
 
-		float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex);
-		float3 reflection = normalize(lightDir + viewDirection);
-		specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity;
-		specular = specular*specularIntensity;
+		float3 diffuse = saturate(diffuseColor.rgb * textureColor * lightIntensity * lightColor * lightStrenght);
 
+		float3 specular = float3(0,0,0);
+		if (lightIntensity > 0.0f)
+		{
+			float3 viewDirection = camPosition - input.positionWS;
+
+			//float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex); //specularTexture gives a 0,0,0,0 float4 somehow
+			float3 reflection = normalize(reflect(-viewDirection, input.normal)); //normalize(sunDir + viewDirection);
+			//float3 reflection = normalize(sunDir - viewDirection);
+			//specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity; //NO WORKING NORMAL MEP YET
+			float specularPower2 = specularPower;
+			specularPower2 += 0.000000001f; //because we can't pow with a value of 0
+			specular = pow(saturate(dot(input.normal, reflection)), specularPower2) * specularColor.rgb; //specularPower = shiny
+			//specular = specular * specularIntensity;
+		}
+		outputColor = saturate(outputColor+diffuse + specular);
 	}
+	outputColor = saturate(outputColor + ambientColor);
+	return float4(outputColor,1);
 
-	if (materialProperty.x == 0) //currently calculating color of diffuse
-		return diffuseColor + ambientColor * 0.05f; //+diffuse when normal maps working, specular still not working
-	else //currently calculating color of texture
-		return textureColor + ambientColor * 0.05f;
-
-	//return ambientColor * 0.05f + diffuse  + specular*specularColor;
+	//if (materialProperty.x == 0) //currently calculating color of diffuse
+		//set textureColor to 1, 1, 1, 1
+	//else //currently calculating color of texture
+	// diffuse * texture when texture has a diffuse
 }
