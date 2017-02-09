@@ -61,7 +61,7 @@ public:
 
 	bool Start()
 	{
-		//m_ship = (Ship*)Find("Ship");
+		m_ship = (Ship*)Find("Ship");
 		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
@@ -84,7 +84,14 @@ public:
 
 	void Update()
 	{
-		//m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
+		if (m_ship == nullptr)
+		{
+			m_ship = (Ship*)Find("Ship");
+		}
+		else
+		{
+			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
+		}
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
@@ -143,7 +150,7 @@ public:
 
 
 private:
-	//Ship* m_ship;
+	Ship* m_ship;
 	component::Camera* m_camera;
 	component::SoundComponent* m_music;
 	component::SoundComponent* m_pirateMusic;
