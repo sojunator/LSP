@@ -124,7 +124,10 @@ namespace thomas
 					m_skybox->Unbind();
 			}
 
-
+			void Camera::ReleaseSkybox()
+			{
+				m_skybox->~Skybox();
+			}
 		}
 	}
 }

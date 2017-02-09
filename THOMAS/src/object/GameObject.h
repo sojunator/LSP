@@ -76,7 +76,7 @@ namespace thomas
 		template<typename T>
 		inline std::vector<T*> GameObject::GetComponents()
 		{
-			std::vector<component::Component*> components;
+			std::vector<T*> components;
 			for (int i = 0; i < m_components.size(); i++)
 			{
 				T* comp = dynamic_cast<T*>(m_components[i]);

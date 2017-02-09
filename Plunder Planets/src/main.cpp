@@ -11,6 +11,8 @@
 #include "gameobjects\TestDirectionalLight.h"
 #include "gameobjects\TestPointLight.h"
 #include "gameobjects\Ship.h"
+#include "graphics\TextRender.h"
+#include "graphics\Sprite.h"
 
 #include "postEffects\OceanPostProcess.h"	
 
@@ -19,7 +21,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	MSG msg = { 0 };
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder Planets");
 	//init code	
-
 
 
 	//Init shaders
@@ -61,12 +62,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::utils::AssimpLoader::LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
 
 
-
-
-
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
+	//Init 2D-images for GUI
+	if(Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+		thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
+	else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+		thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
+	else if(Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+		thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
+
+	//Init text
+	thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
+	thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 	//Init gameObjects
 
@@ -74,9 +83,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	thomas::object::GameObject::Instantiate(new TestDirectionalLight());
 	//TestPointLight* pointLight = new TestPointLight();
 	thomas::object::GameObject::Instantiate(new CameraObject());
+	thomas::object::GameObject::Instantiate(new TerrainObject());
 	thomas::object::GameObject::Instantiate(new Ship());
 	thomas::object::GameObject::Instantiate(new WaterObject());
-	thomas::object::GameObject::Instantiate(new TerrainObject());
+	
 
 	//start
 	thomas::ThomasCore::Start();

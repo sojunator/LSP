@@ -2,9 +2,6 @@
 #pragma once
 #include <Thomas.h>
 #include <string>
-#include "Ship.h"
-
-#include "CameraObject.h"
 
 class TerrainObject : public GameObject
 {
@@ -15,22 +12,19 @@ public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_shipObject = (Ship*)Find("Ship");
 	}
 	~TerrainObject()
 	{
 		delete m_islands;
 		delete m_model;
 		delete m_renderer;
-		delete m_shipObject;
 	}
 
 	bool Start()
 	{
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(3, mat, 1024 / 16, 1, 1024/2, 100);
+		m_islands = new thomas::Islands(3, mat, 1024 / 4, 1, 1024, 100);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
-		m_shipPos = math::Vector2(m_shipObject->m_transform->GetPosition().x, m_shipObject->m_transform->GetPosition().z);
 
 		m_renderer->SetModel("Plane-1");
 
@@ -44,20 +38,35 @@ public:
 
 	void Update()
 	{
-		m_shipPos = math::Vector2(m_shipObject->m_transform->GetPosition().x, m_shipObject->m_transform->GetPosition().z);
+	}
+
+	float Plunder(math::Vector2 pos)
+	{
 		math::Vector2 center;
-		float distance;
-		float treasure;
+		float distance = 0;
+		float treasure = 0;
 		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
 		{
 			center = m_islands->GetCenter(i);
-			distance = math::Vector2::DistanceSquared(m_shipPos, center);
-			if (distance <= m_islands->GetRadiusSquared(i) && m_islands->GetTreasure(i))
-			{
+			distance = math::Vector2::DistanceSquared(pos, center);
+			if (distance <= m_islands->GetPlunderRadiusSquared(i) && m_islands->GetTreasure(i))
 				treasure = m_islands->StealTreasure(i);
-				m_shipObject->UpdateTreasure(treasure);
-			}
 		}
+		return treasure;
+	}
+
+	bool Collision(math::Vector2 pos)
+	{
+		math::Vector2 center;
+		float distance = 0;
+		for (int i = 0; i < m_islands->GetNrOfIslands(); i++)
+		{
+			center = m_islands->GetCenter(i);
+			distance = math::Vector2::DistanceSquared(pos, center);
+			if (distance <= m_islands->GetCollisionRadiusSquared(i))
+				return true;
+		}
+		return false;
 	}
 
 private:
@@ -67,5 +76,4 @@ private:
 	thomas::graphics::Model* m_model;
 
 	component::RenderComponent* m_renderer;
-	Ship* m_shipObject;
 };
