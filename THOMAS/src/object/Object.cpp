@@ -10,16 +10,10 @@ namespace thomas
 		Object::Object(std::string type)
 		{
 			m_type = type;
+			m_alive = true;
 		}
 		Object::~Object()
 		{
-			for (int i = 0; i < s_objects.size(); i++)
-			{
-				if (s_objects[i] == this)
-				{
-					s_objects.erase(s_objects.begin() + i);
-				}
-			}
 		}
 		std::string Object::GetType()
 		{
@@ -31,7 +25,7 @@ namespace thomas
 		}
 		bool Object::Destroy(Object *object)
 		{
-			delete object;
+			object->m_alive = false;
 			return true;
 		}
 
@@ -55,6 +49,18 @@ namespace thomas
 				if (object->m_scene == scene)
 					output.push_back(object);
 			return output;
+		}
+		void Object::Clean()
+		{
+			for (int i = 0; i < s_objects.size(); i++)
+			{
+				if (s_objects[i]->m_alive == false)
+				{
+					delete s_objects[i];
+					s_objects.erase(s_objects.begin() + i);
+				}
+					
+			}
 		}
 	}
 }

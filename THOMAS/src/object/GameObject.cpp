@@ -12,20 +12,7 @@ namespace thomas
 		}
 		GameObject::~GameObject()
 		{
-			for (int i = 0; i < m_components.size(); i++)
-			{
-				if(m_components[i])
-					Object::Destroy(m_components[i]);
-			}
-			m_components.empty();
-
-			for (int i = 0; i < s_gameObjects.size(); i++)
-			{
-				if (s_gameObjects[i] == this)
-				{
-					s_gameObjects.erase(s_gameObjects.begin() + i);
-				}
-			}
+			
 
 		}
 		GameObject * GameObject::Find(std::string type)
@@ -45,7 +32,24 @@ namespace thomas
 
 		bool GameObject::Destroy(GameObject * gameObject)
 		{
-			delete gameObject;
+
+			for (int i = 0; i < gameObject->m_components.size(); i++)
+			{
+				if (gameObject->m_components[i])
+					Object::Destroy(gameObject->m_components[i]);
+			}
+			gameObject->m_components.empty();
+
+			for (int i = 0; i < s_gameObjects.size(); i++)
+			{
+				if (s_gameObjects[i] == gameObject)
+				{
+					s_gameObjects.erase(s_gameObjects.begin() + i);
+				}
+			}
+
+			Object::Destroy(gameObject);
+
 			return true;
 		}
 

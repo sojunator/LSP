@@ -28,7 +28,7 @@ public:
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 	
-		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
+		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;

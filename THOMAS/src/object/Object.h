@@ -31,7 +31,10 @@ namespace thomas
 
 			static std::vector<Object*> GetAllObjectsInScene(Scene* scene);
 
+			static void Clean();
+
 		private:
+			bool m_alive;
 			static std::vector<Object*> s_objects;
 		protected:
 			std::string m_type;

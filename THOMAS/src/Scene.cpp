@@ -61,6 +61,7 @@ namespace thomas
 		else
 			LOG("No scene set");
 
+		object::Object::Clean();
 
 		for (graphics::Shader* shader : m_shaders)
 		{
