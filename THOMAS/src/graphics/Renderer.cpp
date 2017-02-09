@@ -156,7 +156,7 @@ namespace thomas
 
 				//PostEffect::Render(s_backBufferSRV, s_backBuffer, camera);
 
-				ThomasCore::GetSwapChain()->Present(0, 0);
+				//ThomasCore::GetSwapChain()->Present(0, 0);
 			//}
 
 			//					BindGameObjectBuffer(camera, gameObject);

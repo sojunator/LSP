@@ -12,17 +12,16 @@ namespace thomas
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static Update();
 		std::vector<graphics::Shader*> GetShaders();
-		std::vector<graphics::Material*> GetMaterialsByShader(graphics::Shader* shader);
 		template<typename T>
 		std::vector<object::GameObject*> GetObjectsByComponent();
 		static void Render();
 		void Render(object::component::Camera* camera);
-		void CreateMaterial();
-		void RemoveMaterial(std::string name);
-		void CreateShader();
-		void RemoveShader(std::string name);
-		void CreateModel();
-		void RemoveModel(std::string name);
+		graphics::Material* LoadMaterial(std::string type, graphics::Material* material);
+		//void RemoveMaterial(std::string name);
+		graphics::Shader* LoadShader(std::string name, graphics::Shader::InputLayouts inputLayout, std::string path);
+		//void RemoveShader(std::string name);
+		graphics::Model* LoadModel(std::string name, std::string path, std::string type);
+		//void RemoveModel(std::string name);
 		static Scene* GetCurrentScene();
 	private:
 		static std::vector<Scene*> s_scenes;

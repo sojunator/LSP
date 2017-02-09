@@ -109,7 +109,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//start
 	thomas::ThomasCore::Start();
-	delete c;
 
 	return (int)msg.wParam;
 }

@@ -97,7 +97,7 @@ namespace thomas
 									mesh->Draw();
 								}
 							}
-							//graphics::Renderer::UnBindGameObjectBuffer();
+							graphics::Renderer::UnBindGameObjectBuffer();
 						}
 						material->Unbind();
 					}
@@ -109,6 +109,20 @@ namespace thomas
 			camera->UnbindSkybox();
 			//graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
 			ThomasCore::GetSwapChain()->Present(0, 0);
+	}
+	graphics::Material * Scene::LoadMaterial(std::string type, graphics::Material* material)
+	{
+		return graphics::Material::RegisterNewMaterialType(type, material);
+	}
+	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string path)
+	{
+		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path);
+		m_shaders.push_back(shader);
+		return shader;
+	}
+	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string type)
+	{
+		return utils::AssimpLoader::LoadModel(name, path, type);
 	}
 	Scene * Scene::GetCurrentScene()
 	{

@@ -1,7 +1,6 @@
 #pragma once
 #include "../src/Scene.h"
 #include "../../THOMAS/src/object/Object.h"
-#include "../gameobjects/TestObject.h"
 #include "../gameobjects/CameraObject.h"
 #include "../gameobjects/TerrainObject.h"
 #include "../gameobjects/WaterObject.h"
@@ -40,10 +39,10 @@ public:
 		thomas::utils::AssimpLoader::LoadModel("testModel0", "../res/models/Boat/ship.obj", "phongMaterial");
 		thomas::utils::AssimpLoader::LoadModel("testModel1", "../res/models/Boat/ship1.obj", "phongMaterial");
 		thomas::utils::AssimpLoader::LoadModel("testModel2", "../res/models/Boat/ship2.obj", "phongMaterial");
-		Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
+		//Material* m = Material::CreateMaterial("terrainMat", "terrainMaterial");
 		//m_models.push_back(thomas::graphics::Model::CreateModel("Plane-1", thomas::utils::Plane::CreatePlane(256, 1, "Plane-1", m)));
-		thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
-		Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
+		//thomas::Islands* islands = new thomas::Islands(10, m, 1024 / 8, 0.125, 1024 / 4, 30);
+		//Model * model = Model::CreateModel("Plane-1", islands->GetIsland(0));
 
 		/*m_gameObjects.push_back(new TestObject());
 		m_gameObjects.push_back(new CameraObject());
