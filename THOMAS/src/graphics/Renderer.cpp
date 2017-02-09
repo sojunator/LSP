@@ -64,7 +64,8 @@ namespace thomas
 
 				for (Material* mat : Material::GetLoadedMaterials())
 				{
-					mat->Update();
+					if(mat)
+						mat->Update();
 				}
 
 				for (PostEffect* fx : PostEffect::GetLoadedPostEffects())
