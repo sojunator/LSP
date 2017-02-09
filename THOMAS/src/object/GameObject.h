@@ -4,6 +4,7 @@
 #include <vector>
 namespace thomas
 {
+	class Scene;
 	namespace object
 	{
 		class THOMAS_API GameObject : public Object
@@ -25,15 +26,14 @@ namespace thomas
 
 			template<typename T>
 			static std::vector<GameObject*> FindGameObjectsWithComponent();
-
 			static std::vector<GameObject*> GetGameObjects();
 
 			static bool Destroy(GameObject *object);
 
-			static GameObject* Instantiate(GameObject* gameObject);
-			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent);
-			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation);
-			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent);
+			static GameObject* Instantiate(GameObject* gameObject, Scene* scene);
+			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent, Scene* scene);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, Scene* scene);
+			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent, Scene* scene);
 
 			virtual bool Start() { return true; }
 			virtual void Update() {}
@@ -54,7 +54,7 @@ namespace thomas
 			if (std::is_base_of<component::Component, T>::value)
 			{
 				T* component = new T(this);
-				Object::Instantiate(component);
+				Object::Instantiate(component, m_scene);
 				m_components.push_back(component);
 				return component;
 			}

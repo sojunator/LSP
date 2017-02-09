@@ -48,12 +48,12 @@ public:
 		m_gameObjects.push_back(new CameraObject());
 		m_gameObjects.push_back(new WaterObject());*/
 		//Init gameObjects
-		m_gameObjects.push_back(new TerrainObject());
-		m_gameObjects.push_back(new TestDirectionalLight());
+		//m_gameObjects.push_back(new TerrainObject());
+		//m_gameObjects.push_back(new TestDirectionalLight());
 
-		//Init + instantiate objects, instantiate gameObjects
-		for (GameObject* object : m_gameObjects)
-			Object::Instantiate(object);
+		////Init + instantiate objects, instantiate gameObjects
+		//for (GameObject* object : m_gameObjects)
+		//	Object::Instantiate(object);
 
 		//Init Cameras
 		std::vector<GameObject*> cameraObjects = this->GetObjectsByComponent<object::component::Camera>();

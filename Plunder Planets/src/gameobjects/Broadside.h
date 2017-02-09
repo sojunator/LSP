@@ -36,7 +36,7 @@ public:
 				math::Quaternion rot = m_transform->GetRotation();
 				rot *= math::Quaternion::CreateFromAxisAngle(m_transform->Up(), math::DegreesToradians(-i));
 				pos += m_transform->Right()*i*spacing;
-				Projectile* p = (Projectile*)Instantiate(new Projectile(), pos, rot);
+				Projectile* p = (Projectile*)Instantiate(new Projectile(), pos, rot, m_scene);
 				p->forwardSpeed = forwardSpeed;
 			}
 			

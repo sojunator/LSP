@@ -50,31 +50,31 @@ namespace thomas
 			return true;
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, Scene* scene)
 		{
-			Object::Instantiate(gameObject);
+			Object::Instantiate(gameObject, scene);
 			s_gameObjects.push_back(gameObject);
 			return gameObject;
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject, component::Transform * parent)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, component::Transform * parent, Scene* scene)
 		{
 			gameObject->m_transform->m_parent = parent;
-			return Instantiate(gameObject);
+			return Instantiate(gameObject, scene);
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation, Scene* scene)
 		{
 			gameObject->m_transform->SetPosition(position);
 			gameObject->m_transform->SetRotation(rotation);
-			return Instantiate(gameObject);
+			return Instantiate(gameObject, scene);
 		}
 
-		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform * parent)
+		GameObject* GameObject::Instantiate(GameObject * gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform * parent, Scene* scene)
 		{
 			gameObject->m_transform->SetPosition(position);
 			gameObject->m_transform->SetRotation(rotation);
-			return Instantiate(gameObject, parent);
+			return Instantiate(gameObject, parent, scene);
 		}
 		
 

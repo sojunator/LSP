@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "..\Scene.h"
 
 
 namespace thomas
@@ -30,15 +31,20 @@ namespace thomas
 		{
 			return m_type;
 		}
+		Scene* Object::GetScene()
+		{
+			return m_scene;
+		}
 		bool Object::Destroy(Object *object)
 		{
 			delete object;
 			return true;
 		}
 
-		Object * Object::Instantiate(Object *object)
+		Object * Object::Instantiate(Object *object, Scene* scene)
 		{
 			s_objects.push_back(object);
+			object->m_scene = scene;
 			object->Start();
 			return object;
 		}
