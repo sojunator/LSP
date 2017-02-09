@@ -20,6 +20,7 @@ namespace thomas
 		ID3D11DepthStencilState* Renderer::s_depthStencilState = NULL;
 		ID3D11DepthStencilView* Renderer::s_depthStencilView = NULL;
 		ID3D11ShaderResourceView* Renderer::s_depthBufferSRV = NULL;
+		ID3D11DepthStencilView* Renderer::s_depthStencilViewReadOnly = NULL;
 
 		ID3D11Buffer* Renderer::s_objectBuffer;
 		Renderer::GameObjectBuffer Renderer::s_objectBufferStruct;
@@ -27,7 +28,7 @@ namespace thomas
 		bool thomas::graphics::Renderer::Init()
 		{
 
-			if (utils::D3d::InitRenderer(s_backBuffer, s_backBufferSRV, s_depthStencilState, s_depthStencilView, s_depthBufferSRV))
+			if (utils::D3d::InitRenderer(s_backBuffer, s_backBufferSRV, s_depthStencilState, s_depthStencilView, s_depthStencilViewReadOnly, s_depthBufferSRV))
 			{
 				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
@@ -48,14 +49,7 @@ namespace thomas
 
 		void thomas::graphics::Renderer::Render()
 		{
-			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 			Scene::Render();
-
-				for (Material* mat : Material::GetLoadedMaterials())
-				{
-					if(mat)
-						mat->Update();
-				}
 
 			for (PostEffect* fx : PostEffect::GetLoadedPostEffects())
 			{
@@ -128,6 +122,14 @@ namespace thomas
 
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
+		}
+		void Renderer::BindDepthNormal()
+		{
+			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
+		}
+		void Renderer::BindDepthReadOnly()
+		{
+			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilViewReadOnly);
 		}
 	}
 }
