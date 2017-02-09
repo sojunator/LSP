@@ -224,10 +224,10 @@ namespace thomas
 		bool Texture::CreateTextureSamplers()
 		{
 			D3D11_SAMPLER_DESC samplerDesc;
-			samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+			samplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
 			samplerDesc.MipLODBias = 0.0f;
 			samplerDesc.MaxAnisotropy = 1;
-			samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+			samplerDesc.ComparisonFunc = D3D11_COMPARISON_EQUAL;
 			samplerDesc.BorderColor[0] = 1;
 			samplerDesc.BorderColor[1] = 1;
 			samplerDesc.BorderColor[2] = 1;
