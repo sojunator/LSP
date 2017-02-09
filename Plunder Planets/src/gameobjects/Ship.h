@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include "Broadside.h"
+#include "TerrainObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -18,6 +19,7 @@ public:
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
+		m_terrainObject = (TerrainObject*)Find("TerrainObject");
 		m_treasure = 0;
 	}
 
@@ -156,6 +158,12 @@ public:
 
 		}
 		//move the ship
+
+		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
+		{
+			m_forwardSpeed = min(m_forwardSpeed, m_maxSpeed/2);
+		}
+
 		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
 		m_transform->Translate(moveVec);
 		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
@@ -278,16 +286,18 @@ public:
 			m_soundDelayLeft = m_soundDelay;
 		}
 
+		PlunderIsland();
 	}
 
-	void UpdateTreasure(float treasure)
+	void PlunderIsland()
 	{
-		m_treasure += treasure;
+		math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
+		m_treasure += m_terrainObject->Plunder(shipPos);
 	}
 
 	int GetTreasure()
 	{
-		return (int)m_treasure;
+		return m_treasure + 0.5;
 	}
 private:
 	
@@ -327,6 +337,7 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	GameObject* m_cameraObject;
+	TerrainObject* m_terrainObject;
 
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRight;

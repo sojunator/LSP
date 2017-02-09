@@ -22,12 +22,14 @@ namespace thomas
 		int GetTotalTreasure(int island);						//Get totala amount of treasure for specific island
 		int GetSize(int island);								//Get size of specific island
 		int GetDetail(int island);								//Get detail level of specific island
-		float GetRadius(int island);							//Get radius for specific island
+		float GetPlunderRadius(int island);						//Get radius to plunder for specific island
+		float GetCollisionRadius(int island);					//Get radius for collision for specific island
 		math::Vector2 GetCenter(int island);					//Get m_islandCenterWorldPos for specific island
 		math::Vector2 GetOffSet(int island);					//Get offset for specific island	
 		std::vector<graphics::Mesh*> GetIslands(int island);	//Get mesh of all islands on a map
 
-		float GetRadiusSquared(int island);						//Get radius squared for specific island
+		float GetPlunderRadiusSquared(int island);				//Get radius squared for specific island
+		float GetCollisionRadiusSquared(int island);
 		float StealTreasure(int island);						//Get stolen treasure for specific island
 		int GetSizeOFIsland(int island);						//Get size of specific island
 
@@ -43,7 +45,8 @@ namespace thomas
 		std::vector<int> m_totalTreasure;
 		std::vector<int> m_size;
 		std::vector<float> m_detail;
-		std::vector<float> m_radius;
+		std::vector<float> m_plunderRadius;
+		std::vector<float> m_collisionRadius;
 		std::vector<math::Vector2> m_islandCenterWorldPos;
 		std::vector<math::Vector2> m_worldPosOffset;
 		std::vector<std::vector<graphics::Mesh*>> m_mesh;
