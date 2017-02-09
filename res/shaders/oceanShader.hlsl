@@ -3,8 +3,8 @@
 Texture2D perlinTexture : register(t0);
 SamplerState perlinSampler : register(s0);
 
-Texture1D fresnelTexture : register(t1);
-SamplerState fresnelSampler : register(s1);
+Texture2D foamTexture : register(t1);
+SamplerState foamSampler : register(s1);
 
 Texture2D normalTexture : register(t2);
 SamplerState normalSampler : register(s2);
@@ -14,6 +14,9 @@ SamplerState displacementSampler : register(s3);
 
 TextureCube reflectionTexture : register(t4);
 SamplerState reflectionSampler : register(s4);
+
+Texture2D depthBufferTexture : register(t5);
+SamplerState depthBufferSampler : register(s5);
 
 
 #define PATCH_BLEND_BEGIN		100
@@ -105,7 +108,8 @@ struct HSConstantData
 struct PSInput
 {
 	float4 position : SV_POSITION;
-	float3 positionWS : POSITION;
+	float4 clip : POSITION0;
+	float3 positionWS : POSITION1;
 	float2 tex : TEXCOORD0;
 };
 
@@ -196,7 +200,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	blendFactor = clamp(blendFactor, 0, 1);
 
 	float perlin = 0;
-	if(blendFactor < 1)
+	if (blendFactor < 1)
 	{
 		
 		float2 perlinTC = output.tex * perlinSize + (pos.xy % 256) - 128;
@@ -208,7 +212,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	}
 
 	float3 displacement = 0;
-	if(blendFactor > 0)
+	if (blendFactor > 0)
 	{
 		displacement = displacementTexture.SampleLevel(displacementSampler, output.tex, 0).xyz;
 	}
@@ -221,12 +225,11 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	output.position = mul(output.position, projectionMatrix);
 	output.positionWS = pos.xzy;
 
+	output.clip = output.position;
 	
 
 	return output;
 }
-
-
 
 
 //Pixel shader
@@ -234,7 +237,24 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 float4 PSMain(PSInput input) : SV_TARGET
 {
 
-	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z));//lightDir needs to be upside down for some reason
+	float2 ndc;
+	ndc.x = (input.clip.x / input.clip.w) / 2.0 + 0.5;
+	ndc.y = 1 - (input.clip.y / input.clip.w) / 2.0 + 0.5;
+
+
+	float depth = depthBufferTexture.Sample(depthBufferSampler, ndc).r;
+	float near = 0.1;
+	float far = 3000.0;
+	float floorDistance = (2 * near) / (far + near - depth * far - near);
+
+	depth = input.position.z;
+
+	float waterDistance = (2 * near) / (far + near - depth * far - near);
+
+	float waterDepth = floorDistance - waterDistance;
+
+
+	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z)); //lightDir needs to be upside down for some reason
 
 
 	float3 eyeVec = camPosition - input.positionWS;
@@ -243,7 +263,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float dist2d = length(eyeVec.xz);
 
 	float blendFactor = (PATCH_BLEND_END - dist2d) / (PATCH_BLEND_END - PATCH_BLEND_BEGIN);
-	blendFactor = saturate(blendFactor*blendFactor*blendFactor);
+	blendFactor = saturate(blendFactor * blendFactor * blendFactor);
 
 	float2 perlinTC = input.tex * perlinSize + (input.positionWS.xz % 256) - 128;
 	float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
@@ -253,7 +273,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 
 
-	float2 fftTC = (blendFactor > 0) ? input.tex: 0;
+	float2 fftTC = (blendFactor > 0) ? input.tex : 0;
 	float2 grad = normalTexture.Sample(normalSampler, fftTC).xy;
 	grad = lerp(perlin, grad, blendFactor);
 	float3 normal = normalize(float3(grad, texelLengthX2));
@@ -264,7 +284,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
-	float reflectContrib = 0.15f;//hardcoded lerpfactor between watercolor and the sampled reflection
+	float reflectContrib = 0.45f; //hardcoded lerpfactor between watercolor and the sampled reflection
 
 
 	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
@@ -272,8 +292,16 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float cosSpec = saturate(dot(reflectVec, sunDir));
 	float sunSpot = pow(cosSpec, shininess); //shiny
 
+	float wD = clamp(waterDepth/0.002, 0, 1);
+
+
+	float3 foamColor = foamTexture.Sample(foamSampler, input.tex);
+
+	waterColor = lerp(foamColor, waterColor, wD);
+
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
 	
+	float opacity = clamp(waterDepth/0.05, 0, 1);
 
-	return float4(waterColor, 1);
+	return float4(waterColor, opacity);
 }

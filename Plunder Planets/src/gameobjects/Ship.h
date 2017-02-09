@@ -19,6 +19,7 @@ public:
 
 	void Start()
 	{
+		
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();
@@ -92,6 +93,7 @@ public:
 
 	void Update()
 	{
+		return;
 		float dt = Time::GetDeltaTime();
 		float right_x = Input::GetRightStickX();
 		float right_y = Input::GetRightStickY();

@@ -14,6 +14,7 @@ namespace thomas
 		class TextRender
 		{
 		public:
+			static std::unique_ptr<DirectX::CommonStates> s_states;
 			static void SetFontPosX(float posX);
 			static void SetFontPosY(float posY);
 			static void SetFontPosCentered();
@@ -29,7 +30,7 @@ namespace thomas
 			static std::map<std::string, std::unique_ptr<DirectX::SpriteFont>> s_fonts;
 			static math::Vector2 s_fontPos;
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
-			static std::unique_ptr<DirectX::CommonStates> s_states;
+			
 		};
 	}
 }

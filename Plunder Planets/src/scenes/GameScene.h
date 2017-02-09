@@ -5,11 +5,13 @@
 #include "../gameobjects/TerrainObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
+#include "../gameobjects/OceanFloor.h"
 #include "../materials/PhongMaterial.h"
 #include "../materials/TerrainMaterial.h"
 #include "../materials/WaterMaterial.h"
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
+
 
 class GameScene : public thomas::Scene
 {
@@ -67,6 +69,7 @@ public:
 		thomas::object::GameObject::Instantiate<Ship>(this);
 		thomas::object::GameObject::Instantiate<WaterObject>(this);
 		thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
+		thomas::object::GameObject::Instantiate<OceanFloor>(this);
 
 		//Init Cameras //lägga i scene init eller loadscene kanske?
 		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();

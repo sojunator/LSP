@@ -3,7 +3,6 @@
 #include <Thomas.h>
 #include <string>
 #include "Ship.h"
-
 #include "CameraObject.h"
 class TerrainObject : public GameObject
 {
@@ -23,6 +22,7 @@ public:
 
 	void Start()
 	{
+		
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_shipObject = Find("Ship");
 
@@ -30,9 +30,12 @@ public:
 		m_islands = new thomas::Islands(3, mat, 1024 / 4, 1, 1024, 100);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
-		m_renderer->SetModel("Plane-1");
 
-		m_transform->SetPosition(math::Vector3(0, -1, 0));
+
+
+		m_renderer->SetModel("Plane-1");
+		
+		m_transform->SetPosition(math::Vector3(0, -3, 0));
 
 
 	}
@@ -80,4 +83,5 @@ private:
 	thomas::graphics::Model* m_model;
 
 	component::RenderComponent* m_renderer;
+
 };

@@ -105,7 +105,7 @@ namespace thomas
 		}
 		ID3D11ShaderResourceView* Renderer::GetDepthBufferSRV()
 		{
-			return s_backBufferSRV;
+			return s_depthBufferSRV;
 		}
 		ID3D11RenderTargetView * Renderer::GetBackBuffer()
 		{
