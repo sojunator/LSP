@@ -105,8 +105,9 @@ public:
 		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 
 		//for the boost
-		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) ) && m_treasure > 50)
 		{
+			m_treasure -= 50 * dt;
 			m_boostRot = 1;
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
