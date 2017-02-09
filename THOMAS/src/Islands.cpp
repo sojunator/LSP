@@ -22,7 +22,7 @@ namespace thomas
 			m_plunderRadius.push_back(size*detail*1.7);
 			m_collisionRadius.push_back(size*detail*0.8);
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i], m_worldPosOffset[i]);
+			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i]);
 			ApplyOffSet(i, tempPlane[i]);
 			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
 		}

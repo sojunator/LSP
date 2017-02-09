@@ -43,7 +43,7 @@ namespace thomas
 					temp_vert.position.x = (float)y / detail;
 					temp_vert.position.z = -(float)x / detail;
 					temp_vert.uv.x = y / ((float)size * detail);
-					temp_vert.uv.y = 1.0f - (x - (height) / (height));
+					temp_vert.uv.y = x / ((float)size * detail);
 					verts.push_back(temp_vert);
 				}
 			}
