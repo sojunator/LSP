@@ -73,9 +73,9 @@ public:
 		m_camZoomSpeed = 45.0f;
 		m_camRotationSpeed = 2.0f;
 		m_camMinDistanceFromBoat = 20.0f;
-		m_camMaxDistanceFromBoat = 120.0f;
+		m_camMaxDistanceFromBoat = 220.0f;
 
-		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 100 + math::Vector3(0, 25, 0));
+		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
@@ -87,7 +87,7 @@ public:
 		return true;
 	}
 
-	void VulkanControls(float& forwardFactor, float& rightFactor, float& upFactor, float const left_x, float const left_y)
+	void VulkanControls(float& forwardFactor, float& rightFactor, float const left_x, float const left_y)
 	{
 		//calculate forward and right contribution of the cam, with the boat, and the controllers left stick
 		//these controlls makes for the left stick to match the coordinates of the boat
@@ -155,12 +155,12 @@ public:
 		//get forward and right contrib
 		float forwardFactor = left_y;
 		float rightFactor = -left_x;
-		float upFactor = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y + m_transform->Right().Dot(math::Vector3(1, 0, 0)) * left_y;
-		
+		float upFactorX = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
+		float upFactorY = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
 
 		if (m_vulkanControllsOn)
 		{
-			VulkanControls(forwardFactor, rightFactor, upFactor, left_x, left_y);
+			VulkanControls(forwardFactor, rightFactor, left_x, left_y);
 		}
 
 		
@@ -220,12 +220,17 @@ public:
 		}
 		if (m_forwardSpeed > 0.01)
 		{
-			float boostDir = upFactor;
-			if (m_transform->GetPosition().y < m_initPosition.y && boostDir < 0)
-				boostDir = 0;
-			//m_transform->Rotate(m_rotation * dt, 0, 0);
-			//m_transform->Rotate(0, m_boostRot*dt*math::DegreesToradians(boostDir * 10), 0);
-			m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(boostDir * 10), 0);
+			if (!(m_transform->GetPosition().y < m_initPosition.y && (upFactorX < 0 || upFactorY < 0)))
+			{
+				//m_transform->Rotate(0, 0, dt*math::DegreesToradians(upFactorY * 10));
+				//m_transform->Rotate(0, dt*math::DegreesToradians(upFactorX * 10), 0);
+				//m_transform->Rotate(m_rotation * dt, 0, 0);
+				
+				
+				m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(upFactorX * 10), m_boostRot*dt*math::DegreesToradians(upFactorY * 10));
+			}
+			
+			
 			
 
 		}
@@ -236,7 +241,7 @@ public:
 			m_fallSpeed += m_fallAcceleration * dt;
 			m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
 		}
-		else if (m_transform->GetPosition().y < m_initPosition.y - 0.1f)
+		else if (m_transform->GetPosition().y < m_initPosition.y - 0.05f)
 		{
 			m_fallSpeed = 0;
 			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
