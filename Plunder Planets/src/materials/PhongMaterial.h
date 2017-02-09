@@ -19,7 +19,7 @@ private:
 		math::Color ambientColor;
 		math::Color diffuseColor;
 		math::Color specularColor;
-		math::Color materialProperty;
+		math::Vector4 materialProperty;
 		float specularPower;
 		math::Vector3 padding;
 	};

@@ -17,6 +17,13 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_shipObject = (Ship*)Find("Ship");
 	}
+	~TerrainObject()
+	{
+		delete m_islands;
+		delete m_model;
+		delete m_renderer;
+		delete m_shipObject;
+	}
 
 	bool Start()
 	{
