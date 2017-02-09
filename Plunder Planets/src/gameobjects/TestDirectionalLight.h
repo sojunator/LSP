@@ -19,8 +19,7 @@ public:
 	bool Start()
 	{
 		m_rot = 0;
-		m_transform->SetPosition(math::Vector3(50, 50, 50));
-		m_transform->LookAt(m_transform);
+		m_transform->Rotate(math::PI/2, math::PI/2, 0);
 		return true;
 	}
 	void Update()
