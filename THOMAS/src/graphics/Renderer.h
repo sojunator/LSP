@@ -25,7 +25,7 @@ namespace thomas {
 			static std::vector<object::component::Camera*> GetCameras();
 			
 			static ID3D11ShaderResourceView* GetDepthBufferSRV();
-			//static ID3D11RenderTargetView* GetBackBuffer();
+			static ID3D11RenderTargetView* GetBackBuffer();
 
 			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
 			static void UnBindGameObjectBuffer();

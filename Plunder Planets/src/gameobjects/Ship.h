@@ -19,7 +19,6 @@ public:
 
 	void Start()
 	{
-
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();

@@ -5,7 +5,6 @@
 #include "Ship.h"
 
 #include "CameraObject.h"
-
 class TerrainObject : public GameObject
 {
 
@@ -14,8 +13,6 @@ private:
 public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_shipObject = (Ship*)Find("Ship");
 	}
 	~TerrainObject()
 	{
@@ -27,7 +24,7 @@ public:
 	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_shipObject = (Ship*)Find("Ship");
+		m_shipObject = Find("Ship");
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(3, mat, 1024 / 4, 1, 1024, 100);
@@ -64,6 +61,8 @@ public:
 	{
 		math::Vector2 center;
 		float distance = 0;
+		if (!this)
+			return true;
 		for (int i = 0; i < m_islands->GetNrOfIslands(); i++)
 		{
 			center = m_islands->GetCenter(i);
@@ -76,7 +75,7 @@ public:
 
 private:
 	math::Vector2 m_shipPos;
-
+	object::GameObject* m_shipObject;
 	thomas::Islands* m_islands;
 	thomas::graphics::Model* m_model;
 

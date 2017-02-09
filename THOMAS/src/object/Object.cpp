@@ -6,7 +6,6 @@ namespace thomas
 {
 	namespace object
 	{
-
 		std::vector<Object*> Object::s_objects;
 		Object::Object(std::string type)
 		{

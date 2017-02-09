@@ -11,7 +11,7 @@ namespace thomas
 			class TextComponent : public Component
 			{
 			public:
-				TextComponent(GameObject* gameObject);
+				TextComponent();
 				math::Vector2 GetPosition();
 				math::Vector3 GetColor();
 				std::string GetFont();

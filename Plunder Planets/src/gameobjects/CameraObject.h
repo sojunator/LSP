@@ -19,6 +19,7 @@ public:
 
 	void Start()
 	{
+
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
 		m_music = AddComponent<component::SoundComponent>();
@@ -27,8 +28,26 @@ public:
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 	
+		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
+		m_sensitivity = 0.5f;
+		m_normalSpeed = 50.0f;
+		m_fastSpeed = 300.0f;
+		m_flySpeed = m_normalSpeed;
+		m_jaw = 0;
+		m_pitch = 0;
+
+
+		m_music->SetClip("aOceanAmbient");
+		m_music->SetVolume(0.3);
+		m_music->Play();
+
+		m_pirateMusic->SetClip("mSeaChanty");
+		m_pirateMusic->SetVolume(0.9);
+		m_pirateMusic->Play();
+
+
 		//GUI images
-		m_sprite->SetName("GUI");	
+		m_sprite->SetName("GUI");
 		m_sprite->SetPositionX(0); //Offset from top left corner
 		m_sprite->SetPositionY(0);
 		m_sprite->SetScale(1.0f);
@@ -65,27 +84,7 @@ public:
 		m_transform->SetPosition(0, 1, 3);	
 	};
 
-	bool Start()
-	{
-		m_ship = (Ship*)Find("Ship");
-		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
-		m_sensitivity = 0.5f;
-		m_normalSpeed = 50.0f;
-		m_fastSpeed = 300.0f;
-		m_flySpeed = m_normalSpeed;
-		m_jaw = 0;
-		m_pitch = 0;
 
-		
-		m_music->SetClip("aOceanAmbient");
-		m_music->SetVolume(0.3);
-		m_music->Play();
-		
-		m_pirateMusic->SetClip("mSeaChanty");
-		m_pirateMusic->SetVolume(0.9);
-		m_pirateMusic->Play();
-		
-	}
 
 	void Update()
 	{

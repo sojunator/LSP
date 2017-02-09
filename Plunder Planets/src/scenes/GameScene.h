@@ -8,6 +8,8 @@
 #include "../materials/PhongMaterial.h"
 #include "../materials/TerrainMaterial.h"
 #include "../materials/WaterMaterial.h"
+#include "../src/graphics/Sprite.h"
+#include "../src/graphics/TextRender.h"
 
 class GameScene : public thomas::Scene
 {
@@ -46,11 +48,24 @@ public:
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
 
+		//Init 2D-images for GUI
+		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
+		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
+		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
+		else
+			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
+		//Init text
+		thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
+		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
+
 		//Init objects lägga till LoadObjects i scene?
 		thomas::object::GameObject::Instantiate<CameraObject>(this);
+		thomas::object::GameObject::Instantiate<TerrainObject>(this);
 		thomas::object::GameObject::Instantiate<Ship>(this);
 		thomas::object::GameObject::Instantiate<WaterObject>(this);
-		thomas::object::GameObject::Instantiate<TerrainObject>(this);
 		thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
 
 		//Init Cameras //lägga i scene init eller loadscene kanske?

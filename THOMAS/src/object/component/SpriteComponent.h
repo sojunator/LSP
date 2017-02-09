@@ -11,7 +11,7 @@ namespace thomas
 			class SpriteComponent : public Component
 			{
 			public:
-				SpriteComponent(GameObject* gameObject);
+				SpriteComponent();
 				math::Vector2 GetPosition();
 				float GetScale();
 				std::string GetSignature();
