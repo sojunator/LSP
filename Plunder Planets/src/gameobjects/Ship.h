@@ -307,6 +307,17 @@ public:
 		}
 	}
 
+	void PlunderIsland()
+	{
+		math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
+		m_treasure += m_terrainObject->Plunder(shipPos);
+	}
+
+	int GetTreasure()
+	{
+		return m_treasure + 0.5;
+	}
+
 	void Update()
 	{
 		float const dt = Time::GetDeltaTime();
@@ -354,23 +365,11 @@ public:
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
 		CameraZoom(distanceVector, dt);
 		
-
 		PlaySounds(dt);
 		
-
 		PlunderIsland();
 	}
 
-	void PlunderIsland()
-	{
-		math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
-		m_treasure += m_terrainObject->Plunder(shipPos);
-	}
-
-	int GetTreasure()
-	{
-		return m_treasure + 0.5;
-	}
 private:
 	
 	//used for the boat
