@@ -25,7 +25,7 @@ public:
 
 	void Update()
 	{
-		float speed = 200.0;
+		float speed = 180.0;
 		float dt = Time::GetDeltaTime();
 		m_downSpeed += 9.82*dt;
 		m_transform->Translate(m_transform->Forward()*dt*speed);

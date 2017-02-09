@@ -62,8 +62,8 @@ public:
 
 	bool Start()
 	{
-		m_ship = (Ship*)Find("Ship");
-		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
+
+		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;

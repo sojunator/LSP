@@ -45,6 +45,8 @@ namespace thomas
 			{
 				math::Matrix mvpMatrix;
 				math::Matrix viewMatrix;
+				math::Vector3 camPosition;
+				float paddeo;
 			};
 
 			std::vector <math::Vector3> vertices =

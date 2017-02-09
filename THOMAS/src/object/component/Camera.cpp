@@ -106,7 +106,7 @@ namespace thomas
 			{
 				if (m_skybox)
 				{
-					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix()).Transpose();
+					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix());
 					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
 				}
 					
