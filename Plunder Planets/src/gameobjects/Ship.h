@@ -102,13 +102,22 @@ public:
 
 		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
+		math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
+		newForward.Normalize();
+		m_transform->SetRotation(0, 0, 0);
+		m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
+
+
+
 		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 
 		//for the boost
-		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) ) && m_treasure > 50)
+		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) ) && m_treasure > 50*dt)
 		{
 			m_treasure -= 50 * dt;
-			m_boostRot = 1;
+			m_boostRot += dt;
+			if (m_boostRot > 1.5)
+				m_boostRot = 1.5;
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
@@ -196,28 +205,28 @@ public:
 		}
 		if (m_forwardSpeed > 0.01)
 		{
-			float boostDir = left_y;
-			if (m_transform->GetPosition().y < -0.8 && boostDir < 0)
-				boostDir = 0;
-			m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(boostDir * 3), 0);
+			
+
+			m_transform->Rotate(m_rotation * dt, 0, 0);
+			
 		}
 
-		if (m_boostRot == 0 && m_transform->GetPosition().y > -0.8)
-		{
-			m_fallSpeed += -9.82 * dt;
-			m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
-		}
-		else if (m_boostRot == 0)
-		{
-			m_fallSpeed = 0;
-			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
-			newForward.Normalize();
-			m_transform->SetRotation(0, 0, 0);
-			m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
-			
-			float rollAngle = m_transform->Up().Dot(math::Vector3(0, 1, 0));
-			
-		}
+		//if (m_boostRot == 0 && m_transform->GetPosition().y > -0.8)
+		//{
+		//	m_fallSpeed += -9.82 * dt;
+		//	m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
+		//}
+		//else if (m_boostRot == 0)
+		//{
+		//	m_fallSpeed = 0;
+		//	math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
+		//	newForward.Normalize();
+		//	m_transform->SetRotation(0, 0, 0);
+		//	m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
+		//	
+		//	float rollAngle = m_transform->Up().Dot(math::Vector3(0, 1, 0));
+		//	
+		//}
 		
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		math::Vector3 distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
@@ -288,6 +297,14 @@ public:
 		}
 
 		PlunderIsland();
+
+
+
+		newForward = math::Vector3(m_transform->Forward().x, m_boostRot*math::DegreesToradians(-10), m_transform->Forward().z);
+		newForward.Normalize();
+		m_transform->SetRotation(0, 0, 0);
+		m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
+
 	}
 
 	void PlunderIsland()
