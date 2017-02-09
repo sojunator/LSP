@@ -13,5 +13,5 @@
 #define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p)=NULL; } }
 
 
-#define THOMAS_AA_COUNT 4
+#define THOMAS_AA_COUNT 2
 #define THOMAS_AA_QUALITY 0

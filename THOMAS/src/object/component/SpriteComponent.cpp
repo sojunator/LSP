@@ -7,7 +7,7 @@ namespace thomas
 		namespace component
 		{
 
-			SpriteComponent::SpriteComponent(GameObject * gameObject) : Component("SpriteComponent", gameObject)
+			SpriteComponent::SpriteComponent() : Component("SpriteComponent")
 			{
 			}
 

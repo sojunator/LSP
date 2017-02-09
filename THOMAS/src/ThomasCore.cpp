@@ -11,6 +11,7 @@
 #include <assimp\Importer.hpp>
 #include "Sound.h"
 #include "graphics\Sprite.h"
+#include "Scene.h"
 
 #include <AtlBase.h>
 #include <atlconv.h>
@@ -77,14 +78,16 @@ namespace thomas {
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
+		Scene::UpdateCurrentScene();
 		
-		for (object::Object* object : thomas::object::Object::GetObjects())
+		/*for (object::Object* object : thomas::object::Object::GetObjects())
 		{
  			if(object)
 				object->Update();
-		}
+		}*/
 
-		graphics::Renderer::Render();
+		//graphics::Renderer::Render();
+		Scene::Render();
 	}
 
 	void ThomasCore::Start()

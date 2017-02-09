@@ -6,8 +6,7 @@ namespace thomas
 	{
 		namespace component
 		{
-
-			TextComponent::TextComponent(GameObject * gameObject) : Component("TextComponent", gameObject)
+			TextComponent::TextComponent() : Component("TextComponent")
 			{
 				
 			}

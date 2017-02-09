@@ -1,5 +1,6 @@
 #include "Skybox.h"
 #include "Texture.h"
+#include "LightManager.h"
 namespace thomas
 {
 	namespace graphics
@@ -31,10 +32,11 @@ namespace thomas
 			m_data.shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			bool v = m_data.shader->BindVertexBuffer(m_data.vertexBuffer, sizeof(math::Vector3), 0);
 			bool i = m_data.shader->BindIndexBuffer(m_data.indexBuffer);
-			m_mvpStruct.mvpMatrix = mvpMatrix;
+			m_mvpStruct.mvpMatrix = mvpMatrix.Transpose();
 			m_mvpStruct.viewMatrix = viewMatrix;
+			viewMatrix.Invert().Decompose(math::Vector3(), math::Quaternion(),m_mvpStruct.camPosition);
 			utils::D3d::FillBuffer(m_data.constantBuffer, m_mvpStruct);
-
+			LightManager::BindAllLights();
 			ThomasCore::GetDeviceContext()->RSSetState(m_data.rasterizerState);
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_data.depthStencilState, 1);
 
@@ -54,6 +56,7 @@ namespace thomas
 
 		bool Skybox::Unbind()
 		{
+			LightManager::Unbind();
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(math::Vector3), 0);
 			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);
 

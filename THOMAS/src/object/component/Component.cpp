@@ -7,14 +7,8 @@ namespace thomas
 		namespace component
 		{
 
-			Component::Component(std::string name, GameObject * gameObject) : Object("Component:"+name, gameObject->GetName())
+			Component::Component(std::string name) : Object(name)
 			{
-				m_gameObject = gameObject;
-			}
-
-			GameObject * Component::GetGameObject()
-			{
-				return nullptr;
 			}
 
 		}

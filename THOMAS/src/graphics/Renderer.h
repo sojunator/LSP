@@ -2,8 +2,8 @@
 #include "../Common.h"
 #include "../utils/d3d.h"
 #include "../utils/Math.h"
+#include "../object/GameObject.h"
 #include "../object/component/Camera.h"
-#include "../object/component/Light.h"
 
 namespace thomas {
 	namespace graphics
@@ -11,8 +11,7 @@ namespace thomas {
 		class THOMAS_API Renderer {
 		private:
 			
-			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
-			static void UnBindGameObjectBuffer();
+			//static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
 		public:
 
 			
@@ -26,6 +25,11 @@ namespace thomas {
 			static std::vector<object::component::Camera*> GetCameras();
 			
 			static ID3D11ShaderResourceView* GetDepthBufferSRV();
+			static ID3D11RenderTargetView* GetBackBuffer();
+
+			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void UnBindGameObjectBuffer();
+			static void RenderSetup(object::component::Camera* camera);
 
 		private:
 			struct GameObjectBuffer

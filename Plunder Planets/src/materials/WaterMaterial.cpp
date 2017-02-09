@@ -77,7 +77,7 @@ void WaterMaterial::Update()
 
 	
 	if (Input::GetKey(Input::Keys::C))
-		timeSinceLastUpdate = 10;
+		timeSinceLastUpdate = 0;
 
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 

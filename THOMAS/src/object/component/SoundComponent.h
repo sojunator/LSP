@@ -11,7 +11,7 @@ namespace thomas
 			class SoundComponent : public Component
 			{
 			public:
-				SoundComponent(GameObject* gameObject);
+				SoundComponent();
 				bool SetClip(std::string name);
 				std::string GetName();
 				bool SetVolume(float volume);

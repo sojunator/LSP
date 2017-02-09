@@ -12,7 +12,7 @@ namespace thomas
 				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(m_fov, m_viewport.AspectRatio(), m_near, m_far);
 			}
 
-			Camera::Camera(GameObject* gameObject): Component("CameraObject", gameObject)
+			Camera::Camera(): Component("CameraComponent")
 			{
 				m_fov = 70;
 				m_near = 0.1;
@@ -106,7 +106,7 @@ namespace thomas
 			{
 				if (m_skybox)
 				{
-					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix()).Transpose();
+					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix());
 					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
 				}
 					

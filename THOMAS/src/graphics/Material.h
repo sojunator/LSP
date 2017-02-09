@@ -22,7 +22,8 @@ namespace thomas
 			static Material* CreateMaterial(Material* material);
 			static Material* CreateMaterial(std::string dir, std::string materialType, aiMaterial* assimpMaterial);
 			static Material* CreateMaterial(std::string name, std::string materialType);
-			static bool RegisterNewMaterialType(std::string type, Material* material);
+			//static bool RegisterNewMaterialType(std::string type, Material* material);
+			static Material* RegisterNewMaterialType(std::string type, Material* material);
 
 			static Material* GetMaterialByName(std::string name);
 

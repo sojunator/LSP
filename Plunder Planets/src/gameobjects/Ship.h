@@ -15,21 +15,19 @@ private:
 public:
 	Ship() : GameObject("Ship")
 	{
-		
 	}
 
-	bool Start()
+	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
-		
 
-		m_broadSideLeft = (Broadside*)Instantiate(new Broadside(), math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform);
-		m_broadSideRight = (Broadside*)Instantiate(new Broadside(), math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform);
-		
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform, m_scene);
+
 
 
 		m_treasure = 0;
@@ -84,9 +82,6 @@ public:
 
 		m_vulkanControllsOn = false;
 
-		
-
-		return true;
 	}
 
 	void VulkanControls(float& forwardFactor, float& rightFactor, float const left_x, float const left_y)
@@ -110,9 +105,12 @@ public:
 	void ShipBoost(float const dt)
 	{
 		//for the boost
-		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) ) && m_treasure > 50*dt)
 		{
-			m_boostRot = 1;
+			m_treasure -= 50 * dt;
+			m_boostRot += dt;
+			if (m_boostRot > 1.5)
+				m_boostRot = 1.5;
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
@@ -137,10 +135,10 @@ public:
 			{
 				m_maxSpeed = m_nonBoostMaxSpeed;
 			}
-
+			
 		}
 	}
-
+		
 	void ShipMove(float const forwardFactor, float const dt)
 	{
 		//ship controlls
@@ -148,7 +146,7 @@ public:
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
-
+			
 		}
 		else if (forwardFactor > 0.01f)
 		{
@@ -172,7 +170,7 @@ public:
 		m_transform->Translate(moveVec);
 		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
 	}
-
+		
 	void ShipRotate(float const  rightFactor, float const dt)
 	{
 		if (std::abs(rightFactor) > 0.01)
@@ -233,12 +231,12 @@ public:
 			m_fallSpeed = 0;
 		}
 	}
-
+		
 	void ShipFireCannons()
 	{
 		if (Input::GetButtonDown(Input::Buttons::RB))
 			m_broadSideRight->Fire(-m_forwardSpeed);
-
+		
 		if (Input::GetButtonDown(Input::Buttons::LB))
 			m_broadSideLeft->Fire(m_forwardSpeed);
 
@@ -251,10 +249,10 @@ public:
 		{
 			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);//rotate camera around the boat
 		}
-
+		
 		m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * distanceVector.Length());//move the camera back to the distance it was, after rotations
 	}
-
+		
 	void CameraMove(float const right_y, float const dt)
 	{
 		if (std::abs(right_y) > m_controlSensitivity)
@@ -337,7 +335,7 @@ public:
 		ShipBoost(dt);
 		
 		//enable / disable vulkancontrols
-		/*if (m_transform->GetPosition().y > 2)//<--temp vulkan controls
+		/*if (m_transform->GetPosition().y > 2)//<--temp vulkan controls while flying?
 		m_vulkanControllsOn = true;
 		else
 		m_vulkanControllsOn = false;
