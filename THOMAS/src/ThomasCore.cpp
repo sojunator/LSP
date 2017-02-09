@@ -73,11 +73,11 @@ namespace thomas {
 
 		Scene::UpdateCurrentScene();
 		
-		for (object::Object* object : thomas::object::Object::GetObjects())
+		/*for (object::Object* object : thomas::object::Object::GetObjects())
 		{
  			if(object)
 				object->Update();
-		}
+		}*/
 
 		//graphics::Renderer::Render();
 		Scene::Render();

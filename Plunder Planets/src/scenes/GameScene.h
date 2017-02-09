@@ -51,6 +51,7 @@ public:
 		thomas::object::GameObject::Instantiate(new Ship(), this);
 		thomas::object::GameObject::Instantiate(new WaterObject(), this);
 		thomas::object::GameObject::Instantiate(new TerrainObject(), this);
+		thomas::object::GameObject::Instantiate(new TestDirectionalLight(), this);
 
 		//Init Cameras //lägga i scene init eller loadscene kanske?
 		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
