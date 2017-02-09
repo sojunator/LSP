@@ -40,6 +40,8 @@ namespace thomas
 			virtual void FixedUpdate() {}
 			virtual void Render() {}
 
+			static std::vector<GameObject*> GetAllGameObjectsInScene(Scene* scene);
+
 		private:		
 			static std::vector<GameObject*> s_gameObjects;
 		protected:

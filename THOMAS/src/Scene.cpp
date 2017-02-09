@@ -40,10 +40,12 @@ namespace thomas
 	{
 		s_currentScene = scene;
 	}
-	void Scene::Update()
+	void Scene::UpdateCurrentScene()
 	{
-		//for (int i = 0; i < s_currentScene->m_gameObjects.size(); ++i)
-			//s_currentScene->m_gameObjects[i]->SceneUpdate();
+		if (s_currentScene)
+			object::Object::GetAllObjectsInScene(s_currentScene);
+		else
+			LOG("No scene set");
 	}
 	std::vector<graphics::Shader*> Scene::GetShaders()
 	{

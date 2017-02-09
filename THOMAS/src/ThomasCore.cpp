@@ -71,7 +71,7 @@ namespace thomas {
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
-		Scene::Update();
+		Scene::UpdateCurrentScene();
 		
 		for (object::Object* object : thomas::object::Object::GetObjects())
 		{

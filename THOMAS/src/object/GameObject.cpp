@@ -76,6 +76,15 @@ namespace thomas
 			gameObject->m_transform->SetRotation(rotation);
 			return Instantiate(gameObject, parent, scene);
 		}
+
+		std::vector<GameObject*> GameObject::GetAllGameObjectsInScene(Scene* scene)
+		{
+			std::vector<GameObject*> output;
+			for (GameObject* gameObject : s_gameObjects)
+				if (gameObject->m_scene == scene)
+					output.push_back(gameObject);
+			return output;
+		}
 		
 
 	}
