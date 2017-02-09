@@ -51,10 +51,11 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);
 			Scene::Render();
 
-			for (Material* mat : Material::GetLoadedMaterials())
-			{
-				mat->Update();
-			}
+				for (Material* mat : Material::GetLoadedMaterials())
+				{
+					if(mat)
+						mat->Update();
+				}
 
 			for (PostEffect* fx : PostEffect::GetLoadedPostEffects())
 			{

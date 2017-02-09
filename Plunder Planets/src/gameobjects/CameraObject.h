@@ -64,7 +64,7 @@ public:
 		m_text->SetOutline(true);
 
 		//Gold font
-		m_gold->SetFont("Gold");
+		m_gold->SetFont("Name");
 		m_gold->SetOutput("0");
 		m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
 		m_gold->SetRotation(0.0f);
