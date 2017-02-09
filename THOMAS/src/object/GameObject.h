@@ -13,7 +13,7 @@ namespace thomas
 		public:
 			component::Transform* m_transform;
 
-			GameObject(std::string name);
+			GameObject(std::string type);
 			~GameObject();
 			template<typename T>
 			T* AddComponent();
@@ -22,7 +22,7 @@ namespace thomas
 			template<typename T>
 			std::vector<T*> GetComponents();
 
-			static GameObject* Find(std::string name);
+			static GameObject* Find(std::string type);
 
 			template<typename T>
 			static std::vector<GameObject*> FindGameObjectsWithComponent();
@@ -30,12 +30,16 @@ namespace thomas
 
 			static bool Destroy(GameObject *object);
 
-			static GameObject* Instantiate(GameObject* gameObject, Scene* scene);
-			static GameObject* Instantiate(GameObject* gameObject, component::Transform* parent, Scene* scene);
-			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, Scene* scene);
-			static GameObject* Instantiate(GameObject* gameObject, math::Vector3 position, math::Quaternion rotation, component::Transform* parent, Scene* scene);
+			template<typename T>
+			static T* Instantiate(Scene* scene);
+			template<typename T>
+			static T* Instantiate(component::Transform* parent, Scene* scene);
+			template<typename T>
+			static T* Instantiate(math::Vector3 position, math::Quaternion rotation, Scene* scene);
+			template<typename T>
+			static T* Instantiate(math::Vector3 position, math::Quaternion rotation, component::Transform* parent, Scene* scene);
 
-			virtual bool Start() { return true; }
+			virtual void Start() {}
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
 			virtual void Render() {}
@@ -55,9 +59,10 @@ namespace thomas
 		{
 			if (std::is_base_of<component::Component, T>::value)
 			{
-				T* component = new T(this);
-				Object::Instantiate(component, m_scene);
+				T* component = Object::Instantiate<T>(this->GetScene());
+				component->m_gameObject = this;
 				m_components.push_back(component);
+				component->Start();
 				return component;
 			}
 			LOG("Invalid component");
@@ -99,6 +104,43 @@ namespace thomas
 					gameObjectsWithComponent.push_back(s_gameObjects[i]);
 			}
 			return gameObjectsWithComponent;
+		}
+
+		template<typename T>
+		inline T * GameObject::Instantiate(Scene * scene)
+		{
+			T* gameObject = Object::Instantiate<T>(scene);
+			s_gameObjects.push_back(gameObject);
+			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
+			gameObject->Start();
+			return gameObject;
+		}
+
+		template<typename T>
+		inline T * GameObject::Instantiate(component::Transform * parent, Scene * scene)
+		{
+			T* gameObject = Instantiate<T>(scene);
+			gameObject->m_transform->m_parent = parent;
+			return gameObject;
+		}
+
+		template<typename T>
+		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, Scene * scene)
+		{
+			T* gameObject = Instantiate<T>(scene);
+			gameObject->m_transform->SetPosition(position);
+			gameObject->m_transform->SetRotation(rotation);
+			return gameObject;
+		}
+
+		template<typename T>
+		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, component::Transform * parent, Scene * scene)
+		{
+			T* gameObject = Instantiate<T>(scene);
+			gameObject->m_transform->m_parent = parent;
+			gameObject->m_transform->SetPosition(position);
+			gameObject->m_transform->SetRotation(rotation);
+			return gameObject;
 		}
 
 

@@ -17,7 +17,7 @@ namespace thomas
 				void UpdateProjMatrix();
 
 			public:
-				Camera(GameObject* gameObject);
+				Camera();
 				math::Matrix GetViewMatrix();
 				math::Matrix GetProjMatrix();
 				math::Matrix GetViewProjMatrix();

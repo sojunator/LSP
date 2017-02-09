@@ -7,7 +7,7 @@ namespace thomas
 	{
 		namespace component
 		{
-			SoundComponent::SoundComponent(GameObject * gameObject) : Component("SoundObject", gameObject)
+			SoundComponent::SoundComponent() : Component("SoundObject")
 			{
 				m_name == "";
 				m_volume = 1;

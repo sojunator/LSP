@@ -8,9 +8,8 @@ namespace thomas
 	{
 
 		std::vector<Object*> Object::s_objects;
-		Object::Object(std::string type, std::string name)
+		Object::Object(std::string type)
 		{
-			m_name = name;
 			m_type = type;
 		}
 		Object::~Object()
@@ -22,10 +21,6 @@ namespace thomas
 					s_objects.erase(s_objects.begin() + i);
 				}
 			}
-		}
-		std::string Object::GetName()
-		{
-			return m_name;
 		}
 		std::string Object::GetType()
 		{
@@ -41,23 +36,15 @@ namespace thomas
 			return true;
 		}
 
-		Object * Object::Instantiate(Object *object, Scene* scene)
-		{
-			s_objects.push_back(object);
-			object->m_scene = scene;
-			object->Start();
-			return object;
-		}
-
 		std::vector<Object*> Object::GetObjects()
 		{
 			return s_objects;
 		}
-		Object * Object::GetObjectByName(std::string name)
+		Object * Object::GetObjectByType(std::string type)
 		{
 			for (int i = 0; i < s_objects.size(); i++)
 			{
-				if (s_objects[i]->m_name == name)
+				if (s_objects[i]->m_type == type)
 					return s_objects[i];
 			}
 			return NULL;

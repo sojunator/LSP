@@ -47,11 +47,11 @@ public:
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
 
 		//Init objects lägga till LoadObjects i scene?
-		thomas::object::GameObject::Instantiate(new CameraObject(), this);
-		thomas::object::GameObject::Instantiate(new Ship(), this);
-		thomas::object::GameObject::Instantiate(new WaterObject(), this);
-		thomas::object::GameObject::Instantiate(new TerrainObject(), this);
-		thomas::object::GameObject::Instantiate(new TestDirectionalLight(), this);
+		thomas::object::GameObject::Instantiate<CameraObject>(this);
+		thomas::object::GameObject::Instantiate<Ship>(this);
+		thomas::object::GameObject::Instantiate<WaterObject>(this);
+		thomas::object::GameObject::Instantiate<TerrainObject>(this);
+		thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
 
 		//Init Cameras //lägga i scene init eller loadscene kanske?
 		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();

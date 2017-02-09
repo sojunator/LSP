@@ -21,7 +21,7 @@ namespace thomas
 
 				Transform* m_parent;
 
-				Transform(GameObject* gameObject);
+				Transform();
 
 
 				math::Vector3 Forward();

@@ -14,8 +14,7 @@ private:
 public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_shipObject = (Ship*)Find("Ship");
+
 	}
 	~TerrainObject()
 	{
@@ -25,8 +24,11 @@ public:
 		delete m_shipObject;
 	}
 
-	bool Start()
+	void Start()
 	{
+		m_renderer = AddComponent<component::RenderComponent>();
+		m_shipObject = (Ship*)Find("Ship");
+
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(3, mat, 1024 / 16, 1, 1024/2, 100);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
@@ -36,8 +38,6 @@ public:
 
 		m_transform->SetPosition(math::Vector3(0, -1, 0));
 
-
-		return true;
 
 	}
 

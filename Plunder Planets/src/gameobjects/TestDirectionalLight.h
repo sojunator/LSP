@@ -11,17 +11,19 @@ private:
 public:
 	TestDirectionalLight() : GameObject("TestDirectionalLight")
 	{
+
+	}
+
+	void Start()
+	{
 		m_dirLight = AddComponent<component::DirectionalLight>();
 		m_transform->SetRotation(0.936016f, -0.343206f, 0.0780013f);
 		m_dirLight->SetLightColor(math::Vector4(1.0f, 1.0f, 0.6f, 1));
-	}
 
-	bool Start()
-	{
 		m_rot = 0;
 		m_transform->SetPosition(math::Vector3(50, 50, 50));
 		m_transform->LookAt(m_transform);
-		return true;
+
 	}
 	void Update()
 	{

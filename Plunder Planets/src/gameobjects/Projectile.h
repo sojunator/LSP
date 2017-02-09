@@ -13,14 +13,14 @@ public:
 	float forwardSpeed = 0;
 	Projectile() : GameObject("Projectile")
 	{
+
+	}
+
+	void Start()
+	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
 		m_splashSound = AddComponent<component::SoundComponent>();
-	}
-
-	bool Start()
-	{
-		return true;
 	}
 
 	void Update()

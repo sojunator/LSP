@@ -13,14 +13,15 @@ private:
 public:
 	CameraObject() : GameObject("CameraObject") 
 	{
+
+	};
+
+	void Start()
+	{
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
 		m_music = AddComponent<component::SoundComponent>();
 		m_pirateMusic = AddComponent<component::SoundComponent>();
-	};
-
-	bool Start()
-	{
 
 		m_camera->SetSkybox("../res/textures/skymap.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
@@ -39,7 +40,6 @@ public:
 		m_pirateMusic->SetVolume(0.9);
 		m_pirateMusic->Play();
 		
-		return true;
 	}
 
 	void Update()

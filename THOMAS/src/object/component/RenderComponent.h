@@ -11,9 +11,10 @@ namespace thomas
 			{
 			private:
 			public:
-				RenderComponent(GameObject* gameObject);
+				RenderComponent();
 				void SetModel(std::string name);
 				graphics::Model * GetModel();
+				void Update();
 			private:
 				graphics::Model* m_model;
 			};

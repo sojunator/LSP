@@ -14,17 +14,19 @@ private:
 public:
 	Ship() : GameObject("Ship")
 	{
+	}
+
+	void Start()
+	{
+
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
 		m_treasure = 0;
-	}
 
-	bool Start()
-	{
-		m_broadSideLeft = (Broadside*)Instantiate(new Broadside(), math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform, m_scene);
-		m_broadSideRight = (Broadside*)Instantiate(new Broadside(), math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform, m_scene);
 
 
 		m_modelIndex = 0;
@@ -67,9 +69,6 @@ public:
 
 		m_vulkanControllsOn = false;
 
-		
-
-		return true;
 	}
 
 	void VulkanControls(float& forwardFactor, float& rightFactor, float const left_x, float const left_y)

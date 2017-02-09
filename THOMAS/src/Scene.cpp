@@ -32,11 +32,7 @@ namespace thomas
 	}
 	void Scene::UpdateCurrentScene()
 	{
-		if (s_currentScene)
-			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
-				object->Update();
-		else
-			LOG("No scene set");
+		
 	}
 	std::vector<graphics::Shader*> Scene::GetShaders()
 	{
@@ -58,9 +54,17 @@ namespace thomas
 	{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
+			if (s_currentScene)
+				for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
+					object->Update();
+			else
+				LOG("No scene set");
+
+
 			for (graphics::Shader* shader : m_shaders)
 			{
 				shader->Bind();
+				camera->BindReflection();
 				for (object::GameObject* lightGameObject : object::GameObject::FindGameObjectsWithComponent<object::component::Light>())
 				{
 					graphics::LightManager::BindAllLights();
@@ -84,6 +88,7 @@ namespace thomas
 					}
 					graphics::LightManager::Unbind();
 				}
+				
 				shader->Unbind();
 			}
 			camera->BindSkybox();
