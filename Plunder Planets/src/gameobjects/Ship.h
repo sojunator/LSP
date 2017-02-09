@@ -27,24 +27,32 @@ public:
 	{
 		m_broadSideLeft = (Broadside*)Instantiate(new Broadside(), math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform);
 		m_broadSideRight = (Broadside*)Instantiate(new Broadside(), math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform);
+		
+
 
 		m_treasure = 0;
+
+		//model
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
 
+		//sound
 		m_boostSound->SetClip("mThomas");
 		m_boostSound->SetVolume(0.9);
+		m_soundDelay = 5;
+		m_soundDelayLeft = 5;
 
-
-		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
+		//orientation
+		m_initPosition = math::Vector3(0, -0.8, 0);
+		m_transform->SetPosition(m_initPosition);
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
-
+		//movement
 		m_forwardSpeed = 0;
-		
 		m_accelerationSpeed = 9.5f;
 		m_retardationSpeed = 6.5f;
 		m_maxSpeed = 30.0f;
 
+		m_boostRot = 0;
 		m_nonBoostMaxSpeed = m_maxSpeed;
 		m_nonBoostAcceleration = m_accelerationSpeed;
 		m_boostAcceleration = m_accelerationSpeed * 3;
@@ -54,6 +62,11 @@ public:
 		m_minmaxRotFactor = 0.45f;
 		m_rotation = 0.0f;
 
+		//gravity
+		m_fallSpeed = 0;
+		m_fallAcceleration = 0;
+
+		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
 		m_elevateCamSpeed = 38;
@@ -62,8 +75,8 @@ public:
 		m_camMinDistanceFromBoat = 20.0f;
 		m_camMaxDistanceFromBoat = 120.0f;
 
-		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 50 + math::Vector3(0, 25, 0));
-		m_lookAtOffset = math::Vector3(0, 25, 0);
+		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 100 + math::Vector3(0, 25, 0));
+		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 
@@ -89,10 +102,7 @@ public:
 
 			rightFactor = camForwardXZ.Dot(m_transform->Forward()) * left_x + camForwardXZ.Dot(m_transform->Right()) * left_y;
 
-			if (m_cameraObject->m_transform->GetPosition().y < m_transform->GetPosition().y)
-				upFactor = left_y;
-			else
-				upFactor = -left_y;
+			//upFactor = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y + m_transform->Right().Dot(math::Vector3(-1, 0, 0)) * left_x;
 		}
 	}
 
@@ -116,7 +126,9 @@ public:
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
 			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
-			m_fallAcceleration -= 9.82 * dt;
+			
+			
+			m_fallAcceleration += m_transform->Forward().Dot(m_transform->Up()) * m_accelerationSpeed;
 			m_fallSpeed = 0;
 		}
 		else
@@ -136,19 +148,21 @@ public:
 			}
 			
 		}
-		if (m_transform->GetPosition().y > 2)
+		/*if (m_transform->GetPosition().y > 2)
 			m_vulkanControllsOn = true;
 		else
-			m_vulkanControllsOn = false;
+			m_vulkanControllsOn = false;*/
 		//get forward and right contrib
 		float forwardFactor = left_y;
 		float rightFactor = -left_x;
-		float upFactor = left_y;
+		float upFactor = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y + m_transform->Right().Dot(math::Vector3(1, 0, 0)) * left_y;
+		
 
 		if (m_vulkanControllsOn)
 		{
 			VulkanControls(forwardFactor, rightFactor, upFactor, left_x, left_y);
 		}
+
 		
 		//ship controlls
 		if (Input::GetButton(Input::Buttons::RT))
@@ -172,13 +186,13 @@ public:
 
 		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
 		{
-			m_forwardSpeed = min(m_forwardSpeed, m_maxSpeed/2);
+			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed/3);
 		}
 
 		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
 		m_transform->Translate(moveVec);
 		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
-		
+
 
 		if (std::abs(rightFactor) > 0.01)
 		{
@@ -206,26 +220,30 @@ public:
 		}
 		if (m_forwardSpeed > 0.01)
 		{
-			float boostDir = left_y;
-			if (m_transform->GetPosition().y < -0.8 && boostDir < 0)
+			float boostDir = upFactor;
+			if (m_transform->GetPosition().y < m_initPosition.y && boostDir < 0)
 				boostDir = 0;
-			m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(boostDir * 6), 0);
+			//m_transform->Rotate(m_rotation * dt, 0, 0);
+			//m_transform->Rotate(0, m_boostRot*dt*math::DegreesToradians(boostDir * 10), 0);
+			m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(boostDir * 10), 0);
+			
+
 		}
 
-		if (m_boostRot == 0 && m_transform->GetPosition().y > -0.8)
+		if (m_boostRot == 0 && m_transform->GetPosition().y > m_initPosition.y)
 		{
-			m_fallAcceleration += -9.82 * dt;
+			m_fallAcceleration -= 9.82 * dt;
 			m_fallSpeed += m_fallAcceleration * dt;
 			m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
 		}
-		else if (m_transform->GetPosition().y < -0.9)
+		else if (m_transform->GetPosition().y < m_initPosition.y - 0.1f)
 		{
 			m_fallSpeed = 0;
 			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
 			newForward.Normalize();
-			m_transform->SetPosition(m_transform->GetPosition().x, -0.8, m_transform->GetPosition().z);
+			m_transform->SetPosition(m_transform->GetPosition().x, m_initPosition.y, m_transform->GetPosition().z);
 			m_transform->SetRotation(0, 0, 0);
-			m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
+			m_transform->LookAt(m_transform->GetPosition() + newForward);
 			m_fallAcceleration = 0;
 			m_fallSpeed = 0;
 		}
@@ -233,7 +251,7 @@ public:
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		math::Vector3 distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
-		m_lookAtOffset = math::Vector3(0, distanceVector.Length() / 4, 0);//recalculate lookatoffset depending on camera range from boat
+		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 4, 0);//recalculate lookatoffset depending on camera range from boat
 		
 		m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations!
 
@@ -255,9 +273,8 @@ public:
 				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
 			}
 		}
-
+		m_cameraObject->m_transform->SetRotation(0, 0, 0);
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset orientation of camera with lookat
-		
 
 		//zoom camera in or out. Also make sure that the camera dont get to close to the boat.
 		if (distanceVector.Length() > m_camMinDistanceFromBoat)
@@ -343,6 +360,7 @@ private:
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
+	math::Vector3 m_initPosition;
 
 	//components
 	component::RenderComponent* m_renderer;
@@ -356,13 +374,13 @@ private:
 
 	int m_modelIndex;
 
-	float m_soundDelay = 5;
-	float m_soundDelayLeft = 5;
+	float m_soundDelay;
+	float m_soundDelayLeft;
 
 
-	float m_boostRot = 0;
-	float m_fallSpeed = 0;
-	float m_fallAcceleration = 0;
+	float m_boostRot;
+	float m_fallSpeed;
+	float m_fallAcceleration;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",
