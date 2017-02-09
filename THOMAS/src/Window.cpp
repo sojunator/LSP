@@ -4,12 +4,14 @@ namespace thomas
 {
 	LONG Window::s_width;
 	LONG Window::s_height;
+	float Window::s_aspectRatio;
 	WNDCLASSEX Window::s_windowClassInfo;
 	HWND Window::s_windowHandler;
 	RECT Window::s_windowRectangle;
 	LPWSTR Window::s_title;
 	bool Window::s_initialized;
 	bool Window::s_visibleCursor;
+	Window::Ratio Window::s_ratio;
 
 
 	LRESULT CALLBACK Window::EventHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -68,6 +70,8 @@ namespace thomas
 		s_width = width;
 		s_title = title;
 		s_initialized = false;
+
+		SetAspectRatio();
 
 		s_windowClassInfo = { 0 };
 		s_windowClassInfo.cbSize = sizeof(WNDCLASSEX);
@@ -152,6 +156,11 @@ namespace thomas
 		return s_width;
 	}
 
+	Window::Ratio Window::GetAspectRatio()
+	{
+		return s_ratio;
+	}
+
 	HWND Window::GetWindowHandler()
 	{
 		return s_windowHandler;
@@ -171,6 +180,25 @@ namespace thomas
 		const HWND hDesktop = GetDesktopWindow();
 		GetWindowRect(hDesktop, &desktop);
 		return desktop.bottom;
+	}
+
+	bool Window::SetAspectRatio()
+	{
+		s_aspectRatio = float(s_width) / float(s_height);
+
+		if (s_aspectRatio > 1.7f && s_aspectRatio < 1.8f)
+		{
+			s_ratio = Ratio::STANDARD_169;
+		}
+		else if (s_aspectRatio > 1.32f && s_aspectRatio < 1.34f)
+		{
+			s_ratio = Ratio::STANDARD_43;
+		}
+		else if (s_aspectRatio > 1.5f && s_aspectRatio < 1.7f)
+		{
+			s_ratio = Ratio::STANDARD_1610;
+		}
+		return true;
 	}
 
 	void Window::ShowCursor()
