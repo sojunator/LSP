@@ -187,7 +187,7 @@ namespace thomas
 			return stencilState;
 		}
 		
-		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, 
+		bool D3d::CreateDepthStencilView(ID3D11Device * device, ID3D11DepthStencilView *& stencilView, ID3D11DepthStencilView*& depthStencilViewReadOnly,
 			ID3D11ShaderResourceView *& depthBufferSRV)
 		{
 			D3D11_TEXTURE2D_DESC depthStencilBufferDesc;
@@ -209,14 +209,7 @@ namespace thomas
 			depthStencilBufferDesc.MiscFlags = 0;
 		
 
-			// Z-buffer view desc
-			depthViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
-			depthViewDesc.Texture2D.MipSlice = 0;
-			depthViewDesc.Flags = 0;
-
 			ID3D11Texture2D* depthStencilBuffer;
-
 			HRESULT hr = device->CreateTexture2D(&depthStencilBufferDesc, NULL, &depthStencilBuffer);
 			if (FAILED(hr))
 			{
@@ -224,7 +217,24 @@ namespace thomas
 				return false;
 			}
 
+			// Z-buffer view desc
+			depthViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+			depthViewDesc.Texture2D.MipSlice = 0;
+			depthViewDesc.Flags = 0;
+
+			
+
+
 			hr = device->CreateDepthStencilView(depthStencilBuffer, &depthViewDesc, &stencilView);
+			if (FAILED(hr))
+			{
+				LOG_HR(hr);
+				stencilView = nullptr;
+				return false;
+			}
+			depthViewDesc.Flags = D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL;
+			hr = device->CreateDepthStencilView(depthStencilBuffer, &depthViewDesc, &depthStencilViewReadOnly);
 			if (FAILED(hr))
 			{
 				LOG_HR(hr);
@@ -265,10 +275,10 @@ namespace thomas
 
 
 
-		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11ShaderResourceView *& backBufferSRV, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11ShaderResourceView *& depthBufferSRV)
+		bool D3d::InitRenderer(ID3D11RenderTargetView *& backBuffer, ID3D11ShaderResourceView *& backBufferSRV, ID3D11DepthStencilState *& depthStencilState, ID3D11DepthStencilView *& depthStencilView, ID3D11DepthStencilView*& depthStencilViewReadOnly, ID3D11ShaderResourceView *& depthBufferSRV)
 		{
 			CreateBackBuffer(ThomasCore::GetDevice(), ThomasCore::GetSwapChain(), backBuffer, backBufferSRV);
-			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthBufferSRV);
+			CreateDepthStencilView(ThomasCore::GetDevice(), depthStencilView, depthStencilViewReadOnly, depthBufferSRV);
 		
 			depthStencilState = CreateDepthStencilState(D3D11_COMPARISON_LESS, true);
 

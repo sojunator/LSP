@@ -8,7 +8,7 @@ namespace thomas
 		namespace component
 		{
 
-			Light::Light(GameObject* gameObject) : Component("LightComponent", gameObject)
+			Light::Light() : Component("LightComponent")
 			{
 			}
 			Light::~Light()
@@ -19,10 +19,10 @@ namespace thomas
 			DIRECTIONAL LIGHT
 			The light look down its forward transformation
 			*/
-			DirectionalLight::DirectionalLight(GameObject* gameObject) : Light(gameObject)
+			DirectionalLight::DirectionalLight() : Light()
 			{
 				//standard init of light
-				m_thisLight.lightDirection = m_gameObject->m_transform->Forward();
+				
 				m_thisLight.lightColor = thomas::math::Vector4(1, 1, 1, 1);
 
 				m_index = graphics::LightManager::AddDirectionalLight(m_thisLight);
@@ -38,6 +38,11 @@ namespace thomas
 
 			DirectionalLight::~DirectionalLight()
 			{
+			}
+
+			void DirectionalLight::Start()
+			{
+				m_thisLight.lightDirection = m_gameObject->m_transform->Forward();
 			}
 
 			bool DirectionalLight::Bind()
@@ -65,7 +70,7 @@ namespace thomas
 			/**
 			POINT LIGHT
 			*/
-			PointLight::PointLight(GameObject* gameObject) : Light(gameObject)
+			PointLight::PointLight() : Light()
 			{
 				//standard init of light
 				m_thisLight.constantAttenuation = 0.6;

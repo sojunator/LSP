@@ -25,11 +25,12 @@ namespace thomas
 			private:
 				
 			public:
+				virtual void Start() {};
 				virtual bool SetLightColor(thomas::math::Vector4 other) = 0;
 
 				virtual bool Bind() = 0;
 			protected:
-				Light(GameObject* gameObject);
+				Light();
 				~Light();
 				
 			};
@@ -38,8 +39,10 @@ namespace thomas
 			class THOMAS_API DirectionalLight : public Light
 			{
 			public:
-				DirectionalLight(GameObject* gameObject);
+				DirectionalLight();
 				~DirectionalLight();
+
+				void Start();
 
 				bool SetLightColor(thomas::math::Vector4 other);
 
@@ -54,7 +57,7 @@ namespace thomas
 			class THOMAS_API PointLight : public Light
 			{
 			public:
-				PointLight(GameObject* gameObject);
+				PointLight();
 				~PointLight();
 
 				bool SetLightColor(thomas::math::Vector4 other);

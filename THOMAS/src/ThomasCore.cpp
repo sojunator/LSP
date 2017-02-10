@@ -10,6 +10,8 @@
 #include "graphics\PostEffect.h"
 #include <assimp\Importer.hpp>
 #include "Sound.h"
+#include "graphics\Sprite.h"
+#include "Scene.h"
 
 #include <AtlBase.h>
 #include <atlconv.h>
@@ -53,6 +55,12 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = graphics::PostEffect::Init();
 
+		if(s_initialized)
+			s_initialized = graphics::TextRender::Initialize();
+
+		if (s_initialized)
+			s_initialized = graphics::Sprite::Initialize();		
+
 		return s_initialized;
 	}
 
@@ -70,14 +78,16 @@ namespace thomas {
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Window::Destroy();
 
+		Scene::UpdateCurrentScene();
 		
-		for (object::Object* object : thomas::object::Object::GetObjects())
+		/*for (object::Object* object : thomas::object::Object::GetObjects())
 		{
  			if(object)
 				object->Update();
-		}
+		}*/
 
-		graphics::Renderer::Render();
+		//graphics::Renderer::Render();
+		Scene::Render();
 	}
 
 	void ThomasCore::Start()
@@ -127,6 +137,8 @@ namespace thomas {
 
 	bool ThomasCore::Destroy()
 	{
+		graphics::Sprite::Destroy();
+		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
 		graphics::Texture::Destroy();

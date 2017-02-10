@@ -13,19 +13,19 @@ public:
 	float forwardSpeed = 0;
 	Projectile() : GameObject("Projectile")
 	{
+
+	}
+
+	void Start()
+	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
 		m_splashSound = AddComponent<component::SoundComponent>();
 	}
 
-	bool Start()
-	{
-		return true;
-	}
-
 	void Update()
 	{
-		float speed = 200.0;
+		float speed = 180.0;
 		float dt = Time::GetDeltaTime();
 		m_downSpeed += 9.82*dt;
 		m_transform->Translate(m_transform->Forward()*dt*speed);

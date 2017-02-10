@@ -11,7 +11,7 @@ namespace thomas
 				m_localWorldMatrix.Decompose(m_localScale, m_localRotation, m_localPosition);
 			}
 
-			Transform::Transform(GameObject* gameObject): Component("TransformComponent", gameObject)
+			Transform::Transform(): Component("TransformComponent")
 			{
 				Decompose();
 				m_parent = NULL;

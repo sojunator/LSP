@@ -12,11 +12,11 @@ namespace thomas
 			{
 			private:
 			public:
-				Component(std::string name, GameObject* gameObject);
-				GameObject* GetGameObject();
+				GameObject* m_gameObject;
+				Component(std::string name);
 			private:
 			protected:
-				GameObject* m_gameObject;
+				
 			};
 		}
 	}

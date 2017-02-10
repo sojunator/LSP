@@ -2,8 +2,8 @@
 #include "../Common.h"
 #include "../utils/d3d.h"
 #include "../utils/Math.h"
+#include "../object/GameObject.h"
 #include "../object/component/Camera.h"
-#include "../object/component/Light.h"
 
 namespace thomas {
 	namespace graphics
@@ -11,8 +11,7 @@ namespace thomas {
 		class THOMAS_API Renderer {
 		private:
 			
-			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
-			static void UnBindGameObjectBuffer();
+			//static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
 		public:
 
 			
@@ -26,6 +25,14 @@ namespace thomas {
 			static std::vector<object::component::Camera*> GetCameras();
 			
 			static ID3D11ShaderResourceView* GetDepthBufferSRV();
+			static ID3D11RenderTargetView* GetBackBuffer();
+
+			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void UnBindGameObjectBuffer();
+			static void RenderSetup(object::component::Camera* camera);
+
+			static void BindDepthNormal();
+			static void BindDepthReadOnly();
 
 		private:
 			struct GameObjectBuffer
@@ -43,6 +50,7 @@ namespace thomas {
 			static ID3D11RasterizerState* s_wireframeRasterState;
 			static ID3D11DepthStencilState* s_depthStencilState;
 			static ID3D11DepthStencilView* s_depthStencilView;
+			static ID3D11DepthStencilView* s_depthStencilViewReadOnly;
 			static ID3D11ShaderResourceView* s_depthBufferSRV;
 
 			static ID3D11Buffer* s_objectBuffer;

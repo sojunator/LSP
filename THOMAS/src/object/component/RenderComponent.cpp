@@ -4,7 +4,7 @@ namespace thomas {
 	namespace object {
 		namespace component {
 
-			RenderComponent::RenderComponent(GameObject * gameObject) : Component("ModelComponent", gameObject)
+			RenderComponent::RenderComponent() : Component("ModelComponent")
 			{
 			}
 
@@ -20,7 +20,11 @@ namespace thomas {
 			{
 				return m_model;
 			}
-
+			void RenderComponent::Update()
+			{
+				for (graphics::Mesh* mesh : m_model->GetMeshes())
+					mesh->GetMaterial()->Update();
+			}
 		}
 	}
 }

@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 #include "../ThomasCore.h"
-#include "directXTK\WICTextureLoader.h"
-#include "directXTK\DDSTextureLoader.h"
+#include "../../../DirectXTK-dec2016/Inc/WICTextureLoader.h"
+#include "../../../DirectXTK-dec2016/Inc/DDSTextureLoader.h"
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "Dxguid.lib")
@@ -21,14 +21,14 @@ namespace thomas
 		private:
 			static bool CreateSwapchainAndDeviceAndContext(LONG witdh, LONG height, ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, HWND handle);
 			static bool CreateBackBuffer(ID3D11Device* device, IDXGISwapChain* swapchain, ID3D11RenderTargetView*& backBuffer, ID3D11ShaderResourceView*& backBufferSRV);
-			static bool CreateDepthStencilView(ID3D11Device* device, ID3D11DepthStencilView *& stencilView, ID3D11ShaderResourceView *& depthBufferSRV);
+			static bool CreateDepthStencilView(ID3D11Device* device, ID3D11DepthStencilView *& stencilView,ID3D11DepthStencilView*& depthStencilViewReadOnly, ID3D11ShaderResourceView *& depthBufferSRV);
 			static ID3D11Debug* CreateDebug();
 
 		public:
 			static bool CreateRenderTargetView(ID3D11RenderTargetView*& rtv, ID3D11ShaderResourceView*& srv);
 			static bool Init(ID3D11Device*& device, ID3D11DeviceContext*& context, IDXGISwapChain*& swapchain, ID3D11Debug*& debug);
 			static ID3D11DepthStencilState* CreateDepthStencilState(D3D11_COMPARISON_FUNC func, bool depth);
-			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11ShaderResourceView *& backBufferSRV, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11ShaderResourceView *& depthBufferSRV);
+			static bool InitRenderer(ID3D11RenderTargetView*& backBuffer, ID3D11ShaderResourceView *& backBufferSRV, ID3D11DepthStencilState*& depthStencilState, ID3D11DepthStencilView*& depthStencilView, ID3D11DepthStencilView*& depthStencilViewReadOnly, ID3D11ShaderResourceView *& depthBufferSRV);
 
 			static bool LoadTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
 			static bool LoadCubeTextureFromFile(ID3D11Device* device, _In_opt_ ID3D11DeviceContext* context, std::string fileName, _Outptr_opt_ ID3D11Resource*& texture, _Outptr_opt_ ID3D11ShaderResourceView*& textureView);
@@ -44,8 +44,14 @@ namespace thomas
 			template<typename T>
 			static ID3D11Buffer* CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
 
+			template<typename T>
+			static ID3D11Buffer* CreateDynamicBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
+
 			template <typename T>
 			static ID3D11Buffer* CreateBufferFromVector(const std::vector<T>& vectorData, D3D11_BIND_FLAG bindFlag);
+
+			template <typename T>
+			static ID3D11Buffer* CreateDynamicBufferFromVector(const std::vector<T>& vectorData, D3D11_BIND_FLAG bindFlag);
 
 			template<typename T>
 			static bool FillBuffer(ID3D11Buffer* buffer, T data);
@@ -62,6 +68,34 @@ namespace thomas
 			D3D11_BUFFER_DESC bufferDesc;
 			bufferDesc.ByteWidth = sizeof(dataStruct);
 			bufferDesc.Usage = D3D11_USAGE_DEFAULT; //TODO: Maybe dynamic for map/unmap
+			bufferDesc.BindFlags = bindFlag;
+			bufferDesc.CPUAccessFlags = 0; //CPU if dynamic
+			bufferDesc.MiscFlags = 0;
+
+			D3D11_SUBRESOURCE_DATA InitData;
+			InitData.pSysMem = &dataStruct;
+			InitData.SysMemPitch = 0;
+			InitData.SysMemSlicePitch = 0;
+
+			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&bufferDesc, &InitData, &buffer);
+
+			if (result != S_OK)
+				LOG(result);
+
+			if (result == S_OK)
+				return buffer;
+
+			return NULL;
+
+		}
+
+		template<typename T>
+		ID3D11Buffer* D3d::CreateDynamicBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag)
+		{
+			ID3D11Buffer* buffer;
+			D3D11_BUFFER_DESC bufferDesc;
+			bufferDesc.ByteWidth = sizeof(dataStruct);
+			bufferDesc.Usage = D3D11_USAGE_DYNAMIC; //TODO: Maybe dynamic for map/unmap
 			bufferDesc.BindFlags = bindFlag;
 			bufferDesc.CPUAccessFlags = 0; //CPU if dynamic
 			bufferDesc.MiscFlags = 0;
@@ -102,6 +136,37 @@ namespace thomas
 			bufferDesc.CPUAccessFlags = 0; //CPU if dynamic
 			bufferDesc.MiscFlags = 0;
 			
+
+			const T* data = &vectorData[0];
+
+			D3D11_SUBRESOURCE_DATA InitData;
+			InitData.pSysMem = data;
+			InitData.SysMemPitch = 0;
+			InitData.SysMemSlicePitch = 0;
+
+			HRESULT result = ThomasCore::GetDevice()->CreateBuffer(&bufferDesc, &InitData, &buffer);
+
+			if (result != S_OK)
+				LOG(result);
+
+			if (result == S_OK)
+				return buffer;
+
+			return NULL;
+
+		}
+
+		template <typename T>
+		ID3D11Buffer* D3d::CreateDynamicBufferFromVector(const std::vector<T>& vectorData, D3D11_BIND_FLAG bindFlag)
+		{
+			ID3D11Buffer* buffer;
+			D3D11_BUFFER_DESC bufferDesc;
+			bufferDesc.ByteWidth = sizeof(vectorData[0]) * vectorData.size();
+			bufferDesc.Usage = D3D11_USAGE_DYNAMIC; //TODO: Maybe dynamic for map/unmap
+			bufferDesc.BindFlags = bindFlag;
+			bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; //CPU if dynamic
+			bufferDesc.MiscFlags = 0;
+
 
 			const T* data = &vectorData[0];
 

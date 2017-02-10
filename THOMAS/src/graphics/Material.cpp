@@ -114,14 +114,15 @@ namespace thomas
 			return NULL;
 		}
 
-		bool Material::RegisterNewMaterialType(std::string type, Material * material)
+		Material* Material::RegisterNewMaterialType(std::string type, Material * material)
 		{
 			if (s_materialTypes.find(type) == s_materialTypes.end()) //Material is not already registered.
 			{
 				s_materialTypes[type] = material;
-				return true;
+				//return true;
 			}
-			return false;
+			//return false;
+			return material;
 		}
 
 		std::vector<Material*> Material::GetLoadedMaterials()
