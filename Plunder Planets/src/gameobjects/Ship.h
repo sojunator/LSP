@@ -203,13 +203,15 @@ public:
 	{
 		if (m_forwardSpeed > 0.01)
 		{
-			if (m_transform->GetPosition().y > m_initPosition.y - 0.05f || (upFactorX < 0 || upFactorY < 0))	//
+			if (m_transform->GetPosition().y > m_initPosition.y - 0.05f || (upFactorX < 0 || upFactorY < 0))
 			{
 				//m_transform->Rotate(0, 0, dt*math::DegreesToradians(upFactorY * 10));
 				//m_transform->Rotate(0, dt*math::DegreesToradians(upFactorX * 10), 0);
 				//m_transform->Rotate(m_rotation * dt, 0, 0);
-
-				m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(upFactorX * 10), m_boostRot*dt*math::DegreesToradians(upFactorY * 10));
+				if (m_transform->GetPosition().y < m_initPosition.y + 0.05f)
+					m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(upFactorX * 10), m_boostRot*dt*math::DegreesToradians(upFactorY * 10));
+				else
+					m_transform->Rotate(m_rotation * dt, dt*math::DegreesToradians(upFactorX * 10), dt*math::DegreesToradians(upFactorY * 10));
 			}
 		}
 
