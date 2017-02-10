@@ -81,25 +81,29 @@ public:
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 
-		m_vulkanControllsOn = false;
+		m_retardControllsOn = false;
 
 	}
 
-	void VulkanControls(float& forwardFactor, float& rightFactor, float const left_x, float const left_y)
+	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)
 	{
-		//calculate forward and right contribution of the cam, with the boat, and the controllers left stick
-		//these controlls makes for the left stick to match the coordinates of the boat
-		//no matter what direction the camera is pointing, the stick will serve in the boats coordinates
+		//The left stick controlls the ship ASWELL as its orientation. The position of the camera changes the way the boat is maneuvered
 		if (left_x != 0 || left_y != 0)
 		{
 			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
-
 			camForwardXZ.Normalize();
 
-			forwardFactor = camForwardXZ.Dot(m_transform->Forward()) * -left_y + camForwardXZ.Dot(m_transform->Right()) * left_x;
+			float d1 = camForwardXZ.Dot(m_transform->Forward());
+			float d2 = camForwardXZ.Dot(m_transform->Right());
 
-			rightFactor = camForwardXZ.Dot(m_transform->Forward()) * left_x + camForwardXZ.Dot(m_transform->Right()) * left_y;
+			forwardFactor = d1 * -left_y + d2 * left_x;
 
+			rightFactor = d1 * left_x + d2 * left_y;
+
+			upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y * -d1 + m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_x * d2;
+			upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y * -d1 + m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_x * d2;
+
+		
 		}
 	}
 
@@ -197,21 +201,19 @@ public:
 				}
 			}
 		}
+		m_transform->Rotate(m_rotation * dt, 0, 0);
 	}
 
-	void ShipFly(float const upFactorX, float const upFactorY, float const dt)
+	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const dt)
 	{
 		if (m_forwardSpeed > 0.01)
 		{
-			if (m_transform->GetPosition().y > m_initPosition.y - 0.05f || (upFactorX < 0 || upFactorY < 0))
+			if (m_transform->GetPosition().y > m_initPosition.y - 0.05f || (upFactorPitch < 0 || upFactorRoll < 0))
 			{
-				//m_transform->Rotate(0, 0, dt*math::DegreesToradians(upFactorY * 10));
-				//m_transform->Rotate(0, dt*math::DegreesToradians(upFactorX * 10), 0);
-				//m_transform->Rotate(m_rotation * dt, 0, 0);
 				if (m_transform->GetPosition().y < m_initPosition.y + 0.05f)
-					m_transform->Rotate(m_rotation * dt, m_boostRot*dt*math::DegreesToradians(upFactorX * 10), m_boostRot*dt*math::DegreesToradians(upFactorY * 10));
+					m_transform->Rotate(0, m_boostRot * dt * math::DegreesToradians(upFactorPitch * 10), m_boostRot * dt * math::DegreesToradians(upFactorRoll * 10));
 				else
-					m_transform->Rotate(m_rotation * dt, dt*math::DegreesToradians(upFactorX * 10), dt*math::DegreesToradians(upFactorY * 10));
+					m_transform->Rotate(0, dt * math::DegreesToradians(upFactorPitch * 10), dt * math::DegreesToradians(upFactorRoll * 10));
 			}
 		}
 
@@ -329,28 +331,22 @@ public:
 		//get forward, right and up contrib
 		float forwardFactor = 0;
 		float rightFactor = -left_x;
-		float upFactorX = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
-		float upFactorY = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
+		float upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
+		float upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
 
 		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
 		ShipBoost(dt);
 		
-		//enable / disable vulkancontrols
-		/*if (m_transform->GetPosition().y > 2)//<--temp vulkan controls while flying?
-		m_vulkanControllsOn = true;
-		else
-		m_vulkanControllsOn = false;
-
-		if (m_vulkanControllsOn)
+		if (m_retardControllsOn)
 		{
-			VulkanControls(forwardFactor, rightFactor, left_x, left_y);
-		}*/
+			RetardControls(forwardFactor, rightFactor, upFactorPitch, upFactorRoll, left_x, left_y);
+		}
 		
 		//Ship Movement
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorX, upFactorY, dt);
+		ShipFly(upFactorPitch, upFactorRoll, dt);
 		//ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
@@ -398,7 +394,7 @@ private:
 	float m_camMaxDistanceFromBoat;
 	//used for both
 	float m_controlSensitivity;
-	bool m_vulkanControllsOn;
+	bool m_retardControllsOn;
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
