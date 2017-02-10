@@ -251,7 +251,31 @@ public:
 		m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
 		if (std::abs(right_x) > m_controlSensitivity || std::abs(right_y) > m_controlSensitivity)
 		{
-			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(0,0,1)) * m_camRotationSpeed * right_y * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(-1, 0, 0)) * m_camRotationSpeed * right_y * dt);//rotate camera around the boat
+			float angle = std::acos(m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 1, 0))) * 180 / math::PI;
+			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);
+			bool allowRotation = true;
+
+			if (angle > 160)
+			{
+				if (right_y > 0)
+				{
+					allowRotation = false;
+				}
+			}
+			else if (angle < 20)
+			{
+				if (right_y < 0)
+				{
+					allowRotation = false;
+				}
+			}
+			
+			if (allowRotation)//anti gimballock
+			{
+				m_cameraObject->m_transform->Rotate(0, m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 0, 1)) * m_camRotationSpeed * right_y * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(-1, 0, 0)) * m_camRotationSpeed * right_y * dt);//rotate camera around the boat
+			}
+			
+			
 		}
 		
 		m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * distanceVector.Length());//move the camera back to the distance it was, after rotations
