@@ -25,12 +25,13 @@ public:
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform, m_scene);
+		/*//Detta funkar fan inte
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
+		*/
 
 
-
-		m_treasure = 0;
+		m_treasure = 10000;
 
 		//model
 		m_modelIndex = 0;
@@ -108,9 +109,8 @@ public:
 		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) ) && m_treasure > 50*dt)
 		{
 			m_treasure -= 50 * dt;
-			m_boostRot += dt;
-			if (m_boostRot > 1.5)
-				m_boostRot = 1.5;
+			
+			m_boostRot = 1;
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
@@ -118,7 +118,7 @@ public:
 
 
 			m_fallAcceleration += m_transform->Forward().Dot(m_transform->Up()) * m_accelerationSpeed;
-			m_fallSpeed = 0;
+			
 		}
 		else
 		{
@@ -142,7 +142,7 @@ public:
 	void ShipMove(float const forwardFactor, float const dt)
 	{
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RT))
+		if (Input::GetButton(Input::Buttons::RT) || Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -203,7 +203,7 @@ public:
 	{
 		if (m_forwardSpeed > 0.01)
 		{
-			if (!(m_transform->GetPosition().y < m_initPosition.y && (upFactorX < 0 || upFactorY < 0)))
+			if (m_transform->GetPosition().y > m_initPosition.y - 0.05f || (upFactorX < 0 || upFactorY < 0))	//
 			{
 				//m_transform->Rotate(0, 0, dt*math::DegreesToradians(upFactorY * 10));
 				//m_transform->Rotate(0, dt*math::DegreesToradians(upFactorX * 10), 0);
@@ -325,7 +325,7 @@ public:
 		float const left_y = Input::GetLeftStickY();
 
 		//get forward, right and up contrib
-		float forwardFactor = left_y;
+		float forwardFactor = 0;
 		float rightFactor = -left_x;
 		float upFactorX = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
 		float upFactorY = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
@@ -349,7 +349,7 @@ public:
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
 		ShipFly(upFactorX, upFactorY, dt);
-		ShipFireCannons();
+		//ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
