@@ -65,7 +65,7 @@ public:
 
 		//gravity
 		m_fallSpeed = 0;
-		m_fallAcceleration = 0;
+		m_gravety = 9.82;
 
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
@@ -119,9 +119,6 @@ public:
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
 			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
-
-
-			m_fallAcceleration += m_transform->Forward().Dot(m_transform->Up()) * m_accelerationSpeed;
 			
 		}
 		else
@@ -152,7 +149,7 @@ public:
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
 			
 		}
-		else if (forwardFactor > 0.01f)
+		else if (forwardFactor > 0.01f)//for retardcontrols
 		{
 			m_forwardSpeed += m_accelerationSpeed * forwardFactor * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -163,8 +160,8 @@ public:
 			m_forwardSpeed = std::fmaxf(m_forwardSpeed, 0);
 
 		}
-		//move the ship
-
+		
+		//colide with terrain
 		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
 		{
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed / 3);
@@ -217,21 +214,22 @@ public:
 			}
 		}
 
-		if (m_boostRot == 0 && m_transform->GetPosition().y > m_initPosition.y)
+		if (m_transform->GetPosition().y > m_initPosition.y + 0.01f)//gravety
 		{
-			m_fallAcceleration -= 9.82 * dt;
-			m_fallSpeed += m_fallAcceleration * dt;
-			m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
+			m_fallSpeed += m_boostRot * m_accelerationSpeed * dt * (m_transform->GetPosition().y - (m_transform->GetPosition() + m_transform->Forward()).y);
+			m_fallSpeed = std::fminf(m_fallSpeed, m_maxSpeed / 2);
+			m_fallSpeed -= m_gravety * dt;
+			if (m_fallSpeed < 0)
+				m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
 		}
-		else if (m_transform->GetPosition().y < m_initPosition.y - 0.01f)
+		else if (m_transform->GetPosition().y < m_initPosition.y)//back on ground //TODO: Separera landningen från detta, gör det smooth
 		{
-			m_fallSpeed = 0;
 			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
 			newForward.Normalize();
 			m_transform->SetPosition(m_transform->GetPosition().x, m_initPosition.y, m_transform->GetPosition().z);
 			m_transform->SetRotation(0, 0, 0);
 			m_transform->LookAt(m_transform->GetPosition() + newForward);
-			m_fallAcceleration = 0;
+			
 			m_fallSpeed = 0;
 		}
 	}
@@ -426,7 +424,7 @@ private:
 
 	float m_boostRot;
 	float m_fallSpeed;
-	float m_fallAcceleration;
+	float m_gravety;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",
