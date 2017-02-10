@@ -246,30 +246,15 @@ public:
 
 	}
 	//cam
-	void CameraRotate(float const right_x, float const dt, math::Vector3 const distanceVector)
+	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 	{
 		m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
-		if (std::abs(right_x) > m_controlSensitivity)
+		if (std::abs(right_x) > m_controlSensitivity || std::abs(right_y) > m_controlSensitivity)
 		{
-			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);//rotate camera around the boat
+			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(0,0,1)) * m_camRotationSpeed * right_y * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(-1, 0, 0)) * m_camRotationSpeed * right_y * dt);//rotate camera around the boat
 		}
 		
 		m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * distanceVector.Length());//move the camera back to the distance it was, after rotations
-	}
-		
-	void CameraMove(float const right_y, float const dt)
-	{
-		if (std::abs(right_y) > m_controlSensitivity)
-		{
-			if (m_cameraObject->m_transform->GetPosition().y > 3)
-			{
-				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
-			}
-			else if (right_y > m_controlSensitivity)
-			{
-				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
-			}
-		}
 	}
 
 	void CameraZoom(math::Vector3 const distanceVector, float const dt)
@@ -355,8 +340,7 @@ public:
 
 		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
 		
-		CameraRotate(right_x, dt, distanceVector);
-		CameraMove(right_y, dt);
+		CameraRotate(right_x, right_y, dt, distanceVector);
 		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
 		CameraZoom(distanceVector, dt);
