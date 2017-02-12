@@ -62,15 +62,31 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		//Init objects lägga till LoadObjects i scene?
-		thomas::object::GameObject::Instantiate<CameraObject>(this);
-		thomas::object::GameObject::Instantiate<TerrainObject>(this);
-		thomas::object::GameObject::Instantiate<Ship>(this);
-		thomas::object::GameObject::Instantiate<WaterObject>(this);
-		thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
+		m_cameraObject = thomas::object::GameObject::Instantiate<CameraObject>(this);
+		m_terrainObject = thomas::object::GameObject::Instantiate<TerrainObject>(this);
+		m_ship = thomas::object::GameObject::Instantiate<Ship>(this);
+		m_waterObject = thomas::object::GameObject::Instantiate<WaterObject>(this);
+		m_testDirectionalLight = thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
 
 		//Init Cameras //lägga i scene init eller loadscene kanske?
 		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
 		for(GameObject* object : cameraObjects)
 			m_cameras.push_back(object->GetComponent<object::component::Camera>());
 	};
+	
+	void UnloadScene()
+	{
+		thomas::object::GameObject::Destroy(m_cameraObject);
+		thomas::object::GameObject::Destroy(m_terrainObject);
+		thomas::object::GameObject::Destroy(m_ship);
+		thomas::object::GameObject::Destroy(m_waterObject);
+		thomas::object::GameObject::Destroy(m_testDirectionalLight);
+	}
+
+private:
+	CameraObject* m_cameraObject;
+	TerrainObject* m_terrainObject;
+	Ship* m_ship;
+	WaterObject* m_waterObject;
+	TestDirectionalLight* m_testDirectionalLight;
 };

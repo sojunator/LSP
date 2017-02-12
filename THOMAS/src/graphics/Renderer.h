@@ -31,6 +31,9 @@ namespace thomas {
 			static void UnBindGameObjectBuffer();
 			static void RenderSetup(object::component::Camera* camera);
 
+			static void BindDepthNormal();
+			static void BindDepthReadOnly();
+
 		private:
 			struct GameObjectBuffer
 			{
@@ -47,6 +50,7 @@ namespace thomas {
 			static ID3D11RasterizerState* s_wireframeRasterState;
 			static ID3D11DepthStencilState* s_depthStencilState;
 			static ID3D11DepthStencilView* s_depthStencilView;
+			static ID3D11DepthStencilView* s_depthStencilViewReadOnly;
 			static ID3D11ShaderResourceView* s_depthBufferSRV;
 
 			static ID3D11Buffer* s_objectBuffer;

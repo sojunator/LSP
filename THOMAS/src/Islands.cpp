@@ -7,7 +7,6 @@ namespace thomas
 	{
 		std::srand(time(NULL));
 		std::vector<utils::Plane::PlaneData> tempPlane;
-		std::vector<graphics::Mesh*> mesh;
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;

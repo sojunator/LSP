@@ -13,7 +13,8 @@ namespace thomas
 		void static UpdateCurrentScene();
 		std::vector<graphics::Shader*> GetShaders();
 		static void Render();
-		void Render(object::component::Camera* camera);
+		void Render3D(object::component::Camera* camera);
+		void Render2D(object::component::Camera* camera);
 		graphics::Material* LoadMaterial(std::string type, graphics::Material* material);
 		//void RemoveMaterial(std::string name);
 		graphics::Shader* LoadShader(std::string name, graphics::Shader::InputLayouts inputLayout, std::string path);
