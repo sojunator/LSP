@@ -66,6 +66,7 @@ public:
 		//gravity
 		m_fallSpeed = 0;
 		m_gravety = 9.82;
+		m_inAir = false;
 
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
@@ -85,7 +86,7 @@ public:
 
 	}
 
-	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)
+	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
 	{
 		//The left stick controlls the ship ASWELL as its orientation. The position of the camera changes the way the boat is maneuvered
 		if (left_x != 0 || left_y != 0)
@@ -201,20 +202,18 @@ public:
 		m_transform->Rotate(m_rotation * dt, 0, 0);
 	}
 
-	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const dt)
+	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 	{
-		if (m_forwardSpeed > 0.01)
+		if (!m_inAir && left_y < 0)
 		{
-			if (m_transform->GetPosition().y > m_initPosition.y - 0.05f || (upFactorPitch < 0 || upFactorRoll < 0))
-			{
-				if (m_transform->GetPosition().y < m_initPosition.y + 0.05f)
-					m_transform->Rotate(0, m_boostRot * dt * math::DegreesToradians(upFactorPitch * 10), m_boostRot * dt * math::DegreesToradians(upFactorRoll * 10));
-				else
-					m_transform->Rotate(0, dt * math::DegreesToradians(upFactorPitch * 10), dt * math::DegreesToradians(upFactorRoll * 10));
-			}
+			m_transform->Rotate(0, m_boostRot * dt * upFactorPitch * m_rotationSpeed, m_boostRot * dt * upFactorRoll * m_rotationSpeed);
+		}
+		else if (m_inAir)
+		{
+			m_transform->Rotate(0, dt * upFactorPitch * m_rotationSpeed, dt * upFactorRoll * m_rotationSpeed);
 		}
 
-		if (m_transform->GetPosition().y > m_initPosition.y + 0.01f)//gravety
+		if (m_inAir)//gravety
 		{
 			m_fallSpeed += m_boostRot * m_accelerationSpeed * dt * (m_transform->GetPosition().y - (m_transform->GetPosition() + m_transform->Forward()).y);
 			m_fallSpeed = std::fminf(m_fallSpeed, m_maxSpeed / 2);
@@ -222,15 +221,21 @@ public:
 			if (m_fallSpeed < 0)
 				m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
 		}
-		else if (m_transform->GetPosition().y < m_initPosition.y)//back on ground //TODO: Separera landningen från detta, gör det smooth
+
+		if (m_inAir && m_transform->GetPosition().y <= m_initPosition.y)//back on ground //TODO: gör det smooth
 		{
 			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
 			newForward.Normalize();
 			m_transform->SetPosition(m_transform->GetPosition().x, m_initPosition.y, m_transform->GetPosition().z);
 			m_transform->SetRotation(0, 0, 0);
 			m_transform->LookAt(m_transform->GetPosition() + newForward);
-			
+
 			m_fallSpeed = 0;
+			m_inAir = false;
+		}
+		else if (!m_inAir && m_transform->GetPosition().y > m_initPosition.y + 0.2f)
+		{
+			m_inAir = true;
 		}
 	}
 		
@@ -345,15 +350,11 @@ public:
 
 		ShipBoost(dt);
 		
-		if (m_retardControllsOn)
-		{
-			RetardControls(forwardFactor, rightFactor, upFactorPitch, upFactorRoll, left_x, left_y);
-		}
 		
 		//Ship Movement
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorPitch, upFactorRoll, dt);
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		//ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
@@ -425,6 +426,7 @@ private:
 	float m_boostRot;
 	float m_fallSpeed;
 	float m_gravety;
+	bool m_inAir;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",
