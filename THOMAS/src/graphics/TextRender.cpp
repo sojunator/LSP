@@ -76,6 +76,7 @@ namespace thomas
 				LOG("Failed to load font for " << name);
 				return false;
 			}
+			return true;
 		}
 
 		bool TextRender::Initialize()

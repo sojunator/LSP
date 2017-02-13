@@ -6,7 +6,7 @@ PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* mate
 	m_textures = utils::AssimpLoader::GetMaterialTextures(material, dir);
 	m_materialProperties.materialProperty = math::Vector4(0, 0, 0, 0);
 
-	for (int i = 0; i < m_textures.size(); i++)
+	for (unsigned int i = 0; i < m_textures.size(); i++)
 	{
 		switch (m_textures[i]->GetTextureType())
 		{

@@ -31,7 +31,7 @@ namespace thomas
 	void Islands::GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m)
 	{
 		std::vector<thomas::graphics::Mesh*> mesh;
-		for (int i = 0; i < tempPlane.size(); ++i)
+		for (unsigned int i = 0; i < tempPlane.size(); ++i)
 		{
 			mesh.push_back(new graphics::Mesh(tempPlane[i].verts, tempPlane[i].indices, "Plane-1", m));
 
@@ -41,7 +41,7 @@ namespace thomas
 
 	void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
 	{
-		for (int i = 0; i < tempPlanes.verts.size(); ++i)
+		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
 			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
 			tempPlanes.verts[i].position.z += m_worldPosOffset[island].y;
@@ -50,9 +50,9 @@ namespace thomas
 
 	Islands::~Islands()
 	{
-		for (int i = 0; i < m_mesh.size(); ++i)
+		for (unsigned int i = 0; i < m_mesh.size(); ++i)
 		{
-			for (int j = 0; j < m_mesh[i].size(); ++j)
+			for (unsigned int j = 0; j < m_mesh[i].size(); ++j)
 			{
 				delete m_mesh[i][j];
 			}
@@ -176,10 +176,10 @@ namespace thomas
 				else
 				{
 					std::vector<float> distance;
-					for (int j = 0; j < m_worldPosOffset.size(); j++)
+					for (unsigned int j = 0; j < m_worldPosOffset.size(); j++)
 						distance.push_back((m_worldPosOffset[j].x - xy.x) * (m_worldPosOffset[j].x - xy.x) + (m_worldPosOffset[j].y - xy.y) * (m_worldPosOffset[j].y - xy.y));
 
-					for (int k = 0; k < distance.size(); ++k)
+					for (unsigned int k = 0; k < distance.size(); ++k)
 					{
 						if (distance[k] < m_minDistance*m_minDistance)
 						{

@@ -71,7 +71,7 @@ namespace thomas
 		template<typename T>
 		T* GameObject::GetComponent()
 		{
-			for (int i = 0; i < m_components.size(); i++)
+			for (unsigned int i = 0; i < m_components.size(); i++)
 			{
 				T* comp = dynamic_cast<T*>(m_components[i]);
 				if (comp)
@@ -84,7 +84,7 @@ namespace thomas
 		inline std::vector<T*> GameObject::GetComponents()
 		{
 			std::vector<T*> components;
-			for (int i = 0; i < m_components.size(); i++)
+			for (unsigned int i = 0; i < m_components.size(); i++)
 			{
 				T* comp = dynamic_cast<T*>(m_components[i]);
 				if (comp)
@@ -97,7 +97,7 @@ namespace thomas
 		inline std::vector<GameObject*> GameObject::FindGameObjectsWithComponent()
 		{
 			std::vector<GameObject*> gameObjectsWithComponent;
-			for (int i = 0; i < s_gameObjects.size(); i++)
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
 			{
 				T* component = s_gameObjects[i]->GetComponent<T>();
 				if (component)
