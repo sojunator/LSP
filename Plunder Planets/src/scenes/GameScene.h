@@ -52,23 +52,23 @@ public:
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
 
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
 		}		
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
 		}
 
 		//Init text

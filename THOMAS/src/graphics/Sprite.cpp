@@ -91,7 +91,7 @@ namespace thomas
 			SetImagePosX(posX);
 			SetImagePosY(posY);
 			
-			s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
+			s_spriteBatch->Begin();
 						
 			s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
 				0.f, s_origin, scale);

@@ -128,13 +128,20 @@ public:
 		{		
 			//Only in a certain state, like menu
 			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
-			math::Vector2 mouseDelta = Input::GetMousePosition();
-			
-			std::cout << mouseDelta.x << ", " << mouseDelta.y << std::endl;
-			
-		
-		
-			//std::cout << "Hello" << std::endl;
+			math::Vector2 mousePos = Input::GetMousePosition();
+
+			//Construct boundaries
+			float xLeft = m_button->GetPosition().x;
+			float xRight = m_button->GetPosition().x + m_button->GetWidth();
+			float yTop = m_button->GetPosition().y;
+			float yDown = m_button->GetPosition().y + m_button->GetHeight();
+
+			if (mousePos.x >= xLeft && mousePos.x <= xRight && mousePos.y <= yDown && mousePos.y >= yTop)
+			{
+				std::cout << "Yes" << std::endl;
+			}
+			else
+				std::cout << "No" << std::endl;
 		}
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
