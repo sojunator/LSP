@@ -50,13 +50,27 @@ public:
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+
+		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+		}		
 		else
+		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button.png");
+		}
+
 		//Init text
 		thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");

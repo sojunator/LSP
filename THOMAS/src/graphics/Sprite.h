@@ -16,8 +16,10 @@ namespace thomas
 		{
 		public:
 			static bool LoadTexture(std::string name, std::string texture);
-			static void Destroy();
 			static bool Initialize();
+			static UINT GetImageWidth();
+			static UINT GetImageHeight();
+			static void Destroy();
 			static void SetImagePosX(float posX);
 			static void SetImagePosY(float posY);
 			static void RenderImage(std::string name, float posX, float posY, float scale);
@@ -30,6 +32,7 @@ namespace thomas
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;
 			static std::unique_ptr<DirectX::CommonStates> s_states;
+			static math::Vector2 imageSize;
 		};
 	}
 }

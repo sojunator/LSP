@@ -1,5 +1,7 @@
 #include "SpriteComponent.h"
 #include "../../Window.h"
+#include "../../graphics/Sprite.h"
+
 namespace thomas
 {
 	namespace object
@@ -19,6 +21,16 @@ namespace thomas
 			float SpriteComponent::GetScale()
 			{
 				return m_scale;
+			}
+
+			UINT SpriteComponent::GetWidth()
+			{
+				return thomas::graphics::Sprite::GetImageWidth();
+			}
+
+			UINT SpriteComponent::GetHeight()
+			{
+				return thomas::graphics::Sprite::GetImageHeight();
 			}
 
 			std::string SpriteComponent::GetSignature()

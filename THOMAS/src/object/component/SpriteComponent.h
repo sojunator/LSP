@@ -14,6 +14,8 @@ namespace thomas
 				SpriteComponent();
 				math::Vector2 GetPosition();
 				float GetScale();
+				UINT GetWidth();
+				UINT GetHeight();
 				std::string GetSignature();
 
 				void SetName(std::string name);

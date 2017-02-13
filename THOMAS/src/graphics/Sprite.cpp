@@ -9,6 +9,7 @@ namespace thomas
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
 		std::unique_ptr<DirectX::CommonStates> Sprite::s_states;
+		math::Vector2 Sprite::imageSize;
 
 		bool Sprite::LoadTexture(std::string name, std::string texture)
 		{
@@ -29,6 +30,9 @@ namespace thomas
 
 			CD3D11_TEXTURE2D_DESC imageDesc;
 			image->GetDesc(&imageDesc);
+			
+			imageSize.x = imageDesc.Width;
+			imageSize.y = imageDesc.Height;
 
 			s_origin.x = 0;
 			s_origin.y = 0;
@@ -60,6 +64,16 @@ namespace thomas
 				return false;
 			}
 			return true;
+		}
+
+		UINT Sprite::GetImageWidth()
+		{
+			return imageSize.x;
+		}
+
+		UINT Sprite::GetImageHeight()
+		{
+			return imageSize.y;
 		}
 
 		void Sprite::SetImagePosX(float posX)
