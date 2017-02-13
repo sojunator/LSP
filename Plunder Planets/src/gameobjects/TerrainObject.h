@@ -32,7 +32,7 @@ public:
 
 		m_renderer->SetModel("Plane-1");
 
-		m_transform->SetPosition(math::Vector3(0, -1, 0));
+		m_transform->SetPosition(math::Vector3(0, -2, 0));
 
 
 	}
