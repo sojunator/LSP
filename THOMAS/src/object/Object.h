@@ -22,6 +22,8 @@ namespace thomas
 			Scene* GetScene();
 
 			static bool Destroy(Object *object);
+			static void Destroy(Scene* scene);
+			static void Destroy();
 			//Clone object
 			template<typename T>
 			static T* Instantiate(Scene* scene);

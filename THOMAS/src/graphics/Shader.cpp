@@ -374,6 +374,7 @@ namespace thomas
 			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader);
 			if (shader)
 				s_loadedShaders.push_back(shader);
+				
 			return shader;
 		}
 		Shader * Shader::GetCurrentBoundShader()
@@ -389,9 +390,25 @@ namespace thomas
 			}
 			return NULL;
 		}
+		std::vector<Shader*> Shader::GetShadersByScene(Scene * scene)
+		{
+			std::vector<Shader*> output;
+			for (Shader* shader : s_loadedShaders)
+				if (shader->m_scene == scene)
+					output.push_back(shader);
+			return output;
+		}
 		std::vector<Shader*> Shader::GetLoadedShaders()
 		{
 			return s_loadedShaders;
+		}
+		void Shader::Destroy(Scene* scene)
+		{
+			for (int i = 0; i < s_loadedShaders.size(); ++i)
+				if (s_loadedShaders[i]->m_scene == scene)
+				{
+					s_loadedShaders.erase(s_loadedShaders.begin() + i);
+				}
 		}
 	}
 

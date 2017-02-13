@@ -5,6 +5,7 @@
 #include <vector>
 namespace thomas
 {
+	class Scene;
 	namespace graphics
 	{
 
@@ -51,12 +52,15 @@ namespace thomas
 
 			static ID3DBlob* Compile(std::string source, std::string profile, std::string main);
 			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string filePath);
-			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader);
+			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, 
+				std::string geometryShader, std::string hullShader, std::string domainShader, 
+				std::string pixelShader);
 			static Shader* GetCurrentBoundShader();
 			static Shader* GetShaderByName(std::string name);
+			static std::vector<Shader*> GetShadersByScene(Scene* scene);
 			static std::vector<Shader*> GetLoadedShaders();
 			static bool Destroy();
-
+			static void Destroy(Scene* scene);
 
 		private:
 			struct Data
@@ -82,13 +86,11 @@ namespace thomas
 			Data m_data;
 			std::string m_name;
 			std::string m_filePath;
+			Scene* m_scene;
 
 			static Shader* s_currentBoundShader;
 
 			static std::vector<Shader*> s_loadedShaders;
-
-
-
 		};
 	}
 }

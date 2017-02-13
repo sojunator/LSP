@@ -79,14 +79,6 @@ namespace thomas {
 			Window::Destroy();
 
 		Scene::UpdateCurrentScene();
-		
-		/*for (object::Object* object : thomas::object::Object::GetObjects())
-		{
- 			if(object)
-				object->Update();
-		}*/
-
-		//graphics::Renderer::Render();
 		Scene::Render();
 	}
 
@@ -144,6 +136,7 @@ namespace thomas {
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
 		graphics::Renderer::Destroy();
+		object::Object::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();

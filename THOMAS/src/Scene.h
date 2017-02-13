@@ -9,9 +9,9 @@ namespace thomas
 		static bool Init();
 		static Scene* AddScene(Scene* scene);
 		static void Destroy(Scene* scene);
+		static void Destroy();
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static UpdateCurrentScene();
-		std::vector<graphics::Shader*> GetShaders();
 		static void Render();
 		void Render3D(object::component::Camera* camera);
 		void Render2D(object::component::Camera* camera);

@@ -2,6 +2,7 @@
 #include "graphics\PostEffect.h"
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
+#include "graphics\Shader.h"
 
 namespace thomas
 {
@@ -26,6 +27,17 @@ namespace thomas
 	}
 	void Scene::Destroy(Scene* scene)
 	{
+		graphics::Shader::Destroy(scene);
+		object::Object::Destroy(scene);
+		for (int i = 0; i < s_scenes.size(); ++i)
+			if (s_scenes[i] == scene)
+				s_scenes.erase(s_scenes.begin() + i);
+	}
+	void Scene::Destroy()
+	{
+		s_scenes.clear();
+		if (s_currentScene)
+			delete s_currentScene;
 	}
 	void Scene::LoadScene(Scene* scene)
 	{
@@ -34,10 +46,6 @@ namespace thomas
 	void Scene::UpdateCurrentScene()
 	{
 		object::Object::Clean();
-	}
-	std::vector<graphics::Shader*> Scene::GetShaders()
-	{
-		return m_shaders;
 	}
 	void Scene::Render()
 	{
@@ -58,9 +66,6 @@ namespace thomas
 			else
 				LOG("No scene set");
 
-			
-
-
 			s_currentScene->Render3D(camera);
 			s_currentScene->Render2D(camera);
 
@@ -72,6 +77,7 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{	
 		
+		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene)) TODO: Set this up.
 		for (graphics::Shader* shader : m_shaders)
 		{
 			shader->Bind();
