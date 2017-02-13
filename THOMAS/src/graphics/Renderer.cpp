@@ -71,13 +71,16 @@ namespace thomas
 		bool Renderer::Destroy()
 		{
 			SAFE_RELEASE(s_backBuffer);
+			SAFE_RELEASE(s_backBufferSRV);
 			SAFE_RELEASE(s_rasterState);
+			SAFE_RELEASE(s_wireframeRasterState);
 			SAFE_RELEASE(s_depthStencilState);
 			SAFE_RELEASE(s_depthStencilView);
+			SAFE_RELEASE(s_depthStencilViewReadOnly);
+			SAFE_RELEASE(s_depthBufferSRV);
 			SAFE_RELEASE(s_objectBuffer);
-
+			
 			return true;
-
 		}
 		std::vector<object::component::Camera*> Renderer::GetCameras()
 		{

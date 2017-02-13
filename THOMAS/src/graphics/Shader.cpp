@@ -106,10 +106,16 @@ namespace thomas
 			m_name = name;
 
 			m_data.vs = NULL;
+			m_data.vertexShader = nullptr;
 			m_data.ps = NULL;
+			m_data.pixelShader = nullptr;
 			m_data.gs = NULL;
+			m_data.geometryShader = nullptr;
 			m_data.hs = NULL;
+			m_data.hullShader = nullptr;
 			m_data.ds = NULL;
+			m_data.domainShader = nullptr;
+			
 			if(!vertexShader.empty())
 				m_data.vs = Compile(vertexShader, "vs_5_0", "VSMain");
 			if (!geometryShader.empty())
@@ -142,6 +148,17 @@ namespace thomas
 		{
 			m_name = name;
 			m_filePath = filePath;
+
+			m_data.vs = NULL;
+			m_data.vertexShader = nullptr;
+			m_data.ps = NULL;
+			m_data.pixelShader = nullptr;
+			m_data.gs = NULL;
+			m_data.geometryShader = nullptr;
+			m_data.hs = NULL;
+			m_data.hullShader = nullptr;
+			m_data.ds = NULL;
+			m_data.domainShader = nullptr;
 
 			m_data.vs = Compile(filePath, "vs_5_0", "VSMain");
 			m_data.ps = Compile(filePath, "ps_5_0", "PSMain");
@@ -205,6 +222,8 @@ namespace thomas
 			{
 				delete s_loadedShaders[i];
 			}
+			delete s_currentBoundShader;
+
 			return true;
 		}
 

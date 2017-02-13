@@ -21,6 +21,10 @@ namespace thomas
 				m_skybox = NULL;
 				UpdateProjMatrix();
 			}
+			Camera::~Camera()
+			{
+				ReleaseSkybox();
+			}
 
 			math::Matrix Camera::GetProjMatrix()
 			{
