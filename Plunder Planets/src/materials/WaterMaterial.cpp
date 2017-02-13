@@ -42,7 +42,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::DIFFUSE, "../res/textures/perlin.dds"));
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "OceanDisplacement", m_oceanSim->getD3D11DisplacementMap()));
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "OceanNormal", m_oceanSim->getD3D11GradientMap()));
-	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::SPECULAR, "../res/textures/Wavy_Water - Specular.png"));
+	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::SPECULAR, "../res/textures/foam.png"));
 	
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, 5, "dephBuffer", Renderer::GetDepthBufferSRV()));
 
@@ -69,6 +69,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 void WaterMaterial::Update()
 {
 	timeSinceLastUpdate += Time::GetDeltaTime();
+	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 	time += Time::GetDeltaTime();
 
 	if (timeSinceLastUpdate > 0.03)

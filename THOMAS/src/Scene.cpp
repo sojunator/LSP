@@ -108,7 +108,7 @@ namespace thomas
 		{
 
 			graphics::Renderer::BindDepthReadOnly();
-			ThomasCore::GetDeviceContext()->OMSetBlendState(graphics::TextRender::s_states->AlphaBlend(), DirectX::Colors::Black, 0xFFFFFFFF);
+			ThomasCore::GetDeviceContext()->OMSetBlendState(graphics::TextRender::s_states->AlphaBlend(), NULL, 0xFFFFFFFF);
 			oceanShader->Bind();
 			camera->BindReflection();
 			graphics::LightManager::BindAllLights();

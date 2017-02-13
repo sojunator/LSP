@@ -188,7 +188,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 	vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
 
-	float4 pos = float4(vertexPosition.xz, 0, 1);
+	float4 pos = float4(vertexPosition.xzy, 1);
 
 	output.tex = pos.xy * uvScale + uvOffset;
 
@@ -286,22 +286,24 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float reflectContrib = 0.45f; //hardcoded lerpfactor between watercolor and the sampled reflection
 
-
-	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
+	float2 tx = input.positionWS.xz / 50.0;
+	tx += perlinMovement;
+	float3 baseColor = foamTexture.Sample(foamSampler, tx).rgb;
+	float3 waterColor = lerp(baseColor, reflection, reflectContrib);
 
 	float cosSpec = saturate(dot(reflectVec, sunDir));
 	float sunSpot = pow(cosSpec, shininess); //shiny
 
-	float wD = clamp(waterDepth/0.002, 0, 1);
+	float wD = clamp(waterDepth/0.001, 0, 1);
 
 
-	float3 foamColor = foamTexture.Sample(foamSampler, input.tex);
+	float3 foamColor = float3(1,1,1);
 
 	waterColor = lerp(foamColor, waterColor, wD);
 
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
 	
-	float opacity = clamp(waterDepth/0.05, 0, 1);
+	float opacity = clamp(waterDepth/0.1, 0, 1);
 
-	return float4(waterColor, opacity);
+	return float4(waterColor, opacity+(1.0-wD));
 }

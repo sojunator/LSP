@@ -29,7 +29,7 @@ public:
 		m_renderer->SetModel("ocean");
 
 		//m_transform->SetScale(0.05);
-		m_transform->SetPosition(math::Vector3(-dim / 2, 0, dim / 2));
+		m_transform->SetPosition(math::Vector3(-dim / 2, 1.0, dim / 2));
 
 		m_oceanSounds = AddComponent<component::SoundComponent>();
 	}
