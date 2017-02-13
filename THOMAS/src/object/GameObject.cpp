@@ -17,7 +17,7 @@ namespace thomas
 		}
 		GameObject * GameObject::Find(std::string type)
 		{
-			for (int i = 0; i < s_gameObjects.size(); i++)
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
 			{
 				if (s_gameObjects[i]->m_type == type)
 					return s_gameObjects[i];
@@ -33,14 +33,14 @@ namespace thomas
 		bool GameObject::Destroy(GameObject * gameObject)
 		{
 
-			for (int i = 0; i < gameObject->m_components.size(); i++)
+			for (unsigned int i = 0; i < gameObject->m_components.size(); i++)
 			{
 				if (gameObject->m_components[i])
 					Object::Destroy(gameObject->m_components[i]);
 			}
 			gameObject->m_components.empty();
 
-			for (int i = 0; i < s_gameObjects.size(); i++)
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
 			{
 				if (s_gameObjects[i] == gameObject)
 				{

@@ -3,7 +3,6 @@
 #include <AtlBase.h>
 #include <atlconv.h>
 
-#pragma warning(disable: 3501)
 namespace thomas
 {
 	namespace graphics
@@ -106,10 +105,16 @@ namespace thomas
 			m_name = name;
 
 			m_data.vs = NULL;
+			m_data.vertexShader = nullptr;
 			m_data.ps = NULL;
+			m_data.pixelShader = nullptr;
 			m_data.gs = NULL;
+			m_data.geometryShader = nullptr;
 			m_data.hs = NULL;
+			m_data.hullShader = nullptr;
 			m_data.ds = NULL;
+			m_data.domainShader = nullptr;
+			
 			if(!vertexShader.empty())
 				m_data.vs = Compile(vertexShader, "vs_5_0", "VSMain");
 			if (!geometryShader.empty())
@@ -142,6 +147,17 @@ namespace thomas
 		{
 			m_name = name;
 			m_filePath = filePath;
+
+			m_data.vs = NULL;
+			m_data.vertexShader = nullptr;
+			m_data.ps = NULL;
+			m_data.pixelShader = nullptr;
+			m_data.gs = NULL;
+			m_data.geometryShader = nullptr;
+			m_data.hs = NULL;
+			m_data.hullShader = nullptr;
+			m_data.ds = NULL;
+			m_data.domainShader = nullptr;
 
 			m_data.vs = Compile(filePath, "vs_5_0", "VSMain");
 			m_data.ps = Compile(filePath, "ps_5_0", "PSMain");
@@ -201,10 +217,12 @@ namespace thomas
 		}
 
 		bool Shader::Destroy() {
-			for (int i = 0; i < s_loadedShaders.size(); i++)
+			for (unsigned int i = 0; i < s_loadedShaders.size(); i++)
 			{
 				delete s_loadedShaders[i];
 			}
+			delete s_currentBoundShader;
+
 			return true;
 		}
 
@@ -364,7 +382,7 @@ namespace thomas
 		}
 		Shader * Shader::GetShaderByName(std::string name)
 		{
-			for (int i = 0; i < s_loadedShaders.size(); i++)
+			for (unsigned int i = 0; i < s_loadedShaders.size(); i++)
 			{
 				if (s_loadedShaders[i]->GetName() == name)
 					return s_loadedShaders[i];

@@ -142,14 +142,29 @@ namespace thomas
 
 		void PostEffect::Destroy()
 		{
-			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
+			s_renderToBackBuffer->m_effectProperties->Release();
+			s_renderToBackBuffer->m_renderTarget->Release();
+			s_renderToBackBuffer->m_shaderResource->Release();
+			delete s_renderToBackBuffer;
+
+			s_cameraBuffer->Release();
+			s_quadVertexBuffer->Release();
+			for (unsigned int i = 0; i < s_loadedEffects.size(); ++i)
 			{
-				delete s_loadedEffects[i];
+				s_loadedEffects[i]->m_effectProperties->Release();
+				s_loadedEffects[i]->m_renderTarget->Release();
+				s_loadedEffects[i]->m_shaderResource->Release();
 			}
+			
 			for (auto const& effectTypes : s_postEffectTypes)
 			{
 				delete effectTypes.second;
 			}	
+			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
+			{
+				delete s_loadedEffects[i];
+				
+			}
 		}
 
 		bool PostEffect::RenderPostEffect(ID3D11ShaderResourceView* prevRender, ID3D11RenderTargetView* backBuffer)

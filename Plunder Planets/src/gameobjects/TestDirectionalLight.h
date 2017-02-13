@@ -17,6 +17,7 @@ public:
 	void Start()
 	{
 		m_dirLight = AddComponent<component::DirectionalLight>();
+
 		m_transform->SetRotation(0.936016f, -0.343206f, 0.0780013f);
 		m_dirLight->SetLightColor(math::Vector4(1.0f, 1.0f, 0.6f, 1));
 
@@ -41,5 +42,6 @@ public:
 	}
 private:
 	component::DirectionalLight* m_dirLight;
+	component::DirectionalLight* m_dirLight2;
 	float m_rot;
 };

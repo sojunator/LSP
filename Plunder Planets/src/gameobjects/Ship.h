@@ -24,28 +24,36 @@ public:
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
-		m_treasure = 0;
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(90), 0, 0), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromYawPitchRoll(math::DegreesToradians(-90), 0, 0), m_transform, m_scene);
+		/*//Detta funkar fan inte
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
+		*/
 
-		m_treasure = 0;
+
+		m_treasure = 10000;
+
+		//model
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
 
+		//sound
 		m_boostSound->SetClip("mThomas");
 		m_boostSound->SetVolume(0.9);
+		m_soundDelay = 5;
+		m_soundDelayLeft = 5;
 
-
-		m_transform->SetPosition(math::Vector3(0, -0.8, 0));
+		//orientation
+		m_initPosition = math::Vector3(0, -0.8, 0);
+		m_transform->SetPosition(m_initPosition);
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
-
+		//movement
 		m_forwardSpeed = 0;
-		
 		m_accelerationSpeed = 9.5f;
 		m_retardationSpeed = 6.5f;
 		m_maxSpeed = 30.0f;
 
+		m_boostRot = 0;
 		m_nonBoostMaxSpeed = m_maxSpeed;
 		m_nonBoostAcceleration = m_accelerationSpeed;
 		m_boostAcceleration = m_accelerationSpeed * 3;
@@ -55,71 +63,64 @@ public:
 		m_minmaxRotFactor = 0.45f;
 		m_rotation = 0.0f;
 
+		//gravity
+		m_fallSpeed = 0;
+		m_gravety = 9.82;
+		m_inAir = false;
+
+		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
 		m_elevateCamSpeed = 38;
 		m_camZoomSpeed = 45.0f;
 		m_camRotationSpeed = 2.0f;
 		m_camMinDistanceFromBoat = 20.0f;
-		m_camMaxDistanceFromBoat = 120.0f;
+		m_camMaxDistanceFromBoat = 220.0f;
 
-		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 50 + math::Vector3(0, 25, 0));
-		m_lookAtOffset = math::Vector3(0, 25, 0);
+		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
+		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 
-		m_vulkanControllsOn = false;
+		m_retardControllsOn = false;
 
 	}
 
-	void VulkanControls(float& forwardFactor, float& rightFactor, float const left_x, float const left_y)
+	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
 	{
-		//calculate forward and right contribution of the cam, with the boat, and the controllers left stick
-		//these controlls makes for the left stick to match the coordinates of the boat
-		//no matter what direction the camera is pointing, the stick will serve in the boats coordinates
+		//The left stick controlls the ship ASWELL as its orientation. The position of the camera changes the way the boat is maneuvered
 		if (left_x != 0 || left_y != 0)
 		{
 			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
-
 			camForwardXZ.Normalize();
 
-			forwardFactor = camForwardXZ.Dot(m_transform->Forward()) * -left_y + camForwardXZ.Dot(m_transform->Right()) * left_x;
+			float d1 = camForwardXZ.Dot(m_transform->Forward());
+			float d2 = camForwardXZ.Dot(m_transform->Right());
 
-			rightFactor = camForwardXZ.Dot(m_transform->Forward()) * left_x + camForwardXZ.Dot(m_transform->Right()) * left_y;
+			forwardFactor = d1 * -left_y + d2 * left_x;
 
+			rightFactor = d1 * left_x + d2 * left_y;
+
+			upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y * -d1 + m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_x * d2;
+			upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y * -d1 + m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_x * d2;
+
+		
 		}
 	}
 
-	void Update()
+	void ShipBoost(float const dt)
 	{
-		float dt = Time::GetDeltaTime();
-		float right_x = Input::GetRightStickX();
-		float right_y = Input::GetRightStickY();
-		float left_x = Input::GetLeftStickX();
-		float left_y = Input::GetLeftStickY();
-
-		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
-
-		math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
-		newForward.Normalize();
-		m_transform->SetRotation(0, 0, 0);
-		m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
-
-
-
-		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
-
 		//for the boost
 		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) ) && m_treasure > 50*dt)
 		{
 			m_treasure -= 50 * dt;
-			m_boostRot += dt;
-			if (m_boostRot > 1.5)
-				m_boostRot = 1.5;
+			
+			m_boostRot = 1;
 			m_boostSound->Play();
 			m_maxSpeed = m_boostMaxSpeed;
 			m_accelerationSpeed = m_boostAcceleration;
 			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
+			
 		}
 		else
 		{
@@ -138,23 +139,18 @@ public:
 			}
 			
 		}
-		//get forward and right contrib
-		float forwardFactor = left_y;
-		float rightFactor = -left_x;
-
-		if (m_vulkanControllsOn)
-		{
-			VulkanControls(forwardFactor, rightFactor, left_x, left_y);
-		}
+	}
 		
+	void ShipMove(float const forwardFactor, float const dt)
+	{
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RT))
+		if (Input::GetButton(Input::Buttons::RT) || Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
 			m_forwardSpeed += m_accelerationSpeed * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
 			
 		}
-		else if (forwardFactor > 0.01f)
+		else if (forwardFactor > 0.01f)//for retardcontrols
 		{
 			m_forwardSpeed += m_accelerationSpeed * forwardFactor * dt;
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
@@ -165,18 +161,20 @@ public:
 			m_forwardSpeed = std::fmaxf(m_forwardSpeed, 0);
 
 		}
-		//move the ship
-
+		
+		//colide with terrain
 		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
 		{
-			m_forwardSpeed = min(m_forwardSpeed, m_maxSpeed/2);
+			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed / 3);
 		}
 
 		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
 		m_transform->Translate(moveVec);
 		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
+	}
 		
-
+	void ShipRotate(float const  rightFactor, float const dt)
+	{
 		if (std::abs(rightFactor) > 0.01)
 		{
 			m_rotation += m_rotationSpeed * rightFactor * dt;
@@ -201,60 +199,93 @@ public:
 				}
 			}
 		}
-		if (m_forwardSpeed > 0.01)
-		{
-			
+		m_transform->Rotate(m_rotation * dt, 0, 0);
+	}
 
-			m_transform->Rotate(m_rotation * dt, 0, 0);
-			
+	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
+	{
+		if (!m_inAir && left_y < 0)
+		{
+			m_transform->Rotate(0, m_boostRot * dt * upFactorPitch * m_rotationSpeed, m_boostRot * dt * upFactorRoll * m_rotationSpeed);
+		}
+		else if (m_inAir)
+		{
+			m_transform->Rotate(0, dt * upFactorPitch * m_rotationSpeed, dt * upFactorRoll * m_rotationSpeed);
 		}
 
-		//if (m_boostRot == 0 && m_transform->GetPosition().y > -0.8)
-		//{
-		//	m_fallSpeed += -9.82 * dt;
-		//	m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
-		//}
-		//else if (m_boostRot == 0)
-		//{
-		//	m_fallSpeed = 0;
-		//	math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
-		//	newForward.Normalize();
-		//	m_transform->SetRotation(0, 0, 0);
-		//	m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
-		//	
-		//	float rollAngle = m_transform->Up().Dot(math::Vector3(0, 1, 0));
-		//	
-		//}
-		
-		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-		math::Vector3 distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
-
-		m_lookAtOffset = math::Vector3(0, distanceVector.Length() / 4, 0);//recalculate lookatoffset depending on camera range from boat
-		
-		m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations!
-
-		if (std::abs(right_x) > m_controlSensitivity)
+		if (m_inAir)//gravety
 		{
-			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);//rotate camera around the boat
+			m_fallSpeed += m_boostRot * m_accelerationSpeed * dt * (m_transform->GetPosition().y - (m_transform->GetPosition() + m_transform->Forward()).y);
+			m_fallSpeed = std::fminf(m_fallSpeed, m_maxSpeed / 2);
+			m_fallSpeed -= m_gravety * dt;
+			if (m_fallSpeed < 0)
+				m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
+		}
+
+		if (m_inAir && m_transform->GetPosition().y <= m_initPosition.y)//back on ground //TODO: gör det smooth
+		{
+			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
+			newForward.Normalize();
+			m_transform->SetPosition(m_transform->GetPosition().x, m_initPosition.y, m_transform->GetPosition().z);
+			m_transform->SetRotation(0, 0, 0);
+			m_transform->LookAt(m_transform->GetPosition() + newForward);
+
+			m_fallSpeed = 0;
+			m_inAir = false;
+		}
+		else if (!m_inAir && m_transform->GetPosition().y > m_initPosition.y + 0.2f)
+		{
+			m_inAir = true;
+		}
+	}
+		
+	void ShipFireCannons()
+	{
+		if (Input::GetButtonDown(Input::Buttons::RB))
+			m_broadSideRight->Fire(-m_forwardSpeed);
+		
+		if (Input::GetButtonDown(Input::Buttons::LB))
+			m_broadSideLeft->Fire(m_forwardSpeed);
+
+	}
+	//cam
+	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
+	{
+		m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
+		if (std::abs(right_x) > m_controlSensitivity || std::abs(right_y) > m_controlSensitivity)
+		{
+			float angle = std::acos(m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 1, 0))) * 180 / math::PI;
+			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);
+			bool allowRotation = true;
+
+			if (angle > 160)
+			{
+				if (right_y > 0)
+				{
+					allowRotation = false;
+				}
+			}
+			else if (angle < 20)
+			{
+				if (right_y < 0)
+				{
+					allowRotation = false;
+				}
+			}
+			
+			if (allowRotation)//anti gimballock
+			{
+				m_cameraObject->m_transform->Rotate(0, m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 0, 1)) * m_camRotationSpeed * right_y * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(-1, 0, 0)) * m_camRotationSpeed * right_y * dt);//rotate camera around the boat
+			}
+			
+			
 		}
 		
 		m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * distanceVector.Length());//move the camera back to the distance it was, after rotations
-		
-		if (std::abs(right_y) > m_controlSensitivity)
-		{
-			if (m_cameraObject->m_transform->GetPosition().y > 3)
-			{
-				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
-			}
-			else if (right_y > m_controlSensitivity)
-			{
-				m_cameraObject->m_transform->Translate(m_transform->Up() * right_y * m_elevateCamSpeed * dt);//move camera up and down
-			}
-		}
+	}
 
-		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset orientation of camera with lookat
-		
-
+	void CameraZoom(math::Vector3 const distanceVector, float const dt)
+	{
 		//zoom camera in or out. Also make sure that the camera dont get to close to the boat.
 		if (distanceVector.Length() > m_camMinDistanceFromBoat)
 		{
@@ -278,31 +309,16 @@ public:
 		{
 			m_cameraObject->m_transform->Translate(m_cameraObject->m_transform->Forward() * (distanceVector.Length() - m_camMaxDistanceFromBoat));
 		}
+	}
 
-
-		if(Input::GetButtonDown(Input::Buttons::RB))
-			m_broadSideRight->Fire(-m_forwardSpeed);
-
-		if (Input::GetButtonDown(Input::Buttons::LB))
-			m_broadSideLeft->Fire(m_forwardSpeed);
-
-
+	void PlaySounds(float const dt)
+	{
 		m_soundDelayLeft -= dt;
 		if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
 		{
 			m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
 			m_soundDelayLeft = m_soundDelay;
 		}
-
-		PlunderIsland();
-
-
-
-		newForward = math::Vector3(m_transform->Forward().x, m_boostRot*math::DegreesToradians(-10), m_transform->Forward().z);
-		newForward.Normalize();
-		m_transform->SetRotation(0, 0, 0);
-		m_transform->LookAt(m_transform->GetPosition() + newForward * 3);
-
 	}
 
 	void PlunderIsland()
@@ -315,6 +331,48 @@ public:
 	{
 		return m_treasure + 0.5;
 	}
+
+	void Update()
+	{
+		float const dt = Time::GetDeltaTime();
+		float const right_x = Input::GetRightStickX();
+		float const right_y = Input::GetRightStickY();
+		float const left_x = Input::GetLeftStickX();
+		float const left_y = Input::GetLeftStickY();
+
+		//get forward, right and up contrib
+		float forwardFactor = 0;
+		float rightFactor = -left_x;
+		float upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
+		float upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
+
+		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
+
+		ShipBoost(dt);
+		
+		
+		//Ship Movement
+		ShipMove(forwardFactor, dt);
+		ShipRotate(rightFactor, dt);
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		//ShipFireCannons();
+		
+		//Recalculate look at point and the new distance from cam to ship
+		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+
+		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
+		
+		CameraRotate(right_x, right_y, dt, distanceVector);
+		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+		CameraZoom(distanceVector, dt);
+		
+		PlaySounds(dt);
+		
+		PlunderIsland();
+	}
+
 private:
 	
 	//used for the boat
@@ -343,10 +401,11 @@ private:
 	float m_camMaxDistanceFromBoat;
 	//used for both
 	float m_controlSensitivity;
-	bool m_vulkanControllsOn;
+	bool m_retardControllsOn;
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
+	math::Vector3 m_initPosition;
 
 	//components
 	component::RenderComponent* m_renderer;
@@ -360,12 +419,14 @@ private:
 
 	int m_modelIndex;
 
-	float m_soundDelay = 5;
-	float m_soundDelayLeft = 5;
+	float m_soundDelay;
+	float m_soundDelayLeft;
 
 
-	float m_boostRot = 0;
-	float m_fallSpeed = 0;
+	float m_boostRot;
+	float m_fallSpeed;
+	float m_gravety;
+	bool m_inAir;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",

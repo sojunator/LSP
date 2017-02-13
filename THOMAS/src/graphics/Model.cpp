@@ -25,7 +25,7 @@ namespace thomas {
 
 		Model * Model::GetModelByName(std::string name)
 		{
-			for (int i = 0; i < s_loadedModels.size(); i++)
+			for (unsigned int i = 0; i < s_loadedModels.size(); i++)
 			{
 				if (s_loadedModels[i]->GetName() == name)
 					return s_loadedModels[i];
