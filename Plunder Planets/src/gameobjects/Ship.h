@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "Broadside.h"
 #include "TerrainObject.h"
+#include "WaterObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -334,6 +335,10 @@ public:
 
 	void Update()
 	{
+
+
+	
+
 		float const dt = Time::GetDeltaTime();
 		float const right_x = Input::GetRightStickX();
 		float const right_y = Input::GetRightStickY();
@@ -354,7 +359,7 @@ public:
 		//Ship Movement
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		//ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		//ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
@@ -371,6 +376,8 @@ public:
 		PlaySounds(dt);
 		
 		PlunderIsland();
+
+		((WaterObject*)Find("WaterObject"))->GetCollisionAt(m_transform);
 	}
 
 private:

@@ -14,6 +14,8 @@ public:
 	
 	void Update();
 
+	utils::ocean::OceanSimulator* GetOceanSim();
+
 	~WaterMaterial();
 private:
 	struct MaterialProperties

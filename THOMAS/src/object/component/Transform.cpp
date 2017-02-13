@@ -129,7 +129,7 @@ namespace thomas
 				else
 					newPosition = position;
 
-				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(newPosition, math::Vector3::Forward, math::Vector3::Up);
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(newPosition, Forward(), Up());
 				Decompose();
 			}
 			void Transform::SetPosition(float x, float y, float z)

@@ -17,12 +17,12 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// Adjust this parameter to control the simulation speed
 
 	// A scale to control the amplitude. Not the world space height
-	m_oceanSettings.wave_amplitude = 0.35f;
+	m_oceanSettings.wave_amplitude = 0.45f;
 	// 2D wind direction. No need to be normalized
 	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
 	// The bigger the wind speed, the larger scale of wave crest.
 	// But the wave scale can be no larger than patch_length
-	m_oceanSettings.wind_speed = 120.0f;
+	m_oceanSettings.wind_speed = 420.0f;
 	// Damp out the components opposite to wind direction.
 	// The smaller the value, the higher wind dependency
 	m_oceanSettings.wind_dependency = 0.07f;
@@ -81,6 +81,11 @@ void WaterMaterial::Update()
 
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 
+}
+
+utils::ocean::OceanSimulator * WaterMaterial::GetOceanSim()
+{
+	return m_oceanSim;
 }
 
 WaterMaterial::~WaterMaterial()
