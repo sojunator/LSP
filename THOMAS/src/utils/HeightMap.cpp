@@ -22,7 +22,7 @@ namespace thomas
 			myModule.SetSeed(rand() % 1000);
 
 			float x, y;
-			for (int i = 0; i < plane.verts.size(); i++)
+			for (unsigned int i = 0; i < plane.verts.size(); i++)
 			{
 				x = plane.verts[i].position.x * detail;
 				y = -(plane.verts[i].position.z * detail);
@@ -74,9 +74,9 @@ namespace thomas
 				}
 			}
 
-			math::Vector3 sum;
+			/*math::Vector3 sum;
 			int index = 0;
-			float length;
+			float length;*/
 			//// now sum that shit up
 			/*for (int y = 0; y < height; y++)
 			{

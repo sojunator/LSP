@@ -12,7 +12,7 @@ namespace thomas
 			float width = (float)size * detail;
 			float height = width;
 
-			float x, y, z;
+			//float x, y, z;
 			graphics::Vertex temp_vert;
 
 			// Defualt temp values, must be calulated later

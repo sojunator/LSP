@@ -3,7 +3,6 @@
 #include <AtlBase.h>
 #include <atlconv.h>
 
-#pragma warning(disable: 3501)
 namespace thomas
 {
 	namespace graphics
@@ -201,7 +200,7 @@ namespace thomas
 		}
 
 		bool Shader::Destroy() {
-			for (int i = 0; i < s_loadedShaders.size(); i++)
+			for (unsigned int i = 0; i < s_loadedShaders.size(); i++)
 			{
 				delete s_loadedShaders[i];
 			}
@@ -364,7 +363,7 @@ namespace thomas
 		}
 		Shader * Shader::GetShaderByName(std::string name)
 		{
-			for (int i = 0; i < s_loadedShaders.size(); i++)
+			for (unsigned int i = 0; i < s_loadedShaders.size(); i++)
 			{
 				if (s_loadedShaders[i]->GetName() == name)
 					return s_loadedShaders[i];

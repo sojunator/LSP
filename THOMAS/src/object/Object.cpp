@@ -35,7 +35,7 @@ namespace thomas
 		}
 		Object * Object::GetObjectByType(std::string type)
 		{
-			for (int i = 0; i < s_objects.size(); i++)
+			for (unsigned int i = 0; i < s_objects.size(); i++)
 			{
 				if (s_objects[i]->m_type == type)
 					return s_objects[i];
@@ -52,7 +52,7 @@ namespace thomas
 		}
 		void Object::Clean()
 		{
-			for (int i = 0; i < s_objects.size(); i++)
+			for (unsigned int i = 0; i < s_objects.size(); i++)
 			{
 				if (s_objects[i]->m_alive == false)
 				{
