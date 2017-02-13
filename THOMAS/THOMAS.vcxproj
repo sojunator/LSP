@@ -86,6 +86,7 @@
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\utils\AI\pathfinding.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />
