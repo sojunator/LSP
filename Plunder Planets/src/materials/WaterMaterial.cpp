@@ -88,6 +88,11 @@ utils::ocean::OceanSimulator * WaterMaterial::GetOceanSim()
 	return m_oceanSim;
 }
 
+utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
+{
+	return &m_oceanSettings;
+}
+
 WaterMaterial::~WaterMaterial()
 {
 	delete m_oceanSim;

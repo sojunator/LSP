@@ -618,7 +618,7 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->Map(m_1x1StagingTexture, 0, D3D11_MAP_READ, 0, &msr);
 				math::Vector4* pixel = (math::Vector4*)msr.pData;
 				ThomasCore::GetDeviceContext()->Unmap(m_1x1StagingTexture, 0);
-				return math::Vector3(pixel->x, pixel->y, pixel->z);
+				return math::Vector3(pixel->x, pixel->z, pixel->y);
 			}
 
 		}

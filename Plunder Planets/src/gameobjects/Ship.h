@@ -43,10 +43,7 @@ public:
 		m_boostSound->SetVolume(0.9);
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
-
-		//orientation
-		m_initPosition = math::Vector3(0, -0.8, 0);
-		m_transform->SetPosition(m_initPosition);
+		m_transform->SetPosition(0, 0, 0);
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
 		//movement
 		m_forwardSpeed = 0;
@@ -66,9 +63,8 @@ public:
 
 		//gravity
 		m_fallSpeed = 0;
-		m_gravety = 9.82;
 		m_inAir = false;
-
+		m_mass = 10;
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -84,7 +80,7 @@ public:
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 
 		m_retardControllsOn = false;
-
+		m_gravity = 0;
 	}
 
 	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
@@ -163,11 +159,6 @@ public:
 
 		}
 		
-		//colide with terrain
-		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
-		{
-			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed / 3);
-		}
 
 		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
 		m_transform->Translate(moveVec);
@@ -208,36 +199,13 @@ public:
 		if (!m_inAir && left_y < 0)
 		{
 			m_transform->Rotate(0, m_boostRot * dt * upFactorPitch * m_rotationSpeed, m_boostRot * dt * upFactorRoll * m_rotationSpeed);
+			m_inAir = true;
 		}
 		else if (m_inAir)
 		{
 			m_transform->Rotate(0, dt * upFactorPitch * m_rotationSpeed, dt * upFactorRoll * m_rotationSpeed);
 		}
 
-		if (m_inAir)//gravety
-		{
-			m_fallSpeed += m_boostRot * m_accelerationSpeed * dt * (m_transform->GetPosition().y - (m_transform->GetPosition() + m_transform->Forward()).y);
-			m_fallSpeed = std::fminf(m_fallSpeed, m_maxSpeed / 2);
-			m_fallSpeed -= m_gravety * dt;
-			if (m_fallSpeed < 0)
-				m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
-		}
-
-		if (m_inAir && m_transform->GetPosition().y <= m_initPosition.y)//back on ground //TODO: gör det smooth
-		{
-			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
-			newForward.Normalize();
-			m_transform->SetPosition(m_transform->GetPosition().x, m_initPosition.y, m_transform->GetPosition().z);
-			m_transform->SetRotation(0, 0, 0);
-			m_transform->LookAt(m_transform->GetPosition() + newForward);
-
-			m_fallSpeed = 0;
-			m_inAir = false;
-		}
-		else if (!m_inAir && m_transform->GetPosition().y > m_initPosition.y + 0.2f)
-		{
-			m_inAir = true;
-		}
 	}
 		
 	void ShipFireCannons()
@@ -359,7 +327,7 @@ public:
 		//Ship Movement
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		//ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		//ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
@@ -377,7 +345,20 @@ public:
 		
 		PlunderIsland();
 
-		((WaterObject*)Find("WaterObject"))->GetCollisionAt(m_transform);
+		math::Vector3 deltaWater = ((WaterObject*)Find("WaterObject"))->GetCollisionAt(m_transform);
+		if (deltaWater.y > 0) //Under water, need to move up
+		{
+			m_inAir = false;
+			m_gravity += deltaWater.y*dt;
+			
+			//m_transform->Translate(math::Vector3::Up*deltaWater.z*dt);
+		}
+		else //Above water add gravity and shit
+		{
+			m_gravity += -9.82*m_mass*dt;
+		}
+		LOG(m_gravity);
+		m_transform->Translate(math::Vector3::Up*m_gravity*dt);
 	}
 
 private:
@@ -390,6 +371,7 @@ private:
 	float m_maxSpeed;
 
 	float m_treasure;
+	float m_mass;
 
 	//for the boost
 	float m_boostMaxSpeed;
@@ -432,7 +414,7 @@ private:
 
 	float m_boostRot;
 	float m_fallSpeed;
-	float m_gravety;
+	float m_gravity;
 	bool m_inAir;
 
 	std::string m_SFXs[9] = {

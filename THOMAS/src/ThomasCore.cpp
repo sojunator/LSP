@@ -98,7 +98,7 @@ namespace thomas {
 		{
 			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
 			MSG msg = { 0 };
-
+			Time::Update();
 
 			while (WM_QUIT != msg.message)
 			{
