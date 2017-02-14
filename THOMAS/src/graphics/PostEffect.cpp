@@ -1,4 +1,5 @@
 #include "PostEffect.h"
+#include "../Scene.h"
 
 namespace thomas
 {
@@ -44,7 +45,7 @@ namespace thomas
 		bool PostEffect::Init()
 		{	
 			Shader* renderToBackBufferShader = thomas::graphics::Shader::CreateShader("RenderToBackBuffer", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
-				"../res/thomasShaders/postEffect.hlsl");
+				"../res/thomasShaders/postEffect.hlsl", Scene::GetCurrentScene());
 			
 			s_renderToBackBuffer = new PostEffect("renderToBackBuffer", renderToBackBufferShader);
 

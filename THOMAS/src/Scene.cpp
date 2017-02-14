@@ -78,7 +78,7 @@ namespace thomas
 	{	
 		
 		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene)) TODO: Set this up.
-		for (graphics::Shader* shader : m_shaders)
+		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			shader->Bind();
 			camera->BindReflection();
@@ -142,7 +142,7 @@ namespace thomas
 	}
 	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string path)
 	{
-		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path);
+		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path, this);
 		m_shaders.push_back(shader);
 		return shader;
 	}
