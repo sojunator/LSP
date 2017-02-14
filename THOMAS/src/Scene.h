@@ -8,7 +8,7 @@ namespace thomas
 	public:
 		static bool Init();
 		static Scene* AddScene(Scene* scene);
-		static void Destroy(Scene* scene);
+		static void UnloadScene(Scene* scene);
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static UpdateCurrentScene();
 		static void Render();

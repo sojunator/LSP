@@ -70,14 +70,14 @@ public:
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 	};
 	
-	void UnloadScene()
+	/*void UnloadScene()
 	{
 		thomas::object::GameObject::Destroy(m_cameraObject);
 		thomas::object::GameObject::Destroy(m_terrainObject);
 		thomas::object::GameObject::Destroy(m_ship);
 		thomas::object::GameObject::Destroy(m_waterObject);
 		thomas::object::GameObject::Destroy(m_testDirectionalLight);
-	}
+	}*/
 
 private:
 	CameraObject* m_cameraObject;

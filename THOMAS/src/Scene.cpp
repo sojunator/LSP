@@ -25,7 +25,7 @@ namespace thomas
 		s_scenes.push_back(scene);
 		return scene;
 	}
-	void Scene::Destroy(Scene* scene)
+	void Scene::UnloadScene(Scene* scene)
 	{
 		graphics::Shader::Destroy(scene);
 		object::Object::Destroy(scene);
