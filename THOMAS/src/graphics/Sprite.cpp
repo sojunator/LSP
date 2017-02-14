@@ -89,15 +89,23 @@ namespace thomas
 
 		void Sprite::RenderImage(std::string name, float posX, float posY, float scale)
 		{
-			SetImagePosX(posX);
-			SetImagePosY(posY);
-			
-			s_spriteBatch->Begin();
-						
-			s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
-				0.f, s_origin, scale);
+			if (!s_texture[name])
+			{
+				LOG(name << " doesn't match any texture.");
+			}
 
-			s_spriteBatch->End();
+			else
+			{
+				SetImagePosX(posX);
+				SetImagePosY(posY);
+
+				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
+
+				s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
+					0.f, s_origin, scale);
+
+				s_spriteBatch->End();
+			}
 		}
 
 		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
