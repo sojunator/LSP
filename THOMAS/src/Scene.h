@@ -6,10 +6,8 @@ namespace thomas
 	class THOMAS_API Scene
 	{
 	public:
-		static bool Init();
-		static Scene* AddScene(Scene* scene);
-		static void UnloadScene(Scene* scene);
-		static void LoadScene(Scene* scene); //Set s_currentScene
+		static Scene* LoadScene(Scene* scene); //Set s_currentScene
+		static void UnloadScene();
 		void static UpdateCurrentScene();
 		static void Render();
 		void Render3D(object::component::Camera* camera);
@@ -17,7 +15,7 @@ namespace thomas
 		graphics::Material* LoadMaterial(std::string type, graphics::Material* material);
 		//void RemoveMaterial(std::string name);
 		graphics::Shader* LoadShader(std::string name, graphics::Shader::InputLayouts inputLayout, std::string path);
-		graphics::Shader * LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader);
+		graphics::Shader* LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader);
 		//void RemoveShader(std::string name);
 		graphics::Model* LoadModel(std::string name, std::string path, std::string type);
 		//void RemoveModel(std::string name);
@@ -29,9 +27,10 @@ namespace thomas
 		T * LoadObject(thomas::math::Vector3 position, thomas::math::Quaternion rotation);
 		template<typename T>
 		T * LoadObject(thomas::math::Vector3 position, thomas::math::Quaternion rotation, object::component::Transform* parent);
+		//void UnloadObject(std::string name);
 		static Scene* GetCurrentScene();
+		std::string GetName() { return m_name; }
 	private:
-		static std::vector<Scene*> s_scenes;
 		static Scene* s_currentScene;
 	protected:
 		std::string m_name;

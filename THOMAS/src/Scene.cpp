@@ -6,36 +6,21 @@
 
 namespace thomas
 {
-	std::vector<Scene*> Scene::s_scenes;
 	Scene* Scene::s_currentScene;
-
-	bool Scene::Init()
+	Scene* Scene::LoadScene(Scene* scene)
 	{
-		if (s_scenes[0])
-		{
-			s_currentScene = s_scenes[0];
-			LOG("Scene set");
-			return true;
-		}
-		LOG("No scenes");
-		return false;
-	}
-	Scene* Scene::AddScene(Scene* scene)
-	{
-		s_scenes.push_back(scene);
+		if (s_currentScene)
+			UnloadScene();
+		s_currentScene = scene;
+		LOG("Scene " + scene->GetName() + "set");
 		return scene;
 	}
-	void Scene::UnloadScene(Scene* scene)
+	void Scene::UnloadScene()
 	{
-		graphics::Shader::Destroy(scene);
-		object::Object::Destroy(scene);
-		for (int i = 0; i < s_scenes.size(); ++i)
-			if (s_scenes[i] == scene)
-				s_scenes.erase(s_scenes.begin() + i);
-	}
-	void Scene::LoadScene(Scene* scene)
-	{
-		s_currentScene = scene;
+		graphics::Shader::Destroy(s_currentScene);
+		object::Object::Destroy(s_currentScene);
+		delete s_currentScene;
+		s_currentScene = nullptr;
 	}
 	void Scene::UpdateCurrentScene()
 	{

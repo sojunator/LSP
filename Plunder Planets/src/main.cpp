@@ -30,8 +30,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
-	Scene* gameScene = Scene::AddScene(new GameScene());
-	Scene::Init();
+	Scene* gameScene = Scene::LoadScene(new GameScene());
 
 	//start
 	thomas::ThomasCore::Start();
