@@ -47,8 +47,9 @@ namespace thomas
 
 			void Move()
 			{
-				if (math::Vector3::DistanceSquared(m_playerPos, m_transform->GetPosition()) < 100)
+				if (math::Vector3::DistanceSquared(m_playerPos, m_transform->GetPosition()) < 100)	//Close to player
 				{
+					m_newForwardVec = m_ship->m_transform->Forward();
 					m_forwardSpeed -= m_retardation * m_dt;
 					m_forwardSpeed = std::fmaxf(m_forwardSpeed, 0);
 				}
@@ -61,7 +62,17 @@ namespace thomas
 
 			void Rotate()
 			{
-				
+				float turnDir = m_transform->Right().Dot(m_newForwardVec);
+				if (turnDir > 0)	//Check with RightVec
+					m_transform->Rotate(m_rotation * m_dt, 0, 0);
+				else if (turnDir < 0)
+					m_transform->Rotate(-m_rotation * m_dt, 0, 0);
+				else
+				{
+					turnDir = m_transform->Forward().Dot(m_newForwardVec);
+					if (turnDir < 0)
+						m_transform->Rotate(m_rotation * m_dt, 0, 0);
+				}
 			}
 
 			void InsideRadius()
@@ -85,8 +96,27 @@ namespace thomas
 				}
 			}
 
+			bool OnCollisionCourse()
+			{
+				math::Vector3 testPosForward = m_transform->Forward() * 20;		//Need to be tweeked so we get a good sample distance
+
+				if (m_terrainObject->Collision(math::Vector2(testPosForward.x, testPosForward.z)))
+				{
+					if (m_state == Searching)
+					{
+						math::Vector3 vecToLastKnowPos = m_lastKnownPos - m_transform->GetPosition();
+
+						if (m_transform->Forward().Dot(vecToLastKnowPos) == 1 && m_transform->Right().Dot(vecToLastKnowPos) == 0)
+						{
+
+						}
+					}
+				}
+			}
+
 			void Escaped()
 			{
+				//Check if the player is behind a island, then also escaped. Move to last known playerPos
 				if (m_escapeTimer >= m_escapeTime)
 					m_state = Idle;
 			}
@@ -100,7 +130,9 @@ namespace thomas
 			{
 				m_dt = Time::GetDeltaTime();
 				m_playerPos = m_ship->m_transform->GetPosition();
+				Escaped();
 				InsideRadius();
+
 
 				switch (m_state)
 				{

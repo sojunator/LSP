@@ -14,6 +14,7 @@ public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
 	}
+
 	~TerrainObject()
 	{
 		delete m_islands;
