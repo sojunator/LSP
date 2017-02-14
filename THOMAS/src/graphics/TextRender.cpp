@@ -20,6 +20,7 @@ namespace thomas
 			else
 			{
 				ThomasCore::GetDeviceContext()->OMSetBlendState(s_states->Opaque(), DirectX::Colors::Black, 0xFFFFFFFF);
+				//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_states->DepthDefault(), 0);
 
 				SetFontPosX(posX);
 				SetFontPosY(posY);
@@ -52,6 +53,7 @@ namespace thomas
 
 				s_spriteBatch->End();
 
+				//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(NULL, 0);
 				ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, DirectX::Colors::Black, 0xFFFFFFFF);
 			}
 		}
