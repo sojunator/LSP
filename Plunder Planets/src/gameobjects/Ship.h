@@ -45,8 +45,8 @@ public:
 
 		//orientation
 		m_initPosition = math::Vector3(0, -0.8, 0);
-		m_transform->SetPosition(m_initPosition);
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
+		m_transform->SetPosition(m_initPosition);
 		//movement
 		m_forwardSpeed = 0;
 		m_accelerationSpeed = 9.5f;

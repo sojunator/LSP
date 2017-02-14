@@ -167,6 +167,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\Broadside.h" />
+    <ClInclude Include="src\gameobjects\Enemy.h" />
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />

@@ -47,6 +47,7 @@
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
     <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\utils\AI\Pathfinding.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
@@ -86,7 +87,7 @@
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
     <ClInclude Include="src\Time.h" />
-    <ClInclude Include="src\utils\AI\pathfinding.h" />
+    <ClInclude Include="src\utils\AI\Pathfinding.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />

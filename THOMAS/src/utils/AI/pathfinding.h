@@ -12,6 +12,7 @@ namespace thomas
 			public:
 				Pathfinding();
 				~Pathfinding();
+				void FindPath(math::Vector3 pos, math::Vector3 forward, math::Vector3 destination);
 
 			};
 		}
