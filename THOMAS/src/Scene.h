@@ -9,7 +9,6 @@ namespace thomas
 		static bool Init();
 		static Scene* AddScene(Scene* scene);
 		static void Destroy(Scene* scene);
-		static void Destroy();
 		static void LoadScene(Scene* scene); //Set s_currentScene
 		void static UpdateCurrentScene();
 		static void Render();
@@ -26,8 +25,6 @@ namespace thomas
 		static std::vector<Scene*> s_scenes;
 		static Scene* s_currentScene;
 	protected:
-		std::vector<graphics::Shader*> m_shaders;
-		std::vector<object::component::Camera*> m_cameras;
 		std::string m_name;
 		Scene(std::string name) { m_name = name; }
 		Scene() { m_name = "You forgot to name your scene, loser-Preben"; }

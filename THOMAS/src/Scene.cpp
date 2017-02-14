@@ -33,12 +33,6 @@ namespace thomas
 			if (s_scenes[i] == scene)
 				s_scenes.erase(s_scenes.begin() + i);
 	}
-	void Scene::Destroy()
-	{
-		s_scenes.clear();
-		if (s_currentScene)
-			delete s_currentScene;
-	}
 	void Scene::LoadScene(Scene* scene)
 	{
 		s_currentScene = scene;
@@ -54,7 +48,11 @@ namespace thomas
 			LOG("No scene set")
 				return;
 		}
-		for (object::component::Camera* camera : s_currentScene->m_cameras)
+		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
+		std::vector<object::component::Camera*> cameras;
+		for (object::GameObject* object : cameraObjects)
+			cameras.push_back(object->GetComponent<object::component::Camera>());
+		for (object::component::Camera* camera : cameras)
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
@@ -143,7 +141,6 @@ namespace thomas
 	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string path)
 	{
 		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path, this);
-		m_shaders.push_back(shader);
 		return shader;
 	}
 	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string type)

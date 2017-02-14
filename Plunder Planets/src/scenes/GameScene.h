@@ -67,12 +67,6 @@ public:
 		m_ship = thomas::object::GameObject::Instantiate<Ship>(this);
 		m_waterObject = thomas::object::GameObject::Instantiate<WaterObject>(this);
 		m_testDirectionalLight = thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
-
-		//Init Cameras //lägga i scene init eller loadscene kanske?
-		//std::vector<object::component::Camera*> cameras;
-		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
-		for (object::GameObject* object : cameraObjects)
-			m_cameras.push_back(object->GetComponent<object::component::Camera>());
 	};
 	
 	void UnloadScene()
