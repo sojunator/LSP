@@ -72,24 +72,28 @@ namespace thomas
 			{
 				m_scale = scale;
 			}
+
 			void SpriteComponent::SetColor(math::Vector4 color)
 			{
 				m_baseColor = color;
 				m_currentColor = m_baseColor;
 			}
+
 			void SpriteComponent::SetHoverColor(math::Color color)
 			{
 				m_hoverColor = color;
 			}
+
 			void SpriteComponent::SetInteractable(bool interactable)
 			{
 				m_interactable = interactable;
 			}
+
 			void SpriteComponent::Update()
 			{
 				m_currentColor = m_baseColor;
 				m_hovering = false;
-				//Only in a certain state, like menu
+		
 				if (m_interactable)
 				{
 					Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);

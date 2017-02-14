@@ -86,9 +86,9 @@ public:
 
 			if (m_startButton->isHovering())
 			{
-				Scene* gameScene = Scene::AddScene(new GameScene());
+				/*Scene* gameScene = Scene::AddScene(new GameScene());
 				Scene::LoadScene(gameScene);
-				Destroy(this);
+				Destroy(this);*/
 			}
 		}
 	}

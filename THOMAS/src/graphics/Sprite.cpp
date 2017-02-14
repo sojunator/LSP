@@ -9,9 +9,6 @@ namespace thomas
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
 		std::unique_ptr<DirectX::CommonStates> Sprite::s_states;
-		UINT Sprite::s_imageWidth;
-		UINT Sprite::s_imageHeight;
-		RECT Sprite::s_fullscreenRect;
 
 		bool Sprite::LoadTexture(std::string name, std::string texture)
 		{
@@ -38,11 +35,6 @@ namespace thomas
 
 			s_origin.x = 0;
 			s_origin.y = 0;
-
-			s_fullscreenRect.left = 0;
-			s_fullscreenRect.top = 0;
-			s_fullscreenRect.right = Window::GetWidth();
-			s_fullscreenRect.bottom = Window::GetHeight();
 
 			return true;
 		}
@@ -93,7 +85,6 @@ namespace thomas
 			
 			else
 			{
-
 				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 
 				s_spriteBatch->Draw(s_texture[name].srv.Get(), math::Vector2(posX, posY), nullptr, color,
@@ -103,39 +94,9 @@ namespace thomas
 			}
 		}
 
-		void Sprite::RenderImage(object::component::SpriteComponent * sprite, bool fullScreen)
+		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
 		{
-			if (fullScreen)
-			{
-				RenderFullscreen(sprite->GetSignature());
-			}
-
-			else
-			{
-				RenderImage(sprite->GetSignature(), sprite->GetColor(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
-			}
-		}
-
-		void Sprite::RenderFullscreen(std::string name)
-		{
-			if (!s_texture[name].srv)
-			{
-				LOG(name << " doesn't match any texture.");
-			}
-
-			else
-			{
-				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
-
-				s_spriteBatch->Draw(s_texture[name].srv.Get(), s_fullscreenRect);
-
-				s_spriteBatch->End();
-			}
-		}
-
-		math::Vector2 Sprite::GetImagePos()
-		{
-			return s_screenPos;
+			RenderImage(sprite->GetSignature(), sprite->GetColor(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());	
 		}
 	}
 }

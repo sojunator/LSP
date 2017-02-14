@@ -118,7 +118,7 @@ namespace thomas
 
 			for (object::component::SpriteComponent* sprite : gameObject->GetComponents<object::component::SpriteComponent>())
 			{
-				graphics::Sprite::RenderImage(sprite, false);
+				graphics::Sprite::RenderImage(sprite);
 			}
 		}
 
