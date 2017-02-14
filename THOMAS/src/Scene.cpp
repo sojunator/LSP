@@ -73,8 +73,8 @@ namespace thomas
 		}
 	}
 	void Scene::Render3D(object::component::Camera * camera)
-	{	
-		
+	{
+
 		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene)) TODO: Set this up.
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
@@ -140,8 +140,11 @@ namespace thomas
 	}
 	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string path)
 	{
-		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path, this);
-		return shader;
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, path, this);
+	}
+	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+	{
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, vertexShader,geometryShader, hullShader, domainShader, pixelShader, this);
 	}
 	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string type)
 	{
