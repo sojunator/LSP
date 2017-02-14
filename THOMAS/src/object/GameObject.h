@@ -128,8 +128,9 @@ namespace thomas
 		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, Scene * scene)
 		{
 			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->SetPosition(position);
 			gameObject->m_transform->SetRotation(rotation);
+			gameObject->m_transform->SetPosition(position);
+
 			return gameObject;
 		}
 
@@ -137,9 +138,10 @@ namespace thomas
 		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, component::Transform * parent, Scene * scene)
 		{
 			T* gameObject = Instantiate<T>(scene);
+			gameObject->m_transform->SetRotation(rotation);
 			gameObject->m_transform->m_parent = parent;
 			gameObject->m_transform->SetPosition(position);
-			gameObject->m_transform->SetRotation(rotation);
+
 			return gameObject;
 		}
 

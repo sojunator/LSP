@@ -27,7 +27,7 @@ public:
 
 		//Detta funkar fan inte
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 3 / 2 ), m_transform, m_scene);
 	
 
 
@@ -211,6 +211,7 @@ public:
 		else if (m_inAir)
 		{
 			m_transform->Rotate(0, dt * upFactorPitch * m_rotationSpeed, dt * upFactorRoll * m_rotationSpeed);
+
 		}
 
 		if (m_inAir)//gravety

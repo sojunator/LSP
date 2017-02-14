@@ -110,7 +110,7 @@ namespace thomas
 			math::Quaternion Transform::GetRotation()
 			{
 				if (m_parent)
-					return m_parent->GetRotation()*m_localRotation;
+					return m_localRotation*m_parent->GetRotation();
 				else
 					return m_localRotation;
 			}
