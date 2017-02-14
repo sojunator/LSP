@@ -24,6 +24,7 @@ namespace thomas
 			static void SetImagePosY(float posY);
 			static void RenderImage(std::string name, float posX, float posY, float scale);
 			static void RenderImage(object::component::SpriteComponent* sprite);
+			static void PickImage(object::component::SpriteComponent* sprite);
 			static math::Vector2 GetImagePos();
 
 		private:
@@ -32,7 +33,8 @@ namespace thomas
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;
 			static std::unique_ptr<DirectX::CommonStates> s_states;
-			static math::Vector2 imageSize;
+			static UINT s_imageWidth;
+			static UINT s_imageHeight;
 		};
 	}
 }

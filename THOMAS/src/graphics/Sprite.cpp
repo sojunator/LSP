@@ -9,7 +9,8 @@ namespace thomas
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
 		std::unique_ptr<DirectX::CommonStates> Sprite::s_states;
-		math::Vector2 Sprite::imageSize;
+		UINT Sprite::s_imageWidth;
+		UINT Sprite::s_imageHeight;
 
 		bool Sprite::LoadTexture(std::string name, std::string texture)
 		{
@@ -31,8 +32,8 @@ namespace thomas
 			CD3D11_TEXTURE2D_DESC imageDesc;
 			image->GetDesc(&imageDesc);
 			
-			imageSize.x = imageDesc.Width;
-			imageSize.y = imageDesc.Height;
+			s_imageWidth = imageDesc.Width;
+			s_imageHeight = imageDesc.Height;
 
 			s_origin.x = 0;
 			s_origin.y = 0;
@@ -68,12 +69,12 @@ namespace thomas
 
 		UINT Sprite::GetImageWidth()
 		{
-			return imageSize.x;
+			return s_imageWidth;
 		}
 
 		UINT Sprite::GetImageHeight()
 		{
-			return imageSize.y;
+			return s_imageHeight;
 		}
 
 		void Sprite::SetImagePosX(float posX)
@@ -102,6 +103,26 @@ namespace thomas
 		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
 		{
 			RenderImage(sprite->GetSignature(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
+		}
+
+		void Sprite::PickImage(object::component::SpriteComponent * sprite)
+		{
+			//Only in a certain state, like menu
+			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
+			math::Vector2 mousePos = Input::GetMousePosition();
+
+			//Construct boundaries
+			float xLeft = sprite->GetPosition().x;
+			float xRight = sprite->GetPosition().x + sprite->GetWidth();
+			float yTop = sprite->GetPosition().y;
+			float yDown = sprite->GetPosition().y + sprite->GetHeight();
+
+			if (mousePos.x >= xLeft && mousePos.x <= xRight && mousePos.y <= yDown && mousePos.y >= yTop)
+			{
+				std::cout << "Yes" << std::endl;
+			}
+			else
+				std::cout << "No" << std::endl;
 		}
 
 		math::Vector2 Sprite::GetImagePos()
