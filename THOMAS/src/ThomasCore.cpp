@@ -162,6 +162,10 @@ namespace thomas {
 
 		return true;
 	}
+	void ThomasCore::Exit()
+	{
+		Window::Destroy();
+	}
 	ID3D11Device * ThomasCore::GetDevice()
 	{
 		return s_device;

@@ -14,22 +14,27 @@ namespace thomas
 	{
 		class Sprite
 		{
+			struct SpriteData
+			{
+				UINT width;
+				UINT height;
+				Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> srv;
+			};
 		public:
 			static bool LoadTexture(std::string name, std::string texture);
 			static bool Initialize();
-			static UINT GetImageWidth();
-			static UINT GetImageHeight();
+			static UINT GetImageWidth(object::component::SpriteComponent * sprite);
+			static UINT GetImageHeight(object::component::SpriteComponent * sprite);
 			static void Destroy();
 			static void SetImagePosX(float posX);
 			static void SetImagePosY(float posY);
 			static void RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale);
 			static void RenderFullscreen(std::string name);
 			static void RenderImage(object::component::SpriteComponent* sprite, bool fullScreen);
-			static void PickImage(object::component::SpriteComponent* sprite);
 			static math::Vector2 GetImagePos();
 
 		private:
-			static std::map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> s_texture;
+			static std::map<std::string, SpriteData> s_texture;
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
 			static DirectX::SimpleMath::Vector2 s_screenPos;
 			static DirectX::SimpleMath::Vector2 s_origin;

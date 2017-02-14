@@ -10,6 +10,7 @@ namespace thomas
 		static Scene* AddScene(Scene* scene);
 		static void Destroy(Scene* scene);
 		static void LoadScene(Scene* scene); //Set s_currentScene
+		static void LoadScene(int sceneIndex);
 		void static UpdateCurrentScene();
 		std::vector<graphics::Shader*> GetShaders();
 		static void Render();

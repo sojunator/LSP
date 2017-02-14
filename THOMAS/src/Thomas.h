@@ -5,6 +5,8 @@
 #include "Time.h"
 #include "Sound.h"
 
+#include "Scene.h"
+
 #include "utils\AssimpLoader.h"
 
 #include "utils\Plane.h"
@@ -16,3 +18,5 @@
 #include "object\GameObject.h"
 
 #include "graphics\PostEffect.h"
+
+#include "graphics/Sprite.h"

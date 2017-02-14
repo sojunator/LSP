@@ -31,6 +31,10 @@ namespace thomas
 	{
 		s_currentScene = scene;
 	}
+	void Scene::LoadScene(int sceneIndex)
+	{
+		s_currentScene = s_scenes[sceneIndex];
+	}
 	void Scene::UpdateCurrentScene()
 	{
 		object::Object::Clean();
@@ -57,7 +61,7 @@ namespace thomas
 					object->Update();
 			else
 				LOG("No scene set");
-
+			object::Object::Clean();
 			
 
 

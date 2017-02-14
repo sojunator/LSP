@@ -4,7 +4,7 @@ namespace thomas
 {
 	namespace graphics
 	{
-		std::map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> Sprite::s_texture;
+		std::map<std::string, Sprite::SpriteData> Sprite::s_texture;
 		std::unique_ptr<DirectX::SpriteBatch> Sprite::s_spriteBatch;
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
@@ -19,7 +19,7 @@ namespace thomas
 			const wchar_t* result = holder.c_str();
 
 			Microsoft::WRL::ComPtr<ID3D11Resource> resource;
-			HRESULT hr = DirectX::CreateWICTextureFromFile(ThomasCore::GetDevice(), result, resource.GetAddressOf(), s_texture[name].ReleaseAndGetAddressOf());
+			HRESULT hr = DirectX::CreateWICTextureFromFile(ThomasCore::GetDevice(), result, resource.GetAddressOf(), s_texture[name].srv.ReleaseAndGetAddressOf());
 
 			if (FAILED(hr))
 			{
@@ -33,8 +33,8 @@ namespace thomas
 			CD3D11_TEXTURE2D_DESC imageDesc;
 			image->GetDesc(&imageDesc);
 			
-			s_imageWidth = imageDesc.Width;
-			s_imageHeight = imageDesc.Height;
+			s_texture[name].width = imageDesc.Width;
+			s_texture[name].height = imageDesc.Height;
 
 			s_origin.x = 0;
 			s_origin.y = 0;
@@ -49,7 +49,7 @@ namespace thomas
 
 		void Sprite::Destroy()
 		{
-			std::map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator itr;
+			std::map<std::string, Sprite::SpriteData>::iterator itr;
 			itr = s_texture.begin();
 
 			while (itr != s_texture.end())
@@ -73,41 +73,30 @@ namespace thomas
 			return true;
 		}
 
-		UINT Sprite::GetImageWidth()
+		UINT Sprite::GetImageWidth(object::component::SpriteComponent * sprite)
 		{
-			return s_imageWidth;
+			return s_texture[sprite->GetSignature()].width;
 		}
 
-		UINT Sprite::GetImageHeight()
+		UINT Sprite::GetImageHeight(object::component::SpriteComponent * sprite)
 		{
-			return s_imageHeight;
+			return s_texture[sprite->GetSignature()].height;
 		}
 
-		void Sprite::SetImagePosX(float posX)
-		{
-			s_screenPos.x = posX;
-		}
-
-		void Sprite::SetImagePosY(float posY)
-		{
-			s_screenPos.y = posY;
-		}
 
 		void Sprite::RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale)
 		{
-			if (!s_texture[name])
+			if (!s_texture[name].srv)
 			{
 				LOG(name << " doesn't match any texture.");
 			}
 			
 			else
 			{
-				SetImagePosX(posX);
-				SetImagePosY(posY);
 
 				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 
-				s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, color,
+				s_spriteBatch->Draw(s_texture[name].srv.Get(), math::Vector2(posX, posY), nullptr, color,
 					0.f, s_origin, scale);
 
 				s_spriteBatch->End();
@@ -129,7 +118,7 @@ namespace thomas
 
 		void Sprite::RenderFullscreen(std::string name)
 		{
-			if (!s_texture[name])
+			if (!s_texture[name].srv)
 			{
 				LOG(name << " doesn't match any texture.");
 			}
@@ -138,30 +127,10 @@ namespace thomas
 			{
 				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 
-				s_spriteBatch->Draw(s_texture[name].Get(), s_fullscreenRect);
+				s_spriteBatch->Draw(s_texture[name].srv.Get(), s_fullscreenRect);
 
 				s_spriteBatch->End();
 			}
-		}
-
-		void Sprite::PickImage(object::component::SpriteComponent * sprite)
-		{
-			//Only in a certain state, like menu
-			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
-			math::Vector2 mousePos = Input::GetMousePosition();
-
-			//Construct boundaries
-			float xLeft = sprite->GetPosition().x;
-			float xRight = sprite->GetPosition().x + sprite->GetWidth();
-			float yTop = sprite->GetPosition().y;
-			float yDown = sprite->GetPosition().y + sprite->GetHeight();
-
-			if (mousePos.x >= xLeft && mousePos.x <= xRight && mousePos.y <= yDown && mousePos.y >= yTop)
-			{
-				std::cout << "Yes" << std::endl;
-			}
-			else
-				std::cout << "No" << std::endl;
 		}
 
 		math::Vector2 Sprite::GetImagePos()

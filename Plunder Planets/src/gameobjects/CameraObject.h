@@ -29,6 +29,7 @@ public:
 		//m_gold = AddComponent<component::TextComponent>();
 		m_distance = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
+		m_button = AddComponent<component::SpriteComponent>();
 	
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
@@ -54,7 +55,8 @@ public:
 		m_sprite->SetPositionY(0);
 		m_sprite->SetScale(1.0f);
 		m_sprite->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		
+
+
 		//Simple font
 		//m_text->SetFont("Name");
 		//m_text->SetOutput("Plunder Planets");
@@ -90,7 +92,7 @@ public:
 		m_distance->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
 		m_distance->SetRotation(0.0f);
 		m_distance->SetScale(0.4f);
-		m_distance->SetPositionX(Window::GetWidth() / 2);
+		m_distance->SetPositionX(100);
 		m_distance->SetPositionY(Window::GetHeight() / 2);
 		m_distance->SetDropshadow(true);
 		m_distance->SetOutline(true);
@@ -130,11 +132,7 @@ public:
 		}
 
 		//Mouse picking
-		if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
-		{		
-			//Only in a certain state, like menu
-			//thomas::graphics::Sprite::PickImage(m_button);
-		}
+
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
@@ -182,6 +180,7 @@ private:
 	//component::TextComponent* m_gold;
 	component::TextComponent* m_distance;
 	component::SpriteComponent* m_sprite;
+	component::SpriteComponent* m_button;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;
