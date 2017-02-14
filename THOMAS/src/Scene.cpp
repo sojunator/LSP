@@ -58,8 +58,7 @@ namespace thomas
 			else
 				LOG("No scene set");
 
-			
-
+			object::Object::Clean();
 
 			s_currentScene->Render3D(camera);
 			s_currentScene->Render2D(camera);

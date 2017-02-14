@@ -25,10 +25,10 @@ public:
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
 
-		/*//Detta funkar fan inte
+		//Detta funkar fan inte
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
-		*/
+	
 
 
 		m_treasure = 10000;
@@ -355,7 +355,7 @@ public:
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
 		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
-		//ShipFireCannons();
+		ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
