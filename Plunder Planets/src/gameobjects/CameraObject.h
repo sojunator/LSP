@@ -53,6 +53,7 @@ public:
 		m_sprite->SetPositionX(0); //Offset from top left corner
 		m_sprite->SetPositionY(0);
 		m_sprite->SetScale(1.0f);
+		m_sprite->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		
 		//Simple font
 		//m_text->SetFont("Name");

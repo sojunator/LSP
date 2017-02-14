@@ -8,6 +8,7 @@ namespace thomas
 		math::Vector2 TextRender::s_fontPos;
 		std::unique_ptr<DirectX::SpriteBatch> TextRender::s_spriteBatch;
 		std::unique_ptr<DirectX::CommonStates> TextRender::s_states;
+		std::unique_ptr<DirectX::BasicEffect> TextRender::s_effects;
 
 		void TextRender::RenderText(std::string name, std::string output, float posX, float posY, float scale, float rotation,
 									math::Vector3 color, bool dropShadow, bool outline)
@@ -21,6 +22,20 @@ namespace thomas
 			{
 				ThomasCore::GetDeviceContext()->OMSetBlendState(s_states->Opaque(), DirectX::Colors::Black, 0xFFFFFFFF);
 				//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_states->DepthDefault(), 0);
+
+				//Test code
+				/*DirectX::XMVECTOR textPosition = DirectX::XMVectorSet(50, 0, 0, 0);		
+				DirectX::XMVECTOR mp = DirectX::XMVector4Transform(textPosition, m_World);
+				DirectX::XMVECTOR pt = DirectX::XMVector3Project(mp, 0, 0, GetViewPort().Width, GetViewPort().Height, 0, 1, m_Projection, m_View, m_World);
+				DirectX::XMFLOAT3 pos;
+				DirectX::XMStoreFloat3(&pos, pt);
+
+
+				m_spriteBatch->Begin();
+				m_font->DrawString(m_spriteBatch.get(), message.c_str(), XMFLOAT2(pos.x, pos.y), Colors::LightGreen, 0.0f, XMFLOAT2(0, 0), XMFLOAT2(0.6f, 0.6));
+				m_spriteBatch->End();
+*/
+
 
 				SetFontPosX(posX);
 				SetFontPosY(posY);
@@ -93,6 +108,7 @@ namespace thomas
 		{
 			s_spriteBatch = std::make_unique<DirectX::SpriteBatch>(ThomasCore::GetDeviceContext());
 			s_states = std::make_unique<DirectX::CommonStates>(ThomasCore::GetDevice());
+			s_effects = std::make_unique<DirectX::BasicEffect>(ThomasCore::GetDevice());
 
 			if (!s_spriteBatch)
 			{
@@ -119,6 +135,7 @@ namespace thomas
 			
 			s_spriteBatch.reset();
 			s_states.reset();
+			s_effects.reset();
 		}
 
 		void TextRender::RenderText(object::component::TextComponent* text)

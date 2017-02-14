@@ -22,8 +22,9 @@ namespace thomas
 			static void Destroy();
 			static void SetImagePosX(float posX);
 			static void SetImagePosY(float posY);
-			static void RenderImage(std::string name, float posX, float posY, float scale);
-			static void RenderImage(object::component::SpriteComponent* sprite);
+			static void RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale);
+			static void RenderFullscreen(std::string name);
+			static void RenderImage(object::component::SpriteComponent* sprite, bool fullScreen);
 			static void PickImage(object::component::SpriteComponent* sprite);
 			static math::Vector2 GetImagePos();
 
@@ -35,6 +36,7 @@ namespace thomas
 			static std::unique_ptr<DirectX::CommonStates> s_states;
 			static UINT s_imageWidth;
 			static UINT s_imageHeight;
+			static RECT s_fullscreenRect;
 		};
 	}
 }

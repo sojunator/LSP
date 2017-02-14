@@ -11,6 +11,7 @@ namespace thomas
 		std::unique_ptr<DirectX::CommonStates> Sprite::s_states;
 		UINT Sprite::s_imageWidth;
 		UINT Sprite::s_imageHeight;
+		RECT Sprite::s_fullscreenRect;
 
 		bool Sprite::LoadTexture(std::string name, std::string texture)
 		{
@@ -37,6 +38,11 @@ namespace thomas
 
 			s_origin.x = 0;
 			s_origin.y = 0;
+
+			s_fullscreenRect.left = 0;
+			s_fullscreenRect.top = 0;
+			s_fullscreenRect.right = Window::GetWidth();
+			s_fullscreenRect.bottom = Window::GetHeight();
 
 			return true;
 		}
@@ -87,7 +93,41 @@ namespace thomas
 			s_screenPos.y = posY;
 		}
 
-		void Sprite::RenderImage(std::string name, float posX, float posY, float scale)
+		void Sprite::RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale)
+		{
+			if (!s_texture[name])
+			{
+				LOG(name << " doesn't match any texture.");
+			}
+			
+			else
+			{
+				SetImagePosX(posX);
+				SetImagePosY(posY);
+
+				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
+
+				s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, color,
+					0.f, s_origin, scale);
+
+				s_spriteBatch->End();
+			}
+		}
+
+		void Sprite::RenderImage(object::component::SpriteComponent * sprite, bool fullScreen)
+		{
+			if (fullScreen)
+			{
+				RenderFullscreen(sprite->GetSignature());
+			}
+
+			else
+			{
+				RenderImage(sprite->GetSignature(), sprite->GetColor(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
+			}
+		}
+
+		void Sprite::RenderFullscreen(std::string name)
 		{
 			if (!s_texture[name])
 			{
@@ -96,21 +136,12 @@ namespace thomas
 
 			else
 			{
-				SetImagePosX(posX);
-				SetImagePosY(posY);
-
 				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 
-				s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
-					0.f, s_origin, scale);
+				s_spriteBatch->Draw(s_texture[name].Get(), s_fullscreenRect);
 
 				s_spriteBatch->End();
 			}
-		}
-
-		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
-		{
-			RenderImage(sprite->GetSignature(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
 		}
 
 		void Sprite::PickImage(object::component::SpriteComponent * sprite)

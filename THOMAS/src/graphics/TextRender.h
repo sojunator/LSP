@@ -5,6 +5,7 @@
 #include "../../../DirectXTK-dec2016/Inc/SpriteBatch.h"
 #include "../../../DirectXTK-dec2016/Inc/SpriteFont.h"
 #include "../../../DirectXTK-dec2016/Inc/CommonStates.h"
+#include "../../../DirectXTK-dec2016/Inc/Effects.h"
 #include "../object/component/TextComponent.h"
 
 namespace thomas
@@ -30,6 +31,7 @@ namespace thomas
 			static math::Vector2 s_fontPos;
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
 			static std::unique_ptr<DirectX::CommonStates> s_states;
+			static std::unique_ptr<DirectX::BasicEffect> s_effects;
 		};
 	}
 }

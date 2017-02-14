@@ -38,6 +38,11 @@ namespace thomas
 				return m_name;
 			}
 
+			math::Vector4 SpriteComponent::GetColor()
+			{
+				return m_color;
+			}
+
 			void SpriteComponent::SetName(std::string name)
 			{
 				m_name = name;
@@ -56,6 +61,10 @@ namespace thomas
 			void SpriteComponent::SetScale(float scale)
 			{
 				m_scale = scale;
+			}
+			void SpriteComponent::SetColor(math::Vector4 color)
+			{
+				m_color = color;
 			}
 		}
 	}
