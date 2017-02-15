@@ -189,6 +189,7 @@
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />

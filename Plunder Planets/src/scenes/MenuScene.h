@@ -4,7 +4,7 @@
 class MenuScene : public thomas::Scene
 {
 public:
-	MenuScene() : Scene()
+	MenuScene() : Scene("MenuScene")
 	{
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
@@ -36,9 +36,5 @@ public:
 
 		thomas::object::GameObject::Instantiate<MainMenuObject>(this);
 
-		//Init Cameras //lägga i scene init eller loadscene kanske?
-		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
-		for (GameObject* object : cameraObjects)
-			m_cameras.push_back(object->GetComponent<object::component::Camera>());
 	};
 };

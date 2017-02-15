@@ -1,10 +1,11 @@
 #pragma once
+
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
 #include "Ship.h"
+#include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
-
 using namespace thomas;
 using namespace object;
 class CameraObject : public GameObject
@@ -131,8 +132,6 @@ public:
 			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
 		}
 
-		//Mouse picking
-
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
@@ -154,6 +153,9 @@ public:
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
 		}
+
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Scene::LoadScene<MenuScene>();
 
 
 		if (Input::GetKey(Input::Keys::LeftShift))

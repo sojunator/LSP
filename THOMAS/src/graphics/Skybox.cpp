@@ -23,8 +23,6 @@ namespace thomas
 			m_data.constantBuffer->Release();
 			m_data.rasterizerState->Release();
 			m_data.depthStencilState->Release();
-			delete m_data.texture;
-			delete m_data.shader;
 		}
 
 		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)
