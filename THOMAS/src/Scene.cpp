@@ -10,7 +10,7 @@ namespace thomas
 
 	void Scene::UnloadScene()
 	{
-		
+		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
 		graphics::Texture::Destroy();

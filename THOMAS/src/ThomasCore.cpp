@@ -127,6 +127,7 @@ namespace thomas {
 	bool ThomasCore::Destroy()
 	{
 		Scene::UnloadScene();
+		graphics::LightManager::Destroy();
 		graphics::Sprite::Destroy();
 		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
