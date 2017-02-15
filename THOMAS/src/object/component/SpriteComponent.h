@@ -10,21 +10,37 @@ namespace thomas
 		{
 			class SpriteComponent : public Component
 			{
+			private:
+				void OnHover();
 			public:
 				SpriteComponent();
 				math::Vector2 GetPosition();
 				float GetScale();
+				UINT GetWidth();
+				UINT GetHeight();
 				std::string GetSignature();
+				math::Vector4 GetColor();
+				bool isHovering();
 
 				void SetName(std::string name);
 				void SetPositionX(float posX);
 				void SetPositionY(float posY);
 				void SetScale(float scale);
+				void SetColor(math::Vector4 color);
+				void SetHoverColor(math::Color color);
+				void SetInteractable(bool interactable);
+				void Update();
 				
 			private:
 				math::Vector2 m_imagePos;
+				math::Color m_baseColor;
+				math::Color m_currentColor;
+				math::Color m_hoverColor;
 				std::string m_name;
+				bool m_hovering;
+				bool m_interactable;
 				float m_scale;	
+
 			};
 		}
 	}

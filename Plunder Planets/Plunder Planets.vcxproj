@@ -169,6 +169,7 @@
     <ClInclude Include="src\AI\Pathfinding.h" />
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\Broadside.h" />
+    <ClInclude Include="src\gameobjects\MainMenuObject.h" />
     <ClInclude Include="src\gameobjects\Enemy.h" />
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
@@ -191,6 +192,7 @@
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\AI\AI.cpp" />
     <ClCompile Include="src\AI\Pathfinding.cpp" />
     <ClCompile Include="src\main.cpp" />

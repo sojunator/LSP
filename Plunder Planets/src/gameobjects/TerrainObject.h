@@ -14,13 +14,6 @@ public:
 	{
 	}
 
-	~TerrainObject()
-	{
-		delete m_islands;
-		delete m_model;
-		delete m_renderer;
-	}
-
 	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();

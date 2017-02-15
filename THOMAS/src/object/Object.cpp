@@ -28,7 +28,26 @@ namespace thomas
 			object->m_alive = false;
 			return true;
 		}
+		void Object::Destroy(Scene * scene)
+		{
+			for (int i = 0; i < s_objects.size(); ++i)
+			{
+				if (s_objects[i]->m_scene == scene)
+					s_objects[i]->m_alive = false;
+			}
+				
+		}
 
+		
+
+		void Object::Destroy()
+		{
+			s_objects.clear();
+		}
+		bool Object::IsAlive(const Object* object)
+		{
+			return object->m_alive;
+		}
 		std::vector<Object*> Object::GetObjects()
 		{
 			return s_objects;
@@ -52,12 +71,13 @@ namespace thomas
 		}
 		void Object::Clean()
 		{
-			for (unsigned int i = 0; i < s_objects.size(); i++)
+			for (int i =0;i<s_objects.size();i++)
 			{
 				if (s_objects[i]->m_alive == false)
 				{
 					delete s_objects[i];
 					s_objects.erase(s_objects.begin() + i);
+					i -= 1;
 				}
 					
 			}

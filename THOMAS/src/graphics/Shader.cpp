@@ -2,6 +2,7 @@
 #include "../ThomasCore.h"
 #include <AtlBase.h>
 #include <atlconv.h>
+#include "../Scene.h"
 
 namespace thomas
 {
@@ -100,9 +101,10 @@ namespace thomas
 			return true;
 		}
 
-		Shader::Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+		Shader::Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader, Scene* scene)
 		{
 			m_name = name;
+			m_scene = scene;
 
 			m_data.vs = NULL;
 			m_data.vertexShader = nullptr;
@@ -143,10 +145,11 @@ namespace thomas
 
 
 
-		Shader::Shader(std::string name, InputLayouts inputLayout, std::string filePath)
+		Shader::Shader(std::string name, InputLayouts inputLayout, std::string filePath, Scene* scene)
 		{
 			m_name = name;
 			m_filePath = filePath;
+			m_scene = scene;
 
 			m_data.vs = NULL;
 			m_data.vertexShader = nullptr;
@@ -222,7 +225,8 @@ namespace thomas
 				delete s_loadedShaders[i];
 			}
 			delete s_currentBoundShader;
-
+			s_currentBoundShader = NULL;
+			s_loadedShaders.clear();
 			return true;
 		}
 
@@ -354,26 +358,27 @@ namespace thomas
 		}
 
 		
-		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath)
+		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath, Scene* scene)
 		{
 			Shader* shader;
 			if (inputLayout == InputLayouts::POST_EFFECT)
 			{
-				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffect.hlsl", "", "", "", filePath);
+				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffect.hlsl", "", "", "", filePath, scene);
 			}
 			else
 			{
-				shader = new Shader(name, inputLayout, filePath);
+				shader = new Shader(name, inputLayout, filePath, scene);
 			}	
 			if (shader)
 				s_loadedShaders.push_back(shader);
 			return shader;
 		}
-		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader, Scene* scene)
 		{
-			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader);
+			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader, scene);
 			if (shader)
 				s_loadedShaders.push_back(shader);
+				
 			return shader;
 		}
 		Shader * Shader::GetCurrentBoundShader()
@@ -389,9 +394,27 @@ namespace thomas
 			}
 			return NULL;
 		}
+		std::vector<Shader*> Shader::GetShadersByScene(Scene * scene)
+		{
+			std::vector<Shader*> output;
+			for (Shader* shader : s_loadedShaders)
+				if (shader->m_scene == scene)
+					output.push_back(shader);
+			return output;
+		}
 		std::vector<Shader*> Shader::GetLoadedShaders()
 		{
 			return s_loadedShaders;
+		}
+		void Shader::Destroy(Scene* scene)
+		{
+			for (int i = 0; i < s_loadedShaders.size(); ++i)
+				if (s_loadedShaders[i]->m_scene == scene)
+				{
+					Material::Destroy(s_loadedShaders[i]);
+					s_loadedShaders.erase(s_loadedShaders.begin() + i);
+					i -= 1;
+				}
 		}
 	}
 
