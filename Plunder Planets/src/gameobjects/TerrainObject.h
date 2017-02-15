@@ -2,9 +2,8 @@
 #pragma once
 #include <Thomas.h>
 #include <string>
-#include "Ship.h"
-
 #include "CameraObject.h"
+
 class TerrainObject : public GameObject
 {
 
@@ -25,7 +24,6 @@ public:
 	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
-		m_shipObject = Find("Ship");
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(3, mat, 1024 / 4, 1, 1024, 100);
@@ -75,8 +73,6 @@ public:
 	}
 
 private:
-	math::Vector2 m_shipPos;
-	object::GameObject* m_shipObject;
 	thomas::Islands* m_islands;
 	thomas::graphics::Model* m_model;
 
