@@ -1,6 +1,6 @@
 #pragma once
 #include "Thomas.h"
-#include "Projectile.h"
+#include "Canon.h"
 
 using namespace thomas;
 using namespace object;
@@ -20,6 +20,10 @@ public:
 		m_delay = 1.5;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
+		for (int i = -2; i <= 2; i++)
+		{
+
+		}
 	}
 
 
@@ -35,8 +39,8 @@ public:
 				math::Quaternion rot = m_transform->GetRotation();
 				rot *= math::Quaternion::CreateFromAxisAngle(m_transform->Up(), math::DegreesToradians(-i));
 				pos += m_transform->Right()*i*spacing;
-				Projectile* p = Instantiate<Projectile>(pos, rot, m_scene);
-				p->forwardSpeed = forwardSpeed;
+				Canon* c = Instantiate<Canon>(pos, rot, m_scene);
+				c->FireCanon();
 			}
 			
 			m_delayLeft = m_delay;
@@ -55,6 +59,7 @@ public:
 private:
 	float m_delay;
 	float m_delayLeft;
+	std::vector<Canon*> canons; 
 	component::SoundComponent* m_fireSFX;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
 };

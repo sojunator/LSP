@@ -22,6 +22,7 @@ public:
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
+
 		m_splashSound = AddComponent<component::SoundComponent>();
 	}
 
@@ -30,6 +31,7 @@ public:
 		float speed = 180.0;
 		float dt = Time::GetDeltaTime();
 		m_downSpeed += 9.82*dt;
+
 		m_transform->Translate(m_transform->Forward()*dt*speed);
 		m_transform->Translate(m_transform->Right()*dt*forwardSpeed);
 		m_transform->Translate(m_transform->Up()*dt*angleY);
@@ -52,8 +54,9 @@ private:
 		if (randNum < 0.5f)
 			return 15 * (sqrtf(2.0f * randNum) - 1);
 		else
-			return 5 * (1 - sqrtf(2 - 2 * randNum));
+			return 10 * (1 - sqrtf(2 - 2 * randNum));
 	}
+
 	float m_downSpeed;
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
