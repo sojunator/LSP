@@ -20,6 +20,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\ParticleSystem.cpp" />
+    <ClCompile Include="src\object\component\EmitterComponent.cpp" />
     <ClCompile Include="src\object\component\SpriteComponent.cpp" />
     <ClCompile Include="src\graphics\Sprite.cpp" />
     <ClCompile Include="src\graphics\PostEffect.cpp" />
@@ -57,6 +59,8 @@
     <ClCompile Include="src\graphics\TextRender.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\ParticleSystem.h" />
+    <ClInclude Include="src\object\component\EmitterComponent.h" />
     <ClInclude Include="src\object\component\SpriteComponent.h" />
     <ClInclude Include="src\graphics\Sprite.h" />
     <ClInclude Include="src\graphics\LightManager.h" />

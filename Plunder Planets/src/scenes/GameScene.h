@@ -11,6 +11,8 @@
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 
+#include "../src/graphics/ParticleSystem.h"
+
 class GameScene : public thomas::Scene
 {
 public:
@@ -32,6 +34,7 @@ public:
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
 		LoadShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/skyboxShader.hlsl");
 		LoadShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/Terrain.hlsl");
+		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 
 		//Init materials
 		/*thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
@@ -72,6 +75,7 @@ public:
 		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
 		for(GameObject* object : cameraObjects)
 			m_cameras.push_back(object->GetComponent<object::component::Camera>());
+
 	};
 	
 	void UnloadScene()
@@ -89,4 +93,5 @@ private:
 	Ship* m_ship;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
+
 };

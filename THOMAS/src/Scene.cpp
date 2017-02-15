@@ -3,6 +3,7 @@
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
 
+
 namespace thomas
 {
 	std::vector<Scene*> Scene::s_scenes;
@@ -74,6 +75,7 @@ namespace thomas
 		
 		for (graphics::Shader* shader : m_shaders)
 		{
+			
 			shader->Bind();
 			camera->BindReflection();
 			graphics::LightManager::BindAllLights();
@@ -96,11 +98,22 @@ namespace thomas
 				material->Unbind();
 			}
 			graphics::LightManager::Unbind();
-
+			
+			if (shader->GetName() == "particleShader")
+			{
+				if (!once)
+				{
+					pstm = graphics::ParticleSystem("particleShader");
+					once = true;
+				}
+				else
+					pstm.DrawParticles();
+			}
 			shader->Unbind();
 		}
 		camera->BindSkybox();
 		camera->UnbindSkybox();
+
 	}
 
 

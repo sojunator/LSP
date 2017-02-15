@@ -14,7 +14,8 @@ namespace thomas
 			enum class InputLayouts
 			{
 				STANDARD = 0,
-				POST_EFFECT = 1
+				POST_EFFECT = 1,
+				NONE = 2
 			};
 			enum class ResourceType
 			{

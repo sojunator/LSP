@@ -1,6 +1,6 @@
 #pragma once
 #include "graphics\Renderer.h"
-
+#include "graphics\ParticleSystem.h"
 namespace thomas
 {
 	class THOMAS_API Scene
@@ -25,6 +25,8 @@ namespace thomas
 	private:
 		static std::vector<Scene*> s_scenes;
 		static Scene* s_currentScene;
+		graphics::ParticleSystem pstm;
+		bool once = false;
 	protected:
 		std::vector<graphics::Shader*> m_shaders;
 		std::vector<object::component::Camera*> m_cameras;
