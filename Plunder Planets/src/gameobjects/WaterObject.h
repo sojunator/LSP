@@ -32,6 +32,10 @@ public:
 		m_transform->SetPosition(math::Vector3(-dim / 2, 0, dim / 2));
 
 		m_oceanSounds = AddComponent<component::SoundComponent>();
+
+		m_rb = AddComponent<component::RigidBodyComponent>();
+
+
 	}
 
 	void Update()
@@ -54,5 +58,6 @@ private:
 	component::SoundComponent* m_oceanSounds;
 	Material* m_waterMaterial;
 
+	component::RigidBodyComponent* m_rb;
 	
 };

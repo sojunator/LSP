@@ -17,6 +17,7 @@ namespace thomas
 				void SetMass(float mass);
 				float GetMass();
 				void SetKinematic(bool kinematic);
+				void SetCollider(btCollisionShape* collider);
 			private:
 				btRigidBody* m_rigidBody;
 				btCollisionShape* m_collider;

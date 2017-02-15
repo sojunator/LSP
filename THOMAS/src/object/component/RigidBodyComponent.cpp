@@ -64,6 +64,12 @@ namespace thomas
 				}
 		
 			}
+			void RigidBodyComponent::SetCollider(btCollisionShape * collider)
+			{
+				m_collider = collider;
+				m_rigidBody->setCollisionShape(m_collider);
+				SetMass(m_mass);
+			}
 		}
 	}
 }
