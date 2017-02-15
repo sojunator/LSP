@@ -34,7 +34,9 @@ public:
 		m_oceanSounds = AddComponent<component::SoundComponent>();
 
 		m_rb = AddComponent<component::RigidBodyComponent>();
-
+		m_rb->SetCollider(new btStaticPlaneShape(btVector3(0,1,0),1));
+		m_rb->SetMass(0);
+		m_rb->SetKinematic(true);
 
 	}
 
