@@ -1,9 +1,10 @@
 #pragma once
-#pragma once
+
 #include <Thomas.h>
 #include <string>
-#include "CameraObject.h"
 
+using namespace thomas;
+using namespace object;
 class TerrainObject : public GameObject
 {
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "../gameobjects/TerrainObject.h"
+#include "../gameobjects/Ship.h"
 #include "Pathfinding.h"
 #include "Thomas.h"
 
@@ -18,10 +19,12 @@ public:
 	~AI();
 	
 	bool OnCollisionCourse(thomas::math::Vector3 pos);
-	//int 
 
 private:
+	Behavior m_state;
+
 	Pathfinding pathfinding;
 	TerrainObject* m_terrainObject;
+	Ship* m_playerShip;
 
 };

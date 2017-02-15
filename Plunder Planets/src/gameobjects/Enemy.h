@@ -16,12 +16,14 @@ public:
 	Enemy() : GameObject("Enemy")
 	{
 	}
+
 	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
 		m_ship = (Ship*)Find("Ship");
+		m_ai = new AI;
 
 		/*
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
@@ -155,6 +157,11 @@ public:
 
 	}
 
+	void Destroy()
+	{
+		delete m_ai;
+	}
+
 private:
 	//Used for ship
 	math::Vector3 m_initPosition;
@@ -189,6 +196,8 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	//component::AI* m_ai;
+
+	AI* m_ai;
 
 	//Objects
 	TerrainObject* m_terrainObject;
