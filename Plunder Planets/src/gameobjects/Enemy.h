@@ -21,8 +21,6 @@ public:
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
-		m_terrainObject = (TerrainObject*)Find("TerrainObject");
-		m_ship = (Ship*)Find("Ship");
 		m_ai = new AI;
 
 		/*
@@ -40,11 +38,7 @@ public:
 		m_maxSpeed = 30.0f;
 		m_rotation = 0.3f;
 
-		m_escapeTime = 100;		//Should be 10 seconds
-		m_escapeTimer = 0;
-
 		m_searchRadius = 1000;
-		m_dt = 0;
 	}
 
 	void Move()
@@ -77,45 +71,6 @@ public:
 		}
 	}
 
-	void InsideRadius()
-	{
-		float distanceSquared = math::Vector3::DistanceSquared(m_playerPos, m_transform->GetPosition());
-		if (distanceSquared <= (m_searchRadius * m_searchRadius))
-		{
-			m_escapeTimer = 0;
-			m_newForwardVec = m_playerPos - m_transform->GetPosition();
-			m_state = Attacking;
-		}
-		else if (m_state == Attacking)
-		{
-			m_lastKnownPos = m_playerPos;
-			m_escapeTimer += m_dt;
-			m_state = Searching;
-		}
-		else
-		{
-			m_escapeTimer += m_dt;
-		}
-	}
-
-	bool OnCollisionCourse()
-	{
-		math::Vector3 testPosForward = m_transform->Forward() * 50;		//Need to be tweeked so we get a good sample distance
-
-		if (m_terrainObject->Collision(math::Vector2(testPosForward.x, testPosForward.z)))	//Check if island is in front
-		{
-			if (m_state == Searching)
-			{
-				math::Vector3 vecToLastKnowPos = m_lastKnownPos - m_transform->GetPosition();
-
-				if (m_transform->Forward().Dot(vecToLastKnowPos) == 1)		//Check if last known pos is directly in front
-				{
-
-				}
-			}
-		}
-	}
-
 	void Escaped()
 	{
 		//Check if the player is behind a island, then also escaped. Move to last known playerPos
@@ -130,30 +85,28 @@ public:
 
 	void Update()
 	{
-		m_dt = Time::GetDeltaTime();
-		m_playerPos = m_ship->m_transform->GetPosition();
-		Escaped();
-		InsideRadius();
-		
+		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
+		int turnDir = 0;
+		if (m_ai->CheckInFront(m_transform->GetPosition() + (m_transform->Forward() * 50)))	//Check for island in front
+		{
+			turnDir = m_ai->TurnDir;
+			//Turn
+		}
 
-		switch (m_state)
+		if (m_ai->CheckSide(m_transform->GetPosition() + (m_transform->Right() * 40)))		//Check for island to the right
 		{
-		case Searching:
+			//No need to turn
+		}
+
+		if (m_ai->CheckSide(m_transform->GetPosition() - (m_transform->Right() * 40)))		//Check for island to the left
 		{
-			break;
+			//No need to turn
 		}
-		case Idle:
-		{
-			break;
-		}
-		case Attacking:
-		{
-			break;
-		}
-		default:
-			break;
-		}
-				
+
+		Escaped();
+
+
+
 
 	}
 
@@ -174,35 +127,14 @@ private:
 	float m_maxSpeed;
 	float m_searchRadius;
 
-	float m_escapeTimer;
-	float m_escapeTime;
-
-	math::Vector3 m_playerPos;
-	math::Vector3 m_lastKnownPos;
-
-	//Behaviors
-	enum Behavior
-	{
-		Searching,
-		Idle,
-		Attacking,
-	};
-			
-	Behavior m_state = Idle;
-
-	float m_dt;
-
 	//Components
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
-	//component::AI* m_ai;
 
 	AI* m_ai;
 
 	//Objects
-	TerrainObject* m_terrainObject;
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRight;
-	Ship* m_ship;
 
 };

@@ -35,31 +35,31 @@ public:
 	{
 	}
 
-	float Plunder(math::Vector2 pos)
+	float Plunder(math::Vector3 pos)
 	{
-		math::Vector2 center;
+		math::Vector3 center;
 		float distance = 0;
 		float treasure = 0;
 		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
 		{
 			center = m_islands->GetCenter(i);
-			distance = math::Vector2::DistanceSquared(pos, center);
+			distance = math::Vector3::DistanceSquared(pos, center);
 			if (distance <= m_islands->GetPlunderRadiusSquared(i) && m_islands->GetTreasure(i))
 				treasure = m_islands->StealTreasure(i);
 		}
 		return treasure;
 	}
 
-	bool Collision(math::Vector2 pos)
+	bool Collision(math::Vector3 pos)
 	{
-		math::Vector2 center;
+		math::Vector3 center;
 		float distance = 0;
 		if (!this)
 			return true;
 		for (int i = 0; i < m_islands->GetNrOfIslands(); i++)
 		{
 			center = m_islands->GetCenter(i);
-			distance = math::Vector2::DistanceSquared(pos, center);
+			distance = math::Vector3::DistanceSquared(pos, center);
 			if (distance <= m_islands->GetCollisionRadiusSquared(i))
 				return true;
 		}

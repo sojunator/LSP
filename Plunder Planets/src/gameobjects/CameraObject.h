@@ -27,7 +27,7 @@ public:
 		m_music = AddComponent<component::SoundComponent>();
 		m_pirateMusic = AddComponent<component::SoundComponent>();
 		//m_text = AddComponent<component::TextComponent>();
-		//m_gold = AddComponent<component::TextComponent>();
+		m_gold = AddComponent<component::TextComponent>();
 		m_distance = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_button = AddComponent<component::SpriteComponent>();
@@ -70,22 +70,22 @@ public:
 		//m_text->SetOutline(true);
 
 		////Gold font
-		//m_gold->SetFont("Name");
-		//m_gold->SetOutput("0");
-		//m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
-		//m_gold->SetRotation(0.0f);
-		//m_gold->SetScale(1.0f);
+		m_gold->SetFont("Name");
+		m_gold->SetOutput("0");
+		m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
+		m_gold->SetRotation(0.0f);
+		m_gold->SetScale(1.0f);
 
-		//if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
-		//	m_gold->SetPositionX(Window::GetWidth() / 6.4f);
-		//else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
-		//	m_gold->SetPositionX(Window::GetWidth() / 7.2f);
-		//else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
-		//	m_gold->SetPositionX(Window::GetWidth() / 6.5f);
+		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+			m_gold->SetPositionX(Window::GetWidth() / 6.4f);
+		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+			m_gold->SetPositionX(Window::GetWidth() / 7.2f);
+		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+			m_gold->SetPositionX(Window::GetWidth() / 6.5f);
 
-		//m_gold->SetPositionY(Window::GetHeight() / 21.5f);
-		//m_gold->SetDropshadow(true);
-		//m_gold->SetOutline(true);
+		m_gold->SetPositionY(Window::GetHeight() / 21.5f);
+		m_gold->SetDropshadow(true);
+		m_gold->SetOutline(true);
 
 		//Distance font test
 		m_distance->SetFont("Name");
@@ -106,14 +106,14 @@ public:
 
 	void Update()
 	{
-		/*if (m_ship == nullptr)
+		if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
 		else
 		{
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
-		}*/
+		}
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
@@ -179,7 +179,7 @@ private:
 	component::SoundComponent* m_music;
 	component::SoundComponent* m_pirateMusic;
 	//component::TextComponent* m_text;
-	//component::TextComponent* m_gold;
+	component::TextComponent* m_gold;
 	component::TextComponent* m_distance;
 	component::SpriteComponent* m_sprite;
 	component::SpriteComponent* m_button;

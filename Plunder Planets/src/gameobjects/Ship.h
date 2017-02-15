@@ -31,7 +31,7 @@ public:
 		*/
 
 
-		m_treasure = 10000;
+		m_treasure = 0;
 
 		//model
 		m_modelIndex = 0;
@@ -163,7 +163,7 @@ public:
 		}
 		
 		//colide with terrain
-		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
+		if (m_terrainObject->Collision(m_transform->GetPosition()))
 		{
 			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed / 3);
 		}
@@ -323,8 +323,7 @@ public:
 
 	void PlunderIsland()
 	{
-		math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
-		m_treasure += m_terrainObject->Plunder(shipPos);
+		m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
 	}
 
 	int GetTreasure()

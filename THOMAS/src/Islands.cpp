@@ -23,7 +23,7 @@ namespace thomas
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
 			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i]);
 			ApplyOffSet(i, tempPlane[i]);
-			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
+			m_islandCenterWorldPos.push_back(math::Vector3(m_worldPosOffset[i].x + ((size*detail) / 2), 0.0f, m_worldPosOffset[i].z - ((size*detail) / 2)));
 		}
 		GenerateMesh(tempPlane, m);
 	}
@@ -44,7 +44,7 @@ namespace thomas
 		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
 			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-			tempPlanes.verts[i].position.z += m_worldPosOffset[island].y;
+			tempPlanes.verts[i].position.z += m_worldPosOffset[island].z;
 		}
 	}
 
@@ -84,12 +84,12 @@ namespace thomas
 		return m_minDistance;
 	}
 
-	math::Vector2 Islands::GetCenter(int island)
+	math::Vector3 Islands::GetCenter(int island)
 	{
 		return m_islandCenterWorldPos[island];
 	}
 
-	math::Vector2 Islands::GetOffSet(int island)
+	math::Vector3 Islands::GetOffSet(int island)
 	{
 		return m_worldPosOffset[island];
 	}
@@ -162,22 +162,23 @@ namespace thomas
 			bool posNotFound = true;
 			while (posNotFound)
 			{
-				math::Vector2 xy;
-				xy.x = rand() % m_mapSize * 2 - m_mapSize;
-				xy.y = rand() % m_mapSize * 2 - m_mapSize;
+				math::Vector3 xyz;
+				xyz.x = rand() % m_mapSize * 2 - m_mapSize;
+				xyz.y = 0;
+				xyz.z = rand() % m_mapSize * 2 - m_mapSize;
 				float distPrev = 0.0f;
 
 				if (m_worldPosOffset.size() == 0)
 				{
 					distPrev = 0.0f;
-					m_worldPosOffset.push_back(xy);
+					m_worldPosOffset.push_back(xyz);
 					posNotFound = false;
 				}
 				else
 				{
 					std::vector<float> distance;
 					for (unsigned int j = 0; j < m_worldPosOffset.size(); j++)
-						distance.push_back((m_worldPosOffset[j].x - xy.x) * (m_worldPosOffset[j].x - xy.x) + (m_worldPosOffset[j].y - xy.y) * (m_worldPosOffset[j].y - xy.y));
+						distance.push_back((m_worldPosOffset[j].x - xyz.x) * (m_worldPosOffset[j].x - xyz.x) + (m_worldPosOffset[j].z - xyz.z) * (m_worldPosOffset[j].z - xyz.z));
 
 					for (unsigned int k = 0; k < distance.size(); ++k)
 					{
@@ -190,7 +191,7 @@ namespace thomas
 							posNotFound = false;
 					}
 					if (!posNotFound)
-						m_worldPosOffset.push_back(xy);
+						m_worldPosOffset.push_back(xyz);
 				}
 			}
 		}
