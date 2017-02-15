@@ -21,6 +21,7 @@ public:
 	bool CheckInFront(math::Vector3 pos);
 	bool CheckSide(math::Vector3 pos);
 	int TurnDir(math::Vector3 pos, math::Vector3 forward);
+	float Move(math::Vector3 pos, float speed, float retardation, float acceleration);
 
 
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);

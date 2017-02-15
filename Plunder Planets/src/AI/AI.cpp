@@ -47,6 +47,20 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 right)
 		return 1;
 }
 
+float AI::Move(math::Vector3 pos, float speed, float retardation, float acceleration)
+{
+	if (math::Vector3::DistanceSquared(m_playerShip->m_transform->GetPosition(), pos) < 200 * 200)
+	{
+		speed -= retardation * Time::GetDeltaTime();
+		speed = std::fminf(speed, 0);
+		return speed;
+	}
+	else
+	{
+		return speed += acceleration * Time::GetDeltaTime();
+	}
+}
+
 void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
 {
 	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()))

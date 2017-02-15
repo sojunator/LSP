@@ -37,13 +37,31 @@ public:
 		m_retardation = 6.5f;
 		m_maxSpeed = 30.0f;
 		m_rotation = 0.3f;
+		m_turnDir = 0;
 
 		m_searchRadius = 1000;
 	}
 
 	void Move()
 	{
-		if (math::Vector3::DistanceSquared(m_playerPos, m_transform->GetPosition()) < 100)	//Close to player
+		float speed = 0;
+		if (m_turnDir == 0)
+		{
+			speed = m_ai->Move(m_transform->GetPosition(), m_forwardSpeed, m_retardation, m_acceleration);
+			if (speed < 0)
+				speed = 0;
+			else if (speed > m_maxSpeed)
+				speed = m_maxSpeed;
+		}
+		else if (m_turnDir == 1)
+		{
+			//Update turn vec then speed
+		}
+
+
+
+
+		if (math::Vector3::DistanceSquared(m_playerPos, m_transform->GetPosition()) < 100*100)	//Close to player
 		{
 			m_newForwardVec = m_ship->m_transform->Forward();
 			m_forwardSpeed -= m_retardation * m_dt;
@@ -86,12 +104,9 @@ public:
 	void Update()
 	{
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
-		int turnDir = 0;
+
 		if (m_ai->CheckInFront(m_transform->GetPosition() + (m_transform->Forward() * 50)))	//Check for island in front
-		{
-			turnDir = m_ai->TurnDir;
-			//Turn
-		}
+			m_turnDir = m_ai->TurnDir;
 
 		if (m_ai->CheckSide(m_transform->GetPosition() + (m_transform->Right() * 40)))		//Check for island to the right
 		{
@@ -102,6 +117,8 @@ public:
 		{
 			//No need to turn
 		}
+
+		Move();
 
 		Escaped();
 
@@ -126,6 +143,7 @@ private:
 	float m_retardation;
 	float m_maxSpeed;
 	float m_searchRadius;
+	float m_turnDir;
 
 	//Components
 	component::RenderComponent* m_renderer;
