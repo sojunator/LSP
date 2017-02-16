@@ -4,8 +4,9 @@
 #include "Pathfinding.h"
 #include "Thomas.h"
 #include "../gameobjects/Ship.h"
+#include "../../THOMAS/src/object/component/Component.h"
 
-class AI
+class THOMAS_API AI : public thomas::object::component::Component
 {
 public:
 	enum class Behavior
@@ -19,7 +20,7 @@ public:
 	~AI();
 	
 	bool Collision(math::Vector3 pos);
-	int TurnDir(math::Vector3 pos, math::Vector3 forward, bool objectFront, bool objectRight, bool objectLeft);
+	int TurnDir(math::Vector3  pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft);
 	float Move(math::Vector3 pos, float speed, float retardation, float acceleration);
 
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
@@ -35,7 +36,6 @@ private:
 	float m_escapeTimer;
 	float m_escapeTime;
 
-	Pathfinding* m_pathfinding;
 	TerrainObject* m_terrainObject;
 	Ship* m_playerShip;
 

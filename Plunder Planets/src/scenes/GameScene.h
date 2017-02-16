@@ -10,6 +10,7 @@
 #include "../materials/WaterMaterial.h"
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
+#include "../gameobjects/Enemy.h"
 
 class GameScene : public thomas::Scene
 {
@@ -80,6 +81,7 @@ public:
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_ship = LoadObject<Ship>();
+		m_enemyShip = LoadObject<Enemy>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 	};
@@ -97,6 +99,7 @@ private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	Ship* m_ship;
+	Enemy* m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
 };

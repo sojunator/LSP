@@ -31,7 +31,7 @@ public:
 		*/
 
 
-		m_treasure = 0;
+		m_treasure = 10000;
 
 		//model
 		m_modelIndex = 0;
