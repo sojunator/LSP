@@ -136,10 +136,16 @@ float4 PSMain(VSOutput input) : SV_TARGET
 			float3 viewDirection = camPosition - input.positionWS;
 
 			//float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex); //specularTexture gives a 0,0,0,0 float4 somehow
+			
 			float3 reflection = normalize(reflect(-viewDirection, input.normal));
+			if (materialProperty.z >= 1)
+				reflection = normalize(reflect(-viewDirection, bumpNormal));
+
 			float specularPower2 = specularPower;
 			specularPower2 += 0.000000001f; //because we can't pow with a value of 0
 			specular = pow(saturate(dot(input.normal, reflection)), specularPower2) * specularColor.rgb; //specularPower = shiny
+			if (materialProperty.z >= 1)
+				specular = pow(saturate(dot(bumpNormal, reflection)), specularPower2) * specularColor.rgb;
 			//specular = specular * specularIntensity; //specularIntensity returns 0,0,0,0
 		}
 		outputColor = saturate(outputColor + diffuse + specular);
