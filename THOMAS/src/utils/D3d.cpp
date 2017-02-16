@@ -311,6 +311,7 @@ namespace thomas
 			else
 			{
 				hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView);
+				
 			}
 			
 			if (FAILED(hr))

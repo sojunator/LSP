@@ -172,6 +172,7 @@
     <ClInclude Include="src\gameobjects\Ship.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
+    <ClInclude Include="src\gameobjects\TestGameObject.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
+    <ClInclude Include="src\scenes\RenderingTestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

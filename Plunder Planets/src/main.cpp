@@ -13,6 +13,7 @@
 #include "materials\TerrainMaterial.h"
 
 #include "scenes\MenuScene.h"
+#include "scenes/RenderingTestScene.h"
 
 #include "gameobjects\TestDirectionalLight.h"
 #include "gameobjects\TestPointLight.h"
@@ -31,7 +32,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
-	Scene* menuScene = Scene::LoadScene<MenuScene>();
+	Scene* menuScene = Scene::LoadScene<RenderingTestScene>();
 
 	//start
 	thomas::ThomasCore::Start();

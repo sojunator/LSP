@@ -255,3 +255,6 @@ paket-files/
 *.wav
 *.xwb
 
+
+#special
+res/models/sponza/*
