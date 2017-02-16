@@ -64,7 +64,7 @@ namespace thomas
 
 			static bool BindDirectionalLight(unsigned int index);
 			static bool BindPointLight(unsigned int index);
-
+			static void Destroy();
 			
 		private:
 			static ID3D11Buffer* s_lightBuffer;

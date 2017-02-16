@@ -130,7 +130,8 @@ namespace thomas
 
 			void Camera::ReleaseSkybox()
 			{
-				m_skybox->~Skybox();
+				if(m_skybox)
+					m_skybox->~Skybox();
 			}
 		}
 	}

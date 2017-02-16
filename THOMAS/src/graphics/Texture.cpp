@@ -322,10 +322,11 @@ namespace thomas
 					s_loadedTextures[i]->m_data.textureView->Release();
 
 			}
-			s_samplerStates.CLAMP->Release();
-			s_samplerStates.WRAP->Release();
-			s_samplerStates.DECAL->Release();
-			s_samplerStates.MIRROR->Release();
+			s_loadedTextures.clear();
+			//s_samplerStates.CLAMP->Release();
+			//s_samplerStates.WRAP->Release();
+			//s_samplerStates.DECAL->Release();
+			//s_samplerStates.MIRROR->Release();
 		}
 
 	}

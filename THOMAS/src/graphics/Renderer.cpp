@@ -121,7 +121,8 @@ namespace thomas
 		void Renderer::RenderSetup(object::component::Camera* camera)
 		{
 			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilView);
-			ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
+			if(camera)
+				ThomasCore::GetDeviceContext()->RSSetViewports(1, camera->GetViewport().Get11());
 
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
 			ThomasCore::GetDeviceContext()->RSSetState(s_rasterState);

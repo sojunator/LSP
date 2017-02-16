@@ -11,8 +11,8 @@ namespace thomas
 
 		LightManager::~LightManager()
 		{
-			s_lightBuffer->Release();
-
+			SAFE_RELEASE(s_lightBuffer);
+			s_lightBuffer = NULL;
 		}
 
 		LightManager::LightBufferStruct LightManager::s_lightstruct;
@@ -87,6 +87,13 @@ namespace thomas
 		bool LightManager::BindPointLight(unsigned int index)
 		{
 			return false;
+		}
+		void LightManager::Destroy()
+		{
+			SAFE_RELEASE(s_lightBuffer);
+			s_lightBuffer = NULL;
+			s_lightstruct.nrOfDirectionalLights = 0;
+			s_lightstruct.nrOfPointLights = 0;
 		}
 	}
 }

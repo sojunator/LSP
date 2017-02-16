@@ -1,9 +1,11 @@
 #pragma once
+
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
 #include "Ship.h"
-
+#include "../scenes/MenuScene.h"
+#include "../../graphics/Sprite.h"
 using namespace thomas;
 using namespace object;
 class CameraObject : public GameObject
@@ -24,9 +26,11 @@ public:
 		m_transform->SetPosition(0, 1, 3);
 		m_music = AddComponent<component::SoundComponent>();
 		m_pirateMusic = AddComponent<component::SoundComponent>();
-		m_text = AddComponent<component::TextComponent>();
-		m_gold = AddComponent<component::TextComponent>();
+		//m_text = AddComponent<component::TextComponent>();
+		//m_gold = AddComponent<component::TextComponent>();
+		m_distance = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
+		m_button = AddComponent<component::SpriteComponent>();
 	
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
@@ -51,35 +55,49 @@ public:
 		m_sprite->SetPositionX(0); //Offset from top left corner
 		m_sprite->SetPositionY(0);
 		m_sprite->SetScale(1.0f);
+		m_sprite->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
 
 		//Simple font
-		m_text->SetFont("Name");
-		m_text->SetOutput("Plunder Planets");
-		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
-		m_text->SetRotation(0.0f);
-		m_text->SetScale(1.0f);
-		m_text->SetPositionX(Window::GetWidth() / 2.f);
-		m_text->SetPositionY(Window::GetHeight() / 21.5f);
-		m_text->SetDropshadow(true);
-		m_text->SetOutline(true);
+		//m_text->SetFont("Name");
+		//m_text->SetOutput("Plunder Planets");
+		//m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
+		//m_text->SetRotation(0.0f);
+		//m_text->SetScale(1.0f);
+		//m_text->SetPositionX(Window::GetWidth() / 2.f);
+		//m_text->SetPositionY(Window::GetHeight() / 21.5f);
+		//m_text->SetDropshadow(true);
+		//m_text->SetOutline(true);
 
-		//Gold font
-		m_gold->SetFont("Name");
-		m_gold->SetOutput("0");
-		m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
-		m_gold->SetRotation(0.0f);
-		m_gold->SetScale(1.0f);
+		////Gold font
+		//m_gold->SetFont("Name");
+		//m_gold->SetOutput("0");
+		//m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
+		//m_gold->SetRotation(0.0f);
+		//m_gold->SetScale(1.0f);
 
-		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
-			m_gold->SetPositionX(Window::GetWidth() / 7.6f);
-		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
-			m_gold->SetPositionX(Window::GetWidth() / 7.2f);
-		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
-			m_gold->SetPositionX(Window::GetWidth() / 6.5f);
+		//if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+		//	m_gold->SetPositionX(Window::GetWidth() / 6.4f);
+		//else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
+		//	m_gold->SetPositionX(Window::GetWidth() / 7.2f);
+		//else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
+		//	m_gold->SetPositionX(Window::GetWidth() / 6.5f);
 
-		m_gold->SetPositionY(Window::GetHeight() / 21.5f);
-		m_gold->SetDropshadow(true);
-		m_gold->SetOutline(true);
+		//m_gold->SetPositionY(Window::GetHeight() / 21.5f);
+		//m_gold->SetDropshadow(true);
+		//m_gold->SetOutline(true);
+
+		//Distance font test
+		m_distance->SetFont("Name");
+		m_distance->SetOutput("Distance");
+		m_distance->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
+		m_distance->SetRotation(0.0f);
+		m_distance->SetScale(0.4f);
+		m_distance->SetPositionX(100);
+		m_distance->SetPositionY(Window::GetHeight() / 2);
+		m_distance->SetDropshadow(true);
+		m_distance->SetOutline(true);
+
 
 		m_transform->SetPosition(0, 1, 3);	
 	};
@@ -88,14 +106,14 @@ public:
 
 	void Update()
 	{
-		if (m_ship == nullptr)
+		/*if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
 		else
 		{
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
-		}
+		}*/
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
@@ -113,7 +131,6 @@ public:
 		{
 			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
 		}
-
 
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
@@ -137,6 +154,9 @@ public:
 			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
 		}
 
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Scene::LoadScene<MenuScene>();
+
 
 		if (Input::GetKey(Input::Keys::LeftShift))
 		{
@@ -158,9 +178,11 @@ private:
 	component::Camera* m_camera;
 	component::SoundComponent* m_music;
 	component::SoundComponent* m_pirateMusic;
-	component::TextComponent* m_text;
-	component::TextComponent* m_gold;
+	//component::TextComponent* m_text;
+	//component::TextComponent* m_gold;
+	component::TextComponent* m_distance;
 	component::SpriteComponent* m_sprite;
+	component::SpriteComponent* m_button;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

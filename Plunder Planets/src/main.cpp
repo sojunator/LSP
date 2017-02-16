@@ -11,7 +11,8 @@
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
-#include "scenes\GameScene.h"
+
+#include "scenes\MenuScene.h"
 
 #include "gameobjects\TestDirectionalLight.h"
 #include "gameobjects\TestPointLight.h"
@@ -30,8 +31,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
-	Scene* gameScene = Scene::AddScene(new GameScene());
-	Scene::Init();
+	Scene* menuScene = Scene::LoadScene<MenuScene>();
 
 	//start
 	thomas::ThomasCore::Start();

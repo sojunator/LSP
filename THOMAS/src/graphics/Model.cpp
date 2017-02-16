@@ -77,6 +77,7 @@ namespace thomas {
 			{
 				delete s_loadedModels[i];
 			}
+			s_loadedModels.clear();
 		}
 
 		Model::~Model()
@@ -85,6 +86,7 @@ namespace thomas {
 			{
 				delete m_meshes[i];
 			}
+			m_meshes.clear();
 		}
 
 	}

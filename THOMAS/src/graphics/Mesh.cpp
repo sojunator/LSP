@@ -14,8 +14,8 @@ namespace thomas {
 
 		Mesh::~Mesh()
 		{
-			m_data.vertexBuffer->Release();
-			m_data.indexBuffer->Release();
+			SAFE_RELEASE(m_data.vertexBuffer);
+			SAFE_RELEASE(m_data.indexBuffer);
 		}
 
 
