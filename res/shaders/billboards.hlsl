@@ -1,15 +1,14 @@
-
-cbuffer mvp : register(b0)
+cbuffer cameraBuffer : register(b0)
 {
-	matrix worldMatrix;
-	matrix viewMatrix;
-	matrix projectionMatrix;
-	matrix mvpMatrix;
-	float3 camPosition;
-	float padding;
+	float3 cameraForward;
+	float pad;
+	float3 cameraUp;
+	float pad2;
+	float3 cameraRight;
+	float pad3;
+	float3 cameraPosition;
+	float pad4;
 };
-
-
 
 struct quadStruct
 {
@@ -21,34 +20,17 @@ RWStructuredBuffer<quadStruct> particle : register(u0);
 [numthreads(1, 1, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
-/*
-	particle[0].quad[0][0] = float3(-0.5, 0.5, 0);
-	particle[0].quad[0][1] = float3(0.5, -0.5, 0);
-	particle[0].quad[0][2] = float3(-1, -0.5, 0);
-	particle[0].quad[1][0] = float3(0.0, 1, 0);
-	particle[0].quad[1][1] = float3(1, -1, 0);
-	particle[0].quad[1][2] = float3(-1, -1, 0);*/
-
-	float3 posTest = float3(0,0,0);
-	float3 camTest = float3(-1,0,-1);
-	float3 particlePosWS = float3(0,0,-1000);//mul(posTest, (float3x3)worldMatrix);
-
-	float3 particleLookAtCam =	camTest - posTest; //camPosition - particlePosWS;
-
-	float3 forward = normalize(particleLookAtCam);
-	float3 right = cross( float3(0,1,0), particleLookAtCam);
-	float3 up = cross(forward, right);
+	float3 particlePosWS = float3(5,5,1);
+	//float3 forward = -cameraForward;
+	float3 right = cameraRight;
+	float3 up = cameraUp;
 
 	//tri 1
-	particle[0].quad[0][0] = particlePosWS + up - right;
-	particle[0].quad[0][1] = particlePosWS + up + right;
+	particle[0].quad[0][0] = particlePosWS + up + right;
+	particle[0].quad[0][1] = particlePosWS + up - right;
 	particle[0].quad[0][2] = particlePosWS - up + right;
 	//tri 2
-	/*particle[0].quad[1][0] = particlePosWS + up - right;
-	particle[0].quad[1][1] = particlePosWS - up + right;
-	particle[0].quad[1][2] = particlePosWS - up - right;*/
-
-	particle[0].quad[1][0] = float3(0.0, 0.1, 0);
-	particle[0].quad[1][1] = float3(0.1, -0.1, 0);
-	particle[0].quad[1][2] = float3(-0.1, -0.1, 0);
+	particle[0].quad[1][0] = particlePosWS - up + right;
+	particle[0].quad[1][1] = particlePosWS + up - right;
+	particle[0].quad[1][2] = particlePosWS - up - right;
 }

@@ -14,8 +14,10 @@ namespace thomas
 			class EmitterComponent : public Component
 			{
 			public:
+				EmitterComponent();
 				void Emit();
 				void Stop();
+				unsigned int GetNrOfParticles() const;
 			private:
 				graphics::Texture* m_texture;
 				std::string m_name;

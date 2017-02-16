@@ -7,20 +7,30 @@
 
 namespace thomas
 {
+	namespace object
+	{
+		namespace component
+		{
+			class EmitterComponent;
+		}
+	}
 	namespace graphics
 	{
-		class EmitterComponent;
-		class ParticleSystem
+		static class ParticleSystem
 		{
 		private:
-			HRESULT CompileComputeShader();
-			HRESULT CreateOutputUAVandSRV();
+			static HRESULT CompileComputeShader();
+			static HRESULT CreateOutputUAVandSRV();
+			static HRESULT CreateCameraConstantBuffer();
+			static HRESULT CreateMatrixConstantBuffer();
+
+			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
 		public:
 			ParticleSystem();
-			ParticleSystem(std::string shaderName);
 			~ParticleSystem();
-
-			void DrawParticles();
+			
+			static void Init();
+			static void DrawParticles();
 
 			struct Particle
 			{
@@ -32,18 +42,36 @@ namespace thomas
 				math::Vector3 positions[2][3];
 			};
 
-			
+			static void AddEmitter(object::component::EmitterComponent* emitter);
 		private:
-			Billboard* s_billboards;
-			ID3D11Buffer* m_cameraBuffer;
-			
-			ID3D11Buffer* s_billboardsBuffer;
-			ID3D11ComputeShader* s_billboardCS;
-			ID3D11UnorderedAccessView* s_billboardsUAV;
-			ID3D11ShaderResourceView* s_billboardsSRV;
-			Shader* s_shader;
-			unsigned int s_nrOfBillboards;
-			std::vector<EmitterComponent*> Emitters;
+			struct CameraBufferStruct
+			{
+				math::Vector3 forward;
+				float pad;
+				math::Vector3 up;
+				float pad2;
+				math::Vector3 right;
+				float pad3;
+				math::Vector3 position;
+				float pad4;
+			};
+			struct MatrixBufferStruct
+			{
+				math::Matrix viewProjMatrix;
+			};
+			static CameraBufferStruct s_cameraBufferStruct;
+			static MatrixBufferStruct s_matrixBufferStruct;
+			static ID3D11Buffer* s_cameraBuffer;
+			static ID3D11Buffer* s_matrixBuffer;
+			static Billboard* s_billboards;
+			static ID3D11Buffer* s_billboardsBuffer;
+			static ID3D11ComputeShader* s_billboardCS;
+			static ID3D11UnorderedAccessView* s_billboardsUAV;
+			static ID3D11ShaderResourceView* s_billboardsSRV;
+			static Shader* s_shader;
+			static unsigned int s_nrOfBillboards;
+			static std::vector<object::component::EmitterComponent*> s_emitters;
+			static std::vector<object::component::Camera*> s_cameras;
 
 		public:
 

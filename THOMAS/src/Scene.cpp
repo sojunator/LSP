@@ -59,8 +59,6 @@ namespace thomas
 			else
 				LOG("No scene set");
 
-			
-
 
 			s_currentScene->Render3D(camera);
 			s_currentScene->Render2D(camera);
@@ -101,13 +99,7 @@ namespace thomas
 			
 			if (shader->GetName() == "particleShader")
 			{
-				if (!once)
-				{
-					pstm = graphics::ParticleSystem("particleShader");
-					once = true;
-				}
-				else
-					pstm.DrawParticles();
+				graphics::ParticleSystem::DrawParticles();
 			}
 			shader->Unbind();
 		}

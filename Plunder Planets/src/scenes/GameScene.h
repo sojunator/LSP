@@ -10,7 +10,7 @@
 #include "../materials/WaterMaterial.h"
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
-
+#include "../gameobjects/StandardParticleEmitter.h"
 #include "../src/graphics/ParticleSystem.h"
 
 class GameScene : public thomas::Scene
@@ -46,10 +46,12 @@ public:
 		
 		//Init models
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
-		LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
+		LoadModel("testModel0", "../res/models/cannonball/cannonball.obj", "phongMaterial");
 		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
+
+		
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
@@ -70,6 +72,9 @@ public:
 		m_ship = thomas::object::GameObject::Instantiate<Ship>(this);
 		m_waterObject = thomas::object::GameObject::Instantiate<WaterObject>(this);
 		m_testDirectionalLight = thomas::object::GameObject::Instantiate<TestDirectionalLight>(this);
+
+		ParticleSystem::Init();
+		m_particleEmitter = thomas::object::GameObject::Instantiate<StandardParticleEmitter>(this);
 
 		//Init Cameras //lägga i scene init eller loadscene kanske?
 		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
@@ -93,5 +98,5 @@ private:
 	Ship* m_ship;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
-
+	StandardParticleEmitter* m_particleEmitter;
 };
