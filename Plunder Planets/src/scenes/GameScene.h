@@ -11,6 +11,7 @@
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
+#include "../gameobjects/TestCube.h"
 
 class GameScene : public thomas::Scene
 {
@@ -44,10 +45,11 @@ public:
 		
 		//Init models
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
-		LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
-		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
-		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
-		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
+		LoadModel("box", "../res/models/box.obj", "phongMaterial");
+		//LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
+		//LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
+		//LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
+		//LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
@@ -77,13 +79,13 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		//Init objects lägga till LoadObjects i scene?
-		//m_cameraObject = thomas::object::GameObject::Instantiate<CameraObject>(this);
 		m_cameraObject = LoadObject<CameraObject>();
-		m_terrainObject = LoadObject<TerrainObject>();
-		m_ship = LoadObject<Ship>();
-		m_waterObject = LoadObject<WaterObject>();
-		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		//m_terrainObject = LoadObject<TerrainObject>();
+		//m_ship = LoadObject<Ship>();
+		//m_waterObject = LoadObject<WaterObject>();
+		//m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		//LoadObject<PhysicsObject>();
+		LoadObject<TestCube>();
 	};
 	
 	/*void UnloadScene()

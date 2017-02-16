@@ -173,6 +173,7 @@
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
+    <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
