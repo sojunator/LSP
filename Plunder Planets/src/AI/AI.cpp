@@ -18,7 +18,7 @@ AI::~AI()
 	delete m_pathfinding;
 }
 
-bool AI::CheckInFront(math::Vector3 pos)
+bool AI::Collision(math::Vector3 pos)
 {
 	if (m_terrainObject->Collision(pos))
 	{
@@ -27,23 +27,15 @@ bool AI::CheckInFront(math::Vector3 pos)
 	return false;
 }
 
-bool AI::CheckSide(math::Vector3 pos)
-{
-	if (m_terrainObject->Collision(pos))
-	{
-		return true;
-	}
-	return false;
-}
-
-int AI::TurnDir(math::Vector3 pos, math::Vector3 right)
+int AI::TurnDir(math::Vector3 pos, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft)
 {
 	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-	if (playerDir.Dot(right) == 0)		//Continue forward
+
+	if (playerDir.Dot(right) <= 0.1 && playerDir.Dot(right) >= -0.1 && !objectFront || objectLeft && objectRight)		//Continue forward
 		return 0;
-	else if (playerDir.Dot(right) < 0)	//Turn left
+	else if (playerDir.Dot(right) < -0.1 && !objectLeft || objectFront && objectRight || playerDir.Dot(right) <= 0.1 && playerDir.Dot(right) >= -0.1 && objectFront )	//Turn left
 		return -1;
-	else								//Turn right
+	else if (playerDir.Dot(right) > 0.1 && !objectRight || objectFront && objectLeft)			//Turn right
 		return 1;
 }
 
@@ -66,7 +58,7 @@ void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
 	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()))
 	{
 		m_escapeTimer = 0;
-		dir = m_playerShip->m_transform->GetPosition();
+		dir = m_playerShip->m_transform->GetPosition() - pos;
 		m_state = Behavior::Attacking;
 	}
 	else if (m_state == Behavior::Attacking)

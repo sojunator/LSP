@@ -18,13 +18,12 @@ public:
 	AI();
 	~AI();
 	
-	bool CheckInFront(math::Vector3 pos);
-	bool CheckSide(math::Vector3 pos);
-	int TurnDir(math::Vector3 pos, math::Vector3 forward);
+	bool Collision(math::Vector3 pos);
+	int TurnDir(math::Vector3 pos, math::Vector3 forward, bool objectFront, bool objectRight, bool objectLeft);
 	float Move(math::Vector3 pos, float speed, float retardation, float acceleration);
 
-
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
+	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 
 	Behavior GetState();
 

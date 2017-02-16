@@ -40,60 +40,44 @@ public:
 		m_turnDir = 0;
 
 		m_searchRadius = 1000;
+		m_islandForward = false;
+		m_islandLeft = false;
+		m_islandRight = false;
 	}
 
 	void Move()
 	{
-		float speed = 0;
-		if (m_turnDir == 0)
+		
+		switch (m_ai->GetState())
 		{
-			speed = m_ai->Move(m_transform->GetPosition(), m_forwardSpeed, m_retardation, m_acceleration);
-			if (speed < 0)
-				speed = 0;
-			else if (speed > m_maxSpeed)
-				speed = m_maxSpeed;
-		}
-		else if (m_turnDir == 1)
-		{
-			//Update turn vec then speed
+		case AI::Behavior::Attacking:
+			Rotate();
+			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
+			break;
+		case AI::Behavior::Searching:
+			Rotate();
+			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
+			break;
+		case AI::Behavior::Idle:
+			m_forwardSpeed -= m_retardation * Time::GetDeltaTime();
+			break;
+		default:
+			break;
 		}
 
-
-
-
-		if (math::Vector3::DistanceSquared(m_playerPos, m_transform->GetPosition()) < 100*100)	//Close to player
-		{
-			m_newForwardVec = m_ship->m_transform->Forward();
-			m_forwardSpeed -= m_retardation * m_dt;
-			m_forwardSpeed = std::fmaxf(m_forwardSpeed, 0);
-		}
-		else
-		{
-			m_forwardSpeed += m_acceleration * m_dt;
-			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
-		}
+		m_forwardSpeed = std::fminf(m_forwardSpeed, 0);
+		m_forwardSpeed = std::fmaxf(m_forwardSpeed, m_maxSpeed);
 	}
 
 	void Rotate()
 	{
-		float turnDir = m_transform->Right().Dot(m_newForwardVec);
-		if (turnDir > 0)	//Check with RightVec
-			m_transform->Rotate(m_rotation * m_dt, 0, 0);
-		else if (turnDir < 0)
-			m_transform->Rotate(-m_rotation * m_dt, 0, 0);
-		else
+		if (m_transform->Forward() == m_newForwardVec)
 		{
-			turnDir = m_transform->Forward().Dot(m_newForwardVec);
-			if (turnDir < 0)
-				m_transform->Rotate(m_rotation * m_dt, 0, 0);
+			if (m_turnDir == 1)
+				m_transform->Rotate(m_rotation * Time::GetDeltaTime(), 0, 0);
+			else if (m_turnDir == -1)
+				m_transform->Rotate(-m_rotation * Time::GetDeltaTime(), 0, 0);
 		}
-	}
-
-	void Escaped()
-	{
-		//Check if the player is behind a island, then also escaped. Move to last known playerPos
-		if (m_escapeTimer >= m_escapeTime)
-			m_state = Idle;
 	}
 
 	void FireCannons()
@@ -105,22 +89,13 @@ public:
 	{
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
 
-		if (m_ai->CheckInFront(m_transform->GetPosition() + (m_transform->Forward() * 50)))	//Check for island in front
-			m_turnDir = m_ai->TurnDir;
+		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (m_transform->Forward() * 50));	//Check island front
+		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (m_transform->Right() * 40));	//Check island right
+		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (m_transform->Right() * 40));	//Check island left
 
-		if (m_ai->CheckSide(m_transform->GetPosition() + (m_transform->Right() * 40)))		//Check for island to the right
-		{
-			//No need to turn
-		}
-
-		if (m_ai->CheckSide(m_transform->GetPosition() - (m_transform->Right() * 40)))		//Check for island to the left
-		{
-			//No need to turn
-		}
+		m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
 
 		Move();
-
-		Escaped();
 
 
 
@@ -144,6 +119,10 @@ private:
 	float m_maxSpeed;
 	float m_searchRadius;
 	float m_turnDir;
+
+	bool m_islandForward;
+	bool m_islandLeft;
+	bool m_islandRight;
 
 	//Components
 	component::RenderComponent* m_renderer;
