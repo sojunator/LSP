@@ -80,10 +80,10 @@ public:
 		//m_cameraObject = thomas::object::GameObject::Instantiate<CameraObject>(this);
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
-		//m_ship = LoadObject<Ship>();
+		m_ship = LoadObject<Ship>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
-		LoadObject<PhysicsObject>();
+		//LoadObject<PhysicsObject>();
 	};
 	
 	/*void UnloadScene()

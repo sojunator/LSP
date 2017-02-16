@@ -1,6 +1,5 @@
 #pragma once
-#pragma once
-#pragma once
+
 #include "Thomas.h"
 
 using namespace thomas;
