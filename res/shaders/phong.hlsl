@@ -106,7 +106,6 @@ float4 PSMain(VSOutput input) : SV_TARGET
 	float3 ambientColor = float3(0,0,0);
 	float3 outputColor = float3(0,0,0);
 	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular
-
 	ambientColor = (diffuseColor.rgb * textureColor) * 0.5f; //0.5 is a scalefactor for how strong the ambient will be
 	//CURRENTLY NO NORMAL MAP
 	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
@@ -144,7 +143,7 @@ float4 PSMain(VSOutput input) : SV_TARGET
 			specular = pow(saturate(dot(input.normal, reflection)), specularPower2) * specularColor.rgb; //specularPower = shiny
 			//specular = specular * specularIntensity;
 		}
-		outputColor = saturate(outputColor+diffuse + specular);
+		outputColor = saturate(outputColor + diffuse +specular);
 	}
 	outputColor = saturate(outputColor + ambientColor);
 	return float4(outputColor,1);

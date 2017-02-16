@@ -1,0 +1,113 @@
+newmtl lambert7SG
+illum 4
+Kd 0.81 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert8SG
+illum 4
+Kd 1.00 0.32 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert9SG
+illum 4
+Kd 0.00 0.69 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl phong1SG
+illum 4
+Kd 0.14 0.05 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.09 0.07 0.06
+Ns 21.50
+newmtl phong2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.12 0.12 0.12
+Tf 1.00 1.00 1.00
+map_Kd engine.jpg
+bump -mm 0.322148 1 engineNormal.jpg -bm 3.580645
+Ni 1.00
+Ks 0.89 0.89 0.89
+Ns 13.91
+newmtl phong3SG
+illum 4
+Kd 0.84 0.84 0.84
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.68 0.68 0.68
+Ns 6.32
+newmtl phong4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd copper.jpg
+Ni 1.00
+Ks 0.79 0.79 0.79
+Ns 22.13
+newmtl phong5SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.01 0.03 0.07
+Tf 1.00 1.00 1.00
+map_Kd pp.png
+Ni 1.00
+Ks 0.01 0.01 0.01
+Ns 3.16
+newmtl phong8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.86 0.86 0.86
+Tf 1.00 1.00 1.00
+map_Kd pirate.jpg
+Ni 1.00
+Ks 0.02 0.02 0.02
+Ns 2.53
+newmtl phong9SG
+illum 4
+Kd 0.78 0.61 0.03
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.68 0.68 0.68
+Ns 20.86
+newmtl phong10SG
+illum 4
+Kd 0.30 0.10 0.00
+Ka 0.08 0.04 0.02
+Tf 1.00 1.00 1.00
+bump -s 0.125 0.111111 -mm 0.234899 1 boatNormTex2.png -bm -2.935484
+Ni 1.00
+Ks 0.12 0.12 0.12
+Ns 8.22
+newmtl phong11SG
+illum 4
+Kd 0.17 0.05 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.04 0.04 0.04
+Ns 8.85
+newmtl phong12SG
+illum 4
+Kd 0.49 0.24 0.08
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+bump -s 0.166667 0.2 -mm 0.0939597 1 chestTexNorm.png -bm -0.354839
+Ni 1.00
+Ks 0.05 0.05 0.05
+Ns 5.69
+newmtl phong13SG
+illum 4
+Kd 0.03 0.03 0.03
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.01 0.01 0.01
+Ns 1.90

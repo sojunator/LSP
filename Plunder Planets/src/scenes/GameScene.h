@@ -43,7 +43,8 @@ public:
 		
 		//Init models
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
-		LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
+		//LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
+		LoadModel("testModel0", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
