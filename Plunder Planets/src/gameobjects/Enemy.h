@@ -29,6 +29,7 @@ public:
 		*/
 
 		m_renderer->SetModel("testModel0");
+				
 
 		m_initPosition = math::Vector3(100, -0.8f, 100);
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
@@ -54,6 +55,10 @@ public:
 		switch (m_ai->GetState())
 		{
 		case AI::Behavior::Attacking:
+			Rotate();
+			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
+			break;
+		case AI::Behavior::Fiering:
 			Rotate();
 			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
 			break;
@@ -93,14 +98,12 @@ public:
 
 	void Update()
 	{
-		math::Vector3 pos = m_transform->GetPosition();
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
+		//m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
 
-		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (m_transform->Forward() * 50));	//Check island front
-		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (m_transform->Right() * 40));	//Check island right
-		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (m_transform->Right() * 40));	//Check island left
-
-		pos = m_transform->GetPosition();
+		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 50));	//Check island front
+		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (m_transform->Right() * 30));	//Check island right
+		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (m_transform->Right() * 30));	//Check island left
 
 		m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), m_transform->Forward(), m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
 
@@ -144,5 +147,7 @@ private:
 	Broadside* m_broadSideRight;
 
 	bool m_firstFrame;
+
+	
 
 };

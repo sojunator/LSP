@@ -20,7 +20,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(8, mat, 1024 / 4, 1, 1024, 300);
+		m_islands = new thomas::Islands(8, mat, 1024 / 4, 1, 1024, 500);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Plane-1");
