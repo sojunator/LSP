@@ -21,7 +21,7 @@ namespace thomas
 			else
 			{
 				ThomasCore::GetDeviceContext()->OMSetBlendState(s_states->Opaque(), DirectX::Colors::Black, 0xFFFFFFFF);
-			
+	
 				std::wstring holder = std::wstring(output.begin(), output.end());
 				const wchar_t* result = holder.c_str();
 
@@ -33,23 +33,24 @@ namespace thomas
 				if (dropShadow)
 				{
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						s_fontPos + math::Vector2(1.f, 1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(1.f, 1.f), DirectX::Colors::Black, rotation, origin, scale);
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						s_fontPos + math::Vector2(-1.f, 1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(-1.f, 1.f), DirectX::Colors::Black, rotation, origin, scale);
 				}
 
 				if (outline)
 				{
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						s_fontPos + math::Vector2(-1.f, -1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(-1.f, -1.f), DirectX::Colors::Black, rotation, origin, scale);
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						s_fontPos + math::Vector2(1.f, -1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(1.f, -1.f), DirectX::Colors::Black, rotation, origin, scale);
 				}
 
 				s_fonts[name]->DrawString(s_spriteBatch.get(), result, math::Vector2(posX, posY), color, rotation, origin, scale);
 
 				s_spriteBatch->End();
 
+				//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(NULL, 0);
 				ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, DirectX::Colors::Black, 0xFFFFFFFF);
 			}
 		}
