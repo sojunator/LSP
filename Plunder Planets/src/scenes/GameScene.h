@@ -10,6 +10,7 @@
 #include "../materials/WaterMaterial.h"
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
+#include "../gameobjects/PhysicsObject.h"
 
 class GameScene : public thomas::Scene
 {
@@ -34,15 +35,16 @@ public:
 		LoadShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/Terrain.hlsl");
 
 		//Init materials
-		/*thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
+		thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 		thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
-		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));*/
+		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 		LoadMaterial("phongMaterial", new PhongMaterial("Phong"));
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
 		
 		//Init models
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
+		LoadModel("box", "../res/models/box.obj", "phongMaterial");
 		LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
 		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
@@ -76,12 +78,12 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		//Init objects lägga till LoadObjects i scene?
-		//m_cameraObject = thomas::object::GameObject::Instantiate<CameraObject>(this);
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_ship = LoadObject<Ship>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		//LoadObject<PhysicsObject>();
 	};
 	
 	/*void UnloadScene()

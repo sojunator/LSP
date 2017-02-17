@@ -59,34 +59,63 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{
 
-		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene)) TODO: Set this up.
-		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
-		{
-			shader->Bind();
-			camera->BindReflection();
-			graphics::LightManager::BindAllLights();
-			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
-			{
-				material->Bind();
-				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+
+		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
+		//{
+		//	shader->Bind();
+		//	camera->BindReflection();
+		//	graphics::LightManager::BindAllLights();
+		//	for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
+		//	{
+		//		material->Bind();
+		//		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+		//		{
+		//			graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+		//			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+		//			{
+		//				for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+		//				{
+		//					mesh->Bind();
+		//					mesh->Draw();
+		//				}
+		//			}
+		//			graphics::Renderer::UnBindGameObjectBuffer();
+		//		}
+		//		material->Unbind();
+		//	}
+		//	graphics::LightManager::Unbind();
+
+		//	shader->Unbind();
+		//}
+
+		camera->BindReflection();
+		graphics::LightManager::BindAllLights();
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+		{	
+			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+			{	
+				graphics::Model* model = renderComponent->GetModel();
+				if (model)
 				{
+					std::vector < graphics::Mesh*> meshes = model->GetMeshes();
+					meshes[0]->GetMaterial()->GetShader()->Bind();
+					meshes[0]->GetMaterial()->Bind();
 					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+
+					for (graphics::Mesh* mesh : meshes)
 					{
-						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
-						{
-							mesh->Bind();
-							mesh->Draw();
-						}
+						mesh->Bind();
+						mesh->Draw();
 					}
 					graphics::Renderer::UnBindGameObjectBuffer();
+					meshes[0]->GetMaterial()->Unbind();
+					meshes[0]->GetMaterial()->GetShader()->Unbind();
 				}
-				material->Unbind();
+				
 			}
-			graphics::LightManager::Unbind();
-
-			shader->Unbind();
+			
 		}
+		graphics::LightManager::Unbind();
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 	}
