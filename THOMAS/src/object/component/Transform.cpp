@@ -86,7 +86,6 @@ namespace thomas
 				math::Quaternion rot = math::Quaternion::CreateFromAxisAngle(axis, angle);
 				math::Matrix newRot = math::Matrix::CreateFromQuaternion(rot*m_localRotation);
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
-				//m_localRotation = m_localRotation*rot;
 				Decompose();
 			}
 			void Transform::Translate(math::Vector3 translation)
