@@ -19,11 +19,11 @@ namespace thomas
 				
 				math::Matrix m_localWorldMatrix;
 
-				Transform* m_parent;
+				
+				std::vector<Transform*> m_children;
 
 				Transform();
-
-
+				
 				math::Vector3 Forward();
 				math::Vector3 Up();
 				math::Vector3 Right();
@@ -52,8 +52,13 @@ namespace thomas
 				void SetScale(float x, float y, float z);
 				void SetScale(float scale);
 
+				void UpdateChildren();
+				void SetParent(Transform* parent);
+				Transform* GetParent();
+				void RemoveParent();
+
 			private:
-				
+				Transform* m_parent;
 				
 			};
 		}
