@@ -61,7 +61,7 @@ public:
 		m_healthbar->SetPositionX(10); //Offset from top left corner
 		m_healthbar->SetPositionY(960);
 		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
-		m_healthbar->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
 
 
 		//Simple font
@@ -108,6 +108,35 @@ public:
 		{
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
 		}*/
+		//Healthbar code here for now
+		if (m_healthbar->GetScale().x > 0.6f)
+		{
+			m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
+		}
+		else if (m_healthbar->GetScale().x < 0.6f && m_healthbar->GetScale().x >= 0.3f)
+		{
+			m_healthbar->SetColor(math::Vector4(1.0f, 0.3f, 0.0f, 1.0f));
+		}
+		else if (m_healthbar->GetScale().x < 0.3f)
+		{
+			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+
+		if (Input::GetKey(Input::Keys::K))
+		{
+			if (m_healthbar->GetScale().x < 1.0f)
+			{
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, 1.0f));
+			}
+		}
+
+		if (Input::GetKey(Input::Keys::J))
+		{
+			if (m_healthbar->GetScale().x >= 0.0f)
+			{
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
+			}
+		}
 		
 		if (Input::GetKey(Input::Keys::A))
 		{
