@@ -1,11 +1,3 @@
-/*cbuffer cameraBuffer : register(b1)
-{
-	float3 cameraForward;
-	float3 cameraUp;
-	float3 cameraRight;
-	float3 cameraPosition;
-};
-*/
 cbuffer matrixBuffer : register(b0)
 {
 	matrix viewProjMatrix;
@@ -14,6 +6,7 @@ cbuffer matrixBuffer : register(b0)
 struct VS_OUT
 {
 	float4 pos : SV_POSITION;
+	float4 color : COLOR;
 };
 
 struct quadStruct
@@ -26,20 +19,21 @@ StructuredBuffer<quadStruct> particle : register(t0);
 VS_OUT  VSMain(uint id : SV_VERTEXID)
 {
 	VS_OUT output = (VS_OUT) 0;
+	output.color = float4(1,0,0,1);
 
-	uint particleIndex = (uint)id/6.0f;
-	uint triangleIndex = (uint)id/3.0f;
+	uint particleIndex = (uint)(id/6);
+	uint triangleIndex = (uint)((id % 6)/3);
 	uint vertexIndex = id % 3;
 
 	output.pos = mul(float4(particle[particleIndex].quad[triangleIndex][vertexIndex], 1.0), viewProjMatrix);
 
-return output;
+	return output;
 }
 
 
 float4 PSMain(VS_OUT input) : SV_Target
 {
 
-	return float4(1,0,0,1);
+	return input.color;
 
 }

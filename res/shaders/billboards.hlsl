@@ -18,19 +18,24 @@ struct quadStruct
 RWStructuredBuffer<quadStruct> particle : register(u0);
 
 [numthreads(1, 1, 1)]
-void main( uint3 DTid : SV_DispatchThreadID )
+void main( uint3 Gid : SV_GroupID )
 {
-	float3 particlePosWS = float3(5,5,1);
-	//float3 forward = -cameraForward;
 	float3 right = cameraRight;
 	float3 up = cameraUp;
 
+	float3 particlePosWS = float3(10 * Gid.x,5,1);
+
+	uint c = Gid.x;
 	//tri 1
-	particle[0].quad[0][0] = particlePosWS + up + right;
-	particle[0].quad[0][1] = particlePosWS + up - right;
-	particle[0].quad[0][2] = particlePosWS - up + right;
+	particle[c].quad[0][0] = particlePosWS + up + right;
+	particle[c].quad[0][1] = particlePosWS + up - right;
+	particle[c].quad[0][2] = particlePosWS - up + right;
 	//tri 2
-	particle[0].quad[1][0] = particlePosWS - up + right;
-	particle[0].quad[1][1] = particlePosWS + up - right;
-	particle[0].quad[1][2] = particlePosWS - up - right;
+	particle[c].quad[1][0] = particlePosWS - up + right;
+	particle[c].quad[1][1] = particlePosWS + up - right;
+	particle[c].quad[1][2] = particlePosWS - up - right;
+
+
+
+
 }

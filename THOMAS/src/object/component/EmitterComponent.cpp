@@ -3,7 +3,7 @@
 
 thomas::object::component::EmitterComponent::EmitterComponent() : Component("EmitterComponent")
 {
-	m_nrOfParticles = 1;
+	m_nrOfParticles = 50;
 	m_isEmitting = false;
 	graphics::ParticleSystem::AddEmitter(this);
 }

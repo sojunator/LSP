@@ -28,15 +28,15 @@ namespace thomas
 
 		ParticleSystem::~ParticleSystem()
 		{
-			delete[] s_billboards;
+			//delete[] s_billboards;
 
 		}
 
 		void ParticleSystem::Init()
 		{
 			s_shader = Shader::GetShaderByName("particleShader");
-			s_nrOfBillboards = 1;
-			s_billboards = new Billboard[s_nrOfBillboards];
+			s_nrOfBillboards = 50;
+			//s_billboards = new Billboard[2];
 			CompileComputeShader();
 			CreateOutputUAVandSRV();
 			CreateCameraConstantBuffer();
@@ -59,6 +59,7 @@ namespace thomas
 		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
 		{
 			s_emitters.push_back(emitter);
+			//s_billboards = new Billboard[emitter->GetNrOfParticles()];
 			return;
 		}
 
@@ -78,9 +79,13 @@ namespace thomas
 					ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &s_billboardsUAV, NULL);
 					ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
 
-					ThomasCore::GetDeviceContext()->Dispatch(1, 1, 1);
+					ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles(), 1, 1);
 					//unbind uav
 					ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+
+					//bind srv
+					ThomasCore::GetDeviceContext()->VSSetShaderResources(0, 1, &s_billboardsSRV);
+					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
 
 					s_shader->Bind();
 
@@ -88,11 +93,6 @@ namespace thomas
 					ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
 					ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 0, nullptr, 0, 0);
 
-					//bind srv
-					ThomasCore::GetDeviceContext()->VSSetShaderResources(0, 1, &s_billboardsSRV);
-					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
-					//ThomasCore::GetDeviceContext()->VSSetConstantBuffers(1, 1, &m_cameraBuffer);
-					
 
 					thomas::ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfParticles() * 6, 0);
 
@@ -129,7 +129,6 @@ namespace thomas
 			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 			srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
-			srvDesc.Buffer.ElementWidth = s_nrOfBillboards;
 			srvDesc.Buffer.FirstElement = 0;
 			srvDesc.Buffer.NumElements = s_nrOfBillboards;
 
