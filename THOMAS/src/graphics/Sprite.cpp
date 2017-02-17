@@ -76,7 +76,7 @@ namespace thomas
 		}
 
 
-		void Sprite::RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale)
+		void Sprite::RenderImage(std::string name, math::Vector4 color, float posX, float posY, math::Vector2 scale)
 		{
 			if (!s_texture[name].srv)
 			{

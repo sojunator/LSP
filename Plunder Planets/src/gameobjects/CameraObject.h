@@ -28,9 +28,8 @@ public:
 		m_pirateMusic = AddComponent<component::SoundComponent>();
 		m_text = AddComponent<component::TextComponent>();
 		m_gold = AddComponent<component::TextComponent>();
-		m_distance = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
-		m_button = AddComponent<component::SpriteComponent>();
+		m_healthbar = AddComponent<component::SpriteComponent>();
 	
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
@@ -54,8 +53,15 @@ public:
 		m_sprite->SetName("GUI");
 		m_sprite->SetPositionX(0); //Offset from top left corner
 		m_sprite->SetPositionY(0);
-		m_sprite->SetScale(1.0f);
+		m_sprite->SetScale(math::Vector2(1.0f, 1.0f));
 		m_sprite->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		//Healthbar
+		m_healthbar->SetName("Button");
+		m_healthbar->SetPositionX(10); //Offset from top left corner
+		m_healthbar->SetPositionY(960);
+		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
+		m_healthbar->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 
 		//Simple font
@@ -86,18 +92,6 @@ public:
 		m_gold->SetPositionY(Window::GetHeight() / 21.5f);
 		m_gold->SetDropshadow(true);
 		m_gold->SetOutline(true);
-
-		//Distance font test
-		m_distance->SetFont("Name");
-		m_distance->SetOutput("Distance");
-		m_distance->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
-		m_distance->SetRotation(0.0f);
-		m_distance->SetScale(0.4f);
-		m_distance->SetPositionX(100);
-		m_distance->SetPositionY(Window::GetHeight() / 2);
-		m_distance->SetDropshadow(true);
-		m_distance->SetOutline(true);
-
 
 		m_transform->SetPosition(0, 1, 3);	
 	};
@@ -180,9 +174,8 @@ private:
 	component::SoundComponent* m_pirateMusic;
 	component::TextComponent* m_text;
 	component::TextComponent* m_gold;
-	component::TextComponent* m_distance;
 	component::SpriteComponent* m_sprite;
-	component::SpriteComponent* m_button;
+	component::SpriteComponent* m_healthbar;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;
