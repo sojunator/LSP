@@ -1,5 +1,8 @@
 #include "Window.h"
 #include "Input.h"
+//#include "utils\DebugTools.h"
+
+
 namespace thomas 
 {
 	LONG Window::s_width;
@@ -16,6 +19,9 @@ namespace thomas
 
 	LRESULT CALLBACK Window::EventHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		//Init Tweakbar
+		/*utils::DebugTools::ProcessMessages(hWnd, message, wParam, lParam);*/
+
 		//If one case is hit the code will execute everything down until a break;
 		switch (message)
 		{
