@@ -20,6 +20,7 @@ public:
 
 	~WaterMaterial();
 private:
+	bool play;
 	struct MaterialProperties
 	{
 		math::Color waterColor;

@@ -49,9 +49,9 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
 		m_splashSound = AddComponent<component::SoundComponent>();
-		//m_rigidbody = AddComponent<component::RigidBodyComponent>();
+		m_rigidbody = AddComponent<component::RigidBodyComponent>();
 
-		//m_rigidbody->SetMass(m_mass);
+		m_rigidbody->SetMass(m_mass);
 
 
 		m_speed = 300.0f;

@@ -17,12 +17,12 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// Adjust this parameter to control the simulation speed
 
 	// A scale to control the amplitude. Not the world space height
-	m_oceanSettings.wave_amplitude = 0.45f;
+	m_oceanSettings.wave_amplitude = 0.35f;
 	// 2D wind direction. No need to be normalized
 	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
 	// The bigger the wind speed, the larger scale of wave crest.
 	// But the wave scale can be no larger than patch_length
-	m_oceanSettings.wind_speed = 420.0f;
+	m_oceanSettings.wind_speed = 120.0f;
 	// Damp out the components opposite to wind direction.
 	// The smaller the value, the higher wind dependency
 	m_oceanSettings.wind_dependency = 0.07f;
@@ -62,6 +62,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
+	play = false;
 }
 
 void WaterMaterial::Update()
@@ -69,15 +70,15 @@ void WaterMaterial::Update()
 	timeSinceLastUpdate += Time::GetDeltaTime();
 	time += Time::GetDeltaTime();
 
-	if (timeSinceLastUpdate > 0.03)
+	if (timeSinceLastUpdate > 0.03 && play)
 	{
 		timeSinceLastUpdate = 0;
-	//	m_oceanSim->updateDisplacementMap(time);
+		m_oceanSim->updateDisplacementMap(time);
 	}
 
 	
-	if (Input::GetKey(Input::Keys::C))
-		timeSinceLastUpdate = 0;
+	if (Input::GetKeyDown(Input::Keys::C))
+		play = !play;
 
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 

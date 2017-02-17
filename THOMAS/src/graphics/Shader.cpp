@@ -23,20 +23,20 @@ namespace thomas
 
 			if (status != S_OK)
 			{
-				
+
 				if (errorBlob)
 				{
 					if (errorBlob->GetBufferSize())
 					{
 						std::string error((char*)errorBlob->GetBufferPointer());
 
-						#ifndef THOMAS_SHOW_ALL_ERRORS
-							if (error.find("X3501") == std::string::npos) { //ignore annoying errors.
-								LOG("SHADER ERROR : " << source << " errorBlob:" << error);
-							}	
-						#else
+#ifndef THOMAS_SHOW_ALL_ERRORS
+						if (error.find("X3501") == std::string::npos) { //ignore annoying errors.
 							LOG("SHADER ERROR : " << source << " errorBlob:" << error);
-						#endif
+						}
+#else
+						LOG("SHADER ERROR : " << source << " errorBlob:" << error);
+#endif
 
 						errorBlob->Release();
 					}
@@ -116,8 +116,8 @@ namespace thomas
 			m_data.hullShader = nullptr;
 			m_data.ds = NULL;
 			m_data.domainShader = nullptr;
-			
-			if(!vertexShader.empty())
+
+			if (!vertexShader.empty())
 				m_data.vs = Compile(vertexShader, "vs_5_0", "VSMain");
 			if (!geometryShader.empty())
 				m_data.gs = Compile(geometryShader, "gs_5_0", "GSMain");
@@ -238,8 +238,8 @@ namespace thomas
 				ThomasCore::GetDeviceContext()->IASetInputLayout(m_data.inputLayout);
 				ThomasCore::GetDeviceContext()->VSSetShader(m_data.vertexShader, NULL, 0);
 			}
-				
-			if(m_data.ps)
+
+			if (m_data.ps)
 				ThomasCore::GetDeviceContext()->PSSetShader(m_data.pixelShader, NULL, 0);
 
 			if (m_data.gs)
@@ -251,7 +251,7 @@ namespace thomas
 			if (m_data.ds)
 				ThomasCore::GetDeviceContext()->DSSetShader(m_data.domainShader, NULL, 0);
 
-			
+
 			return true;
 		}
 		bool Shader::Unbind()
@@ -286,37 +286,62 @@ namespace thomas
 		}
 		bool Shader::BindBuffer(ID3D11Buffer * resource, int slot)
 		{
-			ThomasCore::GetDeviceContext()->VSSetConstantBuffers(slot, 1, &resource);
-			ThomasCore::GetDeviceContext()->PSSetConstantBuffers(slot, 1, &resource);
-			ThomasCore::GetDeviceContext()->GSSetConstantBuffers(slot, 1, &resource);
-			ThomasCore::GetDeviceContext()->HSSetConstantBuffers(slot, 1, &resource);
-			ThomasCore::GetDeviceContext()->DSSetConstantBuffers(slot, 1, &resource);
-			return true;
-
+			if (s_currentBoundShader && s_currentBoundShader == this)
+			{
+				if (m_data.vs)
+					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.ps)
+					ThomasCore::GetDeviceContext()->PSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.gs)
+					ThomasCore::GetDeviceContext()->GSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.hs)
+					ThomasCore::GetDeviceContext()->HSSetConstantBuffers(slot, 1, &resource);
+				if (m_data.ds)
+					ThomasCore::GetDeviceContext()->DSSetConstantBuffers(slot, 1, &resource);
+				return true;
+			}
+			return false;
 		}
 		bool Shader::BindTextures(ID3D11ShaderResourceView * texture, int slot)
 		{
-			ThomasCore::GetDeviceContext()->VSSetShaderResources(slot, 1, &texture);
-			ThomasCore::GetDeviceContext()->PSSetShaderResources(slot, 1, &texture);
-			ThomasCore::GetDeviceContext()->GSGetShaderResources(slot, 1, &texture);
-			ThomasCore::GetDeviceContext()->HSSetShaderResources(slot, 1, &texture);
-			ThomasCore::GetDeviceContext()->DSSetShaderResources(slot, 1, &texture);
-			return true;
+			if (s_currentBoundShader == this)
+			{
+				if (m_data.vs)
+					ThomasCore::GetDeviceContext()->VSSetShaderResources(slot, 1, &texture);
+				if (m_data.ps)
+					ThomasCore::GetDeviceContext()->PSSetShaderResources(slot, 1, &texture);
+				if (m_data.gs)
+					ThomasCore::GetDeviceContext()->GSGetShaderResources(slot, 1, &texture);
+				if (m_data.hs)
+					ThomasCore::GetDeviceContext()->HSSetShaderResources(slot, 1, &texture);
+				if (m_data.ds)
+					ThomasCore::GetDeviceContext()->DSSetShaderResources(slot, 1, &texture);
+				return true;
+			}
+			return false;
 		}
 		bool Shader::BindTextureSampler(ID3D11SamplerState * sampler, int slot)
 		{
-
-			ThomasCore::GetDeviceContext()->VSSetSamplers(slot, 1, &sampler);
-			ThomasCore::GetDeviceContext()->PSSetSamplers(slot, 1, &sampler);
-			ThomasCore::GetDeviceContext()->GSSetSamplers(slot, 1, &sampler);
-			ThomasCore::GetDeviceContext()->HSSetSamplers(slot, 1, &sampler);
-			ThomasCore::GetDeviceContext()->DSSetSamplers(slot, 1, &sampler);
-			return true;
-
+			if (s_currentBoundShader == this)
+			{
+				if (m_data.vs)
+					ThomasCore::GetDeviceContext()->VSSetSamplers(slot, 1, &sampler);
+				if (m_data.ps)
+					ThomasCore::GetDeviceContext()->PSSetSamplers(slot, 1, &sampler);
+				if (m_data.gs)
+					ThomasCore::GetDeviceContext()->GSSetSamplers(slot, 1, &sampler);
+				if (m_data.hs)
+					ThomasCore::GetDeviceContext()->HSSetSamplers(slot, 1, &sampler);
+				if (m_data.ds)
+					ThomasCore::GetDeviceContext()->DSSetSamplers(slot, 1, &sampler);
+				return true;
+			}
+			return false;
 		}
 		bool Shader::BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type)
 		{
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(type);
+			if (s_currentBoundShader == this && m_data.vs)
+				ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(type);
 			return true;
 		}
 		bool Shader::BindVertexBuffer(ID3D11Buffer * vertexBuffer, UINT stride, UINT offset = 0)
@@ -332,7 +357,7 @@ namespace thomas
 			return true;
 		}
 
-		
+
 		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath, Scene* scene)
 		{
 			Shader* shader;
@@ -343,7 +368,7 @@ namespace thomas
 			else
 			{
 				shader = new Shader(name, inputLayout, filePath, scene);
-			}	
+			}
 			if (shader)
 				s_loadedShaders.push_back(shader);
 			return shader;
@@ -353,7 +378,7 @@ namespace thomas
 			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader, scene);
 			if (shader)
 				s_loadedShaders.push_back(shader);
-				
+
 			return shader;
 		}
 		Shader * Shader::GetCurrentBoundShader()
