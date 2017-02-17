@@ -37,10 +37,10 @@ public:
 				m_fireSFX->PlayOneShot(m_SFXs[rand()%2],1);
 				math::Vector3 pos = m_transform->GetPosition();
 				math::Quaternion rot = m_transform->GetRotation();
-				rot *= math::Quaternion::CreateFromAxisAngle(m_transform->Up(), math::DegreesToradians(-i));
 				pos += m_transform->Right()*i*spacing;
 				Canon* c = Instantiate<Canon>(pos, rot, m_scene);
 				c->FireCanon();
+
 			}
 			
 			m_delayLeft = m_delay;

@@ -36,7 +36,7 @@ public:
 			{
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
-
+				Destroy(this);
 				currentTimeCount = 0.0f;
 				fire = false;
 			}
