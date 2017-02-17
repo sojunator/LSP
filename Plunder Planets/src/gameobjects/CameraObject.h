@@ -1,9 +1,11 @@
 #pragma once
+
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
 #include "Ship.h"
-
+#include "../scenes/MenuScene.h"
+#include "../../graphics/Sprite.h"
 using namespace thomas;
 using namespace object;
 class CameraObject : public GameObject
@@ -27,6 +29,7 @@ public:
 		m_text = AddComponent<component::TextComponent>();
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
+		m_healthbar = AddComponent<component::SpriteComponent>();
 	
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
@@ -50,7 +53,16 @@ public:
 		m_sprite->SetName("GUI");
 		m_sprite->SetPositionX(0); //Offset from top left corner
 		m_sprite->SetPositionY(0);
-		m_sprite->SetScale(1.0f);
+		m_sprite->SetScale(math::Vector2(1.0f, 1.0f));
+		m_sprite->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		//Healthbar
+		m_healthbar->SetName("Button");
+		m_healthbar->SetPositionX(10); //Offset from top left corner
+		m_healthbar->SetPositionY(960);
+		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
+		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
+
 
 		//Simple font
 		m_text->SetFont("Name");
@@ -71,7 +83,7 @@ public:
 		m_gold->SetScale(1.0f);
 
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
-			m_gold->SetPositionX(Window::GetWidth() / 7.6f);
+			m_gold->SetPositionX(Window::GetWidth() / 6.4f);
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 			m_gold->SetPositionX(Window::GetWidth() / 7.2f);
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
@@ -88,13 +100,42 @@ public:
 
 	void Update()
 	{
-		if (m_ship == nullptr)
+		/*if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
 		else
 		{
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
+		}*/
+		//Healthbar code here for now
+		if (m_healthbar->GetScale().x > 0.6f)
+		{
+			m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
+		}
+		else if (m_healthbar->GetScale().x < 0.6f && m_healthbar->GetScale().x >= 0.3f)
+		{
+			m_healthbar->SetColor(math::Vector4(1.0f, 0.3f, 0.0f, 1.0f));
+		}
+		else if (m_healthbar->GetScale().x < 0.3f)
+		{
+			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+
+		if (Input::GetKey(Input::Keys::K))
+		{
+			if (m_healthbar->GetScale().x < 1.0f)
+			{
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, 1.0f));
+			}
+		}
+
+		if (Input::GetKey(Input::Keys::J))
+		{
+			if (m_healthbar->GetScale().x >= 0.0f)
+			{
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
+			}
 		}
 		
 		if (Input::GetKey(Input::Keys::A))
@@ -113,7 +154,6 @@ public:
 		{
 			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
 		}
-
 
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
@@ -136,6 +176,9 @@ public:
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
 		}
+
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Scene::LoadScene<MenuScene>();
 
 
 		if (Input::GetKey(Input::Keys::LeftShift))
@@ -161,6 +204,7 @@ private:
 	component::TextComponent* m_text;
 	component::TextComponent* m_gold;
 	component::SpriteComponent* m_sprite;
+	component::SpriteComponent* m_healthbar;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;

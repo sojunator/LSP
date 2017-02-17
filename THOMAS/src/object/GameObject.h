@@ -29,7 +29,6 @@ namespace thomas
 			static std::vector<GameObject*> GetGameObjects();
 
 			static bool Destroy(GameObject *object);
-
 			template<typename T>
 			static T* Instantiate(Scene* scene);
 			template<typename T>
@@ -71,6 +70,7 @@ namespace thomas
 		template<typename T>
 		T* GameObject::GetComponent()
 		{
+
 			for (unsigned int i = 0; i < m_components.size(); i++)
 			{
 				T* comp = dynamic_cast<T*>(m_components[i]);
@@ -120,7 +120,7 @@ namespace thomas
 		inline T * GameObject::Instantiate(component::Transform * parent, Scene * scene)
 		{
 			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->m_parent = parent;
+			gameObject->m_transform->SetParent(parent);
 			return gameObject;
 		}
 
@@ -128,8 +128,8 @@ namespace thomas
 		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, Scene * scene)
 		{
 			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->SetPosition(position);
 			gameObject->m_transform->SetRotation(rotation);
+			gameObject->m_transform->SetPosition(position);
 			return gameObject;
 		}
 
@@ -137,9 +137,10 @@ namespace thomas
 		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, component::Transform * parent, Scene * scene)
 		{
 			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->m_parent = parent;
-			gameObject->m_transform->SetPosition(position);
+			gameObject->m_transform->SetParent(parent);
 			gameObject->m_transform->SetRotation(rotation);
+			gameObject->m_transform->SetPosition(position);
+			
 			return gameObject;
 		}
 

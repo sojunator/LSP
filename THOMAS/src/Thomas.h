@@ -4,6 +4,8 @@
 #include "Input.h"
 #include "Time.h"
 #include "Sound.h"
+#include "Physics.h"
+#include "Scene.h"
 
 #include "utils\AssimpLoader.h"
 
@@ -16,3 +18,5 @@
 #include "object\GameObject.h"
 
 #include "graphics\PostEffect.h"
+
+#include "graphics/Sprite.h"

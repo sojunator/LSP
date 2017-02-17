@@ -63,41 +63,40 @@ namespace thomas
 			return;
 		}
 
-		void ParticleSystem::DrawParticles()
+		void ParticleSystem::DrawParticles(object::component::Camera * camera)
 		{
 			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
 			ID3D11ShaderResourceView* nullsrv[1] = { NULL };
 
-			for (object::component::Camera* camera : s_cameras)
+			
+			for (object::component::EmitterComponent* emitter : s_emitters)
 			{
-				for (object::component::EmitterComponent* emitter : s_emitters)
-				{
-					UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
+				UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
 
-					ThomasCore::GetDeviceContext()->CSSetShader(s_billboardCS, NULL, 0);
-					//bind uav
-					ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &s_billboardsUAV, NULL);
-					ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
+				ThomasCore::GetDeviceContext()->CSSetShader(s_billboardCS, NULL, 0);
+				//bind uav
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &s_billboardsUAV, NULL);
+				ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
 
-					ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles(), 1, 1);
-					//unbind uav
-					ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+				ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles(), 1, 1);
+				//unbind uav
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
 
-					//bind srv
-					ThomasCore::GetDeviceContext()->VSSetShaderResources(0, 1, &s_billboardsSRV);
-					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
+				//bind srv
+				ThomasCore::GetDeviceContext()->VSSetShaderResources(0, 1, &s_billboardsSRV);
+				ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
 
-					s_shader->Bind();
+				s_shader->Bind();
 
-					s_shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-					ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
-					ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 0, nullptr, 0, 0);
+				s_shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+				ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
+				ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 0, nullptr, 0, 0);
 
 
-					thomas::ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfParticles() * 6, 0);
+				thomas::ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfParticles() * 6, 0);
 
-				}
 			}
+			
 
 			//undbind srv
 			ThomasCore::GetDeviceContext()->VSSetShaderResources(0, 1, nullsrv);

@@ -14,12 +14,6 @@ public:
 	TerrainObject() : GameObject("TerrainObject")
 	{
 	}
-	~TerrainObject()
-	{
-		delete m_islands;
-		delete m_model;
-		delete m_renderer;
-	}
 
 	void Start()
 	{

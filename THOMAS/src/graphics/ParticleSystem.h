@@ -30,7 +30,7 @@ namespace thomas
 			~ParticleSystem();
 			
 			static void Init();
-			static void DrawParticles();
+			static void DrawParticles(object::component::Camera * camera);
 
 			struct Particle
 			{

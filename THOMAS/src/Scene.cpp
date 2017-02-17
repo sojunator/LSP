@@ -2,43 +2,34 @@
 #include "graphics\PostEffect.h"
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
+#include "graphics\Shader.h"
 
 
 namespace thomas
 {
-	std::vector<Scene*> Scene::s_scenes;
 	Scene* Scene::s_currentScene;
 
-	bool Scene::Init()
+	void Scene::UnloadScene()
 	{
-		if (s_scenes[0])
-		{
-			s_currentScene = s_scenes[0];
-			LOG("Scene set");
-			return true;
-		}
-		LOG("No scenes");
-		return false;
-	}
-	Scene* Scene::AddScene(Scene* scene)
-	{
-		s_scenes.push_back(scene);
-		return scene;
-	}
-	void Scene::Destroy(Scene* scene)
-	{
-	}
-	void Scene::LoadScene(Scene* scene)
-	{
-		s_currentScene = scene;
+		graphics::LightManager::Destroy();
+		graphics::Material::Destroy();
+		graphics::Shader::Destroy();
+		graphics::Texture::Destroy();
+		graphics::Model::Destroy();	
+		object::Object::Destroy(s_currentScene);
+		delete s_currentScene;
+		s_currentScene = nullptr;
 	}
 	void Scene::UpdateCurrentScene()
 	{
+		//Temp fix for ocean.
+		graphics::Renderer::RenderSetup(NULL);
+		if (s_currentScene)
+			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
+				object->Update();
+		else
+			LOG("No scene set");
 		object::Object::Clean();
-	}
-	std::vector<graphics::Shader*> Scene::GetShaders()
-	{
-		return m_shaders;
 	}
 	void Scene::Render()
 	{
@@ -47,17 +38,15 @@ namespace thomas
 			LOG("No scene set")
 				return;
 		}
-		for (object::component::Camera* camera : s_currentScene->m_cameras)
+		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
+		std::vector<object::component::Camera*> cameras;
+		for (object::GameObject* object : cameraObjects)
+			cameras.push_back(object->GetComponent<object::component::Camera>());
+		for (object::component::Camera* camera : cameras)
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
 
-			//Temp fix for ocean. Should be done in update
-			if (s_currentScene)
-				for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
-					object->Update();
-			else
-				LOG("No scene set");
 
 
 			s_currentScene->Render3D(camera);
@@ -71,38 +60,68 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{	
 		
-		for (graphics::Shader* shader : m_shaders)
+
+		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
+		//{
+		//	shader->Bind();
+		//	camera->BindReflection();
+		//	graphics::LightManager::BindAllLights();
+		//	for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
+		//	{
+		//		material->Bind();
+		//		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+		//		{
+		//			graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+		//			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+		//			{
+		//				for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+		//				{
+		//					mesh->Bind();
+		//					mesh->Draw();
+		//				}
+		//			}
+		//			graphics::Renderer::UnBindGameObjectBuffer();
+		//		}
+		//		material->Unbind();
+		//	}
+		//	graphics::LightManager::Unbind();
+
+		//	shader->Unbind();
+		//}
+
+		camera->BindReflection();
+		graphics::LightManager::BindAllLights();
+		
+		graphics::ParticleSystem::DrawParticles(camera);
+		
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 		{
-			
-			shader->Bind();
-			camera->BindReflection();
-			graphics::LightManager::BindAllLights();
-			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
+			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 			{
-				material->Bind();
-				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+				graphics::Model* model = renderComponent->GetModel();
+				if (model)
 				{
+					std::vector < graphics::Mesh*> meshes = model->GetMeshes();
+					meshes[0]->GetMaterial()->GetShader()->Bind();
+					meshes[0]->GetMaterial()->Bind();
 					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-					{
-						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+
+					for (graphics::Mesh* mesh : meshes)
 						{
 							mesh->Bind();
 							mesh->Draw();
 						}
-					}
 					graphics::Renderer::UnBindGameObjectBuffer();
+					meshes[0]->GetMaterial()->Unbind();
+					meshes[0]->GetMaterial()->GetShader()->Unbind();
 				}
-				material->Unbind();
+				
 			}
-			graphics::LightManager::Unbind();
-			
-			if (shader->GetName() == "particleShader")
-			{
-				graphics::ParticleSystem::DrawParticles();
-			}
-			shader->Unbind();
+
 		}
+
+		
+		graphics::LightManager::Unbind();
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
@@ -141,9 +160,11 @@ namespace thomas
 	}
 	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string path)
 	{
-		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path);
-		m_shaders.push_back(shader);
-		return shader;
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, path, this);
+	}
+	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+	{
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, vertexShader,geometryShader, hullShader, domainShader, pixelShader, this);
 	}
 	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string type)
 	{

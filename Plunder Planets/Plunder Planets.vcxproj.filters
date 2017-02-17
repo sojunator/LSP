@@ -6,6 +6,7 @@
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
     <ClCompile Include="src\postEffects\OceanPostProcess.cpp" />
+    <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -24,6 +25,10 @@
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
+    <ClInclude Include="src\gameobjects\MainMenuObject.h" />
+    <ClInclude Include="src\gameobjects\PhysicsObject.h" />
+    <ClInclude Include="src\gameobjects\ShipFloat.h" />
+    <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\StandardParticleEmitter.h" />
   </ItemGroup>
   <ItemGroup>

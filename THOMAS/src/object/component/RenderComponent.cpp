@@ -22,8 +22,9 @@ namespace thomas {
 			}
 			void RenderComponent::Update()
 			{
-				for (graphics::Mesh* mesh : m_model->GetMeshes())
-					mesh->GetMaterial()->Update();
+				if(m_model)
+					for (graphics::Mesh* mesh : m_model->GetMeshes())
+						mesh->GetMaterial()->Update();
 			}
 		}
 	}
