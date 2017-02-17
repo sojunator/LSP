@@ -19,6 +19,7 @@ public:
 	void Start()
 	{
 		m_emitterComponent = AddComponent<component::EmitterComponent>();
+		
 	}
 
 

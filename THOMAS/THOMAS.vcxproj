@@ -314,6 +314,7 @@
     <ClInclude Include="include\LinearMath\btTransformUtil.h" />
     <ClInclude Include="include\LinearMath\btVector3.h" />
     <ClInclude Include="src\graphics\ParticleSystem.h" />
+    <ClInclude Include="src\object\component\EmitterComponent.h" />
     <ClInclude Include="src\object\component\RigidBodyComponent.h" />
     <ClInclude Include="src\object\component\SpriteComponent.h" />
     <ClInclude Include="src\graphics\Sprite.h" />

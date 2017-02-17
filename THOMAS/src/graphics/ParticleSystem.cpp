@@ -9,13 +9,17 @@ namespace thomas
 		ParticleSystem::MatrixBufferStruct ParticleSystem::s_matrixBufferStruct;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
-		ParticleSystem::Billboard* ParticleSystem::s_billboards;
 		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
+
 		ID3D11ComputeShader* ParticleSystem::s_billboardCS;
 		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
 		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
+
+		ID3D11UnorderedAccessView* ParticleSystem::s_activeParticleUAV;
+		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV;
+
 		Shader* ParticleSystem::s_shader;
-		unsigned int ParticleSystem::s_nrOfBillboards;
+		unsigned int ParticleSystem::s_maxNrOfBillboards;
 		std::vector<object::component::Camera*> ParticleSystem::s_cameras;
 		std::vector<object::component::EmitterComponent*> ParticleSystem::s_emitters;
 
@@ -28,17 +32,15 @@ namespace thomas
 
 		ParticleSystem::~ParticleSystem()
 		{
-			//delete[] s_billboards;
 
 		}
 
 		void ParticleSystem::Init()
 		{
 			s_shader = Shader::GetShaderByName("particleShader");
-			s_nrOfBillboards = 50;
-			//s_billboards = new Billboard[2];
+			s_maxNrOfBillboards = 10000;
 			CompileComputeShader();
-			CreateOutputUAVandSRV();
+			CreateBillboardUAVandSRV();
 			CreateCameraConstantBuffer();
 			CreateMatrixConstantBuffer();
 			return;
@@ -58,8 +60,8 @@ namespace thomas
 
 		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
 		{
+			CreateParticleUAVandSRV(emitter);
 			s_emitters.push_back(emitter);
-			//s_billboards = new Billboard[emitter->GetNrOfParticles()];
 			return;
 		}
 
@@ -72,28 +74,35 @@ namespace thomas
 			for (object::component::EmitterComponent* emitter : s_emitters)
 			{
 				UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
+				ID3D11DeviceContext* deviceContext = ThomasCore::GetDeviceContext();
+				deviceContext->CSSetShader(s_billboardCS, NULL, 0);
 
-				ThomasCore::GetDeviceContext()->CSSetShader(s_billboardCS, NULL, 0);
-				//bind uav
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &s_billboardsUAV, NULL);
-				ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
+				emitter->SwapUAVsandSRVs(s_activeParticleUAV, s_activeParticleSRV);
 
-				ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles(), 1, 1);
+				//bind uavs and srvs
+				deviceContext->CSSetUnorderedAccessViews(0, 1, &s_activeParticleUAV, NULL);
+				deviceContext->CSSetUnorderedAccessViews(1, 1, &s_billboardsUAV, NULL);
+				deviceContext->CSSetShaderResources(0, 1, &s_activeParticleSRV);
+				deviceContext->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
+
+				deviceContext->Dispatch(emitter->GetNrOfParticles(), 1, 1);
 				//unbind uav
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+				deviceContext->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+				deviceContext->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
+				deviceContext->CSGetShaderResources(0, 1, nullsrv);
 
 				//bind srv
-				ThomasCore::GetDeviceContext()->VSSetShaderResources(0, 1, &s_billboardsSRV);
-				ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
+				deviceContext->VSSetShaderResources(0, 1, &s_billboardsSRV);
+				deviceContext->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
 
 				s_shader->Bind();
 
 				s_shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-				ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
-				ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 0, nullptr, 0, 0);
+				deviceContext->IASetInputLayout(NULL);
+				deviceContext->IASetVertexBuffers(0, 0, nullptr, 0, 0);
 
 
-				thomas::ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfParticles() * 6, 0);
+				deviceContext->Draw(emitter->GetNrOfParticles() * 6, 0);
 
 			}
 			
@@ -106,17 +115,19 @@ namespace thomas
 			return;
 		}
 
-		HRESULT ParticleSystem::CreateOutputUAVandSRV()
+		HRESULT ParticleSystem::CreateBillboardUAVandSRV()
 		{
 			D3D11_BUFFER_DESC billboardDesc;
+			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 			D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+
 			HRESULT hr;
 
 			billboardDesc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
-			billboardDesc.ByteWidth = sizeof(Billboard) * s_nrOfBillboards;
+			billboardDesc.ByteWidth = sizeof(BillboardStruct) * s_maxNrOfBillboards;
 			billboardDesc.CPUAccessFlags = 0;
 			billboardDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-			billboardDesc.StructureByteStride = sizeof(Billboard);
+			billboardDesc.StructureByteStride = sizeof(BillboardStruct);
 			billboardDesc.Usage = D3D11_USAGE_DEFAULT;
 
 			hr = ThomasCore::GetDevice()->CreateBuffer(&billboardDesc, NULL, &s_billboardsBuffer);
@@ -125,11 +136,11 @@ namespace thomas
 				LOG("Failed to create billboard buffer");
 			}
 
-			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+			
 			srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 			srvDesc.Buffer.FirstElement = 0;
-			srvDesc.Buffer.NumElements = s_nrOfBillboards;
+			srvDesc.Buffer.NumElements = s_maxNrOfBillboards;
 
 			hr = ThomasCore::GetDevice()->CreateShaderResourceView(s_billboardsBuffer, &srvDesc, &s_billboardsSRV);
 			if (FAILED(hr))
@@ -139,7 +150,7 @@ namespace thomas
 
 			ZeroMemory(&uavDesc, sizeof(uavDesc));
 			uavDesc.Buffer.FirstElement = 0;
-			uavDesc.Buffer.NumElements = s_nrOfBillboards;
+			uavDesc.Buffer.NumElements = s_maxNrOfBillboards;
 			uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_COUNTER;//D3D11_BUFFER_UAV_FLAG_APPEND;
 			uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 			uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
@@ -148,6 +159,75 @@ namespace thomas
 			if (FAILED(hr))
 			{
 				LOG("Failed to create billboard uav");
+			}
+
+			return hr;
+		}
+
+		HRESULT ParticleSystem::CreateParticleUAVandSRV(object::component::EmitterComponent* emitter)
+		{
+			D3D11_BUFFER_DESC particleDesc;
+			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+			D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+			ID3D11UnorderedAccessView* particleUAV1 = emitter->GetParticleUAV1();
+			ID3D11ShaderResourceView* particleSRV1 = emitter->GetParticleSRV1();
+			ID3D11Buffer* particleBuffer1 = emitter->GetParticleBuffer1();
+			ID3D11UnorderedAccessView* particleUAV2 = emitter->GetParticleUAV2();
+			ID3D11ShaderResourceView* particleSRV2 = emitter->GetParticleSRV2();
+			ID3D11Buffer* particleBuffer2 = emitter->GetParticleBuffer2();
+
+			HRESULT hr;
+
+			particleDesc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+			particleDesc.ByteWidth = sizeof(ParticleStruct) * emitter->GetNrOfParticles();
+			particleDesc.CPUAccessFlags = 0;
+			particleDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			particleDesc.StructureByteStride = sizeof(ParticleStruct);
+			particleDesc.Usage = D3D11_USAGE_DEFAULT;
+
+			ParticleStruct temp;
+			temp.angle = 0;
+			temp.direction = math::Vector3(0, 0, 0);
+			temp.position = math::Vector3(0, 0, 0);
+			temp.speed = 10;
+
+			D3D11_SUBRESOURCE_DATA initData;
+			initData.pSysMem = &temp;
+			initData.SysMemPitch = 0;
+			initData.SysMemSlicePitch = 0;
+
+			hr = ThomasCore::GetDevice()->CreateBuffer(&particleDesc, &initData, &particleBuffer1);
+			hr = ThomasCore::GetDevice()->CreateBuffer(&particleDesc, &initData, &particleBuffer2);
+			if (FAILED(hr))
+			{
+				LOG("Failed to create particle buffers");
+			}
+
+
+			srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+			srvDesc.Buffer.FirstElement = 0;
+			srvDesc.Buffer.NumElements = emitter->GetNrOfParticles();
+
+			hr = ThomasCore::GetDevice()->CreateShaderResourceView(particleBuffer1, &srvDesc, &particleSRV1);
+			hr = ThomasCore::GetDevice()->CreateShaderResourceView(particleBuffer2, &srvDesc, &particleSRV2);
+			if (FAILED(hr))
+			{
+				LOG("Failed to create particle srvs");
+			}
+
+			ZeroMemory(&uavDesc, sizeof(uavDesc));
+			uavDesc.Buffer.FirstElement = 0;
+			uavDesc.Buffer.NumElements = emitter->GetNrOfParticles();
+			uavDesc.Buffer.Flags = D3D11_BUFFER_UAV_FLAG_COUNTER;//D3D11_BUFFER_UAV_FLAG_APPEND;
+			uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+			uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+
+			hr = ThomasCore::GetDevice()->CreateUnorderedAccessView(particleBuffer1, &uavDesc, &particleUAV1);
+			hr = ThomasCore::GetDevice()->CreateUnorderedAccessView(particleBuffer2, &uavDesc, &particleUAV2);
+			if (FAILED(hr))
+			{
+				LOG("Failed to create particle uavs");
 			}
 
 			return hr;

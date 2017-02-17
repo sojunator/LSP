@@ -20,9 +20,10 @@ namespace thomas
 		{
 		private:
 			static HRESULT CompileComputeShader();
-			static HRESULT CreateOutputUAVandSRV();
+			static HRESULT CreateBillboardUAVandSRV();
 			static HRESULT CreateCameraConstantBuffer();
 			static HRESULT CreateMatrixConstantBuffer();
+			static HRESULT CreateParticleUAVandSRV(object::component::EmitterComponent* emitter);
 
 			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
 		public:
@@ -32,18 +33,21 @@ namespace thomas
 			static void Init();
 			static void DrawParticles(object::component::Camera * camera);
 
-			struct Particle
+			struct ParticleStruct
 			{
 				math::Vector3 position;
-				int padding;
+				float speed;
+				math::Vector3 direction;
+				float angle;
 			};
-			struct Billboard
-			{
-				math::Vector3 positions[2][3];
-			};
+			
 
 			static void AddEmitter(object::component::EmitterComponent* emitter);
 		private:
+			struct BillboardStruct
+			{
+				math::Vector3 positions[2][3];
+			};
 			struct CameraBufferStruct
 			{
 				math::Vector3 forward;
@@ -63,13 +67,16 @@ namespace thomas
 			static MatrixBufferStruct s_matrixBufferStruct;
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
-			static Billboard* s_billboards;
 			static ID3D11Buffer* s_billboardsBuffer;
 			static ID3D11ComputeShader* s_billboardCS;
 			static ID3D11UnorderedAccessView* s_billboardsUAV;
 			static ID3D11ShaderResourceView* s_billboardsSRV;
+
+			static ID3D11UnorderedAccessView* s_activeParticleUAV;
+			static ID3D11ShaderResourceView* s_activeParticleSRV;
+
 			static Shader* s_shader;
-			static unsigned int s_nrOfBillboards;
+			static unsigned int s_maxNrOfBillboards;
 			static std::vector<object::component::EmitterComponent*> s_emitters;
 			static std::vector<object::component::Camera*> s_cameras;
 

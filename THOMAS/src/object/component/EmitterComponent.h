@@ -13,16 +13,39 @@ namespace thomas
 		{
 			class EmitterComponent : public Component
 			{
+			private:
+				
 			public:
 				EmitterComponent();
 				void Emit();
 				void Stop();
 				unsigned int GetNrOfParticles() const;
+
+				void SwapUAVsandSRVs(ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv);
+
+				ID3D11UnorderedAccessView* GetParticleUAV1() const;
+				ID3D11ShaderResourceView* GetParticleSRV1() const;
+				ID3D11Buffer* GetParticleBuffer1() const;
+				ID3D11UnorderedAccessView* GetParticleUAV2() const;
+				ID3D11ShaderResourceView* GetParticleSRV2() const;
+				ID3D11Buffer* GetParticleBuffer2() const;
 			private:
 				graphics::Texture* m_texture;
 				std::string m_name;
-				math::Vector3 m_position;
+				
+				ID3D11UnorderedAccessView* m_particleUAV1;
+				ID3D11ShaderResourceView* m_particleSRV1;
+				ID3D11Buffer* m_particleBuffer1;
+				ID3D11UnorderedAccessView* m_particleUAV2;
+				ID3D11ShaderResourceView* m_particleSRV2;
+				ID3D11Buffer* m_particleBuffer2;
+				bool m_booleanSwapUAVandSRV;
+
+
 				bool m_isEmitting;
+
+				//graphics::ParticleSystem::ParticleStruct m_particle;
+
 				unsigned int m_nrOfParticles;
 			};
 		}
