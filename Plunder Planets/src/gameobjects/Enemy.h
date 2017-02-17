@@ -23,15 +23,16 @@ public:
 		m_sound = AddComponent<component::SoundComponent>();
 		m_ai = AddComponent<AI>();
 
-		/*
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
-		*/
+		math::Vector3 dir = -m_transform->Forward();
 
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x + (m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x - (m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
+		m_broadSideFront = Instantiate<Broadside>(math::Vector3(0, 5, m_transform->GetPosition().z + (-m_transform->Forward().z * 50)), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
+		
 		m_renderer->SetModel("testModel0");
 				
 
-		m_initPosition = math::Vector3(100, -0.8f, 100);
+		m_initPosition = math::Vector3(100, 5, 100);
 		m_transform->SetRotation(thomas::math::PI, 0, 0);
 		m_transform->SetPosition(m_initPosition);
 
@@ -39,11 +40,11 @@ public:
 		m_acceleration = 9.5f;
 		m_retardation = 6.5f;
 		m_maxSpeed = 30.0f;
-		m_rotation = 0.3f;
+		m_rotation = 0.6f;
 		m_turnDir = 0;
 
 		m_searchRadius = 1000;
-		m_attackRadius = 200;
+		m_attackRadius = 100;
 		m_islandForward = false;
 		m_islandLeft = false;
 		m_islandRight = false;
@@ -56,17 +57,19 @@ public:
 		{
 		case AI::Behavior::Attacking:
 			Rotate();
-			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
+			m_ai->MatchSpeed(m_forwardSpeed, m_acceleration, m_retardation);
 			break;
-		case AI::Behavior::Fiering:
+		case AI::Behavior::Firing:
+			/*Fire, check side*/
 			Rotate();
-			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
+			m_ai->MatchSpeed(m_forwardSpeed, m_acceleration, m_retardation);
 			break;
 		case AI::Behavior::Searching:
 			Rotate();
-			m_forwardSpeed += m_acceleration * Time::GetDeltaTime();
+			m_ai->MatchSpeed(m_forwardSpeed, m_acceleration, m_retardation);
 			break;
 		case AI::Behavior::Idle:
+			Rotate();
 			m_forwardSpeed -= m_retardation * Time::GetDeltaTime();
 			break;
 		default:
@@ -99,9 +102,9 @@ public:
 	void Update()
 	{
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
-		//m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
 
-		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 50));	//Check island front
+		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
 		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (m_transform->Right() * 30));	//Check island right
 		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (m_transform->Right() * 30));	//Check island left
 
@@ -145,6 +148,7 @@ private:
 	//Objects
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRight;
+	Broadside* m_broadSideFront;
 
 	bool m_firstFrame;
 

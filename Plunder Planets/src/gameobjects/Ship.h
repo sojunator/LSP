@@ -332,7 +332,7 @@ public:
 
 		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
-		//ShipBoost(dt);
+		ShipBoost(dt);
 		
 		
 		//Ship Movement
@@ -377,6 +377,11 @@ public:
 		//}
 
 		
+	}
+
+	float GetSpeed()
+	{
+		return m_forwardSpeed;
 	}
 
 private:

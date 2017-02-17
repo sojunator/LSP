@@ -19,7 +19,7 @@ namespace thomas
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
 			m_plunderRadius.push_back(size*detail*0.8);
-			m_collisionRadius.push_back(size*detail*0.6);
+			m_collisionRadius.push_back(size*detail*0.7);
 			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
 			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i]);
 			ApplyOffSet(i, tempPlane[i]);

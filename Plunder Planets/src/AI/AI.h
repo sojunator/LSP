@@ -14,7 +14,7 @@ public:
 		Idle,
 		Searching,
 		Attacking,
-		Fiering,
+		Firing,
 	};
 public:
 	AI();
@@ -27,6 +27,7 @@ public:
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	void Escaped(math::Vector3 pos);
+	void MatchSpeed(float& speed, float acceleration, float retardation);
 
 	Behavior GetState();
 

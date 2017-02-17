@@ -20,6 +20,10 @@ public:
 		m_delay = 1.5;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
+		m_renderer = AddComponent<component::RenderComponent>();
+
+		m_renderer->SetModel("cannonball");
+		
 	}
 
 
@@ -57,4 +61,5 @@ private:
 	float m_delayLeft;
 	component::SoundComponent* m_fireSFX;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
+	component::RenderComponent* m_renderer;
 };

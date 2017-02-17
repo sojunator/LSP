@@ -32,34 +32,44 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	math::Vector3 norRight = right;
 	norRight.Normalize();
 
-
-	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-	playerDir.Normalize();
-	float pDotR = playerDir.Dot(norRight);
-	float pDotF = playerDir.Dot(norFor);
-		/*Right forward and no island on rigth*/		/*Right back and no island on right*/
-	if ((((pDotR > 0.0 && pDotF > 0.0 || pDotR > 0.1 && pDotF < 0.0) && !objectLeft) || pDotF <= -0.9 && objectFront) || objectFront && objectLeft)	//Turn right
-		return 1;
-			/*Left forward and no island on left*/			/*Left back and no island on left*/
-	else if ((((pDotR < 0.0 && pDotF > 0.0 || pDotR < -0.1 && pDotF < 0.0) && !objectRight) || pDotF <= -0.9 && objectFront) || objectFront && objectRight)		//Turn left
-		return -1;
-			/*Cone forward and no island forward*/
-	else if (pDotF <= -0.9 && !objectFront)	//Continue forward
-		return 0;
-	else
-		return 0;
-
-
-
-
 	switch (m_state)
 	{
 	case Behavior::Attacking:
 	{
+		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		playerDir.Normalize();
+		float pDotR = playerDir.Dot(norRight);
+		float pDotF = playerDir.Dot(norFor);
+
+		/*Right forward and no island on rigth*/		/*Right back and no island on right*/
+		if (pDotR >= 0.0 && pDotF >= 0.0 || pDotR >= 0.1 && pDotF <= 0.0 && !objectLeft || pDotF <= -0.9 && objectFront || objectFront && objectLeft)	//Turn right
+			return 1;
+		/*Left forward and no island on left*/			/*Left back and no island on left*/
+		else if (pDotR < 0.0 && pDotF > 0.0 || pDotR < -0.1 && pDotF < 0.0 && !objectRight || pDotF <= -0.9 && objectFront || objectFront && objectRight)		//Turn left
+			return -1;
+		/*Cone forward and no island forward*/
+		else if (pDotF <= -0.9 && !objectFront)	//Continue forward
+			return 0;
+		else
+			return 0;
 		break;
 	}
-	case Behavior::Fiering:
+	case Behavior::Firing:
 	{
+		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		playerDir.Normalize();
+		float pDotR = playerDir.Dot(norRight);
+		float pDotF = playerDir.Dot(norFor);
+		/*Change to 0.9*/
+		if ((pDotR >= 0.55 || pDotR <= -0.55) && !objectFront)
+			return 0;
+		else if (objectRight || objectFront || objectRight && objectFront || pDotR < 0.55 && pDotF > 0.0 || pDotR < 0.0 && pDotF > -0.55)
+			return -1;
+		else if (objectLeft || objectFront && objectLeft || pDotR < 0.55 && pDotF > -1.0 || pDotR < 0.0 && pDotF > 0.55)
+			return 1;
+		else
+			return 0;
+
 		break;
 	}
 	case Behavior::Idle:
@@ -68,6 +78,22 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	}
 	case Behavior::Searching:
 	{
+		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - m_lastKnownPos;
+		playerDir.Normalize();
+		float pDotR = playerDir.Dot(norRight);
+		float pDotF = playerDir.Dot(norFor);
+
+		/*Right forward and no island on rigth*/		/*Right back and no island on right*/
+		if (pDotR > 0.0 && pDotF > 0.0 || pDotR > 0.1 && pDotF < 0.0 && !objectLeft || pDotF <= -0.9 && objectFront || objectFront && objectLeft)	//Turn right
+			return 1;
+		/*Left forward and no island on left*/			/*Left back and no island on left*/
+		else if (pDotR < 0.0 && pDotF > 0.0 || pDotR < -0.1 && pDotF < 0.0 && !objectRight || pDotF <= -0.9 && objectFront || objectFront && objectRight)		//Turn left
+			return -1;
+		/*Cone forward and no island forward*/
+		else if (pDotF <= -0.9 && !objectFront)	//Continue forward
+			return 0;
+		else
+			return 0;
 		break;
 	}
 	default:
@@ -114,9 +140,19 @@ void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir
 {
 	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()) <= radius * radius)
 	{
-		dir = m_playerShip->m_transform->Forward();		//Should maby bee (-m_playerShip->m_transform->Forward())
-		m_state = Behavior::Fiering;
+		dir = -m_playerShip->m_transform->Forward();		//Should maby be (-m_playerShip->m_transform->Forward())
+		m_state = Behavior::Firing;
 	}
+}
+
+void AI::MatchSpeed(float& speed, float acceleration, float retardation)
+{
+	if (speed <= m_playerShip->GetSpeed())
+		speed += acceleration * Time::GetDeltaTime();
+	 /*
+	else
+		speed -= retardation * Time::GetDeltaTime();
+	*/
 }
 
 AI::Behavior AI::GetState()
