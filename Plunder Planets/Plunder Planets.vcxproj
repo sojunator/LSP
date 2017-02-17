@@ -167,10 +167,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\Broadside.h" />
+    <ClInclude Include="src\gameobjects\ShipFloat.h" />
+    <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
+    <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />

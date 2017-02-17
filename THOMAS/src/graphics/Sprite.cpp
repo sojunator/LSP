@@ -78,10 +78,9 @@ namespace thomas
 
 		void Sprite::RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale)
 		{
-			if (s_texture[name].srv)
-			{
-	
 
+			if(s_texture[name].srv)
+			{
 				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
 
 				s_spriteBatch->Draw(s_texture[name].srv.Get(), math::Vector2(posX, posY), nullptr, color,
