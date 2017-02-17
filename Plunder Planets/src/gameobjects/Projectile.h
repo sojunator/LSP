@@ -10,7 +10,7 @@ class Projectile : public GameObject
 private:
 	void CalculateForce()
 	{
-		force = 0.5 * Cd * 1.21f * radius * radius * math::PI * speed * speed;
+		force = 0.5 * Cd * 1.21f * radius * radius * math::PI * speed * speed * currentDirection;
 	}
 
 	void CalculateAccel()
@@ -22,6 +22,7 @@ private:
 	void UpdateSpeeeeeeed()
 	{
 		speed += accel * Time::GetDeltaTime();
+		speed += math::Vector3::Down * 9.82f * Time::GetDeltaTime();
 	}
 
 
@@ -35,6 +36,13 @@ private:
 			return 10 * (1 - sqrtf(2 - 2 * randNum));
 	}
 
+	void BuildMovementDirection()
+	{
+		currentDirection = m_transform->Forward() + math::Vector3(cosf(angleX), 0.0f, sinf(angleX)) * 180.0f;
+		currentDirection += m_transform->Up() * sinf(angleY);
+		speed = currentDirection;
+		
+	}
 public:
 	float forwardSpeed = 0;
 	Projectile() : GameObject("Projectile")
@@ -43,27 +51,28 @@ public:
 		angleY = MonteCarloAngle() + 10;
 	}
 
+
+
 	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
+
 		m_splashSound = AddComponent<component::SoundComponent>();
-		speed = 180.0f;
-		mass = 2.5f;
+
+		
 	}
 
 	void Update()
 	{
+		BuildMovementDirection();
 		CalculateForce();
 		CalculateAccel();
 		UpdateSpeeeeeeed();
 		float dt = Time::GetDeltaTime();
 		m_downSpeed += 9.82*dt;
 
-		m_transform->Translate(m_transform->Forward()*dt*speed);
-		m_transform->Translate(m_transform->Right()*dt*forwardSpeed);
-		m_transform->Translate(m_transform->Up()*dt*angleY);
-		m_transform->Translate(math::Vector3::Down*m_downSpeed*dt);
+		m_transform->Translate(speed);
 
 
 		if (m_transform->GetPosition().y < 0.0)
@@ -75,15 +84,16 @@ public:
 	}
 
 private:
-	float force;
+	math::Vector3 force;
 	float angleX;
 	float angleY;
 	float mass;
 	float radius;
-	float Cd = 0.35;
-	float accel;
-	float speed;
+	float Cd = 0.35f;
+	math::Vector3 accel;
+	math::Vector3 speed;
 	float m_downSpeed;
+	math::Vector3 currentDirection;
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
 	std::string m_SFXs[3] = { "fSplash1", "fSplash2", "fSplash3" };

@@ -22,11 +22,11 @@ public:
 	void Start()
 	{
 
-		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
-		//m_floats[4] = Instantiate<ShipFloat>(math::Vector3(0, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
+		//m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+		//m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+		//m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
+		//m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
+		////m_floats[4] = Instantiate<ShipFloat>(math::Vector3(0, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
 
 
 		m_renderer = AddComponent<component::RenderComponent>();
@@ -34,11 +34,12 @@ public:
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
-	//	m_rigidBody = AddComponent<component::RigidBodyComponent>();
-		/*//Detta funkar fan inte
+		//m_rigidBody = AddComponent<component::RigidBodyComponent>();
+		//Detta funkar fan inte
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 3 / 2 ), m_transform, m_scene);
-	
+		m_broadSideLeft->CreateCanons();
+		m_broadSideRight->CreateCanons();
 
 
 		////Rigidbody init
