@@ -37,7 +37,7 @@ public:
 
 			float waterDensity = 2 * density;
 			btVector3 force = (volumeUnderWater*waterDensity)*-Physics::s_world->getGravity();
-			rb->GetRigidBody()->applyImpulse(force*Time::GetDeltaTime(), *(btVector3*)&m_transform->GetPosition());
+			rb->applyImpulse(force*Time::GetDeltaTime(), *(btVector3*)&m_transform->GetPosition());
 			return true;
 		}
 		return false;
