@@ -169,12 +169,12 @@ namespace thomas
 			D3D11_BUFFER_DESC particleDesc;
 			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 			D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
-			ID3D11UnorderedAccessView* particleUAV1 = emitter->GetParticleUAV1();
-			ID3D11ShaderResourceView* particleSRV1 = emitter->GetParticleSRV1();
-			ID3D11Buffer* particleBuffer1 = emitter->GetParticleBuffer1();
-			ID3D11UnorderedAccessView* particleUAV2 = emitter->GetParticleUAV2();
-			ID3D11ShaderResourceView* particleSRV2 = emitter->GetParticleSRV2();
-			ID3D11Buffer* particleBuffer2 = emitter->GetParticleBuffer2();
+			ID3D11UnorderedAccessView*& particleUAV1 = emitter->GetParticleUAV1();
+			ID3D11ShaderResourceView*& particleSRV1 = emitter->GetParticleSRV1();
+			ID3D11Buffer*& particleBuffer1 = emitter->GetParticleBuffer1();
+			ID3D11UnorderedAccessView*& particleUAV2 = emitter->GetParticleUAV2();
+			ID3D11ShaderResourceView*& particleSRV2 = emitter->GetParticleSRV2();
+			ID3D11Buffer*& particleBuffer2 = emitter->GetParticleBuffer2();
 
 			HRESULT hr;
 

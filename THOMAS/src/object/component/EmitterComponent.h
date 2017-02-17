@@ -23,12 +23,12 @@ namespace thomas
 
 				void SwapUAVsandSRVs(ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv);
 
-				ID3D11UnorderedAccessView* GetParticleUAV1() const;
-				ID3D11ShaderResourceView* GetParticleSRV1() const;
-				ID3D11Buffer* GetParticleBuffer1() const;
-				ID3D11UnorderedAccessView* GetParticleUAV2() const;
-				ID3D11ShaderResourceView* GetParticleSRV2() const;
-				ID3D11Buffer* GetParticleBuffer2() const;
+				ID3D11UnorderedAccessView*& GetParticleUAV1();
+				ID3D11ShaderResourceView*& GetParticleSRV1();
+				ID3D11Buffer*& GetParticleBuffer1();
+				ID3D11UnorderedAccessView*& GetParticleUAV2();
+				ID3D11ShaderResourceView*& GetParticleSRV2();
+				ID3D11Buffer*& GetParticleBuffer2();
 			private:
 				graphics::Texture* m_texture;
 				std::string m_name;

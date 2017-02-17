@@ -50,27 +50,27 @@ void thomas::object::component::EmitterComponent::SwapUAVsandSRVs(ID3D11Unordere
 	}
 }
 //TODO PEKAR REFERENS 
-ID3D11UnorderedAccessView* thomas::object::component::EmitterComponent::GetParticleUAV1() const
+ID3D11UnorderedAccessView*& thomas::object::component::EmitterComponent::GetParticleUAV1()
 {
 	return m_particleUAV1;
 }
-ID3D11ShaderResourceView* thomas::object::component::EmitterComponent::GetParticleSRV1() const
+ID3D11ShaderResourceView*& thomas::object::component::EmitterComponent::GetParticleSRV1()
 {
 	return m_particleSRV1;
 }
-ID3D11UnorderedAccessView* thomas::object::component::EmitterComponent::GetParticleUAV2() const
+ID3D11UnorderedAccessView*& thomas::object::component::EmitterComponent::GetParticleUAV2()
 {
 	return m_particleUAV2;
 }
-ID3D11ShaderResourceView* thomas::object::component::EmitterComponent::GetParticleSRV2() const
+ID3D11ShaderResourceView*& thomas::object::component::EmitterComponent::GetParticleSRV2()
 {
 	return m_particleSRV2;
 }
-ID3D11Buffer* thomas::object::component::EmitterComponent::GetParticleBuffer1() const
+ID3D11Buffer*& thomas::object::component::EmitterComponent::GetParticleBuffer1()
 {
 	return m_particleBuffer1;
 }
-ID3D11Buffer* thomas::object::component::EmitterComponent::GetParticleBuffer2() const
+ID3D11Buffer*& thomas::object::component::EmitterComponent::GetParticleBuffer2()
 {
 	return m_particleBuffer2;
 }

@@ -32,7 +32,7 @@ RWStructuredBuffer<BillboardStruct> billboards : register(u1);
 void main( uint3 Gid : SV_GroupID )
 {
 	//ANIMATE
-	float3 particlePosWS = particlesRead[Gid.x].position + float3(1, 0, 0);
+	float3 particlePosWS = particlesRead[Gid.x].position + float3(0.01, 0, 0);
 	particlesWrite[Gid.x].position = particlePosWS;
 	particlesWrite[Gid.x].direction = particlesRead[Gid.x].direction;
 	particlesWrite[Gid.x].angle = particlesRead[Gid.x].angle + 0.5f;
