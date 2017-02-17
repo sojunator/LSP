@@ -18,7 +18,8 @@ namespace thomas
 		
 		// the default constraint solver. For parallel processing you can use a different solver
 		//(see Extras / BulletMultiThreaded)
-		btSequentialImpulseConstraintSolver * solver = new btSequentialImpulseConstraintSolver;
+		btSequentialImpulseConstraintSolver * solver = new btSequentialImpulseConstraintSolver;
+
 		s_world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 		s_world->setGravity(btVector3(0, -9.82, 0));
 		return true;

@@ -370,11 +370,11 @@ public:
 
 		if (inWater)
 		{
-			m_rigidBody->GetRigidBody()->setDamping(0.9, m_rigidBody->GetRigidBody()->getAngularDamping());
+			m_rigidBody->setDamping(0.9, m_rigidBody->getAngularDamping());
 		}
 		else
 		{
-			m_rigidBody->GetRigidBody()->setDamping(0.0, m_rigidBody->GetRigidBody()->getAngularDamping());
+			m_rigidBody->setDamping(0.0, m_rigidBody->getAngularDamping());
 		}
 
 		
