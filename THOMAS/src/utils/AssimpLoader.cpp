@@ -27,7 +27,8 @@ namespace thomas
 				aiProcess_ValidateDataStructure |
 				aiProcess_GenSmoothNormals |
 				aiProcess_CalcTangentSpace |
-				aiProcess_FlipUVs
+				aiProcess_FlipUVs |
+				aiProcess_PreTransformVertices
 			);
 			
 			if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero

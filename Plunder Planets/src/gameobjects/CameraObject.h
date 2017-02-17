@@ -31,7 +31,7 @@ public:
 		m_distance = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_button = AddComponent<component::SpriteComponent>();
-	
+
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;
