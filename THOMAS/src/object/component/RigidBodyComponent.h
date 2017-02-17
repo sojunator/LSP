@@ -13,6 +13,7 @@ namespace thomas
 				void UpdateRigidbodyMass(float mass);
 			public:
 				RigidBodyComponent();
+				~RigidBodyComponent();
 				void Start();
 				void Update();
 				void SetKinematic(bool kinematic);

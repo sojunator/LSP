@@ -62,6 +62,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
+	play = false;
 }
 
 void WaterMaterial::Update()
@@ -69,15 +70,15 @@ void WaterMaterial::Update()
 	timeSinceLastUpdate += Time::GetDeltaTime();
 	time += Time::GetDeltaTime();
 
-	if (timeSinceLastUpdate > 0.03)
+	if (timeSinceLastUpdate > 0.03 && play)
 	{
 		timeSinceLastUpdate = 0;
 	//	m_oceanSim->updateDisplacementMap(time);
 	}
 
 	
-	if (Input::GetKey(Input::Keys::C))
-		timeSinceLastUpdate = 0;
+	if (Input::GetKeyDown(Input::Keys::C))
+		play = !play;
 
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 

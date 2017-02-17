@@ -6,7 +6,7 @@
 #include "TerrainObject.h"
 #include "WaterObject.h"
 #include "ShipFloat.h"
-
+#include "PhysicsObject.h"
 using namespace thomas;
 using namespace object;
 class Ship : public GameObject
@@ -22,12 +22,13 @@ public:
 	void Start()
 	{
 
-		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
-		//m_floats[4] = Instantiate<ShipFloat>(math::Vector3(0, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
-
+		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, -1, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, -1, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, -1, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, -1, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[4] = Instantiate<ShipFloat>(math::Vector3(3, -1, 0), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[5] = Instantiate<ShipFloat>(math::Vector3(-3, -1, 0), math::Quaternion::Identity, m_transform, m_scene);
+		m_transform->SetPosition(0, 2, 0);
 
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
@@ -40,11 +41,10 @@ public:
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
 		*/
 
-
 		//Rigidbody init
-		m_rigidBody->SetMass(100);
-		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 4, 8)));
-
+		m_rigidBody->SetMass(5000);
+		m_rigidBody->SetCollider(new btBoxShape(btVector3(4, 3, 8)));
+		m_rigidBody->setSleepingThresholds(0.2, 0.5);
 
 		m_treasure = 10000;
 
@@ -93,6 +93,7 @@ public:
 
 		m_retardControllsOn = false;
 		m_gravity = 0;
+		damp = 0.9;
 	}
 
 	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
@@ -361,7 +362,7 @@ public:
 
 		bool inWater = false;
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
 			if (wTemp)
@@ -370,18 +371,26 @@ public:
 
 		if (inWater)
 		{
-			m_rigidBody->setDamping(0.9, m_rigidBody->getAngularDamping());
+			LOG("in water");
+			m_rigidBody->setDamping(0.9, 0.95);
 		}
 		else
 		{
-			m_rigidBody->setDamping(0.0, m_rigidBody->getAngularDamping());
+			LOG("not in water");
+			m_rigidBody->setDamping(0.0, 0.0);
 		}
+
+		if (Input::GetKeyDown(Input::Keys::Space))
+			Instantiate<PhysicsObject>(m_scene);
 
 		
 	}
 
 private:
 	
+
+	float damp;
+
 	//used for the boat
 	float m_forwardSpeed;
 	
@@ -420,7 +429,7 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
-	ShipFloat* m_floats[5];
+	ShipFloat* m_floats[6];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 
