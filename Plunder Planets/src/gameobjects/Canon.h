@@ -19,10 +19,7 @@ public:
 
 	void Start()
 	{
-		delay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.2f));
-
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("box");
+		delay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.8f));
 	}
 
 	void SetCanonDelay()
@@ -66,5 +63,4 @@ private:
 	bool fire;
 	float delay;
 	float currentTimeCount;
-	component::RenderComponent* m_renderer;
 };

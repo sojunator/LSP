@@ -10,19 +10,19 @@ class Projectile : public GameObject
 private:
 	void CalculateForce()
 	{
-		force = 0.5 * Cd * 1.21f * radius * radius * math::PI * speed * speed * currentDirection;
+		m_force = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI * m_speed * m_speed;
 	}
 
 	void CalculateAccel()
 	{
-		accel = force / mass;
+		m_accel = m_force / m_mass;
 	}
 
 	// https://ih0.redbubble.net/image.104978724.0105/raf,750x1000,075,t,ff4c00:b001c7b98d.u2.jpg
 	void UpdateSpeeeeeeed()
 	{
-		speed += accel * Time::GetDeltaTime();
-		speed += math::Vector3::Down * 9.82f * Time::GetDeltaTime();
+		m_speed += m_accel * Time::GetDeltaTime();
+		m_downSpeed += 9.82*Time::GetDeltaTime() * m_mass;
 	}
 
 
@@ -36,43 +36,40 @@ private:
 			return 10 * (1 - sqrtf(2 - 2 * randNum));
 	}
 
-	void BuildMovementDirection()
-	{
-		currentDirection = m_transform->Forward() + math::Vector3(cosf(angleX), 0.0f, sinf(angleX)) * 180.0f;
-		currentDirection += m_transform->Up() * sinf(angleY);
-		speed = currentDirection;
-		
-	}
 public:
 	float forwardSpeed = 0;
 	Projectile() : GameObject("Projectile")
 	{
-		angleX = MonteCarloAngle();
-		angleY = MonteCarloAngle() + 10;
+		m_angleX = MonteCarloAngle();
+		m_angleY = MonteCarloAngle() + 10;
 	}
-
-
 
 	void Start()
 	{
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
-
 		m_splashSound = AddComponent<component::SoundComponent>();
+		//m_rigidbody = AddComponent<component::RigidBodyComponent>();
 
-		
+		//m_rigidbody->SetMass(m_mass);
+
+
+		m_speed = 300.0f;
+		m_mass = 2.5f;
 	}
 
 	void Update()
 	{
-		BuildMovementDirection();
 		CalculateForce();
 		CalculateAccel();
 		UpdateSpeeeeeeed();
 		float dt = Time::GetDeltaTime();
-		m_downSpeed += 9.82*dt;
 
-		m_transform->Translate(speed);
+
+		m_transform->Translate(m_transform->Forward()*dt*m_speed);
+		m_transform->Translate(m_transform->Right()*dt*forwardSpeed);
+		m_transform->Translate(m_transform->Up()*dt*m_angleY);
+		m_transform->Translate(math::Vector3::Down*m_downSpeed*dt);
 
 
 		if (m_transform->GetPosition().y < 0.0)
@@ -84,17 +81,17 @@ public:
 	}
 
 private:
-	math::Vector3 force;
-	float angleX;
-	float angleY;
-	float mass;
-	float radius;
-	float Cd = 0.35f;
-	math::Vector3 accel;
-	math::Vector3 speed;
+	float m_force;
+	float m_angleX;
+	float m_angleY;
+	float m_mass = 5.0f;
+	float m_radius = 0.05f;
+	float m_Cd = 0.47f;
+	float m_accel;
+	float m_speed;
 	float m_downSpeed;
-	math::Vector3 currentDirection;
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
+	component::RigidBodyComponent* m_rigidbody;
 	std::string m_SFXs[3] = { "fSplash1", "fSplash2", "fSplash3" };
 };

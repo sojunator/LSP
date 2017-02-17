@@ -21,20 +21,20 @@ public:
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
 
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("box");
+		//m_renderer = AddComponent<component::RenderComponent>();
+		//m_renderer->SetModel("box");
 
 	}
 
 	void CreateCanons()
 	{
 		float spacing = 2.3;
-		for (int i = -2; i <= 2; i++)
+		for (int i = -1; i <= 3; i++)
 		{
 			m_fireSFX->PlayOneShot(m_SFXs[rand() % 2], 1);
 			math::Vector3 pos = math::Vector3(0.0f);
 			math::Quaternion rot = m_transform->GetRotation();
-			pos += m_transform->Right()*i*spacing;
+			pos += m_transform->Forward()*i*spacing - m_transform->Up() * 3.5;
 			Canon* c = Instantiate<Canon>(pos, math::Quaternion::Identity, m_transform, m_scene);
 			canons.push_back(c);
 		}
@@ -44,16 +44,12 @@ public:
 	{
 		if (m_delayLeft <= 0)
 		{
-
 			for (auto canon : canons)
 			{
 				canon->FireCanon();
 			}
 			m_delayLeft = m_delay;
 		}
-
-		
-		
 	}
 
 	void Update()
