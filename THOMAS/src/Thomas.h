@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "Time.h"
 #include "Sound.h"
-
+#include "Physics.h"
 #include "Scene.h"
 
 #include "utils\AssimpLoader.h"

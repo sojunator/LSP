@@ -7,3 +7,4 @@
 #include "SoundComponent.h"
 #include "TextComponent.h"
 #include "SpriteComponent.h"
+#include "RigidBodyComponent.h"

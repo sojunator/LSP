@@ -13,6 +13,7 @@ private:
 public:
 	MainMenuObject() : GameObject("MainMenuObject")
 	{
+
 	}
 	~MainMenuObject()
 	{

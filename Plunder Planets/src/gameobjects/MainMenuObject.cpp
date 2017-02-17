@@ -14,7 +14,7 @@ void MainMenuObject::Start()
 	m_startButton->SetName("MainMenuStart");
 	m_startButton->SetPositionX(150);
 	m_startButton->SetPositionY(60);
-	m_startButton->SetScale(1.0f);
+	m_startButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_startButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_startButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_startButton->SetInteractable(true);
@@ -22,7 +22,7 @@ void MainMenuObject::Start()
 	m_highScoreButton->SetName("MainMenuHighScore");
 	m_highScoreButton->SetPositionX(150);
 	m_highScoreButton->SetPositionY(160);
-	m_highScoreButton->SetScale(1.0f);
+	m_highScoreButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_highScoreButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_highScoreButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_highScoreButton->SetInteractable(true);
@@ -30,7 +30,7 @@ void MainMenuObject::Start()
 	m_optionButton->SetName("MainMenuOptions");
 	m_optionButton->SetPositionX(150);
 	m_optionButton->SetPositionY(260);
-	m_optionButton->SetScale(1.0f);
+	m_optionButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_optionButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_optionButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_optionButton->SetInteractable(true);
@@ -38,7 +38,7 @@ void MainMenuObject::Start()
 	m_creditsButton->SetName("MainMenuCredits");
 	m_creditsButton->SetPositionX(150);
 	m_creditsButton->SetPositionY(350);
-	m_creditsButton->SetScale(1.0f);
+	m_creditsButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_creditsButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_creditsButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_creditsButton->SetInteractable(true);
@@ -46,7 +46,7 @@ void MainMenuObject::Start()
 	m_exitButton->SetName("MainMenuExit");
 	m_exitButton->SetPositionX(150);
 	m_exitButton->SetPositionY(450);
-	m_exitButton->SetScale(1.0f);
+	m_exitButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_exitButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_exitButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_exitButton->SetInteractable(true);
@@ -54,7 +54,7 @@ void MainMenuObject::Start()
 	m_backgrounds->SetName("MainMenuBackground");
 	m_backgrounds->SetPositionX(0);
 	m_backgrounds->SetPositionY(0);
-	m_backgrounds->SetScale(1.0f);
+	m_backgrounds->SetScale(math::Vector2(1.0f, 1.0f));
 	m_backgrounds->SetColor(math::Color(1.0f, 1.0f, 1.0f));
 }
 
