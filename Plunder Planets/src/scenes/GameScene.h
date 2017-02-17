@@ -11,7 +11,6 @@
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
-#include "../gameobjects/TestCube.h"
 
 class GameScene : public thomas::Scene
 {

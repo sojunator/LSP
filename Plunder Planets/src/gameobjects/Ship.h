@@ -34,16 +34,16 @@ public:
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
-		m_rigidBody = AddComponent<component::RigidBodyComponent>();
+	//	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 		/*//Detta funkar fan inte
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
 		*/
 
 
-		//Rigidbody init
-		m_rigidBody->SetMass(100);
-		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 4, 8)));
+		////Rigidbody init
+		//m_rigidBody->SetMass(100);
+		//m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 4, 8)));
 
 
 		m_treasure = 10000;
@@ -337,9 +337,9 @@ public:
 		
 		
 		//Ship Movement
-	/*	ShipMove(forwardFactor, dt);
+		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);*/
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		//ShipFireCannons();
 		
 		//Recalculate look at point and the new distance from cam to ship
@@ -359,23 +359,23 @@ public:
 
 		
 
-		bool inWater = false;
+		//bool inWater = false;
 
-		for (int i = 0; i < 4; i++)
-		{
-			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
-			if (wTemp)
-				inWater = true;
-		}
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
+		//	if (wTemp)
+		//		inWater = true;
+		//}
 
-		if (inWater)
-		{
-			m_rigidBody->GetRigidBody()->setDamping(0.9, m_rigidBody->GetRigidBody()->getAngularDamping());
-		}
-		else
-		{
-			m_rigidBody->GetRigidBody()->setDamping(0.0, m_rigidBody->GetRigidBody()->getAngularDamping());
-		}
+		//if (inWater)
+		//{
+		//	m_rigidBody->GetRigidBody()->setDamping(0.9, m_rigidBody->GetRigidBody()->getAngularDamping());
+		//}
+		//else
+		//{
+		//	m_rigidBody->GetRigidBody()->setDamping(0.0, m_rigidBody->GetRigidBody()->getAngularDamping());
+		//}
 
 		
 	}
