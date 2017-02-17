@@ -40,7 +40,6 @@ public:
 		}
 			
 	}
-
 private:
 	float m_downSpeed;
 	component::SoundComponent* m_splashSound;

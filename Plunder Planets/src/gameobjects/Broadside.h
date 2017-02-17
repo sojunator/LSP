@@ -19,6 +19,7 @@ public:
 	{
 		m_delay = 1.5;
 		m_delayLeft = 0;
+		m_aiming = false;
 		m_fireSFX = AddComponent<component::SoundComponent>();
 	}
 
@@ -48,6 +49,21 @@ public:
 
 	void Update()
 	{
+		if (Input::GetKey(Input::Keys::K))
+		{
+			m_aiming = true;
+		}
+		if (m_aiming)
+		{
+			if (Input::GetKeyDown(Input::Keys::L))
+				m_aimYaw += 1.0f;
+			else if (Input::GetKeyDown(Input::Keys::J))
+				m_aimYaw -= 1.0f;
+			if (Input::GetKeyDown(Input::Keys::I))
+				m_aimPitch += 1.0f;
+			else if (Input::GetKeyDown(Input::Keys::M))
+				m_aimPitch -= 1.0f;
+		}
 		float dt = Time::GetDeltaTime();
 		m_delayLeft -= dt;
 	}
@@ -55,6 +71,9 @@ public:
 private:
 	float m_delay;
 	float m_delayLeft;
+	bool m_aiming;
+	float m_aimPitch;
+	float m_aimYaw;
 	component::SoundComponent* m_fireSFX;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
 };
