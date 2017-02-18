@@ -11,8 +11,7 @@ namespace thomas
 			TwInit(TW_DIRECT3D11, ThomasCore::GetDevice());
 			TwWindowSize(Window::GetWidth(), Window::GetHeight());
 
-			s_bar.bar = TwNewBar("Main");
-			TwDefine(" Main label='Debug Variables' fontSize=3 position='30 150' size='270 440' valuesWidth=100");
+			s_bar.bar = TwNewBar("Debug");
 			Hide();
 		}
 
@@ -25,7 +24,7 @@ namespace thomas
 		{
 			
 			TwDeleteBar(s_bar.bar);
-			s_bar.bar = TwNewBar("Main");
+			s_bar.bar = TwNewBar("Debug");
 			Hide();
 		}
 
@@ -46,25 +45,57 @@ namespace thomas
 			return s_bar.bar;
 		}
 
-		void DebugTools::AddFloat(void *variable, const char* name)
+		void DebugTools::AddFloat(float &variable, const char* name)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_FLOAT, variable, "");
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_FLOAT, &variable, "");
 		}
 
-		void DebugTools::AddFloatWithStep(void *variable, const char* name, const char * input)
+		void DebugTools::AddFloatWithStep(float &variable, const char* name, const char * input)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_FLOAT, variable, input);
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_FLOAT, &variable, input);
 		}
 
-		void DebugTools::AddInteger(void *variable, const char* name)
+		void DebugTools::AddInteger(int &variable, const char* name)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_INT16, variable, "");
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_INT16, &variable, "");
 		}
 
-		void DebugTools::AddIntegerWithStep(void *variable, const char* name, const char * input)
+		void DebugTools::AddIntegerWithStep(int &variable, const char* name, const char * input)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_INT16, variable, input);
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_INT16, &variable, input);
 		}
+
+		void DebugTools::AddBool(bool & variable, const char * name)
+		{
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_BOOL16, &variable, "");
+		}
+
+		void DebugTools::AddColor(math::Color & color, const char * name)
+		{
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_COLOR4F, &color, "coloralpha=true");
+		}
+
+
+		void DebugTools::AddDirectionVector(math::Vector3 & vector, const char * name)
+		{
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_DIR3F, &vector, "");
+		}
+
+		void DebugTools::AddQuaternion(math::Quaternion & quaternion, const char * name)
+		{
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_QUAT4F, &quaternion, "");
+		}
+
+		void DebugTools::AddRotation(math::Quaternion & rotation, const char * name)
+		{
+			AddQuaternion(rotation, name);
+		}
+
+		void DebugTools::AddString(std::string & string, const char * name)
+		{
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_STDSTRING, &string, "");
+		}
+
 
 		void DebugTools::Draw()
 		{
@@ -83,13 +114,13 @@ namespace thomas
 		void DebugTools::Hide()
 		{
 			s_visible = false;
-			TwDefine("Main visible=false");
+			TwDefine("Debug visible=false");
 		}
 
 		void DebugTools::Show()
 		{
 			s_visible = true;
-			TwDefine("Main visible=true");
+			TwDefine("Debug visible=true");
 		}
 
 	}
