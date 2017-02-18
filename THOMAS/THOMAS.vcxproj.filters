@@ -39,7 +39,6 @@
     <ClCompile Include="src\object\component\SpriteComponent.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\object\component\RigidBodyComponent.cpp" />
-    <ClCompile Include="src\utils\DebugTools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Material.h" />
@@ -336,7 +335,6 @@
     <ClInclude Include="include\assimp\vector2.h" />
     <ClInclude Include="include\assimp\vector3.h" />
     <ClInclude Include="include\assimp\version.h" />
-    <ClInclude Include="src\utils\DebugTools.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\assimp\color4.inl" />

@@ -3,7 +3,6 @@
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
 #include "graphics\Shader.h"
-//#include "utils\DebugTools.h"
 
 namespace thomas
 {
@@ -54,7 +53,6 @@ namespace thomas
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
 
-			//utils::DebugTools::Draw();
 			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 	}

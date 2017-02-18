@@ -13,7 +13,6 @@
 #include "graphics\Sprite.h"
 #include "Scene.h"
 #include "Physics.h"
-//#include "utils\DebugTools.h"
 
 #include <AtlBase.h>
 #include <atlconv.h>
@@ -41,9 +40,6 @@ namespace thomas {
 
 		if (s_initialized)
 			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
-
-		/*if (s_initialized)
-			s_initialized = utils::DebugTools::Init("Debug Variables");*/
 
 		if (s_initialized)
 			s_initialized = graphics::Texture::Init();
@@ -135,7 +131,6 @@ namespace thomas {
 	bool ThomasCore::Destroy()
 	{
 		Scene::UnloadScene();
-		/*utils::DebugTools::Destroy()*/;
 		graphics::LightManager::Destroy();
 		graphics::Sprite::Destroy();
 		graphics::TextRender::Destroy();
