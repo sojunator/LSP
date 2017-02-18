@@ -8,10 +8,6 @@ namespace thomas
 	{
 		class DebugTools
 		{
-			struct Data
-			{
-				TwBar *bar;
-			};
 
 		public:
 			static void Init();
@@ -27,6 +23,10 @@ namespace thomas
 			static TwBar* GetBar();
 
 		private:
+			struct Data
+			{
+				TwBar *bar;
+			};
 			static Data s_bar;
 		};
 
