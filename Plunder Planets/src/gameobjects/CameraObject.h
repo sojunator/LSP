@@ -6,6 +6,7 @@
 #include "Ship.h"
 #include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
+
 using namespace thomas;
 using namespace object;
 class CameraObject : public GameObject
@@ -16,7 +17,7 @@ private:
 public:
 	CameraObject() : GameObject("CameraObject")
 	{
-
+		
 	};
 
 	void Start()
@@ -47,7 +48,6 @@ public:
 		m_pirateMusic->SetClip("mSeaChanty");
 		m_pirateMusic->SetVolume(0.9);
 		m_pirateMusic->Play();
-
 
 		//GUI images
 		m_sprite->SetName("GUI");
@@ -100,6 +100,7 @@ public:
 
 	void Update()
 	{
+
 		/*if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");

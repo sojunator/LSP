@@ -3,6 +3,7 @@
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
 #include "graphics\Shader.h"
+#include "utils\DebugTools.h"
 
 namespace thomas
 {
@@ -10,6 +11,7 @@ namespace thomas
 
 	void Scene::UnloadScene()
 	{
+		utils::DebugTools::Destroy();
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
@@ -52,7 +54,8 @@ namespace thomas
 			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
-
+			
+			utils::DebugTools::Draw();
 			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 	}

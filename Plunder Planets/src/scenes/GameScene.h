@@ -11,6 +11,7 @@
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
+#include "utils\DebugTools.h"
 
 class GameScene : public thomas::Scene
 {
@@ -49,6 +50,9 @@ public:
 		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
+
+		//Init Tweakbar
+		utils::DebugTools::Init();
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
@@ -101,4 +105,5 @@ private:
 	Ship* m_ship;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
+	float test = 0.0f;
 };

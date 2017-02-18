@@ -39,7 +39,7 @@ namespace thomas {
 			s_initialized = Input::Init();
 
 		if (s_initialized)
-			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
+			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);			
 
 		if (s_initialized)
 			s_initialized = graphics::Texture::Init();
