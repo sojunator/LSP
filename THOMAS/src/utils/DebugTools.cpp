@@ -1,18 +1,27 @@
 #include "DebugTools.h"
-
+#include "../graphics/Shader.h"
 namespace thomas
 {
 	namespace utils
 	{
 		DebugTools::Data DebugTools::s_bar;
 		bool DebugTools::s_visible;
+
+		void TW_CALL DebugTools::ReloadShadersButtonCallback(void * clientData)
+		{
+			graphics::Shader::ReloadShaders();
+		}
+
 		void DebugTools::Init()
 		{
 			TwInit(TW_DIRECT3D11, ThomasCore::GetDevice());
 			TwWindowSize(Window::GetWidth(), Window::GetHeight());
 
 			s_bar.bar = TwNewBar("Debug");
+			TwDefine("Debug fontsize=3 iconifiable=false");
 			Hide();
+
+			TwAddButton(s_bar.bar, "shaderReload", ReloadShadersButtonCallback, NULL, "label='Reload Shaders(F5)' key=F5");
 		}
 
 		void DebugTools::Destroy()
@@ -22,10 +31,12 @@ namespace thomas
 
 		void DebugTools::RemoveAllVariables()
 		{
+			if (s_bar.bar)
+			{
+				TwRemoveAllVars(s_bar.bar);
+				TwAddButton(s_bar.bar, "shaderReload", ReloadShadersButtonCallback, NULL, "label='Reload Shaders(F5)' key=F5");
+			}
 			
-			TwDeleteBar(s_bar.bar);
-			s_bar.bar = TwNewBar("Debug");
-			Hide();
 		}
 
 		void DebugTools::SetPosition(int x, int y)
@@ -67,7 +78,7 @@ namespace thomas
 
 		void DebugTools::AddBool(bool & variable, const char * name)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_BOOL16, &variable, "");
+			TwAddVarRW(s_bar.bar, name, TW_TYPE_BOOL16, &variable, "true='Enabled' false='Disabled'");
 		}
 
 		void DebugTools::AddColor(math::Color & color, const char * name)

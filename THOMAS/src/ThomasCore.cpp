@@ -64,8 +64,11 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Physics::Init();
 
-
+		#ifdef _DEBUG
 		utils::DebugTools::Init();
+		#endif // _DEBUG
+
+		
 
 		return s_initialized;
 	}

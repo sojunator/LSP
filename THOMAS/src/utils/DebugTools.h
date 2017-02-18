@@ -8,7 +8,8 @@ namespace thomas
 	{
 		class DebugTools
 		{
-
+		private:
+			static void TW_CALL ReloadShadersButtonCallback(void* clientData);
 		public:
 			static void Init();
 			static void Destroy();

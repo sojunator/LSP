@@ -22,6 +22,8 @@ public:
 	void Start()
 	{
 
+		m_freeCamera = false;
+		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
@@ -315,7 +317,8 @@ public:
 
 	void Update()
 	{
-
+		if (m_freeCamera)
+			return;
 
 	
 
@@ -382,6 +385,8 @@ public:
 
 private:
 	
+	bool m_freeCamera;
+
 	//used for the boat
 	float m_forwardSpeed;
 	
