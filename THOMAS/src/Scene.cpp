@@ -11,7 +11,7 @@ namespace thomas
 
 	void Scene::UnloadScene()
 	{
-		utils::DebugTools::Destroy();
+		utils::DebugTools::RemoveAllVariables();
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();

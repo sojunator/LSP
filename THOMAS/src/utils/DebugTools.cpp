@@ -5,19 +5,28 @@ namespace thomas
 	namespace utils
 	{
 		DebugTools::Data DebugTools::s_bar;
-
+		bool DebugTools::s_visible;
 		void DebugTools::Init()
 		{
 			TwInit(TW_DIRECT3D11, ThomasCore::GetDevice());
 			TwWindowSize(Window::GetWidth(), Window::GetHeight());
 
 			s_bar.bar = TwNewBar("Main");
-			TwDefine(" Main label='Debug Variables' fontSize=3 position='30 150' size='270 440' valuesWidth=100 ");
+			TwDefine(" Main label='Debug Variables' fontSize=3 position='30 150' size='270 440' valuesWidth=100");
+			Hide();
 		}
 
 		void DebugTools::Destroy()
 		{
 			TwTerminate();
+		}
+
+		void DebugTools::RemoveAllVariables()
+		{
+			
+			TwDeleteBar(s_bar.bar);
+			s_bar.bar = TwNewBar("Main");
+			Hide();
 		}
 
 		void DebugTools::SetPosition(int x, int y)
@@ -60,6 +69,27 @@ namespace thomas
 		void DebugTools::Draw()
 		{
 			TwDraw();
+		}
+
+		void DebugTools::ToggleVisibility()
+		{
+			s_visible = !s_visible;
+			if (s_visible)
+				Show();
+			else
+				Hide();
+		}
+
+		void DebugTools::Hide()
+		{
+			s_visible = false;
+			TwDefine("Main visible=false");
+		}
+
+		void DebugTools::Show()
+		{
+			s_visible = true;
+			TwDefine("Main visible=true");
 		}
 
 	}

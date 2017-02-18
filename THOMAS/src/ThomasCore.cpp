@@ -13,7 +13,7 @@
 #include "graphics\Sprite.h"
 #include "Scene.h"
 #include "Physics.h"
-
+#include "utils\DebugTools.h"
 #include <AtlBase.h>
 #include <atlconv.h>
 
@@ -64,6 +64,9 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Physics::Init();
 
+
+		utils::DebugTools::Init();
+
 		return s_initialized;
 	}
 
@@ -77,6 +80,12 @@ namespace thomas {
 
 		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " FrameTime: " + std::to_string(Time::GetFrameTime());
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
+
+
+		#ifdef _DEBUG
+		if (Input::GetKeyDown(Input::Keys::F1))
+			utils::DebugTools::ToggleVisibility();
+		#endif
 
 		Scene::UpdateCurrentScene();
 		Physics::Update();
