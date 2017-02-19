@@ -6,6 +6,7 @@
 #include "TerrainObject.h"
 #include "WaterObject.h"
 #include "ShipFloat.h"
+#include "PhysicsObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -379,6 +380,11 @@ public:
 		//{
 		//	m_rigidBody->GetRigidBody()->setDamping(0.0, m_rigidBody->GetRigidBody()->getAngularDamping());
 		//}
+
+		if (Input::GetKeyDown(Input::Keys::Space))
+		{
+			Instantiate<PhysicsObject>(m_scene);
+		}
 
 		
 	}

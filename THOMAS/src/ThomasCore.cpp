@@ -152,6 +152,7 @@ namespace thomas {
 		graphics::Model::Destroy();
 		graphics::Renderer::Destroy();
 		object::Object::Destroy();
+		utils::DebugTools::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();

@@ -1,7 +1,9 @@
 #include "Physics.h"
 #include "Time.h"
+
 namespace thomas
 {
+	graphics::BulletDebugDraw* Physics::s_debugDraw;
 	btDiscreteDynamicsWorld* Physics::s_world;
 	bool Physics::Init()
 	{
@@ -21,16 +23,30 @@ namespace thomas
 		btSequentialImpulseConstraintSolver * solver = new btSequentialImpulseConstraintSolver;
 		s_world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 		s_world->setGravity(btVector3(0, -9.82, 0));
+
+		s_debugDraw = new graphics::BulletDebugDraw();
+
+		s_debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	//	s_world->setDebugDrawer(s_debugDraw);
+
 		return true;
 
 	}
 	void Physics::Update()
 	{
 		s_world->stepSimulation(Time::GetDeltaTime(), 7);
+		
 
+	}
+	void Physics::DrawDebug(object::component::Camera* camera)
+	{
+		s_debugDraw->Update(camera);
+		s_debugDraw->drawLine(btVector3(0.5, 100, 0), btVector3(-0.5, 0.5, 0), btVector3(1, 0, 0));
+		//s_world->debugDrawWorld();
 	}
 	void Physics::Destroy()
 	{
+		//Destroy everything????
 	}
 }
 

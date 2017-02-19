@@ -48,10 +48,9 @@ namespace thomas
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
 			
-
-
 			s_currentScene->Render3D(camera);
-			s_currentScene->Render2D(camera);
+			Physics::DrawDebug(camera);
+		//	s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
 			

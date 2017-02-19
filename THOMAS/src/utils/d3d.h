@@ -120,7 +120,7 @@ namespace thomas
 
 		bool D3d::FillBuffer(ID3D11Buffer* buffer, T data)
 		{
-			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, 0, &data, 0, 0);
+			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, NULL, &data, 0, 0);
 			return true;
 		}
 
