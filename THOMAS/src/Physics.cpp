@@ -26,8 +26,9 @@ namespace thomas
 
 		s_debugDraw = new graphics::BulletDebugDraw();
 
-		s_debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	//	s_world->setDebugDrawer(s_debugDraw);
+		s_debugDraw->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+		s_world->setDebugDrawer(s_debugDraw);
+		
 
 		return true;
 
@@ -41,8 +42,7 @@ namespace thomas
 	void Physics::DrawDebug(object::component::Camera* camera)
 	{
 		s_debugDraw->Update(camera);
-		s_debugDraw->drawLine(btVector3(0.5, 100, 0), btVector3(-0.5, 0.5, 0), btVector3(1, 0, 0));
-		//s_world->debugDrawWorld();
+		s_world->debugDrawWorld();
 	}
 	void Physics::Destroy()
 	{

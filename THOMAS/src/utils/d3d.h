@@ -1,6 +1,5 @@
 #pragma once
 #include "../Common.h"
-#include <d3d11.h>
 #include <d3dcompiler.h>
 #include <string>
 #include <vector>
@@ -54,7 +53,13 @@ namespace thomas
 			static ID3D11Buffer* CreateDynamicBufferFromVector(const std::vector<T>& vectorData, D3D11_BIND_FLAG bindFlag);
 
 			template<typename T>
-			static bool FillBuffer(ID3D11Buffer* buffer, T data);
+			static bool FillBuffer(ID3D11Buffer* buffer, T& data);
+
+			template<typename T>
+			static bool FillDynamicBufferStruct(ID3D11Buffer* buffer, T& data);
+
+			template<typename T>
+			static bool FillDynamicBufferVector(ID3D11Buffer* buffer, const std::vector<T>& vectorData);
 
 		private:
 
@@ -97,7 +102,7 @@ namespace thomas
 			bufferDesc.ByteWidth = sizeof(dataStruct);
 			bufferDesc.Usage = D3D11_USAGE_DYNAMIC; //TODO: Maybe dynamic for map/unmap
 			bufferDesc.BindFlags = bindFlag;
-			bufferDesc.CPUAccessFlags = 0; //CPU if dynamic
+			bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 			bufferDesc.MiscFlags = 0;
 
 			D3D11_SUBRESOURCE_DATA InitData;
@@ -118,11 +123,34 @@ namespace thomas
 		}
 		template<typename T>
 
-		bool D3d::FillBuffer(ID3D11Buffer* buffer, T data)
+		bool D3d::FillBuffer(ID3D11Buffer* buffer, T& data)
 		{
 			ThomasCore::GetDeviceContext()->UpdateSubresource(buffer, 0, NULL, &data, 0, 0);
 			return true;
 		}
+
+		template<typename T>
+		inline bool D3d::FillDynamicBufferVector(ID3D11Buffer * buffer, const std::vector<T>& vectorData)
+		{
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+			ThomasCore::GetDeviceContext()->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			memcpy(mappedResource.pData, &vectorData[0], sizeof(vectorData[0])*vectorData.size());
+			ThomasCore::GetDeviceContext()->Unmap(buffer, 0);
+			return true;
+		}
+
+		template<typename T>
+		inline bool D3d::FillDynamicBufferStruct(ID3D11Buffer * buffer, T& data)
+		{
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+			ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+			ThomasCore::GetDeviceContext()->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			memcpy(mappedResource.pData, &data, sizeof(data));
+			ThomasCore::GetDeviceContext()->Unmap(buffer, 0);
+			return true;
+		}
+
 
 
 		template <typename T>

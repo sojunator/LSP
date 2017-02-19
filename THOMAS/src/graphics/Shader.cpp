@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include "../ThomasCore.h"
+#include "../utils/d3d.h"
 #include <AtlBase.h>
 #include <atlconv.h>
 #include "../Scene.h"

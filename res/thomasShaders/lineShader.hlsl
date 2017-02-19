@@ -21,7 +21,7 @@ VS_OUT VSMain(VS_IN input)
 {
 	VS_OUT output = (VS_OUT) 0;
 	
-	output.Pos = mul(input.Pos, viewProjection);
+	output.Pos = mul(float4(input.Pos,1), viewProjection);
 	output.Color = input.Color;
 
 	return output;

@@ -1,6 +1,7 @@
 #include "Skybox.h"
 #include "Texture.h"
 #include "LightManager.h"
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics

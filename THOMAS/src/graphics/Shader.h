@@ -1,7 +1,7 @@
 #pragma once
 #include "../Common.h"
+#include <d3d11.h>
 #include <string>
-#include "../utils/d3d.h"
 #include <vector>
 namespace thomas
 {

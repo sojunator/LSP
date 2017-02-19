@@ -1,6 +1,7 @@
 #include "BulletDebugDraw.h"
 #include "../ThomasCore.h"
 #include "Shader.h"
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics
@@ -15,8 +16,7 @@ namespace thomas
 			if (blob)
 				ThomasCore::GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &m_vertexShader);
 
-			
-			
+				
 
 			//Create input layout
 			std::vector<D3D11_INPUT_ELEMENT_DESC> layoutDesc;
@@ -40,8 +40,8 @@ namespace thomas
 			m_lines.push_back(a); //Line start
 			m_lines.push_back(a); //Line end
 
-			m_lineBuffer = utils::D3d::CreateBufferFromVector(m_lines, D3D11_BIND_VERTEX_BUFFER);
-			m_cameraBuffer = utils::D3d::CreateBufferFromStruct(m_cameraData, D3D11_BIND_CONSTANT_BUFFER);
+			m_lineBuffer = utils::D3d::CreateDynamicBufferFromVector(m_lines, D3D11_BIND_VERTEX_BUFFER);
+			m_cameraBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_cameraData, D3D11_BIND_CONSTANT_BUFFER);
 
 		}
 
@@ -51,11 +51,11 @@ namespace thomas
 			DirectX::CommonStates states(ThomasCore::GetDevice());
 			ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
-			ThomasCore::GetDeviceContext()->RSSetState(states.CullCounterClockwise());
+			ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());
 			
 			ThomasCore::GetDeviceContext()->IASetInputLayout(m_inputLayout);
 
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 			ThomasCore::GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
 			ThomasCore::GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
@@ -67,9 +67,11 @@ namespace thomas
 			m_lines[1].pos = math::Vector3(to.x(), to.y(), to.z());
 			m_lines[1].color = math::Vector3(toColor.x(), toColor.y(), toColor.z());
 
-			utils::D3d::FillBuffer(m_lineBuffer, m_lines);
 			UINT stride = sizeof(LineVertex);
+			utils::D3d::FillDynamicBufferVector(m_lineBuffer, m_lines);
+			
 			UINT offset = 0;
+			ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_cameraBuffer);
 			ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_lineBuffer, &stride, &offset);
 
 			ThomasCore::GetDeviceContext()->Draw(2, 0);
@@ -107,8 +109,7 @@ namespace thomas
 		void BulletDebugDraw::Update(object::component::Camera * camera)
 		{
 			m_cameraData.viewProjection = camera->GetViewProjMatrix().Transpose();
-			utils::D3d::FillBuffer(m_cameraBuffer, m_cameraData);
-			ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_cameraBuffer);
+			utils::D3d::FillDynamicBufferStruct(m_cameraBuffer, m_cameraData);
 			
 		}
 

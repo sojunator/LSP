@@ -8,7 +8,7 @@
 namespace thomas
 {
 	Scene* Scene::s_currentScene;
-
+	bool Scene::s_drawDebugPhysics;
 	void Scene::UnloadScene()
 	{
 		utils::DebugTools::RemoveAllVariables();
@@ -49,8 +49,9 @@ namespace thomas
 			graphics::Renderer::RenderSetup(camera);
 			
 			s_currentScene->Render3D(camera);
-			Physics::DrawDebug(camera);
-		//	s_currentScene->Render2D(camera);
+			if(s_drawDebugPhysics)
+				Physics::DrawDebug(camera);
+			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
 			
@@ -171,5 +172,11 @@ namespace thomas
 			return s_currentScene;
 		LOG("No scene set")
 			return NULL;
+	}
+	Scene::Scene(std::string name)
+	{
+		m_name = name;
+		s_drawDebugPhysics = false;
+		utils::DebugTools::AddBool(s_drawDebugPhysics, "Draw Debug Physics");
 	}
 }

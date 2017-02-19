@@ -21,6 +21,11 @@ namespace thomas
 			{
 			}
 
+			RigidBodyComponent::~RigidBodyComponent()
+			{
+				Physics::s_world->removeRigidBody(this);
+			}
+
 			void RigidBodyComponent::Start()
 			{
 				btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(*(btQuaternion*)&m_gameObject->m_transform->GetRotation(), *(btVector3*)&m_gameObject->m_transform->GetPosition()));
