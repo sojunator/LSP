@@ -14,22 +14,14 @@
 #include "../gameobjects/StandardParticleEmitter.h"
 #include "../src/graphics/ParticleSystem.h"
 
+
 class GameScene : public thomas::Scene
 {
 public:
 	GameScene() : Scene("GameScene")
 	{
 		//Init shaders
-		/*thomas::graphics::Shader* shader = thomas::graphics::Shader::CreateShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD,
-			"../res/shaders/phong.hlsl");
-		thomas::graphics::Shader::CreateShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD,
-			"../res/shaders/oceanShader.hlsl");
-		thomas::graphics::Shader::CreateShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
-			"../res/shaders/oceanPostProcess.hlsl");
-		thomas::graphics::Shader::CreateShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD,
-			"../res/shaders/skyboxShader.hlsl");
-		thomas::graphics::Shader::CreateShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD,
-			"../res/shaders/Terrain.hlsl");*/
+
 		LoadShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/phong.hlsl");
 		LoadShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/oceanShader.hlsl");
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
@@ -46,12 +38,11 @@ public:
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
 		
 		//Init models
-		LoadModel("cannonball", "../res/models/cannonball/cannonball.obj", "phongMaterial");
-		LoadModel("box", "../res/models/box.obj", "phongMaterial");
-		LoadModel("testModel0", "../res/models/Boat/ship0.obj", "phongMaterial");
-		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
-		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
-		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
+		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
+		LoadModel("testModel0", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
+		LoadModel("testModel1", "../res/models/Boat/ship1fbx.fbx", "phongMaterial");
+		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
+		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
 
 		
 
@@ -82,15 +73,14 @@ public:
 		thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
-		m_cameraObject = LoadObject<CameraObject>();
-		m_terrainObject = LoadObject<TerrainObject>();
-		m_ship = LoadObject<Ship>();
-		m_waterObject = LoadObject<WaterObject>();
-		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		LoadObject<CameraObject>();
+		LoadObject<TerrainObject>();
+		LoadObject<Ship>();
+		LoadObject<WaterObject>();
+		LoadObject<TestDirectionalLight>();
 		//LoadObject<PhysicsObject>();
 
-		ParticleSystem::Init();
-		m_particleEmitter = LoadObject<StandardParticleEmitter>();
+		
 	};
 	
 	/*void UnloadScene()
@@ -103,10 +93,5 @@ public:
 	}*/
 
 private:
-	CameraObject* m_cameraObject;
-	TerrainObject* m_terrainObject;
-	Ship* m_ship;
-	WaterObject* m_waterObject;
-	TestDirectionalLight* m_testDirectionalLight;
-	StandardParticleEmitter* m_particleEmitter;
+
 };

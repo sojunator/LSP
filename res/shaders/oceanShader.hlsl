@@ -215,7 +215,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	displacement = lerp(float3(0, 0, perlin), displacement, blendFactor);
 
 
-	pos.xyz += displacement;
+	pos.z += displacement.z;
 
 	output.position = mul(pos.xzyw, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);

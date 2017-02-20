@@ -3,14 +3,16 @@
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
 #include "graphics\Shader.h"
+#include "utils\DebugTools.h"
 
 
 namespace thomas
 {
 	Scene* Scene::s_currentScene;
-
+	bool Scene::s_drawDebugPhysics;
 	void Scene::UnloadScene()
 	{
+		utils::DebugTools::RemoveAllVariables();
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
@@ -46,15 +48,16 @@ namespace thomas
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
-
-
-
+			
 			s_currentScene->Render3D(camera);
+			if(s_drawDebugPhysics)
+				Physics::DrawDebug(camera);
 			graphics::ParticleSystem::DrawParticles(camera);
 			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
-
+			
+			utils::DebugTools::Draw();
 			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 	}
@@ -62,35 +65,36 @@ namespace thomas
 	{	
 		
 
-		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
-		//{
-		//	shader->Bind();
-		//	camera->BindReflection();
-		//	graphics::LightManager::BindAllLights();
-		//	for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
-		//	{
-		//		material->Bind();
-		//		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-		//		{
-		//			graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-		//			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-		//			{
-		//				for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
-		//				{
-		//					mesh->Bind();
-		//					mesh->Draw();
-		//				}
-		//			}
-		//			graphics::Renderer::UnBindGameObjectBuffer();
-		//		}
-		//		material->Unbind();
-		//	}
-		//	graphics::LightManager::Unbind();
+		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
+		{
+			shader->Bind();
+			camera->BindReflection();
+			graphics::LightManager::BindAllLights();
+			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
+			{
+				material->Bind();
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+				{
+					
+					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+					{
+						if(renderComponent->GetModel())
+							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+							{
+								graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+								mesh->Bind();
+								mesh->Draw();
+							}
+					}
+				}
+				material->Unbind();
+			}
+			graphics::LightManager::Unbind();
 
-		//	shader->Unbind();
-		//}
+			shader->Unbind();
+		}
 
-		camera->BindReflection();
+	/*	camera->BindReflection();
 		graphics::LightManager::BindAllLights();
 		
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
@@ -118,9 +122,7 @@ namespace thomas
 			}
 
 		}
-
-		
-		graphics::LightManager::Unbind();
+		graphics::LightManager::Unbind();*/
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
@@ -175,5 +177,11 @@ namespace thomas
 			return s_currentScene;
 		LOG("No scene set")
 			return NULL;
+	}
+	Scene::Scene(std::string name)
+	{
+		m_name = name;
+		s_drawDebugPhysics = false;
+		utils::DebugTools::AddBool(s_drawDebugPhysics, "Draw Debug Physics");
 	}
 }

@@ -1,6 +1,6 @@
 #include "PostEffect.h"
 #include "../Scene.h"
-
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics
@@ -17,7 +17,7 @@ namespace thomas
 			s_cameraBufferStruct.viewMatrixInv = camera->GetViewMatrix().Invert().Transpose();
 			s_cameraBufferStruct.projectionMatrixInv = camera->GetProjMatrix().Invert().Transpose();
 
-			utils::D3d::FillBuffer(s_cameraBuffer, s_cameraBufferStruct);
+			utils::D3d::FillDynamicBufferStruct(s_cameraBuffer, s_cameraBufferStruct);
 		}
 		PostEffect::PostEffect(std::string shader)
 		{
@@ -49,7 +49,7 @@ namespace thomas
 			
 			s_renderToBackBuffer = new PostEffect("renderToBackBuffer", renderToBackBufferShader);
 
-			s_cameraBuffer = utils::D3d::CreateBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+			s_cameraBuffer = utils::D3d::CreateDynamicBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 
 			return true;
 		}

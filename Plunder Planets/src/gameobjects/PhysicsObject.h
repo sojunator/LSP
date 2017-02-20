@@ -21,6 +21,7 @@ public:
 		m_transform->SetScale(10);
 		m_transform->SetPosition(0, 100, 0);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
+		
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
 		
