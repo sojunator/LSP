@@ -42,7 +42,8 @@ namespace thomas
 			{
 				//Update our transform to match the rigidbody.
 				btTransform trans;
-				getMotionState()->getWorldTransform(trans);
+				btDefaultMotionState *myMotionState = (btDefaultMotionState *)getMotionState();
+				trans = myMotionState->m_graphicsWorldTrans;
 				math::Vector3 pos = (math::Vector3)trans.getOrigin();
 				math::Quaternion rot = (math::Quaternion)trans.getRotation();
 				m_gameObject->m_transform->SetRotation(rot);

@@ -1,10 +1,11 @@
 #include "Physics.h"
 #include "Time.h"
-
+#define PHYSICS_TIMESTEP 1.0f/60.0f
 namespace thomas
 {
 	graphics::BulletDebugDraw* Physics::s_debugDraw;
 	btDiscreteDynamicsWorld* Physics::s_world;
+	float Physics::s_accumulator;
 	bool Physics::Init()
 	{
 		// collision configuration contains default setup for memory, collision setup. Advanced
@@ -36,7 +37,10 @@ namespace thomas
 	}
 	void Physics::Update()
 	{
+
 		s_world->stepSimulation(Time::GetDeltaTime(), 7);
+
+		
 		
 
 	}
