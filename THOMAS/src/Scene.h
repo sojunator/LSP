@@ -34,9 +34,10 @@ namespace thomas
 		std::string GetName() { return m_name; }
 	private:
 		static Scene* s_currentScene;
+		static bool s_drawDebugPhysics;
 	protected:
 		std::string m_name;
-		Scene(std::string name) { m_name = name; }
+		Scene(std::string name);
 	};
 	template<typename T>
 	inline Scene * Scene::LoadScene()

@@ -27,7 +27,7 @@ namespace thomas
 			static UINT GetImageWidth(object::component::SpriteComponent * sprite);
 			static UINT GetImageHeight(object::component::SpriteComponent * sprite);
 			static void Destroy();
-			static void RenderImage(std::string name, math::Vector4 color, float posX, float posY, float scale);
+			static void RenderImage(std::string name, math::Vector4 color, float posX, float posY, math::Vector2 scale);
 			static void RenderImage(object::component::SpriteComponent* sprite);
 
 		private:

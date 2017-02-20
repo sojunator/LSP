@@ -4,10 +4,12 @@
 #include "Input.h"
 #include "Time.h"
 #include "Sound.h"
-
+#include "Physics.h"
 #include "Scene.h"
 
 #include "utils\AssimpLoader.h"
+#include "utils\DebugTools.h"
+#include "utils/d3d.h"
 
 #include "utils\Plane.h"
 #include "utils\HeightMap.h"

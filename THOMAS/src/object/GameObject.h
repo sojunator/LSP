@@ -119,27 +119,36 @@ namespace thomas
 		template<typename T>
 		inline T * GameObject::Instantiate(component::Transform * parent, Scene * scene)
 		{
-			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->m_parent = parent;
+			T* gameObject = Object::Instantiate<T>(scene);
+			s_gameObjects.push_back(gameObject);
+			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
+			gameObject->m_transform->SetParent(parent);
+			gameObject->Start();
 			return gameObject;
 		}
 
 		template<typename T>
 		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, Scene * scene)
 		{
-			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->SetPosition(position);
+			T* gameObject = Object::Instantiate<T>(scene);
+			s_gameObjects.push_back(gameObject);
+			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
 			gameObject->m_transform->SetRotation(rotation);
+			gameObject->m_transform->SetPosition(position);
+			gameObject->Start();
 			return gameObject;
 		}
 
 		template<typename T>
 		inline T * GameObject::Instantiate(math::Vector3 position, math::Quaternion rotation, component::Transform * parent, Scene * scene)
 		{
-			T* gameObject = Instantiate<T>(scene);
-			gameObject->m_transform->m_parent = parent;
-			gameObject->m_transform->SetPosition(position);
+			T* gameObject = Object::Instantiate<T>(scene);
+			s_gameObjects.push_back(gameObject);
+			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
+			gameObject->m_transform->SetParent(parent);
 			gameObject->m_transform->SetRotation(rotation);
+			gameObject->m_transform->SetPosition(position);
+			gameObject->Start();
 			return gameObject;
 		}
 

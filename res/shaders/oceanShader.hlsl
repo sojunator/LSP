@@ -184,7 +184,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 	vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
 
-	float4 pos = float4(vertexPosition.xz, 0, 1);
+	float4 pos = float4(vertexPosition.xzy, 1);
 
 	output.tex = pos.xy * uvScale + uvOffset;
 
@@ -215,7 +215,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	displacement = lerp(float3(0, 0, perlin), displacement, blendFactor);
 
 
-	pos.xyz += displacement;
+	pos.z += displacement.z;
 
 	output.position = mul(pos.xzyw, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);

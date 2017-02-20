@@ -26,6 +26,9 @@
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
+    <ClInclude Include="src\gameobjects\PhysicsObject.h" />
+    <ClInclude Include="src\gameobjects\ShipFloat.h" />
+    <ClInclude Include="src\gameobjects\TestCube.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

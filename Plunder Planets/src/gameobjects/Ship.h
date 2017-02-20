@@ -4,6 +4,9 @@
 #include <algorithm>
 #include "Broadside.h"
 #include "TerrainObject.h"
+#include "WaterObject.h"
+#include "ShipFloat.h"
+#include "PhysicsObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -19,17 +22,48 @@ public:
 
 	void Start()
 	{
+
+		m_freeCamera = false;
+		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
+
+		float mass = 5000;
+		//Front
+		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[0]->SetMass(0.10*mass);
+		m_floats[1]->SetMass(0.10*mass);
+		//front middle
+		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 5), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 5), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[2]->SetMass(0.12*mass);
+		m_floats[3]->SetMass(0.12*mass);
+		//back middle
+		m_floats[4] = Instantiate<ShipFloat>(math::Vector3(3, 0, -1), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[5] = Instantiate<ShipFloat>(math::Vector3(-3, 0, -1), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[4]->SetMass(0.13*mass);
+		m_floats[5]->SetMass(0.13*mass);
+		//back
+		m_floats[6] = Instantiate<ShipFloat>(math::Vector3(2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[7] = Instantiate<ShipFloat>(math::Vector3(-2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[6]->SetMass(0.15*mass);
+		m_floats[7]->SetMass(0.15*mass);
+		m_transform->SetPosition(0, 0.5, 0);
+
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
-
+		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 		/*//Detta funkar fan inte
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
 		*/
 
+		//Rigidbody init
+		m_rigidBody->SetMass(5000);
+		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 12, 8)));
+		m_rigidBody->setSleepingThresholds(0.2, 0.5);
 
 		m_treasure = 10000;
 
@@ -42,11 +76,6 @@ public:
 		m_boostSound->SetVolume(0.9);
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
-
-		//orientation
-		m_initPosition = math::Vector3(0, -0.8, 0);
-		m_transform->SetPosition(m_initPosition);
-		m_transform->SetRotation(thomas::math::PI, 0, 0);
 		//movement
 		m_forwardSpeed = 0;
 		m_accelerationSpeed = 9.5f;
@@ -65,9 +94,8 @@ public:
 
 		//gravity
 		m_fallSpeed = 0;
-		m_gravety = 9.82;
 		m_inAir = false;
-
+		m_mass = 10;
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -82,8 +110,10 @@ public:
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 
-		m_retardControllsOn = false;
 
+		m_retardControllsOn = false;
+		m_gravity = 0;
+		damp = 0.9;
 	}
 
 	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
@@ -162,11 +192,6 @@ public:
 
 		}
 		
-		//colide with terrain
-		if (m_terrainObject->Collision(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)))
-		{
-			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed / 3);
-		}
 
 		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
 		m_transform->Translate(moveVec);
@@ -192,6 +217,7 @@ public:
 				if (m_rotation < 0)
 				{
 					m_rotation += m_rotationSpeed * dt;
+					
 				}
 				else
 				{
@@ -207,36 +233,13 @@ public:
 		if (!m_inAir && left_y < 0)
 		{
 			m_transform->Rotate(0, m_boostRot * dt * upFactorPitch * m_rotationSpeed, m_boostRot * dt * upFactorRoll * m_rotationSpeed);
+			m_inAir = true;
 		}
 		else if (m_inAir)
 		{
 			m_transform->Rotate(0, dt * upFactorPitch * m_rotationSpeed, dt * upFactorRoll * m_rotationSpeed);
 		}
 
-		if (m_inAir)//gravety
-		{
-			m_fallSpeed += m_boostRot * m_accelerationSpeed * dt * (m_transform->GetPosition().y - (m_transform->GetPosition() + m_transform->Forward()).y);
-			m_fallSpeed = std::fminf(m_fallSpeed, m_maxSpeed / 2);
-			m_fallSpeed -= m_gravety * dt;
-			if (m_fallSpeed < 0)
-				m_transform->Translate(math::Vector3(0, m_fallSpeed *dt, 0));
-		}
-
-		if (m_inAir && m_transform->GetPosition().y <= m_initPosition.y)//back on ground //TODO: gör det smooth
-		{
-			math::Vector3 newForward = math::Vector3(m_transform->Forward().x, 0, m_transform->Forward().z);
-			newForward.Normalize();
-			m_transform->SetPosition(m_transform->GetPosition().x, m_initPosition.y, m_transform->GetPosition().z);
-			m_transform->SetRotation(0, 0, 0);
-			m_transform->LookAt(m_transform->GetPosition() + newForward);
-
-			m_fallSpeed = 0;
-			m_inAir = false;
-		}
-		else if (!m_inAir && m_transform->GetPosition().y > m_initPosition.y + 0.2f)
-		{
-			m_inAir = true;
-		}
 	}
 		
 	void ShipFireCannons()
@@ -334,7 +337,6 @@ public:
 
 	void Update()
 	{
-		//return; //for flymode
 		float const dt = Time::GetDeltaTime();
 		float const right_x = Input::GetRightStickX();
 		float const right_y = Input::GetRightStickY();
@@ -349,33 +351,76 @@ public:
 
 		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
-		ShipBoost(dt);
+		//ShipBoost(dt);
 		
 		
 		//Ship Movement
-		ShipMove(forwardFactor, dt);
+	/*	ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);*/
 		//ShipFireCannons();
 		
-		//Recalculate look at point and the new distance from cam to ship
-		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
-		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
-		
-		CameraRotate(right_x, right_y, dt, distanceVector);
-		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
-		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
-		CameraZoom(distanceVector, dt);
+		if (!m_freeCamera)
+		{
+			//Recalculate look at point and the new distance from cam to ship
+			m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+			math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+
+			m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
+
+			CameraRotate(right_x, right_y, dt, distanceVector);
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+			CameraZoom(distanceVector, dt);
+		}
+
 		
 		PlaySounds(dt);
 		
 		PlunderIsland();
+
+		
+
+		bool inWater = false;
+
+		for (int i = 0; i < 4; i++)
+		{
+			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
+			if (wTemp)
+				inWater = true;
+		}
+
+		for (int i = 0; i < 8; i++)
+		{
+			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
+			if (wTemp)
+				inWater = true;
+		}
+
+		if (inWater)
+		{
+			LOG("in water");
+		}
+		else
+		{
+			LOG("not in water");
+			m_rigidBody->setDamping(0.0, 0.0);
+		}
+
+		if (Input::GetKey(Input::Keys::Up))
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-m_transform->Forward() * 1000000));
+
+		
 	}
 
 private:
 	
+
+	float damp;
+
+	bool m_freeCamera;
+
 	//used for the boat
 	float m_forwardSpeed;
 	
@@ -384,6 +429,7 @@ private:
 	float m_maxSpeed;
 
 	float m_treasure;
+	float m_mass;
 
 	//for the boost
 	float m_boostMaxSpeed;
@@ -412,6 +458,8 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
+	component::RigidBodyComponent* m_rigidBody;
+	ShipFloat* m_floats[8];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 
@@ -426,7 +474,7 @@ private:
 
 	float m_boostRot;
 	float m_fallSpeed;
-	float m_gravety;
+	float m_gravity;
 	bool m_inAir;
 
 	std::string m_SFXs[9] = {

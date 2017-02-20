@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Shader.h"
+#include "../utils/d3d.h"
 namespace thomas {
 	namespace graphics {
 

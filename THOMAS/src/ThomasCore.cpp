@@ -12,10 +12,11 @@
 #include "Sound.h"
 #include "graphics\Sprite.h"
 #include "Scene.h"
-
+#include "Physics.h"
+#include "utils\DebugTools.h"
 #include <AtlBase.h>
 #include <atlconv.h>
-
+#include "utils/d3d.h"
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
 	ID3D11Device* ThomasCore::s_device;
@@ -38,7 +39,7 @@ namespace thomas {
 			s_initialized = Input::Init();
 
 		if (s_initialized)
-			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);
+			s_initialized = utils::D3d::Init(s_device, s_context, s_swapchain, s_debug);			
 
 		if (s_initialized)
 			s_initialized = graphics::Texture::Init();
@@ -60,6 +61,14 @@ namespace thomas {
 
 		if (s_initialized)
 			s_initialized = graphics::Sprite::Initialize();		
+		if (s_initialized)
+			s_initialized = Physics::Init();
+
+		#ifdef _DEBUG
+		utils::DebugTools::Init();
+		#endif // _DEBUG
+
+		
 
 		return s_initialized;
 	}
@@ -75,7 +84,14 @@ namespace thomas {
 		std::string title = "FPS: " + std::to_string(Time::GetFPS()) + " FrameTime: " + std::to_string(Time::GetFrameTime());
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
 
+
+		#ifdef _DEBUG
+		if (Input::GetKeyDown(Input::Keys::F1))
+			utils::DebugTools::ToggleVisibility();
+		#endif
+
 		Scene::UpdateCurrentScene();
+		Physics::Update();
 		Scene::Render();
 	}
 
@@ -87,7 +103,7 @@ namespace thomas {
 		{
 			LOG("Thomas fully initiated, Chugga-chugga-whoo-whoo!");
 			MSG msg = { 0 };
-
+			Time::Update();
 
 			while (WM_QUIT != msg.message)
 			{
@@ -136,6 +152,7 @@ namespace thomas {
 		graphics::Model::Destroy();
 		graphics::Renderer::Destroy();
 		object::Object::Destroy();
+		utils::DebugTools::Destroy();
 		s_swapchain->Release();
 		s_context->Release();
 		s_device->Release();

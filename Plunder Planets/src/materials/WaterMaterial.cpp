@@ -17,7 +17,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// Adjust this parameter to control the simulation speed
 
 	// A scale to control the amplitude. Not the world space height
-	m_oceanSettings.wave_amplitude = 0.35f;
+	m_oceanSettings.wave_amplitude = 0.25f;
 	// 2D wind direction. No need to be normalized
 	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
 	// The bigger the wind speed, the larger scale of wave crest.
@@ -30,7 +30,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// pointy crests.
 
 	m_oceanSettings.choppy_scale = 1.3f;
-	m_oceanSettings.time_scale = 0.3f;
+	m_oceanSettings.time_scale = 0.1f;
 
 	m_oceanSim = new utils::ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 
@@ -62,6 +62,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
+	play = false;
 }
 
 void WaterMaterial::Update()
@@ -69,18 +70,28 @@ void WaterMaterial::Update()
 	timeSinceLastUpdate += Time::GetDeltaTime();
 	time += Time::GetDeltaTime();
 
-	if (timeSinceLastUpdate > 0.03)
+	if (timeSinceLastUpdate > 0.03 && play)
 	{
 		timeSinceLastUpdate = 0;
 		m_oceanSim->updateDisplacementMap(time);
 	}
 
 	
-	if (Input::GetKey(Input::Keys::C))
-		timeSinceLastUpdate = 0;
+	if (Input::GetKeyDown(Input::Keys::C))
+		play = !play;
 
 	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
 
+}
+
+utils::ocean::OceanSimulator * WaterMaterial::GetOceanSim()
+{
+	return m_oceanSim;
+}
+
+utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
+{
+	return &m_oceanSettings;
 }
 
 WaterMaterial::~WaterMaterial()

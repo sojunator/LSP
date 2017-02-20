@@ -10,6 +10,8 @@
 #include "../materials/WaterMaterial.h"
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
+#include "../gameobjects/PhysicsObject.h"
+
 
 class GameScene : public thomas::Scene
 {
@@ -34,9 +36,9 @@ public:
 		LoadShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/Terrain.hlsl");
 
 		//Init materials
-		/*thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
+		thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
 		thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
-		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));*/
+		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 		LoadMaterial("phongMaterial", new PhongMaterial("Phong"));
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
@@ -48,27 +50,29 @@ public:
 		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
 
+		
+
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 		}		
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 		}
 
 		//Init text
@@ -76,12 +80,12 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		//Init objects lägga till LoadObjects i scene?
-		//m_cameraObject = thomas::object::GameObject::Instantiate<CameraObject>(this);
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_ship = LoadObject<Ship>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		//LoadObject<PhysicsObject>();
 	};
 	
 	/*void UnloadScene()
@@ -99,4 +103,5 @@ private:
 	Ship* m_ship;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
+	float test = 0.0f;
 };

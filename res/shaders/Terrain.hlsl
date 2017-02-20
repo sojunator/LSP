@@ -98,6 +98,7 @@ float4 TerrainColour(VSOutput input)
 {
     float slope, blendAmount;
     float2 tex = input.tex;
+    tex*= 10;
     float4 sand = sandTexture.Sample(diffuseSampler, tex);
     float4 grass = grassTexture.Sample(specularSampler, tex);
     float4 hills = hillsTexture.Sample(normalSampler, tex);

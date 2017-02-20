@@ -23,7 +23,7 @@ namespace thomas
 				return m_imagePos;
 			}
 
-			float SpriteComponent::GetScale()
+			math::Vector2 SpriteComponent::GetScale()
 			{
 				return m_scale;
 			}
@@ -68,7 +68,7 @@ namespace thomas
 				m_imagePos.y = posY;
 			}
 
-			void SpriteComponent::SetScale(float scale)
+			void SpriteComponent::SetScale(math::Vector2 scale)
 			{
 				m_scale = scale;
 			}
