@@ -100,16 +100,18 @@ namespace thomas
 					//bind srv
 					deviceContext->VSSetShaderResources(1, 1, &s_billboardsSRV);
 					deviceContext->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
-
+					emitter->GetParticleD3D()->m_texture->Bind();
 					emitter->GetParticleD3D()->m_shader->Bind();
 
 					emitter->GetParticleD3D()->m_shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 					deviceContext->IASetInputLayout(NULL);
 					deviceContext->IASetVertexBuffers(0, 0, nullptr, 0, 0);
 					
-					emitter->GetParticleD3D()->m_texture->Bind();
+					
 
+					DirectX::CommonStates state(ThomasCore::GetDevice());
 
+				//	deviceContext->OMSetBlendState(state.NonPremultiplied(), DirectX::Colors::Black, 0xFFFFFFFF);
 					deviceContext->Draw(emitter->GetNrOfParticles() * 6, 0);
 
 					//undbind srv

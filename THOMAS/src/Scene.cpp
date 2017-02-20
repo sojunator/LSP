@@ -50,6 +50,7 @@ namespace thomas
 
 
 			s_currentScene->Render3D(camera);
+			graphics::ParticleSystem::DrawParticles(camera);
 			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
@@ -91,8 +92,6 @@ namespace thomas
 
 		camera->BindReflection();
 		graphics::LightManager::BindAllLights();
-		
-		graphics::ParticleSystem::DrawParticles(camera);
 		
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 		{

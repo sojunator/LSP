@@ -42,10 +42,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 {
 	float4 outputColor = diffuseTexture.Sample(diffuseSampler, input.uvs);
 
-	if (outputColor.a < 0.6)
-	{
-		discard;
-	}
+
 
 	return outputColor;
 
