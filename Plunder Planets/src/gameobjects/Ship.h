@@ -7,6 +7,7 @@
 #include "WaterObject.h"
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
+
 using namespace thomas;
 using namespace object;
 class Ship : public GameObject
@@ -332,7 +333,8 @@ public:
 
 	void Update()
 	{
-
+		if (m_freeCamera)
+			return;
 
 	
 
@@ -378,6 +380,13 @@ public:
 
 		bool inWater = false;
 
+		for (int i = 0; i < 4; i++)
+		{
+			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
+			if (wTemp)
+				inWater = true;
+		}
+
 		for (int i = 0; i < 8; i++)
 		{
 			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
@@ -405,6 +414,8 @@ private:
 	
 
 	float damp;
+
+	bool m_freeCamera;
 
 	//used for the boat
 	float m_forwardSpeed;

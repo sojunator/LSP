@@ -103,7 +103,7 @@ namespace thomas
 			math::Vector3 Transform::GetPosition()
 			{
 				if (m_parent)
-					return m_parent->GetPosition() + math::Vector3::Transform(m_localPosition, m_parent->GetWorldMatrix());
+					return m_parent->GetPosition() + math::Vector3::Transform(m_localPosition, math::Matrix::CreateFromQuaternion(m_parent->GetRotation()));
 				else
 					return m_localPosition;
 			}

@@ -1,6 +1,5 @@
 #include "RigidBodyComponent.h"
 
-#define _XM_NO_INTRINSICS_ 1;
 #include "../GameObject.h"
 #include "../../utils/Math.h"
 

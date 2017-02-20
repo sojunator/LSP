@@ -15,16 +15,12 @@ namespace thomas
 		class TextRender
 		{
 		public:
-			static void SetFontPosX(float posX);
-			static void SetFontPosY(float posY);
-			static void SetFontPosCentered();
 			static void Destroy();
 			static void RenderText(object::component::TextComponent* text);
 			static void RenderText(std::string name, std::string output, float posX, float posY, float scale, float rotation,
 								   math::Vector3 color, bool dropShadow, bool outline);
 			static bool LoadFont(std::string name, std::string font);
 			static bool Initialize();
-			static math::Vector2 GetFontPos();
 
 		private:
 			static std::map<std::string, std::unique_ptr<DirectX::SpriteFont>> s_fonts;

@@ -8,6 +8,8 @@
 #include "Scene.h"
 
 #include "utils\AssimpLoader.h"
+#include "utils\DebugTools.h"
+#include "utils/d3d.h"
 
 #include "utils\Plane.h"
 #include "utils\HeightMap.h"

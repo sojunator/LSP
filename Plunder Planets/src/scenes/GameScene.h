@@ -51,27 +51,29 @@ public:
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
 
+		
+
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 		}		
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/button_plunder.png");
+			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
 		}
 
 		//Init text
@@ -102,4 +104,5 @@ private:
 	Ship* m_ship;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
+	float test = 0.0f;
 };
