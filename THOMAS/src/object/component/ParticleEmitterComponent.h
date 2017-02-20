@@ -11,12 +11,12 @@ namespace thomas
 	{
 		namespace component
 		{
-			class EmitterComponent : public Component
+			class ParticleEmitterComponent : public Component
 			{
 			private:
 				
 			public:
-				EmitterComponent();
+				ParticleEmitterComponent();
 				void Emit();
 				void Stop();
 				unsigned int GetNrOfParticles() const;

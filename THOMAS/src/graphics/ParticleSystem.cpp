@@ -1,5 +1,5 @@
 #include "ParticleSystem.h"
-#include "../object/component/EmitterComponent.h"
+#include "../object/component/ParticleEmitterComponent.h"
 #include "../../../DirectXTK-dec2016/Inc/CommonStates.h"
 namespace thomas
 {
@@ -21,7 +21,7 @@ namespace thomas
 
 		unsigned int ParticleSystem::s_maxNrOfBillboards;
 		std::vector<object::component::Camera*> ParticleSystem::s_cameras;
-		std::vector<object::component::EmitterComponent*> ParticleSystem::s_emitters;
+		std::vector<object::component::ParticleEmitterComponent*> ParticleSystem::s_emitters;
 
 
 		ParticleSystem::ParticleSystem()
@@ -61,7 +61,7 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->UpdateSubresource(s_matrixBuffer, 0, NULL, &s_matrixBufferStruct, 0, 0);
 		}
 
-		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
+		void ParticleSystem::AddEmitter(object::component::ParticleEmitterComponent* emitter)
 		{
 			CreateParticleUAVandSRV(emitter);
 			s_emitters.push_back(emitter);
@@ -76,7 +76,7 @@ namespace thomas
 			if (s_emitters.size())
 				UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
 
-			for (object::component::EmitterComponent* emitter : s_emitters)
+			for (object::component::ParticleEmitterComponent* emitter : s_emitters)
 			{
 				if (emitter->IsEmitting())
 				{
@@ -176,7 +176,7 @@ namespace thomas
 			return hr;
 		}
 
-		HRESULT ParticleSystem::CreateParticleUAVandSRV(object::component::EmitterComponent* emitter)
+		HRESULT ParticleSystem::CreateParticleUAVandSRV(object::component::ParticleEmitterComponent* emitter)
 		{
 			D3D11_BUFFER_DESC particleDesc;
 			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
