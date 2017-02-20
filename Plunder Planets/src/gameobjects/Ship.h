@@ -334,7 +334,7 @@ public:
 
 	void Update()
 	{
-		return; //for flymode
+		//return; //for flymode
 		float const dt = Time::GetDeltaTime();
 		float const right_x = Input::GetRightStickX();
 		float const right_y = Input::GetRightStickY();
