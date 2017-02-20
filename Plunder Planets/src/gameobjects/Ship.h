@@ -22,6 +22,10 @@ public:
 
 	void Start()
 	{
+
+		m_freeCamera = false;
+		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
+
 		float mass = 5000;
 		//Front
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -333,9 +337,6 @@ public:
 
 	void Update()
 	{
-		if (m_freeCamera)
-			return;
-
 	
 
 		float const dt = Time::GetDeltaTime();
@@ -361,16 +362,21 @@ public:
 		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);*/
 		//ShipFireCannons();
 		
-		//Recalculate look at point and the new distance from cam to ship
-		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
-		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
-		
-		CameraRotate(right_x, right_y, dt, distanceVector);
-		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
-		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
-		CameraZoom(distanceVector, dt);
+		if (!m_freeCamera)
+		{
+			//Recalculate look at point and the new distance from cam to ship
+			m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+			math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+
+			m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
+
+			CameraRotate(right_x, right_y, dt, distanceVector);
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+			CameraZoom(distanceVector, dt);
+		}
+
 		
 		PlaySounds(dt);
 		
