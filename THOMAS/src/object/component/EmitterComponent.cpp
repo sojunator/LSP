@@ -3,9 +3,15 @@
 
 thomas::object::component::EmitterComponent::EmitterComponent() : Component("EmitterComponent")
 {
-	m_nrOfParticles = 80;
-	m_isEmitting = false;
-	m_booleanSwapUAVandSRV = true;
+	m_nrOfParticles = 5832;
+	m_isEmitting = true;
+
+	m_particleD3D = new thomas::graphics::ParticleSystem::ParticleD3D();
+
+	m_particleD3D->m_shader = graphics::Shader::GetShaderByName("particleShader");
+	m_particleD3D->m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/smokeParticleDank.png");
+	m_particleD3D->m_booleanSwapUAVandSRV = true;
+
 	graphics::ParticleSystem::AddEmitter(this);
 }
 
@@ -13,9 +19,13 @@ void thomas::object::component::EmitterComponent::Emit()
 {
 	m_isEmitting = true;
 
-
-
 }
+
+bool thomas::object::component::EmitterComponent::IsEmitting() const
+{
+	return m_isEmitting;
+}
+
 
 void thomas::object::component::EmitterComponent::Stop()
 {
@@ -27,50 +37,9 @@ unsigned int thomas::object::component::EmitterComponent::GetNrOfParticles() con
 	return m_nrOfParticles;
 }
 
-void thomas::object::component::EmitterComponent::SwapUAVsandSRVs(ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv)
-{
-	if (m_booleanSwapUAVandSRV)
-	{
-		m_booleanSwapUAVandSRV = false;
-	}
-	else
-	{
-		m_booleanSwapUAVandSRV = true;
-	}
 
-	if (m_booleanSwapUAVandSRV)
-	{
-		uav = m_particleUAV1;
-		srv = m_particleSRV2;
-	}
-	else
-	{
-		uav = m_particleUAV2;
-		srv = m_particleSRV1;
-	}
-}
-//TODO PEKAR REFERENS 
-ID3D11UnorderedAccessView*& thomas::object::component::EmitterComponent::GetParticleUAV1()
+
+thomas::graphics::ParticleSystem::ParticleD3D* thomas::object::component::EmitterComponent::GetParticleD3D() const
 {
-	return m_particleUAV1;
-}
-ID3D11ShaderResourceView*& thomas::object::component::EmitterComponent::GetParticleSRV1()
-{
-	return m_particleSRV1;
-}
-ID3D11UnorderedAccessView*& thomas::object::component::EmitterComponent::GetParticleUAV2()
-{
-	return m_particleUAV2;
-}
-ID3D11ShaderResourceView*& thomas::object::component::EmitterComponent::GetParticleSRV2()
-{
-	return m_particleSRV2;
-}
-ID3D11Buffer*& thomas::object::component::EmitterComponent::GetParticleBuffer1()
-{
-	return m_particleBuffer1;
-}
-ID3D11Buffer*& thomas::object::component::EmitterComponent::GetParticleBuffer2()
-{
-	return m_particleBuffer2;
+	return m_particleD3D;
 }
