@@ -32,6 +32,7 @@ public:
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_healthbar = AddComponent<component::SpriteComponent>();
 	
+
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
 		m_normalSpeed = 50.0f;

@@ -37,7 +37,7 @@ namespace thomas
 
 			~Shader();
 			bool Bind();
-			bool Unbind();
+			static bool Unbind();
 			std::string GetName();
 
 			bool BindBuffer(ID3D11Buffer* resource, ResourceType type);

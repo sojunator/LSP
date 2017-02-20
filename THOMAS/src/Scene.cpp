@@ -63,35 +63,36 @@ namespace thomas
 	{
 
 
-		//for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
-		//{
-		//	shader->Bind();
-		//	camera->BindReflection();
-		//	graphics::LightManager::BindAllLights();
-		//	for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
-		//	{
-		//		material->Bind();
-		//		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-		//		{
-		//			graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-		//			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-		//			{
-		//				for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
-		//				{
-		//					mesh->Bind();
-		//					mesh->Draw();
-		//				}
-		//			}
-		//			graphics::Renderer::UnBindGameObjectBuffer();
-		//		}
-		//		material->Unbind();
-		//	}
-		//	graphics::LightManager::Unbind();
+		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
+		{
+			shader->Bind();
+			camera->BindReflection();
+			graphics::LightManager::BindAllLights();
+			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
+			{
+				material->Bind();
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+				{
+					
+					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+					{
+						if(renderComponent->GetModel())
+							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+							{
+								graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+								mesh->Bind();
+								mesh->Draw();
+							}
+					}
+				}
+				material->Unbind();
+			}
+			graphics::LightManager::Unbind();
 
-		//	shader->Unbind();
-		//}
+			shader->Unbind();
+		}
 
-		camera->BindReflection();
+	/*	camera->BindReflection();
 		graphics::LightManager::BindAllLights();
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 		{	
@@ -118,7 +119,7 @@ namespace thomas
 			}
 			
 		}
-		graphics::LightManager::Unbind();
+		graphics::LightManager::Unbind();*/
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 	}

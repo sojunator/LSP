@@ -11,8 +11,7 @@ namespace thomas
 		{
 			void RigidBodyComponent::UpdateRigidbodyMass(float mass)
 			{
-
-				btVector3 inertia(0, 0, 0);
+				btVector3 inertia;
 				getCollisionShape()->calculateLocalInertia(mass, inertia);
 				setMassProps(mass, inertia);
 				
@@ -36,6 +35,7 @@ namespace thomas
 				setCollisionShape(collider);
 				setMassProps(1, inertia);
 				Physics::s_world->addRigidBody(this);
+				m_kinematic = false;
 			}
 
 			void RigidBodyComponent::Update()
@@ -55,12 +55,16 @@ namespace thomas
 				{
 					m_mass = -getInvMass();
 					m_kinematic = kinematic;
+					Physics::s_world->removeRigidBody(this);
 					UpdateRigidbodyMass(0);
+					Physics::s_world->addRigidBody(this);
 				}
 				else if(!kinematic && m_kinematic)
 				{
 					m_kinematic = kinematic;
+					Physics::s_world->removeRigidBody(this);
 					UpdateRigidbodyMass(m_mass);
+					Physics::s_world->addRigidBody(this);
 				}
 		
 			}
@@ -77,8 +81,10 @@ namespace thomas
 			}
 			void RigidBodyComponent::SetMass(float mass)
 			{
+				Physics::s_world->removeRigidBody(this);
 				m_mass = mass;
 				UpdateRigidbodyMass(m_mass);
+				Physics::s_world->addRigidBody(this);
 			}
 			float RigidBodyComponent::GetMass()
 			{
