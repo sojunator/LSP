@@ -18,8 +18,6 @@ public:
 	void Start()
 	{
 		radius = 0.5;
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("cannonball");
 		m_transform->SetScale(radius);
 		mass = 625.0;
 
@@ -81,5 +79,4 @@ public:
 private:
 	float radius;
 	float mass;
-	component::RenderComponent* m_renderer;
 };
