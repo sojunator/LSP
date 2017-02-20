@@ -42,4 +42,8 @@ private:
 	TerrainObject* m_terrainObject;
 	Ship* m_playerShip;
 
+	float pDotR;
+	float pDotF;
+
+
 };

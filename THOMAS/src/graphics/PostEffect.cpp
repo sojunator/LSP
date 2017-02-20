@@ -1,6 +1,6 @@
 #include "PostEffect.h"
 #include "../Scene.h"
-
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics

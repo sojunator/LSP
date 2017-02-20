@@ -1,4 +1,5 @@
 #include "AI.h"
+#include "../../THOMAS/src/utils/DebugTools.h"
 
 AI::AI() : thomas::object::component::Component("AI")
 {
@@ -10,6 +11,9 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_lastKnownPos = math::Vector3::Zero;
 	m_escapeTimer = 0;
 	m_escapeTime = 100;	//Should be 10 seconds
+
+	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0.0 max=1.0 step=0.001");
+	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0.0 max=1.0 step=0.001");
 }
 
 AI::~AI()
@@ -38,19 +42,19 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	{
 		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
 		playerDir.Normalize();
-		float pDotR = playerDir.Dot(norRight);
-		float pDotF = playerDir.Dot(norFor);
+		pDotR = playerDir.Dot(norRight);
+		pDotF = playerDir.Dot(norFor);
 
-		/*Right forward and no island on rigth*/		/*Right back and no island on right*/
-		if (pDotR >= 0.0 && pDotF >= 0.0 || pDotR >= 0.1 && pDotF <= 0.0 && !objectLeft || pDotF <= -0.9 && objectFront || objectFront && objectLeft)	//Turn right
-			return 1;
-		/*Left forward and no island on left*/			/*Left back and no island on left*/
-		else if (pDotR < 0.0 && pDotF > 0.0 || pDotR < -0.1 && pDotF < 0.0 && !objectRight || pDotF <= -0.9 && objectFront || objectFront && objectRight)		//Turn left
-			return -1;
-		/*Cone forward and no island forward*/
-		else if (pDotF <= -0.9 && !objectFront)	//Continue forward
+		if (pDotF >= 0.8 && pDotR >= -0.2 && pDotR <= 0.2 && !objectFront)	//Continue forward
 			return 0;
-		else
+		/*Right forward and no island on rigth*/		/*Right back and no island on right*/
+		else if (pDotR >= 0.0 && pDotF <= 0.0 || pDotR >= 0.2 && pDotF >= 0.0 && !objectRight || pDotF >= 0.8 && objectFront || objectFront && objectLeft)	//Turn right
+			return -1;
+		/*Left forward and no island on left*/			/*Left back and no island on left*/
+		else if (pDotR < 0.0 && pDotF < 0.0 || pDotR <= -0.2 && pDotF >= 0.0 && !objectLeft || objectFront && objectRight)		//Turn left
+			return 1;
+		/*Cone forward and no island forward*/
+		else 
 			return 0;
 		break;
 	}
@@ -60,13 +64,13 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		playerDir.Normalize();
 		float pDotR = playerDir.Dot(norRight);
 		float pDotF = playerDir.Dot(norFor);
-		/*Change to 0.9*/
-		if ((pDotR >= 0.55 || pDotR <= -0.55) && !objectFront)
+
+		if ((pDotR >= 0.98 || pDotR <= -0.98) && !objectFront)
 			return 0;
-		else if (objectRight || objectFront || objectRight && objectFront || pDotR < 0.55 && pDotF > 0.0 || pDotR < 0.0 && pDotF > -0.55)
-			return -1;
-		else if (objectLeft || objectFront && objectLeft || pDotR < 0.55 && pDotF > -1.0 || pDotR < 0.0 && pDotF > 0.55)
+		else if (/*objectRight || objectFront || objectLeft && objectFront ||*/ pDotR < 0.98 && pDotF > 0.0 || pDotR < 0.0 && pDotF > -0.98)
 			return 1;
+		else if (/*objectLeft || objectFront && objectRight ||*/ pDotR < 0.98 && pDotF > -1.0 || pDotR < 0.0 && pDotF > 0.98)
+			return -1;
 		else
 			return 0;
 
@@ -83,15 +87,15 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		float pDotR = playerDir.Dot(norRight);
 		float pDotF = playerDir.Dot(norFor);
 
+		if (pDotF >= 0.8 && pDotR >= -0.2 && pDotR <= 0.2 && !objectFront)	//Continue forward
+			return 0;
 		/*Right forward and no island on rigth*/		/*Right back and no island on right*/
-		if (pDotR > 0.0 && pDotF > 0.0 || pDotR > 0.1 && pDotF < 0.0 && !objectLeft || pDotF <= -0.9 && objectFront || objectFront && objectLeft)	//Turn right
+		else if (pDotR >= 0.0 && pDotF <= 0.0 || pDotR >= 0.2 && pDotF >= 0.0 && !objectRight || pDotF >= 0.8 && objectFront || objectFront && objectLeft)	//Turn right
 			return 1;
 		/*Left forward and no island on left*/			/*Left back and no island on left*/
-		else if (pDotR < 0.0 && pDotF > 0.0 || pDotR < -0.1 && pDotF < 0.0 && !objectRight || pDotF <= -0.9 && objectFront || objectFront && objectRight)		//Turn left
+		else if (pDotR < 0.0 && pDotF < 0.0 || pDotR <= -0.2 && pDotF >= 0.0 && !objectLeft || objectFront && objectRight)		//Turn left
 			return -1;
 		/*Cone forward and no island forward*/
-		else if (pDotF <= -0.9 && !objectFront)	//Continue forward
-			return 0;
 		else
 			return 0;
 		break;

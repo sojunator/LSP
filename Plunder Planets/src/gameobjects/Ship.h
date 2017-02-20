@@ -6,6 +6,7 @@
 #include "TerrainObject.h"
 #include "WaterObject.h"
 #include "ShipFloat.h"
+#include "PhysicsObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -22,6 +23,8 @@ public:
 	void Start()
 	{
 
+		m_freeCamera = false;
+		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
@@ -314,7 +317,8 @@ public:
 
 	void Update()
 	{
-
+		if (m_freeCamera)
+			return;
 
 	
 
@@ -376,6 +380,11 @@ public:
 		//	m_rigidBody->GetRigidBody()->setDamping(0.0, m_rigidBody->GetRigidBody()->getAngularDamping());
 		//}
 
+		if (Input::GetKeyDown(Input::Keys::Space))
+		{
+			Instantiate<PhysicsObject>(m_scene);
+		}
+
 		
 	}
 
@@ -386,6 +395,8 @@ public:
 
 private:
 	
+	bool m_freeCamera;
+
 	//used for the boat
 	float m_forwardSpeed;
 	

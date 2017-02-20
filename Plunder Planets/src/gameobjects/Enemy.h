@@ -105,10 +105,10 @@ public:
 		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
 
 		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
-		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (m_transform->Right() * 30));	//Check island right
-		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (m_transform->Right() * 30));	//Check island left
+		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Right() * 30));	//Check island right
+		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (-m_transform->Right() * 30));	//Check island left
 
-		m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), m_transform->Forward(), m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
+		m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), -m_transform->Forward(), -m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
 
 
 		if (!m_firstFrame)

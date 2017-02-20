@@ -20,6 +20,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\BulletDebugDraw.cpp" />
     <ClCompile Include="src\object\component\RigidBodyComponent.cpp" />
     <ClCompile Include="src\object\component\SpriteComponent.cpp" />
     <ClCompile Include="src\graphics\Sprite.cpp" />
@@ -50,6 +51,7 @@
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
+    <ClCompile Include="src\utils\DebugTools.cpp" />
     <ClCompile Include="src\utils\Ocean\FFT\fft_512x512_c2c.cpp" />
     <ClCompile Include="src\utils\Ocean\OceanSimulator.cpp" />
     <ClCompile Include="src\utils\HeightMap.cpp" />
@@ -310,6 +312,7 @@
     <ClInclude Include="include\LinearMath\btTransform.h" />
     <ClInclude Include="include\LinearMath\btTransformUtil.h" />
     <ClInclude Include="include\LinearMath\btVector3.h" />
+    <ClInclude Include="src\graphics\BulletDebugDraw.h" />
     <ClInclude Include="src\object\component\RigidBodyComponent.h" />
     <ClInclude Include="src\object\component\SpriteComponent.h" />
     <ClInclude Include="src\graphics\Sprite.h" />
@@ -342,6 +345,7 @@
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
+    <ClInclude Include="src\utils\DebugTools.h" />
     <ClInclude Include="src\utils\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\utils\HeightMap.h" />
     <ClInclude Include="src\utils\Math.h" />
@@ -440,12 +444,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib;$(ProjectDir)\lib\BulletCollision_Debug.lib;$(ProjectDir)\lib\BulletDynamics_Debug.lib;$(ProjectDir)\lib\LinearMath_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\AntTweakBar.lib;$(ProjectDir)\lib\libnoise.lib;$(ProjectDir)\lib\BulletCollision_Debug.lib;$(ProjectDir)\lib\BulletDynamics_Debug.lib;$(ProjectDir)\lib\LinearMath_Debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -484,7 +490,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\AntTweakBar.lib;$(ProjectDir)\lib\libnoise.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

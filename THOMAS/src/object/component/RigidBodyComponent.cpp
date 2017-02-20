@@ -1,6 +1,5 @@
 #include "RigidBodyComponent.h"
 
-#define _XM_NO_INTRINSICS_ 1;
 #include "../GameObject.h"
 #include "../../utils/Math.h"
 
@@ -20,6 +19,11 @@ namespace thomas
 			}
 			RigidBodyComponent::RigidBodyComponent() : Component("RigidBodyComponent"), btRigidBody(1, NULL, NULL)
 			{
+			}
+
+			RigidBodyComponent::~RigidBodyComponent()
+			{
+				Physics::s_world->removeRigidBody(this);
 			}
 
 			void RigidBodyComponent::Start()

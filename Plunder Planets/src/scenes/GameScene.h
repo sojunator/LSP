@@ -13,6 +13,7 @@
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/Enemy.h"
 
+
 class GameScene : public thomas::Scene
 {
 public:
@@ -50,6 +51,8 @@ public:
 		LoadModel("testModel1", "../res/models/Boat/ship.obj", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship1.obj", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship2.obj", "phongMaterial");
+
+		
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
@@ -104,4 +107,5 @@ private:
 	Enemy* m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
+	float test = 0.0f;
 };
