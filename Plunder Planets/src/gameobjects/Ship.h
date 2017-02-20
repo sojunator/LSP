@@ -320,7 +320,7 @@ public:
 		m_soundDelayLeft -= dt;
 		if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
 		{
-			m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
+			m_sound->PlayOneShot(m_SFXs[rand() % 9], 1); //doesn't seem to work
 			m_soundDelayLeft = m_soundDelay;
 		}
 	}

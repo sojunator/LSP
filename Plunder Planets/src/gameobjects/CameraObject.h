@@ -48,7 +48,7 @@ public:
 		m_seagull->Play();
 
 		m_creak->SetClip("fCreakLoop");
-		m_creak->SetVolume(0.3);
+		m_creak->SetVolume(0.5);
 		m_creak->Play();
 
 		m_music->SetClip("aOceanAmbient");
