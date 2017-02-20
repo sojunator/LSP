@@ -38,15 +38,16 @@ RWStructuredBuffer<BillboardStruct> billboards : register(u1);
 [numthreads(1, 1, 1)]
 void main( uint3 Gid : SV_GroupID )
 {
-	uint seed = Gid.x;
-	seed = (seed ^ 61) ^ (seed >> 16);
-	seed *= 9;
-	seed = seed ^ (seed >> 4);
-	seed *= 668265261;
-	seed = seed ^ (seed >> 15);
-	seed = seed * 2 - 1;
-	float3 dir = float3(seed,seed,seed);//float3(seed, seed, seed);
+
+	float seed = frac(sin(dot(float2(Gid.x, Gid.x), float2(12.9898, 78.233))) * 43758.5453);
+	float r1 = (seed * 2) - 1;
+	seed = frac(sin(dot(float2(seed, seed), float2(12.9898, 78.233))) * 43758.5453);
+	float r2 = (seed * 2) - 1;
+	seed = frac(sin(dot(float2(seed, seed), float2(12.9898, 78.233))) * 43758.5453);
+	float r3 = (seed * 2) - 1;
+	float3 dir = float3(r1,r2,r3);//float3(seed, seed, seed);
 	normalize(dir);
+
 	//ANIMATE
 	float3 particlePosWS = particlesRead[Gid.x].position + dir * 0.1;
 	particlesWrite[Gid.x].position = particlePosWS;
