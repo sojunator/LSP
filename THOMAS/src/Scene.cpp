@@ -49,10 +49,13 @@ namespace thomas
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
 			
+
+			graphics::ParticleSystem::DrawParticles(camera);
+
 			s_currentScene->Render3D(camera);
 			if(s_drawDebugPhysics)
 				Physics::DrawDebug(camera);
-			graphics::ParticleSystem::DrawParticles(camera);
+			
 			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);

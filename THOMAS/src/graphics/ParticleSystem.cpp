@@ -40,8 +40,8 @@ namespace thomas
 			s_maxNrOfBillboards = 10000;
 			CompileComputeShader();
 			CreateBillboardUAVandSRV();
-			CreateCameraConstantBuffer();
-			CreateMatrixConstantBuffer();
+			s_cameraBuffer = utils::D3d::CreateBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+			s_matrixBuffer = utils::D3d::CreateBufferFromStruct(s_matrixBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 			return;
 		}
 
@@ -55,10 +55,10 @@ namespace thomas
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
 			s_cameraBufferStruct.position = trans->GetPosition();
-			ThomasCore::GetDeviceContext()->UpdateSubresource(s_cameraBuffer, 0, NULL, &s_cameraBufferStruct, 0, 0);
+			utils::D3d::FillBuffer(s_cameraBuffer, s_cameraBufferStruct);
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
-			ThomasCore::GetDeviceContext()->UpdateSubresource(s_matrixBuffer, 0, NULL, &s_matrixBufferStruct, 0, 0);
+			utils::D3d::FillBuffer(s_matrixBuffer, s_matrixBufferStruct);
 		}
 
 		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
@@ -121,11 +121,6 @@ namespace thomas
 				}
 			}
 			
-
-			
-
-			
-
 			return;
 		}
 
@@ -233,102 +228,19 @@ namespace thomas
 			return hr;
 		}
 
-		HRESULT ParticleSystem::CreateCameraConstantBuffer()
-		{
-			HRESULT hr;
-			std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
-
-			for (object::GameObject* object : cameraObjects)
-				s_cameras.push_back(object->GetComponent<object::component::Camera>());
-
-			object::component::Transform* trans = s_cameras.at(0)->m_gameObject->m_transform;
-			s_cameraBufferStruct.forward = trans->Forward();
-			s_cameraBufferStruct.right = trans->Right();
-			s_cameraBufferStruct.up = trans->Up();
-			s_cameraBufferStruct.position = trans->GetPosition();
-
-			D3D11_BUFFER_DESC cbDesc;
-			cbDesc.ByteWidth = sizeof(s_cameraBufferStruct);
-			cbDesc.Usage = D3D11_USAGE_DEFAULT;
-			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			cbDesc.CPUAccessFlags = 0;
-			cbDesc.MiscFlags = 0;
-			cbDesc.StructureByteStride = 0;
-
-			D3D11_SUBRESOURCE_DATA initData;
-			initData.pSysMem = &s_cameraBufferStruct;
-			initData.SysMemPitch = 0;
-			initData.SysMemSlicePitch = 0;
-
-			hr = ThomasCore::GetDevice()->CreateBuffer(&cbDesc, &initData, &s_cameraBuffer);
-			if (FAILED(hr))
-			{
-				LOG("Failed to create camera constant buffer");
-			}
-
-			return hr;
-		}
-
-
-		HRESULT ParticleSystem::CreateMatrixConstantBuffer()
-		{
-			HRESULT hr;
-
-			s_matrixBufferStruct.viewProjMatrix = s_cameras.at(0)->GetViewProjMatrix().Transpose();
-
-			D3D11_BUFFER_DESC cbDesc;
-			cbDesc.ByteWidth = sizeof(s_matrixBufferStruct);
-			cbDesc.Usage = D3D11_USAGE_DEFAULT;
-			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			cbDesc.CPUAccessFlags = 0;
-			cbDesc.MiscFlags = 0;
-			cbDesc.StructureByteStride = 0;
-
-			D3D11_SUBRESOURCE_DATA initData;
-			initData.pSysMem = &s_matrixBufferStruct;
-			initData.SysMemPitch = 0;
-			initData.SysMemSlicePitch = 0;
-
-			hr = ThomasCore::GetDevice()->CreateBuffer(&cbDesc, &initData, &s_matrixBuffer);
-			if (FAILED(hr))
-			{
-				LOG("Failed to create matrix constant buffer");
-			}
-
-			return hr;
-
-		}
-
+	
 		HRESULT ParticleSystem::CompileComputeShader()
 		{
 			ID3DBlob* shaderBlob = nullptr;
 			ID3DBlob* errorBlob = nullptr;
 
-			////////shaderBlob = m_shader->Compile("../res/shaders/billboards.hlsl", "cs_5_0", "main");
-			HRESULT hr = D3DCompileFromFile(L"../res/shaders/billboards.hlsl", NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &shaderBlob, &errorBlob);
-
-			if (FAILED(hr))
-			{
-				if (errorBlob)
-				{
-					OutputDebugStringA((char*)errorBlob->GetBufferPointer());
-					errorBlob->Release();
-				}
-
-				if (shaderBlob)
-					shaderBlob->Release();
-
-				LOG("Failed to compile particle computeshader");
-				return hr;
-			}
-			else
-			{
-				SAFE_RELEASE(errorBlob);
-				hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_billboardCS);
-				SAFE_RELEASE(shaderBlob);
-			}
-
-			return hr;
+			HRESULT result;
+			shaderBlob = graphics::Shader::Compile("../res/shaders/billboards.hlsl", "cs_5_0", "main");
+			if(shaderBlob)
+				result = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_billboardCS);
+				
+			SAFE_RELEASE(shaderBlob);
+			return result;
 		}
 
 

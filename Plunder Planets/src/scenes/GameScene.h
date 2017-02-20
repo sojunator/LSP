@@ -78,6 +78,7 @@ public:
 		LoadObject<Ship>();
 		LoadObject<WaterObject>();
 		LoadObject<TestDirectionalLight>();
+		LoadObject<StandardParticleEmitter>();
 		//LoadObject<PhysicsObject>();
 
 		
