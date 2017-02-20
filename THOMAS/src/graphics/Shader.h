@@ -1,7 +1,7 @@
 #pragma once
 #include "../Common.h"
+#include <d3d11.h>
 #include <string>
-#include "../utils/d3d.h"
 #include <vector>
 namespace thomas
 {
@@ -30,16 +30,15 @@ namespace thomas
 			Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, 
 				std::string hullShader, std::string domainShader, std::string pixelShader, Scene* scene);
 
-
+			void ReloadShader();
 		public:
 
 
 
 			~Shader();
 			bool Bind();
-			bool Unbind();
+			static bool Unbind();
 			std::string GetName();
-			std::string GetFilePath();
 
 			bool BindBuffer(ID3D11Buffer* resource, ResourceType type);
 			bool BindBuffer(ID3D11Buffer* resource, int slot);
@@ -49,17 +48,25 @@ namespace thomas
 			bool BindVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
 			bool BindIndexBuffer(ID3D11Buffer* indexBuffer);
 			
+			
 
 			static ID3DBlob* Compile(std::string source, std::string profile, std::string main);
+
 			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string filePath, 
 				Scene* scene);
-			static Shader* CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, 
-				std::string geometryShader, std::string hullShader, std::string domainShader, 
-				std::string pixelShader, Scene* scene);
+			static Shader* CreateShader(std::string name, InputLayouts inputLayout,
+				std::string vertexShader, 
+				std::string geometryShader,
+				std::string hullShader,
+				std::string domainShader, 
+				std::string pixelShader,
+				Scene* scene);
+
 			static Shader* GetCurrentBoundShader();
 			static Shader* GetShaderByName(std::string name);
 			static std::vector<Shader*> GetShadersByScene(Scene* scene);
 			static std::vector<Shader*> GetLoadedShaders();
+			static void ReloadShaders();
 			static bool Destroy();
 			static void Destroy(Scene* scene);
 
@@ -68,25 +75,24 @@ namespace thomas
 			{
 				ID3DBlob* vs;
 				ID3D11VertexShader* vertexShader;
-
+				std::string VSfilePath;
 				ID3DBlob* ps;
 				ID3D11PixelShader* pixelShader;
-				
+				std::string PSfilePath;
 				ID3DBlob* gs;
 				ID3D11GeometryShader* geometryShader;
-
+				std::string GSfilePath;
 				ID3DBlob* hs;
 				ID3D11HullShader* hullShader;
-
+				std::string HSfilePath;
 				ID3DBlob* ds;
 				ID3D11DomainShader* domainShader;
-				
+				std::string DSfilePath;
 				ID3D11InputLayout* inputLayout;
 			};
 
 			Data m_data;
 			std::string m_name;
-			std::string m_filePath;
 			Scene* m_scene;
 
 			static Shader* s_currentBoundShader;

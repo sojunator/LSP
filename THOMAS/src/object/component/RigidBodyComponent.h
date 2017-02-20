@@ -7,23 +7,21 @@ namespace thomas
 	{
 		namespace component
 		{
-			class THOMAS_API RigidBodyComponent : public Component
+			class THOMAS_API RigidBodyComponent : public Component, public btRigidBody
 			{
 			private:
 				void UpdateRigidbodyMass(float mass);
 			public:
 				RigidBodyComponent();
+				~RigidBodyComponent();
 				void Start();
 				void Update();
-				void SetMass(float mass);
-				float GetMass();
 				void SetKinematic(bool kinematic);
 				bool IsKinematic();
 				void SetCollider(btCollisionShape* collider);
-				btRigidBody* GetRigidBody();
+				void SetMass(float mass);
+				float GetMass();
 			private:
-				btRigidBody* m_rigidBody;
-				btCollisionShape* m_collider;
 				float m_mass;
 				bool m_kinematic;
 			};

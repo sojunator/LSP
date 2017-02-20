@@ -6,7 +6,6 @@
 #include "../../include/assimp/Importer.hpp"
 #include "../../include/assimp/scene.h"
 #include "../../include/assimp/postprocess.h"
-#include "../utils/d3d.h"
 #include "../ThomasCore.h"
 #include "Material.h"
 
