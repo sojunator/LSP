@@ -2,6 +2,7 @@
 
 #include <Thomas.h>
 #include <string>
+#include "Broadside.h"
 
 using namespace thomas;
 using namespace object;
@@ -20,16 +21,27 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(8, mat, 1024 / 4, 1, 1024, 500);
+		m_islands = new thomas::Islands(1, mat, 1024 / 4, 1, 1024, 500);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Plane-1");
 
 		m_transform->SetPosition(math::Vector3(0, -2, 0));
 
-
+		PlaceBalls();
 	}
 
+	void PlaceBalls()
+	{
+		for (int i = 0; i < 360; i++)
+		{
+			m_broadsides.push_back(Instantiate<Broadside>(math::Vector3(m_islands->GetCenter(0).x, 5, m_islands->GetCenter(0).z), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), 0), m_scene));
+			
+			m_broadsides.at(i)->m_transform->Rotate(math::Vector3((math::PI * 2 / 360) * i, 0, 0));
+			m_broadsides.at(i)->m_transform->Translate(m_broadsides.at(i)->m_transform->Forward() * m_islands->GetCollisionRadius(0));
+			m_broadsides.at(i)->m_transform->SetScale(5);
+		}
+	}
 
 	void Update()
 	{
@@ -69,6 +81,8 @@ public:
 private:
 	thomas::Islands* m_islands;
 	thomas::graphics::Model* m_model;
+
+	std::vector<Broadside*> m_broadsides;
 
 	component::RenderComponent* m_renderer;
 };

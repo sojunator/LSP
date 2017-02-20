@@ -2,6 +2,7 @@
 #include <Thomas.h>
 #include "Broadside.h"
 #include "../AI/AI.h"
+#include "../../THOMAS/src/utils/DebugTools.h"
 
 using namespace thomas;
 using namespace object;
@@ -25,9 +26,9 @@ public:
 
 		math::Vector3 dir = -m_transform->Forward();
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x + (m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x - (m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
-		m_broadSideFront = Instantiate<Broadside>(math::Vector3(0, 5, m_transform->GetPosition().z + (-m_transform->Forward().z * 50)), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x - (-m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x + (-m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
+		m_broadSideFront = Instantiate<Broadside>(math::Vector3(0, 5, m_transform->GetPosition().z + (-m_transform->Forward().z * 60)), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
 		
 		m_renderer->SetModel("testModel0");
 				
@@ -48,6 +49,10 @@ public:
 		m_islandForward = false;
 		m_islandLeft = false;
 		m_islandRight = false;
+		thomas::utils::DebugTools::AddInteger(m_turnDir, "Turn Dir");
+		thomas::utils::DebugTools::AddBool(m_islandForward, "Island F");
+		thomas::utils::DebugTools::AddBool(m_islandLeft, "Island L");
+		thomas::utils::DebugTools::AddBool(m_islandRight, "Island R");
 	}
 
 	void Move()
@@ -134,7 +139,7 @@ private:
 	float m_maxSpeed;
 	float m_searchRadius;
 	float m_attackRadius;
-	float m_turnDir;
+	int m_turnDir;
 
 	bool m_islandForward;
 	bool m_islandLeft;

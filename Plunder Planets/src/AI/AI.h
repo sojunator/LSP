@@ -33,7 +33,7 @@ public:
 
 private:
 	Behavior m_state;
-
+	std::string m_stateStr;
 	math::Vector3 m_lastKnownPos;
 
 	float m_escapeTimer;
