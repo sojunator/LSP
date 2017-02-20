@@ -1,5 +1,6 @@
 #include "PostEffect.h"
-
+#include "../Scene.h"
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics
@@ -16,7 +17,7 @@ namespace thomas
 			s_cameraBufferStruct.viewMatrixInv = camera->GetViewMatrix().Invert().Transpose();
 			s_cameraBufferStruct.projectionMatrixInv = camera->GetProjMatrix().Invert().Transpose();
 
-			utils::D3d::FillBuffer(s_cameraBuffer, s_cameraBufferStruct);
+			utils::D3d::FillDynamicBufferStruct(s_cameraBuffer, s_cameraBufferStruct);
 		}
 		PostEffect::PostEffect(std::string shader)
 		{
@@ -44,11 +45,11 @@ namespace thomas
 		bool PostEffect::Init()
 		{	
 			Shader* renderToBackBufferShader = thomas::graphics::Shader::CreateShader("RenderToBackBuffer", thomas::graphics::Shader::InputLayouts::POST_EFFECT,
-				"../res/thomasShaders/postEffect.hlsl");
+				"../res/thomasShaders/postEffect.hlsl", Scene::GetCurrentScene());
 			
 			s_renderToBackBuffer = new PostEffect("renderToBackBuffer", renderToBackBufferShader);
 
-			s_cameraBuffer = utils::D3d::CreateBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+			s_cameraBuffer = utils::D3d::CreateDynamicBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 
 			return true;
 		}
@@ -142,14 +143,29 @@ namespace thomas
 
 		void PostEffect::Destroy()
 		{
-			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
+			s_renderToBackBuffer->m_effectProperties->Release();
+			s_renderToBackBuffer->m_renderTarget->Release();
+			s_renderToBackBuffer->m_shaderResource->Release();
+			delete s_renderToBackBuffer;
+
+			s_cameraBuffer->Release();
+			s_quadVertexBuffer->Release();
+			for (unsigned int i = 0; i < s_loadedEffects.size(); ++i)
 			{
-				delete s_loadedEffects[i];
+				s_loadedEffects[i]->m_effectProperties->Release();
+				s_loadedEffects[i]->m_renderTarget->Release();
+				s_loadedEffects[i]->m_shaderResource->Release();
 			}
+			
 			for (auto const& effectTypes : s_postEffectTypes)
 			{
 				delete effectTypes.second;
 			}	
+			for (unsigned int i = 0; i < s_loadedEffects.size(); i++)
+			{
+				delete s_loadedEffects[i];
+				
+			}
 		}
 
 		bool PostEffect::RenderPostEffect(ID3D11ShaderResourceView* prevRender, ID3D11RenderTargetView* backBuffer)

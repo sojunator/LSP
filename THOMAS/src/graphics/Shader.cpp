@@ -1,9 +1,10 @@
 #include "Shader.h"
 #include "../ThomasCore.h"
+#include "../utils/d3d.h"
 #include <AtlBase.h>
 #include <atlconv.h>
+#include "../Scene.h"
 
-#pragma warning(disable: 3501)
 namespace thomas
 {
 	namespace graphics
@@ -23,20 +24,20 @@ namespace thomas
 
 			if (status != S_OK)
 			{
-				
+
 				if (errorBlob)
 				{
 					if (errorBlob->GetBufferSize())
 					{
 						std::string error((char*)errorBlob->GetBufferPointer());
 
-						#ifndef THOMAS_SHOW_ALL_ERRORS
-							if (error.find("X3501") == std::string::npos) { //ignore annoying errors.
-								LOG("SHADER ERROR : " << source << " errorBlob:" << error);
-							}	
-						#else
+#ifndef THOMAS_SHOW_ALL_ERRORS
+						if (error.find("X3501") == std::string::npos) { //ignore annoying errors.
 							LOG("SHADER ERROR : " << source << " errorBlob:" << error);
-						#endif
+						}
+#else
+						LOG("SHADER ERROR : " << source << " errorBlob:" << error);
+#endif
 
 						errorBlob->Release();
 					}
@@ -101,16 +102,23 @@ namespace thomas
 			return true;
 		}
 
-		Shader::Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+		Shader::Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader, Scene* scene)
 		{
 			m_name = name;
+			m_scene = scene;
 
 			m_data.vs = NULL;
+			m_data.vertexShader = nullptr;
 			m_data.ps = NULL;
+			m_data.pixelShader = nullptr;
 			m_data.gs = NULL;
+			m_data.geometryShader = nullptr;
 			m_data.hs = NULL;
+			m_data.hullShader = nullptr;
 			m_data.ds = NULL;
-			if(!vertexShader.empty())
+			m_data.domainShader = nullptr;
+
+			if (!vertexShader.empty())
 				m_data.vs = Compile(vertexShader, "vs_5_0", "VSMain");
 			if (!geometryShader.empty())
 				m_data.gs = Compile(geometryShader, "gs_5_0", "GSMain");
@@ -121,16 +129,35 @@ namespace thomas
 			if (!pixelShader.empty())
 				m_data.ps = Compile(pixelShader, "ps_5_0", "PSMain");
 
+
 			if (m_data.vs)
+			{
+				m_data.VSfilePath = vertexShader;
 				ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
+			}
 			if (m_data.ps)
+			{
+				m_data.PSfilePath = pixelShader;
 				ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
+			}
+
 			if (m_data.gs)
+			{
+				m_data.GSfilePath = geometryShader;
 				ThomasCore::GetDevice()->CreateGeometryShader(m_data.gs->GetBufferPointer(), m_data.gs->GetBufferSize(), NULL, &m_data.geometryShader);
+			}
+
 			if (m_data.hs)
+			{
+				m_data.HSfilePath = hullShader;
 				ThomasCore::GetDevice()->CreateHullShader(m_data.hs->GetBufferPointer(), m_data.hs->GetBufferSize(), NULL, &m_data.hullShader);
+			}
+
 			if (m_data.ds)
+			{
+				m_data.DSfilePath = domainShader;
 				ThomasCore::GetDevice()->CreateDomainShader(m_data.ds->GetBufferPointer(), m_data.ds->GetBufferSize(), NULL, &m_data.domainShader);
+			}
 
 			CreateInputLayout(inputLayout);
 		}
@@ -138,10 +165,22 @@ namespace thomas
 
 
 
-		Shader::Shader(std::string name, InputLayouts inputLayout, std::string filePath)
+		Shader::Shader(std::string name, InputLayouts inputLayout, std::string filePath, Scene* scene)
 		{
 			m_name = name;
-			m_filePath = filePath;
+			
+			m_scene = scene;
+
+			m_data.vs = NULL;
+			m_data.vertexShader = nullptr;
+			m_data.ps = NULL;
+			m_data.pixelShader = nullptr;
+			m_data.gs = NULL;
+			m_data.geometryShader = nullptr;
+			m_data.hs = NULL;
+			m_data.hullShader = nullptr;
+			m_data.ds = NULL;
+			m_data.domainShader = nullptr;
 
 			m_data.vs = Compile(filePath, "vs_5_0", "VSMain");
 			m_data.ps = Compile(filePath, "ps_5_0", "PSMain");
@@ -150,15 +189,33 @@ namespace thomas
 			m_data.ds = Compile(filePath, "ds_5_0", "DSMain");
 
 			if (m_data.vs)
+			{
+				m_data.VSfilePath = filePath;
 				ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
+			}
 			if (m_data.ps)
+			{
+				m_data.PSfilePath = filePath;
 				ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
+			}
+				
 			if (m_data.gs)
+			{
+				m_data.GSfilePath = filePath;
 				ThomasCore::GetDevice()->CreateGeometryShader(m_data.gs->GetBufferPointer(), m_data.gs->GetBufferSize(), NULL, &m_data.geometryShader);
+			}
+				
 			if (m_data.hs)
+			{
+				m_data.HSfilePath = filePath;
 				ThomasCore::GetDevice()->CreateHullShader(m_data.hs->GetBufferPointer(), m_data.hs->GetBufferSize(), NULL, &m_data.hullShader);
+			}
+				
 			if (m_data.ds)
+			{
+				m_data.DSfilePath = filePath;
 				ThomasCore::GetDevice()->CreateDomainShader(m_data.ds->GetBufferPointer(), m_data.ds->GetBufferSize(), NULL, &m_data.domainShader);
+			}
 
 			CreateInputLayout(inputLayout);
 
@@ -201,23 +258,28 @@ namespace thomas
 		}
 
 		bool Shader::Destroy() {
-			for (int i = 0; i < s_loadedShaders.size(); i++)
+			for (unsigned int i = 0; i < s_loadedShaders.size(); i++)
 			{
 				delete s_loadedShaders[i];
 			}
+			delete s_currentBoundShader;
+			s_currentBoundShader = NULL;
+			s_loadedShaders.clear();
 			return true;
 		}
 
 		bool Shader::Bind()
 		{
+			if (s_currentBoundShader == this)
+				return true;
 			s_currentBoundShader = this;
 			if (m_data.vs)
 			{
 				ThomasCore::GetDeviceContext()->IASetInputLayout(m_data.inputLayout);
 				ThomasCore::GetDeviceContext()->VSSetShader(m_data.vertexShader, NULL, 0);
 			}
-				
-			if(m_data.ps)
+
+			if (m_data.ps)
 				ThomasCore::GetDeviceContext()->PSSetShader(m_data.pixelShader, NULL, 0);
 
 			if (m_data.gs)
@@ -229,31 +291,24 @@ namespace thomas
 			if (m_data.ds)
 				ThomasCore::GetDeviceContext()->DSSetShader(m_data.domainShader, NULL, 0);
 
-			
+
 			return true;
 		}
 		bool Shader::Unbind()
 		{
-			if (s_currentBoundShader == this)
-			{
-				ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->HSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->DSSetShader(NULL, NULL, 0);
-				s_currentBoundShader = nullptr;
-				return true;
-			}
-			return false;
+			ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->HSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->DSSetShader(NULL, NULL, 0);
+			s_currentBoundShader = nullptr;
+			return true;
 		}
 		std::string Shader::GetName()
 		{
 			return m_name;
 		}
-		std::string Shader::GetFilePath()
-		{
-			return m_filePath;
-		}
+
 		bool Shader::BindBuffer(ID3D11Buffer * resource, ResourceType type)
 		{
 			if (s_currentBoundShader == this)
@@ -282,7 +337,7 @@ namespace thomas
 		}
 		bool Shader::BindTextures(ID3D11ShaderResourceView * texture, int slot)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader && s_currentBoundShader == this)
 			{
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetShaderResources(slot, 1, &texture);
@@ -300,7 +355,7 @@ namespace thomas
 		}
 		bool Shader::BindTextureSampler(ID3D11SamplerState * sampler, int slot)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader && s_currentBoundShader == this)
 			{
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetSamplers(slot, 1, &sampler);
@@ -335,27 +390,93 @@ namespace thomas
 			return true;
 		}
 
+		void Shader::ReloadShader()
+		{
+			ID3D10Blob* tempBlob;
+			if (m_data.vs)
+			{		
+				tempBlob = Compile(m_data.VSfilePath, "vs_5_0", "VSMain");
+				if (tempBlob)
+				{
+					SAFE_RELEASE(m_data.vs);
+					SAFE_RELEASE(m_data.vertexShader);
+					m_data.vs = tempBlob;
+					ThomasCore::GetDevice()->CreateVertexShader(m_data.vs->GetBufferPointer(), m_data.vs->GetBufferSize(), NULL, &m_data.vertexShader);
+				}
+					
+			}
+			if (m_data.ps)
+			{		
+				tempBlob = Compile(m_data.PSfilePath, "ps_5_0", "PSMain");
+				if (tempBlob)
+				{
+					SAFE_RELEASE(m_data.ps);
+					SAFE_RELEASE(m_data.pixelShader);
+					m_data.ps = tempBlob;
+					ThomasCore::GetDevice()->CreatePixelShader(m_data.ps->GetBufferPointer(), m_data.ps->GetBufferSize(), NULL, &m_data.pixelShader);
+				}
+					
+			}
+			if (m_data.gs)
+			{		
+				tempBlob = Compile(m_data.GSfilePath, "gs_5_0", "GSMain");
+				if (tempBlob)
+				{
+					SAFE_RELEASE(m_data.gs);
+					SAFE_RELEASE(m_data.geometryShader);
+					m_data.gs = tempBlob;
+					ThomasCore::GetDevice()->CreateGeometryShader(m_data.gs->GetBufferPointer(), m_data.gs->GetBufferSize(), NULL, &m_data.geometryShader);
+				}
+					
+			}
+			if (m_data.ds)
+			{	
+				tempBlob = Compile(m_data.DSfilePath, "ds_5_0", "DSMain");
+				if (tempBlob)
+				{
+					SAFE_RELEASE(m_data.ds);
+					SAFE_RELEASE(m_data.domainShader);
+					m_data.ds = tempBlob;
+					ThomasCore::GetDevice()->CreateDomainShader(m_data.ds->GetBufferPointer(), m_data.ds->GetBufferSize(), NULL, &m_data.domainShader);
+				}
+					
+			}
+			if (m_data.hs)
+			{			
+				tempBlob = Compile(m_data.HSfilePath, "hs_5_0", "HSMain");
+				if (tempBlob)
+				{	
+					SAFE_RELEASE(m_data.hs);
+					SAFE_RELEASE(m_data.hullShader);
+					m_data.hs = tempBlob;
+					ThomasCore::GetDevice()->CreateHullShader(m_data.hs->GetBufferPointer(), m_data.hs->GetBufferSize(), NULL, &m_data.hullShader);
+				}
+					
+			}
+		}
+
 		
-		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath)
+		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string filePath, Scene* scene)
 		{
 			Shader* shader;
 			if (inputLayout == InputLayouts::POST_EFFECT)
 			{
-				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffect.hlsl", "", "", "", filePath);
+				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffect.hlsl", "", "", "", filePath, scene);
 			}
 			else
 			{
-				shader = new Shader(name, inputLayout, filePath);
-			}	
+				shader = new Shader(name, inputLayout, filePath, scene);
+			}
 			if (shader)
 				s_loadedShaders.push_back(shader);
 			return shader;
 		}
-		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+		Shader * Shader::CreateShader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader, Scene* scene)
 		{
-			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader);
+			Shader* shader = new Shader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader, scene);
 			if (shader)
 				s_loadedShaders.push_back(shader);
+
 			return shader;
 		}
 		Shader * Shader::GetCurrentBoundShader()
@@ -364,16 +485,41 @@ namespace thomas
 		}
 		Shader * Shader::GetShaderByName(std::string name)
 		{
-			for (int i = 0; i < s_loadedShaders.size(); i++)
+			for (unsigned int i = 0; i < s_loadedShaders.size(); i++)
 			{
 				if (s_loadedShaders[i]->GetName() == name)
 					return s_loadedShaders[i];
 			}
 			return NULL;
 		}
+		std::vector<Shader*> Shader::GetShadersByScene(Scene * scene)
+		{
+			std::vector<Shader*> output;
+			for (Shader* shader : s_loadedShaders)
+				if (shader->m_scene == scene)
+					output.push_back(shader);
+			return output;
+		}
 		std::vector<Shader*> Shader::GetLoadedShaders()
 		{
 			return s_loadedShaders;
+		}
+		void Shader::ReloadShaders()
+		{
+			for (int i = 0; i < s_loadedShaders.size(); ++i)
+			{
+				s_loadedShaders[i]->ReloadShader();
+			}
+		}
+		void Shader::Destroy(Scene* scene)
+		{
+			for (int i = 0; i < s_loadedShaders.size(); ++i)
+				if (s_loadedShaders[i]->m_scene == scene)
+				{
+					Material::Destroy(s_loadedShaders[i]);
+					s_loadedShaders.erase(s_loadedShaders.begin() + i);
+					i -= 1;
+				}
 		}
 	}
 

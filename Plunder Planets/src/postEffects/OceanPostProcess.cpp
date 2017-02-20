@@ -1,5 +1,5 @@
 #include "OceanPostProcess.h"
-
+#include "../d3d.h"
 OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffect(name, shader)
 {
 	// The size of displacement map. In this sample, it's fixed to 512.
@@ -53,7 +53,7 @@ OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffe
 	m_oceanPropertiesStruct.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_oceanPropertiesStruct.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
-	m_effectProperties = utils::D3d::CreateBufferFromStruct(m_oceanPropertiesStruct, D3D11_BIND_CONSTANT_BUFFER);
+	m_effectProperties = utils::D3d::CreateDynamicBufferFromStruct(m_oceanPropertiesStruct, D3D11_BIND_CONSTANT_BUFFER);
 
 }
 
@@ -61,5 +61,5 @@ void OceanPostProcess::Update()
 {
 	time += Time::GetDeltaTime();
 	m_oceanSim->updateDisplacementMap(time);
-	utils::D3d::FillBuffer(m_effectProperties, m_oceanPropertiesStruct);
+	utils::D3d::FillDynamicBufferStruct(m_effectProperties, m_oceanPropertiesStruct);
 }

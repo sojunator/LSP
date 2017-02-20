@@ -12,12 +12,30 @@ namespace thomas
 		}
 		GameObject::~GameObject()
 		{
-			
+			for (unsigned int i = 0; i < this->m_components.size(); i++)
+			{
+				if (this->m_components[i])
+				{
+					Object::Destroy(this->m_components[i]);
+				}
+					
+			}
+			this->m_components.clear();
 
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
+			{
+				if (s_gameObjects[i] == this)
+				{
+					s_gameObjects.erase(s_gameObjects.begin() + i);
+				
+				}
+			}
+
+			Object::Destroy(this);
 		}
 		GameObject * GameObject::Find(std::string type)
 		{
-			for (int i = 0; i < s_gameObjects.size(); i++)
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
 			{
 				if (s_gameObjects[i]->m_type == type)
 					return s_gameObjects[i];
@@ -33,18 +51,23 @@ namespace thomas
 		bool GameObject::Destroy(GameObject * gameObject)
 		{
 
-			for (int i = 0; i < gameObject->m_components.size(); i++)
+			for (unsigned int i = 0; i < gameObject->m_components.size(); i++)
 			{
 				if (gameObject->m_components[i])
+				{
 					Object::Destroy(gameObject->m_components[i]);
-			}
-			gameObject->m_components.empty();
+					
+				}
 
-			for (int i = 0; i < s_gameObjects.size(); i++)
+			}
+			gameObject->m_components.clear();
+
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
 			{
 				if (s_gameObjects[i] == gameObject)
 				{
 					s_gameObjects.erase(s_gameObjects.begin() + i);
+					
 				}
 			}
 
@@ -52,6 +75,7 @@ namespace thomas
 
 			return true;
 		}
+
 
 		std::vector<GameObject*> GameObject::GetAllGameObjectsInScene(Scene* scene)
 		{

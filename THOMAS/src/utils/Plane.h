@@ -20,7 +20,6 @@ namespace thomas
 
 		private:
 			Plane();
-			~Plane();
 
 		public:
 

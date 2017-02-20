@@ -19,6 +19,7 @@ namespace thomas
 
 			public:
 				Camera();
+				~Camera();
 				math::Matrix GetViewMatrix();
 				math::Matrix GetProjMatrix();
 				math::Matrix GetViewProjMatrix();

@@ -52,8 +52,12 @@ namespace thomas
 				const OceanParameter& getParameters();
 				void SetParameters(OceanParameter& param);
 
+				math::Vector3 GetPositionAtCoord(math::Vector2 texCoord);
 
 			protected:
+
+				ID3D11Texture2D* m_1x1StagingTexture;
+
 				OceanParameter m_param;
 
 				// ---------------------------------- GPU shading asset -----------------------------------

@@ -1,7 +1,7 @@
 #pragma once
+#include <d3d11.h>
 #include "Input.h"
 #include "Window.h"
-#include "utils/d3d.h"
 #include "Time.h"
 namespace thomas
 {
@@ -17,7 +17,7 @@ namespace thomas
 		static void Start();
 		static bool Initialized();
 		static bool Destroy();
-
+		static void Exit();
 
 		static ID3D11Device* GetDevice();
 		static ID3D11DeviceContext* GetDeviceContext();
