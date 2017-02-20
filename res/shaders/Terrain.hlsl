@@ -109,15 +109,15 @@ float4 TerrainColour(VSOutput input)
         // Determine which texture to use based on height.
     if (input.positionWS.y < 1.1 * 4)
     {
-        blendAmount = slope / 0.1f;
+        blendAmount = slope / 0.3f;
         return lerp(sand, grass, blendAmount); //lerp not working as wanted
 		//return sand;
     }
 	
     if (input.positionWS.y < 2.0 * 4)
     {
-        //blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
-		blendAmount = slope / 0.1f;
+        blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+		//blendAmount = slope / 0.3f;
         return lerp(grass, hills, blendAmount);
 		//return grass;
     }
