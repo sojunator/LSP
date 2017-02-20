@@ -52,7 +52,6 @@ public:
 
 			float waterDensity = 2 * density;
 			btVector3 force = (volumeUnderWater*waterDensity)*-Physics::s_world->getGravity();
-			LOG(force.getY());
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
 			if (heightBelowWater < 0.2)
 			{

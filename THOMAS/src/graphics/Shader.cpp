@@ -270,6 +270,8 @@ namespace thomas
 
 		bool Shader::Bind()
 		{
+			if (s_currentBoundShader == this)
+				return true;
 			s_currentBoundShader = this;
 			if (m_data.vs)
 			{
@@ -294,17 +296,13 @@ namespace thomas
 		}
 		bool Shader::Unbind()
 		{
-			if (s_currentBoundShader == this)
-			{
-				ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->HSSetShader(NULL, NULL, 0);
-				ThomasCore::GetDeviceContext()->DSSetShader(NULL, NULL, 0);
-				s_currentBoundShader = nullptr;
-				return true;
-			}
-			return false;
+			ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->HSSetShader(NULL, NULL, 0);
+			ThomasCore::GetDeviceContext()->DSSetShader(NULL, NULL, 0);
+			s_currentBoundShader = nullptr;
+			return true;
 		}
 		std::string Shader::GetName()
 		{
@@ -339,7 +337,7 @@ namespace thomas
 		}
 		bool Shader::BindTextures(ID3D11ShaderResourceView * texture, int slot)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader && s_currentBoundShader == this)
 			{
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetShaderResources(slot, 1, &texture);
@@ -357,7 +355,7 @@ namespace thomas
 		}
 		bool Shader::BindTextureSampler(ID3D11SamplerState * sampler, int slot)
 		{
-			if (s_currentBoundShader == this)
+			if (s_currentBoundShader && s_currentBoundShader == this)
 			{
 				if (m_data.vs)
 					ThomasCore::GetDeviceContext()->VSSetSamplers(slot, 1, &sampler);
