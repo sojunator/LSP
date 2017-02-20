@@ -73,17 +73,17 @@ namespace thomas
 				material->Bind();
 				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 				{
-					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+					
 					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 					{
 						if(renderComponent->GetModel())
 							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
 							{
+								graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
 								mesh->Bind();
 								mesh->Draw();
 							}
 					}
-					graphics::Renderer::UnBindGameObjectBuffer();
 				}
 				material->Unbind();
 			}

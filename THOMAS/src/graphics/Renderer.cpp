@@ -30,7 +30,7 @@ namespace thomas
 
 			if (utils::D3d::InitRenderer(s_backBuffer, s_backBufferSRV, s_depthStencilState, s_depthStencilView, s_depthStencilViewReadOnly, s_depthBufferSRV))
 			{
-				s_objectBuffer = utils::D3d::CreateBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				s_objectBuffer = utils::D3d::CreateDynamicBufferFromStruct(s_objectBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 				s_rasterState = utils::D3d::CreateRasterizer(D3D11_FILL_SOLID, D3D11_CULL_BACK);
 				s_wireframeRasterState = utils::D3d::CreateRasterizer(D3D11_FILL_WIREFRAME, D3D11_CULL_BACK);
 				return true;
@@ -101,7 +101,7 @@ namespace thomas
 			s_objectBufferStruct.mvpMatrix = s_objectBufferStruct.projectionMatrix * s_objectBufferStruct.viewMatrix * s_objectBufferStruct.worldMatrix;
 			s_objectBufferStruct.camPos = camera->GetPosition();
 
-			utils::D3d::FillBuffer(s_objectBuffer, s_objectBufferStruct);
+			utils::D3d::FillDynamicBufferStruct(s_objectBuffer, s_objectBufferStruct);
 
 			//Bind gameObject specific buffers
 			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(s_objectBuffer, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
