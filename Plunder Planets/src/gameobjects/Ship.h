@@ -336,8 +336,6 @@ public:
 
 	void Update()
 	{
-	
-
 		float const dt = Time::GetDeltaTime();
 		float const right_x = Input::GetRightStickX();
 		float const right_y = Input::GetRightStickY();
@@ -399,13 +397,8 @@ public:
 				inWater = true;
 		}
 
-		if (inWater)
+		if(!inWater)
 		{
-			LOG("in water");
-		}
-		else
-		{
-			LOG("not in water");
 			m_rigidBody->setDamping(0.0, 0.0);
 		}
 

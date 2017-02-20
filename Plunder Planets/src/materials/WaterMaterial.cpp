@@ -61,8 +61,8 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
-	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
-	play = false;
+	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
+	play = true;
 }
 
 void WaterMaterial::Update()
@@ -80,7 +80,7 @@ void WaterMaterial::Update()
 	if (Input::GetKeyDown(Input::Keys::C))
 		play = !play;
 
-	utils::D3d::FillBuffer(m_materialPropertiesBuffer, m_materialProperties);
+	utils::D3d::FillDynamicBufferStruct(m_materialPropertiesBuffer, m_materialProperties);
 
 }
 

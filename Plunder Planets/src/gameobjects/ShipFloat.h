@@ -18,8 +18,6 @@ public:
 	void Start()
 	{
 		radius = 0.5;
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("cannonball");
 		m_transform->SetScale(radius);
 		mass = 625.0;
 
@@ -52,7 +50,6 @@ public:
 
 			float waterDensity = 2 * density;
 			btVector3 force = (volumeUnderWater*waterDensity)*-Physics::s_world->getGravity();
-			LOG(force.getY());
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
 			if (heightBelowWater < 0.2)
 			{
@@ -82,5 +79,4 @@ public:
 private:
 	float radius;
 	float mass;
-	component::RenderComponent* m_renderer;
 };
