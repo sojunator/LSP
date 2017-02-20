@@ -86,7 +86,7 @@ VSOutput VSMain(in VSInput input)
 
 	output.positionWS = mul(input.position, (float3x3)worldMatrix);
 
-    output.tex = input.uv * 30.0f; //Because texture is stretched
+    output.tex = input.uv; //Because texture is stretched
 
 	output.normal = mul(input.normal, (float3x3)worldMatrix);
 	output.normal = normalize(output.normal);
@@ -98,7 +98,7 @@ float4 TerrainColour(VSOutput input)
 {
     float slope, blendAmount;
     float2 tex = input.tex;
-    tex*= 10;
+    tex*= 20;
     float4 sand = sandTexture.Sample(diffuseSampler, tex);
     float4 grass = grassTexture.Sample(specularSampler, tex);
     float4 hills = hillsTexture.Sample(normalSampler, tex);
@@ -107,23 +107,53 @@ float4 TerrainColour(VSOutput input)
 	float4 hills = float4(0.0f, 0.0f, 1.0f, 1.0f);*/
     slope = 1.0f - input.normal.y;
 
+	//float textureSize = 256;
+	//float2 texelPos = textureSize * tex;
+	//float2 lerps = frac(texelPos);
+	//float texelSize = 1.0f / textureSize;
+
+	/*float4 sourceVals[4];
+	sourceVals[0] = sandTexture.Sample(diffuseSampler, tex);
+	sourceVals[1] = sandTexture.Sample(diffuseSampler, tex + float2(texelSize, 0.0f));
+	sourceVals[2] = sandTexture.Sample(diffuseSampler, tex + float2(0.0f, texelSize));
+	sourceVals[3] = sandTexture.Sample(diffuseSampler, tex + float2(texelSize, texelSize));
+
+	float4 sourceVals2[4];
+	sourceVals2[0] = grassTexture.Sample(specularSampler, tex);
+	sourceVals2[1] = grassTexture.Sample(specularSampler, tex + float2(texelSize, 0.0f));
+	sourceVals2[2] = grassTexture.Sample(specularSampler, tex + float2(0.0f, texelSize));
+	sourceVals2[3] = grassTexture.Sample(specularSampler, tex + float2(texelSize, texelSize));
+
+	float4 sourceVals3[4];
+	sourceVals3[0] = hillsTexture.Sample(normalSampler, tex);
+	sourceVals3[1] = hillsTexture.Sample(normalSampler, tex + float2(texelSize, 0.0f));
+	sourceVals3[2] = hillsTexture.Sample(normalSampler, tex + float2(0.0f, texelSize));
+	sourceVals3[3] = hillsTexture.Sample(normalSampler, tex + float2(texelSize, texelSize));
+
+	float4 interpolatedSand = lerp(lerp(sourceVals[0], sourceVals[1], lerps.x), lerp(sourceVals[2], sourceVals[3], lerps.x), lerps.y);
+	float4 interpolatedGrass = lerp(lerp(sourceVals2[0], sourceVals2[1], lerps.x), lerp(sourceVals2[2], sourceVals2[3], lerps.x), lerps.y);
+	float4 interpolatedHills = lerp(lerp(sourceVals3[0], sourceVals3[1], lerps.x), lerp(sourceVals3[2], sourceVals3[3], lerps.x), lerps.y);*/
+
         // Determine which texture to use based on height.
     if (input.positionWS.y < 1.1 * 4)
     {
         blendAmount = slope / 0.3f;
-        return lerp(sand, grass, blendAmount); //lerp not working as wanted
-		//return sand;
+		//return interpolatedSand;
+        //return lerp(sand, grass, blendAmount); //lerp not working as wanted
+		return sand;
     }
 	
     if (input.positionWS.y < 2.0 * 4)
     {
-        blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
-		//blendAmount = slope / 0.3f;
-        return lerp(grass, hills, blendAmount);
-		//return grass;
+        blendAmount = ((slope - 0.2f) / (0.5f));
+		//blendAmount = (slope - 0.2f) / 0.5f;
+		//return interpolatedGrass;
+        //return lerp(grass, hills, blendAmount);
+		return grass;
     }
-
+	//return interpolatedHills;
     return hills;
+
     //if (y < 1.1 * 4)
 
     //    return float4(0.749f, 0.749f, 0.749f - y * 0.2, 1.0f);
