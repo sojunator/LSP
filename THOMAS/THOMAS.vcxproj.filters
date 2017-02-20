@@ -40,7 +40,7 @@
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\object\component\RigidBodyComponent.cpp" />
     <ClCompile Include="src\graphics\ParticleSystem.cpp" />
-    <ClCompile Include="src\object\component\ParticleEmitterComponent.cpp" />
+    <ClCompile Include="src\object\component\EmitterComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Material.h" />
@@ -338,7 +338,7 @@
     <ClInclude Include="include\assimp\vector3.h" />
     <ClInclude Include="include\assimp\version.h" />
     <ClInclude Include="src\graphics\ParticleSystem.h" />
-    <ClInclude Include="src\object\component\ParticleEmitterComponent.h" />
+    <ClInclude Include="src\object\component\EmitterComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\assimp\color4.inl" />

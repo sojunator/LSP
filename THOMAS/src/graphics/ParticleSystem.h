@@ -11,7 +11,7 @@ namespace thomas
 	{
 		namespace component
 		{
-			class ParticleEmitterComponent;
+			class EmitterComponent;
 		}
 	}
 	namespace graphics
@@ -23,7 +23,7 @@ namespace thomas
 			static HRESULT CreateBillboardUAVandSRV();
 			static HRESULT CreateCameraConstantBuffer();
 			static HRESULT CreateMatrixConstantBuffer();
-			static HRESULT CreateParticleUAVandSRV(object::component::ParticleEmitterComponent* emitter);
+			static HRESULT CreateParticleUAVandSRV(object::component::EmitterComponent* emitter);
 
 			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
 		public:
@@ -79,7 +79,7 @@ namespace thomas
 			};
 			
 
-			static void AddEmitter(object::component::ParticleEmitterComponent* emitter);
+			static void AddEmitter(object::component::EmitterComponent* emitter);
 		private:
 			struct BillboardStruct
 			{
@@ -117,7 +117,7 @@ namespace thomas
 			static ID3D11ShaderResourceView* s_activeParticleSRV;
 
 			static unsigned int s_maxNrOfBillboards;
-			static std::vector<object::component::ParticleEmitterComponent*> s_emitters;
+			static std::vector<object::component::EmitterComponent*> s_emitters;
 			static std::vector<object::component::Camera*> s_cameras;
 		public:
 
