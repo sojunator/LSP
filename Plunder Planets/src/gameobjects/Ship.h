@@ -72,7 +72,8 @@ public:
 		m_renderer->SetModel("testModel0");
 
 		//sound
-		m_boostSound->SetClip("mThomas");
+		//m_boostSound->SetClip("mThomas");
+		m_boostSound->SetClip("fFlames");
 		m_boostSound->SetVolume(0.9);
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;

@@ -26,6 +26,8 @@ public:
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
 		m_music = AddComponent<component::SoundComponent>();
+		m_seagull = AddComponent<component::SoundComponent>();
+		m_creak = AddComponent<component::SoundComponent>();
 		m_pirateMusic = AddComponent<component::SoundComponent>();
 		m_text = AddComponent<component::TextComponent>();
 		m_gold = AddComponent<component::TextComponent>();
@@ -41,13 +43,20 @@ public:
 		m_jaw = 0;
 		m_pitch = 0;
 
+		m_seagull->SetClip("aSeagull");
+		m_seagull->SetVolume(0.2);
+		m_seagull->Play();
+
+		m_creak->SetClip("fCreakLoop");
+		m_creak->SetVolume(0.3);
+		m_creak->Play();
 
 		m_music->SetClip("aOceanAmbient");
 		m_music->SetVolume(0.3);
 		m_music->Play();
 
 		m_pirateMusic->SetClip("mSeaChanty");
-		m_pirateMusic->SetVolume(0.9);
+		m_pirateMusic->SetVolume(2);
 		m_pirateMusic->Play();
 
 		//GUI images
@@ -201,6 +210,8 @@ public:
 private:
 	Ship* m_ship;
 	component::Camera* m_camera;
+	component::SoundComponent* m_seagull;
+	component::SoundComponent* m_creak;
 	component::SoundComponent* m_music;
 	component::SoundComponent* m_pirateMusic;
 	component::TextComponent* m_text;
