@@ -86,7 +86,7 @@ VSOutput VSMain(in VSInput input)
 
 	output.positionWS = mul(input.position, (float3x3)worldMatrix);
 
-    output.tex = input.uv;
+    output.tex = input.uv * 30.0f; //Because texture is stretched
 
 	output.normal = mul(input.normal, (float3x3)worldMatrix);
 	output.normal = normalize(output.normal);
@@ -101,22 +101,27 @@ float4 TerrainColour(VSOutput input)
     float4 sand = sandTexture.Sample(diffuseSampler, tex);
     float4 grass = grassTexture.Sample(specularSampler, tex);
     float4 hills = hillsTexture.Sample(normalSampler, tex);
+	/*float4 sand = float4(1.0f, 0.0f, 0.0f, 1.0f);
+	float4 grass = float4(0.0f, 1.0f, 0.0f, 1.0f);
+	float4 hills = float4(0.0f, 0.0f, 1.0f, 1.0f);*/
     slope = 1.0f - input.normal.y;
 
         // Determine which texture to use based on height.
     if (input.positionWS.y < 1.1 * 4)
     {
-        blendAmount = slope / 0.2f;
-        return lerp(grass, sand, blendAmount);
+        blendAmount = slope / 0.1f;
+        return lerp(sand, grass, blendAmount); //lerp not working as wanted
+		//return sand;
     }
 	
     if (input.positionWS.y < 2.0 * 4)
     {
-        blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+        //blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
+		blendAmount = slope / 0.1f;
         return lerp(grass, hills, blendAmount);
+		//return grass;
     }
 
- 
     return hills;
     //if (y < 1.1 * 4)
 
