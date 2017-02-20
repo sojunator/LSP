@@ -55,8 +55,8 @@ public:
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 		//Detta funkar fan inte
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 3 / 2 ), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::DegreesToradians(90)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 		m_broadSideLeft->CreateCanons();
 		m_broadSideRight->CreateCanons();
 
@@ -244,12 +244,11 @@ public:
 		
 	void ShipFireCannons()
 	{
-		if (Input::GetButtonDown(Input::Buttons::RB))
+		if (Input::GetKeyDown(Input::Keys::Space))
+		{
 			m_broadSideRight->Fire(-m_forwardSpeed);
-		
-		if (Input::GetButtonDown(Input::Buttons::LB))
 			m_broadSideLeft->Fire(m_forwardSpeed);
-
+		}
 	}
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)

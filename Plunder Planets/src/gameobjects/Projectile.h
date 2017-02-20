@@ -8,21 +8,20 @@ class Projectile : public GameObject
 {
 
 private:
-	void CalculateForce()
+	void CalculateDrag()
 	{
-		m_force = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI * m_speed * m_speed;
+		m_force =  -constant * 180.0f * 180.0f * *(btVector3*)&m_transform->Forward();
 	}
 
 	void CalculateAccel()
 	{
-		m_accel = m_force / m_mass;
+
 	}
 
 	// https://ih0.redbubble.net/image.104978724.0105/raf,750x1000,075,t,ff4c00:b001c7b98d.u2.jpg
 	void UpdateSpeeeeeeed()
 	{
-		m_speed += m_accel * Time::GetDeltaTime();
-		m_downSpeed += 9.82*Time::GetDeltaTime() * m_mass;
+
 	}
 
 
@@ -46,33 +45,27 @@ public:
 
 	void Start()
 	{
+		m_speed = 300.0f;
+		m_mass = 2.5f;
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
 		m_splashSound = AddComponent<component::SoundComponent>();
 		m_rigidbody = AddComponent<component::RigidBodyComponent>();
+		constant = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI;
+		m_rigidbody->setCollisionShape(new btSphereShape(0.35f));
+		m_rigidbody->SetMass(m_mass); 
+		m_rigidbody->setLinearVelocity(*(btVector3*)&m_transform->Forward()*(180.0 * cosf(math::DegreesToradians(m_angleY))) + *(btVector3*)&m_transform->Up() * (180.0 * sinf(math::DegreesToradians(m_angleY))));
 
-		m_rigidbody->SetMass(m_mass);
-
-
-		m_speed = 300.0f;
-		m_mass = 2.5f;
+		
 	}
 
 	void Update()
 	{
-		CalculateForce();
-		CalculateAccel();
-		UpdateSpeeeeeeed();
-		float dt = Time::GetDeltaTime();
+		//CalculateDrag();
+		
+		//m_rigidbody->applyForce(m_force, btVector3(*(btVector3*)&m_transform->GetPosition()));
 
-
-		m_transform->Translate(m_transform->Forward()*dt*m_speed);
-		m_transform->Translate(m_transform->Right()*dt*forwardSpeed);
-		m_transform->Translate(m_transform->Up()*dt*m_angleY);
-		m_transform->Translate(math::Vector3::Down*m_downSpeed*dt);
-
-
-		if (m_transform->GetPosition().y < 0.0)
+		if (m_transform->GetPosition().y < -10.0)
 		{
 			m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 			Destroy(this);
@@ -81,7 +74,8 @@ public:
 	}
 
 private:
-	float m_force;
+	btVector3 m_force;
+
 	float m_angleX;
 	float m_angleY;
 	float m_mass = 5.0f;
@@ -90,6 +84,7 @@ private:
 	float m_accel;
 	float m_speed;
 	float m_downSpeed;
+	float constant;
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
 	component::RigidBodyComponent* m_rigidbody;

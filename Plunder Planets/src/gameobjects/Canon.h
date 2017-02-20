@@ -20,6 +20,8 @@ public:
 	void Start()
 	{
 		delay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 0.8f));
+		m_renderer = AddComponent<component::RenderComponent>();
+		m_renderer->SetModel("box");
 	}
 
 	void SetCanonDelay()
@@ -34,6 +36,7 @@ public:
 			if (currentTimeCount > delay)
 			{
 				// instanciate projectile
+				utils::DebugTools::AddRotation(m_transform->GetRotation(), "proj rot");
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				currentTimeCount = 0.0f;
 				fire = false;
@@ -63,4 +66,6 @@ private:
 	bool fire;
 	float delay;
 	float currentTimeCount;
+	component::RenderComponent* m_renderer;
+
 };

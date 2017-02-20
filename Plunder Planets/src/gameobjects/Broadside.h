@@ -21,8 +21,6 @@ public:
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
 
-		//m_renderer = AddComponent<component::RenderComponent>();
-		//m_renderer->SetModel("box");
 
 	}
 
@@ -33,8 +31,8 @@ public:
 		{
 			m_fireSFX->PlayOneShot(m_SFXs[rand() % 2], 1);
 			math::Vector3 pos = math::Vector3(0.0f);
-			math::Quaternion rot = m_transform->GetRotation();
 			pos += m_transform->Forward()*i*spacing - m_transform->Up() * 3.5;
+
 			Canon* c = Instantiate<Canon>(pos, math::Quaternion::Identity, m_transform, m_scene);
 			canons.push_back(c);
 		}
@@ -61,7 +59,7 @@ public:
 private:
 	float m_delay;
 	float m_delayLeft;
-	component::RenderComponent* m_renderer;
+
 	std::vector<Canon*> canons; 
 	component::SoundComponent* m_fireSFX;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
