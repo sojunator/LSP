@@ -7,7 +7,6 @@
 #include "WaterObject.h"
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
-
 using namespace thomas;
 using namespace object;
 class Ship : public GameObject
@@ -55,10 +54,11 @@ public:
 		m_cameraObject = Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
-		/*//Detta funkar fan inte
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::PI / 2), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI *2 /3 ), m_transform, m_scene);
-		*/
+		//Detta funkar fan inte
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::DegreesToradians(90)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideLeft->CreateCanons();
+		m_broadSideRight->CreateCanons();
 
 		//Rigidbody init
 		m_rigidBody->SetMass(5000);
@@ -244,12 +244,11 @@ public:
 		
 	void ShipFireCannons()
 	{
-		if (Input::GetButtonDown(Input::Buttons::RB))
+		if (Input::GetKeyDown(Input::Keys::Space))
+		{
 			m_broadSideRight->Fire(-m_forwardSpeed);
-		
-		if (Input::GetButtonDown(Input::Buttons::LB))
 			m_broadSideLeft->Fire(m_forwardSpeed);
-
+		}
 	}
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
@@ -355,10 +354,10 @@ public:
 		
 		
 		//Ship Movement
-	/*	ShipMove(forwardFactor, dt);
+		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);*/
-		//ShipFireCannons();
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		ShipFireCannons();
 		
 
 		if (!m_freeCamera)
