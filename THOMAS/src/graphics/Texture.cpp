@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "../ThomasCore.h"
 #include  "../utils/AssimpLoader.h"
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics

@@ -82,8 +82,8 @@ public:
 		math::Vector3 waterPos = oceanSim->GetPositionAtCoord(texCoord);
 		position = transform->GetPosition();
 		
-		waterPos = math::Vector3(waterPos.x, waterPos.z, waterPos.y);
-		return waterPos-position;
+		waterPos = math::Vector3(waterPos.x, waterPos.y, waterPos.z);
+		return waterPos;
 	}
 
 

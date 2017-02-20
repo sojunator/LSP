@@ -22,13 +22,31 @@ public:
 	void Start()
 	{
 
-		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(3, -1, 8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-3, -1, 8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, -1, -8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, -1, -8), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[4] = Instantiate<ShipFloat>(math::Vector3(3, -1, 0), math::Quaternion::Identity, m_transform, m_scene);
-		m_floats[5] = Instantiate<ShipFloat>(math::Vector3(-3, -1, 0), math::Quaternion::Identity, m_transform, m_scene);
-		m_transform->SetPosition(0, 2, 0);
+		m_freeCamera = false;
+		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
+
+		float mass = 5000;
+		//Front
+		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[0]->SetMass(0.10*mass);
+		m_floats[1]->SetMass(0.10*mass);
+		//front middle
+		m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 5), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 5), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[2]->SetMass(0.12*mass);
+		m_floats[3]->SetMass(0.12*mass);
+		//back middle
+		m_floats[4] = Instantiate<ShipFloat>(math::Vector3(3, 0, -1), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[5] = Instantiate<ShipFloat>(math::Vector3(-3, 0, -1), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[4]->SetMass(0.13*mass);
+		m_floats[5]->SetMass(0.13*mass);
+		//back
+		m_floats[6] = Instantiate<ShipFloat>(math::Vector3(2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[7] = Instantiate<ShipFloat>(math::Vector3(-2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[6]->SetMass(0.15*mass);
+		m_floats[7]->SetMass(0.15*mass);
+		m_transform->SetPosition(0, 0.5, 0);
 
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
@@ -44,7 +62,7 @@ public:
 
 		//Rigidbody init
 		m_rigidBody->SetMass(5000);
-		m_rigidBody->SetCollider(new btBoxShape(btVector3(4, 3, 8)));
+		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 12, 8)));
 		m_rigidBody->setSleepingThresholds(0.2, 0.5);
 
 		m_treasure = 10000;
@@ -91,6 +109,7 @@ public:
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
+
 
 		m_retardControllsOn = false;
 		m_gravity = 0;
@@ -198,6 +217,7 @@ public:
 				if (m_rotation < 0)
 				{
 					m_rotation += m_rotationSpeed * dt;
+					
 				}
 				else
 				{
@@ -317,8 +337,6 @@ public:
 
 	void Update()
 	{
-
-
 	
 
 		float const dt = Time::GetDeltaTime();
@@ -344,16 +362,21 @@ public:
 		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		ShipFireCannons();
 		
-		//Recalculate look at point and the new distance from cam to ship
-		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
-		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
-		
-		CameraRotate(right_x, right_y, dt, distanceVector);
-		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
-		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
-		CameraZoom(distanceVector, dt);
+		if (!m_freeCamera)
+		{
+			//Recalculate look at point and the new distance from cam to ship
+			m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+			math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+
+			m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
+
+			CameraRotate(right_x, right_y, dt, distanceVector);
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+			CameraZoom(distanceVector, dt);
+		}
+
 		
 		PlaySounds(dt);
 		
@@ -363,7 +386,14 @@ public:
 
 		bool inWater = false;
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 4; i++)
+		{
+			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
+			if (wTemp)
+				inWater = true;
+		}
+
+		for (int i = 0; i < 8; i++)
 		{
 			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
 			if (wTemp)
@@ -373,7 +403,6 @@ public:
 		if (inWater)
 		{
 			LOG("in water");
-			m_rigidBody->setDamping(0.9, 0.95);
 		}
 		else
 		{
@@ -381,8 +410,8 @@ public:
 			m_rigidBody->setDamping(0.0, 0.0);
 		}
 
-		//if (Input::GetKeyDown(Input::Keys::Space))
-		//	Instantiate<PhysicsObject>(m_scene);
+		if (Input::GetKey(Input::Keys::Up))
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-m_transform->Forward() * 1000000));
 
 		
 	}
@@ -391,6 +420,8 @@ private:
 	
 
 	float damp;
+
+	bool m_freeCamera;
 
 	//used for the boat
 	float m_forwardSpeed;
@@ -430,7 +461,7 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
-	ShipFloat* m_floats[6];
+	ShipFloat* m_floats[8];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 

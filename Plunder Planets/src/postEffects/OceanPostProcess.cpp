@@ -1,5 +1,5 @@
 #include "OceanPostProcess.h"
-
+#include "../d3d.h"
 OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffect(name, shader)
 {
 	// The size of displacement map. In this sample, it's fixed to 512.

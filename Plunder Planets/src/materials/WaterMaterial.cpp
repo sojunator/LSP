@@ -17,7 +17,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// Adjust this parameter to control the simulation speed
 
 	// A scale to control the amplitude. Not the world space height
-	m_oceanSettings.wave_amplitude = 0.35f;
+	m_oceanSettings.wave_amplitude = 0.25f;
 	// 2D wind direction. No need to be normalized
 	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
 	// The bigger the wind speed, the larger scale of wave crest.
@@ -30,7 +30,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// pointy crests.
 
 	m_oceanSettings.choppy_scale = 1.3f;
-	m_oceanSettings.time_scale = 0.3f;
+	m_oceanSettings.time_scale = 0.1f;
 
 	m_oceanSim = new utils::ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 

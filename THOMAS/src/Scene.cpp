@@ -3,13 +3,15 @@
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
 #include "graphics\Shader.h"
+#include "utils\DebugTools.h"
 
 namespace thomas
 {
 	Scene* Scene::s_currentScene;
-
+	bool Scene::s_drawDebugPhysics;
 	void Scene::UnloadScene()
 	{
+		utils::DebugTools::RemoveAllVariables();
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
@@ -54,13 +56,14 @@ namespace thomas
 				LOG("No scene set");
 
 			
-
-
 			s_currentScene->Render3D(camera);
+			if(s_drawDebugPhysics)
+				Physics::DrawDebug(camera);
 			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
-
+			
+			utils::DebugTools::Draw();
 			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 	}
@@ -81,11 +84,12 @@ namespace thomas
 					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
 					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 					{
-						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
-						{
-							mesh->Bind();
-							mesh->Draw();
-						}
+						if(renderComponent->GetModel())
+							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+							{
+								mesh->Bind();
+								mesh->Draw();
+							}
 					}
 					graphics::Renderer::UnBindGameObjectBuffer();
 				}
@@ -177,5 +181,11 @@ namespace thomas
 			return s_currentScene;
 		LOG("No scene set")
 			return NULL;
+	}
+	Scene::Scene(std::string name)
+	{
+		m_name = name;
+		s_drawDebugPhysics = false;
+		utils::DebugTools::AddBool(s_drawDebugPhysics, "Draw Debug Physics");
 	}
 }

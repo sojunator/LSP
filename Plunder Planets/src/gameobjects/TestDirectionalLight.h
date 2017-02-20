@@ -16,11 +16,11 @@ public:
 
 	void Start()
 	{
+		utils::DebugTools::AddColor(m_lightColor, "LightColor");
 		m_dirLight = AddComponent<component::DirectionalLight>();
-
-		m_transform->SetRotation(0.936016f, -0.343206f, 0.0780013f);
-		m_dirLight->SetLightColor(math::Vector4(1.0f, 1.0f, 0.6f, 1));
-
+		
+		m_lightColor = math::Vector4(1.0f, 1.0f, 0.6f, 1);
+		m_dirLight->SetLightColor(m_lightColor);
 		m_rot = 0;
 		m_transform->SetPosition(math::Vector3(50, 50, 50));
 		m_transform->LookAt(m_transform);
@@ -28,6 +28,7 @@ public:
 	}
 	void Update()
 	{
+		m_dirLight->SetLightColor(m_lightColor);
 		float rotFactor = 3 * Time::GetDeltaTime();
 		if (Input::GetKey(Input::Keys::NumPad4))
 		{
@@ -38,10 +39,11 @@ public:
 			m_rot += rotFactor;
 		}
 		m_transform->SetRotation(m_rot, 0, 0);
+
 		
 	}
 private:
 	component::DirectionalLight* m_dirLight;
-	component::DirectionalLight* m_dirLight2;
+	math::Color m_lightColor;
 	float m_rot;
 };

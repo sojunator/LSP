@@ -6,7 +6,7 @@
 #include "TextRender.h"
 #include "Sprite.h"
 #include "PostEffect.h"
-
+#include "../utils/d3d.h"
 
 namespace thomas
 {
