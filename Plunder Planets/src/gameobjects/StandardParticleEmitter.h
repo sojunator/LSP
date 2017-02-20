@@ -1,6 +1,7 @@
 #pragma once
 #include "Thomas.h"
 #include "Input.h"
+#include "object\component\EmitterComponent.h"
 
 using namespace thomas;
 using namespace object;
@@ -17,7 +18,7 @@ public:
 
 	void Start()
 	{
-		m_emitterComponent = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterComponent = AddComponent<component::EmitterComponent>();
 		
 	}
 
@@ -36,5 +37,5 @@ public:
 	}
 
 private:
-	component::ParticleEmitterComponent* m_emitterComponent;
+	component::EmitterComponent* m_emitterComponent;
 };
