@@ -26,7 +26,7 @@ public:
 		m_freeCamera = false;
 		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 
-		float mass = 18000;
+		float mass = 20000;
 		//Front
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -91,11 +91,13 @@ public:
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
-		m_speed = 3000;
+		m_speed = 2000;
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
-		m_turnSpeed = 700;
+		m_turnSpeed = 2000;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
 
+		m_flyTurnSpeed = 500;
+		utils::DebugTools::AddFloat(m_flyTurnSpeed, "boatFlyTurnSpeed");
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -117,7 +119,7 @@ public:
 	void ShipMove(float const dt)
 	{
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RT))
+		if (Input::GetButton(Input::Buttons::RT) || Input::GetKey(Input::Keys::W))
 		{
 			math::Vector3 forward = m_transform->Forward();
 			//Remove y part;
@@ -135,20 +137,16 @@ public:
 		right.y = 0;
 		m_rigidBody->activate();
 		m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
-
-		if (abs(turnDelta) > 0.02)
-			m_turning = true;
-
 	}
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 	{
-		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) || Input::GetKey(Input::Keys::Space))
 		{
 			math::Vector3 forward = m_transform->Forward();
 			m_moving = true;
 			forward.y = 0;
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2.5 * m_speed*dt*m_rigidBody->GetMass()));
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2 * m_speed*dt*m_rigidBody->GetMass()));
 			float turnDelta = -Input::GetLeftStickY();
 
 			/*m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
@@ -160,10 +158,10 @@ public:
 
 	void ShipFireCannons()
 	{
-		if (Input::GetButtonDown(Input::Buttons::RB))
+		if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKey(Input::Keys::E))
 			m_broadSideRight->Fire();
 
-		if (Input::GetButtonDown(Input::Buttons::LB))
+		if (Input::GetButtonDown(Input::Buttons::LB) || Input::GetKey(Input::Keys::Q))
 			m_broadSideLeft->Fire();
 
 	}
@@ -242,10 +240,27 @@ public:
 	void Update()
 	{
 		float const dt = Time::GetDeltaTime();
-		float const right_x = Input::GetRightStickX();
-		float const right_y = Input::GetRightStickY();
-		float const left_x = Input::GetLeftStickX();
-		float const left_y = Input::GetLeftStickY();
+		float right_x = Input::GetRightStickX();
+		float right_y = Input::GetRightStickY();
+		float left_x = Input::GetLeftStickX();
+		float left_y = Input::GetLeftStickY();
+
+		//If cam changed with arrow keys
+		if (Input::GetKey(Input::Keys::Right))
+			right_x = -Input::GetKey(Input::Keys::Right);
+		else if (Input::GetKey(Input::Keys::Left))
+			right_x = Input::GetKey(Input::Keys::Left);
+
+		if (Input::GetKey(Input::Keys::Up))
+			right_y = Input::GetKey(Input::Keys::Up);
+		else if (Input::GetKey(Input::Keys::Down))
+			right_y = -Input::GetKey(Input::Keys::Down);
+
+		//If boat turning with A / D
+		if (Input::GetKey(Input::Keys::D))
+			left_x = Input::GetKey(Input::Keys::D);
+		else if (Input::GetKey(Input::Keys::A))
+			left_x = -Input::GetKey(Input::Keys::A);
 
 		//get forward, right and up contrib
 		float forwardFactor = 0;
@@ -259,8 +274,6 @@ public:
 
 		if (!m_freeCamera)
 		{
-
-
 			CameraZoom(dt);
 
 			//Recalculate look at point and the new distance from cam to ship
@@ -296,19 +309,11 @@ public:
 
 			newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
 
-
-			if (newPos.y < 0)
-				newPos.y = 0;
-
 			m_cameraObject->m_transform->SetPosition(newPos);
-
-
-			
 
 		}
 		m_moving = false;
 		m_flying = false;
-		m_turning = false,
 		//Ship Movement
 		ShipMove(dt);
 		ShipRotate(dt);
@@ -344,20 +349,19 @@ public:
 				inWater = true;
 		}
 
-		m_rigidBody->setDamping(0.0, 0.0);
-		if (m_moving)
+		if (!inWater)
 		{
-			m_rigidBody->setDamping(0.5, 0.4);
+			m_rigidBody->setDamping(0.0, 0.0);
 		}
-		if(m_turning)
-			m_rigidBody->setDamping(0.3, 0.1);
-		m_rigidBody->applyDamping(dt);
+
+
 	}
 
 private:
 
 	bool m_moving;
-	bool m_turning;
+	float damp;
+
 	bool m_freeCamera;
 	bool m_flying;
 	float m_treasure;
