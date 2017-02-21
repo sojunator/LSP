@@ -39,17 +39,14 @@ cbuffer material : register(b1)
 	float3 bendParam;
 	float perlinSize;
 	float3 perlinAmp;
-	float pad;
+	float radius;
 	float3 perlinOctave;
-	float pad2;
+	float aiming;
 	float3 perlinGradient;
 	float pad3;
 	float2 perlinMovement;
-	float2 pad4;
-	float3 shipPosition;
-	float aiming; //-1 for left side, 1 for right, 0 when not aiming
-	float3 shipRight;
-	float power;
+	float2 aimPos;
+
 }
 
 struct DirLight
@@ -134,7 +131,6 @@ HSInput VSMain(in VSInput input)
 	float maxTessFactor = 1.0f;
 
 	output.tessFactor = minTessFactor + (tess * (maxTessFactor - minTessFactor));
-
 	return output;
 }
 
@@ -269,13 +265,21 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float reflectContrib = 0.15f;//hardcoded lerpfactor between watercolor and the sampled reflection
 
+	float3 waterColor;
 
-	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
+	if(length(input.positionWS.xz - aimPos) < radius && aiming != 0.f)
+	{
+		waterColor = (1, 1, 1);
+	}
+	else
+	{
+		waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
 
-	float cosSpec = saturate(dot(reflectVec, sunDir));
-	float sunSpot = pow(cosSpec, shininess); //shiny
+		float cosSpec = saturate(dot(reflectVec, sunDir));
+		float sunSpot = pow(cosSpec, shininess); //shiny
 
-	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
+		waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
+	}
 
 
 	return float4(waterColor, 1);

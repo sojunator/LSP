@@ -11,6 +11,7 @@
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
+#include "../gameobjects/Ship.h"
 
 
 class GameScene : public thomas::Scene
@@ -73,8 +74,8 @@ public:
 		//Init objects lägga till LoadObjects i scene?
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
-		m_ship = LoadObject<Ship>();
 		m_waterObject = LoadObject<WaterObject>();
+		m_ship = LoadObject<Ship>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		//LoadObject<PhysicsObject>();
 	};

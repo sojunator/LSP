@@ -3,7 +3,6 @@
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
-#include "Ship.h"
 #include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
 
@@ -31,7 +30,6 @@ public:
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_healthbar = AddComponent<component::SpriteComponent>();
-		m_aiming = false;
 
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
@@ -186,11 +184,7 @@ public:
 		else
 			m_flySpeed = m_normalSpeed;
 
-		if (Input::GetKeyDown(Input::Keys::G))
-		{
-			m_aiming -= 1.f;
-			m_aiming *= -1.f;
-		}
+		
 		if (Input::GetKeyDown(Input::Keys::Escape))
 			Scene::LoadScene<MenuScene>();
 	}
@@ -199,13 +193,9 @@ public:
 	{
 		return m_camera->GetViewProjMatrix();
 	}
-	bool GetAiming()
-	{
-		return m_aiming;
-	}
 
 private:
-	Ship* m_ship;
+	//Ship* m_ship;
 	component::Camera* m_camera;
 	component::SoundComponent* m_music;
 	component::SoundComponent* m_pirateMusic;
@@ -219,5 +209,4 @@ private:
 	float m_flySpeed;
 	float m_jaw;
 	float m_pitch;
-	float m_aiming;
 };

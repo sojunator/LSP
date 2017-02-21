@@ -13,10 +13,11 @@ public:
 	WaterMaterial(std::string name, Shader* shader);
 	
 	void Update();
-	void SetAim(float side) { m_materialProperties.aiming = side; }
 
 	utils::ocean::OceanSimulator* GetOceanSim();
 	utils::ocean::OceanParameter* GetOceanParams();
+
+	void SetAim(math::Vector2 pos, math::Vector2 right, float pow, float angle);
 
 	~WaterMaterial();
 private:
@@ -32,17 +33,19 @@ private:
 		math::Vector3 bendParam;
 		float g_PerlinSize;
 		math::Vector3 g_PerlinAmplitude;
-		float pad1;
+		float radius;
 		math::Vector3 g_PerlinOctave;
-		float pad2;
+		float aiming;
 		math::Vector3 g_PerlinGradient;
 		float pad3;
 		math::Vector2 perlinMovement;
-		math::Vector2 pad4;
-		math::Vector3 shipPosition;
-		float aiming; //-1 for left side, 1 for right, 0 when not aiming
-		math::Vector3 shipRight;
-		float power; //TODO: få hjälp med shader
+		math::Vector2 aimPos;
+		//math::Vector3 shipPosition;
+		//float aiming; //-1 for left side, 1 for right, 0 when not aiming
+		//math::Vector3 shipRight;
+		//float power; //TODO: få hjälp med shader
+		//float angle;
+		//math::Vector3 padding;
 	};
 	float time;
 	float timeSinceLastUpdate;

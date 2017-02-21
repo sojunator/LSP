@@ -62,10 +62,9 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
-	Ship* ship = (Ship*)thomas::object::GameObject::Find("Ship");
-	m_materialProperties.shipPosition = ship->m_transform->GetPosition();
-	m_materialProperties.aiming = 0;
-	m_materialProperties.shipRight = ship->m_transform->Right();
+	m_materialProperties.aimPos = math::Vector2(0, 0);
+	m_materialProperties.radius = 10.f;
+	m_materialProperties.aiming = 0.f;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 	play = true;
@@ -98,6 +97,16 @@ utils::ocean::OceanSimulator * WaterMaterial::GetOceanSim()
 utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
 {
 	return &m_oceanSettings;
+}
+void WaterMaterial::SetAim(math::Vector2 pos, math::Vector2 right, float pow, float angle)
+{
+	if (!m_materialProperties.aiming)
+	{
+		m_materialProperties.aiming = 1.f;
+		m_materialProperties.aimPos = pos + right * pow + right * std::sin(math::DegreesToradians(angle));
+	}
+	else
+		m_materialProperties.aiming = 0.f;
 }
 
 WaterMaterial::~WaterMaterial()

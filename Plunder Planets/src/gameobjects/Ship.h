@@ -115,6 +115,8 @@ public:
 		m_retardControllsOn = false;
 		m_gravity = 0;
 		damp = 0.9;
+
+		m_aiming = 0;
 	}
 
 	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
@@ -122,7 +124,7 @@ public:
 		//The left stick controlls the ship ASWELL as its orientation. The position of the camera changes the way the boat is maneuvered
 		if (left_x != 0 || left_y != 0)
 		{
-			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
+			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0.f, m_cameraObject->m_transform->Forward().z);
 			camForwardXZ.Normalize();
 
 			float d1 = camForwardXZ.Dot(m_transform->Forward());
@@ -253,15 +255,23 @@ public:
 	}
 	void ShipAimCannons()
 	{
-		if (m_cameraObject->GetAiming() != 0)
+		if (Input::GetKeyDown(Input::Keys::G))
 		{
-			m_waterObject->SetAim(1.f);
+			m_aiming -= 1.f;
+			m_aiming *= -1.f;
+		}
+		if (m_aiming != 0)
+		{
+			float angle = std::acos(m_transform->Right().Dot(math::Vector3(m_transform->Right().x, 0, m_transform->Right().z)));
+			m_waterObject->SetAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
+				, math::Vector2(m_transform->Right().x, m_transform->Right().z), 1.f, angle);
 			if (Input::GetKey(Input::Keys::H))
 			{
 				m_broadSideRight->m_transform->RotateByAxis(m_transform->Up(), 0.01f);
 			}
 		}
 	}
+
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 	{
@@ -484,6 +494,7 @@ private:
 	float m_fallSpeed;
 	float m_gravity;
 	bool m_inAir;
+	float m_aiming;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",

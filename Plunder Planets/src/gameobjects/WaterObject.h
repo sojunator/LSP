@@ -85,9 +85,9 @@ public:
 		waterPos = math::Vector3(waterPos.x, waterPos.y, waterPos.z);
 		return waterPos;
 	}
-	void SetAim(float side)
+	void SetAim(math::Vector2 pos, math::Vector2 right, float pow, float angle)
 	{
-		m_waterMaterial->SetAim(side);
+		m_waterMaterial->SetAim(pos, right, pow, angle);
 	}
 
 
