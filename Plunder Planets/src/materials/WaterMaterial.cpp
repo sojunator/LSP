@@ -56,15 +56,15 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.bendParam = math::Vector3(0.1f, -0.4f, 0.2f);
 
 
-	m_materialProperties.g_PerlinSize = 1.0;
-	m_materialProperties.g_PerlinAmplitude = math::Vector3(35, 42, 57);
-	m_materialProperties.g_PerlinOctave = math::Vector3(1.12f, 0.59f, 0.23f)*0.01;
+	m_materialProperties.g_PerlinSize = 0.0001;
+	m_materialProperties.g_PerlinAmplitude = math::Vector3(35, 42, 57)*0.5;
+	m_materialProperties.g_PerlinOctave = math::Vector3(1.12f, 0.59f, 0.23f)*0.001;
 	m_materialProperties.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 
 	m_materialProperties.aimPos = math::Vector2(0, 0);
 	m_materialProperties.radius = 10.f;
-	m_materialProperties.aiming = 0.f;
+	m_materialProperties.aiming = 1;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 	play = true;
@@ -85,6 +85,7 @@ void WaterMaterial::Update()
 	if (Input::GetKeyDown(Input::Keys::C))
 		play = !play;
 
+	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.01;
 	utils::D3d::FillDynamicBufferStruct(m_materialPropertiesBuffer, m_materialProperties);
 
 }
@@ -98,15 +99,10 @@ utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
 {
 	return &m_oceanSettings;
 }
-void WaterMaterial::SetAim(math::Vector2 pos, math::Vector2 right, float pow, float angle)
+void WaterMaterial::UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle, int side)
 {
-	if (!m_materialProperties.aiming)
-	{
-		m_materialProperties.aiming = 1.f;
-		m_materialProperties.aimPos = pos + right * (std::sin(math::DegreesToradians(angle)) + pow);
-	}
-	else
-		m_materialProperties.aiming = 0.f;
+	m_materialProperties.aimPos = pos + right * (std::sin(math::DegreesToradians(angle)) + pow);
+	m_materialProperties.aiming = side;
 }
 
 WaterMaterial::~WaterMaterial()

@@ -17,7 +17,7 @@ public:
 	utils::ocean::OceanSimulator* GetOceanSim();
 	utils::ocean::OceanParameter* GetOceanParams();
 
-	void SetAim(math::Vector2 pos, math::Vector2 right, float pow, float angle);
+	void UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle, int side);
 
 	~WaterMaterial();
 private:
@@ -35,17 +35,11 @@ private:
 		math::Vector3 g_PerlinAmplitude;
 		float radius;
 		math::Vector3 g_PerlinOctave;
-		float aiming;
+		int aiming;
 		math::Vector3 g_PerlinGradient;
 		float pad3;
 		math::Vector2 perlinMovement;
 		math::Vector2 aimPos;
-		//math::Vector3 shipPosition;
-		//float aiming; //-1 for left side, 1 for right, 0 when not aiming
-		//math::Vector3 shipRight;
-		//float power; //TODO: få hjälp med shader
-		//float angle;
-		//math::Vector3 padding;
 	};
 	float time;
 	float timeSinceLastUpdate;

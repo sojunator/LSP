@@ -38,7 +38,7 @@ public:
 		}
 	}
 
-	void Fire(float forwardSpeed)
+	void Fire()
 	{
 		if (m_delayLeft <= 0)
 		{

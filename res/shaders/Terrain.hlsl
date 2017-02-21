@@ -86,7 +86,7 @@ VSOutput VSMain(in VSInput input)
 
 	output.positionWS = mul(input.position, (float3x3)worldMatrix);
 
-    output.tex = input.uv * 30.0f; //Because texture is stretched
+    output.tex = input.uv; //Because texture is stretched
 
 	output.normal = mul(input.normal, (float3x3)worldMatrix);
 	output.normal = normalize(output.normal);
@@ -98,39 +98,27 @@ float4 TerrainColour(VSOutput input)
 {
     float slope, blendAmount;
     float2 tex = input.tex;
-    tex*= 10;
+    tex*= 40;
     float4 sand = sandTexture.Sample(diffuseSampler, tex);
     float4 grass = grassTexture.Sample(specularSampler, tex);
     float4 hills = hillsTexture.Sample(normalSampler, tex);
-	/*float4 sand = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	float4 grass = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	float4 hills = float4(0.0f, 0.0f, 1.0f, 1.0f);*/
-    slope = 1.0f - input.normal.y;
 
-        // Determine which texture to use based on height.
-    if (input.positionWS.y < 1.1 * 4)
+	float sandGrassCutOff = 4.4f;
+	float grassHillsCutOff = 8;
+
+    // Determine which texture to use based on height.
+    if (input.positionWS.y < sandGrassCutOff)
     {
-        blendAmount = slope / 0.3f;
-        return lerp(sand, grass, blendAmount); //lerp not working as wanted
-		//return sand;
+        blendAmount = saturate((3 - input.positionWS.y) / (3 - sandGrassCutOff));
+        return lerp(sand, grass, blendAmount);
     }
 	
-    if (input.positionWS.y < 2.0 * 4)
+    if (input.positionWS.y < grassHillsCutOff)
     {
-        blendAmount = (slope - 0.2f) * (1.0f / (0.7f - 0.2f));
-		//blendAmount = slope / 0.3f;
+		blendAmount = saturate((sandGrassCutOff - input.positionWS.y) / (sandGrassCutOff - grassHillsCutOff));
         return lerp(grass, hills, blendAmount);
-		//return grass;
     }
-
     return hills;
-    //if (y < 1.1 * 4)
-
-    //    return float4(0.749f, 0.749f, 0.749f - y * 0.2, 1.0f);
-    //else if (y < 2.0 * 4)
-    //    return float4(0.24f - y * 0.02, 0.74f - y * 0.02, 0.49f - y * 0.02, 1.0f);
-    //else
-    //    return float4(0.8 - 0.002 * y, 0.8 - 0.002 * y, 0.8 - 0.002 * y, 1.0);
 }
 
 

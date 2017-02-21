@@ -16,5 +16,6 @@ namespace thomas
 		static void Destroy();
 	private:
 		static graphics::BulletDebugDraw* s_debugDraw;
+		static float s_accumulator;
 	};
 }
