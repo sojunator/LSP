@@ -8,13 +8,13 @@ thomas::object::component::EmitterComponent::EmitterComponent() : Component("Emi
 
 	m_particleD3D = new thomas::graphics::ParticleSystem::ParticleD3D();//TODO DELETE
 	m_emitterData = new thomas::graphics::ParticleSystem::InitParticleBufferStruct();
-	m_emitterData->initDirection = math::Vector3(0, 1, 0);
+	m_emitterData->initDirection = math::Vector3(1, 0, 0);
 	m_emitterData->initMaxDelay = 5;
 	m_emitterData->initMinDelay = 2;
 	m_emitterData->initMaxSpeed = 2;
 	m_emitterData->initMinSpeed = 1;
 	m_emitterData->initPosition = math::Vector3(0,0,0);
-	m_emitterData->initSpread = 0.5f;
+	m_emitterData->initSpread = 0.2f;
 	m_emitterData->initSize = 1.0f;
 
 	m_particleD3D->m_shader = graphics::Shader::GetShaderByName("particleShader");
