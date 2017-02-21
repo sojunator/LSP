@@ -265,16 +265,15 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float reflectContrib = 0.15f;//hardcoded lerpfactor between watercolor and the sampled reflection
 
-	float3 waterColor;
-
-	if(length(input.positionWS.xz - aimPos) < radius && aiming != 0.f)
+	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
+	float distance = length(input.positionWS.xz - aimPos);
+	if (distance < radius && aiming != 0.f)
 	{
-		waterColor = (1, 1, 1);
+		waterColor = lerp(1, waterColor, 0.9);
 	}
+	
 	else
 	{
-		waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
-
 		float cosSpec = saturate(dot(reflectVec, sunDir));
 		float sunSpot = pow(cosSpec, shininess); //shiny
 

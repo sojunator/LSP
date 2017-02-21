@@ -103,7 +103,7 @@ void WaterMaterial::SetAim(math::Vector2 pos, math::Vector2 right, float pow, fl
 	if (!m_materialProperties.aiming)
 	{
 		m_materialProperties.aiming = 1.f;
-		m_materialProperties.aimPos = pos + right * pow + right * std::sin(math::DegreesToradians(angle));
+		m_materialProperties.aimPos = pos + right * (std::sin(math::DegreesToradians(angle)) + pow);
 	}
 	else
 		m_materialProperties.aiming = 0.f;

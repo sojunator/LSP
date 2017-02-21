@@ -263,8 +263,10 @@ public:
 		if (m_aiming != 0)
 		{
 			float angle = std::acos(m_transform->Right().Dot(math::Vector3(m_transform->Right().x, 0, m_transform->Right().z)));
+			math::Vector2 bajs = math::Vector2(m_transform->Forward().x, m_transform->Forward().z);
+			bajs.Normalize();
 			m_waterObject->SetAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-				, math::Vector2(m_transform->Right().x, m_transform->Right().z), 1.f, angle);
+				- bajs, math::Vector2(m_transform->Right().x, m_transform->Right().z), 100.f, 100.f * angle);
 			if (Input::GetKey(Input::Keys::H))
 			{
 				m_broadSideRight->m_transform->RotateByAxis(m_transform->Up(), 0.01f);
