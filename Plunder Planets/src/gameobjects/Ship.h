@@ -26,7 +26,7 @@ public:
 		m_freeCamera = false;
 		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 
-		float mass = 20000;
+		float mass = 18000;
 		//Front
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -91,13 +91,11 @@ public:
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
-		m_speed = 2000;
+		m_speed = 3000;
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
-		m_turnSpeed = 2000;
+		m_turnSpeed = 700;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
 
-		m_flyTurnSpeed = 500;
-		utils::DebugTools::AddFloat(m_flyTurnSpeed, "boatFlyTurnSpeed");
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -132,19 +130,25 @@ public:
 	void ShipRotate(float const dt)
 	{
 		float turnDelta = 0;
+
 		//For XBOX
 		if (Input::GetLeftStickX())
 			turnDelta = -Input::GetLeftStickX();
+
 		//For Keyboard
 		else if (Input::GetKey(Input::Keys::D))
 			turnDelta = -Input::GetKey(Input::Keys::D);
 		else if (-Input::GetKey(Input::Keys::A))
 			turnDelta = Input::GetKey(Input::Keys::A);
 		math::Vector3 right = m_transform->Right();
+
 		//Remove y part;
 		right.y = 0;
 		m_rigidBody->activate();
 		m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
+
+		if (abs(turnDelta) > 0.02)
+			m_turning = true;
 	}
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
@@ -287,9 +291,9 @@ public:
 			CameraRotate(right_x, right_y, dt, distanceVector);
 
 			//Move camera "distance" away from boat.
-			//math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
-			//
-			//newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
+			/*math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
+			
+			newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);*/
 
 			//m_cameraObject->m_transform->SetPosition(newPos);
 
@@ -308,11 +312,16 @@ public:
 
 			newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
 
+			if (newPos.y < 0)
+				newPos.y = 0;
+
 			m_cameraObject->m_transform->SetPosition(newPos);
+
 
 		}
 		m_moving = false;
 		m_flying = false;
+		m_turning = false;
 
 		//Ship Movement
 		ShipMove(dt);
@@ -338,7 +347,6 @@ public:
 		PlunderIsland();
 
 
-
 		bool inWater = false;
 
 
@@ -349,19 +357,20 @@ public:
 				inWater = true;
 		}
 
-		if (!inWater)
+		m_rigidBody->setDamping(0.0, 0.0);
+		if (m_moving)
 		{
-			m_rigidBody->setDamping(0.0, 0.0);
+			m_rigidBody->setDamping(0.5, 0.4);
 		}
-
-
+		if(m_turning)
+			m_rigidBody->setDamping(0.3, 0.1);
+		m_rigidBody->applyDamping(dt);
 	}
 
 private:
 
 	bool m_moving;
-	float damp;
-
+	bool m_turning;
 	bool m_freeCamera;
 	bool m_flying;
 	float m_treasure;
