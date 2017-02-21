@@ -22,7 +22,7 @@ namespace thomas {
 			}
 			void RenderComponent::Update()
 			{
-				if(m_model)
+				if(m_model && m_alive)
 					for (graphics::Mesh* mesh : m_model->GetMeshes())
 						mesh->GetMaterial()->Update();
 			}

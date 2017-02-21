@@ -40,7 +40,7 @@ public:
 	
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
-		m_sensitivity = 0.5f;
+		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;
 		m_flySpeed = m_normalSpeed;
@@ -177,7 +177,7 @@ public:
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity;
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*Time::GetDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);
