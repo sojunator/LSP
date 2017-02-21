@@ -80,7 +80,7 @@ void WaterMaterial::Update()
 	if (Input::GetKeyDown(Input::Keys::C))
 		play = !play;
 
-	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
+	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.01;
 	utils::D3d::FillDynamicBufferStruct(m_materialPropertiesBuffer, m_materialProperties);
 
 }

@@ -91,7 +91,7 @@ public:
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
-		m_speed = 5000;
+		m_speed = 2000;
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
 		m_turnSpeed = 2000;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
@@ -172,12 +172,13 @@ public:
 		{
 			math::Vector3 forward = m_transform->Forward();
 			m_moving = true;
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*dt*m_rigidBody->GetMass()));
+			forward.y = 0;
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2*m_speed*dt*m_rigidBody->GetMass()));
 			float turnDelta = -Input::GetLeftStickY();
 
-			m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
+			/*m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
 			btVector3 angular = m_rigidBody->getAngularVelocity();
-			m_rigidBody->setAngularVelocity(btVector3(angular.x(), angular.y(), 0));
+			m_rigidBody->setAngularVelocity(btVector3(angular.x(), angular.y(), 0));*/
 			m_flying = true;
 		}
 	}
