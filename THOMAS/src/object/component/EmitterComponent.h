@@ -23,10 +23,12 @@ namespace thomas
 				bool IsEmitting() const;
 
 				graphics::ParticleSystem::ParticleD3D* GetParticleD3D() const;
+				graphics::ParticleSystem::InitParticleBufferStruct* GetInitData() const;
 			private:
 				
 				std::string m_name;
 				graphics::ParticleSystem::ParticleD3D* m_particleD3D;
+				graphics::ParticleSystem::InitParticleBufferStruct* m_emitterData;
 				
 				bool m_isEmitting;
 

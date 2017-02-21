@@ -7,10 +7,13 @@ namespace thomas
 	{
 		ParticleSystem::CameraBufferStruct ParticleSystem::s_cameraBufferStruct;
 		ParticleSystem::MatrixBufferStruct ParticleSystem::s_matrixBufferStruct;
-		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
+		ParticleSystem::InitParticleBufferStruct ParticleSystem::s_initParticleBufferStruct;
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
+		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
+		ID3D11Buffer* ParticleSystem::s_initParicleBuffer;
 		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
 
+		ID3D11ComputeShader* ParticleSystem::s_initParticlesCS;
 		ID3D11ComputeShader* ParticleSystem::s_billboardCS;
 		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
 		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
@@ -37,8 +40,8 @@ namespace thomas
 
 		void ParticleSystem::Init()
 		{
-			s_maxNrOfBillboards = 10000;
-			CompileComputeShader();
+			s_maxNrOfBillboards = 100000;
+			CompileComputeShader(L"../res/shaders/billboards.hlsl", s_billboardCS);
 			CreateBillboardUAVandSRV();
 			CreateCameraConstantBuffer();
 			CreateMatrixConstantBuffer();
@@ -55,6 +58,7 @@ namespace thomas
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
 			s_cameraBufferStruct.position = trans->GetPosition();
+			s_cameraBufferStruct.deltaTime = Time::GetDeltaTime();
 			ThomasCore::GetDeviceContext()->UpdateSubresource(s_cameraBuffer, 0, NULL, &s_cameraBufferStruct, 0, 0);
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
@@ -64,6 +68,9 @@ namespace thomas
 		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
 		{
 			CreateParticleUAVandSRV(emitter);
+			CreateInitBuffer(emitter);
+			CompileComputeShader(L"../res/shaders/initParticles.hlsl", s_initParticlesCS);
+			InitialDispatch(emitter);
 			s_emitters.push_back(emitter);
 			return;
 		}
@@ -91,7 +98,7 @@ namespace thomas
 					deviceContext->CSSetShaderResources(0, 1, &s_activeParticleSRV);
 					deviceContext->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
 
-					deviceContext->Dispatch(emitter->GetNrOfParticles(), 1, 1);
+					deviceContext->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
 					//unbind uav
 					deviceContext->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
 					deviceContext->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
@@ -118,10 +125,6 @@ namespace thomas
 					emitter->GetParticleD3D()->m_shader->Unbind();
 				}
 			}
-			
-
-			
-
 			
 
 			return;
@@ -297,13 +300,58 @@ namespace thomas
 
 		}
 
-		HRESULT ParticleSystem::CompileComputeShader()
+		HRESULT ParticleSystem::CreateInitBuffer(object::component::EmitterComponent* emitter)
+		{
+			HRESULT hr;
+			
+			s_initParticleBufferStruct = *(emitter->GetInitData());
+
+			D3D11_BUFFER_DESC cbDesc;
+			cbDesc.ByteWidth = sizeof(s_initParticleBufferStruct);
+			cbDesc.Usage = D3D11_USAGE_DEFAULT;
+			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			cbDesc.CPUAccessFlags = 0;
+			cbDesc.MiscFlags = 0;
+			cbDesc.StructureByteStride = 0;
+
+			D3D11_SUBRESOURCE_DATA initData;
+			initData.pSysMem = &s_initParticleBufferStruct;
+			initData.SysMemPitch = 0;
+			initData.SysMemSlicePitch = 0;
+
+			hr = ThomasCore::GetDevice()->CreateBuffer(&cbDesc, &initData, &s_initParicleBuffer);
+			if (FAILED(hr))
+			{
+				LOG("Failed to create init particle constant buffer");
+			}
+
+			return hr;
+		}
+		void ParticleSystem::InitialDispatch(object::component::EmitterComponent* emitter)
+		{
+			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
+			ThomasCore::GetDeviceContext()->CSSetShader(s_initParticlesCS, 0, NULL);
+
+			ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_initParicleBuffer);
+			if (!emitter->GetParticleD3D()->m_booleanSwapUAVandSRV)
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &emitter->GetParticleD3D()->m_particleUAV2, NULL);
+			else
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &emitter->GetParticleD3D()->m_particleUAV1, NULL);
+
+			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
+
+			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+
+			return;
+		}
+
+		HRESULT ParticleSystem::CompileComputeShader(LPCWSTR name, ID3D11ComputeShader*& shaderpointer)
 		{
 			ID3DBlob* shaderBlob = nullptr;
 			ID3DBlob* errorBlob = nullptr;
 
 			////////shaderBlob = m_shader->Compile("../res/shaders/billboards.hlsl", "cs_5_0", "main");
-			HRESULT hr = D3DCompileFromFile(L"../res/shaders/billboards.hlsl", NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &shaderBlob, &errorBlob);
+			HRESULT hr = D3DCompileFromFile(name, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &shaderBlob, &errorBlob);
 
 			if (FAILED(hr))
 			{
@@ -322,7 +370,7 @@ namespace thomas
 			else
 			{
 				SAFE_RELEASE(errorBlob);
-				hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_billboardCS);
+				hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &shaderpointer);
 				SAFE_RELEASE(shaderBlob);
 			}
 

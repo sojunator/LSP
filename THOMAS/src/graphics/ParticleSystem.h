@@ -19,11 +19,13 @@ namespace thomas
 		static class ParticleSystem
 		{
 		private:
-			static HRESULT CompileComputeShader();
+			static HRESULT CompileComputeShader(LPCWSTR name, ID3D11ComputeShader*& shaderpointer);
 			static HRESULT CreateBillboardUAVandSRV();
 			static HRESULT CreateCameraConstantBuffer();
 			static HRESULT CreateMatrixConstantBuffer();
 			static HRESULT CreateParticleUAVandSRV(object::component::EmitterComponent* emitter);
+			static HRESULT CreateInitBuffer(object::component::EmitterComponent* emitter);
+			static void InitialDispatch(object::component::EmitterComponent* emitter);
 
 			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
 		public:
@@ -34,12 +36,27 @@ namespace thomas
 			static void Destroy();
 			static void DrawParticles(object::component::Camera * camera);
 
+			struct InitParticleBufferStruct
+			{
+				math::Vector3 initPosition;
+				float initSpread;
+				math::Vector3 initDirection;
+				float initMaxSpeed;
+				float initMinSpeed;
+				float initMaxDelay;
+				float initMinDelay;
+				float initSize;
+			};
+
 			struct ParticleStruct
 			{
 				math::Vector3 position;
-				float speed;
+				float spread;
 				math::Vector3 direction;
-				float angle;
+				float speed;
+				float delay;
+				float size;
+				math::Vector2 padding;
 			};
 
 			struct ParticleD3D
@@ -92,7 +109,7 @@ namespace thomas
 			struct CameraBufferStruct
 			{
 				math::Vector3 forward;
-				float pad;
+				float deltaTime;
 				math::Vector3 up;
 				float pad2;
 				math::Vector3 right;
@@ -106,9 +123,12 @@ namespace thomas
 			};
 			static CameraBufferStruct s_cameraBufferStruct;
 			static MatrixBufferStruct s_matrixBufferStruct;
+			static InitParticleBufferStruct s_initParticleBufferStruct;
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
+			static ID3D11Buffer* s_initParicleBuffer;
 			static ID3D11Buffer* s_billboardsBuffer;
+			static ID3D11ComputeShader* s_initParticlesCS;
 			static ID3D11ComputeShader* s_billboardCS;
 			static ID3D11UnorderedAccessView* s_billboardsUAV;
 			static ID3D11ShaderResourceView* s_billboardsSRV;
