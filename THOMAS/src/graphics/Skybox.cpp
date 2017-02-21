@@ -1,6 +1,7 @@
 #include "Skybox.h"
 #include "Texture.h"
 #include "LightManager.h"
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics
@@ -23,7 +24,6 @@ namespace thomas
 			m_data.constantBuffer->Release();
 			m_data.rasterizerState->Release();
 			m_data.depthStencilState->Release();
-			delete m_data.texture;
 		}
 
 		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)
@@ -35,7 +35,7 @@ namespace thomas
 			m_mvpStruct.mvpMatrix = mvpMatrix.Transpose();
 			m_mvpStruct.viewMatrix = viewMatrix;
 			viewMatrix.Invert().Decompose(math::Vector3(), math::Quaternion(),m_mvpStruct.camPosition);
-			utils::D3d::FillBuffer(m_data.constantBuffer, m_mvpStruct);
+			utils::D3d::FillDynamicBufferStruct(m_data.constantBuffer, m_mvpStruct);
 			LightManager::BindAllLights();
 			ThomasCore::GetDeviceContext()->RSSetState(m_data.rasterizerState);
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_data.depthStencilState, 1);
@@ -87,7 +87,7 @@ namespace thomas
 			if (m_data.indexBuffer == nullptr)
 				LOG("ERROR::INITIALIZING::INDEX::BUFFER");
 
-			m_data.constantBuffer = utils::D3d::CreateBufferFromStruct(m_mvpStruct, D3D11_BIND_CONSTANT_BUFFER);
+			m_data.constantBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_mvpStruct, D3D11_BIND_CONSTANT_BUFFER);
 		}
 
 		void Skybox::CreateRasterizer()

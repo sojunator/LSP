@@ -164,9 +164,24 @@ namespace thomas
 			{
 				delete s_materials[i];
 			}
+			s_materials.clear();
 			for (auto const& materialType : s_materialTypes)
 			{
 				delete materialType.second;
+			}
+			s_materialTypes.clear();
+		}
+
+		void Material::Destroy(Shader * shader)
+		{
+			for (unsigned int i = 0; i < s_materials.size(); i++)
+			{
+				if (s_materials[i]->GetShader())
+				{
+					delete s_materials[i];
+					s_materials.erase(s_materials.begin() + i);
+					i -= 1;
+				}
 			}
 		}
 

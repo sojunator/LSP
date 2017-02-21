@@ -1,5 +1,9 @@
 // main.cpp : Defines the entry point for the console application.
 //
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>  
+
 #include "Thomas.h"
 #include "gameobjects\CameraObject.h"
 #include "gameobjects\TerrainObject.h"
@@ -7,7 +11,8 @@
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"
 #include "materials\TerrainMaterial.h"
-#include "scenes\GameScene.h"
+
+#include "scenes\MenuScene.h"
 
 #include "gameobjects\TestDirectionalLight.h"
 #include "gameobjects\TestPointLight.h"
@@ -19,14 +24,14 @@
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	MSG msg = { 0 };
 	thomas::ThomasCore::Init(hInstance, hPrevInstance, lpCmdLine, nCmdShow, 1920, 1080, L"Plunder Planets");
 
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
 
-	Scene* gameScene = Scene::AddScene(new GameScene());
-	Scene::Init();
+	Scene* menuScene = Scene::LoadScene<MenuScene>();
 
 	//start
 	thomas::ThomasCore::Start();

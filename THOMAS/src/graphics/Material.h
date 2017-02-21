@@ -32,6 +32,7 @@ namespace thomas
 			static std::vector<Material*> GetMaterialsByShader(std::string name);
 
 			static void Destroy();
+			static void Destroy(Shader* shader);
 
 			bool Bind();
 			bool Unbind();

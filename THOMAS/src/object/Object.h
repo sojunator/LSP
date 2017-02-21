@@ -12,7 +12,7 @@ namespace thomas
 		private:
 		public:
 			Object(std::string type);
-			~Object();
+			virtual ~Object();
 			virtual void Start() {}
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
@@ -22,6 +22,9 @@ namespace thomas
 			Scene* GetScene();
 
 			static bool Destroy(Object *object);
+			static void Destroy(Scene* scene);
+			static void Destroy();
+			static bool IsAlive(const Object* object);
 			//Clone object
 			template<typename T>
 			static T* Instantiate(Scene* scene);

@@ -148,7 +148,7 @@ namespace thomas
 				LOG_HR(hr);
 				return false;
 			}
-
+			pbackBuffer->Release();
 			return true;
 		}
 
@@ -304,6 +304,7 @@ namespace thomas
 			char * extension_char = PathFindExtensionA(filename_c);
 			std::string extension_string(extension_char);
 
+			
 			delete[] filename_c;
 
 			HRESULT hr;
@@ -315,14 +316,14 @@ namespace thomas
 			{
 				hr = DirectX::CreateWICTextureFromFile(device, context, CA2W(fileName.c_str()), &texture, &textureView);
 			}
-
+			
 			if (FAILED(hr))
 			{
 				LOG("Failed to load texture: " << fileName);
 				LOG_HR(hr);
 				return false;
 			}
-	
+
 			return true;
 		}
 
@@ -424,6 +425,8 @@ namespace thomas
 
 			ThomasCore::GetDevice()->CreateShaderResourceView(fresnelMap, &srv_desc, &fresnelSRV);
 			
+			fresnelMap->Release();
+
 			return fresnelSRV;
 		}
 		void D3d::CreateTextureAndViews(UINT width, UINT height, DXGI_FORMAT format, ID3D11Texture2D *& tex, ID3D11ShaderResourceView *& SRV, ID3D11RenderTargetView *& RTV)

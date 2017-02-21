@@ -4,7 +4,7 @@ namespace thomas
 {
 	namespace graphics
 	{
-		std::map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> Sprite::s_texture;
+		std::map<std::string, Sprite::SpriteData> Sprite::s_texture;
 		std::unique_ptr<DirectX::SpriteBatch> Sprite::s_spriteBatch;
 		DirectX::SimpleMath::Vector2 Sprite::s_screenPos;
 		DirectX::SimpleMath::Vector2 Sprite::s_origin;
@@ -16,7 +16,7 @@ namespace thomas
 			const wchar_t* result = holder.c_str();
 
 			Microsoft::WRL::ComPtr<ID3D11Resource> resource;
-			HRESULT hr = DirectX::CreateWICTextureFromFile(ThomasCore::GetDevice(), result, resource.GetAddressOf(), s_texture[name].ReleaseAndGetAddressOf());
+			HRESULT hr = DirectX::CreateWICTextureFromFile(ThomasCore::GetDevice(), result, resource.GetAddressOf(), s_texture[name].srv.ReleaseAndGetAddressOf());
 
 			if (FAILED(hr))
 			{
@@ -29,6 +29,9 @@ namespace thomas
 
 			CD3D11_TEXTURE2D_DESC imageDesc;
 			image->GetDesc(&imageDesc);
+			
+			s_texture[name].width = imageDesc.Width;
+			s_texture[name].height = imageDesc.Height;
 
 			s_origin.x = 0;
 			s_origin.y = 0;
@@ -38,7 +41,7 @@ namespace thomas
 
 		void Sprite::Destroy()
 		{
-			std::map<std::string, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator itr;
+			std::map<std::string, Sprite::SpriteData>::iterator itr;
 			itr = s_texture.begin();
 
 			while (itr != s_texture.end())
@@ -62,37 +65,34 @@ namespace thomas
 			return true;
 		}
 
-		void Sprite::SetImagePosX(float posX)
+		UINT Sprite::GetImageWidth(object::component::SpriteComponent * sprite)
 		{
-			s_screenPos.x = posX;
+			return s_texture[sprite->GetSignature()].width;
 		}
 
-		void Sprite::SetImagePosY(float posY)
+		UINT Sprite::GetImageHeight(object::component::SpriteComponent * sprite)
 		{
-			s_screenPos.y = posY;
+			return s_texture[sprite->GetSignature()].height;
 		}
 
-		void Sprite::RenderImage(std::string name, float posX, float posY, float scale)
-		{
-			SetImagePosX(posX);
-			SetImagePosY(posY);
-			
-			s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
-						
-			s_spriteBatch->Draw(s_texture[name].Get(), GetImagePos(), nullptr, DirectX::Colors::White,
-				0.f, s_origin, scale);
 
-			s_spriteBatch->End();
+		void Sprite::RenderImage(std::string name, math::Vector4 color, float posX, float posY, math::Vector2 scale)
+		{
+
+			if(s_texture[name].srv)
+			{
+				s_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, s_states->NonPremultiplied());
+
+				s_spriteBatch->Draw(s_texture[name].srv.Get(), math::Vector2(posX, posY), nullptr, color,
+					0.f, s_origin, scale);
+
+				s_spriteBatch->End();
+			}
 		}
 
 		void Sprite::RenderImage(object::component::SpriteComponent * sprite)
 		{
-			RenderImage(sprite->GetSignature(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());
-		}
-
-		math::Vector2 Sprite::GetImagePos()
-		{
-			return s_screenPos;
+			RenderImage(sprite->GetSignature(), sprite->GetColor(), sprite->GetPosition().x, sprite->GetPosition().y, sprite->GetScale());	
 		}
 	}
 }

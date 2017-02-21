@@ -1,6 +1,6 @@
 #pragma once
 #include "../Common.h"
-#include "../utils/d3d.h"
+
 #include "../utils/Math.h"
 #include "../object/GameObject.h"
 #include "../object/component/Camera.h"
@@ -34,6 +34,9 @@ namespace thomas {
 			static void BindDepthNormal();
 			static void BindDepthReadOnly();
 
+			static void BindDepthBufferTexture();
+			static void UnbindDepthBufferTexture();
+
 		private:
 			struct GameObjectBuffer
 			{
@@ -43,6 +46,8 @@ namespace thomas {
 				math::Matrix mvpMatrix;
 				math::Vector3 camPos;
 				float buffer;
+				math::Vector3 camDir;
+				float buffer2;
 			};
 			static ID3D11RenderTargetView* s_backBuffer;
 			static ID3D11ShaderResourceView* s_backBufferSRV;

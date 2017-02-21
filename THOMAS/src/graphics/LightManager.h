@@ -1,6 +1,5 @@
 #pragma once
 #include "../utils/Math.h"
-#include "../utils/d3d.h"
 #include "../graphics/Shader.h"
 
 namespace thomas
@@ -64,7 +63,7 @@ namespace thomas
 
 			static bool BindDirectionalLight(unsigned int index);
 			static bool BindPointLight(unsigned int index);
-
+			static void Destroy();
 			
 		private:
 			static ID3D11Buffer* s_lightBuffer;

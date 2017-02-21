@@ -15,11 +15,15 @@ namespace thomas
 			Camera::Camera(): Component("CameraComponent")
 			{
 				m_fov = 70;
-				m_near = 0.1;
-				m_far = 3000;
+				m_near = 0.5;
+				m_far = 10000;
 				m_viewport = math::Viewport(0, 0, Window::GetWidth(), Window::GetHeight());
 				m_skybox = NULL;
 				UpdateProjMatrix();
+			}
+			Camera::~Camera()
+			{
+				ReleaseSkybox();
 			}
 
 			math::Matrix Camera::GetProjMatrix()
@@ -126,7 +130,8 @@ namespace thomas
 
 			void Camera::ReleaseSkybox()
 			{
-				m_skybox->~Skybox();
+				if(m_skybox)
+					m_skybox->~Skybox();
 			}
 		}
 	}

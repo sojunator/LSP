@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "../ThomasCore.h"
 #include  "../utils/AssimpLoader.h"
+#include "../utils/d3d.h"
 namespace thomas
 {
 	namespace graphics
@@ -15,7 +16,7 @@ namespace thomas
 		}
 		Texture* Texture::CreateTexture(int mappingMode, TextureType type, std::string path)
 		{
-			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				if (s_loadedTextures[i]->GetName() == path)
 					return s_loadedTextures[i];
@@ -29,7 +30,7 @@ namespace thomas
 
 		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string path)
 		{
-			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				if (s_loadedTextures[i]->GetName() == path && s_loadedTextures[i]->GetTextureType() == type)
 					return s_loadedTextures[i];
@@ -43,7 +44,7 @@ namespace thomas
 
 		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string name, ID3D11ShaderResourceView * textureView)
 		{
-			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				if (s_loadedTextures[i]->GetName() == name && s_loadedTextures[i]->GetTextureType() == TextureType::UNDEFINED)
 					return s_loadedTextures[i];
@@ -57,7 +58,7 @@ namespace thomas
 
 		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, std::string path)
 		{
-			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				if (s_loadedTextures[i]->GetName() == path && s_loadedTextures[i]->GetTextureType() == TextureType::UNDEFINED)
 					return s_loadedTextures[i];
@@ -95,7 +96,7 @@ namespace thomas
 
 		Texture * Texture::CreateTexture(SamplerState samplerState, TextureType type, std::string name, ID3D11ShaderResourceView * textureView)
 		{
-			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				if (s_loadedTextures[i]->GetName() == name && s_loadedTextures[i]->GetTextureType() == type)
 					return s_loadedTextures[i];
@@ -314,7 +315,7 @@ namespace thomas
 		}
 		void Texture::Destroy()
 		{
-			for (int i = 0; i < s_loadedTextures.size(); ++i)
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
 				if(s_loadedTextures[i]->m_data.texture)
 					s_loadedTextures[i]->m_data.texture->Release();
@@ -322,10 +323,11 @@ namespace thomas
 					s_loadedTextures[i]->m_data.textureView->Release();
 
 			}
-			s_samplerStates.CLAMP->Release();
-			s_samplerStates.WRAP->Release();
-			s_samplerStates.DECAL->Release();
-			s_samplerStates.MIRROR->Release();
+			s_loadedTextures.clear();
+			//s_samplerStates.CLAMP->Release();
+			//s_samplerStates.WRAP->Release();
+			//s_samplerStates.DECAL->Release();
+			//s_samplerStates.MIRROR->Release();
 		}
 
 	}

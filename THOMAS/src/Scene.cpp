@@ -2,42 +2,35 @@
 #include "graphics\PostEffect.h"
 #include "graphics\Model.h"
 #include "graphics\Sprite.h"
+#include "graphics\Shader.h"
+#include "utils\DebugTools.h"
 
 namespace thomas
 {
-	std::vector<Scene*> Scene::s_scenes;
 	Scene* Scene::s_currentScene;
-
-	bool Scene::Init()
+	bool Scene::s_drawDebugPhysics;
+	void Scene::UnloadScene()
 	{
-		if (s_scenes[0])
-		{
-			s_currentScene = s_scenes[0];
-			LOG("Scene set");
-			return true;
-		}
-		LOG("No scenes");
-		return false;
-	}
-	Scene* Scene::AddScene(Scene* scene)
-	{
-		s_scenes.push_back(scene);
-		return scene;
-	}
-	void Scene::Destroy(Scene* scene)
-	{
-	}
-	void Scene::LoadScene(Scene* scene)
-	{
-		s_currentScene = scene;
+		utils::DebugTools::RemoveAllVariables();
+		graphics::LightManager::Destroy();
+		graphics::Material::Destroy();
+		graphics::Shader::Destroy();
+		graphics::Texture::Destroy();
+		graphics::Model::Destroy();	
+		object::Object::Destroy(s_currentScene);
+		delete s_currentScene;
+		s_currentScene = nullptr;
 	}
 	void Scene::UpdateCurrentScene()
 	{
+		//Temp fix for ocean.
+		graphics::Renderer::RenderSetup(NULL);
+		if (s_currentScene)
+			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
+				object->Update();
+		else
+			LOG("No scene set");
 		object::Object::Clean();
-	}
-	std::vector<graphics::Shader*> Scene::GetShaders()
-	{
-		return m_shaders;
 	}
 	void Scene::Render()
 	{
@@ -46,7 +39,11 @@ namespace thomas
 			LOG("No scene set")
 				return;
 		}
-		for (object::component::Camera* camera : s_currentScene->m_cameras)
+		std::vector<object::GameObject*> cameraObjects = object::GameObject::FindGameObjectsWithComponent<object::component::Camera>();
+		std::vector<object::component::Camera*> cameras;
+		for (object::GameObject* object : cameraObjects)
+			cameras.push_back(object->GetComponent<object::component::Camera>());
+		for (object::component::Camera* camera : cameras)
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
@@ -59,20 +56,22 @@ namespace thomas
 				LOG("No scene set");
 
 			
-
-
 			s_currentScene->Render3D(camera);
+			if(s_drawDebugPhysics)
+				Physics::DrawDebug(camera);
 			s_currentScene->Render2D(camera);
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
-
+			
+			utils::DebugTools::Draw();
 			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
 	}
 	void Scene::Render3D(object::component::Camera * camera)
-	{	
-		
-		for (graphics::Shader* shader : m_shaders)
+	{
+
+
+		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
 				continue;
@@ -84,20 +83,20 @@ namespace thomas
 				material->Bind();
 				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 				{
-					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+					
 					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 					{
-						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
-						{
-							mesh->Bind();
-							mesh->Draw();
-						}
+						if(renderComponent->GetModel())
+							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+							{
+								graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+								mesh->Bind();
+								mesh->Draw();
+							}
 					}
-					graphics::Renderer::UnBindGameObjectBuffer();
 				}
 				material->Unbind();
 			}
-			graphics::LightManager::Unbind();
 
 			shader->Unbind();
 		}
@@ -106,9 +105,9 @@ namespace thomas
 		graphics::Shader* oceanShader = graphics::Shader::GetShaderByName("oceanShader");
 		if (oceanShader)
 		{
-
-			graphics::Renderer::BindDepthReadOnly();
-			ThomasCore::GetDeviceContext()->OMSetBlendState(graphics::TextRender::s_states->AlphaBlend(), NULL, 0xFFFFFFFF);
+			DirectX::CommonStates state(ThomasCore::GetDevice());
+			graphics::Renderer::BindDepthBufferTexture();
+			ThomasCore::GetDeviceContext()->OMSetBlendState(state.NonPremultiplied(), NULL, 0xFFFFFFFF);
 			oceanShader->Bind();
 			camera->BindReflection();
 			graphics::LightManager::BindAllLights();
@@ -133,11 +132,11 @@ namespace thomas
 			graphics::LightManager::Unbind();
 
 			oceanShader->Unbind();
-			graphics::Renderer::BindDepthNormal();
+			graphics::Renderer::UnbindDepthBufferTexture();
 		}
 
-		/*camera->BindSkybox();
-		camera->UnbindSkybox();*/
+		camera->BindSkybox();
+		camera->UnbindSkybox();
 	}
 
 
@@ -173,9 +172,11 @@ namespace thomas
 	}
 	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string path)
 	{
-		graphics::Shader* shader = thomas::graphics::Shader::CreateShader(name, inputLayout, path);
-		m_shaders.push_back(shader);
-		return shader;
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, path, this);
+	}
+	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
+	{
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, vertexShader,geometryShader, hullShader, domainShader, pixelShader, this);
 	}
 	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string type)
 	{
@@ -187,5 +188,11 @@ namespace thomas
 			return s_currentScene;
 		LOG("No scene set")
 			return NULL;
+	}
+	Scene::Scene(std::string name)
+	{
+		m_name = name;
+		s_drawDebugPhysics = false;
+		utils::DebugTools::AddBool(s_drawDebugPhysics, "Draw Debug Physics");
 	}
 }

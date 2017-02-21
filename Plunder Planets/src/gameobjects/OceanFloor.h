@@ -18,7 +18,7 @@ public:
 	void Start()
 	{
 		m_oceanFloor = AddComponent<component::RenderComponent>();
-		utils::Plane::PlaneData pData = utils::Plane::CreatePlane(2000, 1.0 / 100);
+		utils::Plane::PlaneData pData = utils::Plane::CreatePlane(20000, 1.0 / 1000);
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("oceanFloorMat", "terrainMaterial");
 
 		thomas::graphics::Mesh* m = new thomas::graphics::Mesh(pData.verts, pData.indices, "oceanFloor", mat);
@@ -27,7 +27,7 @@ public:
 		thomas::graphics::Model::CreateModel("oceanFloor", meshes);
 
 		m_oceanFloor->SetModel("oceanFloor");
-		m_transform->SetPosition(-1000, -10, 1000);
+		m_transform->SetPosition(-20000/2, -50, 20000/2);
 	}
 
 private:

@@ -6,7 +6,7 @@ PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* mate
 	m_textures = utils::AssimpLoader::GetMaterialTextures(material, dir);
 	m_materialProperties.materialProperty = math::Vector4(0, 0, 0, 0);
 
-	for (int i = 0; i < m_textures.size(); i++)
+	for (unsigned int i = 0; i < m_textures.size(); i++)
 	{
 		switch (m_textures[i]->GetTextureType())
 		{
@@ -28,7 +28,7 @@ PhongMaterial::PhongMaterial(std::string dir, std::string name, aiMaterial* mate
 	m_materialProperties.specularPower = utils::AssimpLoader::GetMaterialShininess(material);
 
 
-	m_materialPropertiesBuffer = utils::D3d::CreateBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
+	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 
 }
 Material * PhongMaterial::CreateInstance(std::string dir, std::string name, aiMaterial * material, Shader* shader)

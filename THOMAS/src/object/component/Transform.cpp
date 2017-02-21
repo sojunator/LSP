@@ -36,6 +36,7 @@ namespace thomas
 
 			math::Matrix Transform::GetWorldMatrix()
 			{
+
 				if (m_parent)
 					return m_localWorldMatrix * m_parent->GetWorldMatrix();
 				else
@@ -46,7 +47,7 @@ namespace thomas
 			{
 				if (target->GetPosition() == GetPosition())
 					return;
-				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target->GetPosition(), Up());
+				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target->GetPosition(), m_localWorldMatrix.Up());
 
 				lookAt = lookAt.Invert();
 				
@@ -59,7 +60,7 @@ namespace thomas
 			{
 				if (target == GetPosition())
 					return;
-				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target, Up());
+				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target, m_localWorldMatrix.Up());
 
 				lookAt = lookAt.Invert();
 
@@ -83,9 +84,8 @@ namespace thomas
 			void Transform::RotateByAxis(math::Vector3 axis, float angle)
 			{
 				math::Quaternion rot = math::Quaternion::CreateFromAxisAngle(axis, angle);
-				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(m_localRotation), rot);
+				math::Matrix newRot = math::Matrix::CreateFromQuaternion(rot*m_localRotation);
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
-
 				Decompose();
 			}
 			void Transform::Translate(math::Vector3 translation)
@@ -103,14 +103,14 @@ namespace thomas
 			math::Vector3 Transform::GetPosition()
 			{
 				if (m_parent)
-					return m_parent->GetPosition()+m_localPosition;
+					return m_parent->GetPosition() + math::Vector3::Transform(m_localPosition, math::Matrix::CreateFromQuaternion(m_parent->GetRotation()));
 				else
 					return m_localPosition;
 			}
 			math::Quaternion Transform::GetRotation()
 			{
 				if (m_parent)
-					return m_parent->GetRotation()*m_localRotation;
+					return m_localRotation*m_parent->GetRotation();
 				else
 					return m_localRotation;
 			}
@@ -123,13 +123,8 @@ namespace thomas
 			}
 			void Transform::SetPosition(math::Vector3 position)
 			{
-				math::Vector3 newPosition;
-				if (m_parent)
-					newPosition = position - m_parent->GetPosition();
-				else
-					newPosition = position;
 
-				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(newPosition, math::Vector3::Forward, math::Vector3::Up);
+				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(position, m_localWorldMatrix.Forward(), m_localWorldMatrix.Up());
 				Decompose();
 			}
 			void Transform::SetPosition(float x, float y, float z)
@@ -138,13 +133,8 @@ namespace thomas
 			}
 			void Transform::SetRotation(math::Quaternion rotation)
 			{
-				math::Quaternion newRotation;
-				if (m_parent)
-					newRotation = rotation - m_parent->GetRotation();
-				else
-					newRotation = rotation;
 
-				math::Matrix rotMatrix = math::Matrix::CreateFromQuaternion(newRotation);
+				math::Matrix rotMatrix = math::Matrix::CreateFromQuaternion(rotation);
 
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, rotMatrix.Forward(), rotMatrix.Up());
 				Decompose();
@@ -155,12 +145,8 @@ namespace thomas
 			}
 			void Transform::SetScale(math::Vector3 scale)
 			{
-				math::Vector3 newScale;
-				if (m_parent)
-					newScale = scale - m_parent->GetScale();
-				else
-					newScale = scale;
-				m_localWorldMatrix = math::Matrix::CreateScale(newScale) * math::Matrix::CreateWorld(m_localPosition, Forward(), Up());
+
+				m_localWorldMatrix = math::Matrix::CreateScale(scale) * math::Matrix::CreateWorld(m_localPosition, m_localWorldMatrix.Forward(), m_localWorldMatrix.Up());
 				Decompose();
 			}
 			void Transform::SetScale(float x, float y, float z)
@@ -170,6 +156,30 @@ namespace thomas
 			void Transform::SetScale(float scale)
 			{
 				return SetScale(math::Vector3(scale, scale, scale));
+			}
+
+			void Transform::SetParent(Transform * parent)
+			{
+				if (m_parent != parent)
+				{
+					RemoveParent();
+					m_parent = parent;
+					m_parent->m_children.push_back(this);
+				}
+			}
+			Transform * Transform::GetParent()
+			{
+				return m_parent;
+			}
+			void Transform::RemoveParent()
+			{
+				if (m_parent) //Remove from old parent
+				{
+					auto it = std::find(m_parent->m_children.begin(), m_parent->m_children.end(), this);
+					if (it != m_parent->m_children.end())
+						m_parent->m_children.erase(it);
+				}
+				m_parent = NULL;
 			}
 		}
 	}
