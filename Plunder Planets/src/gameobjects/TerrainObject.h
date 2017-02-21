@@ -33,7 +33,7 @@ public:
 
 	void PlaceBalls()
 	{
-		for (int i = 0; i < 360; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			m_broadsides.push_back(Instantiate<Broadside>(math::Vector3(m_islands->GetCenter(0).x, 5, m_islands->GetCenter(0).z), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), 0), m_scene));
 			

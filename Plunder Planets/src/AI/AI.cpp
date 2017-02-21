@@ -86,7 +86,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	{
 		if (!objectFront || objectLeft && objectRight && !objectFront)
 			return 0;
-		else if(objectLeft && )
+		//else if(objectLeft && )
 		break;
 	}
 	case Behavior::Searching:

@@ -76,7 +76,7 @@ public:
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_ship = LoadObject<Ship>();
 		m_enemyShip = LoadObject<Enemy>();
-		//m_waterObject = LoadObject<WaterObject>();
+		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		//LoadObject<PhysicsObject>();
 	};
