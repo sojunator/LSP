@@ -47,6 +47,18 @@ public:
 		m_floats[7] = Instantiate<ShipFloat>(math::Vector3(-2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[6]->SetMass(0.15*mass);
 		m_floats[7]->SetMass(0.15*mass);
+
+		//stabilizers front
+		m_floats[8] = Instantiate<ShipFloat>(math::Vector3(2.5, 5, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[9] = Instantiate<ShipFloat>(math::Vector3(-2.5, 5, 8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[8]->SetMass(0.5*mass);
+		m_floats[9]->SetMass(0.5*mass);
+		//stabilizers back
+		m_floats[10] = Instantiate<ShipFloat>(math::Vector3(2.5, 5, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[11] = Instantiate<ShipFloat>(math::Vector3(-2.5, 5, -8), math::Quaternion::Identity, m_transform, m_scene);
+		m_floats[10]->SetMass(0.5*mass);
+		m_floats[11]->SetMass(0.5*mass);
+
 		m_transform->SetPosition(0, 0.5, 0);
 
 		m_renderer = AddComponent<component::RenderComponent>();
@@ -70,32 +82,18 @@ public:
 		//model
 		m_modelIndex = 0;
 		m_renderer->SetModel("testModel0");
-
+		m_moving = false;
 		//sound
-		m_boostSound->SetClip("mThomas");
+		//m_boostSound->SetClip("mThomas");
+		m_boostSound->SetClip("fFlames");
 		m_boostSound->SetVolume(0.9);
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
-		m_forwardSpeed = 0;
-		m_accelerationSpeed = 9.5f;
-		m_retardationSpeed = 6.5f;
-		m_maxSpeed = 30.0f;
-
-		m_boostRot = 0;
-		m_nonBoostMaxSpeed = m_maxSpeed;
-		m_nonBoostAcceleration = m_accelerationSpeed;
-		m_boostAcceleration = m_accelerationSpeed * 3;
-		m_boostMaxSpeed = m_maxSpeed * 2;
-		
-		m_rotationSpeed = 0.3f;
-		m_minmaxRotFactor = 0.45f;
-		m_rotation = 0.0f;
-
-		//gravity
-		m_fallSpeed = 0;
-		m_inAir = false;
-		m_mass = 10;
+		m_speed = 9000;
+		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
+		m_turnSpeed = 2000;
+		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -112,30 +110,12 @@ public:
 
 
 		m_retardControllsOn = false;
-		m_gravity = 0;
-		damp = 0.9;
 	}
 
 	void RetardControls(float& forwardFactor, float& rightFactor, float& upFactorPitch, float&upFactorRoll, float const left_x, float const left_y)//does not work with flying right now
 	{
-		//The left stick controlls the ship ASWELL as its orientation. The position of the camera changes the way the boat is maneuvered
-		if (left_x != 0 || left_y != 0)
-		{
-			math::Vector3 camForwardXZ = math::Vector3(m_cameraObject->m_transform->Forward().x, 0, m_cameraObject->m_transform->Forward().z);
-			camForwardXZ.Normalize();
+		//YE HE RETARD!
 
-			float d1 = camForwardXZ.Dot(m_transform->Forward());
-			float d2 = camForwardXZ.Dot(m_transform->Right());
-
-			forwardFactor = d1 * -left_y + d2 * left_x;
-
-			rightFactor = d1 * left_x + d2 * left_y;
-
-			upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y * -d1 + m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_x * d2;
-			upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y * -d1 + m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_x * d2;
-
-		
-		}
 	}
 
 	void ShipBoost(float const dt)
@@ -145,110 +125,55 @@ public:
 		{
 			m_treasure -= 50 * dt;
 			
-			m_boostRot = 1;
-			m_boostSound->Play();
-			m_maxSpeed = m_boostMaxSpeed;
-			m_accelerationSpeed = m_boostAcceleration;
-			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
+			//m_boostRot = 1;
+			//m_boostSound->Play();
+			//m_maxSpeed = m_boostMaxSpeed;
+			//m_accelerationSpeed = m_boostAcceleration;
+			//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex)); //switches between models, activate when boosting
 			
 		}
 		else
 		{
-			m_boostRot = 0;
 			m_boostSound->Pause();
-			m_accelerationSpeed = m_nonBoostAcceleration;
 			m_renderer->SetModel("testModel0"); //reset to default Mesh
-			if (m_nonBoostMaxSpeed < m_forwardSpeed)
-			{
-				m_forwardSpeed -= m_retardationSpeed * dt;
-				m_maxSpeed = m_forwardSpeed;
-			}
-			else
-			{
-				m_maxSpeed = m_nonBoostMaxSpeed;
-			}
-			
 		}
 	}
 		
-	void ShipMove(float const forwardFactor, float const dt)
+	void ShipMove(float const dt)
 	{
 		//ship controlls
 		if (Input::GetButton(Input::Buttons::RT) || Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
 		{
-			m_forwardSpeed += m_accelerationSpeed * dt;
-			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
-			
+			math::Vector3 forward = m_transform->Forward();
+			//Remove y part;
+			forward.y = 0;
+			m_moving = true;
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*dt*m_rigidBody->GetMass()));
 		}
-		else if (forwardFactor > 0.01f)//for retardcontrols
-		{
-			m_forwardSpeed += m_accelerationSpeed * forwardFactor * dt;
-			m_forwardSpeed = std::fminf(m_forwardSpeed, m_maxSpeed);
-		}
-		else
-		{
-			m_forwardSpeed -= m_retardationSpeed * dt;
-			m_forwardSpeed = std::fmaxf(m_forwardSpeed, 0);
-
-		}
-		
-
-		math::Vector3 moveVec = -m_transform->Forward() * m_forwardSpeed * dt;
-		m_transform->Translate(moveVec);
-		m_cameraObject->m_transform->Translate(moveVec);//make sure the camera moves with the the ship
 	}
 		
-	void ShipRotate(float const  rightFactor, float const dt)
+	void ShipRotate(float const dt)
 	{
-		if (std::abs(rightFactor) > 0.01)
-		{
-			m_rotation += m_rotationSpeed * rightFactor * dt;
-			m_rotation = std::fmaxf(m_rotation, -m_minmaxRotFactor);
-			m_rotation = std::fminf(m_rotation, m_minmaxRotFactor);
-		}
-		else
-		{
-			if (m_rotation * m_rotation < 0.004)
-			{
-				m_rotation = 0;
-			}
-			else
-			{
-				if (m_rotation < 0)
-				{
-					m_rotation += m_rotationSpeed * dt;
-					
-				}
-				else
-				{
-					m_rotation -= m_rotationSpeed * dt;
-				}
-			}
-		}
-		m_transform->Rotate(m_rotation * dt, 0, 0);
+		float turnDelta = -Input::GetLeftStickX();
+		math::Vector3 right = m_transform->Right();
+		//Remove y part;
+		right.y = 0;
+		m_rigidBody->activate();
+		m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
 	}
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 	{
-		if (!m_inAir && left_y < 0)
-		{
-			m_transform->Rotate(0, m_boostRot * dt * upFactorPitch * m_rotationSpeed, m_boostRot * dt * upFactorRoll * m_rotationSpeed);
-			m_inAir = true;
-		}
-		else if (m_inAir)
-		{
-			m_transform->Rotate(0, dt * upFactorPitch * m_rotationSpeed, dt * upFactorRoll * m_rotationSpeed);
-		}
-
+		
 	}
 		
 	void ShipFireCannons()
 	{
-		if (Input::GetButtonDown(Input::Buttons::RB))
-			m_broadSideRight->Fire(-m_forwardSpeed);
-		
-		if (Input::GetButtonDown(Input::Buttons::LB))
-			m_broadSideLeft->Fire(m_forwardSpeed);
+		//if (Input::GetButtonDown(Input::Buttons::RB))
+		//	m_broadSideRight->Fire(-m_forwardSpeed);
+		//
+		//if (Input::GetButtonDown(Input::Buttons::LB))
+		//	m_broadSideLeft->Fire(m_forwardSpeed);
 
 	}
 	//cam
@@ -316,12 +241,12 @@ public:
 
 	void PlaySounds(float const dt)
 	{
-		m_soundDelayLeft -= dt;
-		if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
-		{
-			m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
-			m_soundDelayLeft = m_soundDelay;
-		}
+		//m_soundDelayLeft -= dt;
+		//if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
+		//{
+		//	m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
+		//	m_soundDelayLeft = m_soundDelay;
+		//}
 	}
 
 	void PlunderIsland()
@@ -352,14 +277,6 @@ public:
 
 		ShipBoost(dt);
 		
-		
-		//Ship Movement
-	/*	ShipMove(forwardFactor, dt);
-		ShipRotate(rightFactor, dt);
-		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);*/
-		//ShipFireCannons();
-		
-
 		if (!m_freeCamera)
 		{
 			//Recalculate look at point and the new distance from cam to ship
@@ -373,6 +290,15 @@ public:
 			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
 			CameraZoom(distanceVector, dt);
 		}
+		m_moving = false;
+		//Ship Movement
+		ShipMove(dt);
+		ShipRotate(dt);
+	//	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		//ShipFireCannons();
+		
+
+		
 
 		
 		PlaySounds(dt);
@@ -383,16 +309,10 @@ public:
 
 		bool inWater = false;
 
-		for (int i = 0; i < 4; i++)
-		{
-			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
-			if (wTemp)
-				inWater = true;
-		}
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 12; i++)
 		{
-			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody);
+			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
 			if (wTemp)
 				inWater = true;
 		}
@@ -401,10 +321,6 @@ public:
 		{
 			m_rigidBody->setDamping(0.0, 0.0);
 		}
-
-		if (Input::GetKey(Input::Keys::Up))
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-m_transform->Forward() * 1000000));
-
 		
 	}
 
@@ -415,30 +331,16 @@ public:
 
 private:
 	
-
+	bool m_moving;
 	float damp;
 
 	bool m_freeCamera;
 
-	//used for the boat
-	float m_forwardSpeed;
-	
-	float m_accelerationSpeed;
-	float m_retardationSpeed;//reverse acceleration is called retardation
-	float m_maxSpeed;
-
 	float m_treasure;
 	float m_mass;
 
-	//for the boost
-	float m_boostMaxSpeed;
-	float m_nonBoostMaxSpeed;
-	float m_boostAcceleration;
-	float m_nonBoostAcceleration;
-
-	float m_rotationSpeed;
-	float m_rotation;//rodret
-	float m_minmaxRotFactor;
+	float m_speed;
+	float m_turnSpeed;
 	//used for the camera
 	float m_elevateCamSpeed;//for moving cam up and down
 	float m_camRotationSpeed;
@@ -458,7 +360,7 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
-	ShipFloat* m_floats[8];
+	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 
@@ -470,11 +372,6 @@ private:
 	float m_soundDelay;
 	float m_soundDelayLeft;
 
-
-	float m_boostRot;
-	float m_fallSpeed;
-	float m_gravity;
-	bool m_inAir;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",

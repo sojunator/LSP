@@ -64,9 +64,9 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = Physics::Init();
 
-		#ifdef _DEBUG
+
 		utils::DebugTools::Init();
-		#endif // _DEBUG
+
 
 		
 
@@ -85,13 +85,11 @@ namespace thomas {
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
 
 
-		#ifdef _DEBUG
 		if (Input::GetKeyDown(Input::Keys::F1))
 			utils::DebugTools::ToggleVisibility();
-		#endif
 
-		Scene::UpdateCurrentScene();
 		Physics::Update();
+		Scene::UpdateCurrentScene();
 		Scene::Render();
 	}
 
