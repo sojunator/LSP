@@ -131,7 +131,15 @@ public:
 
 	void ShipRotate(float const dt)
 	{
-		float turnDelta = -Input::GetLeftStickX();
+		float turnDelta = 0;
+		//For XBOX
+		if (Input::GetLeftStickX())
+			turnDelta = -Input::GetLeftStickX();
+		//For Keyboard
+		else if (Input::GetKey(Input::Keys::D))
+			turnDelta = -Input::GetKey(Input::Keys::D);
+		else if (-Input::GetKey(Input::Keys::A))
+			turnDelta = Input::GetKey(Input::Keys::A);
 		math::Vector3 right = m_transform->Right();
 		//Remove y part;
 		right.y = 0;
@@ -242,8 +250,8 @@ public:
 		float const dt = Time::GetDeltaTime();
 		float right_x = Input::GetRightStickX();
 		float right_y = Input::GetRightStickY();
-		float left_x = Input::GetLeftStickX();
-		float left_y = Input::GetLeftStickY();
+		float left_x = Input::GetLeftStickX(); //not used?
+		float left_y = Input::GetLeftStickY(); //not used?
 
 		//If cam changed with arrow keys
 		if (Input::GetKey(Input::Keys::Right))
@@ -255,16 +263,10 @@ public:
 			right_y = Input::GetKey(Input::Keys::Up);
 		else if (Input::GetKey(Input::Keys::Down))
 			right_y = -Input::GetKey(Input::Keys::Down);
-		
-		//If boat turning with A / D
-		if (Input::GetKey(Input::Keys::D))
-			left_x = Input::GetKey(Input::Keys::D);
-		else if (Input::GetKey(Input::Keys::A))
-			left_x = -Input::GetKey(Input::Keys::A);
 
 		//get forward, right and up contrib
-		float forwardFactor = 0;
-		float rightFactor = -left_x;
+		float forwardFactor = 0; //not used?
+		float rightFactor = -left_x; //not used?
 		float upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
 		float upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
 
@@ -283,9 +285,6 @@ public:
 			m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
 
 			CameraRotate(right_x, right_y, dt, distanceVector);
-
-
-
 
 			//Move camera "distance" away from boat.
 			//math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
@@ -314,6 +313,7 @@ public:
 		}
 		m_moving = false;
 		m_flying = false;
+
 		//Ship Movement
 		ShipMove(dt);
 		ShipRotate(dt);
