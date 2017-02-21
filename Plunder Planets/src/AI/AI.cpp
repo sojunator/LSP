@@ -163,8 +163,8 @@ void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir
 
 void AI::MatchSpeed(float& speed, float acceleration, float retardation)
 {
-	if (speed <= m_playerShip->GetSpeed())
-		speed += acceleration * Time::GetDeltaTime();
+	/*if (speed <= m_playerShip->GetSpeed())
+		speed += acceleration * Time::GetDeltaTime();*/
 	 /*
 	else
 		speed -= retardation * Time::GetDeltaTime();

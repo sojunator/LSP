@@ -324,10 +324,10 @@ public:
 		
 	}
 
-	float GetSpeed()
-	{
-		return m_forwardSpeed;
-	}
+	//float GetSpeed()
+	//{
+	//	return m_forwardSpeed;
+	//}
 
 private:
 	
