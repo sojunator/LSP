@@ -21,10 +21,10 @@ public:
 		m_shipObject = Find("Ship");
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 1024 / 4, 0.125, 1024, 100);
-		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
+		m_islands = new thomas::Islands(20, mat, 1024, 1.0/16, 5000, 100);
+		m_model = thomas::graphics::Model::CreateModel("Islands", m_islands->GetIslands(0));
 
-		m_renderer->SetModel("Plane-1");
+		m_renderer->SetModel("Islands");
 
 		m_transform->SetPosition(math::Vector3(0, -2.5, 0));
 

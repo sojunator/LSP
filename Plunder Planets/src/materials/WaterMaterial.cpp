@@ -51,7 +51,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 	m_materialProperties.skyColor = math::Color(0.38f, 0.45f, 0.56f);
 	m_materialProperties.waterColor = math::Color(0.07f, 0.15f, 0.2f, 1.0);
-	m_materialProperties.shininess = 200;
+	m_materialProperties.shininess = 400;
 	m_materialProperties.bendParam = math::Vector3(0.1f, -0.4f, 0.2f);
 
 

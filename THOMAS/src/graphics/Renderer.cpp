@@ -100,6 +100,7 @@ namespace thomas
 			s_objectBufferStruct.projectionMatrix = camera->GetProjMatrix().Transpose();
 			s_objectBufferStruct.mvpMatrix = s_objectBufferStruct.projectionMatrix * s_objectBufferStruct.viewMatrix * s_objectBufferStruct.worldMatrix;
 			s_objectBufferStruct.camPos = camera->GetPosition();
+			s_objectBufferStruct.camDir = camera->m_gameObject->m_transform->Forward();
 
 			utils::D3d::FillDynamicBufferStruct(s_objectBuffer, s_objectBufferStruct);
 

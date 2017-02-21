@@ -17,7 +17,7 @@ SamplerState reflectionSampler : register(s4);
 
 
 #define PATCH_BLEND_BEGIN		500
-#define PATCH_BLEND_END			60000
+#define PATCH_BLEND_END			600000
 
 cbuffer mvp : register(b0)
 {
@@ -26,6 +26,8 @@ cbuffer mvp : register(b0)
 	matrix projectionMatrix;
 	matrix mvpMatrix;
 	float3 camPosition;
+	float buff;
+	float3 camDirection;
 };
 
 cbuffer material : register(b1)
@@ -123,7 +125,7 @@ HSInput VSMain(in VSInput input)
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 100;
+	float maxTessDistance = 500;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 
@@ -227,7 +229,14 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 }
 
 
-
+float fresnelTerm(float3 normal, float3 eyeVec)
+{
+	float angle = 1.0f - saturate(dot(normal, eyeVec));
+	float fresnel = angle * angle;
+	fresnel = fresnel * fresnel;
+	fresnel = fresnel * angle;
+	return saturate(fresnel * (1.0f - saturate(0.9)) + 0.5 - 0.0);
+}
 
 //Pixel shader
 
@@ -265,8 +274,8 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
-	float reflectContrib = 0.15f;//hardcoded lerpfactor between watercolor and the sampled reflection
 
+	float reflectContrib = fresnelTerm(normal, camDirection * eyeDir);
 
 	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
 
@@ -275,6 +284,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
 	
-
+	
 	return float4(waterColor, 1);
 }

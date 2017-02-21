@@ -43,6 +43,8 @@ namespace thomas {
 				math::Matrix mvpMatrix;
 				math::Vector3 camPos;
 				float buffer;
+				math::Vector3 camDir;
+				float buffer2;
 			};
 			static ID3D11RenderTargetView* s_backBuffer;
 			static ID3D11ShaderResourceView* s_backBufferSRV;

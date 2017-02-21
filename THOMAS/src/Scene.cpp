@@ -95,7 +95,6 @@ namespace thomas
 				}
 				material->Unbind();
 			}
-			graphics::LightManager::Unbind();
 
 			shader->Unbind();
 		}

@@ -118,14 +118,14 @@ public:
 		
 		m_camera->SetFar(m_far);
 		m_camera->SetFov(m_fov);
-		/*if (m_ship == nullptr)
+		if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
 		else
 		{
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
-		}*/
+		}
 		//Healthbar code here for now
 		if (m_healthbar->GetScale().x > 0.6f)
 		{
