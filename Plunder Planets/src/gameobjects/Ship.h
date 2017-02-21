@@ -138,8 +138,8 @@ public:
 		}
 		else
 		{
-			m_boostSound->Pause();
-			m_renderer->SetModel("testModel0"); //reset to default Mesh
+			//m_boostSound->Pause();
+			//m_renderer->SetModel("testModel0"); //reset to default Mesh
 		}
 	}
 		
@@ -283,7 +283,7 @@ public:
 		float upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
 		float upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
 
-		m_modelIndex = ((m_modelIndex + 1) % 3);
+		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
 
 		//ShipBoost(dt);
 		
@@ -310,11 +310,13 @@ public:
 		
 		if (m_flying)
 		{
-			m_renderer->SetModel("testModel" + m_modelIndex);
+			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+			m_boostSound->Play();
 		}
 		else
 		{
 			m_renderer->SetModel("testModel0");
+			//m_boostSound->Pause();
 		}
 		
 
