@@ -48,7 +48,7 @@ public:
 				volumeUnderWater = height;
 			volumeUnderWater = (4.0 / 3.0)*math::PI*volumeUnderWater/2;
 
-			float waterDensity = 2.3 * density;
+			float waterDensity = 1.8 * density;
 			btVector3 force = (volumeUnderWater*waterDensity)*-Physics::s_world->getGravity();
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
 			if (heightBelowWater < 0.2)
