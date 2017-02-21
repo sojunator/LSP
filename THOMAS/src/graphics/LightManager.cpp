@@ -1,5 +1,5 @@
 #include "LightManager.h"
-
+#include "../utils/d3d.h"
 
 namespace thomas
 {

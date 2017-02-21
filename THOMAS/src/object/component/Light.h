@@ -5,7 +5,6 @@
 #include "../../utils/Math.h"
 #include "../GameObject.h"
 #include "../../graphics/Shader.h"
-#include "../../utils/d3d.h"
 #include "../../graphics/LightManager.h"
 
 /**

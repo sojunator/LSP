@@ -1,6 +1,5 @@
 #include "RigidBodyComponent.h"
 
-#define _XM_NO_INTRINSICS_ 1;
 #include "../GameObject.h"
 #include "../../utils/Math.h"
 
@@ -12,14 +11,18 @@ namespace thomas
 		{
 			void RigidBodyComponent::UpdateRigidbodyMass(float mass)
 			{
-
-				btVector3 inertia(0, 0, 0);
+				btVector3 inertia;
 				getCollisionShape()->calculateLocalInertia(mass, inertia);
 				setMassProps(mass, inertia);
 				
 			}
 			RigidBodyComponent::RigidBodyComponent() : Component("RigidBodyComponent"), btRigidBody(1, NULL, NULL)
 			{
+			}
+
+			RigidBodyComponent::~RigidBodyComponent()
+			{
+				Physics::s_world->removeRigidBody(this);
 			}
 
 			void RigidBodyComponent::Start()
@@ -32,13 +35,15 @@ namespace thomas
 				setCollisionShape(collider);
 				setMassProps(1, inertia);
 				Physics::s_world->addRigidBody(this);
+				m_kinematic = false;
 			}
 
 			void RigidBodyComponent::Update()
 			{
 				//Update our transform to match the rigidbody.
 				btTransform trans;
-				getMotionState()->getWorldTransform(trans);
+				btDefaultMotionState *myMotionState = (btDefaultMotionState *)getMotionState();
+				trans = myMotionState->m_graphicsWorldTrans;
 				math::Vector3 pos = (math::Vector3)trans.getOrigin();
 				math::Quaternion rot = (math::Quaternion)trans.getRotation();
 				m_gameObject->m_transform->SetRotation(rot);
@@ -51,12 +56,16 @@ namespace thomas
 				{
 					m_mass = -getInvMass();
 					m_kinematic = kinematic;
+					Physics::s_world->removeRigidBody(this);
 					UpdateRigidbodyMass(0);
+					Physics::s_world->addRigidBody(this);
 				}
 				else if(!kinematic && m_kinematic)
 				{
 					m_kinematic = kinematic;
+					Physics::s_world->removeRigidBody(this);
 					UpdateRigidbodyMass(m_mass);
+					Physics::s_world->addRigidBody(this);
 				}
 		
 			}
@@ -73,8 +82,10 @@ namespace thomas
 			}
 			void RigidBodyComponent::SetMass(float mass)
 			{
+				Physics::s_world->removeRigidBody(this);
 				m_mass = mass;
 				UpdateRigidbodyMass(m_mass);
+				Physics::s_world->addRigidBody(this);
 			}
 			float RigidBodyComponent::GetMass()
 			{

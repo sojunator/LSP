@@ -15,11 +15,11 @@ public:
 
 	void Start()
 	{
-		m_dimensions = 2000;
+		m_dimensions = 20000;
 
 		m_waterMaterial = (Material::CreateMaterial("waterMat", "waterMaterial"));
 		oceanSim = ((WaterMaterial*)m_waterMaterial)->GetOceanSim();
-		utils::Plane::PlaneData pData = utils::Plane::CreatePlane(m_dimensions, 1.0 / 10);
+		utils::Plane::PlaneData pData = utils::Plane::CreatePlane(m_dimensions, 1.0 / 100);
 		Mesh* m = new Mesh(pData.verts, pData.indices, "oceanMesh", m_waterMaterial);
 		std::vector<Mesh*> meshes;
 		meshes.push_back(m);
@@ -28,8 +28,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("ocean");
 
-		//m_transform->SetScale(0.05);
-		m_transform->SetPosition(math::Vector3(-m_dimensions /2, 0, m_dimensions /2));
+		m_transform->SetPosition(math::Vector3(-m_dimensions/2, 0, m_dimensions /2));
 
 		m_oceanSounds = AddComponent<component::SoundComponent>();
 
@@ -47,7 +46,10 @@ public:
 			delayLeft = soundEffectDelay;
 
 		}
+
 	}
+
+
 
 	math::Vector3 GetCollisionAt(component::Transform* transform)
 	{
@@ -82,7 +84,9 @@ public:
 		math::Vector3 waterPos = oceanSim->GetPositionAtCoord(texCoord);
 		position = transform->GetPosition();
 		
-		return waterPos-position;
+		waterPos = math::Vector3(waterPos.x, waterPos.y, waterPos.z);
+		return waterPos;
+
 	}
 
 
@@ -95,5 +99,7 @@ private:
 	Material* m_waterMaterial;
 	utils::ocean::OceanSimulator* oceanSim;
 	component::RigidBodyComponent* m_rb;
+
+	float waterX;
 	
 };

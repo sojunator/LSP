@@ -3,9 +3,7 @@
 #include <string>
 #include <vector>
 #include "../Common.h"
-#include "../utils/d3d.h"
-
-
+#include <d3d11.h>
 namespace thomas
 {
 	namespace graphics

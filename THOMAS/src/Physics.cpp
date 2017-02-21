@@ -1,8 +1,11 @@
 #include "Physics.h"
 #include "Time.h"
+#define PHYSICS_TIMESTEP 1.0f/60.0f
 namespace thomas
 {
+	graphics::BulletDebugDraw* Physics::s_debugDraw;
 	btDiscreteDynamicsWorld* Physics::s_world;
+	float Physics::s_accumulator;
 	bool Physics::Init()
 	{
 		// collision configuration contains default setup for memory, collision setup. Advanced
@@ -18,19 +21,36 @@ namespace thomas
 		
 		// the default constraint solver. For parallel processing you can use a different solver
 		//(see Extras / BulletMultiThreaded)
-		btSequentialImpulseConstraintSolver * solver = new btSequentialImpulseConstraintSolver;
+		btSequentialImpulseConstraintSolver * solver = new btSequentialImpulseConstraintSolver;
+
 		s_world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 		s_world->setGravity(btVector3(0, -9.82, 0));
+
+		s_debugDraw = new graphics::BulletDebugDraw();
+
+		s_debugDraw->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+		s_world->setDebugDrawer(s_debugDraw);
+		
+
 		return true;
 
 	}
 	void Physics::Update()
 	{
+
 		s_world->stepSimulation(Time::GetDeltaTime(), 7);
 
+		
+		
+
+	}
+	void Physics::DrawDebug(object::component::Camera* camera)
+	{
+		s_debugDraw->Update(camera);
+		s_world->debugDrawWorld();
 	}
 	void Physics::Destroy()
 	{
+		//Destroy everything????
 	}
 }
-

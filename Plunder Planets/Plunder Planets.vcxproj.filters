@@ -30,6 +30,7 @@
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\StandardParticleEmitter.h" />
+    <ClInclude Include="src\gameobjects\Canon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

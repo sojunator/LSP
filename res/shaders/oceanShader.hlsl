@@ -16,8 +16,8 @@ TextureCube reflectionTexture : register(t4);
 SamplerState reflectionSampler : register(s4);
 
 
-#define PATCH_BLEND_BEGIN		100
-#define PATCH_BLEND_END			50000
+#define PATCH_BLEND_BEGIN		500
+#define PATCH_BLEND_END			60000
 
 cbuffer mvp : register(b0)
 {
@@ -215,7 +215,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	displacement = lerp(float3(0, 0, perlin), displacement, blendFactor);
 
 
-	pos.xyz += displacement;
+	pos.z += displacement.z;
 
 	output.position = mul(pos.xzyw, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
@@ -245,7 +245,8 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float blendFactor = (PATCH_BLEND_END - dist2d) / (PATCH_BLEND_END - PATCH_BLEND_BEGIN);
 	blendFactor = saturate(blendFactor*blendFactor*blendFactor);
 
-	float2 perlinTC = input.tex * perlinSize + (input.positionWS.xz % 256) - 128;
+
+	float2 perlinTC = input.tex * perlinSize + (input.positionWS.xz) ;
 	float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
 	float perlin1 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.y + perlinMovement, 0).w;
 	float perlin2 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.z + perlinMovement, 0).w;
