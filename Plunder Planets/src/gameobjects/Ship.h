@@ -244,10 +244,14 @@ public:
 		
 	void ShipFireCannons()
 	{
-		if (Input::GetKeyDown(Input::Keys::Space))
+		if (Input::GetButtonDown(Input::Buttons::LB))
+		{
+			m_broadSideLeft->Fire(m_forwardSpeed);
+		}
+
+		if (Input::GetButtonDown(Input::Buttons::RB))
 		{
 			m_broadSideRight->Fire(-m_forwardSpeed);
-			m_broadSideLeft->Fire(m_forwardSpeed);
 		}
 	}
 	//cam
