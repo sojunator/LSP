@@ -324,10 +324,10 @@ public:
 		
 	}
 
-	//float GetSpeed()
-	//{
-	//	return m_forwardSpeed;
-	//}
+	btVector3 GetSpeed()
+	{
+		return m_rigidBody->getTotalForce();
+	}
 
 private:
 	
@@ -353,7 +353,7 @@ private:
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
-	math::Vector3 m_initPosition;
+	math::Vector3 m_initPosition;	//Is this needed?
 
 	//components
 	component::RenderComponent* m_renderer;

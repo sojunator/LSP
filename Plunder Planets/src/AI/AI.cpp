@@ -6,7 +6,7 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");
 	m_playerShip = (Ship*)thomas::object::GameObject::Find("Ship");
 
-	m_state = Behavior::Idle;
+	m_state = Behavior::Searching;
 	m_stateStr = "Searching";
 
 	m_lastKnownPos = math::Vector3::Zero;
@@ -169,6 +169,7 @@ void AI::MatchSpeed(float& speed, float acceleration, float retardation)
 	else
 		speed -= retardation * Time::GetDeltaTime();
 	*/
+	speed = 30;
 }
 
 AI::Behavior AI::GetState()
