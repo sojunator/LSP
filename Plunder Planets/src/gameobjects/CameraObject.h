@@ -22,6 +22,10 @@ public:
 
 	void Start()
 	{
+		m_far = 10000;
+		m_fov = 70;
+		utils::DebugTools::AddFloat(m_far, "farPlane");
+		utils::DebugTools::AddFloat(m_fov, "fov");
 
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
@@ -48,7 +52,7 @@ public:
 		m_seagull->Play();
 
 		m_creak->SetClip("fCreakLoop");
-		m_creak->SetVolume(0.3);
+		m_creak->SetVolume(3);
 		m_creak->Play();
 
 		m_music->SetClip("aOceanAmbient");
@@ -111,6 +115,9 @@ public:
 	void Update()
 	{
 
+		
+		m_camera->SetFar(m_far);
+		m_camera->SetFov(m_fov);
 		/*if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
@@ -199,6 +206,8 @@ public:
 		else
 			m_flySpeed = m_normalSpeed;
 		
+
+
 	}
 
 	math::Matrix GetCameraMatrix() 
@@ -224,5 +233,8 @@ private:
 	float m_flySpeed;
 	float m_jaw;
 	float m_pitch;
+
+	float m_far;
+	float m_fov;
 
 };

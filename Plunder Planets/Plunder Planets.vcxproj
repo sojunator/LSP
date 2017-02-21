@@ -178,6 +178,7 @@
     <ClInclude Include="src\AI\Pathfinding.h" />
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\Broadside.h" />
+    <ClInclude Include="src\gameobjects\Canon.h" />
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
