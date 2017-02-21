@@ -91,13 +91,11 @@ public:
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
-		m_speed = 500;
+		m_speed = 3000;
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
-		m_turnSpeed = 150;
+		m_turnSpeed = 700;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
 
-		m_flyTurnSpeed = 500;
-		utils::DebugTools::AddFloat(m_flyTurnSpeed, "boatFlyTurnSpeed");
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -137,6 +135,10 @@ public:
 		right.y = 0;
 		m_rigidBody->activate();
 		m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
+
+		if (abs(turnDelta) > 0.02)
+			m_turning = true;
+
 	}
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
@@ -146,7 +148,7 @@ public:
 			math::Vector3 forward = m_transform->Forward();
 			m_moving = true;
 			forward.y = 0;
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 4 * m_speed*dt*m_rigidBody->GetMass()));
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2.5 * m_speed*dt*m_rigidBody->GetMass()));
 			float turnDelta = -Input::GetLeftStickY();
 
 			/*m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
@@ -306,6 +308,7 @@ public:
 		}
 		m_moving = false;
 		m_flying = false;
+		m_turning = false,
 		//Ship Movement
 		ShipMove(dt);
 		ShipRotate(dt);
@@ -341,19 +344,20 @@ public:
 				inWater = true;
 		}
 
-		if (!inWater)
+		m_rigidBody->setDamping(0.0, 0.0);
+		if (m_moving)
 		{
-			m_rigidBody->setDamping(0.0, 0.0);
+			m_rigidBody->setDamping(0.5, 0.4);
 		}
-
-
+		if(m_turning)
+			m_rigidBody->setDamping(0.3, 0.1);
+		m_rigidBody->applyDamping(dt);
 	}
 
 private:
 
 	bool m_moving;
-	float damp;
-
+	bool m_turning;
 	bool m_freeCamera;
 	bool m_flying;
 	float m_treasure;
