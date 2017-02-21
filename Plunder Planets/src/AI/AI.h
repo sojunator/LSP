@@ -22,13 +22,9 @@ public:
 	
 	bool Collision(math::Vector3 pos);
 	int TurnDir(math::Vector3  pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft);
-	float Move(math::Vector3 pos, float speed, float retardation, float acceleration);
-
+	int FireCannons(math::Vector3 pos, math::Vector3 forward, math::Vector3 right);
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
-	void Escaped(math::Vector3 pos);
-	void MatchSpeed(float& speed, float acceleration, float retardation);
-
 	Behavior GetState();
 
 private:

@@ -21,7 +21,7 @@ public:
 		m_firstFrame = true;
 		m_mass = 18000;
 		m_searchRadius = 1000;
-		m_attackRadius = 100;
+		m_attackRadius = 200;
 		m_turnDir = 0;
 		m_newForwardVec = math::Vector3::Zero;
 
@@ -78,6 +78,9 @@ public:
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(3, 3, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
 
+		m_broadSideRight->CreateCanons();
+		m_broadSideLeft->CreateCanons();
+
 
 		m_renderer->SetModel("testModel0");
 		m_moving = false;
@@ -96,6 +99,10 @@ public:
 		utils::DebugTools::AddFloat(m_speed, "EnemySpeed");
 		m_turnSpeed = 150;
 		utils::DebugTools::AddFloat(m_turnSpeed, "enemyTurnSpeed");
+
+		utils::DebugTools::AddBool(m_islandForward, "Island F");
+		utils::DebugTools::AddBool(m_islandRight, "Island R");
+		utils::DebugTools::AddBool(m_islandLeft, "Island L");
 	}
 
 	void Move(float dt)
@@ -112,6 +119,7 @@ public:
 			break;
 		case AI::Behavior::Firing:
 			/*Fire, check side*/
+			FireCannons();
 			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
 			Rotate(dt);
 			break;
@@ -149,6 +157,8 @@ public:
 	void FireCannons()
 	{
 
+		m_broadSideRight->Fire();
+		m_broadSideLeft->Fire();
 	}
 
 	void Update()
@@ -193,10 +203,10 @@ public:
 private:
 	//Objects
 	ShipFloat* m_floats[12];
+	Broadside* m_broadSideRight;
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRightCannonball;
 	Broadside* m_broadSideLeftCannonball;
-	Broadside* m_broadSideRight;
 	Broadside* m_broadSideFront;
 
 	//Components

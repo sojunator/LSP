@@ -21,7 +21,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 1024 / 4, 0.125, 1024, 100);
+		m_islands = new thomas::Islands(2, mat, 1024 / 4, 0.125, 1024, 100);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Plane-1");
@@ -33,14 +33,14 @@ public:
 
 	void PlaceBalls()
 	{
-		for (int i = 0; i < 5; i++)
-		{
-			m_broadsides.push_back(Instantiate<Broadside>(math::Vector3(m_islands->GetCenter(0).x, 5, m_islands->GetCenter(0).z), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), 0), m_scene));
-			
-			m_broadsides.at(i)->m_transform->Rotate(math::Vector3((math::PI * 2 / 360) * i, 0, 0));
-			m_broadsides.at(i)->m_transform->Translate(m_broadsides.at(i)->m_transform->Forward() * m_islands->GetCollisionRadius(0));
-			m_broadsides.at(i)->m_transform->SetScale(5);
-		}
+		for (int j = 0; j < 2; ++j)
+			for (int i = 0; i < 10; i++)
+			{
+				m_broadsides.push_back(Instantiate<Broadside>(math::Vector3(m_islands->GetCenter(j).x, 5, m_islands->GetCenter(j).z), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), 0), m_scene));
+				m_broadsides.at(i + 10 * j)->m_transform->Rotate(math::Vector3((math::PI * 2 / 360) * 36 * i, 0, 0));
+				m_broadsides.at(i + 10 * j)->m_transform->Translate(m_broadsides.at(i + 10 * j)->m_transform->Forward() * m_islands->GetCollisionRadius(j));
+				m_broadsides.at(i + 10 * j)->m_transform->SetScale(5);
+			}
 	}
 
 	void Update()

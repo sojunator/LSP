@@ -86,7 +86,12 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	{
 		if (!objectFront || objectLeft && objectRight && !objectFront)
 			return 0;
-		//else if(objectLeft && )
+		else if (objectLeft && objectFront || objectFront)
+			return 1;
+		else if (objectRight && objectFront)
+			return -1;
+		else
+			return 0;
 		break;
 	}
 	case Behavior::Searching:
@@ -114,18 +119,9 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	}
 }
 
-float AI::Move(math::Vector3 pos, float speed, float retardation, float acceleration)
+int AI::FireCannons(math::Vector3 pos, math::Vector3 forward, math::Vector3 right)
 {
-	if (math::Vector3::DistanceSquared(m_playerShip->m_transform->GetPosition(), pos) < 200 * 200)
-	{
-		speed -= retardation * Time::GetDeltaTime();
-		speed = std::fminf(speed, 0);
-		return speed;
-	}
-	else
-	{
-		return speed += acceleration * Time::GetDeltaTime();
-	}
+	return 0;
 }
 
 void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
@@ -159,17 +155,6 @@ void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir
 		m_stateStr = "Firing";
 		m_state = Behavior::Firing;
 	}
-}
-
-void AI::MatchSpeed(float& speed, float acceleration, float retardation)
-{
-	/*if (speed <= m_playerShip->GetSpeed())
-		speed += acceleration * Time::GetDeltaTime();*/
-	 /*
-	else
-		speed -= retardation * Time::GetDeltaTime();
-	*/
-	speed = 30;
 }
 
 AI::Behavior AI::GetState()
