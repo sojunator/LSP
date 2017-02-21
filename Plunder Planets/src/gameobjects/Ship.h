@@ -90,10 +90,13 @@ public:
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
-		m_speed = 9000;
+		m_speed = 5000;
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
 		m_turnSpeed = 2000;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
+
+		m_flyTurnSpeed = 500;
+		utils::DebugTools::AddFloat(m_flyTurnSpeed, "boatFlyTurnSpeed");
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
 
@@ -142,7 +145,7 @@ public:
 	void ShipMove(float const dt)
 	{
 		//ship controlls
-		if (Input::GetButton(Input::Buttons::RT) || Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+		if (Input::GetButton(Input::Buttons::RT))
 		{
 			math::Vector3 forward = m_transform->Forward();
 			//Remove y part;
@@ -164,7 +167,18 @@ public:
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 	{
-		
+		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+		{
+			math::Vector3 forward = m_transform->Forward();
+			m_moving = true;
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*dt*m_rigidBody->GetMass()));
+			float turnDelta = -Input::GetLeftStickY();
+
+			m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
+			btVector3 angular = m_rigidBody->getAngularVelocity();
+			m_rigidBody->setAngularVelocity(btVector3(angular.x(), angular.y(), 0));
+			m_flying = true;
+		}
 	}
 		
 	void ShipFireCannons()
@@ -241,12 +255,6 @@ public:
 
 	void PlaySounds(float const dt)
 	{
-		//m_soundDelayLeft -= dt;
-		//if (m_forwardSpeed != 0.0 && m_soundDelayLeft < 0)
-		//{
-		//	m_sound->PlayOneShot(m_SFXs[rand() % 9], 1);
-		//	m_soundDelayLeft = m_soundDelay;
-		//}
 	}
 
 	void PlunderIsland()
@@ -292,13 +300,21 @@ public:
 			CameraZoom(distanceVector, dt);
 		}
 		m_moving = false;
+		m_flying = false;
 		//Ship Movement
 		ShipMove(dt);
 		ShipRotate(dt);
-	//	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
+		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		//ShipFireCannons();
 		
-
+		if (m_flying)
+		{
+			m_renderer->SetModel("testModel" + m_modelIndex);
+		}
+		else
+		{
+			m_renderer->SetModel("testModel0");
+		}
 		
 
 		
@@ -331,10 +347,10 @@ private:
 	float damp;
 
 	bool m_freeCamera;
-
+	bool m_flying;
 	float m_treasure;
 	float m_mass;
-
+	float m_flyTurnSpeed;
 	float m_speed;
 	float m_turnSpeed;
 	//used for the camera
