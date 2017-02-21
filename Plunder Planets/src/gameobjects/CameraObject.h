@@ -155,24 +155,25 @@ public:
 				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
 			}
 		}
-		//needs a if(m_freecamera)
-		/*if (Input::GetKey(Input::Keys::A))
+		if (m_ship->GetFreeCamera())
 		{
-			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			if (Input::GetKey(Input::Keys::A))
+			{
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::D))
+			{
+				m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::W))
+			{
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::S))
+			{
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+			}
 		}
-		if (Input::GetKey(Input::Keys::D))
-		{
-			m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
-		}
-		if (Input::GetKey(Input::Keys::W))
-		{
-			m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}
-		if (Input::GetKey(Input::Keys::S))
-		{
-			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}*/
-
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
@@ -199,7 +200,7 @@ public:
 			Scene::LoadScene<MenuScene>();
 
 
-		if (Input::GetKey(Input::Keys::LeftShift))
+		if (Input::GetKey(Input::Keys::LeftShift) && m_ship->GetFreeCamera()) //Goes in even when GetFreeCamera() == false
 		{
 			m_flySpeed = m_fastSpeed;
 		}
