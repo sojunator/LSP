@@ -17,7 +17,7 @@ private:
 public:
 	CameraObject() : GameObject("CameraObject")
 	{
-		
+
 	};
 
 	void Start()
@@ -31,7 +31,8 @@ public:
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_healthbar = AddComponent<component::SpriteComponent>();
-	
+		m_aiming = false;
+
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 0.5f;
@@ -94,14 +95,13 @@ public:
 		m_gold->SetDropshadow(true);
 		m_gold->SetOutline(true);
 
-		m_transform->SetPosition(0, 1, 3);	
+		m_transform->SetPosition(0, 1, 3);
 	};
 
 
 
 	void Update()
 	{
-
 		/*if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
@@ -139,7 +139,7 @@ public:
 				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
 			}
 		}
-		
+
 		if (Input::GetKey(Input::Keys::A))
 		{
 			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
@@ -166,11 +166,11 @@ public:
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);
 
-			
+
 			if (m_pitch > math::PI / 2.01f)
 				m_pitch = math::PI / 2.01f;
 			if (m_pitch < -math::PI / 2.01f)
-				m_pitch = -math::PI/ 2.01f;
+				m_pitch = -math::PI / 2.01f;
 
 			m_transform->SetRotation(m_jaw, m_pitch, 0);
 		}
@@ -179,24 +179,30 @@ public:
 			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
 		}
 
-		if (Input::GetKeyDown(Input::Keys::Escape))
-			Scene::LoadScene<MenuScene>();
-
-
 		if (Input::GetKey(Input::Keys::LeftShift))
 		{
 			m_flySpeed = m_fastSpeed;
 		}
 		else
 			m_flySpeed = m_normalSpeed;
-		
+
+		if (Input::GetKeyDown(Input::Keys::G))
+		{
+			m_aiming -= 1.f;
+			m_aiming *= -1.f;
+		}
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Scene::LoadScene<MenuScene>();
 	}
 
-	math::Matrix GetCameraMatrix() 
+	math::Matrix GetCameraMatrix()
 	{
 		return m_camera->GetViewProjMatrix();
 	}
-
+	bool GetAiming()
+	{
+		return m_aiming;
+	}
 
 private:
 	Ship* m_ship;
@@ -213,5 +219,5 @@ private:
 	float m_flySpeed;
 	float m_jaw;
 	float m_pitch;
-
+	float m_aiming;
 };

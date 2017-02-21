@@ -46,8 +46,11 @@ cbuffer material : register(b1)
 	float pad3;
 	float2 perlinMovement;
 	float2 pad4;
+	float3 shipPosition;
+	float aiming; //-1 for left side, 1 for right, 0 when not aiming
+	float3 shipRight;
+	float power;
 }
-
 
 struct DirLight
 {
@@ -114,7 +117,7 @@ struct PSInput
 HSInput VSMain(in VSInput input)
 {
 	HSInput output;
-	
+
 	output.position = mul(float4(input.position, 1), worldMatrix).xyz;
 
 
@@ -198,13 +201,13 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	float perlin = 0;
 	if(blendFactor < 1)
 	{
-		
+
 		float2 perlinTC = output.tex * perlinSize + (pos.xy % 256) - 128;
 		float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
 		float perlin1 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.y + perlinMovement, 0).w;
 		float perlin2 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.z + perlinMovement, 0).w;
 		perlin = perlin0 * perlinAmp.x + perlin1 * perlinAmp.y + perlin2 * perlinAmp.z;
-		
+
 	}
 
 	float3 displacement = 0;
@@ -221,7 +224,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	output.position = mul(output.position, projectionMatrix);
 	output.positionWS = pos.xzy;
 
-	
+
 
 	return output;
 }
@@ -273,7 +276,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float sunSpot = pow(cosSpec, shininess); //shiny
 
 	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
-	
+
 
 	return float4(waterColor, 1);
 }

@@ -1,6 +1,7 @@
 #include "WaterMaterial.h"
 #include "Input.h"
 #include "graphics\Renderer.h"
+#include "..\gameobjects\Ship.h"
 Material * WaterMaterial::CreateInstance(std::string name, Shader * shader)
 {
 	return new WaterMaterial(name, shader);
@@ -60,6 +61,11 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.g_PerlinOctave = math::Vector3(1.12f, 0.59f, 0.23f)*0.01;
 	m_materialProperties.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
+
+	Ship* ship = (Ship*)thomas::object::GameObject::Find("Ship");
+	m_materialProperties.shipPosition = ship->m_transform->GetPosition();
+	m_materialProperties.aiming = 0;
+	m_materialProperties.shipRight = ship->m_transform->Right();
 
 	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 	play = true;

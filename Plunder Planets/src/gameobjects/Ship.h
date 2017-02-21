@@ -51,8 +51,9 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_boostSound = AddComponent<component::SoundComponent>();
-		m_cameraObject = Find("CameraObject");
+		m_cameraObject = (CameraObject*)Find("CameraObject");
 		m_terrainObject = (TerrainObject*)Find("TerrainObject");
+		m_waterObject = (WaterObject*)Find("WaterObject");
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 		//Detta funkar fan inte
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0,1,0), math::DegreesToradians(90)), m_transform, m_scene);
@@ -250,6 +251,17 @@ public:
 			m_broadSideLeft->Fire(m_forwardSpeed);
 		}
 	}
+	void ShipAimCannons()
+	{
+		if (m_cameraObject->GetAiming() != 0)
+		{
+			m_waterObject->SetAim(1.f);
+			if (Input::GetKey(Input::Keys::H))
+			{
+				m_broadSideRight->m_transform->RotateByAxis(m_transform->Up(), 0.01f);
+			}
+		}
+	}
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 	{
@@ -353,7 +365,8 @@ public:
 		//ShipBoost(dt);
 		
 		
-		//Ship Movement
+		//Ship Controls
+		ShipAimCannons();
 		ShipMove(forwardFactor, dt);
 		ShipRotate(rightFactor, dt);
 		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
@@ -454,8 +467,9 @@ private:
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
 	ShipFloat* m_floats[8];
-	GameObject* m_cameraObject;
+	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
+	WaterObject* m_waterObject;
 
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRight;
