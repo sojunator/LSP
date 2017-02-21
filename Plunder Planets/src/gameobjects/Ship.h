@@ -204,12 +204,12 @@ public:
 	void CameraZoom(float const dt)
 	{
 
-		if (Input::GetButton(Input::Buttons::DPAD_UP))
+		if (Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Z))
 		{
 			m_cameraDistance -= m_camZoomSpeed*dt;
 		}
 		
-		if (Input::GetButton(Input::Buttons::DPAD_DOWN))
+		if (Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::X))
 		{
 			m_cameraDistance += m_camZoomSpeed*dt;
 		}
@@ -255,7 +255,7 @@ public:
 			right_y = Input::GetKey(Input::Keys::Up);
 		else if (Input::GetKey(Input::Keys::Down))
 			right_y = -Input::GetKey(Input::Keys::Down);
-
+		
 		//If boat turning with A / D
 		if (Input::GetKey(Input::Keys::D))
 			left_x = Input::GetKey(Input::Keys::D);
