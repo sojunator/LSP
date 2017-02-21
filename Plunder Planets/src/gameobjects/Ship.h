@@ -310,7 +310,7 @@ public:
 		
 		if (m_flying)
 		{
-			m_renderer->SetModel("testModel" + m_modelIndex);
+			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 		}
 		else
 		{
@@ -339,6 +339,7 @@ public:
 		{
 			m_rigidBody->setDamping(0.0, 0.0);
 		}
+
 		
 	}
 
