@@ -492,7 +492,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\AntTweakBar.lib;$(ProjectDir)\lib\libnoise.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)\lib\assimp.lib;$(ProjectDir)\lib\AntTweakBar.lib;$(ProjectDir)\lib\libnoise.lib;$(ProjectDir)\lib\BulletCollision.lib;$(ProjectDir)\lib\BulletDynamics.lib;$(ProjectDir)\lib\LinearMath.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

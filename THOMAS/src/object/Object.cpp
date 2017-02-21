@@ -65,7 +65,7 @@ namespace thomas
 		{
 			std::vector<Object*> output;
 			for (Object* object : s_objects)
-				if (object->m_scene == scene)
+				if (object->m_scene == scene && object->m_alive)
 					output.push_back(object);
 			return output;
 		}
