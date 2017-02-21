@@ -6,12 +6,12 @@ namespace thomas
 	Islands::Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance)
 	{
 		std::srand(time(NULL));
-		std::vector<utils::Plane::PlaneData> tempPlane;
+		utils::Plane::PlaneData plane = utils::Plane::CreatePlane(mapSize, detail);
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;
 		m_plunderRate = 30;
-		GeneratePos();
+
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			m_size.push_back(size);
@@ -20,22 +20,23 @@ namespace thomas
 			m_totalTreasure.push_back(1000);
 			m_plunderRadius.push_back(size*detail*0.8);
 			m_collisionRadius.push_back(size*detail*0.6);
-			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i]);
-			ApplyOffSet(i, tempPlane[i]);
+		}
+
+		GeneratePos();
+		for (int i = 0; i < nrOfIslands; i++)
+		{
+;
+			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].y));
 			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
 		}
-		GenerateMesh(tempPlane, m);
+		GenerateMesh(plane, m);
+
 	}
 
-	void Islands::GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m)
+	void Islands::GenerateMesh(utils::Plane::PlaneData tempPlane, graphics::Material* m)
 	{
 		std::vector<thomas::graphics::Mesh*> mesh;
-		for (unsigned int i = 0; i < tempPlane.size(); ++i)
-		{
-			mesh.push_back(new graphics::Mesh(tempPlane[i].verts, tempPlane[i].indices, "Plane-1", m));
-
-		}
+		mesh.push_back(new graphics::Mesh(tempPlane.verts, tempPlane.indices, "Plane-1", m));
 		m_mesh.push_back(mesh);
 	}
 
@@ -163,8 +164,8 @@ namespace thomas
 			while (posNotFound)
 			{
 				math::Vector2 xy;
-				xy.x = rand() % m_mapSize * 2 - m_mapSize;
-				xy.y = rand() % m_mapSize * 2 - m_mapSize;
+				xy.x = rand() % m_mapSize - m_size[i] * m_detail[i] - 1;
+				xy.y = rand() % m_mapSize - m_size[i] * m_detail[i] - 1;
 				float distPrev = 0.0f;
 
 				if (m_worldPosOffset.size() == 0)
