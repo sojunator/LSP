@@ -29,7 +29,7 @@ public:
 		float spacing = 2.3;
 		for (int i = -1; i <= 3; i++)
 		{
-			m_fireSFX->PlayOneShot(m_SFXs[rand() % 2], 1);
+			m_fireSFX->PlayOneShot(m_SFXs[rand() % 2], 1); //varför spela ljud vid creation?
 			math::Vector3 pos = math::Vector3(0.0f);
 			pos += m_transform->Forward()*i*spacing - m_transform->Up() * 3.5;
 

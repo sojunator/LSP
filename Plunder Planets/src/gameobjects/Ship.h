@@ -85,9 +85,9 @@ public:
 		m_renderer->SetModel("testModel0");
 		m_moving = false;
 		//sound
-		//m_boostSound->SetClip("mThomas");
+
 		m_boostSound->SetClip("fFlames");
-		m_boostSound->SetVolume(0.9);
+		m_boostSound->SetVolume(1000);
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 		//movement
@@ -307,7 +307,7 @@ public:
 		ShipRotate(dt);
 		ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 		ShipFireCannons();
-		
+
 		if (m_flying)
 		{
 			m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
@@ -316,7 +316,7 @@ public:
 		else
 		{
 			m_renderer->SetModel("testModel0");
-			//m_boostSound->Pause();
+			m_boostSound->Pause();
 		}
 		
 
