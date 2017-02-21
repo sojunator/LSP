@@ -68,7 +68,7 @@ public:
 		m_treasure = 10000;
 
 		//model
-		m_modelIndex = 0;
+		m_modelIndex = 1;
 		m_renderer->SetModel("testModel0");
 
 		//sound
@@ -350,7 +350,7 @@ public:
 		float upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
 		float upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
 
-		m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
+		m_modelIndex = ((m_modelIndex + 1) % 3);
 
 		//ShipBoost(dt);
 		

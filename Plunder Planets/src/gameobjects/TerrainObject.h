@@ -21,12 +21,12 @@ public:
 		m_shipObject = Find("Ship");
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(3, mat, 1024 / 4, 1, 1024, 100);
+		m_islands = new thomas::Islands(20, mat, 1024 / 4, 0.125, 1024, 100);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Plane-1");
 
-		m_transform->SetPosition(math::Vector3(0, -2, 0));
+		m_transform->SetPosition(math::Vector3(0, -2.5, 0));
 
 
 	}
