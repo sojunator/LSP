@@ -13,7 +13,7 @@
 #define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p)=NULL; } }
 
 
-#define THOMAS_AA_COUNT 2
+#define THOMAS_AA_COUNT 1
 #define THOMAS_AA_QUALITY 0
 
 #define _XM_NO_INTRINSICS_ 1; //Bullet fix

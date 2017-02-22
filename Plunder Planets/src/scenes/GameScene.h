@@ -5,6 +5,7 @@
 #include "../gameobjects/TerrainObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
+#include "../gameobjects/OceanFloor.h"
 #include "../materials/PhongMaterial.h"
 #include "../materials/TerrainMaterial.h"
 #include "../materials/WaterMaterial.h"
@@ -13,6 +14,7 @@
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
 #include "../src/graphics/ParticleSystem.h"
+#include "../gameobjects/Enemy.h"
 
 
 class GameScene : public thomas::Scene
@@ -76,12 +78,13 @@ public:
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_ship = LoadObject<Ship>();
+		m_enemyShip = LoadObject<Enemy>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
 
 		ParticleSystem::Init();
-		m_particleEmitter = LoadObject<StandardParticleEmitter>();
 	};
 	
 	/*void UnloadScene()
@@ -97,8 +100,8 @@ private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	Ship* m_ship;
+	Enemy* m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
-	StandardParticleEmitter* m_particleEmitter;
 	float test = 0.0f;
 };

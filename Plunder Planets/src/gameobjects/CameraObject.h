@@ -40,7 +40,7 @@ public:
 	
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
-		m_sensitivity = 0.5f;
+		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;
 		m_flySpeed = m_normalSpeed;
@@ -118,14 +118,14 @@ public:
 		
 		m_camera->SetFar(m_far);
 		m_camera->SetFov(m_fov);
-		/*if (m_ship == nullptr)
+		if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
 		else
 		{
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
-		}*/
+		}
 		//Healthbar code here for now
 		if (m_healthbar->GetScale().x > 0.6f)
 		{
@@ -155,29 +155,30 @@ public:
 				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
 			}
 		}
-		
-		if (Input::GetKey(Input::Keys::A))
+		if (m_ship->GetFreeCamera())
 		{
-			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			if (Input::GetKey(Input::Keys::A))
+			{
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::D))
+			{
+				m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::W))
+			{
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::S))
+			{
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+			}
 		}
-		if (Input::GetKey(Input::Keys::D))
-		{
-			m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
-		}
-		if (Input::GetKey(Input::Keys::W))
-		{
-			m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}
-		if (Input::GetKey(Input::Keys::S))
-		{
-			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}
-
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity;
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*Time::GetDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);
@@ -199,7 +200,7 @@ public:
 			Scene::LoadScene<MenuScene>();
 
 
-		if (Input::GetKey(Input::Keys::LeftShift))
+		if (Input::GetKey(Input::Keys::LeftShift) && m_ship->GetFreeCamera()) //Goes in even when GetFreeCamera() == false
 		{
 			m_flySpeed = m_fastSpeed;
 		}

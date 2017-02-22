@@ -49,12 +49,25 @@ public:
 
 	}
 
+	void SetOceanCenter(float x, float z)
+	{
+		float gridSize = 100.0;
+
+		x = x / gridSize;
+		x = floor(x);
+		x *= gridSize;
+		z = z / gridSize;
+		z = floor(z);
+		z *= gridSize;
+		m_transform->SetPosition(math::Vector3(x-m_dimensions / 2, 0, z+m_dimensions / 2));
+	}
+
 
 
 	math::Vector3 GetCollisionAt(component::Transform* transform)
 	{
 		math::Vector3 position = transform->GetPosition();
-		float uvScale = 1.0 /oceanSim->getParameters().patch_length;
+		float uvScale = 1.0 /oceanSim->getParameters().patch_length*2;
 		float uvOffset = 0.5f / oceanSim->getParameters().dmap_dim;
 		math::Vector2 texCoord;
 		position.x -= m_dimensions/2;

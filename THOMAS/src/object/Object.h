@@ -37,9 +37,10 @@ namespace thomas
 			static void Clean();
 
 		private:
-			bool m_alive;
+			
 			static std::vector<Object*> s_objects;
 		protected:
+			bool m_alive;
 			std::string m_type;
 			Scene* m_scene;
 		};

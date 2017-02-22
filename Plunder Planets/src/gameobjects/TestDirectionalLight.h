@@ -25,6 +25,7 @@ public:
 		m_transform->SetPosition(math::Vector3(50, 50, 50));
 		m_transform->LookAt(m_transform);
 
+		utils::DebugTools::AddRotation(m_rotation, "sunDir");
 	}
 	void Update()
 	{
@@ -38,12 +39,13 @@ public:
 		{
 			m_rot += rotFactor;
 		}
-		m_transform->SetRotation(m_rot, 0, 0);
-
+	//	m_transform->SetRotation(m_rot, 0, 0);
+		m_transform->SetRotation(m_rotation);
 		
 	}
 private:
 	component::DirectionalLight* m_dirLight;
 	math::Color m_lightColor;
 	float m_rot;
+	math::Quaternion m_rotation;
 };

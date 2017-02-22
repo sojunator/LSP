@@ -100,6 +100,7 @@ namespace thomas
 			s_objectBufferStruct.projectionMatrix = camera->GetProjMatrix().Transpose();
 			s_objectBufferStruct.mvpMatrix = s_objectBufferStruct.projectionMatrix * s_objectBufferStruct.viewMatrix * s_objectBufferStruct.worldMatrix;
 			s_objectBufferStruct.camPos = camera->GetPosition();
+			s_objectBufferStruct.camDir = camera->m_gameObject->m_transform->Forward();
 
 			utils::D3d::FillDynamicBufferStruct(s_objectBuffer, s_objectBufferStruct);
 
@@ -108,7 +109,7 @@ namespace thomas
 		}
 		ID3D11ShaderResourceView* Renderer::GetDepthBufferSRV()
 		{
-			return s_backBufferSRV;
+			return s_depthBufferSRV;
 		}
 		ID3D11RenderTargetView * Renderer::GetBackBuffer()
 		{
@@ -134,6 +135,19 @@ namespace thomas
 		void Renderer::BindDepthReadOnly()
 		{
 			ThomasCore::GetDeviceContext()->OMSetRenderTargets(1, &s_backBuffer, s_depthStencilViewReadOnly);
+		}
+		void Renderer::BindDepthBufferTexture()
+		{
+			BindDepthReadOnly();
+			ID3D11SamplerState* sampler = Texture::GetSamplerState(Texture::SamplerState::WRAP);
+			ThomasCore::GetDeviceContext()->PSSetSamplers(5, 1, &sampler);
+			ThomasCore::GetDeviceContext()->PSSetShaderResources(5, 1, &s_depthBufferSRV);
+		}
+		void Renderer::UnbindDepthBufferTexture()
+		{
+			ID3D11ShaderResourceView* nullSRV = NULL;
+			ThomasCore::GetDeviceContext()->PSSetShaderResources(5, 1, &nullSRV);
+			BindDepthNormal();
 		}
 	}
 }

@@ -47,6 +47,8 @@ namespace thomas
 		Scene* scene = new T();
 		s_currentScene = scene;
 		LOG("Scene " + scene->GetName() + " set");
+		//Flush inputs
+		Input::Update();
 		return scene;
 	}
 	template<typename T>

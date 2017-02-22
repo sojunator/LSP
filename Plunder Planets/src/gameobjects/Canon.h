@@ -2,6 +2,7 @@
 #include "Thomas.h"
 #include "Projectile.h"
 #include <time.h>
+#include "object\component\EmitterComponent.h"
 
 using namespace thomas;
 using namespace object;
@@ -19,10 +20,11 @@ public:
 
 	void Start()
 	{
+		m_emitterComponent = AddComponent<component::EmitterComponent>();
+		m_emitterComponent->Init(256 * 22 + 254, false, math::Vector3(0, 1, 0), 0.0f, 1.0f, 3.0f, 3.4f, m_transform->GetPosition(), 0.1f, 0.4f, 6.0f, "particleShader", "../res/textures/smokeParticleDank.png");
+
 		roof = 0.8f;
 		ReseedDelay();
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("box");
 	}
 
 	void SetMaxCanonDelay(float delay)
@@ -39,10 +41,10 @@ public:
 	{
 		if (fire)
 		{
+			m_emitterComponent->Emit();
 			if (currentTimeCount > delay)
 			{
 				// instanciate projectile
-				utils::DebugTools::AddRotation(m_transform->GetRotation(), "proj rot");
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				currentTimeCount = 0.0f;
 				fire = false;
@@ -73,6 +75,5 @@ private:
 	float delay;
 	float roof;
 	float currentTimeCount;
-	component::RenderComponent* m_renderer;
-
+	component::EmitterComponent* m_emitterComponent;
 };
