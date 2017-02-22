@@ -181,10 +181,13 @@ public:
 	void ShipFireCannons()
 	{
 		if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKey(Input::Keys::E))
-			m_broadSideRight->Fire();
+			m_broadSideLeft->Fire(); //Temporary fix
+			//m_broadSideRight->Fire();
+			
 
 		if (Input::GetButtonDown(Input::Buttons::LB) || Input::GetKey(Input::Keys::Q))
-			m_broadSideLeft->Fire();
+			m_broadSideRight->Fire(); //Temporary Fix
+			//m_broadSideLeft->Fire();
 
 	}
 
