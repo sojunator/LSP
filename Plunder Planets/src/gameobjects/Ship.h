@@ -7,7 +7,7 @@
 #include "WaterObject.h"
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
-
+#include "../scenes/MenuScene.h"
 using namespace thomas;
 using namespace object;
 class Ship : public GameObject
@@ -107,6 +107,9 @@ public:
 		m_camMaxDistanceFromBoat = 220.0f;
 		m_cameraDistance = 50.0;
 
+		m_health = 100;
+		m_maxHealth = m_health;
+
 		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
@@ -121,7 +124,7 @@ public:
 	void ShipMove(float const dt)
 	{
 		//ship controls
-		if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera &&Input::GetKey(Input::Keys::W)))
+		if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera &&Input::GetKey(Input::Keys::W)) || (m_freeCamera && Input::GetKey(Input::Keys::Up)))
 		{
 			math::Vector3 forward = m_transform->Forward();
 
@@ -147,6 +150,13 @@ public:
 				turnDelta = -Input::GetKey(Input::Keys::D);
 			else if (-Input::GetKey(Input::Keys::A))
 				turnDelta = Input::GetKey(Input::Keys::A);
+		}
+		else
+		{
+			if (Input::GetKey(Input::Keys::Right))
+				turnDelta = -Input::GetKey(Input::Keys::Right);
+			else if (-Input::GetKey(Input::Keys::Left))
+				turnDelta = Input::GetKey(Input::Keys::Left);
 		}
 
 		math::Vector3 right = m_transform->Right();
@@ -292,7 +302,7 @@ public:
 
 		bois /= 8;
 		waveHeight /= 8;
-		if (bois.y > waveHeight + roof)
+		if (bois.y > waveHeight + roof && waveHeight > -5)
 		{
 			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
 			float oldY = v.getY();
@@ -311,15 +321,18 @@ public:
 		float left_y = Input::GetLeftStickY(); //not used?
 
 		//If cam changed with arrow keys
-		if (Input::GetKey(Input::Keys::Right))
-			right_x = -Input::GetKey(Input::Keys::Right);
-		else if (Input::GetKey(Input::Keys::Left))
-			right_x = Input::GetKey(Input::Keys::Left);
+		if (!m_freeCamera)
+		{
+			if (Input::GetKey(Input::Keys::Right))
+				right_x = -Input::GetKey(Input::Keys::Right);
+			else if (Input::GetKey(Input::Keys::Left))
+				right_x = Input::GetKey(Input::Keys::Left);
 
-		if (Input::GetKey(Input::Keys::Up))
-			right_y = Input::GetKey(Input::Keys::Up);
-		else if (Input::GetKey(Input::Keys::Down))
-			right_y = -Input::GetKey(Input::Keys::Down);
+			if (Input::GetKey(Input::Keys::Up))
+				right_y = Input::GetKey(Input::Keys::Up);
+			else if (Input::GetKey(Input::Keys::Down))
+				right_y = -Input::GetKey(Input::Keys::Down);
+		}
 
 		//get forward, right and up contrib
 		float forwardFactor = 0; //not used?
@@ -401,6 +414,31 @@ public:
 
 		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 	}
+
+
+
+	void OnCollision(component::RigidBodyComponent* other)
+	{
+		if (other->m_gameObject->GetType() == "Projectile")
+		{
+			Projectile* p = ((Projectile*)other->m_gameObject);
+			if (p->m_spawnedBy == this)
+				return;
+			m_health -= p->GetDamageAmount();
+			LOG("hit hp: " << m_health);
+			if (m_health <= 0)
+			{
+				LOG("You are dead!");
+				Scene::LoadScene<MenuScene>();
+			}
+				
+		}
+			
+	}
+
+public:
+	float m_health;
+	float m_maxHealth;
 
 private:
 	float roof;

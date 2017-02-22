@@ -107,15 +107,13 @@ public:
 		m_gold->SetDropshadow(true);
 		m_gold->SetOutline(true);
 
-		m_transform->SetPosition(0, 1, 3);	
+		m_transform->SetPosition(0, 1, 3);
 	};
 
 
 
 	void Update()
 	{
-
-		
 		m_camera->SetFar(m_far);
 		m_camera->SetFov(m_fov);
 		if (m_ship == nullptr)
@@ -124,6 +122,7 @@ public:
 		}
 		else
 		{
+			m_healthbar->SetScale(math::Vector2(m_ship->m_health / m_ship->m_maxHealth, 1.0f));
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
 		}
 		//Healthbar code here for now
@@ -140,21 +139,6 @@ public:
 			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		if (Input::GetKey(Input::Keys::K))
-		{
-			if (m_healthbar->GetScale().x < 1.0f)
-			{
-				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, 1.0f));
-			}
-		}
-
-		if (Input::GetKey(Input::Keys::J))
-		{
-			if (m_healthbar->GetScale().x >= 0.0f)
-			{
-				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
-			}
-		}
 		if (m_ship->GetFreeCamera())
 		{
 			if (Input::GetKey(Input::Keys::A))

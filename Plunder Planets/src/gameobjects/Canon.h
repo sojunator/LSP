@@ -46,6 +46,7 @@ public:
 				m_emitterComponent->Emit();
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
+				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
 				currentTimeCount = 0.0f;
 				fire = false;
 			}
