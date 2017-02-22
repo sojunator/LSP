@@ -26,6 +26,8 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
+			m_islandCenterWorldPos[i].x -= mapSize / 2;
+			m_islandCenterWorldPos[i].z += mapSize / 2;
 		}
 
 		for (int i = 0; i < plane.verts.size(); i++)
@@ -172,9 +174,9 @@ namespace thomas
 			while (posNotFound && attempt < MAX_ATTEMPTS)
 			{
 				math::Vector3 xy;
-				xy.x = rand() % (m_mapSize  - m_size[i] - 10);
+				xy.x = rand() % (m_mapSize - m_size[i] - 10);
 				xy.y = 0;
-				xy.z = rand() % (m_mapSize  - m_size[i] - 10);
+				xy.z = rand() % (m_mapSize - m_size[i] - 10);
 				xy = xy + math::Vector3(10.0, 0.0, 10.0);
 				float distPrev = 0.0f;
 
