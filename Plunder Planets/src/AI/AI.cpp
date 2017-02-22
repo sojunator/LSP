@@ -61,7 +61,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		else if (pDotR >= 0.0 && pDotF <= 0.0 || pDotR >= 0.2 && pDotF >= 0.0 && !objectLeft || objectFront && objectRight)
 			return -1;
 		/*Cone forward and no island forward*/
-		else 
+		else
 			return 0;
 		break;
 	}
@@ -127,9 +127,9 @@ int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
 	playerDir.Normalize();
 	float pDotR = playerDir.Dot(right);
 
-	if (pDotR >= 0.85)
+	if (pDotR >= 0.9)
 		return 1;
-	else if (pDotR <= -0.85)
+	else if (pDotR <= -0.9)
 		return -1;
 	else
 		return 0;
@@ -155,7 +155,7 @@ void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
 	{
 		m_escapeTimer += Time::GetDeltaTime();
 	}
-	
+
 }
 
 void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir)

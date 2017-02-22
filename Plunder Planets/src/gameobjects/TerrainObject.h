@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <Thomas.h>
@@ -17,11 +18,11 @@ public:
 
 	void Start()
 	{
-		
+
 		m_renderer = AddComponent<component::RenderComponent>();
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 1024, 1.0/16, 5000, 100);
+		m_islands = new thomas::Islands(20, mat, 1024, 1.0 / 16, 5000, 100);
 		m_model = thomas::graphics::Model::CreateModel("Islands", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Islands");
