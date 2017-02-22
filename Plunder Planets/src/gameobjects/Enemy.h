@@ -72,10 +72,6 @@ public:
 		m_ai = AddComponent<AI>();
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		
-		//m_broadSideLeftCannonball = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x - (-m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI / 2), m_transform, m_scene);
-		//m_broadSideRightCannonball = Instantiate<Broadside>(math::Vector3(m_transform->GetPosition().x + (-m_transform->Right().x * 30), 5, -0.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
-		//m_broadSideFront = Instantiate<Broadside>(math::Vector3(0, 5, m_transform->GetPosition().z + (-m_transform->Forward().z * 60)), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::PI * 2 / 3), m_transform, m_scene);
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 
@@ -91,9 +87,9 @@ public:
 		m_rigidBody->SetMass(m_mass);
 		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 12, 8)));
 		m_rigidBody->setSleepingThresholds(0.2, 0.5);
-		
+
 		//Sound
-		
+
 
 		//Movement
 		m_speed = 600;
@@ -101,9 +97,10 @@ public:
 		m_turnSpeed = 150;
 		utils::DebugTools::AddFloat(m_turnSpeed, "enemyTurnSpeed");
 
-		utils::DebugTools::AddBool(m_islandForward, "Island F");
-		utils::DebugTools::AddBool(m_islandRight, "Island R");
-		utils::DebugTools::AddBool(m_islandLeft, "Island L");
+		thomas::utils::DebugTools::AddInteger(m_shootDir, "Shoot Dir");
+		//utils::DebugTools::AddBool(m_islandForward, "Island F");
+		//utils::DebugTools::AddBool(m_islandRight, "Island R");
+		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 	}
 
 	void Move(float dt)
@@ -111,15 +108,16 @@ public:
 		math::Vector3 forward = m_transform->Forward();
 		forward.y = 0;		//Remove y so no flying
 		m_moving = true;
+		m_shootDir = m_ai->FireCannons(m_transform->GetPosition(), -m_transform->Right());
 
 		switch (m_ai->GetState())
 		{
 		case AI::Behavior::Attacking:
+			FireCannons();
 			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
 			Rotate(dt);
 			break;
 		case AI::Behavior::Firing:
-			m_shootDir = m_ai->FireCannons(-forward, -m_transform->Right());
 			FireCannons();
 			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
 			Rotate(dt);
@@ -142,7 +140,7 @@ public:
 		math::Vector3 right = m_transform->Right();
 		right.y = 0;		//Remove y so no flying
 		m_rigidBody->activate();
-		
+
 
 
 		float dir = m_newForwardVec.Dot(m_transform->Right());
@@ -160,7 +158,7 @@ public:
 		if (m_shootDir == 1)
 			m_broadSideLeft->Fire();
 		else if (m_shootDir == -1)
-			m_broadSideRight->Fire();
+			m_broadSideLeft->Fire();
 	}
 
 	void Update()
@@ -182,7 +180,7 @@ public:
 		if (!m_firstFrame)
 			Move(dt);
 		m_firstFrame = false;
-		
+
 		bool inWater = false;
 
 		for (int i = 0; i < 12; i++)
