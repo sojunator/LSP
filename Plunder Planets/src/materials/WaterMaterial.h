@@ -49,5 +49,6 @@ private:
 	utils::ocean::OceanSimulator* m_oceanSim;
 	MaterialProperties m_materialProperties;
 
+	float m_pow;
 };
 

@@ -199,7 +199,7 @@ void Ship::ShipAimCannons()
 		else if (bajs2 < -1.f)
 			bajs2 = -1.f;
 		float angle = math::PI / 2 - std::acos(bajs2);
-
+		int youreadickbutt = 0;
 		math::Vector2 bajs = math::Vector2(m_transform->Forward().x, m_transform->Forward().z);
 		bajs.Normalize();
 

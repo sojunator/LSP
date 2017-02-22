@@ -19,6 +19,8 @@ public:
 
 	void Start()
 	{
+		m_pitch = 15.f;
+		m_yaw = 0.f;
 		roof = 0.8f;
 		ReseedDelay();
 		m_renderer = AddComponent<component::RenderComponent>();
@@ -44,6 +46,8 @@ public:
 				// instanciate projectile
 				utils::DebugTools::AddRotation(m_transform->GetRotation(), "proj rot");
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
+				/*p->SetPitch(m_pitch);
+				p->SetYaw(m_yaw);*/
 				currentTimeCount = 0.0f;
 				fire = false;
 			}
@@ -62,13 +66,21 @@ public:
 			currentTimeCount = 0.0f;
 		}
 	}
-
+	void SetPitch(float pitch)
+	{
+		m_pitch = pitch;
+	}
+	void SetYaw(float yaw)
+	{
+		m_yaw = yaw;
+	}
 	~Cannon()
 	{
 
 	}
 
 private:
+	float m_pitch, m_yaw;
 	bool fire;
 	float delay;
 	float roof;

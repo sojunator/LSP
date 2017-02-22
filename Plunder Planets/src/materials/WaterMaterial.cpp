@@ -10,7 +10,8 @@ Material * WaterMaterial::CreateInstance(std::string name, Shader * shader)
 
 WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, shader)
 {
-
+	m_pow = 5000.f;
+	utils::DebugTools::AddFloat(m_pow, "power");
 	// The size of displacement map. In this sample, it's fixed to 512.
 	m_oceanSettings.dmap_dim = 512;
 	// The side length (world space) of square patch
@@ -101,7 +102,9 @@ utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
 }
 void WaterMaterial::UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle)
 {
-	m_materialProperties.aimPos = pos + right * (std::sin(angle) * 1000.f + pow);
+	m_materialProperties.aimPos = pos + right * (std::sin(angle) * m_pow);
+	math::Vector3 distance = m_materialProperties.aimPos - pos;
+	m_materialProperties.radius = std::sqrt(distance.Length());
 	m_materialProperties.aiming = 1;
 }
 void WaterMaterial::DisableAim()
