@@ -31,7 +31,7 @@ public:
 		m_transform->SetScale(radius);
 	}
 
-	bool UpdateBoat(component::RigidBodyComponent* rb, bool moving) 
+	float UpdateBoat(component::RigidBodyComponent* rb, bool moving) 
 	{
 		math::Vector3 deltaWater = ((WaterObject*)Find("WaterObject"))->GetCollisionAt(m_transform);
 
@@ -71,11 +71,11 @@ public:
 			rb->applyImpulse(force*Time::GetDeltaTime(), *(btVector3*)&pos);
 			if(!moving)
 				rb->applyDamping(Time::GetDeltaTime());
-			return true;
 		}
+		
 
 
-		return false;
+		return deltaWater.y;
 
 		
 	}
