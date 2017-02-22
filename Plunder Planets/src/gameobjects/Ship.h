@@ -114,7 +114,7 @@ public:
 
 	bool GetFreeCamera()
 	{
-		return &m_freeCamera;
+		return m_freeCamera;
 	}
 
 	void ShipMove(float const dt)
@@ -161,7 +161,7 @@ public:
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 	{
-		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A)) && m_treasure > m_flyCost*dt || Input::GetKey(Input::Keys::Space))
+		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A)) || Input::GetKey(Input::Keys::Space) || Input::GetKey(Input::Keys::LeftShift) && m_treasure > m_flyCost*dt)
 		{
 			m_treasure -= m_flyCost*dt;
 			math::Vector3 forward = m_transform->Forward();
