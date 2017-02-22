@@ -1,5 +1,7 @@
 #include "Physics.h"
 #include "Time.h"
+#include "object\component\RigidBodyComponent.h"
+#include "object\GameObject.h"
 #define PHYSICS_TIMESTEP 1.0f/60.0f
 namespace thomas
 {
@@ -40,7 +42,22 @@ namespace thomas
 
 		s_world->stepSimulation(Time::GetDeltaTime(), 7);
 
-		
+		int numManifolds = s_world->getDispatcher()->getNumManifolds();
+		for (int i = 0; i < numManifolds; i++)
+		{
+			btPersistentManifold* contactManifold = s_world->getDispatcher()->getManifoldByIndexInternal(i);
+			btCollisionObject* obA = (btCollisionObject*)contactManifold->getBody0();
+			btCollisionObject* obB = (btCollisionObject*)contactManifold->getBody1();
+			
+			object::component::RigidBodyComponent* rbA = static_cast<object::component::RigidBodyComponent*>(obA);
+			object::component::RigidBodyComponent* rbB = static_cast<object::component::RigidBodyComponent*>(obB);
+			if (object::Object::IsAlive(rbA) && object::Object::IsAlive(rbB))
+			{
+				rbA->m_gameObject->OnCollision(rbB);
+				rbB->m_gameObject->OnCollision(rbA);
+			}
+				
+		}
 		
 
 	}

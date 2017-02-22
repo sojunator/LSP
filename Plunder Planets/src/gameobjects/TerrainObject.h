@@ -22,7 +22,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 1024, 1.0 / 16, 5000, 100);
+		m_islands = new thomas::Islands(20, mat, 1024, 1/8.f, 4096, 1024);
 		m_model = thomas::graphics::Model::CreateModel("Islands", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Islands");
@@ -43,6 +43,8 @@ public:
 				m_broadsides.at(i + 10 * j)->m_transform->SetScale(5);
 			}
 	}
+
+
 
 	void Update()
 	{

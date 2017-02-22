@@ -25,6 +25,7 @@ namespace thomas
 			static void Destroy(Scene* scene);
 			static void Destroy();
 			static bool IsAlive(const Object* object);
+			bool Alive() { return m_alive; }
 			//Clone object
 			template<typename T>
 			static T* Instantiate(Scene* scene);
