@@ -22,18 +22,24 @@ namespace thomas
 			myModule.SetSeed(rand() % 1000);
 			startingPos *= detail;
 			float x, y;
-			for (unsigned int j = startingPos.y; j < startingPos.y + size * detail; j++)
+			float tempX, tempY;
+			int index = (int)startingPos.x + mapSize * detail * ((int)startingPos.y - 1);
+
+			tempX = (plane.verts[index].position.x * detail);
+			tempY = -(plane.verts[index].position.z * detail);
+
+			for (unsigned int j = startingPos.y; j < startingPos.y + size * detail - 1; j++)
 			{
-				for (unsigned int i = startingPos.x; i < startingPos.x + size * detail; i++)
+				for (unsigned int i = startingPos.x; i < startingPos.x + size * detail - 1; i++)
 				{
-					int index = i + mapSize * detail * (j - 1);
+
+					index = i + mapSize * detail * (j - 1);
 					x = (plane.verts[index].position.x * detail);
 					y = -(plane.verts[index].position.z * detail);
 
 					e = 0.0f;
-					double nx = j / width - 0.5,
-						ny = i / height - 0.5;
-
+					double nx = (x - tempX) / width - 0.5,
+						ny = (y - tempY) / height - 0.5;
 
 					e += myModule.GetValue(nx, ny, 0) / 2.0 + 0.5;
 					e += myModule.GetValue(2 * nx, 2 * ny, 0) / 2.0 + 0.5;
@@ -41,7 +47,9 @@ namespace thomas
 					e += myModule.GetValue(8 * nx, 8 * ny, 0) / 2.0 + 0.5;
 					e = pow(e, 3.4f);
 
-					plane.verts[index].position.y = -(e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
+				
+
+					plane.verts[index].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
 					//plane.verts[i].position.x += startingPos.x;
 					//plane.verts[i].position.z += startingPos.y;
 				}

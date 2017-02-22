@@ -23,11 +23,9 @@ namespace thomas
 		}
 
 		GeneratePos();
-		for (int i = 0; i < nrOfIslands; i++)
+		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-;
 			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].y));
-			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
 		}
 		GenerateMesh(plane, m);
 
@@ -158,42 +156,55 @@ namespace thomas
 
 	void Islands::GeneratePos()
 	{
+		const int MAX_ATTEMPTS = 1200;
+		int attempt = 0;
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			bool posNotFound = true;
-			while (posNotFound)
+			while (posNotFound && attempt < MAX_ATTEMPTS)
 			{
 				math::Vector2 xy;
-				xy.x = rand() % m_mapSize - m_size[i] * m_detail[i] - 1;
-				xy.y = rand() % m_mapSize - m_size[i] * m_detail[i] - 1;
+				xy.x = rand() % (m_mapSize  - m_size[i] - 10);
+				xy.y = rand() % (m_mapSize  - m_size[i] - 10);
+				xy = xy + math::Vector2(10.0);
 				float distPrev = 0.0f;
 
-				if (m_worldPosOffset.size() == 0)
+				if (m_islandCenterWorldPos.size() == 0)
 				{
 					distPrev = 0.0f;
 					m_worldPosOffset.push_back(xy);
+					m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((m_size[i] * m_detail[i]) / 2), m_worldPosOffset[i].y - ((m_size[i] * m_detail[i]) / 2)));
 					posNotFound = false;
 				}
 				else
 				{
 					std::vector<float> distance;
-					for (unsigned int j = 0; j < m_worldPosOffset.size(); j++)
-						distance.push_back((m_worldPosOffset[j].x - xy.x) * (m_worldPosOffset[j].x - xy.x) + (m_worldPosOffset[j].y - xy.y) * (m_worldPosOffset[j].y - xy.y));
+					for (unsigned int j = 0; j < m_islandCenterWorldPos.size(); j++)
+						distance.push_back((m_islandCenterWorldPos[j].x - xy.x) * (m_islandCenterWorldPos[j].x - xy.x) + (m_islandCenterWorldPos[j].y - xy.y) * (m_islandCenterWorldPos[j].y - xy.y));
 
 					for (unsigned int k = 0; k < distance.size(); ++k)
 					{
 						if (distance[k] < m_minDistance*m_minDistance)
 						{
 							posNotFound = true;
+							attempt++;
 							break;
 						}
 						else
+						{
+
 							posNotFound = false;
+						}
 					}
 					if (!posNotFound)
+					{
+						attempt = 0;
 						m_worldPosOffset.push_back(xy);
+						m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((m_size[i] * m_detail[i]) / 2), m_worldPosOffset[i].y - ((m_size[i] * m_detail[i]) / 2)));
+					}
 				}
 			}
 		}
+		m_nrOfIslands = m_worldPosOffset.size(); 
 	}
 }

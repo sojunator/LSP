@@ -21,7 +21,7 @@ public:
 		m_shipObject = Find("Ship");
 
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 1024 / 4, 1/16.f, 4096, 100);
+		m_islands = new thomas::Islands(20, mat, 1024, 1/8.f, 4096, 1024);
 		m_model = thomas::graphics::Model::CreateModel("Plane-1", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Plane-1");
