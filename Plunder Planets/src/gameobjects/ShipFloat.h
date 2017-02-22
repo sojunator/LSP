@@ -53,11 +53,11 @@ public:
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
 			if (heightBelowWater < 0.3)
 			{
-				rb->setDamping(0.65, 0.65);
+				rb->setDamping(0.5, 0.5);
 			}
 			else if(heightBelowWater < 1.5)
 			{
-				rb->setDamping(0.5, 0.5);
+				rb->setDamping(0.4, 0.4);
 			}
 			else if (heightBelowWater < 2.0)
 			{

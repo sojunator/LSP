@@ -375,10 +375,10 @@ public:
 		m_rigidBody->setDamping(0.0, 0.0);
 		if (m_moving)
 		{
-			m_rigidBody->setDamping(0.5, 0.4);
+			m_rigidBody->setDamping(0.5, 0.5);
 		}
 		if(m_turning)
-			m_rigidBody->setDamping(0.3, 0.1);
+			m_rigidBody->setDamping(0.3, 0.3);
 		m_rigidBody->applyDamping(dt);
 
 		
@@ -387,7 +387,10 @@ public:
 		if (bois.y > waveHeight+roof)
 		{
 			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
-			v.setY(waveHeight + roof);
+			float oldY = v.getY();
+			float newY = waveHeight + roof;
+			newY = oldY + dt*4.0 * (newY - oldY);
+			v.setY(newY);
 		}
 
 
