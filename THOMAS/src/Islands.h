@@ -10,7 +10,7 @@ namespace thomas
 	{
 	public:
 		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance);
-		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlanes, graphics::Material* m);
+		void GenerateMesh(utils::Plane::PlaneData tempPlanes, graphics::Material* m);
 		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
 		~Islands();
 
