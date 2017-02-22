@@ -25,7 +25,7 @@ struct ParticleStruct
 };
 
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
-
+RWStructuredBuffer<ParticleStruct> particlesWrite2 : register(u1);
 
 
 uint rand_xorshift(uint rng_state)
@@ -81,5 +81,12 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite[index].delay = delay;
 	particlesWrite[index].size = initSize;
     particlesWrite[index].lifeTimeLeft = initLifeTime;
+    particlesWrite2[index].position = initPosition;
+    particlesWrite2[index].spread = initSpread;
+    particlesWrite2[index].direction = dir;
+    particlesWrite2[index].speed = speed;
+    particlesWrite2[index].delay = delay;
+    particlesWrite2[index].size = initSize;
+    particlesWrite2[index].lifeTimeLeft = initLifeTime;
 
 }

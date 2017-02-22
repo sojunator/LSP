@@ -112,24 +112,28 @@ namespace thomas
 			};
 			struct CameraBufferStruct
 			{
-				math::Vector3 forward;
-				float deltaTime;
 				math::Vector3 up;
-				float pad2;
+				float deltaTime;
 				math::Vector3 right;
-				float pad3;
-				math::Vector3 position;
-				float pad4;
+				float pad;
 			};
 			struct MatrixBufferStruct
 			{
 				math::Matrix viewProjMatrix;
 			};
+			struct EmitterPosStruct
+			{
+				math::Vector3 pos;
+				float pad;
+			};
+			
 			static CameraBufferStruct s_cameraBufferStruct;
 			static MatrixBufferStruct s_matrixBufferStruct;
 			static InitParticleBufferStruct s_initParticleBufferStruct;
+			static EmitterPosStruct s_emitterPos;
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
+			static ID3D11Buffer* s_emitterPosBuffer;
 			static ID3D11Buffer* s_initParicleBuffer;
 			static ID3D11Buffer* s_billboardsBuffer;
 			static ID3D11ComputeShader* s_initParticlesCS;

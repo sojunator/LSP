@@ -8,8 +8,10 @@ namespace thomas
 		ParticleSystem::CameraBufferStruct ParticleSystem::s_cameraBufferStruct;
 		ParticleSystem::MatrixBufferStruct ParticleSystem::s_matrixBufferStruct;
 		ParticleSystem::InitParticleBufferStruct ParticleSystem::s_initParticleBufferStruct;
+		ParticleSystem::EmitterPosStruct ParticleSystem::s_emitterPos;
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
+		ID3D11Buffer* ParticleSystem::s_emitterPosBuffer;
 		ID3D11Buffer* ParticleSystem::s_initParicleBuffer;
 		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
 
@@ -83,10 +85,8 @@ namespace thomas
 
 		void ParticleSystem::UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix)
 		{
-			s_cameraBufferStruct.forward = trans->Forward();
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
-			s_cameraBufferStruct.position = trans->GetPosition();
 			s_cameraBufferStruct.deltaTime = Time::GetDeltaTime();
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
@@ -122,6 +122,15 @@ namespace thomas
 				LOG_HR(hr);
 			}
 			InitialDispatch(emitter);
+			
+			struct EmitterPosStruct
+			{
+				math::Vector3 pos;
+				float pad;
+			};
+
+			s_emitterPos.pos = emitter->m_gameObject->m_transform->GetPosition();
+			s_emitterPosBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_emitterPos, D3D11_BIND_CONSTANT_BUFFER);
 
 			s_emitters.push_back(emitter);
 			return;
@@ -139,7 +148,8 @@ namespace thomas
 			{
 				if (emitter->IsEmitting())
 				{
-
+					s_emitterPos.pos = emitter->m_gameObject->m_transform->GetPosition();
+					ThomasCore::GetDeviceContext()->UpdateSubresource(s_emitterPosBuffer, 0, NULL, &s_emitterPos, 0, 0);
 					FLOAT blendfactor[4] = { 0, 0, 0, 0 };
 					ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
 
@@ -153,6 +163,7 @@ namespace thomas
 					deviceContext->CSSetUnorderedAccessViews(1, 1, &s_billboardsUAV, NULL);
 					deviceContext->CSSetShaderResources(0, 1, &s_activeParticleSRV);
 					deviceContext->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
+					deviceContext->CSSetConstantBuffers(1, 1, &s_emitterPosBuffer);
 
 					deviceContext->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
 					//unbind uav
@@ -216,14 +227,14 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->CSSetShader(s_initParticlesCS, 0, NULL);
 
 			ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_initParicleBuffer);
-			if (!emitter->GetParticleD3D()->m_booleanSwapUAVandSRV)
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &emitter->GetParticleD3D()->m_particleUAV2, NULL);
-			else
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &emitter->GetParticleD3D()->m_particleUAV1, NULL);
+			
+			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &emitter->GetParticleD3D()->m_particleUAV2, NULL);
+			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &emitter->GetParticleD3D()->m_particleUAV1, NULL);
 
 			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
 
 			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
 
 			return;
 		}

@@ -1,14 +1,16 @@
 cbuffer cameraBuffer : register(b0)
 {
-	float3 cameraForward;
+    float3 cameraUp;
 	float deltaTime;
-	float3 cameraUp;
-	float pad2;
 	float3 cameraRight;
-	float pad3;
-	float3 cameraPosition;
-	float pad4;
+	float pad;
 };
+
+cbuffer emitterPos : register(b1)
+{
+    float3 emitterposition;
+    float pad2;
+}
 
 struct ParticleStruct
 {
@@ -87,6 +89,7 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
     }
     else
     {
+        particlesWrite[index].position = emitterposition;
         particlesWrite[index].delay = particlesRead[index].delay - deltaTime;
     }
 }
