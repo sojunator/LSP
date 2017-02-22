@@ -251,8 +251,7 @@ public:
 
 	void PlunderIsland()
 	{
-		math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
-		m_treasure += m_terrainObject->Plunder(shipPos);
+		m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
 	}
 
 	int GetTreasure()
@@ -401,7 +400,7 @@ private:
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
-	math::Vector3 m_initPosition;
+	math::Vector3 m_initPosition;	//Is this needed?
 
 	//components
 	component::RenderComponent* m_renderer;
