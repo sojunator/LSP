@@ -107,6 +107,9 @@ public:
 		m_camMaxDistanceFromBoat = 220.0f;
 		m_cameraDistance = 50.0;
 
+		m_health = 100;
+		m_maxHealth = m_health;
+
 		m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
@@ -292,7 +295,7 @@ public:
 
 		bois /= 8;
 		waveHeight /= 8;
-		if (bois.y > waveHeight + roof)
+		if (bois.y > waveHeight + roof && waveHeight > -5)
 		{
 			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
 			float oldY = v.getY();
@@ -401,6 +404,23 @@ public:
 
 		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 	}
+
+
+
+	void OnCollision(component::RigidBodyComponent* other)
+	{
+		if (other->m_gameObject->GetType() == "Projectile")
+		{
+			m_health -= 10;
+			if (m_health <= 0)
+				LOG("You are dead!");
+		}
+			
+	}
+
+public:
+	float m_health;
+	float m_maxHealth;
 
 private:
 	float roof;
