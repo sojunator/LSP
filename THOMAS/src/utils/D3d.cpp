@@ -483,6 +483,10 @@ namespace thomas
 			D3D11_SUBRESOURCE_DATA init_data = { data, 0, 0 };
 
 			result = ThomasCore::GetDevice()->CreateBuffer(&buf_desc, data != NULL ? &init_data : NULL, &buffer);
+			if (FAILED(result))
+			{
+				LOG_HR(result);
+			}
 
 			// Create undordered access view
 			D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc;
@@ -493,6 +497,10 @@ namespace thomas
 			uav_desc.Buffer.Flags = 0;
 
 			result = ThomasCore::GetDevice()->CreateUnorderedAccessView(buffer, &uav_desc, &UAV);
+			if (FAILED(result))
+			{
+				LOG_HR(result);
+			}
 
 			// Create shader resource view
 			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
@@ -502,6 +510,10 @@ namespace thomas
 			srv_desc.Buffer.NumElements = byte_width / byte_stride;
 
 			result = ThomasCore::GetDevice()->CreateShaderResourceView(buffer, &srv_desc, &SRV);
+			if (FAILED(result))
+			{
+				LOG_HR(result);
+			}
 		}
 	}
 }

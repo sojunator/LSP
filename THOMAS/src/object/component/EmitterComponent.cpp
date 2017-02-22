@@ -3,19 +3,20 @@
 
 thomas::object::component::EmitterComponent::EmitterComponent() : Component("EmitterComponent")
 {
-	m_nrOfParticles = 256 * 10 + 254;
-	m_isEmitting = true;
+	m_nrOfParticles = 256 * 100 + 254;
+	m_isEmitting = false;
 
 	m_particleD3D = new thomas::graphics::ParticleSystem::ParticleD3D();//TODO DELETE
 	m_emitterData = new thomas::graphics::ParticleSystem::InitParticleBufferStruct();
-	m_emitterData->initDirection = math::Vector3(1, 0, 0);
-	m_emitterData->initMaxDelay = 5;
-	m_emitterData->initMinDelay = 2;
-	m_emitterData->initMaxSpeed = 2;
+	m_emitterData->initDirection = math::Vector3(0, 1, 0);
+	m_emitterData->initMaxDelay = 3.8f;
+	m_emitterData->initMinDelay = 2.1f;
+	m_emitterData->initMaxSpeed = 4;
 	m_emitterData->initMinSpeed = 1;
-	m_emitterData->initPosition = math::Vector3(0,0,0);
-	m_emitterData->initSpread = 0.2f;
-	m_emitterData->initSize = 1.0f;
+	m_emitterData->initPosition = math::Vector3(9,7,0);
+	m_emitterData->initSpread = 0.05f;
+	m_emitterData->initSize = 0.2f;
+	m_emitterData->initLifeTime = 3;
 
 	m_particleD3D->m_shader = graphics::Shader::GetShaderByName("particleShader");
 	m_particleD3D->m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/smokeParticleDank.png");

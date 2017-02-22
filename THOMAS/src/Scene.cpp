@@ -71,7 +71,7 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{
 
-
+		graphics::ParticleSystem::DrawParticles(camera);
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			shader->Bind();

@@ -19,18 +19,19 @@ namespace thomas
 		static class ParticleSystem
 		{
 		private:
-			static HRESULT CompileComputeShader(LPCWSTR name, ID3D11ComputeShader*& shaderpointer);
-			static HRESULT CreateBillboardUAVandSRV();
-			static HRESULT CreateCameraConstantBuffer();
-			static HRESULT CreateMatrixConstantBuffer();
-			static HRESULT CreateParticleUAVandSRV(object::component::EmitterComponent* emitter);
-			static HRESULT CreateInitBuffer(object::component::EmitterComponent* emitter);
+			static void CreateBillboardUAVandSRV();
+
+			static void CreateParticleUAVsandSRVs(object::component::EmitterComponent* emitter);
+			static void CreateInitBuffer(object::component::EmitterComponent* emitter);
+
 			static void InitialDispatch(object::component::EmitterComponent* emitter);
 
 			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
 		public:
 			ParticleSystem();
 			~ParticleSystem();
+
+			
 			
 			static void Init();
 			static void Destroy();
@@ -46,6 +47,8 @@ namespace thomas
 				float initMaxDelay;
 				float initMinDelay;
 				float initSize;
+				float initLifeTime;
+				math::Vector3 pad;
 			};
 
 			struct ParticleStruct
@@ -56,7 +59,8 @@ namespace thomas
 				float speed;
 				float delay;
 				float size;
-				math::Vector2 padding;
+				float lifeTimeLeft;
+				float pad;
 			};
 
 			struct ParticleD3D
@@ -135,6 +139,8 @@ namespace thomas
 
 			static ID3D11UnorderedAccessView* s_activeParticleUAV;
 			static ID3D11ShaderResourceView* s_activeParticleSRV;
+
+			static ID3D11BlendState* s_particleBlendState;
 
 			static unsigned int s_maxNrOfBillboards;
 			static std::vector<object::component::EmitterComponent*> s_emitters;

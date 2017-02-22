@@ -8,6 +8,8 @@ cbuffer InitBuffer : register(b0)
     float initMaxDelay;
     float initMinDelay;
     float initSize;
+    float initLifeTime;
+    float3 pad;
 };
 
 struct ParticleStruct
@@ -18,7 +20,8 @@ struct ParticleStruct
     float speed;
     float delay;
 	float size;
-    float2 padding;
+    float lifeTimeLeft;
+    float pad;
 };
 
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
@@ -60,37 +63,16 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 	float y = (w4 * (1.0 / 4294967296.0) * 2) - 1;
 	float z = (w5 * (1.0 / 4294967296.0) * 2) - 1;
 
-	float3 rng = float3(x, y, z);
+    float3 rng = float3(x, y, z);
 	normalize(rng);
 
 	float3 proj = rng - (initDirection * dot(initDirection, rng));
-	proj *= initSpread;
-	float3 dir = (proj + initDirection) - initPosition;
+    normalize(proj);
+    proj *= initSpread;
 
-	
-	/*
-	float3 dir = initDirection;
+	float3 dir = proj + initDirection;
+    
 
-	float theta = initSpread * w3;
-	float theta2 = initSpread;
-	float theta3 = initSpread;
-	
-	float c = cos(theta);
-	float s = sin(theta);
-	float c2 = cos(theta2);
-	float s2 = sin(theta2);
-	float c3 = cos(theta3);
-	float s3 = sin(theta3);
-
-	//rotate
-	dir.x = dir.x * c - dir.y * s;
-	dir.y = dir.x * s + dir.y * c;
-	dir.x = dir.x * c2 + dir.z * s2;
-	dir.z = -dir.x * s2 + dir.z * c2;
-	dir.y = dir.y * c3 - dir.z * s3;
-	dir.z = dir.y * s3 + dir.z * c3;
-	*/
-	
 
     particlesWrite[index].position = initPosition;
     particlesWrite[index].spread = initSpread;
@@ -98,6 +80,6 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 	particlesWrite[index].speed = speed;
     particlesWrite[index].delay = delay;
 	particlesWrite[index].size = initSize;
-
+    particlesWrite[index].lifeTimeLeft = initLifeTime;
 
 }

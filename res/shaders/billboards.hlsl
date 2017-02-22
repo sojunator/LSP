@@ -18,7 +18,8 @@ struct ParticleStruct
 	float speed;
 	float delay;
 	float size;
-	float2 padding;
+    float lifeTimeLeft;
+    float pad;
 };
 
 struct BillboardStruct
@@ -44,33 +45,48 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 	float index = (Gid.x * 256) + GTid.x;
 
     //ANIMATE
-	float3 particlePosWS = particlesRead[index].position + particlesRead[index].direction * particlesRead[index].speed * deltaTime;
-	particlesWrite[index].position = particlePosWS;
-	particlesWrite[index].direction = particlesRead[index].direction;
-	particlesWrite[index].delay = particlesRead[index].delay;
-	particlesWrite[index].speed = particlesRead[index].speed;
-	particlesWrite[index].spread = particlesRead[index].spread;
-	particlesWrite[index].size = particlesRead[index].size;
+    if (particlesRead[index].delay < 0.0f)
+    {
+        float3 particlePosWS = particlesRead[index].position + particlesRead[index].direction * particlesRead[index].speed * deltaTime;
+        particlesWrite[index].position = particlePosWS;
+        particlesWrite[index].direction = particlesRead[index].direction;
+        particlesWrite[index].delay = particlesRead[index].delay;
+        particlesWrite[index].speed = particlesRead[index].speed;
+        particlesWrite[index].spread = particlesRead[index].spread;
+        particlesWrite[index].size = particlesRead[index].size;
+        particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
 
-    //BILLBOARD
-	float3 right = cameraRight * particlesRead[index].size;;
-	float3 up = cameraUp * particlesRead[index].size;;
-	
+        float scale = particlesRead[index].size;
+        if (particlesRead[index].lifeTimeLeft < 0.0f)
+        {
+            scale = 0.0f;
+        }
+        else
+        {
+            particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
+        }
+        //BILLBOARD
+        float3 right = cameraRight * scale;
+        float3 up = cameraUp * scale;	
 
-    //tri 1
-	billboards[index].quad[0][0] = particlePosWS + up + right;
-	billboards[index].quad[0][1] = particlePosWS + up - right;
-	billboards[index].quad[0][2] = particlePosWS - up + right;
-	billboards[index].uvs[0][0] = float2(0, 0);
-	billboards[index].uvs[0][1] = float2(1, 0);
-	billboards[index].uvs[0][2] = float2(0, 1);
-    //tri 2
-	billboards[index].quad[1][0] = particlePosWS - up + right;
-	billboards[index].quad[1][1] = particlePosWS + up - right;
-	billboards[index].quad[1][2] = particlePosWS - up - right;
+         //tri 1
+        billboards[index].quad[0][0] = particlePosWS + up + right;
+        billboards[index].quad[0][1] = particlePosWS + up - right;
+        billboards[index].quad[0][2] = particlePosWS - up + right;
+        billboards[index].uvs[0][0] = float2(0, 0);
+        billboards[index].uvs[0][1] = float2(1, 0);
+        billboards[index].uvs[0][2] = float2(0, 1);
+        //tri 2
+        billboards[index].quad[1][0] = particlePosWS - up + right;
+        billboards[index].quad[1][1] = particlePosWS + up - right;
+        billboards[index].quad[1][2] = particlePosWS - up - right;
 
-	billboards[index].uvs[1][0] = float2(0, 1);
-	billboards[index].uvs[1][1] = float2(1, 0);
-	billboards[index].uvs[1][2] = float2(1, 1);
-
+        billboards[index].uvs[1][0] = float2(0, 1);
+        billboards[index].uvs[1][1] = float2(1, 0);
+        billboards[index].uvs[1][2] = float2(1, 1);
+    }
+    else
+    {
+        particlesWrite[index].delay = particlesRead[index].delay - deltaTime;
+    }
 }
