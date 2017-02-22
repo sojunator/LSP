@@ -19,7 +19,7 @@ public:
 	void Start()
 	{
 		m_emitterComponent = AddComponent<component::EmitterComponent>();
-		
+		m_emitterComponent->Init(256 * 100 + 254, false, math::Vector3(0, 1, 0), 0.0f, 2.0f, 1.0f, 3.0f, m_transform->GetPosition(), 0.1f, 0.15f, 2.5f, "particleShader", "../res/textures/smokeParticleDank.png");
 	}
 
 

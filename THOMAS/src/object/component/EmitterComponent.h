@@ -17,6 +17,8 @@ namespace thomas
 				
 			public:
 				EmitterComponent();
+				void Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay, float minSpeed, float maxSpeed, 
+					math::Vector3 emitterPosition, float particleSpreadFactor, float particleSize, float particleLifeTime, std::string shaderName, std::string texturePath);
 				void Emit();
 				void Stop();
 				unsigned int GetNrOfParticles() const;

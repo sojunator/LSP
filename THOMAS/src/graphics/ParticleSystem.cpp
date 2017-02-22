@@ -53,21 +53,27 @@ namespace thomas
 			CreateBillboardUAVandSRV();
 
 
-			// Create an alpha enabled blend state description.
-			D3D11_BLEND_DESC blendStateDescription;
-			blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
-			blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-			blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-			blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-			blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-			blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-			blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-			blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+			D3D11_BLEND_DESC blendDesc;
+			ZeroMemory(&blendDesc, sizeof(blendDesc));
 
-			ThomasCore::GetDevice()->CreateBlendState(&blendStateDescription, &s_particleBlendState);
+			D3D11_RENDER_TARGET_BLEND_DESC rtbd;
+			ZeroMemory(&rtbd, sizeof(rtbd));
 
-			ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, NULL, 0xffffffff);
+			rtbd.BlendEnable = true;
+			rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			rtbd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			rtbd.BlendOp = D3D11_BLEND_OP_MIN;
+			rtbd.SrcBlendAlpha = D3D11_BLEND_ONE;
+			rtbd.DestBlendAlpha = D3D11_BLEND_ZERO;
+			rtbd.BlendOpAlpha = D3D11_BLEND_OP_MIN;
+			rtbd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
+			blendDesc.AlphaToCoverageEnable = false;
+			blendDesc.RenderTarget[0] = rtbd;
+			
+
+			hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_particleBlendState);
+			
 			return;
 		}
 
@@ -133,6 +139,10 @@ namespace thomas
 			{
 				if (emitter->IsEmitting())
 				{
+
+					FLOAT blendfactor[4] = { 0, 0, 0, 0 };
+					ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
+
 					ID3D11DeviceContext* deviceContext = ThomasCore::GetDeviceContext();
 					deviceContext->CSSetShader(s_billboardCS, NULL, 0);
 
@@ -162,8 +172,10 @@ namespace thomas
 					
 					emitter->GetParticleD3D()->m_texture->Bind();
 
-
+					
 					deviceContext->Draw(emitter->GetNrOfParticles() * 6, 0);
+
+					ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 
 					//undbind srv
 					emitter->GetParticleD3D()->m_texture->Unbind();
