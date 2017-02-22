@@ -20,9 +20,9 @@ private:
 		float randNum = rand() % 999 + 1;
 		randNum /= 1000.0f;
 		if (randNum < 0.5f)
-			return 3.0f * (sqrtf(2.0f * randNum) - 1);
+			return 0.75f * (sqrtf(2.0f * randNum) - 1);
 		else
-			return 3.0f * (1 - sqrtf(2 - 2 * randNum));
+			return 0.75f * (1 - sqrtf(2 - 2 * randNum));
 	}
 
 public:

@@ -60,7 +60,7 @@ public:
 	}
 	bool IncreasePitch(float pitch)
 	{
-		if (m_pitch < 5.f)
+		if (m_pitch < 10.f)
 		{
 			m_pitch += (float)pitch;
 			for (auto cannon : m_cannons)
@@ -86,7 +86,7 @@ public:
 	}
 	bool DecreasePitch(float pitch)
 	{
-		if (m_pitch > -5.f)
+		if (m_pitch > -10.f)
 		{
 			m_pitch -= (float)pitch;
 			for (auto cannon : m_cannons)

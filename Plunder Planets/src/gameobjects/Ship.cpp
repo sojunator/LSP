@@ -164,7 +164,7 @@ void Ship::ShipAimCannons()
 		bajs.Normalize();
 
 		m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, angle);
+			- bajs, math::Vector2(flatRight.x, flatRight.z), angle);
 
 		if (Input::GetKey(Input::Keys::I))
 		{
@@ -204,7 +204,7 @@ void Ship::ShipAimCannons()
 		bajs.Normalize();
 
 		m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, angle);
+			- bajs, math::Vector2(flatRight.x, flatRight.z), angle);
 
 		if (Input::GetKey(Input::Keys::I))
 		{

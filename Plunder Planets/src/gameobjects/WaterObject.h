@@ -88,9 +88,9 @@ public:
 		return waterPos;
 
 	}
-	void UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle)
+	void UpdateAim(math::Vector2 pos, math::Vector2 right, float angle)
 	{
-		m_waterMaterial->UpdateAim(pos, right, pow, angle);
+		m_waterMaterial->UpdateAim(pos, right, angle);
 	}
 	void DisableAim()
 	{
