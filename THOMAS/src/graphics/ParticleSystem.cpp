@@ -64,13 +64,13 @@ namespace thomas
 			rtbd.BlendEnable = true;
 			rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
 			rtbd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-			rtbd.BlendOp = D3D11_BLEND_OP_MIN;
+			rtbd.BlendOp = D3D11_BLEND_OP_ADD;
 			rtbd.SrcBlendAlpha = D3D11_BLEND_ONE;
 			rtbd.DestBlendAlpha = D3D11_BLEND_ZERO;
-			rtbd.BlendOpAlpha = D3D11_BLEND_OP_MIN;
+			rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
 			rtbd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-			blendDesc.AlphaToCoverageEnable = false;
+			blendDesc.AlphaToCoverageEnable = true;
 			blendDesc.RenderTarget[0] = rtbd;
 			
 
@@ -141,13 +141,11 @@ namespace thomas
 			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
 			ID3D11ShaderResourceView* nullsrv[1] = { NULL };
 
-			if (s_emitters.size())
-				UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
-
 			for (object::component::EmitterComponent* emitter : s_emitters)
 			{
 				if (emitter->IsEmitting())
 				{
+					UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
 					s_emitterPos.pos = emitter->m_gameObject->m_transform->GetPosition();
 					ThomasCore::GetDeviceContext()->UpdateSubresource(s_emitterPosBuffer, 0, NULL, &s_emitterPos, 0, 0);
 					FLOAT blendfactor[4] = { 0, 0, 0, 0 };

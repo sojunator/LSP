@@ -54,10 +54,12 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 	uint w5 = rand_xorshift(w4);
 	
 
-
+    
 	
 	float delay = (w1 * (1.0 / 4294967296.0) * (initMaxDelay - initMinDelay)) + initMinDelay;
 	float speed = (w2 * (1.0 / 4294967296.0) * (initMaxSpeed - initMinSpeed)) + initMinSpeed;
+
+    float size = w4 * (1.0 / 4294967296.0) * initSize;
 
 	float x = (w3 * (1.0 / 4294967296.0) * 2) - 1;
 	float y = (w4 * (1.0 / 4294967296.0) * 2) - 1;
@@ -79,14 +81,14 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite[index].direction = dir;
 	particlesWrite[index].speed = speed;
     particlesWrite[index].delay = delay;
-	particlesWrite[index].size = initSize;
+	particlesWrite[index].size = size;
     particlesWrite[index].lifeTimeLeft = initLifeTime;
     particlesWrite2[index].position = initPosition;
     particlesWrite2[index].spread = initSpread;
     particlesWrite2[index].direction = dir;
     particlesWrite2[index].speed = speed;
     particlesWrite2[index].delay = delay;
-    particlesWrite2[index].size = initSize;
+    particlesWrite2[index].size = size;
     particlesWrite2[index].lifeTimeLeft = initLifeTime;
 
 }

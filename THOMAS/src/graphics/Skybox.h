@@ -27,6 +27,9 @@ namespace thomas
 			void BindSkyboxTexture();
 
 		private:
+			ID3D11RasterizerState* m_rasterizerP;
+			ID3D11DepthStencilState* m_depthstencilP;
+			UINT m_depthRefP;
 
 			struct CubeData
 			{

@@ -71,7 +71,7 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{
 
-		graphics::ParticleSystem::DrawParticles(camera);
+		
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
@@ -135,10 +135,13 @@ namespace thomas
 			oceanShader->Unbind();
 			graphics::Renderer::UnbindDepthBufferTexture();
 			}
-			
+
+		
+
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
+		graphics::ParticleSystem::DrawParticles(camera);
 	}
 
 
