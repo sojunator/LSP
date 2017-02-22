@@ -45,11 +45,18 @@ namespace thomas
 					e += myModule.GetValue(2 * nx, 2 * ny, 0) / 2.0 + 0.5;
 					e += myModule.GetValue(4 * nx, 4 * ny, 0) / 2.0 + 0.5;
 					e += myModule.GetValue(8 * nx, 8 * ny, 0) / 2.0 + 0.5;
-					e = pow(e, 3.4f);
+					e += myModule.GetValue(16 * nx, 16 * ny, 0) / 2.0 + 0.5;
+					e += myModule.GetValue(32 * nx, 32 * ny, 0) / 2.0 + 0.5;
+					e = pow(e, 3.0f);
 
 				
+					double d = 2 * sqrt(nx*nx + ny*ny);
+					e = (e + 1.00) * (1 - 2.00*pow(d, 1.70));
 
-					plane.verts[index].position.y = (e + 0.10) * (1 - 1.05*pow(2 * max(abs(nx), abs(ny)), 0.40));
+					if (e < 0.0f)
+						e = 0.0f;
+
+					plane.verts[index].position.y = e;
 					//plane.verts[i].position.x += startingPos.x;
 					//plane.verts[i].position.z += startingPos.y;
 				}

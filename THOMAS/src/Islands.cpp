@@ -27,10 +27,17 @@ namespace thomas
 		{
 			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].y));
 		}
+
+		for (int i = 0; i < plane.verts.size(); i++)
+		{
+			plane.verts[i].position.x -= 1024;
+			plane.verts[i].position.z += 1024;
+		}
+
 		GenerateMesh(plane, m);
 
 	}
-
+	
 	void Islands::GenerateMesh(utils::Plane::PlaneData tempPlane, graphics::Material* m)
 	{
 		std::vector<thomas::graphics::Mesh*> mesh;
