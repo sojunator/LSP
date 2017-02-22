@@ -79,7 +79,7 @@ public:
 		m_broadSideLeft->CreateCanons();
 
 
-		m_renderer->SetModel("testModel0");
+		m_renderer->SetModel("testModelEnemy");
 		m_moving = false;
 
 
