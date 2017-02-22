@@ -19,6 +19,8 @@ public:
 
 	void UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle, int side);
 
+	void DisableAim();
+
 	~WaterMaterial();
 private:
 	bool play;

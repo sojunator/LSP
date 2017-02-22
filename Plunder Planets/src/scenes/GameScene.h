@@ -41,6 +41,7 @@ public:
 		LoadModel("testModel1", "../res/models/Boat/ship1fbx.fbx", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
+		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)

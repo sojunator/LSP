@@ -270,7 +270,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float distance = length(input.positionWS.xz - aimPos);
 	if (distance < radius && aiming != (int)0)
 	{
-		waterColor = lerp(1, waterColor, 0.9);
+		waterColor = lerp(float3(1, 0, 0), waterColor, 0.5) * ((radius + 2 - distance)/(radius + 2));
 	}
 	
 	else

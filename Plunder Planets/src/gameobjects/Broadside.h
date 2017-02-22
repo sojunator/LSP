@@ -20,8 +20,10 @@ public:
 		m_delay = 1.5;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
+	
 
-
+		m_box = AddComponent<component::RenderComponent>();
+		m_box->SetModel("box1");
 	}
 
 	void CreateCanons()
@@ -52,6 +54,8 @@ public:
 
 	void Update()
 	{
+		forward = m_transform->Forward();
+		right = m_transform->Right();
 		float dt = Time::GetDeltaTime();
 		m_delayLeft -= dt;
 	}
@@ -59,8 +63,10 @@ public:
 private:
 	float m_delay;
 	float m_delayLeft;
+	math::Vector3 forward, right;
 
 	std::vector<Canon*> canons; 
 	component::SoundComponent* m_fireSFX;
+	component::RenderComponent* m_box;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
 };

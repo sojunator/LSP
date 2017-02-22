@@ -64,7 +64,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 	m_materialProperties.aimPos = math::Vector2(0, 0);
 	m_materialProperties.radius = 10.f;
-	m_materialProperties.aiming = 1;
+	m_materialProperties.aiming = 0;
 
 	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 	play = true;
@@ -101,8 +101,12 @@ utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
 }
 void WaterMaterial::UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle, int side)
 {
-	m_materialProperties.aimPos = pos + right * (std::sin(math::DegreesToradians(angle)) + pow);
+	m_materialProperties.aimPos = pos + right * (std::sin(math::DegreesToradians(angle)) + pow) * side;
 	m_materialProperties.aiming = side;
+}
+void WaterMaterial::DisableAim()
+{
+	m_materialProperties.aiming = 0;
 }
 
 WaterMaterial::~WaterMaterial()

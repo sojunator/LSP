@@ -7,6 +7,7 @@
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
     <ClCompile Include="src\postEffects\OceanPostProcess.cpp" />
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
+    <ClCompile Include="src\gameobjects\Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

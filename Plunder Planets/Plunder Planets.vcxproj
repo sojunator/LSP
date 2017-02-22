@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
+    <ClCompile Include="src\gameobjects\Ship.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />

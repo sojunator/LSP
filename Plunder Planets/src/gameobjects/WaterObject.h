@@ -92,6 +92,10 @@ public:
 	{
 		m_waterMaterial->UpdateAim(pos, right, pow, angle, side);
 	}
+	void DisableAim()
+	{
+		m_waterMaterial->DisableAim();
+	}
 
 private:
 	int m_dimensions;
