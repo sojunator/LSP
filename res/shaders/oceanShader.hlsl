@@ -224,7 +224,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 
 
 	pos.xyz += displacement.xyz;
-
+	//pos.z += displacement.z;
 	output.position = mul(pos.xzyw, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 	output.positionWS = pos.xzy;
@@ -297,9 +297,9 @@ float4 PSMain(PSInput input) : SV_TARGET
 	//shading
 
 	float3 shoreHardness = 1.0;
-	float3 foamExistence = { 4.65f, 9.35f, 0.5f };
+	float3 foamExistence = { 15.65f, 5.35f, 1.005f };
 	// Colour of the water surface
-	float3 depthColour = { 0.0078f, 0.5176f, 0.7f };
+	float3 depthColour = { 0.0078f, 0.6176f, 0.8f };
 // Colour of the water depth
 	float3 bigDepthColour = { 0.0039f, 0.00196f, 0.145f };
 	float3 extinction = { 7.0f, 30.0f, 40.0f }; // Horizontal
@@ -307,10 +307,10 @@ float4 PSMain(PSInput input) : SV_TARGET
 	// How fast will colours fade out. You can also think about this
 // values as how clear water is. Therefore use smaller values (eg. 0.05f)
 // to have crystal clear water and bigger to achieve "muddy" water.
-	float fadeSpeed = 0.15f;
+	float fadeSpeed = 0.05f;
 
 	// Water transparency along eye vector.
-	float visibility = 4.0f;
+	float visibility = 1.0f;
 
 	float3 sunColor = directionalLights[0].lightColor.xyz;
 	float sunScale = 3.0f;
@@ -332,6 +332,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	half3 specular = 0.0f;
 	float3 lightDir = directionalLights[0].lightDir;
+	eyeDir = abs(eyeDir);
 	half3 mirrorEye = (2.0f * dot(eyeDir, normal) * normal - eyeDir);
 	half dotSpec = saturate(dot(mirrorEye.xyz, -lightDir) * 0.5f + 0.5f);
 	specular = (1.0f - fresnel) * saturate(-lightDir.y) * ((pow(dotSpec, 512.0f)) * (shininess * 1.8f + 0.2f)) * sunColor;
@@ -349,7 +350,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	foam = lerp(foamColor, 0.0f, foamshit);
 
-	foam += (foamColor * 1.5f *
+	foam += (foamColor * 0.5f *
 			saturate((input.positionWS.y - foamExistence.x)) / (foamExistence.y - foamExistence.z));
 	
 
@@ -369,6 +370,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	foamshit = saturate(1.0 - foamshit);
 
-	float opacity = clamp(waterDepth / 0.01, 0.3, 1);
+	float opacity = clamp(waterDepth / 0.02, 0.5, 1);
 	return float4(waterColor, opacity + foamshit);
 }
