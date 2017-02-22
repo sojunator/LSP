@@ -121,7 +121,7 @@ public:
 	void ShipMove(float const dt)
 	{
 		//ship controls
-		if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera &&Input::GetKey(Input::Keys::W)))
+		if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera &&Input::GetKey(Input::Keys::W)) || (m_freeCamera && Input::GetKey(Input::Keys::Up)))
 		{
 			math::Vector3 forward = m_transform->Forward();
 
@@ -147,6 +147,13 @@ public:
 				turnDelta = -Input::GetKey(Input::Keys::D);
 			else if (-Input::GetKey(Input::Keys::A))
 				turnDelta = Input::GetKey(Input::Keys::A);
+		}
+		else
+		{
+			if (Input::GetKey(Input::Keys::Right))
+				turnDelta = -Input::GetKey(Input::Keys::Right);
+			else if (-Input::GetKey(Input::Keys::Left))
+				turnDelta = Input::GetKey(Input::Keys::Left);
 		}
 
 		math::Vector3 right = m_transform->Right();
@@ -311,15 +318,18 @@ public:
 		float left_y = Input::GetLeftStickY(); //not used?
 
 		//If cam changed with arrow keys
-		if (Input::GetKey(Input::Keys::Right))
-			right_x = -Input::GetKey(Input::Keys::Right);
-		else if (Input::GetKey(Input::Keys::Left))
-			right_x = Input::GetKey(Input::Keys::Left);
+		if (!m_freeCamera)
+		{
+			if (Input::GetKey(Input::Keys::Right))
+				right_x = -Input::GetKey(Input::Keys::Right);
+			else if (Input::GetKey(Input::Keys::Left))
+				right_x = Input::GetKey(Input::Keys::Left);
 
-		if (Input::GetKey(Input::Keys::Up))
-			right_y = Input::GetKey(Input::Keys::Up);
-		else if (Input::GetKey(Input::Keys::Down))
-			right_y = -Input::GetKey(Input::Keys::Down);
+			if (Input::GetKey(Input::Keys::Up))
+				right_y = Input::GetKey(Input::Keys::Up);
+			else if (Input::GetKey(Input::Keys::Down))
+				right_y = -Input::GetKey(Input::Keys::Down);
+		}
 
 		//get forward, right and up contrib
 		float forwardFactor = 0; //not used?
