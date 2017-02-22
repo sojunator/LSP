@@ -182,6 +182,7 @@
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
+    <ClInclude Include="src\gameobjects\OceanFloor.h" />
     <ClInclude Include="src\gameobjects\Enemy.h" />
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />

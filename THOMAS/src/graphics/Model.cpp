@@ -1,5 +1,5 @@
 #include "Model.h"
-
+#include "../object/component/RenderComponent.h"
 namespace thomas {
 	namespace graphics {
 
@@ -73,10 +73,6 @@ namespace thomas {
 
 		void Model::Destroy()
 		{
-			for (unsigned int i = 0; i < s_loadedModels.size(); i++)
-			{
-				delete s_loadedModels[i];
-			}
 			s_loadedModels.clear();
 		}
 

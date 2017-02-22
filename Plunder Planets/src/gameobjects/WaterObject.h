@@ -49,6 +49,19 @@ public:
 
 	}
 
+	void SetOceanCenter(float x, float z)
+	{
+		float gridSize = 100.0;
+
+		x = x / gridSize;
+		x = floor(x);
+		x *= gridSize;
+		z = z / gridSize;
+		z = floor(z);
+		z *= gridSize;
+		m_transform->SetPosition(math::Vector3(x-m_dimensions / 2, 0, z+m_dimensions / 2));
+	}
+
 
 
 	math::Vector3 GetCollisionAt(component::Transform* transform)

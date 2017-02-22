@@ -21,8 +21,6 @@ public:
 	{
 		roof = 0.8f;
 		ReseedDelay();
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("box");
 	}
 
 	void SetMaxCanonDelay(float delay)
@@ -73,6 +71,5 @@ private:
 	float delay;
 	float roof;
 	float currentTimeCount;
-	component::RenderComponent* m_renderer;
 
 };

@@ -26,7 +26,7 @@ public:
 		m_freeCamera = false;
 		utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 
-		float mass = 18000;
+		float mass = 500000;
 		//Front
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -74,11 +74,11 @@ public:
 		m_broadSideRight->CreateCanons();
 
 		//Rigidbody init
-		m_rigidBody->SetMass(20000);
+		m_rigidBody->SetMass(mass);
 		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
 		m_rigidBody->setSleepingThresholds(0.2, 0.5);
-
-		m_treasure = 10000;
+		m_rigidBody->setGravity(btVector3(0, -15, 0));
+		m_treasure = 0;
 
 		//model
 		m_modelIndex = 1;
@@ -95,6 +95,8 @@ public:
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
 		m_turnSpeed = 700;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
+
+		m_flyCost = 20;
 
 		//controlls/camera
 		m_controlSensitivity = 0.13f;
@@ -143,8 +145,9 @@ public:
 
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 	{
-		if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+		if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A)) && m_treasure > m_flyCost*dt)
 		{
+			m_treasure -= m_flyCost*dt;
 			math::Vector3 forward = m_transform->Forward();
 			m_moving = true;
 			forward.y = 0;
@@ -155,6 +158,7 @@ public:
 			btVector3 angular = m_rigidBody->getAngularVelocity();
 			m_rigidBody->setAngularVelocity(btVector3(angular.x(), angular.y(), 0));*/
 			m_flying = true;
+
 		}
 	}
 
@@ -174,7 +178,7 @@ public:
 		if (std::abs(right_x) > m_controlSensitivity || std::abs(right_y) > m_controlSensitivity)
 		{
 			float angle = std::acos(m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 1, 0))) * 180 / math::PI;
-			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);
+			
 			bool allowRotation = true;
 
 			if (angle > 160)
@@ -184,7 +188,7 @@ public:
 					allowRotation = false;
 				}
 			}
-			else if (angle < 20)
+			else if (angle < 85)
 			{
 				if (right_y < 0)
 				{
@@ -194,6 +198,7 @@ public:
 
 			if (allowRotation)//anti gimballock
 			{
+				m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);
 				m_cameraObject->m_transform->Rotate(0, m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 0, 1)) * m_camRotationSpeed * right_y * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(-1, 0, 0)) * m_camRotationSpeed * right_y * dt);//rotate camera around the boat
 			}
 
@@ -284,7 +289,7 @@ public:
 			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
 			posBehindBoat.y = 25;
 
-			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt);
+			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt*0.5);
 
 			m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
@@ -296,8 +301,7 @@ public:
 			newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
 
 
-			if (newPos.y < 0)
-				newPos.y = 0;
+			
 
 			m_cameraObject->m_transform->SetPosition(newPos);
 
@@ -332,6 +336,11 @@ public:
 		PlunderIsland();
 
 
+		if (Input::GetKey(Input::Keys::Space))
+		{
+			m_rigidBody->applyCentralForce(btVector3(0, m_speed*dt*m_rigidBody->GetMass(), 0));
+		}
+
 
 		bool inWater = false;
 
@@ -351,6 +360,9 @@ public:
 		if(m_turning)
 			m_rigidBody->setDamping(0.3, 0.1);
 		m_rigidBody->applyDamping(dt);
+
+
+		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 	}
 
 private:
@@ -364,6 +376,7 @@ private:
 	float m_flyTurnSpeed;
 	float m_speed;
 	float m_turnSpeed;
+	int m_flyCost;
 	//used for the camera
 	float m_elevateCamSpeed;//for moving cam up and down
 	float m_camRotationSpeed;

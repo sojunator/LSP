@@ -444,7 +444,7 @@ namespace thomas
 			if (m_data.hs)
 			{			
 				tempBlob = Compile(m_data.HSfilePath, "hs_5_0", "HSMain");
-				if (m_data.hs)
+				if (tempBlob)
 				{
 					SAFE_RELEASE(m_data.hs);
 					SAFE_RELEASE(m_data.hullShader);
