@@ -17,20 +17,20 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	// Adjust this parameter to control the simulation speed
 
 	// A scale to control the amplitude. Not the world space height
-	m_oceanSettings.wave_amplitude = 0.45f;
+	m_oceanSettings.wave_amplitude = 0.35f;
 	// 2D wind direction. No need to be normalized
 	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
 	// The bigger the wind speed, the larger scale of wave crest.
 	// But the wave scale can be no larger than patch_length
-	m_oceanSettings.wind_speed = 220.0f;
+	m_oceanSettings.wind_speed = 500.0f;
 	// Damp out the components opposite to wind direction.
 	// The smaller the value, the higher wind dependency
 	m_oceanSettings.wind_dependency = 0.07f;
 	// Control the scale of horizontal movement. Higher value creates
 	// pointy crests.
 
-	m_oceanSettings.choppy_scale = 1.3f;
-	m_oceanSettings.time_scale = 0.1f;
+	m_oceanSettings.choppy_scale = 0.8f;
+	m_oceanSettings.time_scale = 0.12f;
 
 	m_oceanSim = new utils::ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 
@@ -59,7 +59,6 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_materialProperties.g_PerlinOctave = math::Vector3(1.12f, 0.59f, 0.23f)*0.001;
 	m_materialProperties.g_PerlinGradient = math::Vector3(1.4f, 1.6f, 2.2f);
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
-
 	m_materialPropertiesBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_materialProperties, D3D11_BIND_CONSTANT_BUFFER);
 	play = true;
 }

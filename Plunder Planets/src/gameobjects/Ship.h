@@ -93,7 +93,8 @@ public:
 		utils::DebugTools::AddFloat(m_speed, "boatSpeed");
 		m_turnSpeed = 700;
 		utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
-
+		roof = 1.0;
+		utils::DebugTools::AddFloat(roof, "roof");
 		m_flyCost = 20;
 
 		//controlls/camera
@@ -251,13 +252,54 @@ public:
 
 	void PlunderIsland()
 	{
-		math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
-		m_treasure += m_terrainObject->Plunder(shipPos);
+		m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
 	}
 
 	int GetTreasure()
 	{
 		return m_treasure + 0.5;
+	}
+
+
+	void Float(float dt)
+	{
+		float waveHeight = 0;
+		math::Vector3 bois;
+		for (int i = 0; i < 12; i++)
+		{
+
+			if (i < 8)
+			{
+				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				bois += m_floats[i]->m_transform->GetPosition();
+			}
+			else
+			{
+				m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+			}
+
+		}
+
+		m_rigidBody->setDamping(0.0, 0.0);
+		if (m_moving)
+		{
+			m_rigidBody->setDamping(0.5, 0.5);
+		}
+		if (m_turning)
+			m_rigidBody->setDamping(0.3, 0.3);
+		m_rigidBody->applyDamping(dt);
+
+
+		bois /= 8;
+		waveHeight /= 8;
+		if (bois.y > waveHeight + roof)
+		{
+			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
+			float oldY = v.getY();
+			float newY = waveHeight + roof;
+			newY = oldY + dt*4.0 * (newY - oldY);
+			v.setY(newY);
+		}
 	}
 
 	void Update()
@@ -310,7 +352,7 @@ public:
 
 			//move camera behind boat
 			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
-			posBehindBoat.y = 25;
+			posBehindBoat.y = 35;
 
 			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt*2);
 
@@ -354,30 +396,14 @@ public:
 
 		PlunderIsland();
 
-		bool inWater = false;
-
-		for (int i = 0; i < 12; i++)
-		{
-			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
-			if (wTemp)
-				inWater = true;
-		}
-
-		m_rigidBody->setDamping(0.0, 0.0);
-		if (m_moving)
-		{
-			m_rigidBody->setDamping(0.5, 0.4);
-		}
-		if(m_turning)
-			m_rigidBody->setDamping(0.3, 0.1);
-		m_rigidBody->applyDamping(dt);
+		Float(dt);
 
 
 		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 	}
 
 private:
-
+	float roof;
 	bool m_moving;
 	bool m_turning;
 	bool m_flying;
@@ -401,7 +427,7 @@ private:
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
-	math::Vector3 m_initPosition;
+	math::Vector3 m_initPosition;	//Is this needed?
 
 	//components
 	component::RenderComponent* m_renderer;

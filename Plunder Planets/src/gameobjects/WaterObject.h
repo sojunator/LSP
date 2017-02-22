@@ -67,7 +67,7 @@ public:
 	math::Vector3 GetCollisionAt(component::Transform* transform)
 	{
 		math::Vector3 position = transform->GetPosition();
-		float uvScale = 1.0 /oceanSim->getParameters().patch_length;
+		float uvScale = 1.0 /oceanSim->getParameters().patch_length*2;
 		float uvOffset = 0.5f / oceanSim->getParameters().dmap_dim;
 		math::Vector2 texCoord;
 		position.x -= m_dimensions/2;
