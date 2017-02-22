@@ -290,7 +290,7 @@ public:
 			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
 			posBehindBoat.y = 25;
 
-			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt*0.5);
+			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt*2);
 
 			m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
