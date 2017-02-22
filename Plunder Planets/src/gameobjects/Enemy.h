@@ -91,7 +91,7 @@ public:
 
 		//Sound
 		m_health = 20;
-		m_dead = false;
+
 		//Movement
 		m_speed = 600;
 		utils::DebugTools::AddFloat(m_speed, "EnemySpeed");
@@ -159,7 +159,7 @@ public:
 		if (m_shootDir == 1)
 			m_broadSideLeft->Fire();
 		else if (m_shootDir == -1)
-			m_broadSideRight->Fire();
+			m_broadSideLeft->Fire();
 	}
 
 	void Float(float dt)
@@ -168,7 +168,7 @@ public:
 		math::Vector3 bois;
 		for (int i = 0; i < 12; i++)
 		{
-			
+
 			if (i < 8)
 			{
 				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
@@ -206,14 +206,6 @@ public:
 	{
 		float const dt = Time::GetDeltaTime();
 
-		if (m_dead)
-		{
-			m_rigidBody->setDamping(0.5, 0.5);
-			if (m_transform->GetPosition().y < -10)
-				Destroy(this);
-			return;
-		}
-
 		m_moving = false;
 		m_ai->Escape();
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
@@ -230,9 +222,6 @@ public:
 		m_firstFrame = false;
 
 		Float(dt);
-
-
-			
 
 	}
 
@@ -252,11 +241,10 @@ public:
 
 	void Die()
 	{
-		m_dead = true;
+		Destroy(this);
 	}
 
 private:
-	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
 	Broadside* m_broadSideRight;

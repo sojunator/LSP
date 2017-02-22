@@ -297,7 +297,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	//shading
 
 	float3 shoreHardness = 1.0;
-	float3 foamExistence = { 1.65f, 5.35f, 1.005f };
+	float3 foamExistence = { 15.65f, 5.35f, 1.005f };
 	// Colour of the water surface
 	float3 depthColour = { 0.0078f, 0.6176f, 0.8f };
 // Colour of the water depth
