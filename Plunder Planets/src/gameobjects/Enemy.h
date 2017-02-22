@@ -90,7 +90,7 @@ public:
 		m_rigidBody->setGravity(btVector3(0, -15, 0));
 
 		//Sound
-
+		m_health = 20;
 
 		//Movement
 		m_speed = 600;
@@ -225,8 +225,23 @@ public:
 
 	}
 
-	void Destroy()
+	void OnCollision(component::RigidBodyComponent* other)
 	{
+		if (other->m_gameObject->GetType() == "Projectile")
+		{
+			Projectile* p = ((Projectile*)other->m_gameObject);
+			if (p->m_spawnedBy == this)
+				return;
+			m_health -= p->GetDamageAmount();
+			if (m_health <= 0)
+				Die();
+		}
+
+	}
+
+	void Die()
+	{
+		Destroy(this);
 	}
 
 private:
@@ -245,6 +260,7 @@ private:
 	AI* m_ai;
 
 	//Ship
+	float m_health;
 	bool m_moving;
 	float m_mass;
 	float m_speed;

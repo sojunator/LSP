@@ -7,7 +7,7 @@
 #include "WaterObject.h"
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
-
+#include "../scenes/MenuScene.h"
 using namespace thomas;
 using namespace object;
 class Ship : public GameObject
@@ -421,9 +421,17 @@ public:
 	{
 		if (other->m_gameObject->GetType() == "Projectile")
 		{
-			m_health -= 10;
+			Projectile* p = ((Projectile*)other->m_gameObject);
+			if (p->m_spawnedBy == this)
+				return;
+			m_health -= p->GetDamageAmount();
+			LOG("hit hp: " << m_health);
 			if (m_health <= 0)
+			{
 				LOG("You are dead!");
+				Scene::LoadScene<MenuScene>();
+			}
+				
 		}
 			
 	}
