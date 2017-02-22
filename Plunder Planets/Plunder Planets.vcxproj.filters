@@ -25,6 +25,8 @@
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
+    <ClInclude Include="src\gameobjects\OceanFloor.h" />
+    <ClInclude Include="src\postEffects\testEffect.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\ShipFloat.h" />

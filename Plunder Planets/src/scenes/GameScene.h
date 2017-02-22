@@ -5,6 +5,7 @@
 #include "../gameobjects/TerrainObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
+#include "../gameobjects/OceanFloor.h"
 #include "../materials/PhongMaterial.h"
 #include "../materials/TerrainMaterial.h"
 #include "../materials/WaterMaterial.h"
@@ -74,6 +75,7 @@ public:
 		m_ship = LoadObject<Ship>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
 	};
 	

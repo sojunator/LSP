@@ -3,8 +3,8 @@
 Texture2D perlinTexture : register(t0);
 SamplerState perlinSampler : register(s0);
 
-Texture1D fresnelTexture : register(t1);
-SamplerState fresnelSampler : register(s1);
+Texture2D foamTexture : register(t1);
+SamplerState foamSampler : register(s1);
 
 Texture2D normalTexture : register(t2);
 SamplerState normalSampler : register(s2);
@@ -15,9 +15,11 @@ SamplerState displacementSampler : register(s3);
 TextureCube reflectionTexture : register(t4);
 SamplerState reflectionSampler : register(s4);
 
+Texture2D depthBufferTexture : register(t5);
+SamplerState depthBufferSampler : register(s5);
 
 #define PATCH_BLEND_BEGIN		500
-#define PATCH_BLEND_END			60000
+#define PATCH_BLEND_END			6000000
 
 cbuffer mvp : register(b0)
 {
@@ -26,6 +28,8 @@ cbuffer mvp : register(b0)
 	matrix projectionMatrix;
 	matrix mvpMatrix;
 	float3 camPosition;
+	float buff;
+	float3 camDirection;
 };
 
 cbuffer material : register(b1)
@@ -105,7 +109,8 @@ struct HSConstantData
 struct PSInput
 {
 	float4 position : SV_POSITION;
-	float3 positionWS : POSITION;
+	float4 clip : POSITION0;
+	float3 positionWS : POSITION1;
 	float2 tex : TEXCOORD0;
 };
 
@@ -123,12 +128,15 @@ HSInput VSMain(in VSInput input)
 
 
 	float minTessDistance = 1;
-	float maxTessDistance = 100;
+	float maxTessDistance = 1000;
 
 	float tess = saturate((minTessDistance - d) / (minTessDistance - maxTessDistance));
 
-	float minTessFactor = 16.0f;
+	
+
+	float minTessFactor = 32.0f;
 	float maxTessFactor = 1.0f;
+
 
 	output.tessFactor = minTessFactor + (tess * (maxTessFactor - minTessFactor));
 
@@ -196,7 +204,7 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	blendFactor = clamp(blendFactor, 0, 1);
 
 	float perlin = 0;
-	if(blendFactor < 1)
+	if (blendFactor < 1)
 	{
 		
 		float2 perlinTC = output.tex * perlinSize + (pos.xy % 256) - 128;
@@ -208,33 +216,58 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	}
 
 	float3 displacement = 0;
-	if(blendFactor > 0)
+	if (blendFactor > 0)
 	{
 		displacement = displacementTexture.SampleLevel(displacementSampler, output.tex, 0).xyz;
 	}
 	displacement = lerp(float3(0, 0, perlin), displacement, blendFactor);
 
 
-	pos.z += displacement.z;
+	pos.xyz += displacement.xyz;
 
 	output.position = mul(pos.xzyw, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 	output.positionWS = pos.xzy;
 
+	output.clip = output.position;
 	
 
 	return output;
 }
 
 
-
+float fresnelTerm(float3 normal, float3 eyeVec)
+{
+	float angle = 1.0f - saturate(dot(normal, eyeVec));
+	float fresnel = angle * angle;
+	fresnel = fresnel * fresnel;
+	fresnel = fresnel * angle;
+	return saturate(fresnel * (1.0f - saturate(0.5)) + 0.5 - 0.5);
+}
 
 //Pixel shader
 
 float4 PSMain(PSInput input) : SV_TARGET
 {
 
-	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z));//lightDir needs to be upside down for some reason
+	float2 ndc;
+	ndc.x = (input.clip.x / input.clip.w) / 2.0 + 0.5;
+	ndc.y = 1 - (input.clip.y / input.clip.w) / 2.0 + 0.5;
+
+
+	float depth = depthBufferTexture.Sample(depthBufferSampler, ndc).r;
+	float near = 0.1;
+	float far = 3000.0;
+	float floorDistance = (2 * near) / (far + near - depth * far - near);
+
+	depth = input.position.z;
+
+	float waterDistance = (2 * near) / (far + near - depth * far - near);
+
+	float waterDepth = floorDistance - waterDistance;
+
+
+	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z)); //lightDir needs to be upside down for some reason
 
 
 	float3 eyeVec = camPosition - input.positionWS;
@@ -243,7 +276,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float dist2d = length(eyeVec.xz);
 
 	float blendFactor = (PATCH_BLEND_END - dist2d) / (PATCH_BLEND_END - PATCH_BLEND_BEGIN);
-	blendFactor = saturate(blendFactor*blendFactor*blendFactor);
+	blendFactor = saturate(blendFactor * blendFactor * blendFactor);
 
 
 	float2 perlinTC = input.tex * perlinSize + (input.positionWS.xz) ;
@@ -254,27 +287,88 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 
 
-	float2 fftTC = (blendFactor > 0) ? input.tex: 0;
+	float2 fftTC = (blendFactor > 0) ? input.tex : 0;
 	float2 grad = normalTexture.Sample(normalSampler, fftTC).xy;
 	grad = lerp(perlin, grad, blendFactor);
 	float3 normal = normalize(float3(grad, texelLengthX2));
 
 
+	//return float4(normal, 1);
+	//shading
+
+	float3 shoreHardness = 1.0;
+	float3 foamExistence = { 4.65f, 9.35f, 0.5f };
+	// Colour of the water surface
+	float3 depthColour = { 0.0078f, 0.5176f, 0.7f };
+// Colour of the water depth
+	float3 bigDepthColour = { 0.0039f, 0.00196f, 0.145f };
+	float3 extinction = { 7.0f, 30.0f, 40.0f }; // Horizontal
+
+	// How fast will colours fade out. You can also think about this
+// values as how clear water is. Therefore use smaller values (eg. 0.05f)
+// to have crystal clear water and bigger to achieve "muddy" water.
+	float fadeSpeed = 0.15f;
+
+	// Water transparency along eye vector.
+	float visibility = 4.0f;
+
+	float3 sunColor = directionalLights[0].lightColor.xyz;
+	float sunScale = 3.0f;
 	float3 reflectVec = reflect(-eyeDir, normal);
-	float cosAngle = dot(normal, eyeDir);
 
 	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
-	float reflectContrib = 0.15f;//hardcoded lerpfactor between watercolor and the sampled reflection
+
+	float fresnel = fresnelTerm(normal, camDirection * eyeDir);
+	float2 tx = input.positionWS.xz / 100.0;
+	tx += normal.xy * 0.1 + perlinMovement.xy / 5;
 
 
-	float3 waterColor = lerp(baseWaterColor.rgb, reflection, reflectContrib);
+	float3 waterCol = saturate(length(sunColor) / sunScale);
+	float depthN = waterDepth * fadeSpeed;
+	
+	float3 baseColor = lerp(depthColour * waterCol, bigDepthColour * waterCol, saturate(waterDepth / extinction));
 
-	float cosSpec = saturate(dot(reflectVec, sunDir));
-	float sunSpot = pow(cosSpec, shininess); //shiny
 
-	waterColor += float3(directionalLights[0].lightColor.xyz) * sunSpot;
+	half3 specular = 0.0f;
+	float3 lightDir = directionalLights[0].lightDir;
+	half3 mirrorEye = (2.0f * dot(eyeDir, normal) * normal - eyeDir);
+	half dotSpec = saturate(dot(mirrorEye.xyz, -lightDir) * 0.5f + 0.5f);
+	specular = (1.0f - fresnel) * saturate(-lightDir.y) * ((pow(dotSpec, 512.0f)) * (shininess * 1.8f + 0.2f)) * sunColor;
+	specular += specular * 25 * saturate(shininess - 0.05f) * sunColor;
+
+	
+	
+	
+	float3 foam = 0.0f;
+
+	float2 texCoord = (input.positionWS.xz + eyeDir.xz * 0.1+perlinMovement) * 0.05;
+	float3 foamColor = foamTexture.Sample(foamSampler, texCoord);
+	
+	float foamshit = clamp(waterDepth / 0.0005, 0, 1);
+
+	foam = lerp(foamColor, 0.0f, foamshit);
+
+	foam += (foamColor * 1.5f *
+			saturate((input.positionWS.y - foamExistence.x)) / (foamExistence.y - foamExistence.z));
 	
 
-	return float4(waterColor, 1);
+
+	float3 waterColor = lerp(baseColor, reflection, fresnel);
+
+	waterColor = saturate(waterColor + max(specular, foam * sunColor));
+
+	waterColor = lerp(waterColor, baseColor, saturate(depthN * shoreHardness));
+
+	foamshit = clamp(waterDepth / 0.00005, 0, 1);
+
+
+
+	waterColor = lerp(1.0, waterColor, foamshit);
+
+
+	foamshit = saturate(1.0 - foamshit);
+
+	float opacity = clamp(waterDepth / 0.01, 0.3, 1);
+	return float4(waterColor, opacity + foamshit);
 }
