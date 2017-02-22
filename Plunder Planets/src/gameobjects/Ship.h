@@ -80,7 +80,6 @@ private:
 	float m_soundDelayLeft;
 	bool m_aiming;
 	bool m_prevFrame;
-	math::Vector3 position, right;
 
 	std::string m_SFXs[9] = {
 		"fCreak1",

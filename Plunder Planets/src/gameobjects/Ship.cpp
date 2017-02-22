@@ -2,16 +2,6 @@
 
 void Ship::Start()
 {
-	position = m_transform->GetPosition();
-	right = m_transform->Right();
-	utils::DebugTools::AddFloat(position.x, "pos x");
-	utils::DebugTools::AddFloat(position.y, "pos y");
-	utils::DebugTools::AddFloat(position.z, "pos z");
-
-	utils::DebugTools::AddFloatWithStep(right.x, "right x", "min=-1 max=1, step=0.01");
-	utils::DebugTools::AddFloatWithStep(right.y, "right y", "min=-1 max=1, step=0.01");
-	utils::DebugTools::AddFloatWithStep(right.z, "right z", "min=-1 max=1, step=0.01");
-
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 
@@ -60,8 +50,8 @@ void Ship::Start()
 
 	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
 	m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
-	m_broadSideLeft->CreateCanons();
-	m_broadSideRight->CreateCanons();
+	m_broadSideLeft->CreateCannons();
+	m_broadSideRight->CreateCannons();
 
 	//Rigidbody init
 	m_rigidBody->SetMass(20000);
@@ -177,11 +167,24 @@ void Ship::ShipAimCannons()
 
 		if (Input::GetKey(Input::Keys::I))
 		{
-			m_broadSideLeft->m_transform->Rotate(0, math::DegreesToradians(1.f), 0);
+			if (m_broadSideLeft->IncreasePitch(1.f))
+		
+				m_broadSideLeft->m_transform->Rotate(0, math::DegreesToradians(1.f), 0);
 		}
 		else if (Input::GetKey(Input::Keys::M))
 		{
-			m_broadSideLeft->m_transform->Rotate(0, math::DegreesToradians(359.f), 0);
+			if (m_broadSideLeft->DecreasePitch(1.f))
+				m_broadSideLeft->m_transform->Rotate(0, math::DegreesToradians(359.f), 0);
+		}
+		if (Input::GetKey(Input::Keys::H))
+		{
+			if (m_broadSideLeft->IncreaseYaw(1.f))
+				m_broadSideLeft->m_transform->Rotate(math::DegreesToradians(1.f), 0, 0);
+		}
+		else if (Input::GetKey(Input::Keys::L))
+		{
+			if (m_broadSideLeft->DecreaseYaw(1.f))
+				m_broadSideLeft->m_transform->Rotate(math::DegreesToradians(359.f), 0, 0);
 		}
 	}
 	else if (Input::GetKey(Input::Keys::F)) //LEFT
@@ -203,13 +206,30 @@ void Ship::ShipAimCannons()
 			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, 100.f * angle, -1);
 
 		if (Input::GetKey(Input::Keys::I))
-			m_broadSideRight->m_transform->Rotate(0, math::DegreesToradians(1.f), 0);
+		{
+			if (m_broadSideRight->IncreasePitch(1.f))
+				m_broadSideRight->m_transform->Rotate(0, math::DegreesToradians(1.f), 0);
+		}
+		else if (Input::GetKey(Input::Keys::M))
+		{
+			if (m_broadSideRight->DecreasePitch(1.f))
+				m_broadSideRight->m_transform->Rotate(0, math::DegreesToradians(359.f), 0);
+		}
+		if (Input::GetKey(Input::Keys::H))
+		{
+			if (m_broadSideRight->IncreaseYaw(1.f))
+				m_broadSideRight->m_transform->Rotate(math::DegreesToradians(1.f), 0, 0);
+		}
+		else if (Input::GetKey(Input::Keys::L))
+		{
+			if (m_broadSideRight->DecreaseYaw(1.f))
+				m_broadSideRight->m_transform->Rotate(math::DegreesToradians(359.f), 0, 0);
+		}
 
-		if (Input::GetKey(Input::Keys::M))
-			m_broadSideRight->m_transform->Rotate(0, math::DegreesToradians(359.f), 0);
+
 	}
 
-	if (Input::GetKeyUp(Input::Keys::G) || Input::GetKeyUp(Input::Keys::F))
+	else if (Input::GetKeyUp(Input::Keys::G) || Input::GetKeyUp(Input::Keys::F))
 	{
 		m_waterObject->DisableAim();
 	}
@@ -284,8 +304,6 @@ int Ship::GetTreasure()
 
 void Ship::Update()
 {
-	position = m_transform->GetPosition();
-	right = m_transform->Right();
 	float const dt = Time::GetDeltaTime();
 	float const right_x = Input::GetRightStickX();
 	float const right_y = Input::GetRightStickY();

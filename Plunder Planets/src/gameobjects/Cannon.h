@@ -6,13 +6,13 @@
 using namespace thomas;
 using namespace object;
 
-class Canon : public GameObject
+class Cannon : public GameObject
 {
 private:
 
 
 public:
-	Canon() : GameObject("Canon") 
+	Cannon() : GameObject("Cannon") 
 	{
 
 	};
@@ -25,7 +25,7 @@ public:
 		m_renderer->SetModel("box");
 	}
 
-	void SetMaxCanonDelay(float delay)
+	void SetMaxCannonDelay(float delay)
 	{
 		this->roof = delay;
 	}
@@ -54,7 +54,7 @@ public:
 		}
 	};
 
-	void FireCanon()
+	void FireCannon()
 	{
 		if (!fire)
 		{
@@ -63,7 +63,7 @@ public:
 		}
 	}
 
-	~Canon()
+	~Cannon()
 	{
 
 	}

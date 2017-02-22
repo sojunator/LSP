@@ -1,6 +1,6 @@
 #pragma once
 #include "Thomas.h"
-#include "Canon.h"
+#include "Cannon.h"
 
 using namespace thomas;
 using namespace object;
@@ -20,13 +20,14 @@ public:
 		m_delay = 1.5;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
-	
+		m_pitch = 0.0f;
+		m_yaw = 0.0f;
 
 		m_box = AddComponent<component::RenderComponent>();
 		m_box->SetModel("box1");
 	}
 
-	void CreateCanons()
+	void CreateCannons()
 	{
 		float spacing = 2.3;
 		for (int i = -1; i <= 3; i++)
@@ -35,8 +36,8 @@ public:
 			math::Vector3 pos = math::Vector3(0.0f);
 			pos += m_transform->Forward()*i*spacing - m_transform->Up() * 3.5;
 
-			Canon* c = Instantiate<Canon>(pos, math::Quaternion::Identity, m_transform, m_scene);
-			canons.push_back(c);
+			Cannon* c = Instantiate<Cannon>(pos, math::Quaternion::Identity, m_transform, m_scene);
+			m_cannons.push_back(c);
 		}
 	}
 
@@ -44,9 +45,9 @@ public:
 	{
 		if (m_delayLeft <= 0)
 		{
-			for (auto canon : canons)
+			for (auto cannon : m_cannons)
 			{
-				canon->FireCanon();
+				cannon->FireCannon();
 			}
 			m_delayLeft = m_delay;
 		}
@@ -54,18 +55,52 @@ public:
 
 	void Update()
 	{
-		forward = m_transform->Forward();
-		right = m_transform->Right();
 		float dt = Time::GetDeltaTime();
 		m_delayLeft -= dt;
+	}
+	bool IncreasePitch(unsigned float pitch)
+	{
+		if (m_pitch < 5.f)
+		{
+			m_pitch += (float)pitch;
+			return true;
+		}
+		return false;
+	}
+	bool IncreaseYaw(unsigned float yaw)
+	{
+		if (m_yaw < 10.f)
+		{
+			m_yaw += (float)yaw;
+			return true;
+		}
+		return false;
+	}
+	bool DecreasePitch(unsigned float pitch)
+	{
+		if (m_pitch > -5.f)
+		{
+			m_pitch -= (float)pitch;
+			return true;
+		}
+		return false;
+	}
+	bool DecreaseYaw(unsigned float yaw)
+	{
+		if (m_yaw > -10.f)
+		{
+			m_yaw -= (float)yaw;
+			return true;
+		}
+		return false;
 	}
 
 private:
 	float m_delay;
 	float m_delayLeft;
-	math::Vector3 forward, right;
+	float m_pitch, m_yaw;
 
-	std::vector<Canon*> canons; 
+	std::vector<Cannon*> m_cannons; 
 	component::SoundComponent* m_fireSFX;
 	component::RenderComponent* m_box;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
