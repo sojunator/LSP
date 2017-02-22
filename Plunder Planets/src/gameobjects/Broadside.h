@@ -58,7 +58,7 @@ public:
 		float dt = Time::GetDeltaTime();
 		m_delayLeft -= dt;
 	}
-	bool IncreasePitch(unsigned float pitch)
+	bool IncreasePitch(float pitch)
 	{
 		if (m_pitch < 5.f)
 		{
@@ -67,7 +67,7 @@ public:
 		}
 		return false;
 	}
-	bool IncreaseYaw(unsigned float yaw)
+	bool IncreaseYaw(float yaw)
 	{
 		if (m_yaw < 10.f)
 		{
@@ -76,7 +76,7 @@ public:
 		}
 		return false;
 	}
-	bool DecreasePitch(unsigned float pitch)
+	bool DecreasePitch(float pitch)
 	{
 		if (m_pitch > -5.f)
 		{
@@ -85,7 +85,7 @@ public:
 		}
 		return false;
 	}
-	bool DecreaseYaw(unsigned float yaw)
+	bool DecreaseYaw(float yaw)
 	{
 		if (m_yaw > -10.f)
 		{

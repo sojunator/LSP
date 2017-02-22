@@ -99,10 +99,10 @@ utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
 {
 	return &m_oceanSettings;
 }
-void WaterMaterial::UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle, int side)
+void WaterMaterial::UpdateAim(math::Vector2 pos, math::Vector2 right, float pow, float angle)
 {
-	m_materialProperties.aimPos = pos + right * (std::sin(math::DegreesToradians(angle)) + pow) * side;
-	m_materialProperties.aiming = side;
+	m_materialProperties.aimPos = pos + right * (std::sin(angle) * 1000.f + pow);
+	m_materialProperties.aiming = 1;
 }
 void WaterMaterial::DisableAim()
 {

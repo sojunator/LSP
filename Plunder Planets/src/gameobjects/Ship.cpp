@@ -149,21 +149,22 @@ void Ship::ShipAimCannons()
 
 	if (Input::GetKey(Input::Keys::G)) //RIGHT
 	{
-		math::Vector3 flatRight = math::Vector3(-m_broadSideRight->m_transform->Forward().x, 0, -m_broadSideRight->m_transform->Forward().z);
+		math::Vector3 flatRight = math::Vector3(m_broadSideLeft->m_transform->Forward().x, 0, m_broadSideLeft->m_transform->Forward().z);
 		flatRight.Normalize();
 
-		float bajs2 = (-m_broadSideRight->m_transform->Forward()).Dot(flatRight);
+		//float bajs2 = (m_broadSideLeft->m_transform->Forward()).Dot(flatRight);
+		float bajs2 = (m_broadSideLeft->m_transform->Forward()).Dot(math::Vector3(0,1,0));
 		if (bajs2 > 1.f)
 			bajs2 = 1.f;
 		else if (bajs2 < -1.f)
 			bajs2 = -1.f;
-		float angle = std::acos(bajs2);
+		float angle = math::PI / 2 - std::acos(bajs2);
 
 		math::Vector2 bajs = math::Vector2(m_transform->Forward().x, m_transform->Forward().z);
 		bajs.Normalize();
 
 		m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, 100.f * angle, 1);
+			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, angle);
 
 		if (Input::GetKey(Input::Keys::I))
 		{
@@ -189,21 +190,21 @@ void Ship::ShipAimCannons()
 	}
 	else if (Input::GetKey(Input::Keys::F)) //LEFT
 	{
-		math::Vector3 flatRight = math::Vector3(m_broadSideLeft->m_transform->Forward().x, 0, m_broadSideLeft->m_transform->Forward().z);
+		math::Vector3 flatRight = math::Vector3(m_broadSideRight->m_transform->Forward().x, 0, m_broadSideRight->m_transform->Forward().z);
 		flatRight.Normalize();
 
-		float bajs2 = (-m_broadSideLeft->m_transform->Forward()).Dot(flatRight);
+		float bajs2 = (m_broadSideRight->m_transform->Forward()).Dot(math::Vector3(0, 1, 0));
 		if (bajs2 > 1.f)
 			bajs2 = 1.f;
 		else if (bajs2 < -1.f)
 			bajs2 = -1.f;
-		float angle = std::acos(bajs2);
+		float angle = math::PI / 2 - std::acos(bajs2);
 
 		math::Vector2 bajs = math::Vector2(m_transform->Forward().x, m_transform->Forward().z);
 		bajs.Normalize();
 
 		m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, 100.f * angle, -1);
+			- bajs, math::Vector2(flatRight.x, flatRight.z), 200.f, angle);
 
 		if (Input::GetKey(Input::Keys::I))
 		{
