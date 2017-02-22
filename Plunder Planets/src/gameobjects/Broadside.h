@@ -17,7 +17,7 @@ public:
 
 	void Start()
 	{
-		m_delay = 0;
+		m_delay = 4.0;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
 		//m_renderer = AddComponent<component::RenderComponent>();
