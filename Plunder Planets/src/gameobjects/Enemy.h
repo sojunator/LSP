@@ -87,6 +87,7 @@ public:
 		m_rigidBody->SetMass(m_mass);
 		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 12, 8)));
 		m_rigidBody->setSleepingThresholds(0.2, 0.5);
+		m_rigidBody->setGravity(btVector3(0, -15, 0));
 
 		//Sound
 
@@ -161,12 +162,51 @@ public:
 			m_broadSideLeft->Fire();
 	}
 
+	void Float(float dt)
+	{
+		float waveHeight = 0;
+		math::Vector3 bois;
+		for (int i = 0; i < 12; i++)
+		{
+
+			if (i < 8)
+			{
+				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				bois += m_floats[i]->m_transform->GetPosition();
+			}
+			else
+			{
+				m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+			}
+
+		}
+
+		m_rigidBody->setDamping(0.0, 0.0);
+		if (m_moving)
+		{
+			m_rigidBody->setDamping(0.5, 0.5);
+		}
+		m_rigidBody->applyDamping(dt);
+
+
+		bois /= 8;
+		waveHeight /= 8;
+		if (bois.y > waveHeight + 0.5)
+		{
+			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
+			float oldY = v.getY();
+			float newY = waveHeight + 0.5;
+			newY = oldY + dt*4.0 * (newY - oldY);
+			v.setY(newY);
+		}
+	}
+
+
 	void Update()
 	{
 		float const dt = Time::GetDeltaTime();
 
 		m_moving = false;
-
 		m_ai->Escape();
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
 		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
@@ -181,18 +221,7 @@ public:
 			Move(dt);
 		m_firstFrame = false;
 
-		bool inWater = false;
-
-		for (int i = 0; i < 12; i++)
-		{
-			bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
-			if (wTemp)
-				inWater = true;
-		}
-
-		if (m_moving)
-			m_rigidBody->setDamping(0.5, 0.5);
-		m_rigidBody->applyDamping(dt);
+		Float(dt);
 
 	}
 

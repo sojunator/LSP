@@ -40,7 +40,6 @@ public:
 			if (currentTimeCount > delay)
 			{
 				// instanciate projectile
-				utils::DebugTools::AddRotation(m_transform->GetRotation(), "proj rot");
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				currentTimeCount = 0.0f;
 				fire = false;

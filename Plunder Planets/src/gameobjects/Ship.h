@@ -260,6 +260,48 @@ public:
 		return m_treasure + 0.5;
 	}
 
+
+	void Float(float dt)
+	{
+		float waveHeight = 0;
+		math::Vector3 bois;
+		for (int i = 0; i < 12; i++)
+		{
+
+			if (i < 8)
+			{
+				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				bois += m_floats[i]->m_transform->GetPosition();
+			}
+			else
+			{
+				m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+			}
+
+		}
+
+		m_rigidBody->setDamping(0.0, 0.0);
+		if (m_moving)
+		{
+			m_rigidBody->setDamping(0.5, 0.5);
+		}
+		if (m_turning)
+			m_rigidBody->setDamping(0.3, 0.3);
+		m_rigidBody->applyDamping(dt);
+
+
+		bois /= 8;
+		waveHeight /= 8;
+		if (bois.y > waveHeight + roof)
+		{
+			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
+			float oldY = v.getY();
+			float newY = waveHeight + roof;
+			newY = oldY + dt*4.0 * (newY - oldY);
+			v.setY(newY);
+		}
+	}
+
 	void Update()
 	{
 		float const dt = Time::GetDeltaTime();
@@ -354,44 +396,7 @@ public:
 
 		PlunderIsland();
 
-		float waveHeight = 0;
-
-		math::Vector3 bois;
-		for (int i = 0; i < 12; i++)
-		{
-			
-			if (i < 8)
-			{
-				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
-				bois += m_floats[i]->m_transform->GetPosition();
-			}
-			else
-			{
-				m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
-			}
-				
-		}
-
-		m_rigidBody->setDamping(0.0, 0.0);
-		if (m_moving)
-		{
-			m_rigidBody->setDamping(0.5, 0.5);
-		}
-		if(m_turning)
-			m_rigidBody->setDamping(0.3, 0.3);
-		m_rigidBody->applyDamping(dt);
-
-		
-		bois /= 8;
-		waveHeight /= 8;
-		if (bois.y > waveHeight+roof)
-		{
-			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
-			float oldY = v.getY();
-			float newY = waveHeight + roof;
-			newY = oldY + dt*4.0 * (newY - oldY);
-			v.setY(newY);
-		}
+		Float(dt);
 
 
 		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
