@@ -20,33 +20,42 @@ public:
 	{
 	}
 	void Start();
+	bool GetFreeCamera();
 	void ShipMove(float const dt);
 	void ShipRotate(float const dt);
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt);
 	void ShipFireCannons();
 	void ShipAimCannons();
-
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
 	void CameraZoom(float const dt);
-	void PlaySounds(float const dt)	{}
+
+
+	void PlaySounds(float const dt){}
 	void PlunderIsland();
 	int GetTreasure();
+
+	void Float(float dt);
+
 	void Update();
 
+public:
+	float m_health;
+	float m_maxHealth;
+
 private:
-
+	float roof;
 	bool m_moving;
-	float damp;
-
-	bool m_freeCamera;
+	bool m_turning;
 	bool m_flying;
 	float m_treasure;
 	float m_mass;
 	float m_flyTurnSpeed;
 	float m_speed;
 	float m_turnSpeed;
+	int m_flyCost;
 	//used for the camera
+	bool m_freeCamera;
 	float m_elevateCamSpeed;//for moving cam up and down
 	float m_camRotationSpeed;
 	float m_camZoomSpeed;
@@ -59,7 +68,7 @@ private:
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
-	math::Vector3 m_initPosition;
+	math::Vector3 m_initPosition;	//Is this needed?
 
 	//components
 	component::RenderComponent* m_renderer;
@@ -67,7 +76,7 @@ private:
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
 	ShipFloat* m_floats[12];
-	CameraObject* m_cameraObject;
+	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	WaterObject* m_waterObject;
 

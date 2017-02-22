@@ -6,12 +6,12 @@ namespace thomas
 	Islands::Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance)
 	{
 		std::srand(time(NULL));
-		std::vector<utils::Plane::PlaneData> tempPlane;
+		utils::Plane::PlaneData plane = utils::Plane::CreatePlane(mapSize, detail);
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;
 		m_plunderRate = 30;
-		GeneratePos();
+
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			m_size.push_back(size);
@@ -20,22 +20,28 @@ namespace thomas
 			m_totalTreasure.push_back(1000);
 			m_plunderRadius.push_back(size*detail*0.8);
 			m_collisionRadius.push_back(size*detail*0.6);
-			tempPlane.push_back(utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, tempPlane[i]);
-			ApplyOffSet(i, tempPlane[i]);
-			m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((size*detail) / 2), m_worldPosOffset[i].y - ((size*detail) / 2)));
 		}
-		GenerateMesh(tempPlane, m);
-	}
 
-	void Islands::GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m)
+		GeneratePos();
+		for (int i = 0; i < m_nrOfIslands; i++)
+		{
+			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
+		}
+
+		for (int i = 0; i < plane.verts.size(); i++)
+		{
+			plane.verts[i].position.x -= mapSize / 2;
+			plane.verts[i].position.z += mapSize / 2;
+		}
+
+		GenerateMesh(plane, m);
+
+	}
+	
+	void Islands::GenerateMesh(utils::Plane::PlaneData tempPlane, graphics::Material* m)
 	{
 		std::vector<thomas::graphics::Mesh*> mesh;
-		for (unsigned int i = 0; i < tempPlane.size(); ++i)
-		{
-			mesh.push_back(new graphics::Mesh(tempPlane[i].verts, tempPlane[i].indices, "Plane-1", m));
-
-		}
+		mesh.push_back(new graphics::Mesh(tempPlane.verts, tempPlane.indices, "Islands", m));
 		m_mesh.push_back(mesh);
 	}
 
@@ -44,7 +50,7 @@ namespace thomas
 		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
 			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-			tempPlanes.verts[i].position.z += m_worldPosOffset[island].y;
+			tempPlanes.verts[i].position.z += m_worldPosOffset[island].z;
 		}
 	}
 
@@ -84,12 +90,12 @@ namespace thomas
 		return m_minDistance;
 	}
 
-	math::Vector2 Islands::GetCenter(int island)
+	math::Vector3 Islands::GetCenter(int island)
 	{
 		return m_islandCenterWorldPos[island];
 	}
 
-	math::Vector2 Islands::GetOffSet(int island)
+	math::Vector3 Islands::GetOffSet(int island)
 	{
 		return m_worldPosOffset[island];
 	}
@@ -157,42 +163,58 @@ namespace thomas
 
 	void Islands::GeneratePos()
 	{
+		const int MAX_ATTEMPTS = 1200;
+		int attempt = 0;
+		m_islandCenterWorldPos.push_back(math::Vector3(0, 0, 0));
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			bool posNotFound = true;
-			while (posNotFound)
+			while (posNotFound && attempt < MAX_ATTEMPTS)
 			{
-				math::Vector2 xy;
-				xy.x = rand() % m_mapSize * 2 - m_mapSize;
-				xy.y = rand() % m_mapSize * 2 - m_mapSize;
+				math::Vector3 xy;
+				xy.x = rand() % (m_mapSize  - m_size[i] - 10);
+				xy.y = 0;
+				xy.z = rand() % (m_mapSize  - m_size[i] - 10);
+				xy = xy + math::Vector3(10.0, 0.0, 10.0);
 				float distPrev = 0.0f;
 
-				if (m_worldPosOffset.size() == 0)
-				{
-					distPrev = 0.0f;
-					m_worldPosOffset.push_back(xy);
-					posNotFound = false;
-				}
-				else
+				//if (m_islandCenterWorldPos.size() == 0)
+				//{
+				//	distPrev = 0.0f;
+				//	m_worldPosOffset.push_back(xy);
+				//	m_islandCenterWorldPos.push_back(math::Vector2(m_worldPosOffset[i].x + ((m_size[i] * m_detail[i]) / 2), m_worldPosOffset[i].y - ((m_size[i] * m_detail[i]) / 2)));
+				//	posNotFound = false;
+				//}
+				if (true) // temp
 				{
 					std::vector<float> distance;
-					for (unsigned int j = 0; j < m_worldPosOffset.size(); j++)
-						distance.push_back((m_worldPosOffset[j].x - xy.x) * (m_worldPosOffset[j].x - xy.x) + (m_worldPosOffset[j].y - xy.y) * (m_worldPosOffset[j].y - xy.y));
+					for (unsigned int j = 0; j < m_islandCenterWorldPos.size(); j++)
+						distance.push_back((m_islandCenterWorldPos[j].x - xy.x) * (m_islandCenterWorldPos[j].x - xy.x) + (m_islandCenterWorldPos[j].z - xy.z) * (m_islandCenterWorldPos[j].z - xy.z));
 
 					for (unsigned int k = 0; k < distance.size(); ++k)
 					{
 						if (distance[k] < m_minDistance*m_minDistance)
 						{
 							posNotFound = true;
+							attempt++;
 							break;
 						}
 						else
+						{
+
 							posNotFound = false;
+						}
 					}
 					if (!posNotFound)
+					{
+						attempt = 0;
 						m_worldPosOffset.push_back(xy);
+						m_islandCenterWorldPos.push_back(math::Vector3(m_worldPosOffset[i].x + ((m_size[i] * m_detail[i]) / 2), 0.0, m_worldPosOffset[i].z - ((m_size[i] * m_detail[i]) / 2)));
+					}
 				}
 			}
 		}
+		m_nrOfIslands = m_worldPosOffset.size(); 
+		m_islandCenterWorldPos.erase(m_islandCenterWorldPos.begin());
 	}
 }

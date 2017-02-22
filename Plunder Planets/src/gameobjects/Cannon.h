@@ -23,8 +23,6 @@ public:
 		m_yaw = 0.f;
 		roof = 0.8f;
 		ReseedDelay();
-		m_renderer = AddComponent<component::RenderComponent>();
-		m_renderer->SetModel("box");
 	}
 
 	void SetMaxCannonDelay(float delay)
@@ -44,7 +42,6 @@ public:
 			if (currentTimeCount > delay)
 			{
 				// instanciate projectile
-				utils::DebugTools::AddRotation(m_transform->GetRotation(), "proj rot");
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				/*p->SetPitch(m_pitch);
 				p->SetYaw(m_yaw);*/
@@ -85,6 +82,5 @@ private:
 	float delay;
 	float roof;
 	float currentTimeCount;
-	component::RenderComponent* m_renderer;
 
 };

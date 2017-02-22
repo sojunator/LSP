@@ -5,12 +5,14 @@
 #include "../gameobjects/TerrainObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
+#include "../gameobjects/OceanFloor.h"
 #include "../materials/PhongMaterial.h"
 #include "../materials/TerrainMaterial.h"
 #include "../materials/WaterMaterial.h"
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
+#include "../gameobjects/Enemy.h"
 #include "../gameobjects/Ship.h"
 
 
@@ -75,7 +77,9 @@ public:
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_ship = LoadObject<Ship>();
+		m_enemyShip = LoadObject<Enemy>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
+		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
 	};
 	
@@ -92,6 +96,7 @@ private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	Ship* m_ship;
+	Enemy* m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
 	float test = 0.0f;

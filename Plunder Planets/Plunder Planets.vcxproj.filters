@@ -7,6 +7,8 @@
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
     <ClCompile Include="src\postEffects\OceanPostProcess.cpp" />
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
+    <ClCompile Include="src\AI\Pathfinding.cpp" />
+    <ClCompile Include="src\AI\AI.cpp" />
     <ClCompile Include="src\gameobjects\Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +27,11 @@
     <ClInclude Include="src\scenes\LoadScreenScene.h" />
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
+    <ClInclude Include="src\gameobjects\Enemy.h" />
+    <ClInclude Include="src\AI\Pathfinding.h" />
+    <ClInclude Include="src\AI\AI.h" />
+    <ClInclude Include="src\postEffects\testEffect.h" />
+    <ClInclude Include="src\gameobjects\OceanFloor.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />

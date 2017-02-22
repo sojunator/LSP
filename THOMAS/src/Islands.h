@@ -10,7 +10,7 @@ namespace thomas
 	{
 	public:
 		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance);
-		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlanes, graphics::Material* m);
+		void GenerateMesh(utils::Plane::PlaneData tempPlanes, graphics::Material* m);
 		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
 		~Islands();
 
@@ -24,8 +24,8 @@ namespace thomas
 		int GetDetail(int island);								//Get detail level of specific island
 		float GetPlunderRadius(int island);						//Get radius to plunder for specific island
 		float GetCollisionRadius(int island);					//Get radius for collision for specific island
-		math::Vector2 GetCenter(int island);					//Get m_islandCenterWorldPos for specific island
-		math::Vector2 GetOffSet(int island);					//Get offset for specific island	
+		math::Vector3 GetCenter(int island);					//Get m_islandCenterWorldPos for specific island
+		math::Vector3 GetOffSet(int island);					//Get offset for specific island	
 		std::vector<graphics::Mesh*> GetIslands(int island);	//Get mesh of all islands on a map
 
 		float GetPlunderRadiusSquared(int island);				//Get radius squared for specific island
@@ -47,8 +47,8 @@ namespace thomas
 		std::vector<float> m_detail;
 		std::vector<float> m_plunderRadius;
 		std::vector<float> m_collisionRadius;
-		std::vector<math::Vector2> m_islandCenterWorldPos;
-		std::vector<math::Vector2> m_worldPosOffset;
+		std::vector<math::Vector3> m_islandCenterWorldPos;
+		std::vector<math::Vector3> m_worldPosOffset;
 		std::vector<std::vector<graphics::Mesh*>> m_mesh;
 	};
 }

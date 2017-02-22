@@ -43,7 +43,7 @@ void Ship::Start()
 	m_renderer = AddComponent<component::RenderComponent>();
 	m_sound = AddComponent<component::SoundComponent>();
 	m_boostSound = AddComponent<component::SoundComponent>();
-	m_cameraObject = (CameraObject*)Find("CameraObject");
+	m_cameraObject = Find("CameraObject");
 	m_terrainObject = (TerrainObject*)Find("TerrainObject");
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
@@ -54,20 +54,19 @@ void Ship::Start()
 	m_broadSideRight->CreateCannons();
 
 	//Rigidbody init
-	m_rigidBody->SetMass(20000);
+	m_rigidBody->SetMass(mass);
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
 	m_rigidBody->setSleepingThresholds(0.2, 0.5);
-
-	m_treasure = 10000;
+	m_rigidBody->setGravity(btVector3(0, -15, 0));
+	m_treasure = 0;
 
 	//model
 	m_modelIndex = 0;
 	m_renderer->SetModel("testModel0");
 	m_moving = false;
 	//sound
-	//m_boostSound->SetClip("mThomas");
 	m_boostSound->SetClip("fFlames");
-	m_boostSound->SetVolume(0.9);
+	m_boostSound->SetVolume(1000);
 	m_soundDelay = 5;
 	m_soundDelayLeft = 5;
 	//movement
@@ -75,9 +74,10 @@ void Ship::Start()
 	utils::DebugTools::AddFloat(m_speed, "boatSpeed");
 	m_turnSpeed = 2000;
 	utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
+	roof = 1.0;
+	utils::DebugTools::AddFloat(roof, "roof");
+	m_flyCost = 20;
 
-	m_flyTurnSpeed = 500;
-	utils::DebugTools::AddFloat(m_flyTurnSpeed, "boatFlyTurnSpeed");
 	//controlls/camera
 	m_controlSensitivity = 0.13f;
 
@@ -88,40 +88,64 @@ void Ship::Start()
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
 
+	m_health = 100;
+	m_maxHealth = m_health;
+
 	m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
 	m_lookAtOffset = math::Vector3(0, 20, 0);
 	m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 	m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 	m_aiming = false;
 }
-
+bool Ship::GetFreeCamera()
+{
+	return m_freeCamera;
+}
 void Ship::ShipMove(float const dt)
 {
-	//ship controlls
-	if (Input::GetButton(Input::Buttons::RT))
+	//ship controls
+	if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera &&Input::GetKey(Input::Keys::W)))
 	{
 		math::Vector3 forward = m_transform->Forward();
+
 		//Remove y part;
 		forward.y = 0;
 		m_moving = true;
 		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*dt*m_rigidBody->GetMass()));
 	}
 }
-
 void Ship::ShipRotate(float const dt)
 {
-	float turnDelta = -Input::GetLeftStickX();
+	float turnDelta = 0;
+
+	//For XBOX
+	if (Input::GetLeftStickX())
+		turnDelta = -Input::GetLeftStickX();
+
+	//For Keyboard
+	else if (!m_freeCamera)
+	{
+		if (Input::GetKey(Input::Keys::D))
+			turnDelta = -Input::GetKey(Input::Keys::D);
+		else if (-Input::GetKey(Input::Keys::A))
+			turnDelta = Input::GetKey(Input::Keys::A);
+	}
+
 	math::Vector3 right = m_transform->Right();
+
 	//Remove y part;
 	right.y = 0;
 	m_rigidBody->activate();
 	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
-}
 
+	if (abs(turnDelta) > 0.02)
+		m_turning = true;
+}
 void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 {
-	if (Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A))
+	if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) || Input::GetKey(Input::Keys::Space) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
 	{
+		m_treasure -= m_flyCost*dt;
 		math::Vector3 forward = m_transform->Forward();
 		m_moving = true;
 		forward.y = 0;
@@ -132,18 +156,20 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 		btVector3 angular = m_rigidBody->getAngularVelocity();
 		m_rigidBody->setAngularVelocity(btVector3(angular.x(), angular.y(), 0));*/
 		m_flying = true;
+
 	}
 }
-
 void Ship::ShipFireCannons()
 {
-	if (Input::GetKeyDown(Input::Keys::Space))
-	{
-		m_broadSideRight->Fire();
-		m_broadSideLeft->Fire();
-	}
-}
+	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKey(Input::Keys::E))
+		m_broadSideLeft->Fire(); //Temporary fix
+								 //m_broadSideRight->Fire();
 
+
+	if (Input::GetButtonDown(Input::Buttons::LB) || Input::GetKey(Input::Keys::Q))
+		m_broadSideRight->Fire(); //Temporary Fix
+								  //m_broadSideLeft->Fire();
+}
 void Ship::ShipAimCannons()
 {
 
@@ -235,14 +261,13 @@ void Ship::ShipAimCannons()
 		m_waterObject->DisableAim();
 	}
 }
-
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
 	m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
 	if (std::abs(right_x) > m_controlSensitivity || std::abs(right_y) > m_controlSensitivity)
 	{
 		float angle = std::acos(m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 1, 0))) * 180 / math::PI;
-		m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);
+
 		bool allowRotation = true;
 
 		if (angle > 160)
@@ -252,7 +277,7 @@ void Ship::CameraRotate(float const right_x, float const right_y, float const dt
 				allowRotation = false;
 			}
 		}
-		else if (angle < 20)
+		else if (angle < 85)
 		{
 			if (right_y < 0)
 			{
@@ -262,24 +287,21 @@ void Ship::CameraRotate(float const right_x, float const right_y, float const dt
 
 		if (allowRotation)//anti gimballock
 		{
+			m_cameraObject->m_transform->Rotate(m_camRotationSpeed * right_x * dt, 0, 0);
 			m_cameraObject->m_transform->Rotate(0, m_cameraObject->m_transform->Forward().Dot(math::Vector3(0, 0, 1)) * m_camRotationSpeed * right_y * dt, m_cameraObject->m_transform->Forward().Dot(math::Vector3(-1, 0, 0)) * m_camRotationSpeed * right_y * dt);//rotate camera around the boat
 		}
-
-
 	}
 
 	m_cameraObject->m_transform->Translate(-m_cameraObject->m_transform->Forward() * distanceVector.Length());//move the camera back to the distance it was, after rotations
 }
-
 void Ship::CameraZoom(float const dt)
 {
-
-	if (Input::GetButton(Input::Buttons::DPAD_UP))
+	if (Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Z))
 	{
 		m_cameraDistance -= m_camZoomSpeed*dt;
 	}
 
-	if (Input::GetButton(Input::Buttons::DPAD_DOWN))
+	if (Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::X))
 	{
 		m_cameraDistance += m_camZoomSpeed*dt;
 	}
@@ -289,31 +311,77 @@ void Ship::CameraZoom(float const dt)
 
 	if (m_cameraDistance < m_camMinDistanceFromBoat)
 		m_cameraDistance = m_camMinDistanceFromBoat;
-
 }
-
 void Ship::PlunderIsland()
 {
-	math::Vector2 shipPos = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z);
-	m_treasure += m_terrainObject->Plunder(shipPos);
+	m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
 }
-
 int Ship::GetTreasure()
 {
 	return m_treasure + 0.5;
 }
+void Ship::Float(float dt)
+{
+	float waveHeight = 0;
+	math::Vector3 bois;
+	for (int i = 0; i < 12; i++)
+	{
 
+		if (i < 8)
+		{
+			waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+			bois += m_floats[i]->m_transform->GetPosition();
+		}
+		else
+		{
+			m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+		}
+
+	}
+
+	m_rigidBody->setDamping(0.0, 0.0);
+	if (m_moving)
+	{
+		m_rigidBody->setDamping(0.5, 0.5);
+	}
+	if (m_turning)
+		m_rigidBody->setDamping(0.3, 0.3);
+	m_rigidBody->applyDamping(dt);
+
+
+	bois /= 8;
+	waveHeight /= 8;
+	if (bois.y > waveHeight + roof && waveHeight > -5)
+	{
+		btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
+		float oldY = v.getY();
+		float newY = waveHeight + roof;
+		newY = oldY + dt*4.0 * (newY - oldY);
+		v.setY(newY);
+	}
+}
 void Ship::Update()
 {
 	float const dt = Time::GetDeltaTime();
-	float const right_x = Input::GetRightStickX();
-	float const right_y = Input::GetRightStickY();
-	float const left_x = Input::GetLeftStickX();
-	float const left_y = Input::GetLeftStickY();
+	float right_x = Input::GetRightStickX();
+	float right_y = Input::GetRightStickY();
+	float left_x = Input::GetLeftStickX(); //not used?
+	float left_y = Input::GetLeftStickY(); //not used?
+
+										   //If cam changed with arrow keys
+	if (Input::GetKey(Input::Keys::Right))
+		right_x = -Input::GetKey(Input::Keys::Right);
+	else if (Input::GetKey(Input::Keys::Left))
+		right_x = Input::GetKey(Input::Keys::Left);
+
+	if (Input::GetKey(Input::Keys::Up))
+		right_y = Input::GetKey(Input::Keys::Up);
+	else if (Input::GetKey(Input::Keys::Down))
+		right_y = -Input::GetKey(Input::Keys::Down);
 
 	//get forward, right and up contrib
-	float forwardFactor = 0;
-	float rightFactor = -left_x;
+	float forwardFactor = 0; //not used?
+	float rightFactor = -left_x; //not used?
 	float upFactorPitch = m_transform->Forward().Dot(math::Vector3(0, 0, -1)) * left_y;
 	float upFactorRoll = m_transform->Forward().Dot(math::Vector3(1, 0, 0)) * left_y;
 
@@ -321,18 +389,10 @@ void Ship::Update()
 
 	//ShipBoost(dt);
 
-
-	//Ship Controls
-	ShipAimCannons();
-	ShipMove(dt);
-	ShipRotate(dt);
-	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
-	ShipFireCannons();
-
-
 	if (!m_freeCamera)
 	{
 		CameraZoom(dt);
+
 		//Recalculate look at point and the new distance from cam to ship
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
@@ -341,21 +401,18 @@ void Ship::Update()
 
 		CameraRotate(right_x, right_y, dt, distanceVector);
 
-
-
-
 		//Move camera "distance" away from boat.
-		//math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
-		//
-		//newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
+		/*math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
+
+		newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);*/
 
 		//m_cameraObject->m_transform->SetPosition(newPos);
 
 		//move camera behind boat
 		math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
-		posBehindBoat.y = 25;
+		posBehindBoat.y = 35;
 
-		posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt);
+		posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
 
 		m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
@@ -366,48 +423,40 @@ void Ship::Update()
 
 		newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
 
-		m_cameraObject->m_transform->SetPosition(newPos);
 
+
+
+		m_cameraObject->m_transform->SetPosition(newPos);
 	}
+
 	m_moving = false;
 	m_flying = false;
+	m_turning = false;
+
 	//Ship Movement
 	ShipMove(dt);
 	ShipRotate(dt);
 	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 	ShipFireCannons();
+	ShipAimCannons();
 
 	if (m_flying)
 	{
 		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+		m_boostSound->Play();
 	}
 	else
 	{
 		m_renderer->SetModel("testModel0");
+		m_boostSound->Pause();
 	}
-
-
 
 	PlaySounds(dt);
 
 	PlunderIsland();
 
+	Float(dt);
 
 
-	bool inWater = false;
-
-
-	for (int i = 0; i < 12; i++)
-	{
-		bool wTemp = m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
-		if (wTemp)
-			inWater = true;
-	}
-
-	if (!inWater)
-	{
-		m_rigidBody->setDamping(0.0, 0.0);
-	}
-
-
+	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }

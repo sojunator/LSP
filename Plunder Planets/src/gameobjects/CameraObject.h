@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
+#include "Ship.h"
 
 using namespace thomas;
 using namespace object;
@@ -39,7 +40,7 @@ public:
 
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
-		m_sensitivity = 0.5f;
+		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;
 		m_flySpeed = m_normalSpeed;
@@ -51,7 +52,7 @@ public:
 		m_seagull->Play();
 
 		m_creak->SetClip("fCreakLoop");
-		m_creak->SetVolume(0.3);
+		m_creak->SetVolume(3);
 		m_creak->Play();
 
 		m_music->SetClip("aOceanAmbient");
@@ -113,18 +114,17 @@ public:
 
 	void Update()
 	{
-
-		
 		m_camera->SetFar(m_far);
 		m_camera->SetFov(m_fov);
-		/*if (m_ship == nullptr)
+		if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
 		else
 		{
+			m_healthbar->SetScale(math::Vector2(m_ship->m_health / m_ship->m_maxHealth, 1.0f));
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
-		}*/
+		}
 		//Healthbar code here for now
 		if (m_healthbar->GetScale().x > 0.6f)
 		{
@@ -172,11 +172,10 @@ public:
 			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
 		}
 
-
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity;
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*Time::GetDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);
@@ -212,7 +211,7 @@ public:
 	}
 
 private:
-	//Ship* m_ship;
+	Ship* m_ship;
 	component::Camera* m_camera;
 	component::SoundComponent* m_seagull;
 	component::SoundComponent* m_creak;

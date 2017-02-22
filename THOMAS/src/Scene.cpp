@@ -73,6 +73,8 @@ namespace thomas
 
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
+			if (shader->GetName() == "oceanShader")
+				continue;
 			shader->Bind();
 			camera->BindReflection();
 			graphics::LightManager::BindAllLights();
@@ -95,39 +97,44 @@ namespace thomas
 				}
 				material->Unbind();
 			}
-			graphics::LightManager::Unbind();
 
 			shader->Unbind();
 		}
 
-	/*	camera->BindReflection();
-		graphics::LightManager::BindAllLights();
-		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-		{	
-			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-			{	
-				graphics::Model* model = renderComponent->GetModel();
-				if (model)
-				{
-					std::vector < graphics::Mesh*> meshes = model->GetMeshes();
-					meshes[0]->GetMaterial()->GetShader()->Bind();
-					meshes[0]->GetMaterial()->Bind();
-					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
 
-					for (graphics::Mesh* mesh : meshes)
+		graphics::Shader* oceanShader = graphics::Shader::GetShaderByName("oceanShader");
+		if (oceanShader)
+		{
+			DirectX::CommonStates state(ThomasCore::GetDevice());
+			graphics::Renderer::BindDepthBufferTexture();
+			ThomasCore::GetDeviceContext()->OMSetBlendState(state.NonPremultiplied(), NULL, 0xFFFFFFFF);
+			oceanShader->Bind();
+			camera->BindReflection();
+			graphics::LightManager::BindAllLights();
+			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(oceanShader))
+			{
+				material->Bind();
+				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+				{
+					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
+					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 					{
-						mesh->Bind();
-						mesh->Draw();
+						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+						{
+							mesh->Bind();
+							mesh->Draw();
+						}
 					}
 					graphics::Renderer::UnBindGameObjectBuffer();
-					meshes[0]->GetMaterial()->Unbind();
-					meshes[0]->GetMaterial()->GetShader()->Unbind();
 				}
-				
+				material->Unbind();
 			}
-			
+			graphics::LightManager::Unbind();
+
+			oceanShader->Unbind();
+			graphics::Renderer::UnbindDepthBufferTexture();
 		}
-		graphics::LightManager::Unbind();*/
+
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 	}
