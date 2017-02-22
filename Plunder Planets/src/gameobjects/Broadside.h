@@ -17,13 +17,12 @@ public:
 
 	void Start()
 	{
-		m_delay = 1.5;
+		m_delay = 4.5;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
-		m_renderer = AddComponent<component::RenderComponent>();
+		//m_renderer = AddComponent<component::RenderComponent>();
 
-		m_renderer->SetModel("cannonball");
-		
+		//m_renderer->SetModel("cannonball");		
 	}
 
 	void CreateCanons()

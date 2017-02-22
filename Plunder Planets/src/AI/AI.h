@@ -22,10 +22,11 @@ public:
 	
 	bool Collision(math::Vector3 pos);
 	int TurnDir(math::Vector3  pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft);
-	int FireCannons(math::Vector3 pos, math::Vector3 forward, math::Vector3 right);
+	int FireCannons(math::Vector3 pos, math::Vector3 right);
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	Behavior GetState();
+	void Escape();
 
 private:
 	Behavior m_state;

@@ -28,7 +28,7 @@ public:
 
 		m_transform->SetPosition(math::Vector3(0, -5.5, 0));
 
-		PlaceBalls();
+		//PlaceBalls();
 	}
 
 	void PlaceBalls()
