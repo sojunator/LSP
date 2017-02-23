@@ -27,29 +27,26 @@ public:
 		m_emitterSpark = AddComponent<component::EmitterComponent>();
 		m_emitterSpark->Init(320, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0.1f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/spark.png");
 
-		m_maxFireDelay = 2.0f;
-		m_minFireDelay = 1.2f;
-		m_fireDelay = m_minFireDelay;
+		
+		roof = 0.8f;
 		ReseedDelay();
 	}
 
 	void SetMaxCannonDelay(float delay)
 	{
-		this->m_maxFireDelay = delay;
+		this->roof = delay;
 	}
 
 	void ReseedDelay()
 	{
-		float rand = (std::rand() % 100) / 100.f;
-		m_fireDelay = rand * (m_maxFireDelay - m_minFireDelay) + m_minFireDelay;
+		m_monteCarloDelay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / roof));
 	}
-
 
 	void Update()
 	{
 		if (m_fire)
 		{
-			if (m_fireDelay < 0)
+			if (m_monteCarloDelay < 0)
 			{
 				math::Vector3 smokeDir = m_transform->Forward() * 6 + math::Vector3(0, 1, 0);
 				smokeDir.Normalize();
@@ -69,7 +66,7 @@ public:
 			}
 			else
 			{
-				m_fireDelay -= thomas::Time::GetDeltaTime();
+				m_monteCarloDelay -= thomas::Time::GetDeltaTime();
 			}
 		}
 	};
@@ -94,9 +91,8 @@ public:
 
 private:
 	bool m_fire;
-	float m_fireDelay;
-	float m_maxFireDelay;
-	float m_minFireDelay;
+	float roof;
+	float m_monteCarloDelay;
 	component::EmitterComponent* m_emitterSmoke;
 	component::EmitterComponent* m_emitterSmoke2;
 	component::EmitterComponent* m_emitterSpark;
