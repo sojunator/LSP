@@ -15,7 +15,6 @@ private:
 public:
 	Cannon() : GameObject("Cannon") 
 	{
-
 	};
 
 	void Start()
@@ -59,6 +58,11 @@ public:
 			}
 		}
 	};
+
+	void SetCanonAngle(float angle)
+	{
+		m_transform->SetRotation(0, angle, 0);
+	}
 
 	void FireCannon()
 	{

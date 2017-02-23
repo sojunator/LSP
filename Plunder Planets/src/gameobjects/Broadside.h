@@ -22,9 +22,7 @@ public:
 		m_pitch = 0.f;
 		m_yaw = 0.f;
 
-		m_box = AddComponent<component::RenderComponent>();
-		m_box->SetModel("box1");
-		m_transform->Rotate(0, math::DegreesToradians(15), 0);
+
 	}
 
 	void CreateCannons()
@@ -33,7 +31,7 @@ public:
 		for (int i = -1; i <= 3; i++)
 		{
 			math::Vector3 pos = math::Vector3(0.0f);
-			pos += m_transform->Forward()*i*spacing - m_transform->Up() * 3.5;
+			pos += math::Vector3(1,0,0)*i*spacing - math::Vector3(0, 1, 0) * 5;
 
 			Cannon* c = Instantiate<Cannon>(pos, math::Quaternion::Identity, m_transform, m_scene);
 			m_cannons.push_back(c);
@@ -53,10 +51,47 @@ public:
 		}
 	}
 
+
+	void SetCanonAngle(float angle)
+	{
+		for (auto cannon : m_cannons)
+		{
+			cannon->SetCanonAngle(angle);
+		}
+	}
+
+	float CalculateCanonAngle(math::Vector3 target)
+	{
+		math::Vector3 broadsidePos = m_transform->GetPosition();
+		float y = broadsidePos.y - target.y;
+
+		float xx = target.x - broadsidePos.x;
+		float xz = target.z - broadsidePos.z;
+		float x = sqrtf(xx*xx + xz*xz);
+
+		float v = 150;
+
+		float g = Physics::s_world->getGravity().getY();
+
+		float square = (v*v*v*v) - (g*(g*(x*x) + 2 * y*(v*v)));
+
+		if (square < 0.0)
+		{
+			return -1000.0;
+		}
+		square = sqrtf(square);
+		if (x < 500)
+			return atanf(((v*v) - square) / (g*x));
+		else
+			return atanf(((v*v) + square) / (g*x));
+
+	}
+
 	void Update()
 	{
 		float dt = Time::GetDeltaTime();
 		m_delayLeft -= dt;
+
 	}
 	bool IncreasePitch(float pitch)
 	{
@@ -109,6 +144,5 @@ private:
 
 	std::vector<Cannon*> m_cannons; 
 	component::SoundComponent* m_fireSFX;
-	component::RenderComponent* m_box;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
 };

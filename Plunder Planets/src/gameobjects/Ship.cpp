@@ -48,8 +48,8 @@ void Ship::Start()
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-	m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5, 6, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
+	m_broadSideRight = Instantiate<Broadside>(math::Vector3(5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
@@ -87,7 +87,7 @@ void Ship::Start()
 	m_camMinDistanceFromBoat = 20.0f;
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
-
+	testValue = 5;
 	m_health = 100;
 	m_maxHealth = m_health;
 
@@ -173,84 +173,48 @@ void Ship::ShipFireCannons()
 void Ship::ShipAimCannons()
 {
 
+
+	if (Input::GetButton(Input::Buttons::DPAD_RIGHT))
+	{
+		testValue -= Time::GetDeltaTime()*50;
+	}
+
+	if (Input::GetButton(Input::Buttons::DPAD_LEFT))
+	{
+		testValue += Time::GetDeltaTime() * 50;
+	}
 	if (Input::GetKey(Input::Keys::G)) //RIGHT
 	{
-		math::Vector3 flatRight = math::Vector3(m_broadSideLeft->m_transform->Forward().x, 0, m_broadSideLeft->m_transform->Forward().z);
+		math::Vector3 flatRight = m_transform->Right();
+		flatRight.y = 0;
 		flatRight.Normalize();
+		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) + flatRight2D*testValue;
 
-		//float bajs2 = (m_broadSideLeft->m_transform->Forward()).Dot(flatRight);
-		float bajs2 = (m_broadSideLeft->m_transform->Forward()).Dot(math::Vector3(0,1,0));
-		if (bajs2 > 1.f)
-			bajs2 = 1.f;
-		else if (bajs2 < -1.f)
-			bajs2 = -1.f;
-		float angle = math::PI / 2 - std::acos(bajs2);
+		float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
-		math::Vector2 bajs = math::Vector2(m_transform->Forward().x, m_transform->Forward().z);
-		bajs.Normalize();
+		if (angle > -500.0)
+		{
+			m_broadSideLeft->SetCanonAngle(-angle);
 
-		m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-			- bajs, math::Vector2(flatRight.x, flatRight.z), angle);
-
-		if (Input::GetKey(Input::Keys::I))
-		{
-			if (m_broadSideLeft->IncreasePitch(1.f))
-		
-				m_broadSideLeft->m_transform->Rotate(0, math::DegreesToradians(1.f), 0);
-		}
-		else if (Input::GetKey(Input::Keys::M))
-		{
-			if (m_broadSideLeft->DecreasePitch(1.f))
-				m_broadSideLeft->m_transform->Rotate(0, math::DegreesToradians(359.f), 0);
-		}
-		if (Input::GetKey(Input::Keys::H))
-		{
-			if (m_broadSideLeft->IncreaseYaw(1.f))
-				m_broadSideLeft->m_transform->Rotate(math::DegreesToradians(1.f), 0, 0);
-		}
-		else if (Input::GetKey(Input::Keys::L))
-		{
-			if (m_broadSideLeft->DecreaseYaw(1.f))
-				m_broadSideLeft->m_transform->Rotate(math::DegreesToradians(359.f), 0, 0);
+			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target, 0);
 		}
 	}
 	else if (Input::GetKey(Input::Keys::F)) //LEFT
 	{
-		math::Vector3 flatRight = math::Vector3(m_broadSideRight->m_transform->Forward().x, 0, m_broadSideRight->m_transform->Forward().z);
+		math::Vector3 flatRight = m_transform->Right();
+		flatRight.y = 0;
 		flatRight.Normalize();
+		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D*testValue;
 
-		float bajs2 = (m_broadSideRight->m_transform->Forward()).Dot(math::Vector3(0, 1, 0));
-		if (bajs2 > 1.f)
-			bajs2 = 1.f;
-		else if (bajs2 < -1.f)
-			bajs2 = -1.f;
-		float angle = math::PI / 2 - std::acos(bajs2);
-		int youreadickbutt = 0;
-		math::Vector2 bajs = math::Vector2(m_transform->Forward().x, m_transform->Forward().z);
-		bajs.Normalize();
+		float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
-		m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z)
-			- bajs, math::Vector2(flatRight.x, flatRight.z), angle);
+		if (angle > -500.0)
+		{
+			m_broadSideRight->SetCanonAngle(-angle);
 
-		if (Input::GetKey(Input::Keys::I))
-		{
-			if (m_broadSideRight->IncreasePitch(1.f))
-				m_broadSideRight->m_transform->Rotate(0, math::DegreesToradians(1.f), 0);
-		}
-		else if (Input::GetKey(Input::Keys::M))
-		{
-			if (m_broadSideRight->DecreasePitch(1.f))
-				m_broadSideRight->m_transform->Rotate(0, math::DegreesToradians(359.f), 0);
-		}
-		if (Input::GetKey(Input::Keys::H))
-		{
-			if (m_broadSideRight->IncreaseYaw(1.f))
-				m_broadSideRight->m_transform->Rotate(math::DegreesToradians(1.f), 0, 0);
-		}
-		else if (Input::GetKey(Input::Keys::L))
-		{
-			if (m_broadSideRight->DecreaseYaw(1.f))
-				m_broadSideRight->m_transform->Rotate(math::DegreesToradians(359.f), 0, 0);
+			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target, 0);
 		}
 
 
