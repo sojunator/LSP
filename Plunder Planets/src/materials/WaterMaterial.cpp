@@ -12,8 +12,6 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 {
 	m_pow = 1150.f; //completely arbitrary
 	m_tweakConst = -100.f; //same as above
-	utils::DebugTools::AddFloat(m_pow, "power");
-	utils::DebugTools::AddFloat(m_tweakConst, "tweak");
 	// The size of displacement map. In this sample, it's fixed to 512.
 	m_oceanSettings.dmap_dim = 512;
 	// The side length (world space) of square patch
@@ -78,7 +76,7 @@ void WaterMaterial::Update()
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
 	time += Time::GetDeltaTime();
 
-	if (timeSinceLastUpdate > 0.03 && play)
+	if (timeSinceLastUpdate > 0.05 && play)
 	{
 		timeSinceLastUpdate = 0;
 		m_oceanSim->updateDisplacementMap(time);

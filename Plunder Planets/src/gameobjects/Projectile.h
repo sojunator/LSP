@@ -38,6 +38,7 @@ public:
 		m_mass = 2.5f;
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
+		m_transform->SetScale(2);
 		m_splashSound = AddComponent<component::SoundComponent>();
 		m_rigidbody = AddComponent<component::RigidBodyComponent>();
 		constant = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI;
@@ -78,7 +79,7 @@ public:
 		{
 			math::Vector3 deltaWater = m_water->GetCollisionAt(m_transform);
 			float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
-			if (heightBelowWater > 0.0)
+			if (heightBelowWater > 1.0)
 			{
 				Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
@@ -90,7 +91,7 @@ public:
 
 	void OnCollision(component::RigidBodyComponent* other)
 	{
-		if(other->m_gameObject != m_spawnedBy)
+		if(other->m_gameObject != m_spawnedBy && other->m_gameObject->GetType() != "Projectile")
 			Destroy(this);
 
 	}

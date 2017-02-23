@@ -72,8 +72,8 @@ public:
 		m_ai = AddComponent<AI>();
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
@@ -94,11 +94,8 @@ public:
 		m_dead = false;
 		//Movement
 		m_speed = 600;
-		utils::DebugTools::AddFloat(m_speed, "EnemySpeed");
 		m_turnSpeed = 150;
-		utils::DebugTools::AddFloat(m_turnSpeed, "enemyTurnSpeed");
 
-		thomas::utils::DebugTools::AddInteger(m_shootDir, "Shoot Dir");
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
@@ -164,9 +161,33 @@ public:
 	void FireCannons()
 	{
 		if (m_shootDir == 1)
-			m_broadSideLeft->Fire();
+		{
+			
+			math::Vector3 targetPos = m_ai->GetTargetPos();
+			math::Vector2 target(targetPos.x, targetPos.z);
+			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, -1, target.y));
+
+			if (angle > -500.0)
+			{
+				m_broadSideLeft->SetCanonLookAt(targetPos);
+				m_broadSideLeft->SetCanonAngle(-angle);
+				m_broadSideLeft->Fire();
+			}
+		}
+			
 		else if (m_shootDir == -1)
-			m_broadSideRight->Fire();
+		{
+			math::Vector3 targetPos = m_ai->GetTargetPos();
+			math::Vector2 target(targetPos.x, targetPos.z);
+			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, -1, target.y));
+
+			if (angle > -500.0)
+			{
+				m_broadSideLeft->SetCanonLookAt(targetPos);
+				m_broadSideLeft->SetCanonAngle(-angle);
+				m_broadSideLeft->Fire();
+			}
+		}
 	}
 
 	void Float(float dt)

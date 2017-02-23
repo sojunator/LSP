@@ -3,27 +3,26 @@
 void Ship::Start()
 {
 	m_freeCamera = false;
-	utils::DebugTools::AddBool(m_freeCamera, "Free Camera");
 
 	float mass = 20000;
 	//Front
-	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
-	m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[0]->SetMass(0.13*mass);
 	m_floats[1]->SetMass(0.13*mass);
 	//front middle
-	m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, 0, 5), math::Quaternion::Identity, m_transform, m_scene);
-	m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, 0, 5), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[2] = Instantiate<ShipFloat>(math::Vector3(3, -0.5, 5), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[3] = Instantiate<ShipFloat>(math::Vector3(-3, -0.5, 5), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[2]->SetMass(0.11*mass);
 	m_floats[3]->SetMass(0.11*mass);
 	//back middle
-	m_floats[4] = Instantiate<ShipFloat>(math::Vector3(3, 0, -1), math::Quaternion::Identity, m_transform, m_scene);
-	m_floats[5] = Instantiate<ShipFloat>(math::Vector3(-3, 0, -1), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[4] = Instantiate<ShipFloat>(math::Vector3(3, -0.5, -1), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[5] = Instantiate<ShipFloat>(math::Vector3(-3, -0.5, -1), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[4]->SetMass(0.12*mass);
 	m_floats[5]->SetMass(0.12*mass);
 	//back
-	m_floats[6] = Instantiate<ShipFloat>(math::Vector3(2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
-	m_floats[7] = Instantiate<ShipFloat>(math::Vector3(-2.5, 0, -8), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[6] = Instantiate<ShipFloat>(math::Vector3(2.5, -0.5, -8), math::Quaternion::Identity, m_transform, m_scene);
+	m_floats[7] = Instantiate<ShipFloat>(math::Vector3(-2.5, -0.5, -8), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[6]->SetMass(0.14*mass);
 	m_floats[7]->SetMass(0.14*mass);
 
@@ -48,8 +47,8 @@ void Ship::Start()
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.8, 7, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-	m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.8, 7, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 10, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
+	m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 10, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
@@ -70,12 +69,9 @@ void Ship::Start()
 	m_soundDelay = 5;
 	m_soundDelayLeft = 5;
 	//movement
-	m_speed = 2000;
-	utils::DebugTools::AddFloat(m_speed, "boatSpeed");
-	m_turnSpeed = 2000;
-	utils::DebugTools::AddFloat(m_turnSpeed, "boatTurnSpeed");
+	m_speed = 1500;
+	m_turnSpeed = 500;
 	roof = 1.0;
-	utils::DebugTools::AddFloat(roof, "roof");
 	m_flyCost = 20;
 
 	//controlls/camera

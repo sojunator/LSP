@@ -51,6 +51,13 @@ public:
 		}
 	}
 
+	void SetCanonLookAt(math::Vector3 pos)
+	{
+		for (auto cannon : m_cannons)
+		{
+			cannon->m_transform->LookAt(pos);
+		}
+	}
 
 	void SetCanonAngle(float angle)
 	{
@@ -63,7 +70,7 @@ public:
 	float CalculateCanonAngle(math::Vector3 target)
 	{
 		math::Vector3 broadsidePos = m_transform->GetPosition();
-		float y = broadsidePos.y - target.y;
+		float y = broadsidePos.y+5 - target.y;
 
 		float xx = target.x - broadsidePos.x;
 		float xz = target.z - broadsidePos.z;

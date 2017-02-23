@@ -29,6 +29,8 @@ public:
 	void Escape();
 	void IdleTimer();
 
+	math::Vector3 GetTargetPos();
+
 private:
 	Behavior m_state;
 	std::string m_stateStr;

@@ -58,7 +58,7 @@ namespace thomas
 
 			
 			s_currentScene->Render3D(camera);
-			if(!s_drawDebugPhysics)
+			if(s_drawDebugPhysics)
 				Physics::DrawDebug(camera);
 			s_currentScene->Render2D(camera);
 

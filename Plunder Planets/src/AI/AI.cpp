@@ -15,10 +15,6 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_idleTimer = 0;
 	m_idleTime = 100;
 
-	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0.0 max=1.0 step=0.001");
-	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0.0 max=1.0 step=0.001");
-	thomas::utils::DebugTools::AddFloat(m_escapeTimer, "Escape Timer");
-	thomas::utils::DebugTools::AddString(m_stateStr, "State");
 }
 
 AI::~AI()
@@ -185,6 +181,11 @@ void AI::Escape()
 		m_state = Behavior::Idle;
 		m_stateStr = "Idle";
 	}
+}
+
+math::Vector3 AI::GetTargetPos()
+{
+	return m_playerShip->m_transform->GetPosition();
 }
 
 void AI::IdleTimer()

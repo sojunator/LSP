@@ -34,6 +34,7 @@ public:
 
 	void PlaceRigidBody()
 	{
+		LOG(m_islands->GetNrOfIslands());
 		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
 		{
 			m_rigidBodyVec.push_back(AddComponent<component::RigidBodyComponent>());

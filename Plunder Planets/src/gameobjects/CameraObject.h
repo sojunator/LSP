@@ -22,10 +22,9 @@ public:
 
 	void Start()
 	{
-		m_far = 10000;
+		m_far = 4000;
 		m_fov = 70;
-		utils::DebugTools::AddFloat(m_far, "farPlane");
-		utils::DebugTools::AddFloat(m_fov, "fov");
+
 
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
