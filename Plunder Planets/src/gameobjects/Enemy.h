@@ -107,8 +107,10 @@ public:
 	void SetPositionAI(int lingongrova)
 	{
 		//m_transform->SetPosition(lingongrova * 20, 0.5, 0);
-		m_rigidBody->setWorldTransform(btTransform(btQuaternion(), btVector3(lingongrova * 20, 0.5f, 5)));
+		if(lingongrova > 0)
+			m_rigidBody->setWorldTransform(btTransform(btQuaternion(), btVector3(lingongrova * 200, 0.5, 200))); //make random based
 	}
+
 	void Move(float dt)
 	{
 		math::Vector3 forward = m_transform->Forward();

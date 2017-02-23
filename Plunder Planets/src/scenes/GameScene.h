@@ -81,9 +81,11 @@ public:
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_ship = LoadObject<Ship>();
-		for (int lingongrova = 0; lingongrova < 2; lingongrova++)
+		for (int lingongrova = 0; lingongrova < 2; lingongrova++) //10 = number of AI
 		{
 			m_enemyShip.push_back(LoadObject<Enemy>());
+			if (lingongrova == 0)
+				m_enemyShip[0] = nullptr; //release bugfix
 			m_enemyShip[lingongrova]->SetPositionAI(lingongrova);
 		}
 		m_waterObject = LoadObject<WaterObject>();
