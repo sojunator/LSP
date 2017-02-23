@@ -25,10 +25,7 @@ public:
 		m_emitterSmoke2->Init(256 * 10 + 254, false, math::Vector3(0, 1, 0), 0.1f, 2.7f, 6.1f, 13.4f, m_transform->GetPosition(), 0.08f, 0.5f, 0.95f, 0.4f, 0.9f, 1, "particleShader", "../res/textures/smoke.dds");
 
 		m_emitterSpark = AddComponent<component::EmitterComponent>();
-		m_emitterSpark->Init(120, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0.08f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/spark.png");
-
-		m_emitterFire = AddComponent<component::EmitterComponent>();
-		m_emitterFire->Init(150, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 38.4f, m_transform->GetPosition(), 0.15f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/fire.png");
+		m_emitterSpark->Init(320, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0.1f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/spark.png");
 
 		roof = 0.8f;
 		ReseedDelay();
@@ -59,8 +56,7 @@ public:
 				m_emitterSmoke2->Emit();
 				m_emitterSpark->Update(NULL, m_transform->Forward(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
 				m_emitterSpark->Emit();
-				m_emitterFire->Update(NULL, m_transform->Forward(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
-				m_emitterFire->Emit();
+				
 				
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
@@ -102,5 +98,4 @@ private:
 	component::EmitterComponent* m_emitterSmoke;
 	component::EmitterComponent* m_emitterSmoke2;
 	component::EmitterComponent* m_emitterSpark;
-	component::EmitterComponent* m_emitterFire;
 };

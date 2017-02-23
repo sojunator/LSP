@@ -18,7 +18,7 @@ public:
 	{
 		m_emitterComponent = AddComponent<component::EmitterComponent>();
 		
-		m_emitterComponent->Init(256 * 16 + 254, true, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 1.705f, 0.5f, 1.0f, 1.f, 4.f, 1, "particleShader", "../res/textures/splash.png");
+		m_emitterComponent->Init(256 * 6 + 254, true, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 0.605f, 0.5f, 1.0f, 0.6f, 1.2f, 0.7, "particleShader", "../res/textures/splash.png");
 
 	}
 
