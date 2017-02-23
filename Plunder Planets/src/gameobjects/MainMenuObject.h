@@ -34,5 +34,6 @@ private:
 	component::SpriteComponent* m_creditsButton;
 	component::SpriteComponent* m_exitButton;
 	component::SpriteComponent* m_backgrounds;
+	component::SoundComponent* m_music;
 
 };
