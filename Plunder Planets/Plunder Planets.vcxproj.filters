@@ -9,6 +9,7 @@
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\AI\Pathfinding.cpp" />
     <ClCompile Include="src\AI\AI.cpp" />
+    <ClCompile Include="src\gameobjects\Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -36,8 +37,7 @@
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\TestCube.h" />
-    <ClInclude Include="src\gameobjects\StandardParticleEmitter.h" />
-    <ClInclude Include="src\gameobjects\Canon.h" />
+    <ClInclude Include="src\gameobjects\Cannon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

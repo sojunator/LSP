@@ -3,7 +3,6 @@
 #include "../utils/d3d.h"
 #include "Shader.h"
 #include "Renderer.h"
-#include "../object/GameObject.h"
 
 namespace thomas
 {
@@ -12,6 +11,7 @@ namespace thomas
 		namespace component
 		{
 			class EmitterComponent;
+			class Transform;
 		}
 	}
 	namespace graphics
@@ -20,11 +20,6 @@ namespace thomas
 		{
 		private:
 			static void CreateBillboardUAVandSRV();
-
-			static void CreateParticleUAVsandSRVs(object::component::EmitterComponent* emitter);
-			static void CreateInitBuffer(object::component::EmitterComponent* emitter);
-
-			static void InitialDispatch(object::component::EmitterComponent* emitter);
 
 			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, math::Vector3 emitterPos);
 		public:
@@ -35,72 +30,8 @@ namespace thomas
 			
 			static void Init();
 			static void Destroy();
-			static void DrawParticles(object::component::Camera * camera);
+			static void DrawParticles(object::component::Camera * camera, object::component::EmitterComponent* emitter);
 
-			struct InitParticleBufferStruct
-			{
-				math::Vector3 initPosition;
-				float initSpread;
-				math::Vector3 initDirection;
-				float initMaxSpeed;
-				float initMinSpeed;
-				float initMaxDelay;
-				float initMinDelay;
-				float initSize;
-				float initLifeTime;
-				math::Vector3 pad;
-			};
-
-			struct ParticleStruct
-			{
-				math::Vector3 position;
-				float spread;
-				math::Vector3 direction;
-				float speed;
-				float delay;
-				float size;
-				float lifeTimeLeft;
-				float pad;
-			};
-
-			struct ParticleD3D
-			{
-				graphics::Shader* m_shader;
-				graphics::Texture* m_texture;
-				ID3D11UnorderedAccessView* m_particleUAV1;
-				ID3D11ShaderResourceView* m_particleSRV1;
-				ID3D11Buffer* m_particleBuffer1;
-				ID3D11UnorderedAccessView* m_particleUAV2;
-				ID3D11ShaderResourceView* m_particleSRV2;
-				ID3D11Buffer* m_particleBuffer2;
-				bool m_booleanSwapUAVandSRV;
-
-				void SwapUAVsandSRVs(ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv)//ping pong
-				{
-					if (m_booleanSwapUAVandSRV)
-					{
-						m_booleanSwapUAVandSRV = false;
-					}
-					else
-					{
-						m_booleanSwapUAVandSRV = true;
-					}
-
-					if (m_booleanSwapUAVandSRV)
-					{
-						uav = m_particleUAV1;
-						srv = m_particleSRV2;
-					}
-					else
-					{
-						uav = m_particleUAV2;
-						srv = m_particleSRV1;
-					}
-				}
-			};
-			
-
-			static void AddEmitter(object::component::EmitterComponent* emitter);
 		private:
 			struct BillboardStruct
 			{
@@ -129,14 +60,13 @@ namespace thomas
 			
 			static CameraBufferStruct s_cameraBufferStruct;
 			static MatrixBufferStruct s_matrixBufferStruct;
-			static InitParticleBufferStruct s_initParticleBufferStruct;
 			static EmitterPosStruct s_emitterPos;
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
 			static ID3D11Buffer* s_emitterPosBuffer;
-			static ID3D11Buffer* s_initParicleBuffer;
+			
 			static ID3D11Buffer* s_billboardsBuffer;
-			static ID3D11ComputeShader* s_initParticlesCS;
+			
 			static ID3D11ComputeShader* s_billboardCS;
 			static ID3D11UnorderedAccessView* s_billboardsUAV;
 			static ID3D11ShaderResourceView* s_billboardsSRV;
@@ -147,8 +77,6 @@ namespace thomas
 			static ID3D11BlendState* s_particleBlendState;
 
 			static unsigned int s_maxNrOfBillboards;
-			static std::vector<object::component::EmitterComponent*> s_emitters;
-			static std::vector<object::component::Camera*> s_cameras;
 		public:
 
 		};

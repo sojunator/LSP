@@ -7,15 +7,13 @@ namespace thomas
 	{
 		ParticleSystem::CameraBufferStruct ParticleSystem::s_cameraBufferStruct;
 		ParticleSystem::MatrixBufferStruct ParticleSystem::s_matrixBufferStruct;
-		ParticleSystem::InitParticleBufferStruct ParticleSystem::s_initParticleBufferStruct;
 		ParticleSystem::EmitterPosStruct ParticleSystem::s_emitterPos;
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
 		ID3D11Buffer* ParticleSystem::s_emitterPosBuffer;
-		ID3D11Buffer* ParticleSystem::s_initParicleBuffer;
+
 		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
 
-		ID3D11ComputeShader* ParticleSystem::s_initParticlesCS;
 		ID3D11ComputeShader* ParticleSystem::s_billboardCS;
 		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
 		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
@@ -26,8 +24,6 @@ namespace thomas
 		ID3D11BlendState* ParticleSystem::s_particleBlendState;
 
 		unsigned int ParticleSystem::s_maxNrOfBillboards;
-		std::vector<object::component::Camera*> ParticleSystem::s_cameras;
-		std::vector<object::component::EmitterComponent*> ParticleSystem::s_emitters;
 
 
 		ParticleSystem::ParticleSystem()
@@ -55,12 +51,6 @@ namespace thomas
 			}
 			CreateBillboardUAVandSRV();
 
-			shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/initParticles.hlsl", "cs_5_0", "main");
-			hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_initParticlesCS);
-			if (FAILED(hr))
-			{
-				LOG_HR(hr);
-			}
 
 			D3D11_BLEND_DESC blendDesc;
 			ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -127,72 +117,57 @@ namespace thomas
 			}
 		}
 
-		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
-		{
-			CreateParticleUAVsandSRVs(emitter);
-			CreateInitBuffer(emitter);
-			
-			InitialDispatch(emitter);
-			
-			s_emitters.push_back(emitter);
-			return;
-		}
-
-		void ParticleSystem::DrawParticles(object::component::Camera * camera)
+		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::EmitterComponent* emitter)
 		{
 			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
 			ID3D11ShaderResourceView* nullsrv[1] = { NULL };
 
-			for (object::component::EmitterComponent* emitter : s_emitters)
+			if (emitter->IsEmitting())
 			{
-				if (emitter->IsEmitting())
-				{
-					UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->m_gameObject->m_transform->GetPosition());
+				UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->m_gameObject->m_transform->GetPosition());
 					
-					FLOAT blendfactor[4] = { 0, 0, 0, 0 };
-					ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
+				FLOAT blendfactor[4] = { 0, 0, 0, 0 };
+				ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
 
-					ID3D11DeviceContext* deviceContext = ThomasCore::GetDeviceContext();
-					deviceContext->CSSetShader(s_billboardCS, NULL, 0);
+				ID3D11DeviceContext* deviceContext = ThomasCore::GetDeviceContext();
+				deviceContext->CSSetShader(s_billboardCS, NULL, 0);
 
-					emitter->GetParticleD3D()->SwapUAVsandSRVs(s_activeParticleUAV, s_activeParticleSRV);
+				emitter->SwapUAVsandSRVs(s_activeParticleUAV, s_activeParticleSRV);
 
-					//bind uavs and srvs
-					deviceContext->CSSetUnorderedAccessViews(0, 1, &s_activeParticleUAV, NULL);
-					deviceContext->CSSetUnorderedAccessViews(1, 1, &s_billboardsUAV, NULL);
-					deviceContext->CSSetShaderResources(0, 1, &s_activeParticleSRV);
-					deviceContext->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
-					deviceContext->CSSetConstantBuffers(1, 1, &s_emitterPosBuffer);
+				//bind uavs and srvs
+				deviceContext->CSSetUnorderedAccessViews(0, 1, &s_activeParticleUAV, NULL);
+				deviceContext->CSSetUnorderedAccessViews(1, 1, &s_billboardsUAV, NULL);
+				deviceContext->CSSetShaderResources(0, 1, &s_activeParticleSRV);
+				deviceContext->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
+				deviceContext->CSSetConstantBuffers(1, 1, &s_emitterPosBuffer);
 
-					deviceContext->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
-					//unbind uav
-					deviceContext->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
-					deviceContext->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
-					deviceContext->CSSetShaderResources(0, 1, nullsrv);
+				deviceContext->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
+				//unbind uav
+				deviceContext->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+				deviceContext->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
+				deviceContext->CSSetShaderResources(0, 1, nullsrv);
 
-					//bind srv
-					deviceContext->VSSetShaderResources(1, 1, &s_billboardsSRV);
-					deviceContext->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
+				//bind srv
+				deviceContext->VSSetShaderResources(1, 1, &s_billboardsSRV);
+				deviceContext->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
 
-					emitter->GetParticleD3D()->m_shader->Bind();
-
-					emitter->GetParticleD3D()->m_shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-					deviceContext->IASetInputLayout(NULL);
-					deviceContext->IASetVertexBuffers(0, 0, nullptr, 0, 0);
+				emitter->GetShader()->Bind();
+				deviceContext->IASetInputLayout(NULL);
+				deviceContext->IASetVertexBuffers(0, 0, nullptr, 0, 0);
 					
-					emitter->GetParticleD3D()->m_texture->Bind();
+				emitter->GetTexture()->Bind();
 
 					
-					deviceContext->Draw(emitter->GetNrOfParticles() * 6, 0);
+				deviceContext->Draw(emitter->GetNrOfParticles() * 6, 0);
 
-					ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
+				ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 
-					//undbind srv
-					emitter->GetParticleD3D()->m_texture->Unbind();
-					deviceContext->VSSetShaderResources(1, 1, nullsrv);
-					emitter->GetParticleD3D()->m_shader->Unbind();
-				}
+				//undbind srv
+				emitter->GetTexture()->Unbind();
+				deviceContext->VSSetShaderResources(1, 1, nullsrv);
+				emitter->GetShader()->Unbind();
 			}
+			
 			
 
 			return;
@@ -205,40 +180,8 @@ namespace thomas
 			thomas::utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, s_billboardsBuffer, s_billboardsUAV, s_billboardsSRV);
 		}
 
-		void ParticleSystem::CreateParticleUAVsandSRVs(object::component::EmitterComponent* emitter)
-		{
-			UINT bytewidth = sizeof(ParticleStruct) * emitter->GetNrOfParticles();
-			UINT structurebytestride = sizeof(ParticleStruct);
-			thomas::utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, emitter->GetParticleD3D()->m_particleBuffer1, emitter->GetParticleD3D()->m_particleUAV1, emitter->GetParticleD3D()->m_particleSRV1);
-			thomas::utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, emitter->GetParticleD3D()->m_particleBuffer2, emitter->GetParticleD3D()->m_particleUAV2, emitter->GetParticleD3D()->m_particleSRV2);
-		}
-
-		void ParticleSystem::CreateInitBuffer(object::component::EmitterComponent* emitter)
-		{
-			s_initParticleBufferStruct = *(emitter->GetInitData());
-			s_initParicleBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_initParticleBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
-			
-		}
-
-		void ParticleSystem::InitialDispatch(object::component::EmitterComponent* emitter)
-		{
-			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
-			ThomasCore::GetDeviceContext()->CSSetShader(s_initParticlesCS, 0, NULL);
-
-			ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &s_initParicleBuffer);
-			
-			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &emitter->GetParticleD3D()->m_particleUAV2, NULL);
-			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &emitter->GetParticleD3D()->m_particleUAV1, NULL);
-
-			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
-
-			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
-			ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
-
-			return;
-		}
-
-
+		
+	
 	}
 }
 

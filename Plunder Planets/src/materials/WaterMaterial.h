@@ -15,8 +15,11 @@ public:
 	void Update();
 
 	utils::ocean::OceanSimulator* GetOceanSim();
-
 	utils::ocean::OceanParameter* GetOceanParams();
+
+	void UpdateAim(math::Vector2 pos, math::Vector2 right, float angle);
+
+	void DisableAim();
 
 	~WaterMaterial();
 private:
@@ -32,13 +35,13 @@ private:
 		math::Vector3 bendParam;
 		float g_PerlinSize;
 		math::Vector3 g_PerlinAmplitude;
-		float pad1;
+		float radius;
 		math::Vector3 g_PerlinOctave;
-		float pad2;
+		int aiming;
 		math::Vector3 g_PerlinGradient;
 		float pad3;
 		math::Vector2 perlinMovement;
-		math::Vector2 pad4;
+		math::Vector2 aimPos;
 	};
 	float time;
 	float timeSinceLastUpdate;
@@ -46,5 +49,7 @@ private:
 	utils::ocean::OceanSimulator* m_oceanSim;
 	MaterialProperties m_materialProperties;
 
+	float m_pow;
+	float m_tweakConst;
 };
 

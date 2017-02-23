@@ -1,94 +1,166 @@
 #include "EmitterComponent.h"
 
-
-thomas::object::component::EmitterComponent::EmitterComponent() : Component("EmitterComponent")
+namespace thomas
 {
-	
-}
+	namespace object
+	{
+		namespace component
+		{
+			thomas::object::component::EmitterComponent::EmitterComponent() : Component("EmitterComponent")
+			{
 
-void thomas::object::component::EmitterComponent::Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay, 
-	float minSpeed, float maxSpeed, math::Vector3 emitterPosition, float particleSpreadFactor, float particleSize, float particleLifeTime, std::string shaderName, std::string texturePath)
-{
-	m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
-	m_isEmitting = emitterState;
+			}
 
-	m_particleD3D = new thomas::graphics::ParticleSystem::ParticleD3D();//TODO DELETE
-	m_emitterData = new thomas::graphics::ParticleSystem::InitParticleBufferStruct();
-	m_emitterData->initDirection = particleDirection;
-	m_emitterData->initMaxDelay = maxDelay;
-	m_emitterData->initMinDelay = minDelay;
-	m_emitterData->initMaxSpeed = maxSpeed;
-	m_emitterData->initMinSpeed = minSpeed;
-	m_emitterData->initPosition = emitterPosition;
-	m_emitterData->initSpread = particleSpreadFactor;
-	m_emitterData->initSize = particleSize;
-	m_emitterData->initLifeTime = particleLifeTime;
+			void thomas::object::component::EmitterComponent::Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay,
+				float minSpeed, float maxSpeed, math::Vector3 emitterPosition, float particleSpreadFactor, float particleSize, float particleLifeTime, std::string shaderName, std::string texturePath)
+			{
+				m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
+				m_isEmitting = emitterState;
 
-	m_particleD3D->m_shader = graphics::Shader::GetShaderByName(shaderName);
-	m_particleD3D->m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
-	m_particleD3D->m_booleanSwapUAVandSRV = true;
+				m_initParticleBufferStruct.initDirection = particleDirection;
+				m_initParticleBufferStruct.initMaxDelay = maxDelay;
+				m_initParticleBufferStruct.initMinDelay = minDelay;
+				m_initParticleBufferStruct.initMaxSpeed = maxSpeed;
+				m_initParticleBufferStruct.initMinSpeed = minSpeed;
+				m_initParticleBufferStruct.initPosition = emitterPosition;
+				m_initParticleBufferStruct.initSpread = particleSpreadFactor;
+				m_initParticleBufferStruct.initSize = particleSize;
+				m_initParticleBufferStruct.initLifeTime = particleLifeTime;
 
-	graphics::ParticleSystem::AddEmitter(this);
+				m_shader = graphics::Shader::GetShaderByName(shaderName);
+				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
+				m_booleanSwapUAVandSRV = true;
 
-	return;
-}
+				ID3DBlob* shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/initParticles.hlsl", "cs_5_0", "main");
+				HRESULT hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_initParticlesCS);
+				if (FAILED(hr))
+				{
+					LOG_HR(hr);
+				}
 
-void thomas::object::component::EmitterComponent::Destroy()
-{
+				CreateParticleUAVsandSRVs();
+				CreateInitBuffer();
+				InitialDispatch();
 
-}
+				return;
+			}
 
-void thomas::object::component::EmitterComponent::Update(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay,
-	float minSpeed, float maxSpeed, math::Vector3 emitterPosition, float particleSpreadFactor, float particleSize, float particleLifeTime, std::string shaderName, std::string texturePath)
-{
-	m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
-	m_isEmitting = emitterState;
+			void thomas::object::component::EmitterComponent::Destroy()
+			{
 
-	m_emitterData->initDirection = particleDirection;
-	m_emitterData->initMaxDelay = maxDelay;
-	m_emitterData->initMinDelay = minDelay;
-	m_emitterData->initMaxSpeed = maxSpeed;
-	m_emitterData->initMinSpeed = minSpeed;
-	m_emitterData->initPosition = emitterPosition;
-	m_emitterData->initSpread = particleSpreadFactor;
-	m_emitterData->initSize = particleSize;
-	m_emitterData->initLifeTime = particleLifeTime;
+			}
 
-	m_particleD3D->m_shader = graphics::Shader::GetShaderByName(shaderName);
-	m_particleD3D->m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
-	
+			void thomas::object::component::EmitterComponent::Update(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay,
+			_In_opt_ float minSpeed, _In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleSize, _In_opt_ float particleLifeTime)
+			{
+				if (nrOfParticles)
+					m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
+				if (particleDirection != math::Vector3(NULL, NULL, NULL))
+					m_initParticleBufferStruct.initDirection = particleDirection;
+				if (minDelay)
+					m_initParticleBufferStruct.initMaxDelay = maxDelay;
+				if (maxDelay)
+					m_initParticleBufferStruct.initMinDelay = minDelay;
+				if (minSpeed)
+					m_initParticleBufferStruct.initMaxSpeed = maxSpeed;
+				if (maxSpeed)
+					m_initParticleBufferStruct.initMinSpeed = minSpeed;
+				if (particleSpreadFactor)
+					m_initParticleBufferStruct.initSpread = particleSpreadFactor;
+				if (particleSize)
+					m_initParticleBufferStruct.initSize = particleSize;
+				if (particleLifeTime)
+					m_initParticleBufferStruct.initLifeTime = particleLifeTime;
 
-	graphics::ParticleSystem::AddEmitter(this);
-}
+				ThomasCore::GetDeviceContext()->UpdateSubresource(m_initParicleBuffer, 0, 0, &m_initParticleBufferStruct, 0, 0);
+				InitialDispatch();
+			}
 
-void thomas::object::component::EmitterComponent::Emit()
-{
-	m_isEmitting = true;
+			void thomas::object::component::EmitterComponent::Emit()
+			{
+				m_isEmitting = true;
 
-}
+			}
 
-bool thomas::object::component::EmitterComponent::IsEmitting() const
-{
-	return m_isEmitting;
-}
+			bool thomas::object::component::EmitterComponent::IsEmitting() const
+			{
+				return m_isEmitting;
+			}
 
 
-void thomas::object::component::EmitterComponent::Stop()
-{
-	m_isEmitting = false;
-}
+			void EmitterComponent::SwapUAVsandSRVs(ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv)//ping pong
+			{
+				if (m_booleanSwapUAVandSRV)
+				{
+					m_booleanSwapUAVandSRV = false;
+				}
+				else
+				{
+					m_booleanSwapUAVandSRV = true;
+				}
 
-unsigned int thomas::object::component::EmitterComponent::GetNrOfParticles() const
-{
-	return m_nrOfParticles;
-}
+				if (m_booleanSwapUAVandSRV)
+				{
+					uav = m_particleUAV1;
+					srv = m_particleSRV2;
+				}
+				else
+				{
+					uav = m_particleUAV2;
+					srv = m_particleSRV1;
+				}
+			}
 
-thomas::graphics::ParticleSystem::ParticleD3D* thomas::object::component::EmitterComponent::GetParticleD3D() const
-{
-	return m_particleD3D;
-}
+			graphics::Shader * EmitterComponent::GetShader()
+			{
+				return m_shader;
+			}
 
-thomas::graphics::ParticleSystem::InitParticleBufferStruct* thomas::object::component::EmitterComponent::GetInitData() const
-{
-	return m_emitterData;
+			graphics::Texture * EmitterComponent::GetTexture()
+			{
+				return m_texture;
+			}
+
+			void thomas::object::component::EmitterComponent::CreateParticleUAVsandSRVs()
+			{
+				UINT bytewidth = sizeof(ParticleStruct) * m_nrOfParticles;
+				UINT structurebytestride = sizeof(ParticleStruct);
+				thomas::utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_particleBuffer1, m_particleUAV1, m_particleSRV1);
+				thomas::utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_particleBuffer2, m_particleUAV2, m_particleSRV2);
+			}
+
+			void thomas::object::component::EmitterComponent::CreateInitBuffer()
+			{
+				m_initParicleBuffer = thomas::utils::D3d::CreateBufferFromStruct(m_initParticleBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+			}
+
+			void thomas::object::component::EmitterComponent::InitialDispatch()
+			{
+				ID3D11UnorderedAccessView* nulluav[1] = { NULL };
+				ThomasCore::GetDeviceContext()->CSSetShader(s_initParticlesCS, 0, NULL);
+
+				ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &m_initParicleBuffer);
+
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_particleUAV2, NULL);
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &m_particleUAV1, NULL);
+
+				ThomasCore::GetDeviceContext()->Dispatch(GetNrOfParticles() / 256 + 1, 1, 1);
+
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
+				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
+			}
+
+			void thomas::object::component::EmitterComponent::Stop()
+			{
+				m_isEmitting = false;
+			}
+
+			unsigned int thomas::object::component::EmitterComponent::GetNrOfParticles() const
+			{
+				return m_nrOfParticles;
+			}
+
+			
+		}
+	}
 }

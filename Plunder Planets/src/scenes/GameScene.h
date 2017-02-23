@@ -14,6 +14,7 @@
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
 #include "../gameobjects/Enemy.h"
+#include "../gameobjects/Ship.h"
 
 
 class GameScene : public thomas::Scene
@@ -45,6 +46,7 @@ public:
 		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
 		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
+		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		
 
@@ -77,9 +79,9 @@ public:
 
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
+		m_waterObject = LoadObject<WaterObject>();
 		m_ship = LoadObject<Ship>();
 		m_enemyShip = LoadObject<Enemy>();
-		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();

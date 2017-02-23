@@ -58,7 +58,7 @@ namespace thomas
 
 			
 			s_currentScene->Render3D(camera);
-			if(s_drawDebugPhysics)
+			if(!s_drawDebugPhysics)
 				Physics::DrawDebug(camera);
 			s_currentScene->Render2D(camera);
 
@@ -141,7 +141,14 @@ namespace thomas
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
-		graphics::ParticleSystem::DrawParticles(camera);
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::EmitterComponent>())
+		{
+			for (object::component::EmitterComponent* emitterComponent : gameObject->GetComponents<object::component::EmitterComponent>())
+			{
+				graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
+			}
+		}
+		
 	}
 
 

@@ -43,15 +43,15 @@ cbuffer material : register(b1)
 	float3 bendParam;
 	float perlinSize;
 	float3 perlinAmp;
-	float pad;
+	float radius;
 	float3 perlinOctave;
-	float pad2;
+	int aiming;
 	float3 perlinGradient;
 	float pad3;
 	float2 perlinMovement;
-	float2 pad4;
-}
+	float2 aimPos;
 
+}
 
 struct DirLight
 {
@@ -119,7 +119,7 @@ struct PSInput
 HSInput VSMain(in VSInput input)
 {
 	HSInput output;
-	
+
 	output.position = mul(float4(input.position, 1), worldMatrix).xyz;
 
 
@@ -139,7 +139,6 @@ HSInput VSMain(in VSInput input)
 
 
 	output.tessFactor = minTessFactor + (tess * (maxTessFactor - minTessFactor));
-
 	return output;
 }
 
@@ -206,13 +205,13 @@ PSInput DSMain(HSConstantData input, float3 uvwCoord : SV_DomainLocation, const 
 	float perlin = 0;
 	if (blendFactor < 1)
 	{
-		
+
 		float2 perlinTC = output.tex * perlinSize + (pos.xy % 256) - 128;
 		float perlin0 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.x + perlinMovement, 0).w;
 		float perlin1 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.y + perlinMovement, 0).w;
 		float perlin2 = perlinTexture.SampleLevel(perlinSampler, perlinTC * perlinOctave.z + perlinMovement, 0).w;
 		perlin = perlin0 * perlinAmp.x + perlin1 * perlinAmp.y + perlin2 * perlinAmp.z;
-		
+
 	}
 
 	float3 displacement = 0;
@@ -297,7 +296,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	//shading
 
 	float3 shoreHardness = 1.0;
-	float3 foamExistence = { 15.65f, 5.35f, 1.005f };
+	float3 foamExistence = { 1.65f, 5.35f, 1.005f };
 	// Colour of the water surface
 	float3 depthColour = { 0.0078f, 0.6176f, 0.8f };
 // Colour of the water depth
@@ -337,9 +336,6 @@ float4 PSMain(PSInput input) : SV_TARGET
 	half dotSpec = saturate(dot(mirrorEye.xyz, -lightDir) * 0.5f + 0.5f);
 	specular = (1.0f - fresnel) * saturate(-lightDir.y) * ((pow(dotSpec, 512.0f)) * (shininess * 1.8f + 0.2f)) * sunColor;
 	specular += specular * 25 * saturate(shininess - 0.05f) * sunColor;
-
-	
-	
 	
 	float3 foam = 0.0f;
 
@@ -352,22 +348,22 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 	foam += (foamColor * 0.5f *
 			saturate((input.positionWS.y - foamExistence.x)) / (foamExistence.y - foamExistence.z));
-	
-
 
 	float3 waterColor = lerp(baseColor, reflection, fresnel);
 
-	waterColor = saturate(waterColor + max(specular, foam * sunColor));
-
-	waterColor = lerp(waterColor, baseColor, saturate(depthN * shoreHardness));
-
-	foamshit = clamp(waterDepth / 0.00005, 0, 1);
-
-
-
-	waterColor = lerp(1.0, waterColor, foamshit);
-
-
+	float distance = length(input.positionWS.xz - aimPos);
+	if (distance < radius && aiming)
+	{
+		waterColor = lerp(float3(1, 0, 0), waterColor, 0.5) * ((radius + 2 - distance)/(radius + 2));
+	}
+	
+	else
+	{
+		waterColor = saturate(waterColor + max(specular, foam * sunColor));
+	}
+    waterColor = lerp(waterColor, baseColor, saturate(depthN * shoreHardness));
+    foamshit = clamp(waterDepth / 0.00005, 0, 1);
+    waterColor = lerp(1.0, waterColor, foamshit);
 	foamshit = saturate(1.0 - foamshit);
 
 	float opacity = clamp(waterDepth / 0.02, 0.5, 1);

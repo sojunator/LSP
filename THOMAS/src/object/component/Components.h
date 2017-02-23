@@ -8,3 +8,4 @@
 #include "TextComponent.h"
 #include "SpriteComponent.h"
 #include "RigidBodyComponent.h"
+#include "EmitterComponent.h"
