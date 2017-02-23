@@ -30,7 +30,7 @@ namespace thomas
 
 		s_debugDraw = new graphics::BulletDebugDraw();
 
-		s_debugDraw->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+		s_debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 		s_world->setDebugDrawer(s_debugDraw);
 		
 
@@ -70,4 +70,5 @@ namespace thomas
 	{
 		//Destroy everything????
 	}
+
 }
