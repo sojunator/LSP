@@ -15,7 +15,7 @@ public:
 
 	void Start()
 	{
-		m_dimensions = 20000;
+		m_dimensions = 5000;
 
 		m_waterMaterial = (WaterMaterial*)(Material::CreateMaterial("waterMat", "waterMaterial"));
 		oceanSim = ((WaterMaterial*)m_waterMaterial)->GetOceanSim();

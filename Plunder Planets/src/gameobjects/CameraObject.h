@@ -154,7 +154,7 @@ public:
 				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
 			}
 		}
-		if (m_ship->GetFreeCamera())
+		if (m_ship && m_ship->GetFreeCamera())
 		{
 			if (Input::GetKey(Input::Keys::A))
 			{

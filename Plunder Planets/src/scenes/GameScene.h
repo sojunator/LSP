@@ -88,7 +88,6 @@ public:
 				m_enemyShip[0] = nullptr; //release bugfix
 			m_enemyShip[lingongrova]->SetPositionAI(lingongrova);
 		}
-		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
