@@ -48,24 +48,24 @@ public:
 				volumeUnderWater = height;
 			volumeUnderWater = (4.0 / 3.0)*math::PI*volumeUnderWater/2;
 
-			float waterDensity = 2.3 * density;
+			float waterDensity = 2.8 * density;
 			btVector3 force = (volumeUnderWater*waterDensity)*-rb->getGravity();
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
 			if (heightBelowWater < 0.3)
 			{
-				rb->setDamping(0.5, 0.5);
+				rb->setDamping(0.9, 0.9);
 			}
 			else if(heightBelowWater < 1.5)
 			{
-				rb->setDamping(0.4, 0.4);
+				rb->setDamping(0.7, 0.7);
 			}
 			else if (heightBelowWater < 2.0)
 			{
-				rb->setDamping(0.3, 0.3);
+				rb->setDamping(0.5, 0.5);
 			}
 			else
 			{
-				rb->setDamping(0.1, 0.1);
+				rb->setDamping(0.3, 0.3);
 			}
 			
 			rb->applyImpulse(force*Time::GetDeltaTime(), *(btVector3*)&pos);

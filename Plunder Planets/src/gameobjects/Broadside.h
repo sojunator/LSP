@@ -69,9 +69,9 @@ public:
 		float xz = target.z - broadsidePos.z;
 		float x = sqrtf(xx*xx + xz*xz);
 
-		float v = 100;
+		float v = 200;
 
-		float g = Physics::s_world->getGravity().getY();
+		float g = Physics::s_world->getGravity().getY()*2.5f;
 
 		float square = (v*v*v*v) - (g*(g*(x*x) + 2 * y*(v*v)));
 
@@ -80,7 +80,7 @@ public:
 			return -1000.0;
 		}
 		square = sqrtf(square);
-		if (x < 500)
+		if (x < 5000)
 			return atanf(((v*v) - square) / (g*x));
 		else
 			return atanf(((v*v) + square) / (g*x));

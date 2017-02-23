@@ -48,8 +48,8 @@ void Ship::Start()
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-	m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.8, 7, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
+	m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.8, 7, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
@@ -87,7 +87,7 @@ void Ship::Start()
 	m_camMinDistanceFromBoat = 20.0f;
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
-	testValue = 5;
+	m_aimDistance = 20;
 	m_health = 100;
 	m_maxHealth = m_health;
 
@@ -152,7 +152,7 @@ void Ship::ShipRotate(float const dt)
 }
 void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 {
-	if ((Input::GetButton(Input::Buttons::LT) || Input::GetButton(Input::Buttons::A) || Input::GetKey(Input::Keys::Space) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
+	if ((Input::GetButton(Input::Buttons::LT) || Input::GetKey(Input::Keys::Space) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
 	{
 		m_treasure -= m_flyCost*dt;
 		math::Vector3 forward = m_transform->Forward();
@@ -170,67 +170,106 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 }
 void Ship::ShipFireCannons()
 {
-	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKey(Input::Keys::E))
-		m_broadSideLeft->Fire(); //Temporary fix
-								 //m_broadSideRight->Fire();
-
-
-	if (Input::GetButtonDown(Input::Buttons::LB) || Input::GetKey(Input::Keys::Q))
-		m_broadSideRight->Fire(); //Temporary Fix
-								  //m_broadSideLeft->Fire();
 }
+
+
+void Ship::Aim(float side, math::Vector2 aimPos)
+{
+	m_aiming = true;
+	CameraZoom(Time::GetDeltaTime());
+	//Recalculate look at point and the new distance from cam to ship
+	math::Vector3 camPos = m_transform->GetPosition() + m_lookAtOffset;
+	m_lookAtPoint = math::Vector3(aimPos.x, m_transform->GetPosition().y, aimPos.y);
+	
+
+	math::Vector3 camSide = -m_lookAtPoint / 10;
+	math::Vector3 camBack = m_transform->Forward()*m_lookAtPoint.Length() / 20;
+
+	m_lookAtPoint += -m_transform->Forward()*(m_lookAtPoint.Length()/2);
+	camPos += camSide + camBack;
+
+	math::Vector3 const distanceVector = camPos - m_cameraObject->m_transform->GetPosition();
+
+	m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
+
+	math::Vector3 lookAtVector = side*m_transform->Right() + m_transform->Forward()*0.5;
+	lookAtVector.Normalize();
+	math::Vector3 posBehindBoat = camPos + (lookAtVector*m_cameraDistance);
+	posBehindBoat.y = 35;
+
+	posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, Time::GetDeltaTime() * 2);
+
+	m_cameraObject->m_transform->SetPosition(posBehindBoat);
+
+	m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+	m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+
+	math::Vector3 newPos = camPos - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
+
+	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, Time::GetDeltaTime()*2.5);
+
+
+
+
+	m_cameraObject->m_transform->SetPosition(newPos);
+}
+
 void Ship::ShipAimCannons()
 {
 
+	if (Input::GetButton(Input::Buttons::RB)) //RIGHT
+	{
+		float deltaX = Input::GetRightStickY();
+		m_aimDistance += deltaX*Time::GetDeltaTime() * 50;
 
-	if (Input::GetButton(Input::Buttons::DPAD_RIGHT))
-	{
-		testValue -= Time::GetDeltaTime()*50;
-	}
-
-	if (Input::GetButton(Input::Buttons::DPAD_LEFT))
-	{
-		testValue += Time::GetDeltaTime() * 50;
-	}
-	if (Input::GetKey(Input::Keys::G)) //RIGHT
-	{
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
 		flatRight.Normalize();
 		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
-		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) + flatRight2D*testValue;
-
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D*m_aimDistance;
+		Aim(1, target);
 		float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
 		if (angle > -500.0)
 		{
 			m_broadSideLeft->SetCanonAngle(-angle);
 
-			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target, 0);
+			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 		}
+
+
+		if (Input::GetButtonDown(Input::Buttons::A))
+			m_broadSideLeft->Fire(); //Temporary fix
+
 	}
-	else if (Input::GetKey(Input::Keys::F)) //LEFT
+	else if (Input::GetButton(Input::Buttons::LB)) //LEFT
 	{
+		float deltaX = Input::GetRightStickY();
+		
+		m_aimDistance += deltaX*Time::GetDeltaTime()*50;
+
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
 		flatRight.Normalize();
 		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
-		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D*testValue;
-
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) + flatRight2D*m_aimDistance;
+		Aim(-1, target);
 		float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
 		if (angle > -500.0)
 		{
 			m_broadSideRight->SetCanonAngle(-angle);
 
-			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target, 0);
+			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 		}
-
+		if (Input::GetButtonDown(Input::Buttons::A))
+			m_broadSideRight->Fire(); //Temporary fix
 
 	}
 
-	else if (Input::GetKeyUp(Input::Keys::G) || Input::GetKeyUp(Input::Keys::F))
+	else if (Input::GetButtonUp(Input::Buttons::RB) || Input::GetButton(Input::Buttons::LB))
 	{
+		m_aiming = false;
 		m_waterObject->DisableAim();
 	}
 }
@@ -362,7 +401,7 @@ void Ship::Update()
 
 	//ShipBoost(dt);
 
-	if (!m_freeCamera)
+	if (!m_freeCamera && !m_aiming)
 	{
 		CameraZoom(dt);
 

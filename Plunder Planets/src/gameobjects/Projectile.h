@@ -43,7 +43,7 @@ public:
 		constant = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI;
 		m_rigidbody->setCollisionShape(new btSphereShape(0.35f));
 		m_rigidbody->SetMass(m_mass); 
-		m_velocity = 100;
+		m_velocity = 200;
 		m_water = (WaterObject*)Find("WaterObject");
 		if (!m_water)
 		{

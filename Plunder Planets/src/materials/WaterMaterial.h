@@ -17,7 +17,7 @@ public:
 	utils::ocean::OceanSimulator* GetOceanSim();
 	utils::ocean::OceanParameter* GetOceanParams();
 
-	void UpdateAim(math::Vector2 pos, math::Vector2 right, float angle);
+	void UpdateAim(math::Vector2 pos, math::Vector2 target);
 
 	void DisableAim();
 

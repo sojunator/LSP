@@ -14,7 +14,7 @@ class Ship : public GameObject
 {
 
 private:
-
+	void Aim(float side, math::Vector2 aimPos);
 public:
 	Ship() : GameObject("Ship")
 	{
@@ -31,6 +31,7 @@ public:
 	void CameraZoom(float const dt);
 
 
+
 	void PlaySounds(float const dt){}
 	void PlunderIsland();
 	int GetTreasure();
@@ -45,7 +46,7 @@ public:
 	float m_maxHealth;
 
 private:
-	float testValue;
+	float m_aimDistance;
 	float roof;
 	bool m_moving;
 	bool m_turning;
