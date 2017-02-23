@@ -7,7 +7,7 @@ class WaterSplashParticle : public GameObject
 {
 private:
 	component::EmitterComponent* m_emitterComponent;
-	float timer = 7.0f;
+	float timer = 5.0f;
 public:
 	WaterSplashParticle() : GameObject("WaterSplashParticle")
 	{

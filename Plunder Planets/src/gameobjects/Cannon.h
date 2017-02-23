@@ -27,26 +27,29 @@ public:
 		m_emitterSpark = AddComponent<component::EmitterComponent>();
 		m_emitterSpark->Init(320, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0.1f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/spark.png");
 
-		roof = 0.8f;
+		m_maxFireDelay = 2.0f;
+		m_minFireDelay = 1.2f;
+		m_fireDelay = m_minFireDelay;
 		ReseedDelay();
 	}
 
 	void SetMaxCannonDelay(float delay)
 	{
-		this->roof = delay;
+		this->m_maxFireDelay = delay;
 	}
 
 	void ReseedDelay()
 	{
-		delay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / roof));
+		float rand = (std::rand() % 100) / 100.f;
+		m_fireDelay = rand * (m_maxFireDelay - m_minFireDelay) + m_minFireDelay;
 	}
 
 
 	void Update()
 	{
-		if (fire)
+		if (m_fire)
 		{
-			if (currentTimeCount > delay)
+			if (m_fireDelay < 0)
 			{
 				math::Vector3 smokeDir = m_transform->Forward() * 6 + math::Vector3(0, 1, 0);
 				smokeDir.Normalize();
@@ -61,12 +64,12 @@ public:
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
-				currentTimeCount = 0.0f;
-				fire = false;
+				
+				m_fire = false;
 			}
 			else
 			{
-				currentTimeCount += thomas::Time::GetDeltaTime();
+				m_fireDelay -= thomas::Time::GetDeltaTime();
 			}
 		}
 	};
@@ -78,10 +81,9 @@ public:
 
 	void FireCannon()
 	{
-		if (!fire)
+		if (!m_fire)
 		{
-			fire = true;
-			currentTimeCount = 0.0f;
+			m_fire = true;
 		}
 	}
 
@@ -91,10 +93,10 @@ public:
 	}
 
 private:
-	bool fire;
-	float delay;
-	float roof;
-	float currentTimeCount;
+	bool m_fire;
+	float m_fireDelay;
+	float m_maxFireDelay;
+	float m_minFireDelay;
 	component::EmitterComponent* m_emitterSmoke;
 	component::EmitterComponent* m_emitterSmoke2;
 	component::EmitterComponent* m_emitterSpark;
