@@ -1,4 +1,6 @@
 #include "EmitterComponent.h"
+#include <cstdlib>
+#include <ctime>
 
 namespace thomas
 {
@@ -12,8 +14,9 @@ namespace thomas
 			}
 
 			void thomas::object::component::EmitterComponent::Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay, float minSpeed, float maxSpeed, 
-				math::Vector3 emitterPosition, float particleSpreadFactor, float particleMinSize, float particleMaxSize, float particleMinLifeTime, float particleMaxLifeTime, std::string shaderName, std::string texturePath)
+				math::Vector3 emitterPosition, float particleSpreadFactor, float particleMinSize, float particleMaxSize, float particleMinLifeTime, float particleMaxLifeTime, float alpha, std::string shaderName, std::string texturePath)
 			{
+				std::srand(time(NULL));
 				m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
 				m_isEmitting = emitterState;
 
@@ -28,7 +31,9 @@ namespace thomas
 				m_initParticleBufferStruct.initMinSize = particleMinSize;
 				m_initParticleBufferStruct.initMaxLifeTime = particleMaxLifeTime;
 				m_initParticleBufferStruct.initMinLifeTime = particleMinLifeTime;
-				m_initParticleBufferStruct.rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+				m_initParticleBufferStruct.alpha = alpha;
+
+				m_initParticleBufferStruct.rand = (std::rand() % 1000)/1000.f;
 
 				m_shader = graphics::Shader::GetShaderByName(shaderName);
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
@@ -54,7 +59,7 @@ namespace thomas
 			}
 
 			void thomas::object::component::EmitterComponent::Update(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed,
-				_In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime)
+				_In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime, _In_opt_ float alpha)
 			{
 				if (nrOfParticles)
 					m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
@@ -78,6 +83,12 @@ namespace thomas
 					m_initParticleBufferStruct.initMinLifeTime = particleMinLifeTime;
 				if (particleMaxLifeTime)
 					m_initParticleBufferStruct.initMaxLifeTime = particleMaxLifeTime;
+				if (alpha)
+					m_initParticleBufferStruct.alpha;
+
+				float test = std::rand() % 1000;
+
+				m_initParticleBufferStruct.rand = test / 1000.f;
 
 				ThomasCore::GetDeviceContext()->UpdateSubresource(m_initParicleBuffer, 0, 0, &m_initParticleBufferStruct, 0, 0);
 				InitialDispatch();

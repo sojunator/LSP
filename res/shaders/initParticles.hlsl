@@ -14,6 +14,9 @@ cbuffer InitBuffer : register(b0)
     float initMaxLifeTime;
     float initMinLifeTime;
     float rand;
+
+    float initAlpha;
+    float3 pad;
 };
 
 struct ParticleStruct
@@ -25,7 +28,7 @@ struct ParticleStruct
     float delay;
 	float size;
     float lifeTimeLeft;
-    float pad;
+    float alpha;
 };
 
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
@@ -53,9 +56,9 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 
 	uint w1 = rand_xorshift(rng_state);
 	uint w2 = rand_xorshift(w1);
-	uint w3 = rand_xorshift(w2);
+	uint w3 = rand_xorshift(w2 * rand);
 	uint w4 = rand_xorshift(w3);
-	uint w5 = rand_xorshift(w4);
+	uint w5 = rand_xorshift(w4 * rand);
 	
     float randClamp = (1.0 / 4294967296.0);
     
@@ -81,7 +84,7 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 
 	float3 dir = proj + initDirection;
     
-
+    float alpha = max(initAlpha * w3 * randClamp * rand * 2, 0.65f);
 
     particlesWrite[index].position = initPosition;
     particlesWrite[index].spread = initSpread;
@@ -90,6 +93,7 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite[index].delay = delay;
 	particlesWrite[index].size = size;
     particlesWrite[index].lifeTimeLeft = lifeTime;
+    particlesWrite[index].alpha = alpha;
     particlesWrite2[index].position = initPosition;
     particlesWrite2[index].spread = initSpread;
     particlesWrite2[index].direction = dir;
@@ -97,5 +101,6 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite2[index].delay = delay;
     particlesWrite2[index].size = size;
     particlesWrite2[index].lifeTimeLeft = lifeTime;
+    particlesWrite2[index].alpha = alpha;
 
 }

@@ -10,14 +10,14 @@ struct VS_OUT
 {
 	float4 pos : SV_POSITION;
 	float2 uvs : TEXCOORD0;
+    float alpha : ALPHAC;
 };
 
 struct quadStruct
 {
 	float3 quad[2][3];
-	float pad;
 	float2 uvs[2][3];
-	float pad2;
+	float alpha;
 	float pad3;
 };
 
@@ -33,6 +33,7 @@ VS_OUT  VSMain(uint id : SV_VERTEXID)
 
 	output.pos = mul(float4(particle[particleIndex].quad[triangleIndex][vertexIndex], 1.0), viewProjMatrix);
 	output.uvs = particle[particleIndex].uvs[triangleIndex][vertexIndex];
+    output.alpha = particle[particleIndex].alpha;
 
 	return output;
 }
@@ -40,9 +41,12 @@ VS_OUT  VSMain(uint id : SV_VERTEXID)
 
 float4 PSMain(VS_OUT input) : SV_Target
 {
-	float4 outputColor = diffuseTexture.Sample(diffuseSampler, input.uvs);
+    float4 outputColor = diffuseTexture.Sample(diffuseSampler, input.uvs);
 
-
+    outputColor.xyz *= float3(input.alpha, input.alpha, input.alpha);
+    float fade = input.alpha;
+    //fade *= 0.25f;
+    outputColor.w *= fade;
 	return outputColor;
 
 }
