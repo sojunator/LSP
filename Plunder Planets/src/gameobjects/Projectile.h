@@ -66,17 +66,19 @@ public:
 		if (!m_hitWater)
 		{
 			math::Vector3  temp = m_water->GetCollisionAt(m_transform);
-			if (temp.y - 0.0001f < 0.0f)
+			LOG(temp.x << " " << temp.y << " " << temp.z << "\n");
+			if (temp.y < 0.0f)
 			{
-				constant = -0.5 * m_Cd * 1000.f * m_radius * m_radius * math::PI;
+	
+				//constant = -0.5 * m_Cd * 1000.f * m_radius * m_radius * math::PI;
 				m_hitWater = true;
+				Destroy(this);
 			}
-		}
-
-		if (m_transform->GetPosition().y < -100.0f)
-		{
-			Destroy(this);
-		}
+		} 
+		//else if (m_transform->GetPosition().y < -20.0f)
+		//{
+		//	Destroy(this);
+		//}
 	}
 
 private:
