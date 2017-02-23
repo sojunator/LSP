@@ -26,7 +26,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_oceanSettings.wind_dir = math::Vector2(0.8f, 0.6f);
 	// The bigger the wind speed, the larger scale of wave crest.
 	// But the wave scale can be no larger than patch_length
-	m_oceanSettings.wind_speed = 500.0f;
+	m_oceanSettings.wind_speed = 200.0f;
 	// Damp out the components opposite to wind direction.
 	// The smaller the value, the higher wind dependency
 	m_oceanSettings.wind_dependency = 0.07f;

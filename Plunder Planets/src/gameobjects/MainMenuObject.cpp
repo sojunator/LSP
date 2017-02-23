@@ -9,7 +9,11 @@ void MainMenuObject::Start()
 	m_optionButton = AddComponent<component::SpriteComponent>();
 	m_creditsButton = AddComponent<component::SpriteComponent>();
 	m_exitButton = AddComponent<component::SpriteComponent>();
+	m_music = AddComponent<component::SoundComponent>();
 
+	m_music->SetClip("mMenuTheme");
+	m_music->SetLooping(true);
+	m_music->Play();
 
 	m_startButton->SetName("MainMenuStart");
 	m_startButton->SetPositionX(150);
