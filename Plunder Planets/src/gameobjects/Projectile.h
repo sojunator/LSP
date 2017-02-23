@@ -79,9 +79,9 @@ public:
 		{
 			math::Vector3 deltaWater = m_water->GetCollisionAt(m_transform);
 			float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
-			if (heightBelowWater > 1.0)
+			if (heightBelowWater > 3.0)
 			{
-				Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
+				//Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 				Destroy(this);
 			}
