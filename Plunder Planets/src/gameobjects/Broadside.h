@@ -20,9 +20,6 @@ public:
 		m_delay = 4.0;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
-		m_renderer = AddComponent<component::RenderComponent>();
-
-		m_renderer->SetModel("cannonball");		
 	}
 
 	void CreateCanons()
@@ -64,5 +61,4 @@ private:
 	std::vector<Canon*> canons;
 	component::SoundComponent* m_fireSFX;
 	std::string m_SFXs[2] = { "fCannon1", "fCannon2" };
-	component::RenderComponent* m_renderer;
 };

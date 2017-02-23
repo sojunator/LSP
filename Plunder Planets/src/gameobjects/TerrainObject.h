@@ -28,23 +28,7 @@ public:
 		m_renderer->SetModel("Islands");
 
 		m_transform->SetPosition(math::Vector3(0, -5.5, 0));
-
-		PlaceBalls();
 	}
-
-	void PlaceBalls()
-	{
-		for (int j = 0; j < m_islands->GetNrOfIslands(); ++j)
-			for (int i = 0; i < 10; i++)
-			{
-				m_broadsides.push_back(Instantiate<Broadside>(math::Vector3(m_islands->GetCenter(j).x, 5, m_islands->GetCenter(j).z), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), 0), m_scene));
-				m_broadsides.at(i + 10 * j)->m_transform->Rotate(math::Vector3((math::PI * 2 / 360) * 36 * i, 0, 0));
-				m_broadsides.at(i + 10 * j)->m_transform->Translate(m_broadsides.at(i + 10 * j)->m_transform->Forward() * m_islands->GetCollisionRadius(j));
-				m_broadsides.at(i + 10 * j)->m_transform->SetScale(30);
-			}
-	}
-
-
 
 	void Update()
 	{
