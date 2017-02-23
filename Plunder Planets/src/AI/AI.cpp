@@ -12,6 +12,8 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_lastKnownPos = math::Vector3::Zero;
 	m_escapeTimer = 0;
 	m_escapeTime = 600;	//Should be 60 seconds
+	m_idleTimer = 0;
+	m_idleTime = 100;
 
 	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0.0 max=1.0 step=0.001");
 	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0.0 max=1.0 step=0.001");
@@ -122,17 +124,20 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 
 int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
 {
-	right.Normalize();
-	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-	playerDir.Normalize();
-	float pDotR = playerDir.Dot(right);
+	if (m_idleTimer >= m_idleTime)
+	{
+		right.Normalize();
+		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		playerDir.Normalize();
+		float pDotR = playerDir.Dot(right);
 
-	if (pDotR >= 0.9)
-		return 1;
-	else if (pDotR <= -0.9)
-		return -1;
-	else
-		return 0;
+		if (pDotR >= 0.9)
+			return 1;
+		else if (pDotR <= -0.9)
+			return -1;
+		else
+			return 0;
+	}
 }
 
 void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
@@ -180,4 +185,9 @@ void AI::Escape()
 		m_state = Behavior::Idle;
 		m_stateStr = "Idle";
 	}
+}
+
+void AI::IdleTimer()
+{
+	m_idleTimer += Time::GetDeltaTime();
 }

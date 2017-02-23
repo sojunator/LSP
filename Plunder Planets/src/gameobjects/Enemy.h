@@ -121,7 +121,7 @@ public:
 		switch (m_ai->GetState())
 		{
 		case AI::Behavior::Attacking:
-			FireCannons();
+			//FireCannons();
 			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
 			Rotate(dt);
 			break;
@@ -223,6 +223,7 @@ public:
 
 		m_moving = false;
 		m_ai->Escape();
+		m_ai->IdleTimer();
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
 		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
 

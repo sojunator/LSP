@@ -27,6 +27,7 @@ public:
 	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	Behavior GetState();
 	void Escape();
+	void IdleTimer();
 
 private:
 	Behavior m_state;
@@ -35,6 +36,9 @@ private:
 
 	float m_escapeTimer;
 	float m_escapeTime;
+
+	float m_idleTimer;
+	float m_idleTime;
 
 	TerrainObject* m_terrainObject;
 	Ship* m_playerShip;
