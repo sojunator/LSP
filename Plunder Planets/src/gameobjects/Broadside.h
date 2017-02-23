@@ -69,7 +69,7 @@ public:
 		float xz = target.z - broadsidePos.z;
 		float x = sqrtf(xx*xx + xz*xz);
 
-		float v = 150;
+		float v = 100;
 
 		float g = Physics::s_world->getGravity().getY();
 

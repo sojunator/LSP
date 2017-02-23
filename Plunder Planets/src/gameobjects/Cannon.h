@@ -36,6 +36,7 @@ public:
 		delay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / roof));
 	}
 
+
 	void Update()
 	{
 		if (fire)
