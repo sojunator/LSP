@@ -28,7 +28,22 @@ public:
 		m_renderer->SetModel("Islands");
 
 		m_transform->SetPosition(math::Vector3(0, -5.5, 0));
+
+		PlaceRigidBody();
 	}
+
+	void PlaceRigidBody()
+	{
+		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
+		{
+			m_rigidBodyVec.push_back(AddComponent<component::RigidBodyComponent>());
+			m_rigidBodyVec[i]->SetMass(0);
+			m_rigidBodyVec[i]->SetCollider(new btSphereShape(m_islands->GetCollisionRadius(i)));
+			m_rigidBodyVec[i]->setWorldTransform(btTransform(btQuaternion(), btVector3(m_islands->GetCenter(i).x, 0, m_islands->GetCenter(i).z)));
+		}
+	}
+
+
 
 	void Update()
 	{
@@ -69,8 +84,9 @@ private:
 	thomas::Islands* m_islands;
 	thomas::graphics::Model* m_model;
 
-	std::vector<Broadside*> m_broadsides;
-
+	//std::vector<Broadside*> m_broadsides;
+	
+	std::vector<component::RigidBodyComponent*> m_rigidBodyVec;
 	component::RenderComponent* m_renderer;
 
 };
