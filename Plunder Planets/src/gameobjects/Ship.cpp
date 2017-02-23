@@ -57,7 +57,7 @@ void Ship::Start()
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
 	m_rigidBody->setSleepingThresholds(0.2, 0.5);
 	m_rigidBody->setGravity(btVector3(0, -15, 0));
-	m_treasure = 0;
+	m_treasure = 300;
 
 	//model
 	m_modelIndex = 0;
@@ -80,7 +80,7 @@ void Ship::Start()
 	m_elevateCamSpeed = 38;
 	m_camZoomSpeed = 45.0f;
 	m_camRotationSpeed = 2.0f;
-	m_camMinDistanceFromBoat = 20.0f;
+	m_camMinDistanceFromBoat = 100.0f;
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
@@ -175,41 +175,38 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 {
 	m_aiming = true;
 	CameraZoom(Time::GetDeltaTime());
+	math::Vector3 lookAtPoint = math::Vector3(aimPos.x, 0, aimPos.y);
 	//Recalculate look at point and the new distance from cam to ship
-	math::Vector3 camPos = m_transform->GetPosition() + m_lookAtOffset;
-	m_lookAtPoint = math::Vector3(aimPos.x, m_transform->GetPosition().y, aimPos.y);
-	
-
-	math::Vector3 camSide = -m_lookAtPoint / 10;
-	math::Vector3 camBack = m_transform->Forward()*m_lookAtPoint.Length() / 20;
-
-	m_lookAtPoint += -m_transform->Forward()*(m_lookAtPoint.Length()/2);
-	camPos += camSide + camBack;
-
-	math::Vector3 const distanceVector = camPos - m_cameraObject->m_transform->GetPosition();
+	m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+	math::Vector3 const distanceVector = lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
 	m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
 
-	math::Vector3 lookAtVector = side*m_transform->Right() + m_transform->Forward()*0.5;
-	lookAtVector.Normalize();
-	math::Vector3 posBehindBoat = camPos + (lookAtVector*m_cameraDistance);
-	posBehindBoat.y = 35;
+	
+	//Move camera "distance" away from boat.
+	/*math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
 
+	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);*/
+
+	//m_cameraObject->m_transform->SetPosition(newPos);
+
+	//move camera behind boat
+	float distToTarget = math::Vector2(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().y) - lookAtPoint).Length();
+	math::Vector3 posBehindBoat = m_transform->GetPosition() + (side*m_transform->Right()*m_cameraDistance);
+	posBehindBoat += (side*m_transform->Right()*distToTarget / 8);
+	posBehindBoat.y = 35;
+	posBehindBoat += (math::Vector3::Up*distToTarget / 8);
+	posBehindBoat += (m_transform->Forward()*distToTarget / 8);
 	posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, Time::GetDeltaTime() * 2);
 
 	m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
 	m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
-	m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+	m_cameraObject->m_transform->LookAt(lookAtPoint);//reset to planar orientation of camera with lookat
 
-	math::Vector3 newPos = camPos - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
+	math::Vector3 newPos = lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
 
 	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, Time::GetDeltaTime()*2.5);
-
-
-
-
-	m_cameraObject->m_transform->SetPosition(newPos);
 }
 
 void Ship::ShipAimCannons()
@@ -218,8 +215,8 @@ void Ship::ShipAimCannons()
 	if (Input::GetButton(Input::Buttons::RB)) //RIGHT
 	{
 		float deltaX = Input::GetRightStickY();
-		m_aimDistance += deltaX*Time::GetDeltaTime() * 50;
-
+		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
+		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
 		flatRight.Normalize();
@@ -236,16 +233,20 @@ void Ship::ShipAimCannons()
 		}
 
 
-		if (Input::GetButtonDown(Input::Buttons::A))
+		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
+		{
 			m_broadSideLeft->Fire(); //Temporary fix
+			m_treasure -= 50;
+		}
+			
 
 	}
 	else if (Input::GetButton(Input::Buttons::LB)) //LEFT
 	{
 		float deltaX = Input::GetRightStickY();
 		
-		m_aimDistance += deltaX*Time::GetDeltaTime()*50;
-
+		m_aimDistance += deltaX*Time::GetDeltaTime()*70;
+		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
 		flatRight.Normalize();
@@ -260,13 +261,18 @@ void Ship::ShipAimCannons()
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 		}
-		if (Input::GetButtonDown(Input::Buttons::A))
+		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideRight->CanFire())
+		{
+			m_treasure -= 50;
 			m_broadSideRight->Fire(); //Temporary fix
+		}
+			
 
 	}
 
-	else if (Input::GetButtonUp(Input::Buttons::RB) || Input::GetButton(Input::Buttons::LB))
+	else if (Input::GetButtonUp(Input::Buttons::RB) || Input::GetButtonUp(Input::Buttons::LB))
 	{
+		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_aiming = false;
 		m_waterObject->DisableAim();
 	}

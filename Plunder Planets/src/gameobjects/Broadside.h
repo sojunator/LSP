@@ -51,6 +51,11 @@ public:
 		}
 	}
 
+	bool CanFire()
+	{
+		return m_delayLeft <= 0;
+	}
+
 	void SetCanonLookAt(math::Vector3 pos)
 	{
 		for (auto cannon : m_cannons)
