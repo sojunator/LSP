@@ -85,6 +85,9 @@ namespace thomas
 			case InputLayouts::POST_EFFECT:
 				layoutDesc = { { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 } };
 				break;
+			case InputLayouts::NONE:
+				layoutDesc = { { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 } };
+				break;
 			default:
 				return false;
 				break;
@@ -462,6 +465,11 @@ namespace thomas
 			if (inputLayout == InputLayouts::POST_EFFECT)
 			{
 				shader = new Shader(name, inputLayout, "../res/thomasShaders/postEffect.hlsl", "", "", "", filePath, scene);
+			}
+			else if (inputLayout == InputLayouts::NONE)
+			{
+				shader = new Shader(name, inputLayout, filePath, "", "", "", filePath, scene);
+				
 			}
 			else
 			{

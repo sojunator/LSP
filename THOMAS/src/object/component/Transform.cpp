@@ -11,7 +11,7 @@ namespace thomas
 				m_localWorldMatrix.Decompose(m_localScale, m_localRotation, m_localPosition);
 			}
 
-			Transform::Transform(): Component("TransformComponent")
+			Transform::Transform() : Component("TransformComponent")
 			{
 				Decompose();
 				m_parent = NULL;
@@ -50,7 +50,7 @@ namespace thomas
 				math::Matrix lookAt = math::Matrix::CreateLookAt(GetPosition(), target->GetPosition(), m_localWorldMatrix.Up());
 
 				lookAt = lookAt.Invert();
-				
+
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, lookAt.Forward(), lookAt.Up());
 
 				Decompose();
@@ -72,7 +72,7 @@ namespace thomas
 			void Transform::Rotate(math::Vector3 angles)
 			{
 				math::Quaternion rot = math::Quaternion::CreateFromYawPitchRoll(angles.x, angles.y, angles.z);
-				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(m_localRotation), rot);
+				math::Matrix newRot = math::Matrix::Transform(math::Matrix::CreateFromQuaternion(rot), m_localRotation);
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
 
 				Decompose();
@@ -84,14 +84,15 @@ namespace thomas
 			void Transform::RotateByAxis(math::Vector3 axis, float angle)
 			{
 				math::Quaternion rot = math::Quaternion::CreateFromAxisAngle(axis, angle);
-				math::Matrix newRot = math::Matrix::CreateFromQuaternion(rot*m_localRotation);
+				math::Matrix newRot = math::Matrix::CreateFromQuaternion(m_localRotation * rot);
 				m_localWorldMatrix = math::Matrix::CreateScale(m_localScale) * math::Matrix::CreateWorld(m_localPosition, newRot.Forward(), newRot.Up());
 				Decompose();
+
 			}
 			void Transform::Translate(math::Vector3 translation)
 			{
 				math::Matrix pos = math::Matrix::CreateTranslation(translation);
-				
+
 				m_localWorldMatrix *= pos;
 				Decompose();
 			}

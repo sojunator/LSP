@@ -14,6 +14,7 @@ namespace thomas
 				btVector3 inertia;
 				getCollisionShape()->calculateLocalInertia(mass, inertia);
 				setMassProps(mass, inertia);
+				updateInertiaTensor();
 				
 			}
 			RigidBodyComponent::RigidBodyComponent() : Component("RigidBodyComponent"), btRigidBody(1, NULL, NULL)

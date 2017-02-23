@@ -75,8 +75,8 @@ public:
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
 		m_broadSideRight = Instantiate<Broadside>(math::Vector3(5.5, 6, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
 
-		m_broadSideRight->CreateCanons();
-		m_broadSideLeft->CreateCanons();
+		m_broadSideRight->CreateCannons();
+		m_broadSideLeft->CreateCannons();
 
 
 		m_renderer->SetModel("testModelEnemy");
@@ -90,8 +90,8 @@ public:
 		m_rigidBody->setGravity(btVector3(0, -15, 0));
 
 		//Sound
-
-
+		m_health = 20;
+		m_dead = false;
 		//Movement
 		m_speed = 600;
 		utils::DebugTools::AddFloat(m_speed, "EnemySpeed");
@@ -164,7 +164,7 @@ public:
 		if (m_shootDir == 1)
 			m_broadSideLeft->Fire();
 		else if (m_shootDir == -1)
-			m_broadSideLeft->Fire();
+			m_broadSideRight->Fire();
 	}
 
 	void Float(float dt)
@@ -173,7 +173,7 @@ public:
 		math::Vector3 bois;
 		for (int i = 0; i < 12; i++)
 		{
-
+			
 			if (i < 8)
 			{
 				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
@@ -211,6 +211,14 @@ public:
 	{
 		float const dt = Time::GetDeltaTime();
 
+		if (m_dead)
+		{
+			m_rigidBody->setDamping(0.5, 0.5);
+			if (m_transform->GetPosition().y < -10)
+				Destroy(this);
+			return;
+		}
+
 		m_moving = false;
 		m_ai->Escape();
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
@@ -228,13 +236,32 @@ public:
 
 		Float(dt);
 
+
+			
+
 	}
 
-	void Destroy()
+	void OnCollision(component::RigidBodyComponent* other)
 	{
+		if (other->m_gameObject->GetType() == "Projectile")
+		{
+			Projectile* p = ((Projectile*)other->m_gameObject);
+			if (p->m_spawnedBy == this)
+				return;
+			m_health -= p->GetDamageAmount();
+			if (m_health <= 0)
+				Die();
+		}
+
+	}
+
+	void Die()
+	{
+		m_dead = true;
 	}
 
 private:
+	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
 	Broadside* m_broadSideRight;
@@ -250,6 +277,7 @@ private:
 	AI* m_ai;
 
 	//Ship
+	float m_health;
 	bool m_moving;
 	float m_mass;
 	float m_speed;

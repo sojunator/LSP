@@ -14,6 +14,7 @@ namespace thomas
 		static void Update();
 		static void DrawDebug(object::component::Camera* camera);
 		static void Destroy();
+
 	private:
 		static graphics::BulletDebugDraw* s_debugDraw;
 		static float s_accumulator;
