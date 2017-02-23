@@ -43,8 +43,6 @@ public:
 		}
 	}
 
-
-
 	void Update()
 	{
 	}

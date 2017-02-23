@@ -18,8 +18,8 @@ namespace thomas
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
-			m_plunderRadius.push_back(size*0.2);
-			m_collisionRadius.push_back(size*0.2);
+			m_plunderRadius.push_back(size*0.32);
+			m_collisionRadius.push_back(size*0.3);
 		}
 
 		GeneratePos();
