@@ -63,10 +63,6 @@ public:
 		if (m_pitch < 10.f)
 		{
 			m_pitch += (float)pitch;
-			for (auto cannon : m_cannons)
-			{
-				cannon->SetPitch(m_pitch + 15.f);
-			}
 			return true;
 		}
 		return false;
@@ -76,10 +72,6 @@ public:
 		if (m_yaw < 10.f)
 		{
 			m_yaw += (float)yaw;
-			for (auto cannon : m_cannons)
-			{
-				cannon->SetYaw(m_yaw);
-			}
 			return true;
 		}
 		return false;
@@ -89,10 +81,6 @@ public:
 		if (m_pitch > -10.f)
 		{
 			m_pitch -= (float)pitch;
-			for (auto cannon : m_cannons)
-			{
-				cannon->SetPitch(m_pitch + 15.f);
-			}
 			return true;
 		}
 		return false;
@@ -102,10 +90,6 @@ public:
 		if (m_yaw > -10.f)
 		{
 			m_yaw -= (float)yaw;
-			for (auto cannon : m_cannons)
-			{
-				cannon->SetYaw(m_yaw);
-			}
 			return true;
 		}
 		return false;

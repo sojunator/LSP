@@ -7,7 +7,7 @@
 #include "WaterObject.h"
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
-
+#include "../scenes/MenuScene.h"
 using namespace thomas;
 using namespace object;
 class Ship : public GameObject
@@ -38,6 +38,7 @@ public:
 	void Float(float dt);
 
 	void Update();
+	void OnCollision(component::RigidBodyComponent* other);
 
 public:
 	float m_health;

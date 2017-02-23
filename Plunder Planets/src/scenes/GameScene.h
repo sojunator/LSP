@@ -43,6 +43,7 @@ public:
 		LoadModel("testModel1", "../res/models/Boat/ship1fbx.fbx", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
+		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		//Init 2D-images for GUI

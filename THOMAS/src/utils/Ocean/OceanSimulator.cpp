@@ -405,8 +405,7 @@ namespace thomas
 				int height_map_dim = params.dmap_dim;
 				float patch_length = params.patch_length;
 
-				// initialize random generator.
-				srand(0);
+
 
 				for (i = 0; i <= height_map_dim; i++)
 				{

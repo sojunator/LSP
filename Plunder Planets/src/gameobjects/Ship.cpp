@@ -460,3 +460,21 @@ void Ship::Update()
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }
+void Ship::OnCollision(component::RigidBodyComponent* other)
+{
+	if (other->m_gameObject->GetType() == "Projectile")
+	{
+		Projectile* p = ((Projectile*)other->m_gameObject);
+		if (p->m_spawnedBy == this)
+			return;
+		m_health -= p->GetDamageAmount();
+		LOG("hit hp: " << m_health);
+		if (m_health <= 0)
+		{
+			LOG("You are dead!");
+			Scene::LoadScene<MenuScene>();
+		}
+
+	}
+
+}

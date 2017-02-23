@@ -46,6 +46,7 @@ public:
 		m_rigidbody->setLinearVelocity(150 * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToradians(m_pitch)) * cosf(math::DegreesToradians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToradians(m_pitch))) + 
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToradians(m_pitch)) * sinf(math::DegreesToradians(m_yaw))));
+		m_damageAmount = 5;
 	}
 
 	void Update()
@@ -61,15 +62,31 @@ public:
 		}
 			
 	}
+
+	void OnCollision(component::RigidBodyComponent* other)
+	{
+		if(other->m_gameObject != m_spawnedBy)
+			Destroy(this);
+
+	}
+
+	float GetDamageAmount()
+	{
+		return m_damageAmount;
+	}
+
+public:
+	GameObject* m_spawnedBy;
 private:
 	btVector3 m_force;
-
+	float m_damageAmount;
 	float m_yaw;
 	float m_pitch;
 	float m_mass = 5.0f;
 	btScalar m_radius = 0.05f;
 	btScalar m_Cd = 0.47f;
 	btScalar constant;
+	
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
 	component::RigidBodyComponent* m_rigidbody;
