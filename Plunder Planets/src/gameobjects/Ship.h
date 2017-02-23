@@ -45,6 +45,7 @@ public:
 	float m_maxHealth;
 
 private:
+	float testValue;
 	float roof;
 	bool m_moving;
 	bool m_turning;

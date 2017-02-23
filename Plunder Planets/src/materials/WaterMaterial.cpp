@@ -104,8 +104,9 @@ utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
 }
 void WaterMaterial::UpdateAim(math::Vector2 pos, math::Vector2 right, float angle)
 {
-	m_materialProperties.aimPos = pos + right * ((std::sqrtf(std::sinf(angle)) * m_pow) + (std::sinf(angle) * m_tweakConst));
-	math::Vector3 distance = m_materialProperties.aimPos - pos;
+//	m_materialProperties.aimPos = pos + right * ((std::sqrtf(std::sinf(angle)) * m_pow) + (std::sinf(angle) * m_tweakConst));
+	m_materialProperties.aimPos = right;
+	math::Vector3 distance = pos - right;
 	m_materialProperties.radius = std::sqrt(distance.Length());
 	m_materialProperties.aiming = 1;
 }

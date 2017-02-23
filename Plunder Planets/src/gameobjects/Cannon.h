@@ -15,7 +15,6 @@ private:
 public:
 	Cannon() : GameObject("Cannon") 
 	{
-
 	};
 
 	void Start()
@@ -36,6 +35,7 @@ public:
 	{
 		delay = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / roof));
 	}
+
 
 	void Update()
 	{
@@ -59,6 +59,11 @@ public:
 			}
 		}
 	};
+
+	void SetCanonAngle(float angle)
+	{
+		m_transform->SetRotation(0, angle, 0);
+	}
 
 	void FireCannon()
 	{

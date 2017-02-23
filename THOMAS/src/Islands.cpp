@@ -26,15 +26,15 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
-			/*m_islandCenterWorldPos[i].x -= mapSize / 2;
-			m_islandCenterWorldPos[i].z += mapSize / 2;*/
+			m_islandCenterWorldPos[i].x -= mapSize / 2;
+			m_islandCenterWorldPos[i].z += mapSize / 2;
 		}
 
-		/*for (int i = 0; i < plane.verts.size(); i++)
+		for (int i = 0; i < plane.verts.size(); i++)
 		{
 			plane.verts[i].position.x -= mapSize / 2;
 			plane.verts[i].position.z += mapSize / 2;
-		}*/
+		}
 
 
 		ChangeHeightMapValues(plane);
@@ -180,9 +180,14 @@ namespace thomas
 		int attempt = 0;
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
-		tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+		/*tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
 		tempOffset.y = 0;
-		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
+		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);*/
+
+		tempOffset.x = m_mapSize / 2;
+		tempOffset.y = 0;
+		tempOffset.z = m_mapSize / 2;
+
 
 		tempOffset.x += 10;
 		tempOffset.z += 10;
@@ -194,9 +199,10 @@ namespace thomas
 
 		m_worldPosOffset.push_back(tempOffset);
 		m_islandCenterWorldPos.push_back(tempCenter);
+		addedIslands++;
 
 		std::vector<float> distance;
-		for (int i = 0; i < m_nrOfIslands-1; i++)
+		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			bool foundPos = false;
 			while (!foundPos && MAX_ATTEMPTS != attempt)
@@ -240,6 +246,8 @@ namespace thomas
 			}
 
 		}
-		m_nrOfIslands = addedIslands;
+		m_worldPosOffset.erase(m_worldPosOffset.begin());
+		m_islandCenterWorldPos.erase(m_islandCenterWorldPos.begin());
+		m_nrOfIslands = --addedIslands;
 	}
 }
