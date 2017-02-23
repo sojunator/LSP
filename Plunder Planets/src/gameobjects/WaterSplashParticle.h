@@ -7,7 +7,7 @@ class WaterSplashParticle : public GameObject
 {
 private:
 	component::EmitterComponent* m_emitterComponent;
-
+	float timer = 7.0f;
 public:
 	WaterSplashParticle() : GameObject("WaterSplashParticle")
 	{
@@ -17,14 +17,18 @@ public:
 	void Start()
 	{
 		m_emitterComponent = AddComponent<component::EmitterComponent>();
-		m_emitterComponent->Init(256 * 10 + 254, true, math::Vector3(0, 1, 0), 0.0f, 0.0f, 2.0f, 6.4f, m_transform->GetPosition(), 0.035f, 0.6f, 2.2f, 1.4f, 3.2f, "particleShader", "../res/textures/smoke.dds");
+		
+		m_emitterComponent->Init(256 * 0 + 254, true, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 0.705f, 1.0f, 1.0f, 5.f, 5.f, 1, "particleShader", "../res/textures/smokeParticle.png");
 
 	}
 
 	void Update()
 	{
-		m_emitterComponent->Update(NULL, math::Vector3::Up, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-		m_emitterComponent->Emit();
+		timer -= Time::GetDeltaTime();
+		if (timer < 0.0f)
+		{
+			Destroy(this);
+		}
 	}
 
 private:
