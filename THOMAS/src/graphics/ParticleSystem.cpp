@@ -46,6 +46,7 @@ namespace thomas
 			s_maxNrOfBillboards = 100000;
 			s_cameraBuffer = nullptr;
 			s_matrixBuffer = nullptr;
+			s_emitterPosBuffer = nullptr;
 			ID3DBlob* shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/billboards.hlsl", "cs_5_0", "main");
 			HRESULT hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_billboardCS);
 			if (FAILED(hr))
@@ -54,6 +55,12 @@ namespace thomas
 			}
 			CreateBillboardUAVandSRV();
 
+			shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/initParticles.hlsl", "cs_5_0", "main");
+			hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_initParticlesCS);
+			if (FAILED(hr))
+			{
+				LOG_HR(hr);
+			}
 
 			D3D11_BLEND_DESC blendDesc;
 			ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -83,13 +90,15 @@ namespace thomas
 		{
 		}
 
-		void ParticleSystem::UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix)
+		void ParticleSystem::UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, math::Vector3 emitterPos)
 		{
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
 			s_cameraBufferStruct.deltaTime = Time::GetDeltaTime();
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
+
+			s_emitterPos.pos = emitterPos;
 
 			if (s_cameraBuffer == nullptr)
 			{
@@ -108,30 +117,23 @@ namespace thomas
 			{
 				ThomasCore::GetDeviceContext()->UpdateSubresource(s_matrixBuffer, 0, NULL, &s_matrixBufferStruct, 0, 0);
 			}
-			
+			if (s_emitterPosBuffer == nullptr)
+			{
+				s_emitterPosBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_emitterPos, D3D11_BIND_CONSTANT_BUFFER);
+			}
+			else
+			{
+				ThomasCore::GetDeviceContext()->UpdateSubresource(s_emitterPosBuffer, 0, NULL, &s_emitterPos, 0, 0);
+			}
 		}
 
 		void ParticleSystem::AddEmitter(object::component::EmitterComponent* emitter)
 		{
 			CreateParticleUAVsandSRVs(emitter);
 			CreateInitBuffer(emitter);
-			ID3DBlob* shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/initParticles.hlsl", "cs_5_0", "main");
-			HRESULT hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_initParticlesCS);
-			if (FAILED(hr))
-			{
-				LOG_HR(hr);
-			}
+			
 			InitialDispatch(emitter);
 			
-			struct EmitterPosStruct
-			{
-				math::Vector3 pos;
-				float pad;
-			};
-
-			s_emitterPos.pos = emitter->m_gameObject->m_transform->GetPosition();
-			s_emitterPosBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_emitterPos, D3D11_BIND_CONSTANT_BUFFER);
-
 			s_emitters.push_back(emitter);
 			return;
 		}
@@ -145,9 +147,8 @@ namespace thomas
 			{
 				if (emitter->IsEmitting())
 				{
-					UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
-					s_emitterPos.pos = emitter->m_gameObject->m_transform->GetPosition();
-					ThomasCore::GetDeviceContext()->UpdateSubresource(s_emitterPosBuffer, 0, NULL, &s_emitterPos, 0, 0);
+					UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->m_gameObject->m_transform->GetPosition());
+					
 					FLOAT blendfactor[4] = { 0, 0, 0, 0 };
 					ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
 

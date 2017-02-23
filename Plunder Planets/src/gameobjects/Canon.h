@@ -21,7 +21,7 @@ public:
 	void Start()
 	{
 		m_emitterComponent = AddComponent<component::EmitterComponent>();
-		m_emitterComponent->Init(256 * 5 + 254, false, math::Vector3(0, 1, 0), 0.0f, 1.0f, 2.0f, 3.4f, m_transform->GetPosition(), 0.1f, 0.7f, 6.0f, "particleShader", "../res/textures/smoke.dds");
+		m_emitterComponent->Init(256 * 5 + 254, false, math::Vector3(0, 1, 0), 0.0f, 2.0f, 2.0f, 3.4f, m_transform->GetPosition(), 0.1f, 1.7f, 9.0f, "particleShader", "../res/textures/smoke.dds");
 
 		roof = 0.8f;
 		ReseedDelay();

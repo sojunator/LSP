@@ -26,7 +26,7 @@ namespace thomas
 
 			static void InitialDispatch(object::component::EmitterComponent* emitter);
 
-			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
+			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, math::Vector3 emitterPos);
 		public:
 			ParticleSystem();
 			~ParticleSystem();

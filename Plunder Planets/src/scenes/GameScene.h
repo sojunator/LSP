@@ -13,7 +13,6 @@
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
-#include "../src/graphics/ParticleSystem.h"
 #include "../gameobjects/Enemy.h"
 
 
@@ -85,7 +84,6 @@ public:
 		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
 
-		ParticleSystem::Init();
 	};
 	
 	/*void UnloadScene()
