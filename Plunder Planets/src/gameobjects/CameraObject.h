@@ -154,24 +154,25 @@ public:
 				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
 			}
 		}
-
-		if (Input::GetKey(Input::Keys::A))
+		if (m_ship->GetFreeCamera())
 		{
-			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			if (Input::GetKey(Input::Keys::A))
+			{
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::D))
+			{
+				m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::W))
+			{
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+			}
+			if (Input::GetKey(Input::Keys::S))
+			{
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+			}
 		}
-		if (Input::GetKey(Input::Keys::D))
-		{
-			m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
-		}
-		if (Input::GetKey(Input::Keys::W))
-		{
-			m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}
-		if (Input::GetKey(Input::Keys::S))
-		{
-			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-		}
-
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
