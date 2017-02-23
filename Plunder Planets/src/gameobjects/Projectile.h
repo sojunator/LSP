@@ -43,7 +43,7 @@ public:
 		constant = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI;
 		m_rigidbody->setCollisionShape(new btSphereShape(0.35f));
 		m_rigidbody->SetMass(m_mass); 
-		
+		m_velocity = 100;
 		m_water = (WaterObject*)Find("WaterObject");
 		if (!m_water)
 		{
@@ -54,12 +54,16 @@ public:
 		{
 			m_hitWater = false;
 		}
-		m_rigidbody->setLinearVelocity(150 * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToradians(m_pitch)) * cosf(math::DegreesToradians(m_yaw))+ 
+		m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToradians(m_pitch)) * cosf(math::DegreesToradians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToradians(m_pitch))) + 
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToradians(m_pitch)) * sinf(math::DegreesToradians(m_yaw))));
 		m_damageAmount = 5;
 	}
 
+	float GetVelocity()
+	{
+		return m_velocity;
+	}
 
 
 	void Update()
@@ -70,9 +74,9 @@ public:
 
 		if (!m_hitWater)
 		{
-			math::Vector3 temp = m_water->GetCollisionAt(m_transform);
-
-			if (temp.y < 0.0)
+			math::Vector3 deltaWater = m_water->GetCollisionAt(m_transform);
+			float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
+			if (heightBelowWater > 0.0)
 			{
 				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 				Destroy(this);
@@ -96,6 +100,7 @@ public:
 public:
 	GameObject* m_spawnedBy;
 private:
+	float m_velocity;
 	btVector3 m_force;
 	float m_damageAmount;
 	float m_yaw;

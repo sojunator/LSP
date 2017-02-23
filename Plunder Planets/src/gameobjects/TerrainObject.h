@@ -29,22 +29,19 @@ public:
 
 		m_transform->SetPosition(math::Vector3(0, -5.5, 0));
 
-		//PlaceBalls();
+		PlaceRigidBody();
 	}
 
-	void PlaceBalls()
+	void PlaceRigidBody()
 	{
-		for (int j = 0; j < 2; ++j)
-			for (int i = 0; i < 10; i++)
-			{
-				m_broadsides.push_back(Instantiate<Broadside>(math::Vector3(m_islands->GetCenter(j).x, 5, m_islands->GetCenter(j).z), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), 0), m_scene));
-				m_broadsides.at(i + 10 * j)->m_transform->Rotate(math::Vector3((math::PI * 2 / 360) * 36 * i, 0, 0));
-				m_broadsides.at(i + 10 * j)->m_transform->Translate(m_broadsides.at(i + 10 * j)->m_transform->Forward() * m_islands->GetCollisionRadius(j));
-				m_broadsides.at(i + 10 * j)->m_transform->SetScale(5);
-			}
+		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
+		{
+			m_rigidBodyVec.push_back(AddComponent<component::RigidBodyComponent>());
+			m_rigidBodyVec[i]->SetMass(0);
+			m_rigidBodyVec[i]->SetCollider(new btSphereShape(m_islands->GetCollisionRadius(i)));
+			m_rigidBodyVec[i]->setWorldTransform(btTransform(btQuaternion(), btVector3(m_islands->GetCenter(i).x, 0, m_islands->GetCenter(i).z)));
+		}
 	}
-
-
 
 	void Update()
 	{
@@ -85,8 +82,9 @@ private:
 	thomas::Islands* m_islands;
 	thomas::graphics::Model* m_model;
 
-	std::vector<Broadside*> m_broadsides;
-
+	//std::vector<Broadside*> m_broadsides;
+	
+	std::vector<component::RigidBodyComponent*> m_rigidBodyVec;
 	component::RenderComponent* m_renderer;
 
 };

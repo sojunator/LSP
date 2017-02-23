@@ -81,7 +81,14 @@ public:
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_ship = LoadObject<Ship>();
-		m_enemyShip = LoadObject<Enemy>();
+		for (int lingongrova = 0; lingongrova < 2; lingongrova++) //10 = number of AI
+		{
+			m_enemyShip.push_back(LoadObject<Enemy>());
+			if (lingongrova == 0)
+				m_enemyShip[0] = nullptr; //release bugfix
+			m_enemyShip[lingongrova]->SetPositionAI(lingongrova);
+		}
+		m_waterObject = LoadObject<WaterObject>();
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
@@ -101,7 +108,7 @@ private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	Ship* m_ship;
-	Enemy* m_enemyShip;
+	std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
 	float test = 0.0f;

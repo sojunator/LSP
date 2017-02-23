@@ -33,6 +33,8 @@ namespace thomas
 		float StealTreasure(int island);						//Get stolen treasure for specific island
 		int GetSizeOFIsland(int island);						//Get size of specific island
 
+		void ChangeHeightMapValues(thomas::utils::Plane::PlaneData& plane);
+
 	private:
 		void GeneratePos();
 
