@@ -21,7 +21,7 @@ public:
 	void Start()
 	{
 		m_emitterComponent = AddComponent<component::EmitterComponent>();
-		m_emitterComponent->Init(256 * 5 + 254, false, math::Vector3(0, 1, 0), 0.0f, 2.0f, 2.0f, 3.4f, m_transform->GetPosition(), 0.05f, 3.0f, 9.0f, "particleShader", "../res/textures/smoke.dds");
+		m_emitterComponent->Init(256 * 10 + 254, false, math::Vector3(0, 1, 0), 0.0f, 0.0f, 2.0f, 6.4f, m_transform->GetPosition(), 0.035f, 0.6f, 2.2f, 1.4f, 3.2f, "particleShader", "../res/textures/smoke.dds");
 
 		roof = 0.8f;
 		ReseedDelay();
@@ -43,9 +43,9 @@ public:
 		{
 			if (currentTimeCount > delay)
 			{
-				math::Vector3 smokeDir = (m_transform->Forward() * 0.3 + math::Vector3(0, 1, 0));
+				math::Vector3 smokeDir = m_transform->Forward() * 0.5 + math::Vector3(0, 1, 0);
 				smokeDir.Normalize();
-				m_emitterComponent->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+				m_emitterComponent->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 				m_emitterComponent->Emit();
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);

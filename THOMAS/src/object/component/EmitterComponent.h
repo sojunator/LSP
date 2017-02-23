@@ -19,14 +19,19 @@ namespace thomas
 				{
 					math::Vector3 initPosition;
 					float initSpread;
+
 					math::Vector3 initDirection;
 					float initMaxSpeed;
+
 					float initMinSpeed;
 					float initMaxDelay;
 					float initMinDelay;
-					float initSize;
-					float initLifeTime;
-					math::Vector3 pad;
+					float initMaxSize;
+
+					float initMinSize;
+					float initMaxLifeTime;
+					float initMinLifeTime;
+					float rand;
 				};
 
 				struct ParticleStruct
@@ -47,11 +52,11 @@ namespace thomas
 
 			public:
 				EmitterComponent();
-				void Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay, float minSpeed, float maxSpeed, 
-					math::Vector3 emitterPosition, float particleSpreadFactor, float particleSize, float particleLifeTime, std::string shaderName, std::string texturePath);
+				void Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay, float minSpeed, float maxSpeed, math::Vector3 emitterPosition,
+					float particleSpreadFactor, float particleMinSize, float particleMaxSize, float particleMinLifeTime, float particleMaxLifeTime, std::string shaderName, std::string texturePath);
 				void Destroy();
 				void Update(unsigned int nrOfParticles, math::Vector3 particleDirection, float minDelay, float maxDelay, float minSpeed, float maxSpeed,
-					float particleSpreadFactor, float particleSize, float particleLifeTime);
+					float particleSpreadFactor, float particleMinSize, float particleMaxSize, float particleMinLifeTime, float particleMaxLifeTime);
 				void Emit();
 				void Stop();
 				unsigned int GetNrOfParticles() const;

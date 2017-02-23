@@ -11,8 +11,8 @@ namespace thomas
 
 			}
 
-			void thomas::object::component::EmitterComponent::Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay,
-				float minSpeed, float maxSpeed, math::Vector3 emitterPosition, float particleSpreadFactor, float particleSize, float particleLifeTime, std::string shaderName, std::string texturePath)
+			void thomas::object::component::EmitterComponent::Init(unsigned int nrOfParticles, bool emitterState, math::Vector3 particleDirection, float minDelay, float maxDelay, float minSpeed, float maxSpeed, 
+				math::Vector3 emitterPosition, float particleSpreadFactor, float particleMinSize, float particleMaxSize, float particleMinLifeTime, float particleMaxLifeTime, std::string shaderName, std::string texturePath)
 			{
 				m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
 				m_isEmitting = emitterState;
@@ -24,8 +24,11 @@ namespace thomas
 				m_initParticleBufferStruct.initMinSpeed = minSpeed;
 				m_initParticleBufferStruct.initPosition = emitterPosition;
 				m_initParticleBufferStruct.initSpread = particleSpreadFactor;
-				m_initParticleBufferStruct.initSize = particleSize;
-				m_initParticleBufferStruct.initLifeTime = particleLifeTime;
+				m_initParticleBufferStruct.initMaxSize = particleMaxSize;
+				m_initParticleBufferStruct.initMinSize = particleMinSize;
+				m_initParticleBufferStruct.initMaxLifeTime = particleMaxLifeTime;
+				m_initParticleBufferStruct.initMinLifeTime = particleMinLifeTime;
+				m_initParticleBufferStruct.rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
 				m_shader = graphics::Shader::GetShaderByName(shaderName);
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
@@ -50,8 +53,8 @@ namespace thomas
 
 			}
 
-			void thomas::object::component::EmitterComponent::Update(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay,
-			_In_opt_ float minSpeed, _In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleSize, _In_opt_ float particleLifeTime)
+			void thomas::object::component::EmitterComponent::Update(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed,
+				_In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime)
 			{
 				if (nrOfParticles)
 					m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
@@ -67,10 +70,14 @@ namespace thomas
 					m_initParticleBufferStruct.initMinSpeed = minSpeed;
 				if (particleSpreadFactor)
 					m_initParticleBufferStruct.initSpread = particleSpreadFactor;
-				if (particleSize)
-					m_initParticleBufferStruct.initSize = particleSize;
-				if (particleLifeTime)
-					m_initParticleBufferStruct.initLifeTime = particleLifeTime;
+				if (particleMinSize)
+					m_initParticleBufferStruct.initMinSize = particleMinSize;
+				if (particleMaxSize)
+					m_initParticleBufferStruct.initMaxSize = particleMaxSize;
+				if (particleMinLifeTime)
+					m_initParticleBufferStruct.initMinLifeTime = particleMinLifeTime;
+				if (particleMaxLifeTime)
+					m_initParticleBufferStruct.initMaxLifeTime = particleMaxLifeTime;
 
 				ThomasCore::GetDeviceContext()->UpdateSubresource(m_initParicleBuffer, 0, 0, &m_initParticleBufferStruct, 0, 0);
 				InitialDispatch();

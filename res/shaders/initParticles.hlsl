@@ -4,12 +4,16 @@ cbuffer InitBuffer : register(b0)
     float initSpread;
     float3 initDirection;
     float initMaxSpeed;
+
     float initMinSpeed;
     float initMaxDelay;
     float initMinDelay;
-    float initSize;
-    float initLifeTime;
-    float3 pad;
+    float initMaxSize;
+
+    float initMinSize;
+    float initMaxLifeTime;
+    float initMinLifeTime;
+    float rand;
 };
 
 struct ParticleStruct
@@ -45,7 +49,7 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 {
     //INITIALIZE
     float index = (Gid.x * 256) + GTid.x;
-	uint rng_state = index;
+	uint rng_state = index * rand;
 
 	uint w1 = rand_xorshift(rng_state);
 	uint w2 = rand_xorshift(w1);
@@ -53,17 +57,20 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 	uint w4 = rand_xorshift(w3);
 	uint w5 = rand_xorshift(w4);
 	
-
+    float randClamp = (1.0 / 4294967296.0);
     
 	
-	float delay = (w1 * (1.0 / 4294967296.0) * (initMaxDelay - initMinDelay)) + initMinDelay;
-	float speed = (w2 * (1.0 / 4294967296.0) * (initMaxSpeed - initMinSpeed)) + initMinSpeed;
+    float delay = (w1 * randClamp * (initMaxDelay - initMinDelay)) + initMinDelay;
+    float speed = (w2 * randClamp * (initMaxSpeed - initMinSpeed)) + initMinSpeed;
 
-    float size = w4 * (1.0 / 4294967296.0) * initSize;
+    float size = (w4 * randClamp * (initMaxSize - initMinSize)) + initMinSize;
+    float lifeTime = (w5 * randClamp * (initMaxSize - initMinLifeTime)) + initMinLifeTime;
 
-	float x = (w3 * (1.0 / 4294967296.0) * 2) - 1;
-	float y = (w4 * (1.0 / 4294967296.0) * 2) - 1;
-	float z = (w5 * (1.0 / 4294967296.0) * 2) - 1;
+    float randClampTimes2 = randClamp * 2;
+
+    float x = (w3 * randClampTimes2) - 1;
+    float y = (w4 * randClampTimes2) - 1;
+    float z = (w5 * randClampTimes2) - 1;
 
     float3 rng = float3(x, y, z);
 	normalize(rng);
@@ -82,13 +89,13 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 	particlesWrite[index].speed = speed;
     particlesWrite[index].delay = delay;
 	particlesWrite[index].size = size;
-    particlesWrite[index].lifeTimeLeft = initLifeTime;
+    particlesWrite[index].lifeTimeLeft = lifeTime;
     particlesWrite2[index].position = initPosition;
     particlesWrite2[index].spread = initSpread;
     particlesWrite2[index].direction = dir;
     particlesWrite2[index].speed = speed;
     particlesWrite2[index].delay = delay;
     particlesWrite2[index].size = size;
-    particlesWrite2[index].lifeTimeLeft = initLifeTime;
+    particlesWrite2[index].lifeTimeLeft = lifeTime;
 
 }

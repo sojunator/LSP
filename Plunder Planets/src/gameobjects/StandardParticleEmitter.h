@@ -18,25 +18,18 @@ public:
 
 	void Start()
 	{
-		m_emitterComponent = AddComponent<component::EmitterComponent>();
-		m_emitterComponent->Init(256 * 100 + 254, true, math::Vector3(0, 1, 0), 4.0f, 8.0f, 2.0f, 2.4f, m_transform->GetPosition(), 0.1f, 0.4f, 14.0f, "particleShader", "../res/textures/smokeParticleDank.png");
+		//m_emitterComponent = AddComponent<component::EmitterComponent>();
+		//m_emitterComponent->Init(256 * 100 + 254, true, math::Vector3(0, 1, 0), 4.0f, 8.0f, 2.0f, 2.4f, m_transform->GetPosition(), 0.1f, 0.4f, 14.0f, "particleShader", "../res/textures/smokeParticleDank.png");
 
 	}
 
 
 	void Update()
 	{
-		if (Input::GetKeyDown(Input::Keys::NumPad1))
-		{
-			m_emitterComponent->Emit();
-		}
-		else if (Input::GetKeyDown(Input::Keys::NumPad9))
-		{
-			m_emitterComponent->Stop();
-		}
+		
 
 	}
 
 private:
-	component::EmitterComponent* m_emitterComponent;
+	//component::EmitterComponent* m_emitterComponent;
 };
