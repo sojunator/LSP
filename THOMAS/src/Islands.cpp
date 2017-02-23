@@ -18,7 +18,7 @@ namespace thomas
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
-			m_plunderRadius.push_back(size*0.37);
+			m_plunderRadius.push_back(size*0.43);
 			m_collisionRadius.push_back(size*0.3);
 		}
 
@@ -36,6 +36,8 @@ namespace thomas
 			plane.verts[i].position.z += mapSize / 2;
 		}*/
 
+
+		ChangeHeightMapValues(plane);
 		GenerateMesh(plane, m);
 
 	}
@@ -161,6 +163,15 @@ namespace thomas
 	int Islands::GetSizeOFIsland(int island)
 	{
 		return m_size[island]/* * m_detail[island]*/;
+	}
+
+	void Islands::ChangeHeightMapValues(thomas::utils::Plane::PlaneData& plane)
+	{
+		for (int i = 0; i < plane.verts.size(); i++)
+		{
+			if (plane.verts[i].position.y < 5.0)
+				plane.verts[i].position.y = -20.0;
+		}
 	}
 
 	void Islands::GeneratePos()

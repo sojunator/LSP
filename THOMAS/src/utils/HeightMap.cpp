@@ -57,8 +57,6 @@ namespace thomas
 						e = 0.0f;
 
 					plane.verts[index].position.y = e;
-					//plane.verts[i].position.x += startingPos.x;
-					//plane.verts[i].position.z += startingPos.y;
 				}
 
 			}
