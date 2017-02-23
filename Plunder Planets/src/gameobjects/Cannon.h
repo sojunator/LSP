@@ -6,13 +6,13 @@
 using namespace thomas;
 using namespace object;
 
-class Canon : public GameObject
+class Cannon : public GameObject
 {
 private:
 
 
 public:
-	Canon() : GameObject("Canon") 
+	Cannon() : GameObject("Cannon") 
 	{
 
 	};
@@ -23,7 +23,7 @@ public:
 		ReseedDelay();
 	}
 
-	void SetMaxCanonDelay(float delay)
+	void SetMaxCannonDelay(float delay)
 	{
 		this->roof = delay;
 	}
@@ -41,6 +41,7 @@ public:
 			{
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
+				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
 				currentTimeCount = 0.0f;
 				fire = false;
 			}
@@ -51,7 +52,7 @@ public:
 		}
 	};
 
-	void FireCanon()
+	void FireCannon()
 	{
 		if (!fire)
 		{
@@ -60,7 +61,7 @@ public:
 		}
 	}
 
-	~Canon()
+	~Cannon()
 	{
 
 	}

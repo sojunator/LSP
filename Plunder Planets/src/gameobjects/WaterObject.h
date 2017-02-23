@@ -17,7 +17,7 @@ public:
 	{
 		m_dimensions = 20000;
 
-		m_waterMaterial = (Material::CreateMaterial("waterMat", "waterMaterial"));
+		m_waterMaterial = (WaterMaterial*)(Material::CreateMaterial("waterMat", "waterMaterial"));
 		oceanSim = ((WaterMaterial*)m_waterMaterial)->GetOceanSim();
 		utils::Plane::PlaneData pData = utils::Plane::CreatePlane(m_dimensions, 1.0 / 100);
 		Mesh* m = new Mesh(pData.verts, pData.indices, "oceanMesh", m_waterMaterial);
@@ -101,7 +101,14 @@ public:
 		return waterPos;
 
 	}
-
+	void UpdateAim(math::Vector2 pos, math::Vector2 right, float angle)
+	{
+		m_waterMaterial->UpdateAim(pos, right, angle);
+	}
+	void DisableAim()
+	{
+		m_waterMaterial->DisableAim();
+	}
 
 private:
 	int m_dimensions;
@@ -109,7 +116,7 @@ private:
 	float delayLeft = soundEffectDelay;
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_oceanSounds;
-	Material* m_waterMaterial;
+	WaterMaterial* m_waterMaterial;
 	utils::ocean::OceanSimulator* oceanSim;
 	component::RigidBodyComponent* m_rb;
 

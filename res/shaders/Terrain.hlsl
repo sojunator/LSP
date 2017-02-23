@@ -103,8 +103,8 @@ float4 TerrainColour(VSOutput input)
     float4 grass = grassTexture.Sample(specularSampler, tex);
     float4 hills = hillsTexture.Sample(normalSampler, tex);
 
-	float sandGrassCutOff = 4.4f;
-	float grassHillsCutOff = 8;
+	float sandGrassCutOff = 20;
+	float grassHillsCutOff = 30;
 
     // Determine which texture to use based on height.
     if (input.positionWS.y < sandGrassCutOff)

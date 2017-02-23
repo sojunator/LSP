@@ -3,9 +3,9 @@
 #include <Thomas.h>
 #include <string>
 #include <algorithm>
-#include "Ship.h"
 #include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
+#include "Ship.h"
 
 using namespace thomas;
 using namespace object;
@@ -17,7 +17,7 @@ private:
 public:
 	CameraObject() : GameObject("CameraObject")
 	{
-		
+
 	};
 
 	void Start()
@@ -37,7 +37,7 @@ public:
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_healthbar = AddComponent<component::SpriteComponent>();
-	
+
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 2.5f;
@@ -139,24 +139,37 @@ public:
 			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		if (m_ship->GetFreeCamera())
+		if (Input::GetKey(Input::Keys::K))
 		{
-			if (Input::GetKey(Input::Keys::A))
+			if (m_healthbar->GetScale().x < 1.0f)
 			{
-				m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, 1.0f));
 			}
-			if (Input::GetKey(Input::Keys::D))
+		}
+
+		if (Input::GetKey(Input::Keys::J))
+		{
+			if (m_healthbar->GetScale().x >= 0.0f)
 			{
-				m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
 			}
-			if (Input::GetKey(Input::Keys::W))
-			{
-				m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-			}
-			if (Input::GetKey(Input::Keys::S))
-			{
-				m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
-			}
+		}
+
+		if (Input::GetKey(Input::Keys::A))
+		{
+			m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+		}
+		if (Input::GetKey(Input::Keys::D))
+		{
+			m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+		}
+		if (Input::GetKey(Input::Keys::W))
+		{
+			m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+		}
+		if (Input::GetKey(Input::Keys::S))
+		{
+			m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
 		}
 
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
@@ -167,11 +180,11 @@ public:
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);
 
-			
+
 			if (m_pitch > math::PI / 2.01f)
 				m_pitch = math::PI / 2.01f;
 			if (m_pitch < -math::PI / 2.01f)
-				m_pitch = -math::PI/ 2.01f;
+				m_pitch = -math::PI / 2.01f;
 
 			m_transform->SetRotation(m_jaw, m_pitch, 0);
 		}
@@ -180,26 +193,22 @@ public:
 			Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
 		}
 
-		if (Input::GetKeyDown(Input::Keys::Escape))
-			Scene::LoadScene<MenuScene>();
-
-
-		if (Input::GetKey(Input::Keys::LeftShift) && m_ship->GetFreeCamera()) //Goes in even when GetFreeCamera() == false
+		if (Input::GetKey(Input::Keys::LeftShift))
 		{
 			m_flySpeed = m_fastSpeed;
 		}
 		else
 			m_flySpeed = m_normalSpeed;
+
 		
-
-
+		if (Input::GetKeyDown(Input::Keys::Escape))
+			Scene::LoadScene<MenuScene>();
 	}
 
-	math::Matrix GetCameraMatrix() 
+	math::Matrix GetCameraMatrix()
 	{
 		return m_camera->GetViewProjMatrix();
 	}
-
 
 private:
 	Ship* m_ship;
