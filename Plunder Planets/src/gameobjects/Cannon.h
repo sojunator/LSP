@@ -19,8 +19,16 @@ public:
 
 	void Start()
 	{
-		m_emitterComponent = AddComponent<component::EmitterComponent>();
-		m_emitterComponent->Init(256 * 10 + 254, false, math::Vector3(0, 1, 0), 0.0f, 0.0f, 2.0f, 6.4f, m_transform->GetPosition(), 0.035f, 0.6f, 2.2f, 1.4f, 3.2f, "particleShader", "../res/textures/smoke.dds");
+		m_emitterSmoke = AddComponent<component::EmitterComponent>();
+		m_emitterSmoke->Init(256 * 4 + 254, false, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 0.205f, 1.4f, 2.25f, 0.4f, 1.9f, 1, "particleShader", "../res/textures/smokeParticle.png");
+		m_emitterSmoke2 = AddComponent<component::EmitterComponent>();
+		m_emitterSmoke2->Init(256 * 10 + 254, false, math::Vector3(0, 1, 0), 0.1f, 2.7f, 6.1f, 13.4f, m_transform->GetPosition(), 0.08f, 0.5f, 0.95f, 0.4f, 0.9f, 1, "particleShader", "../res/textures/smoke.dds");
+
+		m_emitterSpark = AddComponent<component::EmitterComponent>();
+		m_emitterSpark->Init(120, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0.08f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/spark.png");
+
+		m_emitterFire = AddComponent<component::EmitterComponent>();
+		m_emitterFire->Init(150, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 38.4f, m_transform->GetPosition(), 0.15f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/fire.png");
 
 		roof = 0.8f;
 		ReseedDelay();
@@ -43,10 +51,17 @@ public:
 		{
 			if (currentTimeCount > delay)
 			{
-				math::Vector3 smokeDir = m_transform->Forward() * 0.5 + math::Vector3(0, 1, 0);
+				math::Vector3 smokeDir = m_transform->Forward() * 6 + math::Vector3(0, 1, 0);
 				smokeDir.Normalize();
-				m_emitterComponent->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-				m_emitterComponent->Emit();
+				m_emitterSmoke->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+				m_emitterSmoke->Emit();
+				m_emitterSmoke2->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+				m_emitterSmoke2->Emit();
+				m_emitterSpark->Update(NULL, m_transform->Forward(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
+				m_emitterSpark->Emit();
+				m_emitterFire->Update(NULL, m_transform->Forward(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
+				m_emitterFire->Emit();
+				
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
@@ -84,5 +99,8 @@ private:
 	float delay;
 	float roof;
 	float currentTimeCount;
-	component::EmitterComponent* m_emitterComponent;
+	component::EmitterComponent* m_emitterSmoke;
+	component::EmitterComponent* m_emitterSmoke2;
+	component::EmitterComponent* m_emitterSpark;
+	component::EmitterComponent* m_emitterFire;
 };

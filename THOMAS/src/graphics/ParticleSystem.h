@@ -36,7 +36,6 @@ namespace thomas
 			struct BillboardStruct
 			{
 				math::Vector3 positions[2][3];
-				float pad;
 				math::Vector2 uvs[2][3];
 				float pad2;
 				float pad3;

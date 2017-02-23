@@ -104,7 +104,7 @@ bool Ship::GetFreeCamera()
 void Ship::ShipMove(float const dt)
 {
 	//ship controls
-	if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera &&Input::GetKey(Input::Keys::W)))
+	if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera && Input::GetKey(Input::Keys::W)) || (m_freeCamera && Input::GetKey(Input::Keys::Up)))
 	{
 		math::Vector3 forward = m_transform->Forward();
 
@@ -129,6 +129,15 @@ void Ship::ShipRotate(float const dt)
 			turnDelta = -Input::GetKey(Input::Keys::D);
 		else if (-Input::GetKey(Input::Keys::A))
 			turnDelta = Input::GetKey(Input::Keys::A);
+	}
+
+	//For Keyboard when freeCam is active
+	else if (m_freeCamera)
+	{
+		if (Input::GetKey(Input::Keys::Right))
+			turnDelta = -Input::GetKey(Input::Keys::Right);
+		else if (Input::GetKey(Input::Keys::Left))
+			turnDelta = Input::GetKey(Input::Keys::Left);
 	}
 
 	math::Vector3 right = m_transform->Right();

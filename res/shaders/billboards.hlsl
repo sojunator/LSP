@@ -21,15 +21,14 @@ struct ParticleStruct
 	float delay;
 	float size;
     float lifeTimeLeft;
-    float pad;
+    float alpha;
 };
 
 struct BillboardStruct
 {
 	float3 quad[2][3];
-	float pad;
 	float2 uvs[2][3];
-	float pad2;
+	float alpha;
 	float pad3;
 };
 
@@ -57,6 +56,7 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         particlesWrite[index].spread = particlesRead[index].spread;
         particlesWrite[index].size = particlesRead[index].size;
         particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
+        particlesWrite[index].alpha = min(particlesRead[index].alpha, 1);
 
         float scale = particlesRead[index].size;
         if (particlesRead[index].lifeTimeLeft < 0.0f)
@@ -86,6 +86,9 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         billboards[index].uvs[1][0] = float2(0, 1);
         billboards[index].uvs[1][1] = float2(1, 0);
         billboards[index].uvs[1][2] = float2(1, 1);
+
+        billboards[index].alpha = particlesRead[index].alpha;
+
     }
     else
     {

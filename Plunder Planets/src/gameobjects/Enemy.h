@@ -65,7 +65,7 @@ public:
 		m_floats[10]->SetMass(0.5*m_mass);
 		m_floats[11]->SetMass(0.5*m_mass);
 
-		m_transform->SetPosition(0, 0.5, 0);
+		//m_transform->SetPosition(0, 0.5, 0);
 
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
@@ -102,6 +102,13 @@ public:
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
+	}
+
+	void SetPositionAI(int lingongrova)
+	{
+		//m_transform->SetPosition(lingongrova * 20, 0.5, 0);
+		if(lingongrova > 0)
+			m_rigidBody->setWorldTransform(btTransform(btQuaternion(), btVector3(lingongrova * 200, 0.5, 200))); //make random based
 	}
 
 	void Move(float dt)
