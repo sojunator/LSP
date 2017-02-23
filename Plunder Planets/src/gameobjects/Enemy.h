@@ -99,6 +99,11 @@ public:
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
+
+		m_emitterSpark = AddComponent<component::EmitterComponent>();
+		m_emitterSpark->Init(320, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0,0,0,0,0, 1, "particleShader", "../res/textures/spark.png");
+		m_emitterSmoke = AddComponent<component::EmitterComponent>();
+		m_emitterSmoke->Init(256 * 4 + 254, false, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 0.205f, 5.4f, 10.25f, 5.4f, 10.9f, 1, "particleShader", "../res/textures/smokeParticle.png");
 	}
 
 	void SetPositionAI(int lingongrova)
@@ -165,11 +170,10 @@ public:
 			
 			math::Vector3 targetPos = m_ai->GetTargetPos();
 			math::Vector2 target(targetPos.x, targetPos.z);
-			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, -1, target.y));
+			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
 			if (angle > -500.0)
 			{
-				m_broadSideLeft->SetCanonLookAt(targetPos);
 				m_broadSideLeft->SetCanonAngle(-angle);
 				m_broadSideLeft->Fire();
 			}
@@ -179,11 +183,10 @@ public:
 		{
 			math::Vector3 targetPos = m_ai->GetTargetPos();
 			math::Vector2 target(targetPos.x, targetPos.z);
-			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, -1, target.y));
+			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
 			if (angle > -500.0)
 			{
-				m_broadSideLeft->SetCanonLookAt(targetPos);
 				m_broadSideLeft->SetCanonAngle(-angle);
 				m_broadSideLeft->Fire();
 			}
@@ -282,9 +285,15 @@ public:
 	void Die()
 	{
 		m_dead = true;
+		m_emitterSpark->Update(1000, m_transform->Up(), NULL, NULL, NULL, NULL, NULL, NULL, 10, NULL, 0.2, 1);
+		m_emitterSmoke->Update(NULL, m_transform->Up(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+		m_emitterSmoke->Emit();
+		m_emitterSpark->Emit();
+		m_sound->PlayOneShot("fEnemyExplode", 0.7);
 	}
 
 private:
+	
 	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
@@ -295,6 +304,8 @@ private:
 	Broadside* m_broadSideFront;
 
 	//Components
+	component::EmitterComponent* m_emitterSpark;
+	component::EmitterComponent* m_emitterSmoke;
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;

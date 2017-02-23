@@ -14,6 +14,7 @@ namespace thomas
 
 		for (int i = 0; i < nrOfIslands; i++)
 		{
+			m_lostTreasureSinceLastEnemySpawn.push_back(0);
 			m_size.push_back(size);
 			m_detail.push_back(detail);
 			m_treasure.push_back(1000);
@@ -129,10 +130,23 @@ namespace thomas
 		return m_treasure[island];
 	}
 
+	float Islands::GetTreasureLostSinceLastEnemy(int island)
+	{
+		return m_lostTreasureSinceLastEnemySpawn[island];
+	}
+
+	void Islands::resetTreasureLost(int island)
+	{
+		m_lostTreasureSinceLastEnemySpawn[island] = 0;
+	}
+
+
 	int Islands::GetTotalTreasure(int island)
 	{
 		return m_totalTreasure[island];
 	}
+
+
 
 	int Islands::GetSize(int island)
 	{
@@ -151,11 +165,13 @@ namespace thomas
 		{
 			float temp = m_treasure[island];
 			m_treasure[island] -= m_treasure[island];
+			m_lostTreasureSinceLastEnemySpawn[island] += temp;
 			return temp;
 		}
 		else
 		{
 			m_treasure[island] -= dt*m_plunderRate;
+			m_lostTreasureSinceLastEnemySpawn[island] += dt*m_plunderRate;
 			return dt*m_plunderRate;
 		}
 	}

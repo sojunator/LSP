@@ -3,13 +3,13 @@
 #include <string>
 #include <algorithm>
 #include "Broadside.h"
-#include "TerrainObject.h"
 #include "WaterObject.h"
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
 #include "../scenes/MenuScene.h"
 using namespace thomas;
 using namespace object;
+class TerrainObject;
 class Ship : public GameObject
 {
 

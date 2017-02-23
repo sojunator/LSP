@@ -1,11 +1,11 @@
 #pragma once
-#include "../gameobjects/TerrainObject.h"
+
 #include "../gameobjects/Ship.h"
 #include "Pathfinding.h"
 #include "Thomas.h"
-#include "../gameobjects/Ship.h"
 #include "../../THOMAS/src/object/component/Component.h"
 
+class TerrainObject;
 class THOMAS_API AI : public thomas::object::component::Component
 {
 public:

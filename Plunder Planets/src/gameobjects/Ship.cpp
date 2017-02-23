@@ -1,5 +1,5 @@
 #include "ship.h"
-
+#include "TerrainObject.h"
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -141,6 +141,8 @@ void Ship::ShipRotate(float const dt)
 	//Remove y part;
 	right.y = 0;
 	m_rigidBody->activate();
+	if (!m_moving)
+		turnDelta *= 2;
 	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
 
 	if (abs(turnDelta) > 0.02)
