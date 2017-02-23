@@ -1,7 +1,7 @@
 #pragma once
-#pragma once
 #include "Thomas.h"
 #include "WaterObject.h"
+#include "WaterSplashParticle.h"
 using namespace thomas;
 using namespace object;
 class Projectile : public GameObject
@@ -45,6 +45,8 @@ public:
 		m_rigidbody->SetMass(m_mass); 
 		m_velocity = 200;
 		m_water = (WaterObject*)Find("WaterObject");
+		
+
 		if (!m_water)
 		{
 			LOG("Errorroror no wadder found");
@@ -78,6 +80,7 @@ public:
 			float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
 			if (heightBelowWater > 0.0)
 			{
+				Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 				Destroy(this);
 			}
@@ -110,6 +113,7 @@ private:
 	btScalar m_Cd = 0.47f;
 	btScalar constant;
 	
+	component::EmitterComponent* m_emitterComponent;
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
 	component::RigidBodyComponent* m_rigidbody;

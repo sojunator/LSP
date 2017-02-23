@@ -84,7 +84,7 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 
 	float3 dir = proj + initDirection;
     
-    float alpha = max(initAlpha * w3 * randClamp * rand * 2, 0.65f);
+    float alpha = max(initAlpha * w3 * randClamp * rand * 2, 0.45f);
 
     particlesWrite[index].position = initPosition;
     particlesWrite[index].spread = initSpread;
