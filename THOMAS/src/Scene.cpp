@@ -5,6 +5,7 @@
 #include "graphics\Shader.h"
 #include "utils\DebugTools.h"
 
+
 namespace thomas
 {
 	Scene* Scene::s_currentScene;
@@ -70,7 +71,7 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{
 
-
+		
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
@@ -110,33 +111,44 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->OMSetBlendState(state.NonPremultiplied(), NULL, 0xFFFFFFFF);
 			oceanShader->Bind();
 			camera->BindReflection();
-			graphics::LightManager::BindAllLights();
+		graphics::LightManager::BindAllLights();
 			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(oceanShader))
 			{
 				material->Bind();
-				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-				{
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+		{	
 					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-					{
+			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+			{	
 						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
-						{
-							mesh->Bind();
-							mesh->Draw();
-						}
+					{
+						mesh->Bind();
+						mesh->Draw();
+					}
 					}
 					graphics::Renderer::UnBindGameObjectBuffer();
 				}
 				material->Unbind();
-			}
+				}
 			graphics::LightManager::Unbind();
-
+				
 			oceanShader->Unbind();
 			graphics::Renderer::UnbindDepthBufferTexture();
-		}
+			}
+
+		
 
 		camera->BindSkybox();
 		camera->UnbindSkybox();
+
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::EmitterComponent>())
+		{
+			for (object::component::EmitterComponent* emitterComponent : gameObject->GetComponents<object::component::EmitterComponent>())
+			{
+				graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
+			}
+		}
+		
 	}
 
 

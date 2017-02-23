@@ -12,6 +12,7 @@
 #include "../src/graphics/Sprite.h"
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
+#include "../gameobjects/StandardParticleEmitter.h"
 #include "../gameobjects/Enemy.h"
 #include "../gameobjects/Ship.h"
 
@@ -28,6 +29,7 @@ public:
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
 		LoadShader("skyboxShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/skyboxShader.hlsl");
 		LoadShader("Terrain", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/Terrain.hlsl");
+		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 
 		//Init materials
 		thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
@@ -45,6 +47,8 @@ public:
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
 		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
+
+		
 
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
@@ -73,7 +77,6 @@ public:
 		thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
-		//Init objects lägga till LoadObjects i scene?
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
@@ -82,6 +85,7 @@ public:
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
 		//LoadObject<PhysicsObject>();
+
 	};
 	
 	/*void UnloadScene()

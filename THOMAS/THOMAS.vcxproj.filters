@@ -42,6 +42,8 @@
     <ClCompile Include="src\object\component\SpriteComponent.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\object\component\RigidBodyComponent.cpp" />
+    <ClCompile Include="src\graphics\ParticleSystem.cpp" />
+    <ClCompile Include="src\object\component\EmitterComponent.cpp" />
     <ClCompile Include="src\utils\DebugTools.cpp" />
     <ClCompile Include="src\graphics\BulletDebugDraw.cpp" />
   </ItemGroup>
@@ -251,6 +253,8 @@
     <ClInclude Include="include\assimp\vector2.h" />
     <ClInclude Include="include\assimp\vector3.h" />
     <ClInclude Include="include\assimp\version.h" />
+    <ClInclude Include="src\graphics\ParticleSystem.h" />
+    <ClInclude Include="src\object\component\EmitterComponent.h" />
     <ClInclude Include="src\utils\DebugTools.h" />
     <ClInclude Include="src\graphics\BulletDebugDraw.h" />
   </ItemGroup>

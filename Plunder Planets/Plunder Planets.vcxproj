@@ -186,6 +186,7 @@
     <ClInclude Include="src\gameobjects\Enemy.h" />
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
+    <ClInclude Include="src\gameobjects\StandardParticleEmitter.h" />
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />

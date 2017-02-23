@@ -28,6 +28,9 @@ namespace thomas
 
 		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)
 		{
+			ThomasCore::GetDeviceContext()->RSGetState(&m_rasterizerP);
+			ThomasCore::GetDeviceContext()->OMGetDepthStencilState(&m_depthstencilP, &m_depthRefP);
+
 			m_data.shader->Bind();
 			m_data.shader->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			bool v = m_data.shader->BindVertexBuffer(m_data.vertexBuffer, sizeof(math::Vector3), 0);
@@ -60,8 +63,8 @@ namespace thomas
 			bool v = Shader::GetCurrentBoundShader()->BindVertexBuffer(NULL, sizeof(math::Vector3), 0);
 			bool i = Shader::GetCurrentBoundShader()->BindIndexBuffer(NULL);
 
-			ThomasCore::GetDeviceContext()->RSSetState(NULL);
-			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(NULL, 1);
+			ThomasCore::GetDeviceContext()->RSSetState(m_rasterizerP);
+			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_depthstencilP, m_depthRefP);
 
 			m_data.texture->Unbind();
 			m_data.shader->Unbind();

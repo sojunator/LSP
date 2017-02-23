@@ -22,6 +22,8 @@
   <ItemGroup>
     <ClCompile Include="src\graphics\BulletDebugDraw.cpp" />
     <ClCompile Include="src\object\component\RigidBodyComponent.cpp" />
+    <ClCompile Include="src\graphics\ParticleSystem.cpp" />
+    <ClCompile Include="src\object\component\EmitterComponent.cpp" />
     <ClCompile Include="src\object\component\SpriteComponent.cpp" />
     <ClCompile Include="src\graphics\Sprite.cpp" />
     <ClCompile Include="src\graphics\PostEffect.cpp" />
@@ -312,6 +314,8 @@
     <ClInclude Include="include\LinearMath\btTransform.h" />
     <ClInclude Include="include\LinearMath\btTransformUtil.h" />
     <ClInclude Include="include\LinearMath\btVector3.h" />
+    <ClInclude Include="src\graphics\ParticleSystem.h" />
+    <ClInclude Include="src\object\component\EmitterComponent.h" />
     <ClInclude Include="src\graphics\BulletDebugDraw.h" />
     <ClInclude Include="src\object\component\RigidBodyComponent.h" />
     <ClInclude Include="src\object\component\SpriteComponent.h" />
