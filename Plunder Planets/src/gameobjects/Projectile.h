@@ -68,11 +68,15 @@ public:
 		
 		m_rigidbody->applyCentralForce(m_force);
 
-		if (m_transform->GetPosition().y < -0.0)
+		if (!m_hitWater)
 		{
+			math::Vector3 temp = m_water->GetCollisionAt(m_transform);
 
-			m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
-			Destroy(this);
+			if (temp.y < 0.0)
+			{
+				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
+				Destroy(this);
+			}
 		}
 			
 	}
