@@ -20,7 +20,7 @@ public:
 	void Start()
 	{
 		m_emitterSmoke = AddComponent<component::EmitterComponent>();
-		m_emitterSmoke->Init(256 * 4 + 254, false, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 0.205f, 1.4f, 2.25f, 0.4f, 1.9f, 1, "particleShader", "../res/textures/smokeParticle.png");
+		m_emitterSmoke->Init(256 * 4 + 254, false, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 8.4f, m_transform->GetPosition(), 0.205f, 1.4f, 2.25f, 0.4f, 1.25f, 1, "particleShader", "../res/textures/smokeParticle.png");
 		m_emitterSmoke2 = AddComponent<component::EmitterComponent>();
 		m_emitterSmoke2->Init(256 * 10 + 254, false, math::Vector3(0, 1, 0), 0.1f, 2.7f, 6.1f, 13.4f, m_transform->GetPosition(), 0.08f, 0.5f, 0.95f, 0.4f, 0.9f, 1, "particleShader", "../res/textures/smoke.dds");
 
@@ -48,7 +48,7 @@ public:
 		{
 			if (m_monteCarloDelay < 0)
 			{
-				math::Vector3 smokeDir = m_transform->Forward() * 6 + math::Vector3(0, 1, 0);
+				math::Vector3 smokeDir = m_transform->Forward() * 7 + math::Vector3(0, 1, 0);
 				smokeDir.Normalize();
 				m_emitterSmoke->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 				m_emitterSmoke->Emit();
