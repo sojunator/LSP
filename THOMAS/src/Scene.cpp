@@ -10,6 +10,18 @@ namespace thomas
 {
 	Scene* Scene::s_currentScene;
 	bool Scene::s_drawDebugPhysics;
+	std::vector<object::component::RenderComponent*> Scene::GetAllRenderComponents()
+	{
+		std::vector<object::component::RenderComponent*> renderComponents;
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+		{
+			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+			{
+				renderComponents.push_back(renderComponent);
+			}
+		}
+		return renderComponents;
+	}
 	void Scene::UnloadScene()
 	{
 		utils::DebugTools::RemoveAllVariables();
@@ -71,34 +83,37 @@ namespace thomas
 	void Scene::Render3D(object::component::Camera * camera)
 	{
 
-		
+		std::vector<object::component::RenderComponent*> renderComponents = GetAllRenderComponents();
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
 				continue;
 			shader->Bind();
 			camera->BindReflection();
+			graphics::Renderer::BindGameObjectBuffer();
 			graphics::LightManager::BindAllLights();
 			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
 			{
 				material->Bind();
-				for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
+				for (object::component::RenderComponent* renderComponent : renderComponents)
 				{
-					
-					for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+					if (renderComponent->GetModel())
 					{
-						if(renderComponent->GetModel())
-							for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+						std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
+						if (!meshes.empty())
+						{
+							graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
+							for (graphics::Mesh* mesh : meshes)
 							{
-								graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
 								mesh->Bind();
 								mesh->Draw();
 							}
+						}
+							
 					}
+							
 				}
-				material->Unbind();
 			}
-
 			shader->Unbind();
 		}
 
@@ -110,34 +125,37 @@ namespace thomas
 			graphics::Renderer::BindDepthBufferTexture();
 			ThomasCore::GetDeviceContext()->OMSetBlendState(state.NonPremultiplied(), NULL, 0xFFFFFFFF);
 			oceanShader->Bind();
+			graphics::Renderer::BindGameObjectBuffer();
 			camera->BindReflection();
-		graphics::LightManager::BindAllLights();
+			graphics::LightManager::BindAllLights();
 			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(oceanShader))
 			{
 				material->Bind();
-		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
-		{	
-					graphics::Renderer::BindGameObjectBuffer(camera, gameObject);
-			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-			{	
-						for (graphics::Mesh* mesh : renderComponent->GetModel()->GetMeshesByMaterial(material))
+				for (object::component::RenderComponent* renderComponent : renderComponents)
+				{
+					if (renderComponent->GetModel())
 					{
-						mesh->Bind();
-						mesh->Draw();
+						std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
+						if (!meshes.empty())
+						{
+							graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
+							for (graphics::Mesh* mesh : meshes)
+							{
+								mesh->Bind();
+								mesh->Draw();
+							}
+						}
+
 					}
-					}
-					graphics::Renderer::UnBindGameObjectBuffer();
+
 				}
-				material->Unbind();
-				}
+			}
 			graphics::LightManager::Unbind();
-				
 			oceanShader->Unbind();
 			graphics::Renderer::UnbindDepthBufferTexture();
+			graphics::Renderer::UnBindGameObjectBuffer();
 			}
-
 		
-
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 

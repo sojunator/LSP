@@ -5,6 +5,8 @@ namespace thomas
 {
 	class THOMAS_API Scene
 	{
+	private:
+		std::vector<object::component::RenderComponent*> GetAllRenderComponents();
 	public:
 		
 		static void UnloadScene();

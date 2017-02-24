@@ -9,6 +9,8 @@ namespace thomas
 	float Time::s_FPS;
 	float Time::s_FrameTime;
 	float Time::s_timescale;
+	float Time::s_FpsUpdateFreq;
+	float Time::s_TimeLeftToUpdateFPS;
 
 	bool Time::Init()
 	{
@@ -23,15 +25,23 @@ namespace thomas
 		s_startTime = double(currentTime.QuadPart);
 		s_FPS = 0;
 		s_timescale = 1;
+		s_FpsUpdateFreq = 0.7;
+		s_TimeLeftToUpdateFPS = s_FpsUpdateFreq;
 		return true;
 	}
 
 	void Time::Update()
 	{
 
-		s_DeltaTime = GetElapsedTime();	
-		s_FPS = 1.0 / s_DeltaTime;
-		s_FrameTime = 1000.0 / s_FPS;
+		s_DeltaTime = GetElapsedTime();
+		s_TimeLeftToUpdateFPS -= s_DeltaTime;
+		if (s_TimeLeftToUpdateFPS <= 0)
+		{
+			s_FPS = 1.0 / s_DeltaTime;
+			s_FrameTime = 1000.0 / s_FPS;
+			s_TimeLeftToUpdateFPS = s_FpsUpdateFreq;
+		}
+		
 	}
 
 	float Time::GetDeltaTime()

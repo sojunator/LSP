@@ -27,7 +27,9 @@ namespace thomas {
 			static ID3D11ShaderResourceView* GetDepthBufferSRV();
 			static ID3D11RenderTargetView* GetBackBuffer();
 
-			static void BindGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			
+			static void UpdateGameObjectBuffer(object::component::Camera* camera, object::GameObject* gameObject);
+			static void BindGameObjectBuffer();
 			static void UnBindGameObjectBuffer();
 			static void RenderSetup(object::component::Camera* camera);
 

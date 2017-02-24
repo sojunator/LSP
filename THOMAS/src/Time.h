@@ -36,6 +36,8 @@ namespace thomas
 		static float s_FPS;
 		static float s_FrameTime;
 		static float s_timescale;
+		static float s_FpsUpdateFreq;
+		static float s_TimeLeftToUpdateFPS;
 	public:
 
 	};

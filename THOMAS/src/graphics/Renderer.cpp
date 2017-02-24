@@ -91,7 +91,7 @@ namespace thomas
 			}
 			return cameras;
 		}
-		void Renderer::BindGameObjectBuffer(object::component::Camera * camera, object::GameObject * gameObject)
+		void Renderer::UpdateGameObjectBuffer(object::component::Camera * camera, object::GameObject * gameObject)
 		{
 			//Fill matrix buffer with gameObject info
 
@@ -104,9 +104,14 @@ namespace thomas
 
 			utils::D3d::FillDynamicBufferStruct(s_objectBuffer, s_objectBufferStruct);
 
-			//Bind gameObject specific buffers
+			
+		}
+
+		void Renderer::BindGameObjectBuffer()
+		{
 			thomas::graphics::Shader::GetCurrentBoundShader()->BindBuffer(s_objectBuffer, thomas::graphics::Shader::ResourceType::GAME_OBJECT);
 		}
+
 		ID3D11ShaderResourceView* Renderer::GetDepthBufferSRV()
 		{
 			return s_depthBufferSRV;

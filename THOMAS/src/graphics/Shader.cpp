@@ -393,6 +393,7 @@ namespace thomas
 			return true;
 		}
 
+
 		void Shader::ReloadShader()
 		{
 			ID3D10Blob* tempBlob;
