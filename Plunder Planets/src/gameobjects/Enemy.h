@@ -100,18 +100,43 @@ public:
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 
-		m_emitterSpark = AddComponent<component::EmitterComponent>();
-		m_emitterSpark->Init(320, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0,0,0,0,0, 1, "particleShader", "../res/textures/spark.png");
-		m_emitterSmoke = AddComponent<component::EmitterComponent>();
-		m_emitterSmoke->Init(256 * 4 + 254, false, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 10.4f, m_transform->GetPosition(), 0.205f, 5.4f, 10.25f, 5.4f, 10.9f, 1, "particleShader", "../res/textures/smokeParticle.png");
+		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterSpark->SetNrOfParticles(256 * 6 + 254);
+		m_emitterSpark->SetTexture("../res/textures/spark.png");
+		m_emitterSpark->SetShader("particleShader");
+		m_emitterSpark->SetPosition(m_transform->GetPosition());
+		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
+		m_emitterSpark->SetAlpha(1);
+		m_emitterSpark->SetMaxDelay(0.0f);
+		m_emitterSpark->SetMinDelay(0.0f);
+		m_emitterSpark->SetMaxSpeed(20.0f);
+		m_emitterSpark->SetMinSpeed(12.0f);
+		m_emitterSpark->SetMaxSize(2.0f);
+		m_emitterSpark->SetMinSize(1.0f);
+		m_emitterSpark->SetMaxLifeTime(0.5f);
+		m_emitterSpark->SetMinLifeTime(0.3f);
+		m_emitterSpark->SetSpread(0.71f);
+
+		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterSmoke->SetNrOfParticles(256 * 6 + 254);
+		m_emitterSmoke->SetTexture("../res/textures/smokeParticle.png");
+		m_emitterSmoke->SetShader("particleShader");
+		m_emitterSmoke->SetPosition(m_transform->GetPosition());
+		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
+		m_emitterSmoke->SetAlpha(1);
+		m_emitterSmoke->SetMaxDelay(2.45f);
+		m_emitterSmoke->SetMinDelay(0.15f);
+		m_emitterSmoke->SetMaxSpeed(9.0f);
+		m_emitterSmoke->SetMinSpeed(6.0f);
+		m_emitterSmoke->SetMaxSize(3.2f);
+		m_emitterSmoke->SetMinSize(2.4f);
+		m_emitterSmoke->SetMaxLifeTime(3.55f);
+		m_emitterSmoke->SetMinLifeTime(2.4f);
+		m_emitterSmoke->SetSpread(0.8f);
+
+		
 	}
 
-	void SetPositionAI(int lingongrova)
-	{
-		//m_transform->SetPosition(lingongrova * 20, 0.5, 0);
-		if(lingongrova > 0)
-			m_rigidBody->setWorldTransform(btTransform(btQuaternion(), btVector3(lingongrova * 200, 0.5, 200))); //make random based
-	}
 
 	void Move(float dt)
 	{
@@ -285,10 +310,10 @@ public:
 	void Die()
 	{
 		m_dead = true;
-		m_emitterSpark->Update(1000, m_transform->Up(), NULL, NULL, NULL, NULL, NULL, NULL, 10, NULL, 0.2, 1);
-		m_emitterSmoke->Update(NULL, m_transform->Up(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-		m_emitterSmoke->Emit();
-		m_emitterSpark->Emit();
+		m_emitterSpark->SetDirection(m_transform->Up());
+		m_emitterSmoke->SetDirection(m_transform->Up());
+		m_emitterSmoke->StartEmitting();
+		m_emitterSpark->StartEmitting();
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
 	}
 
@@ -304,8 +329,8 @@ private:
 	Broadside* m_broadSideFront;
 
 	//Components
-	component::EmitterComponent* m_emitterSpark;
-	component::EmitterComponent* m_emitterSmoke;
+	component::ParticleEmitterComponent* m_emitterSpark;
+	component::ParticleEmitterComponent* m_emitterSmoke;
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;

@@ -64,11 +64,11 @@ namespace thomas
 	template<typename T>
 	T* Scene::LoadObject(thomas::math::Vector3 position, thomas::math::Quaternion rotation)
 	{
-		return object::GameObject::Instantiate<T>(position, rotation, this)
+		return object::GameObject::Instantiate<T>(position, rotation, this);
 	}
 	template<typename T>
 	T* Scene::LoadObject(thomas::math::Vector3 position, thomas::math::Quaternion rotation, object::component::Transform* parent)
 	{
-		return object::GameObject::Instantiate<T>(position, rotation, parent, this)
+		return object::GameObject::Instantiate<T>(position, rotation, parent, this);
 	}
 }

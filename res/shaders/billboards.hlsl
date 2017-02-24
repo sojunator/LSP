@@ -45,9 +45,10 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 {
 	float index = (Gid.x * 256) + GTid.x;
 
-    //ANIMATE
+    
     if (particlesRead[index].delay < 0.0f)
     {
+        //ANIMATE
         float3 particlePosWS = particlesRead[index].position + particlesRead[index].direction * particlesRead[index].speed * deltaTime;
         particlesWrite[index].position = particlePosWS;
         particlesWrite[index].direction = particlesRead[index].direction;

@@ -2,7 +2,6 @@
 #include "Thomas.h"
 #include "Projectile.h"
 #include <time.h>
-#include "object\component\EmitterComponent.h"
 
 using namespace thomas;
 using namespace object;
@@ -19,15 +18,58 @@ public:
 
 	void Start()
 	{
-		m_emitterSmoke = AddComponent<component::EmitterComponent>();
-		m_emitterSmoke->Init(256 * 4 + 254, false, math::Vector3(0, 1, 0), 0.1f, 1.9f, 6.1f, 8.4f, m_transform->GetPosition(), 0.205f, 1.4f, 2.25f, 0.4f, 1.25f, 1, "particleShader", "../res/textures/smokeParticle.png");
-		m_emitterSmoke2 = AddComponent<component::EmitterComponent>();
-		m_emitterSmoke2->Init(256 * 10 + 254, false, math::Vector3(0, 1, 0), 0.1f, 2.7f, 6.1f, 13.4f, m_transform->GetPosition(), 0.08f, 0.5f, 0.95f, 0.4f, 0.9f, 1, "particleShader", "../res/textures/smoke.dds");
-
-		m_emitterSpark = AddComponent<component::EmitterComponent>();
-		m_emitterSpark->Init(320, false, math::Vector3(0, 0, 1), 0.0f, 0.0f, 16.0f, 28.4f, m_transform->GetPosition(), 0.1f, 0.1f, 0.4f, 0.02f, 0.12f, 1, "particleShader", "../res/textures/spark.png");
-
+		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterSmoke->SetNrOfParticles(256 * 4 + 254);
+		//m_emitterSmoke->SetTexture("../res/textures/smokeParticle.png");
+		m_emitterSmoke->SetShader("particleShader");
+		m_emitterSmoke->SetPosition(m_transform->GetPosition());
+		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
+		m_emitterSmoke->SetAlpha(1);
+		m_emitterSmoke->SetMaxDelay(1.75f);
+		m_emitterSmoke->SetMinDelay(0.15f);
+		m_emitterSmoke->SetMaxSpeed(9.0f);
+		m_emitterSmoke->SetMinSpeed(6.0f);
+		m_emitterSmoke->SetMaxSize(2.2f);
+		m_emitterSmoke->SetMinSize(1.4f);
+		m_emitterSmoke->SetMaxLifeTime(1.25f);
+		m_emitterSmoke->SetMinLifeTime(0.4f);
+		m_emitterSmoke->SetSpread(0.2f);
 		
+		m_emitterSmoke2 = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterSmoke2->SetNrOfParticles(256 * 10 + 254);
+		//m_emitterSmoke2->SetTexture("../res/textures/smoke.dds");
+		m_emitterSmoke2->SetShader("particleShader");
+		m_emitterSmoke2->SetPosition(m_transform->GetPosition());
+		m_emitterSmoke2->SetDirection(math::Vector3(0, 1, 0));
+		m_emitterSmoke2->SetAlpha(1);
+		m_emitterSmoke2->SetMaxDelay(2.5f);
+		m_emitterSmoke2->SetMinDelay(0.15f);
+		m_emitterSmoke2->SetMaxSpeed(13.0f);
+		m_emitterSmoke2->SetMinSpeed(6.0f);
+		m_emitterSmoke2->SetMaxSize(1.0f);
+		m_emitterSmoke2->SetMinSize(0.5f);
+		m_emitterSmoke2->SetMaxLifeTime(0.9f);
+		m_emitterSmoke2->SetMinLifeTime(0.4f);
+		m_emitterSmoke2->SetSpread(0.09f);
+
+		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
+
+		m_emitterSpark->SetNrOfParticles(360);
+		//m_emitterSpark->SetTexture("../res/textures/spark.png");
+		m_emitterSpark->SetShader("particleShader");
+		m_emitterSpark->SetPosition(m_transform->GetPosition());
+		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
+		m_emitterSpark->SetAlpha(1);
+		m_emitterSpark->SetMaxDelay(0.0f);
+		m_emitterSpark->SetMinDelay(0.0f);
+		m_emitterSpark->SetMaxSpeed(27.0f);
+		m_emitterSpark->SetMinSpeed(16.0f);
+		m_emitterSpark->SetMaxSize(0.4f);
+		m_emitterSpark->SetMinSize(0.1f);
+		m_emitterSpark->SetMaxLifeTime(0.12f);
+		m_emitterSpark->SetMinLifeTime(0.02f);
+		m_emitterSpark->SetSpread(0.11f);
+
 		roof = 0.8f;
 		ReseedDelay();
 	}
@@ -48,14 +90,16 @@ public:
 		{
 			if (m_monteCarloDelay < 0)
 			{
-				math::Vector3 smokeDir = m_transform->Forward() * 7 + math::Vector3(0, 1, 0);
-				smokeDir.Normalize();
-				m_emitterSmoke->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-				m_emitterSmoke->Emit();
-				m_emitterSmoke2->Update(NULL, smokeDir, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-				m_emitterSmoke2->Emit();
-				m_emitterSpark->Update(NULL, m_transform->Forward(), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
-				m_emitterSpark->Emit();
+				math::Vector3 dir = m_transform->Forward() * 7 + math::Vector3(0, 1, 0);
+				dir.Normalize();
+				m_emitterSmoke->SetDirection(dir);
+				m_emitterSmoke->StartEmitting();
+				m_emitterSmoke2->SetDirection(dir);
+				m_emitterSmoke2->StartEmitting();
+				m_emitterSpark->SetDirection(dir);
+				m_emitterSpark->SetAlpha(1);
+				m_emitterSpark->StartEmitting();
+				
 				
 				
 				// instanciate projectile
@@ -93,7 +137,7 @@ private:
 	bool m_fire;
 	float roof;
 	float m_monteCarloDelay;
-	component::EmitterComponent* m_emitterSmoke;
-	component::EmitterComponent* m_emitterSmoke2;
-	component::EmitterComponent* m_emitterSpark;
+	component::ParticleEmitterComponent* m_emitterSmoke;
+	component::ParticleEmitterComponent* m_emitterSmoke2;
+	component::ParticleEmitterComponent* m_emitterSpark;
 };

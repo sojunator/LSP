@@ -1,6 +1,5 @@
 #include "ParticleSystem.h"
-#include "../object/component/EmitterComponent.h"
-#include "../../../DirectXTK-dec2016/Inc/CommonStates.h"
+
 namespace thomas
 {
 	namespace graphics
@@ -117,7 +116,7 @@ namespace thomas
 			}
 		}
 
-		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::EmitterComponent* emitter)
+		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter)
 		{
 			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
 			ID3D11ShaderResourceView* nullsrv[1] = { NULL };

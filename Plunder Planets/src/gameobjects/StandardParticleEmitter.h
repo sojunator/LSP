@@ -1,7 +1,7 @@
 #pragma once
 #include "Thomas.h"
 #include "Input.h"
-#include "object\component\EmitterComponent.h"
+#include "object\component\ParticleEmitterComponent.h"
 
 using namespace thomas;
 using namespace object;

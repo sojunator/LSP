@@ -43,7 +43,8 @@ float4 PSMain(VS_OUT input) : SV_Target
 {
     float4 outputColor = diffuseTexture.Sample(diffuseSampler, input.uvs);
 
-    outputColor.xyz *= float3(input.alpha, input.alpha, input.alpha);
+    outputColor.xyz *= input.alpha;
+    //input.alpha, input.alpha);
     float fade = input.alpha;
     //fade *= 0.25f;
     outputColor.w *= fade;

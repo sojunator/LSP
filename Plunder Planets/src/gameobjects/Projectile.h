@@ -114,7 +114,7 @@ private:
 	btScalar m_Cd = 0.47f;
 	btScalar constant;
 	
-	component::EmitterComponent* m_emitterComponent;
+	component::ParticleEmitterComponent* m_emitterComponent;
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
 	component::RigidBodyComponent* m_rigidbody;

@@ -141,9 +141,9 @@ namespace thomas
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
-		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::EmitterComponent>())
+		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::ParticleEmitterComponent>())
 		{
-			for (object::component::EmitterComponent* emitterComponent : gameObject->GetComponents<object::component::EmitterComponent>())
+			for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
 			{
 				graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
 			}

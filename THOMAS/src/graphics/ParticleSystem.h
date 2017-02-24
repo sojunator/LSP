@@ -3,6 +3,7 @@
 #include "../utils/d3d.h"
 #include "Shader.h"
 #include "Renderer.h"
+#include "../object/component/ParticleEmitterComponent.h"
 
 namespace thomas
 {
@@ -10,7 +11,7 @@ namespace thomas
 	{
 		namespace component
 		{
-			class EmitterComponent;
+			class ParticleEmitterComponent;
 			class Transform;
 		}
 	}
@@ -30,7 +31,7 @@ namespace thomas
 			
 			static void Init();
 			static void Destroy();
-			static void DrawParticles(object::component::Camera * camera, object::component::EmitterComponent* emitter);
+			static void DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter);
 
 		private:
 			struct BillboardStruct
