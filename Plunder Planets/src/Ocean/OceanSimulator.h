@@ -57,17 +57,13 @@ namespace ocean
 
 	protected:
 
-		struct OceanCollisionDatarStruct
+		struct OceanCollisionDataStruct
 		{
 			thomas::math::Vector2 UVs[2000];
 		}m_oceanCollisionData;
 		int m_nextCollisionIndex = 0;
 		ID3D11Buffer* m_oceanCollisionDataBuffer;
-		struct OceanCollisionHeightDataStruct
-		{
-			float height;
-			thomas::math::Vector3 padding;
-		}m_oceanCollisionHeightData[2000];
+		float* m_oceanCollisionHeightData;
 		ID3D11Buffer* m_oceanCollisionHeightDataBuffer;
 		ID3D11UnorderedAccessView* m_oceanCollisionHeightDataUAV;
 
