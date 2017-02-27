@@ -31,8 +31,8 @@ private:
 	component::SpriteComponent* m_startButton;
 	/*component::SpriteComponent* m_highScoreButton;
 	component::SpriteComponent* m_optionButton;
-	component::SpriteComponent* m_creditsButton;
-	component::SpriteComponent* m_exitButton;*/
+	component::SpriteComponent* m_creditsButton;*/
+	component::SpriteComponent* m_exitButton;
 	component::SpriteComponent* m_backgrounds;
 	component::SoundComponent* m_music;
 

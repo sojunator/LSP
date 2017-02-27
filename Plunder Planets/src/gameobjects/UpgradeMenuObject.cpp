@@ -7,17 +7,17 @@ void UpgradeMenuObject::Start()
 	m_startButton = AddComponent<component::SpriteComponent>();
 	/*m_highScoreButton = AddComponent<component::SpriteComponent>();
 	m_optionButton = AddComponent<component::SpriteComponent>();
-	m_creditsButton = AddComponent<component::SpriteComponent>();
-	m_exitButton = AddComponent<component::SpriteComponent>();*/
+	m_creditsButton = AddComponent<component::SpriteComponent>();*/
+	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 
-	m_music->SetClip("mUpgradeTheme");
+	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
 
 	m_startButton->SetName("UpgradeMenuStart");
-	m_startButton->SetPositionX(150);
-	m_startButton->SetPositionY(60);
+	m_startButton->SetPositionX(1450);
+	m_startButton->SetPositionY(970);
 	m_startButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_startButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_startButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
@@ -45,15 +45,15 @@ void UpgradeMenuObject::Start()
 	m_creditsButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_creditsButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_creditsButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_creditsButton->SetInteractable(true);
+	m_creditsButton->SetInteractable(true);*/
 
-	m_exitButton->SetName("MainMenuExit");
-	m_exitButton->SetPositionX(150);
-	m_exitButton->SetPositionY(450);
+	m_exitButton->SetName("UpgradeMenuExit");
+	m_exitButton->SetPositionX(50);
+	m_exitButton->SetPositionY(970);
 	m_exitButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_exitButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_exitButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_exitButton->SetInteractable(true);*/
+	m_exitButton->SetInteractable(true);
 
 	m_backgrounds->SetName("UpgradeMenuBackground");
 	m_backgrounds->SetPositionX(0);
@@ -66,8 +66,8 @@ void UpgradeMenuObject::Update()
 {
 	if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
 	{
-		/*if (m_exitButton->isHovering())
-			ThomasCore::Exit();*/
+		if (m_exitButton->isHovering())
+			ThomasCore::Exit();
 
 		if (m_startButton->isHovering())
 		{
@@ -75,6 +75,9 @@ void UpgradeMenuObject::Update()
 		}
 	}
 
-	/*if (Input::GetKeyDown(Input::Keys::Escape))
-		ThomasCore::Exit();*/
+	if (Input::GetKeyDown(Input::Keys::Escape))
+		ThomasCore::Exit();
+
+	if (Input::GetKeyDown(Input::Keys::Enter))
+		Scene::LoadScene<GameScene>();
 }

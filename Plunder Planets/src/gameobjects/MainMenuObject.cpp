@@ -78,4 +78,7 @@ void MainMenuObject::Update()
 
 	if (Input::GetKeyDown(Input::Keys::Escape))
 		ThomasCore::Exit();
+
+	if (Input::GetKeyDown(Input::Keys::Enter))
+		Scene::LoadScene<UpgradeScene>();
 }
