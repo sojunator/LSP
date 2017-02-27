@@ -5,14 +5,15 @@
 AI::AI() : thomas::object::component::Component("AI")
 {
 	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");
-	m_playerShip = (Ship*)thomas::object::GameObject::Find("Ship");
+	m_playerShip = thomas::object::GameObject::Find("Ship");
+	m_enemies = thomas::object::GameObject::FindAllOfType("Enemy");
 
-	m_state = Behavior::Searching;
-	m_stateStr = "Searching";
+	m_state = Behavior::Searching;		//Should be Idle on start
+	m_stateStr = "Searching";			//Should be Idle on start
 
 	m_lastKnownPos = math::Vector3::Zero;
 	m_escapeTimer = 0;
-	m_escapeTime = 600;	//Should be 60 seconds
+	m_escapeTime = 600;	//Should be 60 seconds?
 	m_idleTimer = 0;
 	m_idleTime = 50;
 
@@ -33,6 +34,10 @@ bool AI::Collision(math::Vector3 pos)
 
 int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft)
 {
+	float pDotR;
+	float pDotF;
+	float eDotR;
+	float eDotF;
 	math::Vector3 norFor = forward;
 	norFor.Normalize();
 	math::Vector3 norRight = right;
@@ -43,12 +48,36 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	* 0 is forward
 	*/
 
+	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+	playerDir.Normalize();
+	pDotR = playerDir.Dot(norRight);
+	pDotF = playerDir.Dot(norFor);
 
-	//GameObject::Find();
+	if (!objectFront)	//Forward
+	{
+		if (pDotF >= 0.9)
+		{
+			for (unsigned int i = 0; i < m_enemies.size(); ++i)
+			{
+				math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition();
+				enemyDir.Normalize();
+				eDotR = enemyDir.Dot(right);
+				eDotF = enemyDir.Dot(forward);
+			}
+		}
+	}
+	else if (!objectRight)	//Right
+	{
 
+	}
+	else if (!objectLeft)	//Left
+	{
 
+	}
+	else	//Don't know...
+	{
 
-
+	}
 
 
 

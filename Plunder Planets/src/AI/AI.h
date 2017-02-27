@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../gameobjects/Ship.h"
-#include "Pathfinding.h"
 #include "Thomas.h"
 #include "../../THOMAS/src/object/component/Component.h"
 
@@ -43,10 +41,6 @@ private:
 	float m_idleTime;
 
 	TerrainObject* m_terrainObject;
-	Ship* m_playerShip;
-
-	float pDotR;
-	float pDotF;
-
-
+	GameObject* m_playerShip;
+	std::vector<GameObject*> m_enemies;
 };
