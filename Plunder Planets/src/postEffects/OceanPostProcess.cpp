@@ -24,7 +24,7 @@ OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffe
 	m_oceanSettings.choppy_scale = 3.0f;
 	m_oceanSettings.time_scale = 0.3f;
 
-	m_oceanSim = new utils::ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
+	m_oceanSim = new ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 
 	m_oceanSim->updateDisplacementMap(0);
 

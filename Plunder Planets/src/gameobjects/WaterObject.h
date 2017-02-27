@@ -117,7 +117,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_oceanSounds;
 	WaterMaterial* m_waterMaterial;
-	utils::ocean::OceanSimulator* oceanSim;
+	ocean::OceanSimulator* oceanSim;
 	component::RigidBodyComponent* m_rb;
 
 	float waterX;

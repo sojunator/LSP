@@ -1,7 +1,7 @@
 #pragma once
 #include "Thomas.h"
 #include "graphics\Renderer.h"
-#include "utils\Ocean\OceanSimulator.h"
+#include "..\Ocean\OceanSimulator.h"
 using namespace thomas;
 using namespace graphics;
 class OceanPostProcess : public PostEffect
@@ -37,6 +37,6 @@ private:
 	};
 	float time;
 	OceanProperties m_oceanPropertiesStruct;
-	utils::ocean::OceanParameter m_oceanSettings;
-	utils::ocean::OceanSimulator* m_oceanSim;
+	ocean::OceanParameter m_oceanSettings;
+	ocean::OceanSimulator* m_oceanSim;
 };
