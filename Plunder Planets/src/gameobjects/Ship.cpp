@@ -1,5 +1,6 @@
 #include "ship.h"
 #include "TerrainObject.h"
+
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -211,22 +212,14 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 void Ship::ShipAimCannons()
 {
-	/*if (Input::GetKeyDown(Input::Keys::H))
-	{
-		m_aimRight = true;
-	}
-
-	if(m_aimRight)
-		std::cout << "W" << std::endl;*/
-
-
-	if (Input::GetButtonDown(Input::Buttons::RB))
+	if (Input::GetKeyDown(Input::Keys::R) && m_counter == 0)
 	{
 		m_aimstate = AIMSTATE::AIMRIGHT;
 	}
 
 	else if (m_aimstate == AIMSTATE::AIMRIGHT) //RIGHT
 	{
+		m_counter = 5;
 		float deltaX = Input::GetRightStickY();
 		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
@@ -281,8 +274,16 @@ void Ship::ShipAimCannons()
 
 	}
 
-	else if (Input::GetButton(Input::Buttons::RB) && m_aimstate == AIMSTATE::AIMRIGHT)
+	if (Input::GetKeyDown(Input::Keys::R) && m_counter == 5)
 	{
+		/*int delay = 0;
+
+		for (int i = 0; i < 40000; i++)
+		{
+			delay += 1;
+		}*/
+
+		m_counter = 0;
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_aiming = false;
 		m_aimstate = AIMSTATE::AIMDISABLE;

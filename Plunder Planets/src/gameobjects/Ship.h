@@ -29,8 +29,7 @@ public:
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
 	void CameraZoom(float const dt);
-
-
+	
 
 	void PlaySounds(float const dt){}
 	void PlunderIsland();
@@ -114,6 +113,8 @@ private:
 		AIMDISABLE = 2,
 	};
 
+	int m_counter = 0;
+	
 	AIMSTATE m_aimstate = AIMSTATE::AIMDISABLE;
 	
 };
