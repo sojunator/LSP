@@ -40,6 +40,12 @@ namespace ocean
 		// Update ocean wave when tick arrives.
 		void updateDisplacementMap(float time);
 
+		int RegisterOceanCollider(thomas::math::Vector2 UV);
+
+		void UpdateOceanCollision();
+
+		float GetColliderOceanHeight(int index);
+
 		// Texture access
 		ID3D11ShaderResourceView* getD3D11DisplacementMap();
 		ID3D11ShaderResourceView* getD3D11GradientMap();
@@ -50,6 +56,22 @@ namespace ocean
 		thomas::math::Vector3 GetPositionAtCoord(thomas::math::Vector2 texCoord);
 
 	protected:
+
+		struct OceanCollisionDatarStruct
+		{
+			thomas::math::Vector2 UVs[2000];
+		}m_oceanCollisionData;
+		int m_nextCollisionIndex = 0;
+		ID3D11Buffer* m_oceanCollisionDataBuffer;
+		struct OceanCollisionHeightDataStruct
+		{
+			float height;
+			thomas::math::Vector3 padding;
+		}m_oceanCollisionHeightData[2000];
+		ID3D11Buffer* m_oceanCollisionHeightDataBuffer;
+		ID3D11UnorderedAccessView* m_oceanCollisionHeightDataUAV;
+
+		ID3D11ComputeShader* m_oceanColliderCS;
 
 		ID3D11Texture2D* m_1x1StagingTexture;
 

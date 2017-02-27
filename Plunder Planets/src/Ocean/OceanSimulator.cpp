@@ -316,6 +316,14 @@ namespace ocean
 		m_pd3dDevice->CreateTexture2D(&desc, NULL, &m_1x1StagingTexture);
 
 
+		m_oceanCollisionDataBuffer = thomas::utils::D3d::CreateBufferFromStruct(m_oceanCollisionData, D3D11_BIND_CONSTANT_BUFFER);
+		
+		thomas::utils::D3d::CreateCPUReadBufferAndUAV(m_oceanCollisionHeightData,
+			sizeof(m_oceanCollisionHeightData), sizeof(OceanCollisionHeightDataStruct),
+			m_oceanCollisionHeightDataBuffer, m_oceanCollisionHeightDataUAV);
+
+
+
 #ifdef CS_DEBUG_BUFFER
 		D3D11_BUFFER_DESC buf_desc;
 		buf_desc.ByteWidth = 3 * input_half_size * float2_stride;
@@ -568,6 +576,29 @@ namespace ocean
 			m_pd3dImmediateContext->Unmap(m_pDebugBuffer, 0);
 		}
 #endif
+	}
+
+	int OceanSimulator::RegisterOceanCollider(thomas::math::Vector2 UV)
+	{
+
+		m_oceanCollisionData.UVs[m_nextCollisionIndex] = UV;
+		m_nextCollisionIndex++;
+		return m_nextCollisionIndex-1;
+	}
+
+	void OceanSimulator::UpdateOceanCollision()
+	{
+		thomas::ThomasCore::GetDeviceContext()->CSSetShader(m_oceanColliderCS, NULL, 0);
+		thomas::ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &m_oceanCollisionDataBuffer);
+		thomas::ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_oceanCollisionHeightDataUAV, NULL);
+		thomas::ThomasCore::GetDeviceContext()->CSSetShaderResources(0, 1, &m_pDisplacementSRV);
+		
+		thomas::ThomasCore::GetDeviceContext()->Dispatch(m_nextCollisionIndex + 2, 1, 1);
+	}
+
+	float OceanSimulator::GetColliderOceanHeight(int index)
+	{
+		return m_oceanCollisionHeightData[index].height;
 	}
 
 	ID3D11ShaderResourceView* OceanSimulator::getD3D11DisplacementMap()
