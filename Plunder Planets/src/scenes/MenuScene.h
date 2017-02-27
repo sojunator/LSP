@@ -34,7 +34,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("MainMenuBackground", "../res/GUI/menu/background.png");
 		}
 
-		thomas::object::GameObject::Instantiate<MainMenuObject>(this);
+		LoadObject<MainMenuObject>();
 
 	};
 };
