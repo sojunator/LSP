@@ -43,6 +43,17 @@ namespace thomas
 			return NULL;
 		}
 
+		std::vector<GameObject*> GameObject::FindAllOfType(std::string type)
+		{
+			std::vector<GameObject*> temp;
+			for (unsigned int i = 0; i < s_gameObjects.size(); i++)
+			{
+				if (s_gameObjects[i]->m_type == type)
+					temp.push_back(s_gameObjects[i]);
+			}
+			return temp;
+		}
+
 		std::vector<GameObject*> GameObject::GetGameObjects()
 		{
 			return s_gameObjects;

@@ -1,6 +1,7 @@
 #include "AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
 #include "../gameobjects/TerrainObject.h"
+
 AI::AI() : thomas::object::component::Component("AI")
 {
 	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");
@@ -13,7 +14,7 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_escapeTimer = 0;
 	m_escapeTime = 600;	//Should be 60 seconds
 	m_idleTimer = 0;
-	m_idleTime = 100;
+	m_idleTime = 50;
 
 }
 
@@ -41,6 +42,35 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	* -1 is left
 	* 0 is forward
 	*/
+
+
+	//GameObject::Find();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	switch (m_state)
 	{
 	case Behavior::Attacking:

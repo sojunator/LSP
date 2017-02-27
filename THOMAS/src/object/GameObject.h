@@ -23,6 +23,7 @@ namespace thomas
 			std::vector<T*> GetComponents();
 
 			static GameObject* Find(std::string type);
+			static std::vector<GameObject*> FindAllOfType(std::string type);
 
 			template<typename T>
 			static std::vector<GameObject*> FindGameObjectsWithComponent();
