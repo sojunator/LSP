@@ -35,7 +35,7 @@ public:
 	{
 
 		float deltaWater = ((WaterObject*)Find("WaterObject"))->GetWaterHeightAtColliderIndex(m_collisionIndex);
-
+		m_collisionIndex = ((WaterObject*)Find("WaterObject"))->RegisterColliderAt(m_transform->GetPosition());
 		float heightBelowWater = deltaWater - m_transform->GetPosition().y;
 		
 		if (heightBelowWater > 0)
@@ -74,8 +74,6 @@ public:
 				rb->applyDamping(Time::GetDeltaTime());
 		}
 		
-
-
 		return deltaWater;
 
 		
@@ -83,7 +81,7 @@ public:
 
 	void Update()
 	{
-		m_collisionIndex = ((WaterObject*)Find("WaterObject"))->RegisterColliderAt(m_transform->GetPosition());
+
 	}
 
 private:

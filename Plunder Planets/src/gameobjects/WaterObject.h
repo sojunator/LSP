@@ -49,6 +49,11 @@ public:
 
 	}
 
+	void LateUpdate()
+	{
+		m_oceanSim->UpdateOceanCollision();
+	}
+
 	void SetOceanCenter(float x, float z)
 	{
 		float gridSize = 100.0;

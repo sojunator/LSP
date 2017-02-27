@@ -565,7 +565,6 @@ namespace ocean
 		SAFE_RELEASE(old_depth);
 
 		m_pd3dImmediateContext->GenerateMips(m_pGradientSRV);
-		UpdateOceanCollision();
 
 		// Define CS_DEBUG_BUFFER to enable writing a buffer into a file.
 #ifdef CS_DEBUG_BUFFER

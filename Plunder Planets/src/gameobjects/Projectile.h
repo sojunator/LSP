@@ -77,8 +77,9 @@ public:
 
 		if (!m_hitWater)
 		{
-			math::Vector3 deltaWater(0, 0, 0);
-			float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
+			float deltawater = m_water->GetWaterHeightAtColliderIndex(m_oceanCollisionIndex);
+			m_oceanCollisionIndex = m_water->RegisterColliderAt(m_transform->GetPosition());
+			float heightBelowWater = deltawater - m_transform->GetPosition().y;
 			if (heightBelowWater > 3.0)
 			{
 				//Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
@@ -104,6 +105,7 @@ public:
 public:
 	GameObject* m_spawnedBy;
 private:
+	int m_oceanCollisionIndex;
 	float m_velocity;
 	btVector3 m_force;
 	float m_damageAmount;

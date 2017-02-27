@@ -39,8 +39,13 @@ namespace thomas
 		//Temp fix for ocean.
 		graphics::Renderer::RenderSetup(NULL);
 		if (s_currentScene)
+		{
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 				object->Update();
+
+			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
+				object->LateUpdate();
+		}
 		else
 			LOG("No scene set");
 		object::Object::Clean();
