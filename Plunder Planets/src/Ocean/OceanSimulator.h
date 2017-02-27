@@ -67,6 +67,8 @@ namespace ocean
 		ID3D11Buffer* m_oceanCollisionHeightDataBuffer;
 		ID3D11UnorderedAccessView* m_oceanCollisionHeightDataUAV;
 
+		ID3D11Buffer* m_oceanCPUBuffer;
+
 		ID3D11ComputeShader* m_oceanColliderCS;
 
 		ID3D11Texture2D* m_1x1StagingTexture;

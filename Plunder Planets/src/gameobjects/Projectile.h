@@ -77,7 +77,7 @@ public:
 
 		if (!m_hitWater)
 		{
-			math::Vector3 deltaWater = m_water->GetCollisionAt(m_transform);
+			math::Vector3 deltaWater(0, 0, 0);
 			float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
 			if (heightBelowWater > 3.0)
 			{

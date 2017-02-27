@@ -42,6 +42,8 @@ namespace thomas
 			
 			static void CreateCPUReadBufferAndUAV(void* data, UINT byte_width, UINT byte_stride, ID3D11Buffer*& buffer, ID3D11UnorderedAccessView*& UAV);
 
+			static ID3D11Buffer* CreateStagingBuffer(UINT byte_width, UINT byte_stride);
+
 			template<typename T>
 			static ID3D11Buffer* CreateBufferFromStruct(T& dataStruct, D3D11_BIND_FLAG bindFlag);
 

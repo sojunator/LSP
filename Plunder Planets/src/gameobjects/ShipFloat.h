@@ -17,32 +17,33 @@ public:
 
 	void Start()
 	{
-		radius = 0.5;
-		m_transform->SetScale(radius);
-		mass = 625.0;
+		m_radius = 0.5;
+		m_transform->SetScale(m_radius);
+		m_mass = 625.0;
 
 	}
 
 	void SetMass(float m)
 	{
-		mass = m;
-		radius = m / 5000.0;
-		radius *= 5;
-		m_transform->SetScale(radius);
+		m_mass = m;
+		m_radius = m / 5000.0;
+		m_radius *= 5;
+		m_transform->SetScale(m_radius);
 	}
 
 	float UpdateBoat(component::RigidBodyComponent* rb, bool moving) 
 	{
-		math::Vector3 deltaWater = ((WaterObject*)Find("WaterObject"))->GetCollisionAt(m_transform);
 
-		float heightBelowWater = deltaWater.y - m_transform->GetPosition().y;
+		float deltaWater = ((WaterObject*)Find("WaterObject"))->GetWaterHeightAtColliderIndex(m_collisionIndex);
+
+		float heightBelowWater = deltaWater - m_transform->GetPosition().y;
 		
 		if (heightBelowWater > 0)
 		{
 			
-			float volume = (4.0 / 3.0)*math::PI*radius;
-			float height = radius*2;
-			float density = mass/volume;
+			float volume = (4.0 / 3.0)*math::PI*m_radius;
+			float height = m_radius*2;
+			float density = m_mass/volume;
 			float volumeUnderWater = height - heightBelowWater;
 			if (volumeUnderWater < 0)
 				volumeUnderWater = height;
@@ -75,17 +76,18 @@ public:
 		
 
 
-		return deltaWater.y;
+		return deltaWater;
 
 		
 	}
 
 	void Update()
 	{
-
+		m_collisionIndex = ((WaterObject*)Find("WaterObject"))->RegisterColliderAt(m_transform->GetPosition());
 	}
 
 private:
-	float radius;
-	float mass;
+	int m_collisionIndex;
+	float m_radius;
+	float m_mass;
 };

@@ -7,10 +7,10 @@ cbuffer CollisionBuffer : register(b0)
 
 RWStructuredBuffer<float> CollisionWrite : register(u0);
 
-[numthreads(256, 1, 1)]
+[numthreads(1, 1, 1)]
 void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 {
-	float index = (Gid * 256) + GTid.x;
+	float index = Gid.x;
 	float height = displacementMap.SampleLevel(displacementSampler, UVs[index], 0).z;
 
 	CollisionWrite[index] = height;
