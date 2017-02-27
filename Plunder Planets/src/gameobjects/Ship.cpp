@@ -211,8 +211,21 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 void Ship::ShipAimCannons()
 {
+	/*if (Input::GetKeyDown(Input::Keys::H))
+	{
+		m_aimRight = true;
+	}
 
-	if (Input::GetButton(Input::Buttons::RB)) //RIGHT
+	if(m_aimRight)
+		std::cout << "W" << std::endl;*/
+
+
+	if (Input::GetButtonDown(Input::Buttons::RB))
+	{
+		m_aimstate = AIMSTATE::AIMRIGHT;
+	}
+
+	else if (m_aimstate == AIMSTATE::AIMRIGHT) //RIGHT
 	{
 		float deltaX = Input::GetRightStickY();
 		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
@@ -232,15 +245,13 @@ void Ship::ShipAimCannons()
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 		}
 
-
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			m_broadSideLeft->Fire(); //Temporary fix
 			m_treasure -= 50;
 		}
-			
-
 	}
+
 	else if (Input::GetButton(Input::Buttons::LB)) //LEFT
 	{
 		float deltaX = Input::GetRightStickY();
@@ -270,10 +281,11 @@ void Ship::ShipAimCannons()
 
 	}
 
-	else if (Input::GetButtonUp(Input::Buttons::RB) || Input::GetButtonUp(Input::Buttons::LB))
+	else if (Input::GetButton(Input::Buttons::RB) && m_aimstate == AIMSTATE::AIMRIGHT)
 	{
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_aiming = false;
+		m_aimstate = AIMSTATE::AIMDISABLE;
 		m_waterObject->DisableAim();
 	}
 }

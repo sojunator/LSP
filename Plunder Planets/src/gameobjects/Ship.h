@@ -92,6 +92,8 @@ private:
 	float m_soundDelayLeft;
 	bool m_aiming;
 	bool m_prevFrame;
+	bool m_aimRight;
+
 
 	std::string m_SFXs[9] = {
 		"fCreak1",
@@ -104,5 +106,14 @@ private:
 		"fSlowCreak1",
 		"fSlowCreak2"
 	};
+
+	enum class AIMSTATE
+	{
+		AIMRIGHT = 0,
+		AIMLEFT = 1,
+		AIMDISABLE = 2,
+	};
+
+	AIMSTATE m_aimstate = AIMSTATE::AIMDISABLE;
 	
 };
