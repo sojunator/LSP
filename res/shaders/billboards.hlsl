@@ -52,7 +52,7 @@ RWStructuredBuffer<BillboardStruct> billboards : register(u1);
 
 
 [numthreads(256, 1, 1)]
-void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
+void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 {
 	float index = (Gid.x * 256) + GTid.x;
 

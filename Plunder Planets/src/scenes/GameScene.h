@@ -81,12 +81,9 @@ public:
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_ship = LoadObject<Ship>();
-		for (int lingongrova = 0; lingongrova < 20; lingongrova++) //10 = number of AI
+		for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI
 		{
-			m_enemyShip.push_back(LoadObject<Enemy>(math::Vector3(lingongrova * 200, 0.5, 200), math::Quaternion::Identity));
-			if (lingongrova == 0)
-				m_enemyShip[0] = nullptr; //release bugfix
-			//m_enemyShip[lingongrova]->SetPositionAI(lingongrova);
+			m_enemyShip.push_back(LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity));
 		}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
@@ -94,14 +91,6 @@ public:
 
 	};
 	
-	/*void UnloadScene()
-	{
-		thomas::object::GameObject::Destroy(m_cameraObject);
-		thomas::object::GameObject::Destroy(m_terrainObject);
-		thomas::object::GameObject::Destroy(m_ship);
-		thomas::object::GameObject::Destroy(m_waterObject);
-		thomas::object::GameObject::Destroy(m_testDirectionalLight);
-	}*/
 
 private:
 	CameraObject* m_cameraObject;

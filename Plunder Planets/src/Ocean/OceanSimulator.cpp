@@ -607,6 +607,7 @@ namespace ocean
 			float* data = reinterpret_cast<float*>(mappedResource.pData);
 			m_oceanCollisionHeightData = data;
 		}
+		thomas::ThomasCore::GetDeviceContext()->Unmap(m_oceanCPUBuffer, 0);
 		m_nextCollisionIndex = 0; //"clear" the array5
 	}
 
