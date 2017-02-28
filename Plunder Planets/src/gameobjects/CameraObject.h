@@ -36,6 +36,7 @@ public:
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_healthbar = AddComponent<component::SpriteComponent>();
+		m_backbar = AddComponent<component::SpriteComponent>();
 
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
@@ -76,6 +77,12 @@ public:
 		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
 		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
 
+		//Background bar for health
+		m_backbar->SetName("BackHealth");
+		m_backbar->SetPositionX(410); //Offset from top left corner
+		m_backbar->SetPositionY(300);
+		m_backbar->SetScale(math::Vector2(1.0f, 1.0f));
+		m_backbar->SetColor(math::Vector4(0.6f, 0.6f, 0.6f, 1.0f));
 
 		//Simple font
 		m_text->SetFont("Name");
@@ -138,21 +145,22 @@ public:
 			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		if (Input::GetKey(Input::Keys::K))
-		{
-			if (m_healthbar->GetScale().x < 1.0f)
-			{
-				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, 1.0f));
-			}
-		}
+		//if (Input::GetKey(Input::Keys::K))
+		//{
+		//	if (m_health->GetScale().x < 0.685f)
+		//	{
+		//		m_health->SetScale(math::Vector2(m_health->GetScale().x + 0.01f, m_health->GetScale().y));
+		//	}
+		//}
 
-		if (Input::GetKey(Input::Keys::J))
-		{
-			if (m_healthbar->GetScale().x >= 0.0f)
-			{
-				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, 1.0f));
-			}
-		}
+		//if (Input::GetKey(Input::Keys::J))
+		//{
+		//	if (m_health->GetScale().x >= 0.0f)
+		//	{
+		//		m_health->SetScale(math::Vector2(m_health->GetScale().x - 0.01f, m_health->GetScale().y));
+		//	}
+		//}
+
 		if (m_ship && m_ship->GetFreeCamera())
 		{
 			if (Input::GetKey(Input::Keys::A))
@@ -221,13 +229,13 @@ private:
 	component::TextComponent* m_gold;
 	component::SpriteComponent* m_sprite;
 	component::SpriteComponent* m_healthbar;
+	component::SpriteComponent* m_backbar;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;
 	float m_flySpeed;
 	float m_jaw;
 	float m_pitch;
-
 	float m_far;
 	float m_fov;
 

@@ -55,22 +55,25 @@ public:
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
 			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
-
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/le.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
 			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/le.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
 			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/le.png");
 		}		
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
 			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/le.png");
 		}
 
 		//Init text
