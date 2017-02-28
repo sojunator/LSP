@@ -37,4 +37,5 @@ private:
 	component::SoundComponent* m_music;
 
 	int m_yArray[5] = { 0, 0, 0, 0, 0 };
+	float m_delay = 0.3f;
 };
