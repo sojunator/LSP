@@ -1,6 +1,5 @@
 #pragma once
-#include "Thomas.h"
-#include "utils/Ocean/OceanSimulator.h"
+#include "../Ocean/OceanSimulator.h"
 using namespace thomas;
 using namespace graphics;
 
@@ -14,8 +13,8 @@ public:
 	
 	void Update();
 
-	utils::ocean::OceanSimulator* GetOceanSim();
-	utils::ocean::OceanParameter* GetOceanParams();
+	ocean::OceanSimulator* GetOceanSim();
+	ocean::OceanParameter* GetOceanParams();
 
 	void UpdateAim(math::Vector2 pos, math::Vector2 target);
 
@@ -45,8 +44,8 @@ private:
 	};
 	float time;
 	float timeSinceLastUpdate;
-	utils::ocean::OceanParameter m_oceanSettings;
-	utils::ocean::OceanSimulator* m_oceanSim;
+	ocean::OceanParameter m_oceanSettings;
+	ocean::OceanSimulator* m_oceanSim;
 	MaterialProperties m_materialProperties;
 
 	float m_pow;

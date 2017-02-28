@@ -195,6 +195,8 @@
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />
+    <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
+    <ClInclude Include="src\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\scenes\GameScene.h" />
     <ClInclude Include="src\scenes\LoadScreenScene.h" />
     <ClInclude Include="src\scenes\MenuScene.h" />
@@ -216,6 +218,8 @@
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
+    <ClCompile Include="src\Ocean\FFT\fft_512x512_c2c.cpp" />
+    <ClCompile Include="src\Ocean\OceanSimulator.cpp" />
     <ClCompile Include="src\postEffects\OceanPostProcess.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

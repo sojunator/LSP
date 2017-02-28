@@ -40,6 +40,6 @@ private:
 	float m_idleTime;
 
 	TerrainObject* m_terrainObject;
-	GameObject* m_playerShip;
-	std::vector<GameObject*> m_enemies;
+	thomas::object::GameObject* m_playerShip;
+	std::vector<thomas::object::GameObject*> m_enemies;
 };

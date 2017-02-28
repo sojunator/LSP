@@ -51,7 +51,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	//First check with other enemies
 	for (unsigned int i = 0; i < m_enemies.size(); ++i)
 	{
-		if (math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition()) <= 100*100)
+		if (math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition()) <= 50)
 		{
 			math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
 			enemyDir.Normalize();
@@ -84,9 +84,9 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		{
 			if (pDotF >= 0.9)	//Forward
 				return 0;
-			else if ((pDotR < 0.1 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF < 0.0))	//Turn right
+			else if ((pDotR >= 0.1 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
 				return 1;
-			else if ((pDotR < -0.1 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF < 0.0))	//Turn left
+			else if ((pDotR <= -0.1 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
 				return -1;
 		}
 		else if (turnDir == 1)	//Turn right

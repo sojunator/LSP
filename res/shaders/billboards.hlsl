@@ -14,30 +14,41 @@ cbuffer emitterPos : register(b1)
 
 struct ParticleStruct
 {
-	float3 position;
-	float spread;
-	float3 direction;
-	float speed;
-	float delay;
-	float size;
+    float3 position;
+    float spread;
+
+    float3 direction;
+    float speed;
+
+    float endSpeed;
+    float delay;
+    float size;
+    float endSize;
+
     float lifeTimeLeft;
-    float alpha;
+    float timeElapsed;
+    float rotationSpeed;
+    bool looping;
+
+    float4 startColor;
+
+    float4 endColor;
+
+    float3 initPosition;
+    float paddd;
 };
 
 struct BillboardStruct
 {
 	float3 quad[2][3];
+    float2 pad2;
 	float2 uvs[2][3];
-	float alpha;
-	float pad3;
+    float4 colorFactor;
 };
 
 StructuredBuffer<ParticleStruct> particlesRead : register(t0);
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
 RWStructuredBuffer<BillboardStruct> billboards : register(u1);
-
-
-
 
 
 [numthreads(256, 1, 1)]
@@ -51,22 +62,34 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         //ANIMATE
         float3 particlePosWS = particlesRead[index].position + particlesRead[index].direction * particlesRead[index].speed * deltaTime;
         particlesWrite[index].position = particlePosWS;
-        particlesWrite[index].direction = particlesRead[index].direction;
+        
         particlesWrite[index].delay = particlesRead[index].delay;
         particlesWrite[index].speed = particlesRead[index].speed;
-        particlesWrite[index].spread = particlesRead[index].spread;
+        
         particlesWrite[index].size = particlesRead[index].size;
+        
         particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
-        particlesWrite[index].alpha = min(particlesRead[index].alpha, 1);
-
+        particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed;
+        
         float scale = particlesRead[index].size;
+
         if (particlesRead[index].lifeTimeLeft < 0.0f)
         {
-            scale = 0.0f;
+            if (particlesRead[index].looping)
+            {
+                particlesWrite[index].position = particlesRead[index].initPosition;
+                particlesWrite[index].lifeTimeLeft = particlesRead[index].timeElapsed;
+                particlesWrite[index].timeElapsed = 0.0f;
+            }
+            else
+            {
+                scale = particlesRead[index].endSize;
+            }
         }
         else
         {
             particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
+            particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
         }
         //BILLBOARD
         float3 right = cameraRight * scale;
@@ -88,8 +111,11 @@ void main(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         billboards[index].uvs[1][1] = float2(1, 0);
         billboards[index].uvs[1][2] = float2(1, 1);
 
-        billboards[index].alpha = particlesRead[index].alpha;
-
+        float a = particlesRead[index].lifeTimeLeft + particlesRead[index].timeElapsed;
+        float b = particlesRead[index].lifeTimeLeft / a;
+        float c = 1 - b;
+        billboards[index].colorFactor = particlesRead[index].startColor * b + particlesRead[index].endColor * c;
+        particlesWrite[index].size = particlesRead[index].size * b + particlesRead[index].endSize * c;
     }
     else
     {

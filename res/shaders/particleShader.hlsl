@@ -10,18 +10,19 @@ struct VS_OUT
 {
 	float4 pos : SV_POSITION;
 	float2 uvs : TEXCOORD0;
-    float alpha : ALPHAC;
+    float2 paddddd : padding;
+    float4 colorFactor : COLOR0;
 };
 
-struct quadStruct
+struct BillboardStruct
 {
 	float3 quad[2][3];
+    float2 pad2;
 	float2 uvs[2][3];
-	float alpha;
-	float pad3;
+    float4 colorFactor;
 };
 
-StructuredBuffer<quadStruct> particle : register(t1);
+StructuredBuffer<BillboardStruct> particle : register(t1);
 
 VS_OUT  VSMain(uint id : SV_VERTEXID)
 {
@@ -33,7 +34,7 @@ VS_OUT  VSMain(uint id : SV_VERTEXID)
 
 	output.pos = mul(float4(particle[particleIndex].quad[triangleIndex][vertexIndex], 1.0), viewProjMatrix);
 	output.uvs = particle[particleIndex].uvs[triangleIndex][vertexIndex];
-    output.alpha = particle[particleIndex].alpha;
+    output.colorFactor = particle[particleIndex].colorFactor;
 
 	return output;
 }
@@ -43,11 +44,8 @@ float4 PSMain(VS_OUT input) : SV_Target
 {
     float4 outputColor = diffuseTexture.Sample(diffuseSampler, input.uvs);
 
-    outputColor.xyz *= input.alpha;
-    //input.alpha, input.alpha);
-    float fade = input.alpha;
-    //fade *= 0.25f;
-    outputColor.w *= fade;
+    outputColor *= input.colorFactor;
+    
 	return outputColor;
 
 }

@@ -3,6 +3,7 @@
 #include "Broadside.h"
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
+#include "ShipFloat.h"
 
 using namespace thomas;
 using namespace object;
@@ -93,8 +94,8 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = 600;
-		m_turnSpeed = 150;
+		m_speed = 300;
+		m_turnSpeed = 50;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
@@ -106,7 +107,6 @@ public:
 		m_emitterSpark->SetShader("particleShader");
 		m_emitterSpark->SetPosition(m_transform->GetPosition());
 		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
-		m_emitterSpark->SetAlpha(1);
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
 		m_emitterSpark->SetMaxSpeed(20.0f);
@@ -123,7 +123,6 @@ public:
 		m_emitterSmoke->SetShader("particleShader");
 		m_emitterSmoke->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
-		m_emitterSmoke->SetAlpha(1);
 		m_emitterSmoke->SetMaxDelay(2.45f);
 		m_emitterSmoke->SetMinDelay(0.15f);
 		m_emitterSmoke->SetMaxSpeed(9.0f);
@@ -138,7 +137,7 @@ public:
 	}
 
 
-	void Move(float dt)
+	void Move()
 	{
 		math::Vector3 forward = m_transform->Forward();
 		forward.y = 0;		//Remove y so no flying
@@ -149,28 +148,28 @@ public:
 		{
 		case AI::Behavior::Attacking:
 			//FireCannons();
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
+			Rotate();
 			break;
 		case AI::Behavior::Firing:
 			FireCannons();
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
+			Rotate();
 			break;
 		case AI::Behavior::Searching:
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
+			Rotate();
 			break;
 		case AI::Behavior::Idle:
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
+			Rotate();
 			break;
 		default:
 			break;
 		}
 	}
 
-	void Rotate(float dt)
+	void Rotate()
 	{
 		math::Vector3 right = m_transform->Right();
 		right.y = 0;		//Remove y so no flying
@@ -182,9 +181,9 @@ public:
 		if (m_transform->Forward() != m_newForwardVec)
 		{
 			if (m_turnDir == 1)
-				m_rigidBody->applyTorque(btVector3(0, m_turnSpeed * dt * m_rigidBody->GetMass(), 0));
+				m_rigidBody->applyTorque(btVector3(0, m_turnSpeed * m_rigidBody->GetMass(), 0));
 			else if (m_turnDir == -1)
-				m_rigidBody->applyTorque(btVector3(0, -m_turnSpeed * dt * m_rigidBody->GetMass(), 0));
+				m_rigidBody->applyTorque(btVector3(0, -m_turnSpeed * m_rigidBody->GetMass(), 0));
 		}
 	}
 
@@ -283,7 +282,7 @@ public:
 		m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), -m_transform->Forward(), -m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
 
 		if (!m_firstFrame)
-			Move(dt);
+			Move();
 		m_firstFrame = false;
 
 		Float(dt);

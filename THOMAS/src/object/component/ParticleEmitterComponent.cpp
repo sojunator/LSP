@@ -20,18 +20,23 @@ namespace thomas
 				m_nrOfParticles = 255;//256 * 100 + 254;
 				m_isEmitting = false;
 
-				m_particleBufferStruct.direction = math::Vector3(1, 0, 0);
-				m_particleBufferStruct.maxDelay = 1.0f;
-				m_particleBufferStruct.minDelay = 1.0f;
-				m_particleBufferStruct.maxSpeed = 1.0f;
-				m_particleBufferStruct.minSpeed = 1.0f;
 				m_particleBufferStruct.position = math::Vector3(0, 0, 0);
 				m_particleBufferStruct.spread = 1.0f;
+				m_particleBufferStruct.direction = math::Vector3(1, 0, 0);
+				m_particleBufferStruct.maxSpeed = 1.0f;
+				m_particleBufferStruct.minSpeed = 1.0f;
+				m_particleBufferStruct.endSpeed = 1.0f;
+				m_particleBufferStruct.maxDelay = 1.0f;
+				m_particleBufferStruct.minDelay = 1.0f;
 				m_particleBufferStruct.maxSize = 1.0f;
 				m_particleBufferStruct.minSize = 1.0f;
+				m_particleBufferStruct.endSize = 0.0f;
 				m_particleBufferStruct.maxLifeTime = 1.0f;
 				m_particleBufferStruct.minLifeTime = 1.0f;
-				m_particleBufferStruct.alpha = 1.0f;
+				m_particleBufferStruct.rotationSpeed = 0.0f;
+				m_particleBufferStruct.looping = false;
+				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 				m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
 
@@ -68,7 +73,7 @@ namespace thomas
 			}
 
 			void thomas::object::component::ParticleEmitterComponent::SetAll(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed,
-				_In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime, _In_opt_ float alpha)
+				_In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime)
 			{
 				if (nrOfParticles)
 					m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
@@ -92,70 +97,94 @@ namespace thomas
 					m_particleBufferStruct.minLifeTime = particleMinLifeTime;
 				if (particleMaxLifeTime)
 					m_particleBufferStruct.maxLifeTime = particleMaxLifeTime;
-				if (alpha)
-					m_particleBufferStruct.alpha;
+				
 
 				m_shouldUpdateResources = true;
 			}
 
-			void ParticleEmitterComponent::SetPosition(math::Vector3 other)
+			void ParticleEmitterComponent::SetPosition(math::Vector3 const other)
 			{
 				m_particleBufferStruct.position = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetSpread(float other)
+			void ParticleEmitterComponent::SetSpread(float const other)
 			{
 				m_particleBufferStruct.spread = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetDirection(math::Vector3 other)
+			void ParticleEmitterComponent::SetDirection(math::Vector3 const other)
 			{
 				m_particleBufferStruct.direction = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMinSpeed(float other)
-			{
-				m_particleBufferStruct.minSpeed = other;
-				m_shouldUpdateResources = true;
-			}
-			void ParticleEmitterComponent::SetMaxSpeed(float other)
+			void ParticleEmitterComponent::SetMaxSpeed(float const other)
 			{
 				m_particleBufferStruct.maxSpeed = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMinDelay(float other)
+			void ParticleEmitterComponent::SetMinSpeed(float const other)
 			{
-				m_particleBufferStruct.minDelay = other;
+				m_particleBufferStruct.minSpeed = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMaxDelay(float other)
+			void ParticleEmitterComponent::SetEndSpeed(float const other)
+			{
+				m_particleBufferStruct.endSpeed = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetMaxDelay(float const other)
 			{
 				m_particleBufferStruct.maxDelay = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMinSize(float other)
+			void ParticleEmitterComponent::SetMinDelay(float const other)
 			{
-				m_particleBufferStruct.minSize = other;
+				m_particleBufferStruct.minDelay = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMaxSize(float other)
+			void ParticleEmitterComponent::SetMaxSize(float const other)
 			{
 				m_particleBufferStruct.maxSize = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMinLifeTime(float other)
+			void ParticleEmitterComponent::SetMinSize(float const other)
+			{
+				m_particleBufferStruct.minSize = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetEndSize(float const other)
+			{
+				m_particleBufferStruct.endSize = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetMinLifeTime(float const other)
 			{
 				m_particleBufferStruct.minLifeTime = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetMaxLifeTime(float other)
+			void ParticleEmitterComponent::SetMaxLifeTime(float const other)
 			{
 				m_particleBufferStruct.maxLifeTime = other;
 				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetAlpha(float other)
+			void ParticleEmitterComponent::SetRotationSpeed(float const other)
 			{
-				m_particleBufferStruct.alpha = other;
+				m_particleBufferStruct.rotationSpeed = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetLooping(bool const other)
+			{
+				m_particleBufferStruct.looping = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetStartColor(math::Vector4 const other)
+			{
+				m_particleBufferStruct.startColor = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetEndColor(math::Vector4 const other)
+			{
+				m_particleBufferStruct.endColor = other;
 				m_shouldUpdateResources = true;
 			}
 

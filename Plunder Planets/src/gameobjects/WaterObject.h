@@ -18,7 +18,7 @@ public:
 		m_dimensions = 5000;
 
 		m_waterMaterial = (WaterMaterial*)(Material::CreateMaterial("waterMat", "waterMaterial"));
-		oceanSim = ((WaterMaterial*)m_waterMaterial)->GetOceanSim();
+		m_oceanSim = ((WaterMaterial*)m_waterMaterial)->GetOceanSim();
 		utils::Plane::PlaneData pData = utils::Plane::CreatePlane(m_dimensions, 1.0 / 100);
 		Mesh* m = new Mesh(pData.verts, pData.indices, "oceanMesh", m_waterMaterial);
 		std::vector<Mesh*> meshes;
@@ -49,6 +49,11 @@ public:
 
 	}
 
+	void LateUpdate()
+	{
+		m_oceanSim->UpdateOceanCollision();
+	}
+
 	void SetOceanCenter(float x, float z)
 	{
 		float gridSize = 100.0;
@@ -63,12 +68,15 @@ public:
 	}
 
 
-
-	math::Vector3 GetCollisionAt(component::Transform* transform)
+	float GetWaterHeightAtColliderIndex(int index)
 	{
-		math::Vector3 position = transform->GetPosition();
-		float uvScale = 1.0 /oceanSim->getParameters().patch_length*2;
-		float uvOffset = 0.5f / oceanSim->getParameters().dmap_dim;
+		return m_oceanSim->GetColliderOceanHeight(index);
+	}
+
+	int RegisterColliderAt(math::Vector3 position)
+	{
+		float uvScale = 1.0 /m_oceanSim->getParameters().patch_length*2;
+		float uvOffset = 0.5f / m_oceanSim->getParameters().dmap_dim;
 		math::Vector2 texCoord;
 		position.x -= m_dimensions/2;
 		position.z += m_dimensions/2;
@@ -94,12 +102,7 @@ public:
 			texCoord.y = std::fmod(texCoord.y, 1.0);
 		}
 
-		math::Vector3 waterPos = oceanSim->GetPositionAtCoord(texCoord);
-		position = transform->GetPosition();
-		
-		waterPos = math::Vector3(waterPos.x, waterPos.y, waterPos.z);
-		return waterPos;
-
+		return m_oceanSim->RegisterOceanCollider(texCoord);
 	}
 	void UpdateAim(math::Vector2 pos, math::Vector2 target)
 	{
@@ -117,7 +120,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_oceanSounds;
 	WaterMaterial* m_waterMaterial;
-	utils::ocean::OceanSimulator* oceanSim;
+	ocean::OceanSimulator* m_oceanSim;
 	component::RigidBodyComponent* m_rb;
 
 	float waterX;
