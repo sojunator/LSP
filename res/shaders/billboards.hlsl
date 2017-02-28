@@ -89,9 +89,9 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         else
         {
             particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
-            
+            particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
         }
-        particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
+        
         //BILLBOARD
         float3 right = cameraRight * scale;
         float3 up =  -cameraUp* scale;

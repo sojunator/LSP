@@ -85,11 +85,11 @@ void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     float randClamp = (1.0 / 4294967296.0);
     
 	
-    float delay = (w1 * randClamp * (initMaxDelay - initMinDelay)) + initMinDelay;
-    float speed = (w2 * randClamp * (initMaxSpeed - initMinSpeed)) + initMinSpeed;
+    float delay = max((w1 * randClamp * (initMaxDelay - initMinDelay)), 0) + initMinDelay;
+    float speed = max((w2 * randClamp * (initMaxSpeed - initMinSpeed)), 0) + initMinSpeed;
 
-    float size = (w4 * randClamp * (initMaxSize - initMinSize)) + initMinSize;
-    float lifeTime = (w5 * randClamp * (initMaxSize - initMinLifeTime)) + initMinLifeTime;
+    float size = max((w4 * randClamp * (initMaxSize - initMinSize)), 0) + initMinSize;
+    float lifeTime = max((w5 * randClamp * (initMaxSize - initMinLifeTime)), 0) + initMinLifeTime;
 
     float randClampTimes2 = randClamp * 2;
 
