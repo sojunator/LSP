@@ -79,8 +79,8 @@ public:
 
 		//Healthbar
 		m_healthbar->SetName("Health");
-		m_healthbar->SetPositionX(10); //Offset from top left corner
-		m_healthbar->SetPositionY(960);
+		m_healthbar->SetPositionX(16.5); //Offset from top left corner
+		m_healthbar->SetPositionY(964);
 		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
 		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
 
