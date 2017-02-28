@@ -95,8 +95,8 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         //BILLBOARD
         float3 right = cameraRight * scale;
         float3 up = cameraUp * scale;
-        float angletest = particlesRead[index].timeElapsed * 0.0f;
-        float angle90 = angletest + 0.785;
+        float angletest = particlesRead[index].timeElapsed * 10.0f;
+        float angle90 = angletest + 1.57075;
 
         float x1 = saturate((cos(angletest) - sin(angletest)) * -1);
         float y1 = saturate((cos(angletest) + sin(angletest)) * -1);
@@ -111,23 +111,23 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         billboards[index].quad[0][0] = particlePosWS + up + right;
         billboards[index].quad[0][1] = particlePosWS + up - right;
         billboards[index].quad[0][2] = particlePosWS - up + right;
-        //billboards[index].uvs[1][0] = float2(x1, y1);
-        //billboards[index].uvs[1][1] = float2(x2, y2);
-        //billboards[index].uvs[1][2] = float2(x4, y4);
-        billboards[index].uvs[0][0] = float2(0, 0);
-        billboards[index].uvs[0][1] = float2(1, 0);
-        billboards[index].uvs[0][2] = float2(0, 1);
+        //billboards[index].uvs[0][0] = float2(x3, y3);
+        //billboards[index].uvs[0][1] = float2(x4, y4);
+        //billboards[index].uvs[0][2] = float2(x2, y2);
+        billboards[index].uvs[0][0] = float2(1, 1);
+        billboards[index].uvs[0][1] = float2(0, 1);
+        billboards[index].uvs[0][2] = float2(1, 0);
         //tri 2
         billboards[index].quad[1][0] = particlePosWS - up + right;
         billboards[index].quad[1][1] = particlePosWS + up - right;
         billboards[index].quad[1][2] = particlePosWS - up - right;
 
-        //billboards[index].uvs[1][0] = float2(x4, y4);
-        //billboards[index].uvs[1][1] = float2(x2, y2);
-        //billboards[index].uvs[1][2] = float2(x3, y3);
+        //billboards[index].uvs[1][0] = float2(x2, y2);
+        //billboards[index].uvs[1][1] = float2(x4, y4);
+        //billboards[index].uvs[1][2] = float2(x1, y1);
         billboards[index].uvs[1][0] = float2(1, 0);
         billboards[index].uvs[1][1] = float2(0, 1);
-        billboards[index].uvs[1][2] = float2(1, 1);
+        billboards[index].uvs[1][2] = float2(0, 0);
 
         float a = particlesRead[index].lifeTimeLeft + particlesRead[index].timeElapsed;
         float b = particlesRead[index].lifeTimeLeft / a;
