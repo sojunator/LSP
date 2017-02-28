@@ -1,5 +1,6 @@
 #include "ship.h"
 #include "TerrainObject.h"
+
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -211,8 +212,18 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 void Ship::ShipAimCannons()
 {
+	if (Input::GetButtonDown(Input::Buttons::RB))
+	{
+		m_aimRight = !m_aimRight;
+		m_aimLeft = false;
+	}
+	else if(Input::GetButtonDown(Input::Buttons::LB))
+	{
+		m_aimLeft = !m_aimLeft;
+		m_aimRight = false;
+	}
 
-	if (Input::GetButton(Input::Buttons::RB)) //RIGHT
+	if (m_aimRight) //RIGHT
 	{
 		float deltaX = Input::GetRightStickY();
 		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
@@ -232,16 +243,14 @@ void Ship::ShipAimCannons()
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 		}
 
-
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			m_broadSideLeft->Fire(); //Temporary fix
 			m_treasure -= 50;
 		}
-			
-
 	}
-	else if (Input::GetButton(Input::Buttons::LB)) //LEFT
+
+	else if (m_aimLeft) //LEFT
 	{
 		float deltaX = Input::GetRightStickY();
 		
@@ -270,12 +279,25 @@ void Ship::ShipAimCannons()
 
 	}
 
-	else if (Input::GetButtonUp(Input::Buttons::RB) || Input::GetButtonUp(Input::Buttons::LB))
+	if (!m_aimLeft && !m_aimRight)
 	{
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_aiming = false;
 		m_waterObject->DisableAim();
 	}
+
+	//if (Input::GetKeyDown(Input::Keys::R) && m_counter == 5)
+	//{
+	//	/*int delay = 0;
+
+	//	for (int i = 0; i < 40000; i++)
+	//	{
+	//		delay += 1;
+	//	}*/
+
+	//	m_counter = 0;
+	//	
+	//}
 }
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
