@@ -89,27 +89,37 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         else
         {
             particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
-            particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
+            
         }
+        particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
         //BILLBOARD
         float3 right = cameraRight * scale;
-        float3 up = cameraUp * scale;	
+        float3 up =  -cameraUp* scale;
 
-         //tri 1
+        float angletest = 0;
+        //particlesRead[index].timeElapsed * 1.0f;
+
+        float sinangle = sin(angletest);
+        float cosangle = cos(angletest);
+
+        float3 temp = cosangle * right - sinangle * up;
+        right = sinangle * right + cosangle * up;
+        up = temp;
+
+        //tri 1
         billboards[index].quad[0][0] = particlePosWS + up + right;
         billboards[index].quad[0][1] = particlePosWS + up - right;
         billboards[index].quad[0][2] = particlePosWS - up + right;
-        billboards[index].uvs[0][0] = float2(0, 0);
-        billboards[index].uvs[0][1] = float2(1, 0);
-        billboards[index].uvs[0][2] = float2(0, 1);
+        billboards[index].uvs[0][0] = float2(1, 1);
+        billboards[index].uvs[0][1] = float2(0, 1);
+        billboards[index].uvs[0][2] = float2(1, 0);
         //tri 2
         billboards[index].quad[1][0] = particlePosWS - up + right;
         billboards[index].quad[1][1] = particlePosWS + up - right;
         billboards[index].quad[1][2] = particlePosWS - up - right;
-
-        billboards[index].uvs[1][0] = float2(0, 1);
-        billboards[index].uvs[1][1] = float2(1, 0);
-        billboards[index].uvs[1][2] = float2(1, 1);
+        billboards[index].uvs[1][0] = float2(1, 0);
+        billboards[index].uvs[1][1] = float2(0, 1);
+        billboards[index].uvs[1][2] = float2(0, 0);
 
         float a = particlesRead[index].lifeTimeLeft + particlesRead[index].timeElapsed;
         float b = particlesRead[index].lifeTimeLeft / a;
