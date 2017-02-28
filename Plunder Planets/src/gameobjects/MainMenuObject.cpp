@@ -122,33 +122,32 @@ void MainMenuObject::Update()
 			ThomasCore::Exit();
 
 	}
-
 	//Menu scrolling, move to own function
-	if (Input::GetLeftStickY() || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetButton(Input::Buttons::DPAD_UP))
+	if (Input::GetLeftStickY() || Input::GetButtonDown(Input::Buttons::DPAD_DOWN) || Input::GetButtonDown(Input::Buttons::DPAD_UP))
 	{
 		float x = Input::GetLeftStickY(); //Debugging
-		float y = Input::GetButton(Input::Buttons::DPAD_DOWN); //Debugging
+		float y = Input::GetButtonDown(Input::Buttons::DPAD_DOWN); //Debugging
 		for (int i = 0; i < 5; i++)
 		{
 			int tempMemes = m_yArray[4];// debugging
-			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP))) //Player presses up, we're already at the top
+			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButtonDown(Input::Buttons::DPAD_UP))) //Player presses up, we're already at the top
 			{
 				m_yArray[0] = 1;
 				break;
 			}
-			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP))) //Player presses up
+			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButtonDown(Input::Buttons::DPAD_UP))) //Player presses up
 			{
 				m_yArray[i - 1] = 1; //Select Sprite Above
 				m_yArray[i] = 0; //Deselect Current Sprite
 				break;
 			}
-			else if ((i < 4) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down
+			else if ((i < 4) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() < 0) || Input::GetButtonDown(Input::Buttons::DPAD_DOWN))) //Player presses down
 			{
 				m_yArray[i + 1] = 1;
 				m_yArray[i] = 0;
 				break;
 			} 
-			else if (m_yArray[4] == 1 && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom
+			else if (m_yArray[4] == 1 && ((Input::GetLeftStickY() < 0) || Input::GetButtonDown(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom
 			{
 				m_yArray[4] = 1;
 				break;
