@@ -301,21 +301,6 @@ namespace ocean
 		fft512x512_create_plan(&m_fft_plan, m_pd3dDevice, 3);
 
 
-		D3D11_TEXTURE2D_DESC desc;
-		desc.Width = 1;
-		desc.Height = 1;
-		desc.MipLevels = 1;
-		desc.ArraySize = 1;
-		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = 0;
-		desc.Usage = D3D11_USAGE_STAGING;
-		desc.BindFlags = 0;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-		desc.MiscFlags = 0;
-		m_pd3dDevice->CreateTexture2D(&desc, NULL, &m_1x1StagingTexture);
-
-
 		m_oceanCollisionDataBuffer = thomas::utils::D3d::CreateBufferFromStruct(m_oceanCollisionData, D3D11_BIND_CONSTANT_BUFFER);
 		
 		m_oceanCPUBuffer = thomas::utils::D3d::CreateStagingBuffer(sizeof(float) * 2000, sizeof(float));
@@ -388,8 +373,6 @@ namespace ocean
 
 		SAFE_RELEASE(m_pImmutableCB);
 		SAFE_RELEASE(m_pPerFrameCB);
-
-		SAFE_RELEASE(m_1x1StagingTexture);
 
 		SAFE_RELEASE(m_pd3dImmediateContext);
 
@@ -653,27 +636,6 @@ namespace ocean
 		this->m_param = param;
 	}
 
-	thomas::math::Vector3 OceanSimulator::GetPositionAtCoord(thomas::math::Vector2 texCoord)
-	{
-
-		float x = texCoord.x *m_param.dmap_dim;
-		float y = texCoord.y*m_param.dmap_dim;
-		D3D11_BOX srcBox;
-		srcBox.left = x;
-		srcBox.right = x + 1;
-		srcBox.top = y;
-		srcBox.bottom = y + 1;
-		srcBox.front = 0;
-		srcBox.back = 1;
-
-		thomas::ThomasCore::GetDeviceContext()->CopySubresourceRegion(m_1x1StagingTexture, 0, 0, 0, 0, m_pDisplacementMap, 0, &srcBox);
-
-		D3D11_MAPPED_SUBRESOURCE msr;
-		thomas::ThomasCore::GetDeviceContext()->Map(m_1x1StagingTexture, 0, D3D11_MAP_READ, 0, &msr);
-		thomas::math::Vector4* pixel = (thomas::math::Vector4*)msr.pData;
-		thomas::ThomasCore::GetDeviceContext()->Unmap(m_1x1StagingTexture, 0);
-		return thomas::math::Vector3(pixel->x, pixel->z, pixel->y);
-	}
 
 }
 

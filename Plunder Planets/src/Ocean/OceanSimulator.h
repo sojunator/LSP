@@ -53,10 +53,10 @@ namespace ocean
 		const OceanParameter& getParameters();
 		void SetParameters(OceanParameter& param);
 
-		thomas::math::Vector3 GetPositionAtCoord(thomas::math::Vector2 texCoord);
 
 	protected:
 
+		// ---------------------------------- Collision -----------------------------------
 		struct OceanCollisionDataStruct
 		{
 			thomas::math::Vector2 UVs[2000];
@@ -71,7 +71,6 @@ namespace ocean
 
 		ID3D11ComputeShader* m_oceanColliderCS;
 
-		ID3D11Texture2D* m_1x1StagingTexture;
 
 		OceanParameter m_param;
 
