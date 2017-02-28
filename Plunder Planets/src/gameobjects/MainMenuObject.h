@@ -36,5 +36,5 @@ private:
 	component::SpriteComponent* m_backgrounds;
 	component::SoundComponent* m_music;
 
-	int m_yArray[5] = { 0 };
+	int m_yArray[5] = { 0, 0, 0, 0, 0 };
 };

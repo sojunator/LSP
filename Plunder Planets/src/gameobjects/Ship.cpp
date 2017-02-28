@@ -406,7 +406,7 @@ void Ship::Update()
 	float left_x = Input::GetLeftStickX(); //not used?
 	float left_y = Input::GetLeftStickY(); //not used?
 
-										   //If cam changed with arrow keys
+	//If cam changed with arrow keys
 	if (Input::GetKey(Input::Keys::Right))
 		right_x = -Input::GetKey(Input::Keys::Right);
 	else if (Input::GetKey(Input::Keys::Left))

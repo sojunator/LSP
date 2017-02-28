@@ -68,31 +68,97 @@ void MainMenuObject::Start()
 
 void MainMenuObject::Update()
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++) //Move to own function
 	{
 		if (m_yArray[i] == 1)
 		{
 			if (i == 0)
 				m_startButton->SetHovering(true);
+			if (i == 1)
+				m_highScoreButton->SetHovering(true);
+			if (i == 2)
+				m_optionButton->SetHovering(true);
+			if (i == 3)
+				m_creditsButton->SetHovering(true);
+			if (i == 4)
+				m_exitButton->SetHovering(true);
 		}
 		else
-			m_yArray[i] = 0;
+		{
+			if (i == 0)
+				m_startButton->SetHovering(false);
+			if (i == 1)
+				m_highScoreButton->SetHovering(false);
+			if (i == 2)
+				m_optionButton->SetHovering(false);
+			if (i == 3)
+				m_creditsButton->SetHovering(false);
+			if (i == 4)
+				m_exitButton->SetHovering(false);
+		}
+			
 	}
-	m_yArray[0];
 	if (Input::GetButton(Input::Buttons::A))
 	{
-		if (m_exitButton->isHovering())
-			ThomasCore::Exit();
-
 		if (m_startButton->isHovering())
 		{
 			Scene::LoadScene<UpgradeScene>();
 		}
+
+		if (m_highScoreButton->isHovering())
+		{
+			//Add Highscore
+		}
+		if (m_optionButton->isHovering())
+		{
+			//Add Settings
+		}
+		if (m_creditsButton->isHovering())
+		{
+			//Add Credits
+		}
+
+		if (m_exitButton->isHovering())
+			ThomasCore::Exit();
+
 	}
 
-	if (Input::GetKeyDown(Input::Keys::Escape))
-		ThomasCore::Exit();
+	//Menu scrolling, move to own function
+	if (Input::GetLeftStickY() || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetButton(Input::Buttons::DPAD_UP))
+	{
+		float x = Input::GetLeftStickY(); //Debugging
+		float y = Input::GetButton(Input::Buttons::DPAD_DOWN); //Debugging
+		for (int i = 0; i < 5; i++)
+		{
+			int tempMemes = m_yArray[4];// debugging
+			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP))) //Player presses up, we're already at the top
+			{
+				m_yArray[0] = 1;
+				break;
+			}
+			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP))) //Player presses up
+			{
+				m_yArray[i - 1] = 1; //Select Sprite Above
+				m_yArray[i] = 0; //Deselect Current Sprite
+				break;
+			}
+			else if ((i < 4) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down
+			{
+				m_yArray[i + 1] = 1;
+				m_yArray[i] = 0;
+				break;
+			} 
+			else if (m_yArray[4] == 1 && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom
+			{
+				m_yArray[4] = 1;
+				break;
+			}
+		}
+	}
 
-	if (Input::GetKeyDown(Input::Keys::Enter))
+	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButton(Input::Buttons::START))
 		Scene::LoadScene<UpgradeScene>();
+
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButton(Input::Buttons::BACK))
+		ThomasCore::Exit();
 }
