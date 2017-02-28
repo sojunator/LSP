@@ -15,7 +15,6 @@ namespace thomas
 
 			void ParticleEmitterComponent::Start()
 			{
-				std::srand(time(NULL));
 				m_shouldUpdateResources = false;
 				m_nrOfParticles = 255;//256 * 100 + 254;
 				m_isEmitting = false;
@@ -44,12 +43,7 @@ namespace thomas
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/standardParticle.png");
 				m_booleanSwapUAVandSRV = true;
 
-				ID3DBlob* shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/initParticles.hlsl", "cs_5_0", "main");
-				HRESULT hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_particlesCS);
-				if (FAILED(hr))
-				{
-					LOG_HR(hr);
-				}
+				m_particlesCS = graphics::Shader::GetShaderByName("InitParticleCS");
 
 				CreateParticleUAVsandSRVs();
 				CreateInitBuffer();
@@ -272,17 +266,17 @@ namespace thomas
 			void thomas::object::component::ParticleEmitterComponent::InitialDispatch()
 			{
 				ID3D11UnorderedAccessView* nulluav[1] = { NULL };
-				ThomasCore::GetDeviceContext()->CSSetShader(s_particlesCS, 0, NULL);
-
-				ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &m_particleBuffer);
-
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_particleUAV2, NULL);
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &m_particleUAV1, NULL);
+				m_particlesCS->Bind();
+				m_particlesCS->BindBuffer(m_particleBuffer, 0);
+				m_particlesCS->BindUAV(m_particleUAV2, 0);
+				m_particlesCS->BindUAV(m_particleUAV1, 1);
 
 				ThomasCore::GetDeviceContext()->Dispatch(GetNrOfParticles() / 256 + 1, 1, 1);
 
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
-				ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
+				m_particlesCS->BindUAV(NULL, 0);
+				m_particlesCS->BindUAV(NULL, 0);
+				m_particlesCS->BindBuffer(NULL, 0);
+				m_particlesCS->Unbind();
 			}
 
 			unsigned int thomas::object::component::ParticleEmitterComponent::GetNrOfParticles() const

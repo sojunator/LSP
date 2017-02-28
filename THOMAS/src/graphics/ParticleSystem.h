@@ -67,7 +67,8 @@ namespace thomas
 			
 			static ID3D11Buffer* s_billboardsBuffer;
 			
-			static ID3D11ComputeShader* s_billboardCS;
+			static Shader* s_billboardCS;
+			static Shader* s_initParticleCS;
 			static ID3D11UnorderedAccessView* s_billboardsUAV;
 			static ID3D11ShaderResourceView* s_billboardsSRV;
 

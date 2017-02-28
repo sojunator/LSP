@@ -130,7 +130,7 @@ namespace thomas
 				ID3D11Buffer* m_particleBuffer2;
 				bool m_booleanSwapUAVandSRV;
 
-				ID3D11ComputeShader* s_particlesCS;
+				graphics::Shader* m_particlesCS;
 				ID3D11Buffer* m_particleBuffer;
 
 				InitParticleBufferStruct m_particleBufferStruct;
