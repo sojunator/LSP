@@ -12,6 +12,8 @@ void MainMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 
+	
+
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
@@ -23,6 +25,7 @@ void MainMenuObject::Start()
 	m_startButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_startButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_startButton->SetInteractable(true);
+	m_startButton->SetHovering(true);
 
 	m_highScoreButton->SetName("MainMenuHighScore");
 	m_highScoreButton->SetPositionX(150);
@@ -65,6 +68,14 @@ void MainMenuObject::Start()
 
 void MainMenuObject::Update()
 {
+	for (int i = 0; i < 5; i++)
+	{
+		if (m_yArray[i] == 1)
+		{
+			/*if (i == 0)
+				m_startButton->*/
+		}
+	}
 	if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
 	{
 		if (m_exitButton->isHovering())
