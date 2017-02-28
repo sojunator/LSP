@@ -17,22 +17,21 @@ public:
 public:
 	AI();
 	~AI();
-	
-	bool Collision(math::Vector3 pos);
-	int TurnDir(math::Vector3  pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft);
-	int FireCannons(math::Vector3 pos, math::Vector3 right);
-	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
-	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
+	bool Collision(thomas::math::Vector3 pos);
+	int TurnDir(thomas::math::Vector3  pos, thomas::math::Vector3 forward, thomas::math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft);
+	int FireCannons(thomas::math::Vector3 pos, thomas::math::Vector3 right);
+	void InsideRadius(float radius, thomas::math::Vector3 pos, thomas::math::Vector3& dir);
+	void InsideAttackRadius(float radius, thomas::math::Vector3 pos, thomas::math::Vector3& dir);
 	Behavior GetState();
 	void Escape();
 	void IdleTimer();
 
-	math::Vector3 GetTargetPos();
+	thomas::math::Vector3 GetTargetPos();
 
 private:
 	Behavior m_state;
 	std::string m_stateStr;
-	math::Vector3 m_lastKnownPos;
+	thomas::math::Vector3 m_lastKnownPos;
 
 	float m_escapeTimer;
 	float m_escapeTime;
