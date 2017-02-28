@@ -519,5 +519,59 @@ namespace thomas
 				LOG_HR(result);
 			}
 		}
+		void D3d::CreateCPUReadBufferAndUAV(void * data, UINT byte_width, UINT byte_stride, ID3D11Buffer *& buffer, ID3D11UnorderedAccessView *& UAV)
+		{
+			HRESULT result;
+			// Create buffer
+			D3D11_BUFFER_DESC buf_desc;
+			buf_desc.ByteWidth = byte_width;
+			buf_desc.Usage = D3D11_USAGE_DEFAULT;
+			buf_desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+			buf_desc.CPUAccessFlags = 0;
+			buf_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			buf_desc.StructureByteStride = byte_stride;
+
+			D3D11_SUBRESOURCE_DATA init_data = { data, 0, 0 };
+
+			result = ThomasCore::GetDevice()->CreateBuffer(&buf_desc, data != NULL ? &init_data : NULL, &buffer);
+			if (FAILED(result))
+			{
+				LOG_HR(result);
+			}
+
+			// Create undordered access view
+			D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc;
+			uav_desc.Format = DXGI_FORMAT_UNKNOWN;
+			uav_desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+			uav_desc.Buffer.FirstElement = 0;
+			uav_desc.Buffer.NumElements = byte_width / byte_stride;
+			uav_desc.Buffer.Flags = 0;
+
+			result = ThomasCore::GetDevice()->CreateUnorderedAccessView(buffer, &uav_desc, &UAV);
+			if (FAILED(result))
+			{
+				LOG_HR(result);
+			}
+		}
+		ID3D11Buffer * D3d::CreateStagingBuffer(UINT byte_width, UINT byte_stride)
+		{
+			HRESULT result;
+			// Create buffer
+			D3D11_BUFFER_DESC buf_desc;
+			buf_desc.ByteWidth = byte_width;
+			buf_desc.Usage = D3D11_USAGE_STAGING;
+			buf_desc.BindFlags = 0;
+			buf_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+			buf_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			buf_desc.StructureByteStride = byte_stride;
+
+			ID3D11Buffer* buffer;
+			result = ThomasCore::GetDevice()->CreateBuffer(&buf_desc, NULL, &buffer);
+			if (FAILED(result))
+			{
+				LOG_HR(result);
+			}
+			return buffer;
+		}
 	}
 }

@@ -30,7 +30,7 @@ namespace thomas
 			Shader(std::string name, InputLayouts inputLayout, std::string filePath, Scene* scene);
 			Shader(std::string name, InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, 
 				std::string hullShader, std::string domainShader, std::string pixelShader, Scene* scene);
-
+			Shader(std::string name, std::string ComputeShader, Scene* scene);
 			void ReloadShader();
 		public:
 
@@ -38,18 +38,17 @@ namespace thomas
 
 			~Shader();
 			bool Bind();
-			static bool Unbind();
+			bool Unbind();
 			std::string GetName();
 
 			bool BindBuffer(ID3D11Buffer* resource, ResourceType type);
 			bool BindBuffer(ID3D11Buffer* resource, int slot);
-			bool BindTextures(ID3D11ShaderResourceView* texture, int slot);
+			bool BindUAV(ID3D11UnorderedAccessView* uav, int slot);
+			bool BindResource(ID3D11ShaderResourceView* texture, int slot);
 			bool BindTextureSampler(ID3D11SamplerState* sampler, int slot);
 			bool BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY type);
 			bool BindVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
 			bool BindIndexBuffer(ID3D11Buffer* indexBuffer);
-			
-			
 
 			static ID3DBlob* Compile(std::string source, std::string profile, std::string main);
 
@@ -62,6 +61,8 @@ namespace thomas
 				std::string domainShader, 
 				std::string pixelShader,
 				Scene* scene);
+
+			static Shader* CreateComputeShader(std::string name, std::string computeShader, Scene* scene);
 
 			static Shader* GetCurrentBoundShader();
 			static Shader* GetShaderByName(std::string name);
@@ -90,6 +91,9 @@ namespace thomas
 				ID3D11DomainShader* domainShader;
 				std::string DSfilePath;
 				ID3D11InputLayout* inputLayout;
+				ID3DBlob* cs;
+				std::string CSFilePath;
+				ID3D11ComputeShader* computeShader;
 			};
 
 			Data m_data;
@@ -97,7 +101,6 @@ namespace thomas
 			Scene* m_scene;
 
 			static Shader* s_currentBoundShader;
-
 			static std::vector<Shader*> s_loadedShaders;
 		};
 	}

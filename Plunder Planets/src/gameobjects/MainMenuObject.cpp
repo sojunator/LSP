@@ -1,5 +1,6 @@
 #include "MainMenuObject.h"
-#include "../scenes/GameScene.h"
+//#include "../scenes/GameScene.h"
+#include "../scenes/UpgradeScene.h"
 void MainMenuObject::Start()
 {
 	m_backgrounds = AddComponent<component::SpriteComponent>();
@@ -71,10 +72,13 @@ void MainMenuObject::Update()
 
 		if (m_startButton->isHovering())
 		{
-			Scene::LoadScene<GameScene>();
+			Scene::LoadScene<UpgradeScene>();
 		}
 	}
 
 	if (Input::GetKeyDown(Input::Keys::Escape))
 		ThomasCore::Exit();
+
+	if (Input::GetKeyDown(Input::Keys::Enter))
+		Scene::LoadScene<UpgradeScene>();
 }

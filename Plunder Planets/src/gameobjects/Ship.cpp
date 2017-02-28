@@ -1,9 +1,10 @@
 #include "ship.h"
 #include "TerrainObject.h"
-
+#include "Wormhole.h"
 void Ship::Start()
 {
 	m_freeCamera = false;
+	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
 
 	float mass = 20000;
 	//Front
@@ -212,14 +213,19 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 void Ship::ShipAimCannons()
 {
-	if (Input::GetKeyDown(Input::Keys::R) && m_counter == 0)
+	if (Input::GetButtonDown(Input::Buttons::RB))
 	{
-		m_aimstate = AIMSTATE::AIMRIGHT;
+		m_aimRight = !m_aimRight;
+		m_aimLeft = false;
+	}
+	else if(Input::GetButtonDown(Input::Buttons::LB))
+	{
+		m_aimLeft = !m_aimLeft;
+		m_aimRight = false;
 	}
 
-	else if (m_aimstate == AIMSTATE::AIMRIGHT) //RIGHT
+	if (m_aimRight) //RIGHT
 	{
-		m_counter = 5;
 		float deltaX = Input::GetRightStickY();
 		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
@@ -245,7 +251,7 @@ void Ship::ShipAimCannons()
 		}
 	}
 
-	else if (Input::GetButton(Input::Buttons::LB)) //LEFT
+	else if (m_aimLeft) //LEFT
 	{
 		float deltaX = Input::GetRightStickY();
 		
@@ -274,21 +280,25 @@ void Ship::ShipAimCannons()
 
 	}
 
-	if (Input::GetKeyDown(Input::Keys::R) && m_counter == 5)
+	if (!m_aimLeft && !m_aimRight)
 	{
-		/*int delay = 0;
-
-		for (int i = 0; i < 40000; i++)
-		{
-			delay += 1;
-		}*/
-
-		m_counter = 0;
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_aiming = false;
-		m_aimstate = AIMSTATE::AIMDISABLE;
 		m_waterObject->DisableAim();
 	}
+
+	//if (Input::GetKeyDown(Input::Keys::R) && m_counter == 5)
+	//{
+	//	/*int delay = 0;
+
+	//	for (int i = 0; i < 40000; i++)
+	//	{
+	//		delay += 1;
+	//	}*/
+
+	//	m_counter = 0;
+	//	
+	//}
 }
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
@@ -486,6 +496,11 @@ void Ship::Update()
 
 	Float(dt);
 
+
+	if (m_treasure > 500)
+	{
+		((Wormhole*)Find("Wormhole"))->SetActive(true);
+	}
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }

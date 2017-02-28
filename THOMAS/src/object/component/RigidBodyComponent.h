@@ -14,6 +14,8 @@ namespace thomas
 			public:
 				RigidBodyComponent();
 				~RigidBodyComponent();
+				void OnEnable();
+				void OnDisable();
 				void Start();
 				void Update();
 				void SetKinematic(bool kinematic);

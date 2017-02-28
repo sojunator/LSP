@@ -6,29 +6,51 @@ cbuffer InitBuffer : register(b0)
     float initMaxSpeed;
 
     float initMinSpeed;
+    float initEndSpeed;
     float initMaxDelay;
     float initMinDelay;
-    float initMaxSize;
 
+    float initMaxSize;
     float initMinSize;
+    float initEndSize;
     float initMaxLifeTime;
+
     float initMinLifeTime;
     float rand;
+    float initRotationSpeed;
+    float initRotation;
 
-    float initAlpha;
-    float3 pad;
+    float4 initStartColor;
+    float4 initEndColor;
+
+    bool initLooping;
+    float3 padddddd;
 };
 
 struct ParticleStruct
 {
     float3 position;
     float spread;
+
     float3 direction;
     float speed;
+
+    float endSpeed;
     float delay;
 	float size;
+    float endSize;
+
     float lifeTimeLeft;
-    float alpha;
+    float timeElapsed;
+    float rotationSpeed;
+    float rotation;
+
+    float4 startColor;
+
+    float4 endColor;
+
+    float3 initPosition;
+    bool looping;
 };
 
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
@@ -48,7 +70,7 @@ uint rand_xorshift(uint rng_state)
 
 
 [numthreads(256, 1, 1)]
-void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
+void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 {
     //INITIALIZE
     float index = (Gid.x * 256) + GTid.x;
@@ -83,24 +105,39 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     proj *= initSpread;
 
 	float3 dir = proj + initDirection;
-    
-    float alpha = max(initAlpha * w3 * randClamp, 0.65f);
+    normalize(dir);
 
     particlesWrite[index].position = initPosition;
+    particlesWrite[index].initPosition = initPosition;
     particlesWrite[index].spread = initSpread;
     particlesWrite[index].direction = dir;
 	particlesWrite[index].speed = speed;
+    particlesWrite[index].endSpeed = initEndSpeed;
     particlesWrite[index].delay = delay;
 	particlesWrite[index].size = size;
+    particlesWrite[index].endSize = initEndSize;
     particlesWrite[index].lifeTimeLeft = lifeTime;
-    particlesWrite[index].alpha = alpha;
+    particlesWrite[index].timeElapsed = 0.0f;
+    particlesWrite[index].rotationSpeed = initRotationSpeed;
+    particlesWrite[index].rotation = initRotation;
+    particlesWrite[index].looping = initLooping;
+    particlesWrite[index].startColor = initStartColor;
+    particlesWrite[index].endColor = initEndColor;
+
     particlesWrite2[index].position = initPosition;
+    particlesWrite2[index].initPosition = initPosition;
     particlesWrite2[index].spread = initSpread;
     particlesWrite2[index].direction = dir;
     particlesWrite2[index].speed = speed;
+    particlesWrite2[index].endSpeed = initEndSpeed;
     particlesWrite2[index].delay = delay;
     particlesWrite2[index].size = size;
+    particlesWrite2[index].endSize = initEndSize;
     particlesWrite2[index].lifeTimeLeft = lifeTime;
-    particlesWrite2[index].alpha = alpha;
-
+    particlesWrite2[index].timeElapsed = 0.0f;
+    particlesWrite2[index].rotationSpeed = initRotationSpeed;
+    particlesWrite2[index].rotation = initRotation;
+    particlesWrite2[index].looping = initLooping;
+    particlesWrite2[index].startColor = initStartColor;
+    particlesWrite2[index].endColor = initEndColor;
 }

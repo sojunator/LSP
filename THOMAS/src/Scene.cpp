@@ -15,10 +15,12 @@ namespace thomas
 		std::vector<object::component::RenderComponent*> renderComponents;
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 		{
-			for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
-			{
-				renderComponents.push_back(renderComponent);
-			}
+			if(gameObject->GetActive())
+				for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
+				{
+					if(renderComponent->GetActive())
+						renderComponents.push_back(renderComponent);
+				}
 		}
 		return renderComponents;
 	}
@@ -27,7 +29,7 @@ namespace thomas
 		utils::DebugTools::RemoveAllVariables();
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
-		graphics::Shader::Destroy();
+		graphics::Shader::Destroy(s_currentScene);
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();	
 		object::Object::Destroy(s_currentScene);
@@ -39,8 +41,19 @@ namespace thomas
 		//Temp fix for ocean.
 		graphics::Renderer::RenderSetup(NULL);
 		if (s_currentScene)
+		{
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
-				object->Update();
+			{
+				if(object->GetActive())
+					object->Update();
+			}
+			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
+			{
+				if(object->GetActive())
+					object->LateUpdate();
+			}
+				
+		}
 		else
 			LOG("No scene set");
 		object::Object::Clean();
@@ -60,14 +73,6 @@ namespace thomas
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
-
-			//Temp fix for ocean. Should be done in update
-			if (s_currentScene)
-				for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
-					object->Update();
-			else
-				LOG("No scene set");
-
 			
 			s_currentScene->Render3D(camera);
 			if(s_drawDebugPhysics)
@@ -161,10 +166,12 @@ namespace thomas
 
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::ParticleEmitterComponent>())
 		{
-			for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
-			{
-				graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
-			}
+			if(gameObject->GetActive())
+				for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
+				{
+					if(emitterComponent->GetActive())
+						graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
+				}
 		}
 		
 	}
@@ -177,21 +184,22 @@ namespace thomas
 
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::SpriteComponent>())
 		{
-
-			for (object::component::SpriteComponent* sprite : gameObject->GetComponents<object::component::SpriteComponent>())
-			{
-				graphics::Sprite::RenderImage(sprite);
-			}
+			if(gameObject->GetActive())
+				for (object::component::SpriteComponent* sprite : gameObject->GetComponents<object::component::SpriteComponent>())
+				{
+					if(sprite->GetActive())
+						graphics::Sprite::RenderImage(sprite);
+				}
 		}
 
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::TextComponent>())
-		{
-			std::vector <object::component::TextComponent*> textComponent = gameObject->GetComponents<object::component::TextComponent>();
-
-			for (object::component::TextComponent* text : gameObject->GetComponents<object::component::TextComponent>())
-			{
-				graphics::TextRender::RenderText(text);
-			}
+		{	
+			if(gameObject->GetActive())
+				for (object::component::TextComponent* text : gameObject->GetComponents<object::component::TextComponent>())
+				{
+					if(text->GetActive())
+						graphics::TextRender::RenderText(text);
+				}
 		}
 	}
 

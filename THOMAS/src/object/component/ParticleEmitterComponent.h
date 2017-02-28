@@ -18,22 +18,31 @@ namespace thomas
 				struct InitParticleBufferStruct
 				{
 					math::Vector3 position;
-					float spread;
+					float spread;//This is a hack
 
 					math::Vector3 direction;
 					float maxSpeed;
 
 					float minSpeed;
+					float endSpeed;
 					float maxDelay;
 					float minDelay;
-					float maxSize;
 
+					float maxSize;
 					float minSize;
+					float endSize;
 					float maxLifeTime;
+
 					float minLifeTime;
 					float rand;
+					float rotationSpeed;
+					float rotation;
 
-					float alpha;
+					math::Vector4 startColor;
+
+					math::Vector4 endColor;
+
+					bool looping;
 					math::Vector3 pad;
 				};
 
@@ -41,12 +50,26 @@ namespace thomas
 				{
 					math::Vector3 position;
 					float spread;
+
 					math::Vector3 direction;
 					float speed;
+
+					float endSpeed;
 					float delay;
 					float size;
+					float endSize;
+
 					float lifeTimeLeft;
-					float alpha;
+					float timeElapsed;
+					float rotationSpeed;
+					float rotation;
+
+					math::Vector4 startColor;
+
+					math::Vector4 endColor;
+
+					math::Vector3 initPosition;
+					bool looping;
 				};
 			private:
 				void CreateParticleUAVsandSRVs();
@@ -61,21 +84,34 @@ namespace thomas
 				void Start();
 				void Update();
 
-				void SetAll(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed, _In_opt_ float maxSpeed, 
-					_In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime, _In_opt_ float alpha);
-
-				void SetPosition(math::Vector3 other);
-				void SetSpread(float other);
-				void SetDirection(math::Vector3 other);
-				void SetMinSpeed(float other);
-				void SetMaxSpeed(float other);
-				void SetMinDelay(float other);
-				void SetMaxDelay(float other);
-				void SetMinSize(float other);
-				void SetMaxSize(float other);
-				void SetMinLifeTime(float other);
-				void SetMaxLifeTime(float other);
-				void SetAlpha(float other);
+				void SetPosition(math::Vector3 const other);
+				void SetPosition(float const x, float const y, float const z);
+				void SetSpread(float const other);
+				void SetDirection(math::Vector3 const other);
+				void SetSpeed(float const min, float const max);
+				void SetSpeed(float const speed);
+				void SetMaxSpeed(float const other);
+				void SetMinSpeed(float const other);
+				void SetEndSpeed(float const other);
+				void SetDelay(float const min, float const max);
+				void SetDelay(float const delay);
+				void SetMaxDelay(float const other);
+				void SetMinDelay(float const other);
+				void SetSize(float const min, float const max);
+				void SetSize(float const size);
+				void SetMaxSize(float const other);
+				void SetMinSize(float const other);
+				void SetEndSize(float const other);
+				void SetLifeTime(float const min, float const max);
+				void SetLifeTime(float lifeTime);
+				void SetMaxLifeTime(float const other);
+				void SetMinLifeTime(float const other);
+				void SetRotationSpeed(float const other);
+				void SetRotation(float const other);
+				void SetLooping(bool const other);
+				void SetStartColor(math::Vector4 const other);
+				void SetEndColor(math::Vector4 const other);
+				
 				
 
 				void StartEmitting();
@@ -104,7 +140,7 @@ namespace thomas
 				ID3D11Buffer* m_particleBuffer2;
 				bool m_booleanSwapUAVandSRV;
 
-				ID3D11ComputeShader* s_particlesCS;
+				graphics::Shader* m_particlesCS;
 				ID3D11Buffer* m_particleBuffer;
 
 				InitParticleBufferStruct m_particleBufferStruct;

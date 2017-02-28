@@ -75,7 +75,14 @@ namespace thomas
 
 			return true;
 		}
-
+		bool GameObject::GetActive()
+		{
+			if (m_transform->GetParent())
+			{
+				return m_active && m_transform->GetParent()->m_gameObject->GetActive();
+			}
+			return m_active;
+		}
 
 		std::vector<GameObject*> GameObject::GetAllGameObjectsInScene(Scene* scene)
 		{

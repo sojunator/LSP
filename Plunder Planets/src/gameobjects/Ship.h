@@ -92,6 +92,7 @@ private:
 	bool m_aiming;
 	bool m_prevFrame;
 	bool m_aimRight;
+	bool m_aimLeft;
 
 
 	std::string m_SFXs[9] = {
@@ -106,15 +107,5 @@ private:
 		"fSlowCreak2"
 	};
 
-	enum class AIMSTATE
-	{
-		AIMRIGHT = 0,
-		AIMLEFT = 1,
-		AIMDISABLE = 2,
-	};
-
-	int m_counter = 0;
-	
-	AIMSTATE m_aimstate = AIMSTATE::AIMDISABLE;
 	
 };
