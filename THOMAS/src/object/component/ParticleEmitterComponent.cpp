@@ -30,10 +30,10 @@ namespace thomas
 				m_particleBufferStruct.minDelay = 1.0f;
 				m_particleBufferStruct.maxSize = 1.0f;
 				m_particleBufferStruct.minSize = 1.0f;
-				m_particleBufferStruct.endSize = 0.0f;
+				m_particleBufferStruct.endSize = 1.0f;
 				m_particleBufferStruct.maxLifeTime = 1.0f;
 				m_particleBufferStruct.minLifeTime = 1.0f;
-				m_particleBufferStruct.rotationSpeed = 0.0f;
+				m_particleBufferStruct.rotationSpeed = 0.5f;
 				m_particleBufferStruct.looping = false;
 				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -72,35 +72,6 @@ namespace thomas
 
 			}
 
-			void thomas::object::component::ParticleEmitterComponent::SetAll(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed,
-				_In_opt_ float maxSpeed, _In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime)
-			{
-				if (nrOfParticles)
-					m_nrOfParticles = nrOfParticles;//256 * 100 + 254;
-				if (particleDirection != math::Vector3(NULL, NULL, NULL))
-					m_particleBufferStruct.direction = particleDirection;
-				if (minDelay)
-					m_particleBufferStruct.maxDelay = maxDelay;
-				if (maxDelay)
-					m_particleBufferStruct.minDelay = minDelay;
-				if (minSpeed)
-					m_particleBufferStruct.maxSpeed = maxSpeed;
-				if (maxSpeed)
-					m_particleBufferStruct.minSpeed = minSpeed;
-				if (particleSpreadFactor)
-					m_particleBufferStruct.spread = particleSpreadFactor;
-				if (particleMinSize)
-					m_particleBufferStruct.minSize = particleMinSize;
-				if (particleMaxSize)
-					m_particleBufferStruct.maxSize = particleMaxSize;
-				if (particleMinLifeTime)
-					m_particleBufferStruct.minLifeTime = particleMinLifeTime;
-				if (particleMaxLifeTime)
-					m_particleBufferStruct.maxLifeTime = particleMaxLifeTime;
-				
-
-				m_shouldUpdateResources = true;
-			}
 
 			void ParticleEmitterComponent::SetPosition(math::Vector3 const other)
 			{

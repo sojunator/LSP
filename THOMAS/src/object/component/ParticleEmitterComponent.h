@@ -81,9 +81,6 @@ namespace thomas
 				void Start();
 				void Update();
 
-				void SetAll(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed, _In_opt_ float maxSpeed, 
-					_In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime);
-
 				void SetPosition(math::Vector3 const other);
 				void SetSpread(float const other);
 				void SetDirection(math::Vector3 const other);
