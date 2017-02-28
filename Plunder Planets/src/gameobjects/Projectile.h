@@ -82,6 +82,7 @@ public:
 			float heightBelowWater = deltawater - m_transform->GetPosition().y;
 			if (heightBelowWater > 3.0)
 			{
+				//LOG("CANCER");
 				//Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 				Destroy(this);

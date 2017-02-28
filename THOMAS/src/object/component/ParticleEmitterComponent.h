@@ -18,35 +18,55 @@ namespace thomas
 				struct InitParticleBufferStruct
 				{
 					math::Vector3 position;
-					float spread;
+					float spread;//This is a hack
 
 					math::Vector3 direction;
 					float maxSpeed;
 
 					float minSpeed;
+					float endSpeed;
 					float maxDelay;
 					float minDelay;
-					float maxSize;
 
+					float maxSize;
 					float minSize;
+					float endSize;
 					float maxLifeTime;
+
 					float minLifeTime;
 					float rand;
+					float rotationSpeed;
+					bool looping;
 
-					float alpha;
-					math::Vector3 pad;
+					math::Vector4 startColor;
+
+					math::Vector4 endColor;
 				};
 
 				struct ParticleStruct
 				{
 					math::Vector3 position;
 					float spread;
+
 					math::Vector3 direction;
 					float speed;
+
+					float endSpeed;
 					float delay;
 					float size;
+					float endSize;
+
 					float lifeTimeLeft;
-					float alpha;
+					float timeElapsed;
+					float rotationSpeed;
+					bool looping;
+
+					math::Vector4 startColor;
+
+					math::Vector4 endColor;
+
+					math::Vector3 initPosition;
+					float padding;
 				};
 			private:
 				void CreateParticleUAVsandSRVs();
@@ -62,20 +82,26 @@ namespace thomas
 				void Update();
 
 				void SetAll(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed, _In_opt_ float maxSpeed, 
-					_In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime, _In_opt_ float alpha);
+					_In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime);
 
-				void SetPosition(math::Vector3 other);
-				void SetSpread(float other);
-				void SetDirection(math::Vector3 other);
-				void SetMinSpeed(float other);
-				void SetMaxSpeed(float other);
-				void SetMinDelay(float other);
-				void SetMaxDelay(float other);
-				void SetMinSize(float other);
-				void SetMaxSize(float other);
-				void SetMinLifeTime(float other);
-				void SetMaxLifeTime(float other);
-				void SetAlpha(float other);
+				void SetPosition(math::Vector3 const other);
+				void SetSpread(float const other);
+				void SetDirection(math::Vector3 const other);
+				void SetMaxSpeed(float const other);
+				void SetMinSpeed(float const other);
+				void SetEndSpeed(float const other);
+				void SetMaxDelay(float const other);
+				void SetMinDelay(float const other);
+				void SetMaxSize(float const other);
+				void SetMinSize(float const other);
+				void SetEndSize(float const other);
+				void SetMaxLifeTime(float const other);
+				void SetMinLifeTime(float const other);
+				void SetRotationSpeed(float const other);
+				void SetLooping(bool const other);
+				void SetStartColor(math::Vector4 const other);
+				void SetEndColor(math::Vector4 const other);
+				
 				
 
 				void StartEmitting();
