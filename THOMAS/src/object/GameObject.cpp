@@ -79,7 +79,7 @@ namespace thomas
 
 		void GameObject::SetActive(bool active)
 		{
-			m_active = active;
+			Object::SetActive(active);
 			for (component::Component* component : m_components)
 			{
 				component->SetActive(active && component->GetActive());
