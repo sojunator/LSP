@@ -67,7 +67,7 @@ uint rand_xorshift(uint rng_state)
 
 
 [numthreads(256, 1, 1)]
-void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
+void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 {
     //INITIALIZE
     float index = (Gid.x * 256) + GTid.x;
