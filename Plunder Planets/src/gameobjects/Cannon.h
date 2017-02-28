@@ -20,12 +20,12 @@ public:
 	{
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSmoke->SetNrOfParticles(256 * 4 + 254);
-		m_emitterSmoke->SetTexture("../res/textures/smokeParticle.png");
+		m_emitterSmoke->SetTexture("../res/textures/sumo-wrestler2.png");
 		m_emitterSmoke->SetShader("particleShader");
 		m_emitterSmoke->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_emitterSmoke->SetMaxDelay(1.75f);
 		m_emitterSmoke->SetMinDelay(0.15f);
 		m_emitterSmoke->SetMaxSpeed(9.0f);
@@ -33,18 +33,18 @@ public:
 		m_emitterSmoke->SetMaxSize(2.2f);
 		m_emitterSmoke->SetMinSize(1.4f);
 		m_emitterSmoke->SetEndSize(3.0f);
-		m_emitterSmoke->SetMaxLifeTime(1.75f);
+		m_emitterSmoke->SetMaxLifeTime(10.75f);
 		m_emitterSmoke->SetMinLifeTime(0.7f);
 		m_emitterSmoke->SetSpread(0.2f);
 		
 		m_emitterSmoke2 = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSmoke2->SetNrOfParticles(256 * 10 + 254);
-		m_emitterSmoke2->SetTexture("../res/textures/smoke.dds");
+		m_emitterSmoke2->SetTexture("../res/textures/sumo-wrestler2.png");
 		m_emitterSmoke2->SetShader("particleShader");
 		m_emitterSmoke2->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke2->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSmoke2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+		m_emitterSmoke2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_emitterSmoke2->SetMaxDelay(2.5f);
 		m_emitterSmoke2->SetMinDelay(0.15f);
 		m_emitterSmoke2->SetMaxSpeed(13.0f);
@@ -70,6 +70,7 @@ public:
 		m_emitterSpark->SetEndColor(math::Vector4(0.5f, 0.0f, 0.0f, 1.0f));
 		m_emitterSpark->SetMaxSize(0.4f);
 		m_emitterSpark->SetMinSize(0.1f);
+		m_emitterSpark->SetEndSize(0.0f);
 		m_emitterSpark->SetMaxLifeTime(0.12f);
 		m_emitterSpark->SetMinLifeTime(0.02f);
 		m_emitterSpark->SetSpread(0.11f);
