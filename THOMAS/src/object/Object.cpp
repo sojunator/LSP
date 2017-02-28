@@ -11,6 +11,7 @@ namespace thomas
 		{
 			m_type = type;
 			m_alive = true;
+			m_active = true;
 		}
 		Object::~Object()
 		{
