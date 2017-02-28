@@ -520,5 +520,4 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		}
 
 	}
-
 }

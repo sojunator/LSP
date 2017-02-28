@@ -79,7 +79,7 @@ public:
 
 		//Healthbar
 		m_healthbar->SetName("Health");
-		m_healthbar->SetPositionX(16.5); //Offset from top left corner
+		m_healthbar->SetPositionX(14.7); //Offset from top left corner
 		m_healthbar->SetPositionY(964);
 		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
 		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
@@ -122,6 +122,7 @@ public:
 	{
 		m_camera->SetFar(m_far);
 		m_camera->SetFov(m_fov);
+
 		if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
@@ -145,21 +146,21 @@ public:
 			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		//if (Input::GetKey(Input::Keys::K))
-		//{
-		//	if (m_health->GetScale().x < 0.685f)
-		//	{
-		//		m_health->SetScale(math::Vector2(m_health->GetScale().x + 0.01f, m_health->GetScale().y));
-		//	}
-		//}
+		/*if (Input::GetKey(Input::Keys::K))
+		{
+			if (m_healthbar->GetScale().x < 1.0f)
+			{
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, m_healthbar->GetScale().y));
+			}
+		}
 
-		//if (Input::GetKey(Input::Keys::J))
-		//{
-		//	if (m_health->GetScale().x >= 0.0f)
-		//	{
-		//		m_health->SetScale(math::Vector2(m_health->GetScale().x - 0.01f, m_health->GetScale().y));
-		//	}
-		//}
+		if (Input::GetKey(Input::Keys::J))
+		{
+			if (m_healthbar->GetScale().x >= 0.0f)
+			{
+				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, m_healthbar->GetScale().y));
+			}
+		}*/
 
 		if (m_ship && m_ship->GetFreeCamera())
 		{
