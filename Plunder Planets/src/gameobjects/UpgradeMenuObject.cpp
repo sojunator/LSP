@@ -455,9 +455,9 @@ void UpgradeMenuObject::Update()
 		}
 	}
 
-	if (Input::GetKeyDown(Input::Keys::Escape))
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButton(Input::Buttons::BACK))
 		ThomasCore::Exit();
 
-	if (Input::GetKeyDown(Input::Keys::Enter))
+	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButton(Input::Buttons::START))
 		Scene::LoadScene<GameScene>();
 }

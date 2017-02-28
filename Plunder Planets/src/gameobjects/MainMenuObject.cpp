@@ -12,7 +12,7 @@ void MainMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 
-	
+	m_yArray[0] = 1;
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
@@ -72,11 +72,14 @@ void MainMenuObject::Update()
 	{
 		if (m_yArray[i] == 1)
 		{
-			/*if (i == 0)
-				m_startButton->*/
+			if (i == 0)
+				m_startButton->SetHovering(true);
 		}
+		else
+			m_yArray[i] = 0;
 	}
-	if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
+	m_yArray[0];
+	if (Input::GetButton(Input::Buttons::A))
 	{
 		if (m_exitButton->isHovering())
 			ThomasCore::Exit();
