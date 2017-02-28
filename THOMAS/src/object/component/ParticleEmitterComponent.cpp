@@ -22,11 +22,11 @@ namespace thomas
 				m_particleBufferStruct.position = math::Vector3(0, 0, 0);
 				m_particleBufferStruct.spread = 1.0f;
 				m_particleBufferStruct.direction = math::Vector3(1, 0, 0);
-				m_particleBufferStruct.maxSpeed = 1.0f;
-				m_particleBufferStruct.minSpeed = 1.0f;
-				m_particleBufferStruct.endSpeed = 1.0f;
-				m_particleBufferStruct.maxDelay = 1.0f;
-				m_particleBufferStruct.minDelay = 1.0f;
+				m_particleBufferStruct.maxSpeed = 0.0f;
+				m_particleBufferStruct.minSpeed = 0.0f;
+				m_particleBufferStruct.endSpeed = 0.0f;
+				m_particleBufferStruct.maxDelay = 0.0f;
+				m_particleBufferStruct.minDelay = 0.0f;
 				m_particleBufferStruct.maxSize = 1.0f;
 				m_particleBufferStruct.minSize = 1.0f;
 				m_particleBufferStruct.endSize = 1.0f;
@@ -73,6 +73,10 @@ namespace thomas
 				m_particleBufferStruct.position = other;
 				m_shouldUpdateResources = true;
 			}
+			void ParticleEmitterComponent::SetPosition(float const x, float const y, float const z)
+			{
+				SetPosition(math::Vector3(x, y, z));
+			}
 			void ParticleEmitterComponent::SetSpread(float const other)
 			{
 				m_particleBufferStruct.spread = other;
@@ -82,6 +86,16 @@ namespace thomas
 			{
 				m_particleBufferStruct.direction = other;
 				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetSpeed(float const min, float const max)
+			{
+				SetMinSpeed(min);
+				SetMaxSpeed(max);
+			}
+			void ParticleEmitterComponent::SetSpeed(float const speed)
+			{
+				SetSpeed(speed, speed);
+				SetEndSpeed(speed);
 			}
 			void ParticleEmitterComponent::SetMaxSpeed(float const other)
 			{
@@ -98,6 +112,16 @@ namespace thomas
 				m_particleBufferStruct.endSpeed = other;
 				m_shouldUpdateResources = true;
 			}
+			void ParticleEmitterComponent::SetDelay(float const min, float const max)
+			{
+				SetMinDelay(min);
+				SetMaxDelay(max);
+			}
+			void ParticleEmitterComponent::SetDelay(float const delay)
+			{
+				SetDelay(delay, delay);
+				
+			}
 			void ParticleEmitterComponent::SetMaxDelay(float const other)
 			{
 				m_particleBufferStruct.maxDelay = other;
@@ -107,6 +131,16 @@ namespace thomas
 			{
 				m_particleBufferStruct.minDelay = other;
 				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetSize(float const min, float const max)
+			{
+				SetMinSize(min);
+				SetMaxSize(max);
+			}
+			void ParticleEmitterComponent::SetSize(float const size)
+			{
+				SetSize(size, size);
+				SetEndSize(size);
 			}
 			void ParticleEmitterComponent::SetMaxSize(float const other)
 			{
@@ -122,6 +156,16 @@ namespace thomas
 			{
 				m_particleBufferStruct.endSize = other;
 				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetLifeTime(float const min, float const max)
+			{
+				SetMinLifeTime(min);
+				SetMaxLifeTime(max);
+			}
+			void ParticleEmitterComponent::SetLifeTime(float lifeTime)
+			{
+				SetLifeTime(lifeTime, lifeTime);
+				
 			}
 			void ParticleEmitterComponent::SetMinLifeTime(float const other)
 			{

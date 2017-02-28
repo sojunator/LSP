@@ -85,16 +85,25 @@ namespace thomas
 				void Update();
 
 				void SetPosition(math::Vector3 const other);
+				void SetPosition(float const x, float const y, float const z);
 				void SetSpread(float const other);
 				void SetDirection(math::Vector3 const other);
+				void SetSpeed(float const min, float const max);
+				void SetSpeed(float const speed);
 				void SetMaxSpeed(float const other);
 				void SetMinSpeed(float const other);
 				void SetEndSpeed(float const other);
+				void SetDelay(float const min, float const max);
+				void SetDelay(float const delay);
 				void SetMaxDelay(float const other);
 				void SetMinDelay(float const other);
+				void SetSize(float const min, float const max);
+				void SetSize(float const size);
 				void SetMaxSize(float const other);
 				void SetMinSize(float const other);
 				void SetEndSize(float const other);
+				void SetLifeTime(float const min, float const max);
+				void SetLifeTime(float lifeTime);
 				void SetMaxLifeTime(float const other);
 				void SetMinLifeTime(float const other);
 				void SetRotationSpeed(float const other);

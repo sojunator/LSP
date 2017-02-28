@@ -15,7 +15,7 @@
 #include "../gameobjects/StandardParticleEmitter.h"
 #include "../gameobjects/Enemy.h"
 #include "../gameobjects/Ship.h"
-
+#include "../gameobjects/Wormhole.h"
 
 class GameScene : public thomas::Scene
 {
@@ -87,6 +87,7 @@ public:
 		}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
+		LoadObject<Wormhole>();
 		//LoadObject<PhysicsObject>();
 
 	};

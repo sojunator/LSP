@@ -4,6 +4,7 @@
 void Ship::Start()
 {
 	m_freeCamera = false;
+	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
 
 	float mass = 20000;
 	//Front
