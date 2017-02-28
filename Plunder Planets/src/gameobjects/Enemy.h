@@ -106,7 +106,6 @@ public:
 		m_emitterSpark->SetShader("particleShader");
 		m_emitterSpark->SetPosition(m_transform->GetPosition());
 		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
-		m_emitterSpark->SetAlpha(1);
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
 		m_emitterSpark->SetMaxSpeed(20.0f);
@@ -123,7 +122,6 @@ public:
 		m_emitterSmoke->SetShader("particleShader");
 		m_emitterSmoke->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
-		m_emitterSmoke->SetAlpha(1);
 		m_emitterSmoke->SetMaxDelay(2.45f);
 		m_emitterSmoke->SetMinDelay(0.15f);
 		m_emitterSmoke->SetMaxSpeed(9.0f);

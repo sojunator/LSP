@@ -37,9 +37,9 @@ namespace thomas
 			struct BillboardStruct
 			{
 				math::Vector3 positions[2][3];
+				math::Vector2 pad2;
 				math::Vector2 uvs[2][3];
-				float pad2;
-				float pad3;
+				math::Vector4 colorFactor;
 			};
 			struct CameraBufferStruct
 			{
@@ -67,7 +67,8 @@ namespace thomas
 			
 			static ID3D11Buffer* s_billboardsBuffer;
 			
-			static ID3D11ComputeShader* s_billboardCS;
+			static Shader* s_billboardCS;
+			static Shader* s_initParticleCS;
 			static ID3D11UnorderedAccessView* s_billboardsUAV;
 			static ID3D11ShaderResourceView* s_billboardsSRV;
 

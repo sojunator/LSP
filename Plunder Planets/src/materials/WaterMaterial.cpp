@@ -34,7 +34,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_oceanSettings.choppy_scale = 0.8f;
 	m_oceanSettings.time_scale = 0.12f;
 
-	m_oceanSim = new utils::ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
+	m_oceanSim = new ocean::OceanSimulator(m_oceanSettings, ThomasCore::GetDevice());
 
 	m_oceanSim->updateDisplacementMap(0);
 
@@ -91,12 +91,12 @@ void WaterMaterial::Update()
 
 }
 
-utils::ocean::OceanSimulator * WaterMaterial::GetOceanSim()
+ocean::OceanSimulator * WaterMaterial::GetOceanSim()
 {
 	return m_oceanSim;
 }
 
-utils::ocean::OceanParameter * WaterMaterial::GetOceanParams()
+ocean::OceanParameter * WaterMaterial::GetOceanParams()
 {
 	return &m_oceanSettings;
 }

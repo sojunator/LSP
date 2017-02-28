@@ -46,8 +46,6 @@ namespace thomas
 			s_keyboardTracker.Update(s_keyboardState);
 			s_mouseTracker.Update(s_mouseState);
 			s_gamePadTracker.Update(s_gamePadState);
-
-			
 			s_mousePosition = math::Vector2(s_mouseState.x, s_mouseState.y);
 			if (s_mousePosition == math::Vector2(0, 0))
 				s_recordPosition = true;

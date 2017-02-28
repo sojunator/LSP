@@ -139,12 +139,12 @@ namespace thomas
 			if (m_textureType == TextureType::UNDEFINED)
 			{
 				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, m_resourceSlot);
-				return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindResource(m_data.textureView, m_resourceSlot);
 			}
 			else
 			{
 				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, (int)m_textureType);
-				return Shader::GetCurrentBoundShader()->BindTextures(m_data.textureView, (int)m_textureType);
+				return Shader::GetCurrentBoundShader()->BindResource(m_data.textureView, (int)m_textureType);
 			}
 			
 		}
@@ -153,12 +153,12 @@ namespace thomas
 			if (m_textureType == TextureType::UNDEFINED)
 			{
 				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, m_resourceSlot);
-				return Shader::GetCurrentBoundShader()->BindTextures(NULL, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindResource(NULL, m_resourceSlot);
 			}
 			else
 			{
 				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, (int)m_textureType);
-				return Shader::GetCurrentBoundShader()->BindTextures(NULL, (int)m_textureType);
+				return Shader::GetCurrentBoundShader()->BindResource(NULL, (int)m_textureType);
 			}
 		}
 		Texture::Texture(int mappingMode, TextureType type, std::string path)

@@ -29,8 +29,7 @@ public:
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
 	void CameraZoom(float const dt);
-
-
+	
 
 	void PlaySounds(float const dt){}
 	void PlunderIsland();
@@ -92,6 +91,9 @@ private:
 	float m_soundDelayLeft;
 	bool m_aiming;
 	bool m_prevFrame;
+	bool m_aimRight;
+	bool m_aimLeft;
+
 
 	std::string m_SFXs[9] = {
 		"fCreak1",
@@ -104,5 +106,6 @@ private:
 		"fSlowCreak1",
 		"fSlowCreak2"
 	};
+
 	
 };
