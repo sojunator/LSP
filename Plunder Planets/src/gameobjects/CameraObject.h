@@ -35,8 +35,8 @@ public:
 		m_text = AddComponent<component::TextComponent>();
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
-		m_healthbar = AddComponent<component::SpriteComponent>();
 		m_backbar = AddComponent<component::SpriteComponent>();
+		m_healthbar = AddComponent<component::SpriteComponent>();
 
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
@@ -70,19 +70,19 @@ public:
 		m_sprite->SetScale(math::Vector2(1.0f, 1.0f));
 		m_sprite->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
+		//Background bar for health
+		m_backbar->SetName("BackHealth");
+		m_backbar->SetPositionX(10); //Offset from top left corner
+		m_backbar->SetPositionY(960);
+		m_backbar->SetScale(math::Vector2(1.0f, 1.0f));
+		m_backbar->SetColor(math::Vector4(0.6f, 0.6f, 0.6f, 1.0f));
+
 		//Healthbar
-		m_healthbar->SetName("Button");
+		m_healthbar->SetName("Health");
 		m_healthbar->SetPositionX(10); //Offset from top left corner
 		m_healthbar->SetPositionY(960);
 		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
 		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
-
-		//Background bar for health
-		m_backbar->SetName("BackHealth");
-		m_backbar->SetPositionX(410); //Offset from top left corner
-		m_backbar->SetPositionY(300);
-		m_backbar->SetScale(math::Vector2(1.0f, 1.0f));
-		m_backbar->SetColor(math::Vector4(0.6f, 0.6f, 0.6f, 1.0f));
 
 		//Simple font
 		m_text->SetFont("Name");
