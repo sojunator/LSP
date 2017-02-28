@@ -96,7 +96,8 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         float3 right = cameraRight * scale;
         float3 up =  -cameraUp* scale;
 
-        float angletest = particlesRead[index].timeElapsed * 1.0f;
+        float angletest = 0;
+        //particlesRead[index].timeElapsed * 1.0f;
 
         float sinangle = sin(angletest);
         float cosangle = cos(angletest);
