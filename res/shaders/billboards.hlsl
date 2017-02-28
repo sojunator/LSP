@@ -28,14 +28,14 @@ struct ParticleStruct
     float lifeTimeLeft;
     float timeElapsed;
     float rotationSpeed;
-    bool looping;
+    float rotation;
 
     float4 startColor;
 
     float4 endColor;
 
     float3 initPosition;
-    float paddd;
+    bool looping;
 };
 
 struct BillboardStruct
@@ -96,11 +96,10 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         float3 right = cameraRight * scale;
         float3 up =  -cameraUp* scale;
 
-        float angletest = 0;
-        //particlesRead[index].timeElapsed * 1.0f;
+        particlesWrite[index].rotation = particlesRead[index].rotation + particlesRead[index].rotationSpeed * deltaTime;
 
-        float sinangle = sin(angletest);
-        float cosangle = cos(angletest);
+        float sinangle = sin(particlesRead[index].rotation);
+        float cosangle = cos(particlesRead[index].rotation);
 
         float3 temp = cosangle * right - sinangle * up;
         right = sinangle * right + cosangle * up;

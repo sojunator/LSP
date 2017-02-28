@@ -32,7 +32,8 @@ namespace thomas
 				m_particleBufferStruct.endSize = 1.0f;
 				m_particleBufferStruct.maxLifeTime = 1.0f;
 				m_particleBufferStruct.minLifeTime = 1.0f;
-				m_particleBufferStruct.rotationSpeed = 0.5f;
+				m_particleBufferStruct.rotationSpeed = 0.0f;
+				m_particleBufferStruct.rotation = math::PI / 2;
 				m_particleBufferStruct.looping = false;
 				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -135,6 +136,11 @@ namespace thomas
 			void ParticleEmitterComponent::SetRotationSpeed(float const other)
 			{
 				m_particleBufferStruct.rotationSpeed = other;
+				m_shouldUpdateResources = true;
+			}
+			void ParticleEmitterComponent::SetRotation(float const other)
+			{
+				m_particleBufferStruct.rotation = other;
 				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetLooping(bool const other)

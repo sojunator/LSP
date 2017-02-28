@@ -18,10 +18,13 @@ cbuffer InitBuffer : register(b0)
     float initMinLifeTime;
     float rand;
     float initRotationSpeed;
-    bool initLooping;
+    float initRotation;
 
     float4 initStartColor;
     float4 initEndColor;
+
+    bool initLooping;
+    float3 padddddd;
 };
 
 struct ParticleStruct
@@ -40,14 +43,14 @@ struct ParticleStruct
     float lifeTimeLeft;
     float timeElapsed;
     float rotationSpeed;
-    bool looping;
+    float rotation;
 
     float4 startColor;
 
     float4 endColor;
 
     float3 initPosition;
-    float paddd;
+    bool looping;
 };
 
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
@@ -116,6 +119,7 @@ void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite[index].lifeTimeLeft = lifeTime;
     particlesWrite[index].timeElapsed = 0.0f;
     particlesWrite[index].rotationSpeed = initRotationSpeed;
+    particlesWrite[index].rotation = initRotation;
     particlesWrite[index].looping = initLooping;
     particlesWrite[index].startColor = initStartColor;
     particlesWrite[index].endColor = initEndColor;
@@ -132,6 +136,7 @@ void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite2[index].lifeTimeLeft = lifeTime;
     particlesWrite2[index].timeElapsed = 0.0f;
     particlesWrite2[index].rotationSpeed = initRotationSpeed;
+    particlesWrite2[index].rotation = initRotation;
     particlesWrite2[index].looping = initLooping;
     particlesWrite2[index].startColor = initStartColor;
     particlesWrite2[index].endColor = initEndColor;

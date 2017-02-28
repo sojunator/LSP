@@ -36,11 +36,14 @@ namespace thomas
 					float minLifeTime;
 					float rand;
 					float rotationSpeed;
-					bool looping;
+					float rotation;
 
 					math::Vector4 startColor;
 
 					math::Vector4 endColor;
+
+					bool looping;
+					math::Vector3 pad;
 				};
 
 				struct ParticleStruct
@@ -59,14 +62,14 @@ namespace thomas
 					float lifeTimeLeft;
 					float timeElapsed;
 					float rotationSpeed;
-					bool looping;
+					float rotation;
 
 					math::Vector4 startColor;
 
 					math::Vector4 endColor;
 
 					math::Vector3 initPosition;
-					float padding;
+					bool looping;
 				};
 			private:
 				void CreateParticleUAVsandSRVs();
@@ -95,6 +98,7 @@ namespace thomas
 				void SetMaxLifeTime(float const other);
 				void SetMinLifeTime(float const other);
 				void SetRotationSpeed(float const other);
+				void SetRotation(float const other);
 				void SetLooping(bool const other);
 				void SetStartColor(math::Vector4 const other);
 				void SetEndColor(math::Vector4 const other);
