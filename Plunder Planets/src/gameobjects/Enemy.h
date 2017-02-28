@@ -94,8 +94,8 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = 300;
-		m_turnSpeed = 50;
+		m_speed = 100;
+		m_turnSpeed = 20;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
@@ -134,6 +134,7 @@ public:
 		m_emitterSmoke->SetSpread(0.8f);
 
 		
+		thomas::utils::DebugTools::AddInteger(m_turnDir, "Turn Dir");
 	}
 
 

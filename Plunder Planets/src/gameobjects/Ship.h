@@ -21,8 +21,8 @@ public:
 	}
 	void Start();
 	bool GetFreeCamera();
-	void ShipMove(float const dt);
-	void ShipRotate(float const dt);
+	void ShipMove();
+	void ShipRotate();
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt);
 	void ShipFireCannons();
 	void ShipAimCannons();

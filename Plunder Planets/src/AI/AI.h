@@ -42,4 +42,7 @@ private:
 	TerrainObject* m_terrainObject;
 	thomas::object::GameObject* m_playerShip;
 	std::vector<thomas::object::GameObject*> m_enemies;
+
+	float pDotR;
+	float pDotF;
 };

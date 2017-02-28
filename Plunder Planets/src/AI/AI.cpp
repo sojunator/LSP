@@ -16,7 +16,8 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_escapeTime = 600;	//Should be 60 seconds?
 	m_idleTimer = 0;
 	m_idleTime = 50;
-
+	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0 max=10 step=0.01");
+	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0 max=10 step=0.01");
 }
 
 AI::~AI()
@@ -34,8 +35,8 @@ bool AI::Collision(math::Vector3 pos)
 
 int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft)
 {
-	float pDotR;
-	float pDotF;
+	//float pDotR;
+	//float pDotF;
 	float eDotR;
 	float eDotF;
 	math::Vector3 norFor = forward;
@@ -51,11 +52,13 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	//First check with other enemies
 	for (unsigned int i = 0; i < m_enemies.size(); ++i)
 	{
-		if (math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition()) <= 50)
+		float distance = math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition());
+		if (distance <= 50 && distance != 0)
 		{
 			math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
 			enemyDir.Normalize();
 			float fEnemyDir = enemyDir.Dot(norRight);
+
 			math::Vector3 enemyForward = -m_enemies[i]->m_transform->Forward();
 			enemyForward.Normalize();
 			eDotR = enemyForward.Dot(right);
@@ -94,8 +97,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		else if (turnDir == -1)
 			return -1;
 	}
-
-	if (turnDir == 0)	//Forward
+	else if (turnDir == 0)	//Forward
 	{
 		if (!objectFront)	//Forward
 		{
@@ -119,7 +121,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			}
 			else	//Turn right
 			{
-				if (!objectRight)
+				if (!objectRight)	//Turn right
 				{
 					return 1;
 				}

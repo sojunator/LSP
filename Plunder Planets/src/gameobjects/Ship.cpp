@@ -70,8 +70,8 @@ void Ship::Start()
 	m_soundDelay = 5;
 	m_soundDelayLeft = 5;
 	//movement
-	m_speed = 1500;
-	m_turnSpeed = 500;
+	m_speed = 150;
+	m_turnSpeed = 25;
 	roof = 1.0;
 	m_flyCost = 20;
 
@@ -98,7 +98,7 @@ bool Ship::GetFreeCamera()
 {
 	return m_freeCamera;
 }
-void Ship::ShipMove(float const dt)
+void Ship::ShipMove()
 {
 	//ship controls
 	if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera && Input::GetKey(Input::Keys::W)) || (m_freeCamera && Input::GetKey(Input::Keys::Up)))
@@ -108,10 +108,10 @@ void Ship::ShipMove(float const dt)
 		//Remove y part;
 		forward.y = 0;
 		m_moving = true;
-		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*dt*m_rigidBody->GetMass()));
+		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*m_rigidBody->GetMass()));
 	}
 }
-void Ship::ShipRotate(float const dt)
+void Ship::ShipRotate()
 {
 	float turnDelta = 0;
 
@@ -144,7 +144,7 @@ void Ship::ShipRotate(float const dt)
 	m_rigidBody->activate();
 	if (!m_moving)
 		turnDelta *= 2;
-	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
+	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*m_rigidBody->GetMass(), 0));
 
 	if (abs(turnDelta) > 0.02)
 		m_turning = true;
@@ -472,8 +472,8 @@ void Ship::Update()
 	m_turning = false;
 
 	//Ship Movement
-	ShipMove(dt);
-	ShipRotate(dt);
+	ShipMove();
+	ShipRotate();
 	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 	ShipFireCannons();
 	ShipAimCannons();

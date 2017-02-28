@@ -15,7 +15,6 @@
 #include "scenes\MenuScene.h"
 
 #include "gameobjects\TestDirectionalLight.h"
-#include "gameobjects\TestPointLight.h"
 #include "gameobjects\Ship.h"
 #include "graphics\TextRender.h"
 #include "graphics\Sprite.h"
