@@ -20,7 +20,7 @@ public:
 	void Start()
 	{
 		m_firstFrame = true;
-		m_mass = 500000;
+		m_mass = 20000;
 		m_searchRadius = 1000;
 		m_attackRadius = 200;
 		m_turnDir = 0;
@@ -94,8 +94,8 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = 100;
-		m_turnSpeed = 20;
+		m_speed = 80;
+		m_turnSpeed = 10;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
