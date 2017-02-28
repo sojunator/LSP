@@ -75,19 +75,13 @@ namespace thomas
 
 			return true;
 		}
-
-
-		void GameObject::SetActive(bool active)
+		bool GameObject::GetActive()
 		{
-			Object::SetActive(active);
-			for (component::Component* component : m_components)
+			if (m_transform->GetParent())
 			{
-				component->SetActive(active && component->GetActive());
+				return m_active && m_transform->GetParent()->m_gameObject->GetActive();
 			}
-			for (component::Transform* childTransforms : m_transform->m_children)
-			{
-				childTransforms->m_gameObject->SetActive(active && childTransforms->m_gameObject->GetActive());
-			}
+			return m_active;
 		}
 
 		std::vector<GameObject*> GameObject::GetAllGameObjectsInScene(Scene* scene)

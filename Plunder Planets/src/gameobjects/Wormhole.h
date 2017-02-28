@@ -10,9 +10,20 @@ class Wormhole : public GameObject
 private:
 
 public:
-	Wormhole() : GameObject("PhysicsTest")
+	Wormhole() : GameObject("Wormhole")
 	{
 
+	}
+
+	void OnEnable()
+	{
+		if(m_emitter)
+			m_emitter->StartEmitting();
+	}
+
+	void OnDisable()
+	{
+		m_emitter->StopEmitting();
 	}
 
 	void Start()
@@ -20,11 +31,12 @@ public:
 		m_transform->SetPosition(0, 300, 0);
 		m_emitter = AddComponent<component::ParticleEmitterComponent>();
 		m_emitter->SetLooping(true);
-		m_emitter->StartEmitting();
+		
 		m_emitter->SetSize(100);
 		m_emitter->SetPosition(0, 300, 0);
 		m_emitter->SetNrOfParticles(1);
 		m_emitter->SetTexture("../res/textures/wormhole.png");
+		SetActive(false);
 	}
 
 	void Update()

@@ -1,6 +1,6 @@
 #include "ship.h"
 #include "TerrainObject.h"
-
+#include "Wormhole.h"
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -496,6 +496,11 @@ void Ship::Update()
 
 	Float(dt);
 
+
+	if (m_treasure > 500)
+	{
+		((Wormhole*)Find("Wormhole"))->SetActive(true);
+	}
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }
