@@ -60,14 +60,6 @@ namespace thomas
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
-
-			//Temp fix for ocean. Should be done in update
-			if (s_currentScene)
-				for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
-					object->Update();
-			else
-				LOG("No scene set");
-
 			
 			s_currentScene->Render3D(camera);
 			if(s_drawDebugPhysics)
