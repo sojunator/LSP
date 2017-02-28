@@ -36,6 +36,7 @@ public:
 		m_emitter->SetPosition(0, 300, 0);
 		m_emitter->SetNrOfParticles(1);
 		m_emitter->SetTexture("../res/textures/wormhole.png");
+		m_emitter->SetRotationSpeed(math::DegreesToradians(20));
 		SetActive(false);
 	}
 
