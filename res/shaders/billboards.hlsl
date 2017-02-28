@@ -94,26 +94,21 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
         //BILLBOARD
         float3 right = cameraRight * scale;
-        float3 up = cameraUp * scale;
-        float angletest = particlesRead[index].timeElapsed * 10.0f;
-        float angle90 = angletest + 1.57075;
+        float3 up =  -cameraUp* scale;
 
-        float x1 = saturate((cos(angletest) - sin(angletest)) * -1);
-        float y1 = saturate((cos(angletest) + sin(angletest)) * -1);
-        float x2 = saturate((cos(angle90) - sin(angle90)) * -1);
-        float y2 = saturate((cos(angle90) + sin(angle90)) * -1);
-        float x3 = saturate(cos(angletest) - sin(angletest));
-        float y3 = saturate(cos(angletest) + sin(angletest));
-        float x4 = saturate(cos(angle90) - sin(angle90));
-        float y4 = saturate(cos(angle90) + sin(angle90));
+        float angletest = particlesRead[index].timeElapsed * 1.0f;
 
-         //tri 1
+        float sinangle = sin(angletest);
+        float cosangle = cos(angletest);
+
+        float3 temp = cosangle * right - sinangle * up;
+        right = sinangle * right + cosangle * up;
+        up = temp;
+
+        //tri 1
         billboards[index].quad[0][0] = particlePosWS + up + right;
         billboards[index].quad[0][1] = particlePosWS + up - right;
         billboards[index].quad[0][2] = particlePosWS - up + right;
-        //billboards[index].uvs[0][0] = float2(x3, y3);
-        //billboards[index].uvs[0][1] = float2(x4, y4);
-        //billboards[index].uvs[0][2] = float2(x2, y2);
         billboards[index].uvs[0][0] = float2(1, 1);
         billboards[index].uvs[0][1] = float2(0, 1);
         billboards[index].uvs[0][2] = float2(1, 0);
@@ -121,10 +116,6 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         billboards[index].quad[1][0] = particlePosWS - up + right;
         billboards[index].quad[1][1] = particlePosWS + up - right;
         billboards[index].quad[1][2] = particlePosWS - up - right;
-
-        //billboards[index].uvs[1][0] = float2(x2, y2);
-        //billboards[index].uvs[1][1] = float2(x4, y4);
-        //billboards[index].uvs[1][2] = float2(x1, y1);
         billboards[index].uvs[1][0] = float2(1, 0);
         billboards[index].uvs[1][1] = float2(0, 1);
         billboards[index].uvs[1][2] = float2(0, 0);
