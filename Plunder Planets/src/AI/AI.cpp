@@ -115,7 +115,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return 0;
 		}
 		else
-			return 1;
+			return 0;
 		break;
 	}
 	case AI::Behavior::Searching:
@@ -186,7 +186,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return 0;
 		}
 		else
-			return 1;
+			return 0;
 		break;
 	}
 	case AI::Behavior::Attacking:
@@ -257,7 +257,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return 0;
 		}
 		else
-			return 1;
+			return 0;
 		break;
 	}
 	case AI::Behavior::Firing:
@@ -271,11 +271,11 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		{
 			if (turnDir == 0)	//No other enemies near
 			{
-				if (pDotR >= 0.9 || pDotR <= -0.95)	//Forward
+				if (pDotR >= 0.9 || pDotR <= -0.9)	//Forward
 					return 0;
-				else if (pDotR >= 0.0)
+				else if ((pDotR <= 0.0 && pDotF >= 0.1) || (pDotR >= 0.0 && pDotF <= -0.1))	//Turn right
 					return 1;
-				else if (pDotR <= 0.0)
+				else if ((pDotR <= 0.0 && pDotF <= -0.1) || (pDotR >= 0.0 && pDotF >= 0.1))	//Turn left
 					return -1;
 			}
 			else if (turnDir == 1)	//Turn right
@@ -288,11 +288,11 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		{
 			if (!objectFront)	//Forward
 			{
-				if (pDotF >= 0.8)	//Forward
+				if (pDotR >= 0.9 || pDotR <= -0.9)	//Forward
 					return 0;
-				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+				else if ((pDotR <= 0.0 && pDotF >= 0.1) || (pDotR >= 0.0 && pDotF <= -0.1))	//Turn right
 					return 1;
-				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+				else if ((pDotR <= 0.0 && pDotF <= -0.1) || (pDotR >= 0.0 && pDotF >= 0.1))	//Turn left
 					return -1;
 			}
 			else if (objectFront)	//Turn
@@ -328,7 +328,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return 0;
 		}
 		else
-			return 1;
+			return 0;
 		break;
 	}
 	default:

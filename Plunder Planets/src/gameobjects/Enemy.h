@@ -94,8 +94,8 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = 80;
-		m_turnSpeed = 30;
+		m_speed = 70;
+		m_turnSpeed = 20;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");

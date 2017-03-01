@@ -81,7 +81,7 @@ public:
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		m_ship = LoadObject<Ship>();
-		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
+		for (int startEnemies = 0; startEnemies < 10; startEnemies++) //10 = number of AI
 		{
 			m_enemyShip.push_back(LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity));
 		}
