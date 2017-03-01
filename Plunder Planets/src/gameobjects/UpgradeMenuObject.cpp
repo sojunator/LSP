@@ -308,9 +308,9 @@ void UpgradeMenuObject::Start()
 void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - Time::GetDeltaTime();
-
+	
 	SetSelectedObject();
-
+	
 	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back))
 	{
 		bool upgrade = false;
@@ -674,7 +674,7 @@ void UpgradeMenuObject::Navigation()
 	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f)
 		|| (Input::GetButton(Input::Buttons::DPAD_UP) && m_delay < 0.1f) || (Input::GetKey(Input::Keys::Down) && m_delay < 0.1f)
 		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f) || Input::GetButton(Input::Buttons::DPAD_RIGHT) || Input::GetButton(Input::Buttons::DPAD_LEFT)
-		|| Input::GetLeftStickX())
+		|| Input::GetLeftStickX() || Input::GetKey(Input::Keys::Right) || Input::GetKey(Input::Keys::Left))
 	{
 		for (int i = 0; i < 3; i++) //three rows currently
 		{
