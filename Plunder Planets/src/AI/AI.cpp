@@ -265,7 +265,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	case AI::Behavior::Firing:
 	{
 		math::Vector3 playerFor = m_playerShip->m_transform->Forward();
-		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor*4) - pos;
+		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor * 4) - pos;
 		playerDir.Normalize();
 		pDotR = playerDir.Dot(right);
 		pDotF = playerDir.Dot(forward);
@@ -345,14 +345,41 @@ int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
 	{
 		right.Normalize();
 		math::Vector3 playerFor = m_playerShip->m_transform->Forward();
-		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor*4) - pos;
+		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor * 4) - pos;
 		playerDir.Normalize();
+		int fireSide = 0;
 		float pDotR = playerDir.Dot(right);
 
 		if (pDotR >= 0.97)
+		{
+			for (int i = 0; i < m_enemies.size(); i++)
+			{
+				math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
+				enemyDir.Normalize();
+				float eDotR = enemyDir.Dot(right);
+
+				if (eDotR >= 0.96)
+				{
+					return 0;
+				}
+			}
 			return 1;
+		}
 		else if (pDotR <= -0.97)
+		{
+			for (int i = 0; i < m_enemies.size(); i++)
+			{
+				math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
+				enemyDir.Normalize();
+				float eDotR = enemyDir.Dot(right);
+
+				if (eDotR >= -0.96)
+				{
+					return 0;
+				}
+			}
 			return -1;
+		}
 		else
 			return 0;
 	}
