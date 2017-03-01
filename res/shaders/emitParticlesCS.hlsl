@@ -2,8 +2,10 @@ cbuffer InitBuffer : register(b0)
 {
 	float3 initPosition;
 	float initSpread;
-	float3 initDirection;
+	
+	uint particleBlockIndex;
 	float initMaxSpeed;
+	float2 padding;
 
 	float initMinSpeed;
 	float initEndSpeed;
@@ -23,8 +25,7 @@ cbuffer InitBuffer : register(b0)
 	float4 initStartColor;
 	float4 initEndColor;
 
-	uint particleBlockIndex;
-	float3 padding;
+	matrix directionMatrix;
 };
 
 struct ParticleStruct
@@ -95,8 +96,8 @@ void CSMain(uint3 Gid : SV_GroupID)
 	float3 rng = float3(x, y, z);
 	normalize(rng);
 
-	float theta = x * 3.14159265359;
-	float phi = y * 3.14159265359 * 2;
+	float theta = x * 3.14159265359 * 2;
+	float phi = y * (initSpread % 3.14159265359);
 	float xAngle = sin(phi) * cos(theta);
 	float yAngle = sin(phi) * sin(theta);
 	float zAngle = cos(phi);
@@ -106,8 +107,9 @@ void CSMain(uint3 Gid : SV_GroupID)
  //   normalize(proj);
  //   proj *= initSpread;
 
-	float3 dir = randDir;
+	float3 dir = mul(randDir, (float3x3) directionMatrix);;
 	normalize(dir);
+
 
 	particlesWrite[index].position = initPosition;
 	particlesWrite[index].direction = dir;

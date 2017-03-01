@@ -26,7 +26,7 @@ namespace thomas
 
 				m_particleBufferStruct.position = math::Vector3(0, 0, 0);
 				m_particleBufferStruct.spread = 1.0f;
-				m_particleBufferStruct.direction = math::Vector3(1, 0, 0);
+				m_particleBufferStruct.directionMatrix = math::Matrix::CreateLookAt(math::Vector3(0,0,0),math::Vector3(1, 0, 0),math::Vector3::Up).Transpose();
 				m_particleBufferStruct.maxSpeed = 0.0f;
 				m_particleBufferStruct.minSpeed = 0.0f;
 				m_particleBufferStruct.endSpeed = 0.0f;
@@ -105,12 +105,11 @@ namespace thomas
 			void ParticleEmitterComponent::SetSpread(float const other)
 			{
 				m_particleBufferStruct.spread = other;
-				m_shouldUpdateResources = true;
 			}
-			void ParticleEmitterComponent::SetDirection(math::Vector3 const other)
+			void ParticleEmitterComponent::SetDirection(math::Vector3 other)
 			{
-				m_particleBufferStruct.direction = other;
-				m_shouldUpdateResources = true;
+				other.x += 0.0000001;
+				m_particleBufferStruct.directionMatrix = math::Matrix::CreateLookAt(math::Vector3(0, 0, 0), -other, math::Vector3::Up).Invert().Transpose();
 			}
 			void ParticleEmitterComponent::SetDirection(float const x, float const y, float const z)
 			{
@@ -129,17 +128,14 @@ namespace thomas
 			void ParticleEmitterComponent::SetMaxSpeed(float const other)
 			{
 				m_particleBufferStruct.maxSpeed = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetMinSpeed(float const other)
 			{
 				m_particleBufferStruct.minSpeed = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetEndSpeed(float const other)
 			{
 				m_particleBufferStruct.endSpeed = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetDelay(float const min, float const max)
 			{
@@ -154,13 +150,11 @@ namespace thomas
 			void ParticleEmitterComponent::SetMaxDelay(float const other)
 			{
 				m_particleBufferStruct.maxDelay = other;
-				m_shouldUpdateResources = true;
 				CalculateMaxNrOfParticles();
 			}
 			void ParticleEmitterComponent::SetMinDelay(float const other)
 			{
 				m_particleBufferStruct.minDelay = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetSize(float const min, float const max)
 			{
@@ -175,17 +169,14 @@ namespace thomas
 			void ParticleEmitterComponent::SetMaxSize(float const other)
 			{
 				m_particleBufferStruct.maxSize = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetMinSize(float const other)
 			{
 				m_particleBufferStruct.minSize = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetEndSize(float const other)
 			{
 				m_particleBufferStruct.endSize = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetLifeTime(float const min, float const max)
 			{
@@ -200,23 +191,19 @@ namespace thomas
 			void ParticleEmitterComponent::SetMinLifeTime(float const other)
 			{
 				m_particleBufferStruct.minLifeTime = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetMaxLifeTime(float const other)
 			{
 				m_particleBufferStruct.maxLifeTime = other;
-				m_shouldUpdateResources = true;
 				CalculateMaxNrOfParticles();
 			}
 			void ParticleEmitterComponent::SetRotationSpeed(float const other)
 			{
 				m_particleBufferStruct.rotationSpeed = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetRotation(float const other)
 			{
 				m_particleBufferStruct.rotation = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetLooping(bool const other)
 			{
@@ -225,12 +212,10 @@ namespace thomas
 			void ParticleEmitterComponent::SetStartColor(math::Vector4 const other)
 			{
 				m_particleBufferStruct.startColor = other;
-				m_shouldUpdateResources = true;
 			}
 			void ParticleEmitterComponent::SetEndColor(math::Vector4 const other)
 			{
 				m_particleBufferStruct.endColor = other;
-				m_shouldUpdateResources = true;
 			}
 
 			void ParticleEmitterComponent::StartEmitting()
@@ -254,7 +239,6 @@ namespace thomas
 			void ParticleEmitterComponent::SetShader(std::string shaderName)
 			{
 				m_shader = graphics::Shader::GetShaderByName(shaderName);
-				m_shouldUpdateResources = true;
 			}
 
 			graphics::Shader * ParticleEmitterComponent::GetShader()
@@ -265,7 +249,6 @@ namespace thomas
 			void ParticleEmitterComponent::SetTexture(std::string texturePath)
 			{
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
-				m_shouldUpdateResources = true;
 			}
 
 			graphics::Texture * ParticleEmitterComponent::GetTexture()
@@ -301,6 +284,7 @@ namespace thomas
 			{
 				m_maxNrOfParticles = (m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay)*m_emissionRate;
 				m_maxNrOfParticles += m_emissionRate + 1; //add some padding :)
+				m_shouldUpdateResources = true;
 				
 			}
 

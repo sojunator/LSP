@@ -34,9 +34,10 @@ namespace thomas
 				{
 					math::Vector3 position;
 					float spread;//This is a hack
-
-					math::Vector3 direction;
+					
+					unsigned int currentParticleStartIndex;
 					float maxSpeed;
+					math::Vector2 padding;
 
 					float minSpeed;
 					float endSpeed;
@@ -57,9 +58,7 @@ namespace thomas
 
 					math::Vector4 endColor;
 
-					unsigned int currentParticleStartIndex;
-
-					math::Vector3 pad;
+					math::Matrix directionMatrix;
 				};
 
 				struct ParticleStruct
@@ -100,7 +99,7 @@ namespace thomas
 				void Update();
 
 				void SetSpread(float const other);
-				void SetDirection(math::Vector3 const other);
+				void SetDirection(math::Vector3 other);
 				void SetDirection(float const x, float const y, float const z);
 				void SetSpeed(float const min, float const max);
 				void SetSpeed(float const speed);
