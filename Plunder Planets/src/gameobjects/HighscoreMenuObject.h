@@ -26,6 +26,7 @@ public:
 
 private:
 	component::SpriteComponent* m_highscoreBackground;
+	component::SpriteComponent* m_centText;
 };
 
 

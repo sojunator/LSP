@@ -10,6 +10,7 @@ public:
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("HighscoreBackground", "../res/GUI/Highscore/highscore.jpg");
+			thomas::graphics::Sprite::LoadTexture("centText", "../res/GUI/Highscore/centText.png");
 
 		}
 		else if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_1610)
@@ -23,6 +24,7 @@ public:
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("HighscoreBackground", "../res/GUI/Highscore/highscore.jpg");
+			thomas::graphics::Sprite::LoadTexture("centText", "../res/GUI/Highscore/centText.png");
 		}
 
 		LoadObject<HighscoreMenuObject>();
