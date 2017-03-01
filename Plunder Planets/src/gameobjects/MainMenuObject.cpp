@@ -74,6 +74,8 @@ void MainMenuObject::Update()
 		{
 			Scene::LoadScene<UpgradeScene>();
 		}
+
+		//Highscore
 	}
 
 	if (Input::GetKeyDown(Input::Keys::Escape))

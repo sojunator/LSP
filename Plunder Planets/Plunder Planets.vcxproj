@@ -173,6 +173,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\AI\AI.h" />
     <ClInclude Include="src\AI\Pathfinding.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\scenes\GameScene.h" />
+    <ClInclude Include="src\scenes\HighscoreScene.h" />
     <ClInclude Include="src\scenes\LoadScreenScene.h" />
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
@@ -213,6 +215,7 @@
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gameobjects\HighscoreMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\AI\AI.cpp" />
     <ClCompile Include="src\AI\Pathfinding.cpp" />
