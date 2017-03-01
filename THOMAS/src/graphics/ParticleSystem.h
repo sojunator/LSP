@@ -22,7 +22,9 @@ namespace thomas
 		private:
 			static void CreateBillboardUAVandSRV();
 
-			static void UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, math::Vector3 emitterPos);
+			static void UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
+			static void SwapUAVsandSRVs(object::component::ParticleEmitterComponent * emitter);//ping pong
+			
 		public:
 			ParticleSystem();
 			~ParticleSystem();
@@ -31,6 +33,8 @@ namespace thomas
 			
 			static void Init();
 			static void Destroy();
+			static void SpawnParticles(object::component::ParticleEmitterComponent* emitter, int amountOfParticles);
+			static void UpdateParticles(object::component::ParticleEmitterComponent* emitter);
 			static void DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter);
 
 		private:
@@ -52,23 +56,16 @@ namespace thomas
 			{
 				math::Matrix viewProjMatrix;
 			};
-			struct EmitterPosStruct
-			{
-				math::Vector3 pos;
-				float pad;
-			};
 			
 			static CameraBufferStruct s_cameraBufferStruct;
 			static MatrixBufferStruct s_matrixBufferStruct;
-			static EmitterPosStruct s_emitterPos;
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
-			static ID3D11Buffer* s_emitterPosBuffer;
 			
 			static ID3D11Buffer* s_billboardsBuffer;
 			
-			static Shader* s_billboardCS;
-			static Shader* s_initParticleCS;
+			static Shader* s_updateParticlesCS;
+			static Shader* s_emitParticlesCS;
 			static ID3D11UnorderedAccessView* s_billboardsUAV;
 			static ID3D11ShaderResourceView* s_billboardsSRV;
 
@@ -77,7 +74,7 @@ namespace thomas
 
 			static ID3D11BlendState* s_particleBlendState;
 
-			static unsigned int s_maxNrOfBillboards;
+			static unsigned int s_maxNumberOfBillboardsSupported;
 		public:
 
 		};

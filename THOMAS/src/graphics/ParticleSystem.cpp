@@ -6,24 +6,22 @@ namespace thomas
 	{
 		ParticleSystem::CameraBufferStruct ParticleSystem::s_cameraBufferStruct;
 		ParticleSystem::MatrixBufferStruct ParticleSystem::s_matrixBufferStruct;
-		ParticleSystem::EmitterPosStruct ParticleSystem::s_emitterPos;
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
-		ID3D11Buffer* ParticleSystem::s_emitterPosBuffer;
 
 		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
 
-		Shader* ParticleSystem::s_billboardCS;
-		Shader* ParticleSystem::s_initParticleCS;
+		Shader* ParticleSystem::s_updateParticlesCS;
+		Shader* ParticleSystem::s_emitParticlesCS;
 		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
 		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
 
-		ID3D11UnorderedAccessView* ParticleSystem::s_activeParticleUAV;
-		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV;
+		ID3D11UnorderedAccessView* ParticleSystem::s_activeParticleUAV; //ping
+		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV; //pong
 
 		ID3D11BlendState* ParticleSystem::s_particleBlendState;
 
-		unsigned int ParticleSystem::s_maxNrOfBillboards;
+		unsigned int ParticleSystem::s_maxNumberOfBillboardsSupported;
 
 
 		ParticleSystem::ParticleSystem()
@@ -39,12 +37,11 @@ namespace thomas
 
 		void ParticleSystem::Init()
 		{
-			s_maxNrOfBillboards = 100000;
+			s_maxNumberOfBillboardsSupported = 1000000;
 			s_cameraBuffer = nullptr;
 			s_matrixBuffer = nullptr;
-			s_emitterPosBuffer = nullptr;
-			s_initParticleCS = Shader::CreateComputeShader("InitParticleCS","../res/shaders/initParticles.hlsl", NULL);
-			s_billboardCS = Shader::CreateComputeShader("ParticleCS", "../res/shaders/billboards.hlsl", NULL);
+			s_emitParticlesCS = Shader::CreateComputeShader("EmitParticlesCS","../res/shaders/initParticles.hlsl", NULL);
+			s_updateParticlesCS = Shader::CreateComputeShader("UpdateParticlesCS", "../res/shaders/billboards.hlsl", NULL);
 
 			CreateBillboardUAVandSRV();
 
@@ -70,6 +67,9 @@ namespace thomas
 
 			HRESULT hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_particleBlendState);
 			
+
+			s_cameraBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+			s_matrixBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_matrixBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 			return;
 		}
 
@@ -77,7 +77,7 @@ namespace thomas
 		{
 		}
 
-		void ParticleSystem::UpdateConstantBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, math::Vector3 emitterPos)
+		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix)
 		{
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
@@ -85,65 +85,88 @@ namespace thomas
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
 
-			s_emitterPos.pos = emitterPos;
+			thomas::utils::D3d::FillDynamicBufferStruct(s_cameraBuffer, s_cameraBufferStruct);
+			thomas::utils::D3d::FillDynamicBufferStruct(s_matrixBuffer, s_matrixBufferStruct);
+			
+		}
 
-			if (s_cameraBuffer == nullptr)
+		void ParticleSystem::SwapUAVsandSRVs(object::component::ParticleEmitterComponent * emitter)
+		{
+			object::component::ParticleEmitterComponent::D3DData* emitterD3D = emitter->GetD3DData();
+			if (emitterD3D->m_booleanSwapUAVandSRV)
 			{
-				s_cameraBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				emitterD3D->m_booleanSwapUAVandSRV = false;
 			}
 			else
 			{
-				thomas::utils::D3d::FillDynamicBufferStruct(s_cameraBuffer, s_cameraBufferStruct);
+
+				emitterD3D->m_booleanSwapUAVandSRV = true;
 			}
 			
-			if (s_matrixBuffer == nullptr)
+
+			if (emitterD3D->m_booleanSwapUAVandSRV)
 			{
-				s_matrixBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_matrixBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				s_activeParticleUAV = emitterD3D->m_particleUAV1;
+				s_activeParticleSRV = emitterD3D->m_particleSRV2;
 			}
 			else
 			{
-				thomas::utils::D3d::FillDynamicBufferStruct(s_matrixBuffer, s_matrixBufferStruct);
+				s_activeParticleUAV = emitterD3D->m_particleUAV2;
+				s_activeParticleSRV = emitterD3D->m_particleSRV1;
 			}
-			if (s_emitterPosBuffer == nullptr)
-			{
-				s_emitterPosBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_emitterPos, D3D11_BIND_CONSTANT_BUFFER);
-			}
-			else
-			{
-				thomas::utils::D3d::FillDynamicBufferStruct(s_emitterPosBuffer, s_emitterPos);
-			}
+		
+		}
+
+		void ParticleSystem::SpawnParticles(object::component::ParticleEmitterComponent * emitter, int amountOfParticles)
+		{
+			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
+			s_emitParticlesCS->Bind();
+			s_emitParticlesCS->BindBuffer(emitter->m_particleBuffer, 0);
+			s_emitParticlesCS->BindUAV(m_particleUAV2, 0);
+			s_emitParticlesCS->BindUAV(m_particleUAV1, 1);
+
+			ThomasCore::GetDeviceContext()->Dispatch(GetNrOfParticles() / 256 + 1, 1, 1);
+
+			s_emitParticlesCS->BindUAV(NULL, 0);
+			s_emitParticlesCS->BindUAV(NULL, 0);
+			s_emitParticlesCS->BindBuffer(NULL, 0);
+			s_emitParticlesCS->Unbind();
+		}
+
+		void ParticleSystem::UpdateParticles(object::component::ParticleEmitterComponent * emitter)
+		{
+									
+				SwapUAVsandSRVs(emitter);
+
+				//bind CS
+				s_updateParticlesCS->Bind();
+				s_updateParticlesCS->BindUAV(s_activeParticleUAV, 0);
+				s_updateParticlesCS->BindUAV(s_billboardsUAV, 1);
+				s_updateParticlesCS->BindResource(s_activeParticleSRV, 0);
+				s_updateParticlesCS->BindBuffer(s_cameraBuffer, 0);
+
+				ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfMaxParticles() / 256 + 1, 1, 1);
+				//unbind CS
+				s_updateParticlesCS->BindUAV(NULL, 0);
+				s_updateParticlesCS->BindUAV(NULL, 1);
+				s_updateParticlesCS->BindResource(NULL, 0);
+				s_updateParticlesCS->Unbind();
+
+			
+			
 		}
 
 		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter)
 		{
-			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
-			ID3D11ShaderResourceView* nullsrv[1] = { NULL };
 
 			if (emitter->IsEmitting())
 			{
-				UpdateConstantBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->m_gameObject->m_transform->GetPosition());
-					
+				UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
+				UpdateParticles(emitter);
+
+
 				FLOAT blendfactor[4] = { 0, 0, 0, 0 };
 				ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
-
-						
-
-				emitter->SwapUAVsandSRVs(s_activeParticleUAV, s_activeParticleSRV);
-
-				//bind CS
-				s_billboardCS->Bind();
-				s_billboardCS->BindUAV(s_activeParticleUAV, 0);
-				s_billboardCS->BindUAV(s_billboardsUAV, 1);
-				s_billboardCS->BindResource(s_activeParticleSRV, 0);
-				s_billboardCS->BindBuffer(s_cameraBuffer, 0);
-				s_billboardCS->BindBuffer(s_emitterPosBuffer, 1);
-
-				ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
-				//unbind CS
-				s_billboardCS->BindUAV(NULL, 0);
-				s_billboardCS->BindUAV(NULL, 1);
-				s_billboardCS->BindResource(NULL, 0);
-				s_billboardCS->Unbind();
 				//bind Emitter
 
 				emitter->GetShader()->Bind();
@@ -154,7 +177,7 @@ namespace thomas
 					
 				emitter->GetTexture()->Bind();
 	
-				ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfParticles() * 6, 0);
+				ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfMaxParticles() * 6, 0);
 
 				ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 
@@ -172,7 +195,7 @@ namespace thomas
 
 		void ParticleSystem::CreateBillboardUAVandSRV()
 		{
-			UINT bytewidth = sizeof(BillboardStruct) * s_maxNrOfBillboards;
+			UINT bytewidth = sizeof(BillboardStruct) * s_maxNumberOfBillboardsSupported;
 			UINT structurebytestride = sizeof(BillboardStruct);
 			thomas::utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, s_billboardsBuffer, s_billboardsUAV, s_billboardsSRV);
 		}

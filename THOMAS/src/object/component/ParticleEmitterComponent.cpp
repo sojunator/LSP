@@ -15,8 +15,8 @@ namespace thomas
 
 			void ParticleEmitterComponent::Start()
 			{
-				m_shouldUpdateResources = false;
-				m_nrOfParticles = 255;//256 * 100 + 254;
+				m_shouldUpdateResources = true;
+				m_maxNrOfParticles = 0;//256 * 100 + 254;
 				m_isEmitting = false;
 
 				m_particleBufferStruct.position = math::Vector3(0, 0, 0);
@@ -44,22 +44,32 @@ namespace thomas
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/standardParticle.png");
 				m_booleanSwapUAVandSRV = true;
 
-				m_particlesCS = graphics::Shader::GetShaderByName("InitParticleCS");
-
-				CreateParticleUAVsandSRVs();
+				CalculateMaxNrOfParticles();
 				CreateInitBuffer();
-				InitialDispatch();
 			}
 
 			void ParticleEmitterComponent::Update()
 			{
-				if (m_shouldUpdateResources)
+				m_emissionTimer += Time::GetDeltaTime();
+				UINT numberOfParticlesToEmit = m_emissionTimer / (1.0f/m_emissionRate);
+				if (numberOfParticlesToEmit > 0)
 				{
-					m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
-					utils::D3d::FillDynamicBufferStruct(m_particleBuffer, m_particleBufferStruct);
-					InitialDispatch();
-					m_shouldUpdateResources = false;
+					if (m_shouldUpdateResources)
+					{
+						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
+						utils::D3d::FillDynamicBufferStruct(m_particleBuffer, m_particleBufferStruct);
+						m_shouldUpdateResources = false;
+						CreateParticleUAVsandSRVs();
+					}
+					
+					graphics::ParticleSystem::SpawnParticles(this, numberOfParticlesToEmit);
+
 				}
+
+				
+
+
+				
 			}
 
 			void thomas::object::component::ParticleEmitterComponent::Destroy()
@@ -130,6 +140,7 @@ namespace thomas
 			{
 				m_particleBufferStruct.maxDelay = other;
 				m_shouldUpdateResources = true;
+				CalculateMaxNrOfParticles();
 			}
 			void ParticleEmitterComponent::SetMinDelay(float const other)
 			{
@@ -180,6 +191,7 @@ namespace thomas
 			{
 				m_particleBufferStruct.maxLifeTime = other;
 				m_shouldUpdateResources = true;
+				CalculateMaxNrOfParticles();
 			}
 			void ParticleEmitterComponent::SetRotationSpeed(float const other)
 			{
@@ -247,12 +259,6 @@ namespace thomas
 				}
 			}
 
-			void ParticleEmitterComponent::SetNrOfParticles(unsigned int other)
-			{
-				m_nrOfParticles = other;
-				m_shouldUpdateResources = true;
-			}
-
 			void ParticleEmitterComponent::SetShader(std::string shaderName)
 			{
 				m_shader = graphics::Shader::GetShaderByName(shaderName);
@@ -277,7 +283,14 @@ namespace thomas
 
 			void ParticleEmitterComponent::CreateParticleUAVsandSRVs()
 			{
-				UINT bytewidth = sizeof(ParticleStruct) * m_nrOfParticles;
+				SAFE_RELEASE(m_particleBuffer1);
+				SAFE_RELEASE(m_particleBuffer2);
+				SAFE_RELEASE(m_particleUAV1);
+				SAFE_RELEASE(m_particleUAV2);
+				SAFE_RELEASE(m_particleSRV1);
+				SAFE_RELEASE(m_particleSRV2);
+
+				UINT bytewidth = sizeof(ParticleStruct) * m_maxNrOfParticles;
 				UINT structurebytestride = sizeof(ParticleStruct);
 				utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_particleBuffer1, m_particleUAV1, m_particleSRV1);
 				utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_particleBuffer2, m_particleUAV2, m_particleSRV2);
@@ -290,7 +303,6 @@ namespace thomas
 
 			void thomas::object::component::ParticleEmitterComponent::InitialDispatch()
 			{
-				ID3D11UnorderedAccessView* nulluav[1] = { NULL };
 				m_particlesCS->Bind();
 				m_particlesCS->BindBuffer(m_particleBuffer, 0);
 				m_particlesCS->BindUAV(m_particleUAV2, 0);
@@ -304,9 +316,31 @@ namespace thomas
 				m_particlesCS->Unbind();
 			}
 
-			unsigned int thomas::object::component::ParticleEmitterComponent::GetNrOfParticles() const
+			void ParticleEmitterComponent::CalculateMaxNrOfParticles()
 			{
-				return m_nrOfParticles;
+				m_maxNrOfParticles = (m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay)*m_emissionRate;
+				m_maxNrOfParticles += m_emissionRate + 1; //add some padding :)
+			}
+
+			void ParticleEmitterComponent::SetEmissionRate(float emissionRate)
+			{
+				m_emissionRate = emissionRate;
+				CalculateMaxNrOfParticles();
+			}
+
+			float ParticleEmitterComponent::GetEmissionRate()
+			{
+				return m_emissionRate;
+			}
+
+			unsigned int ParticleEmitterComponent::GetNrOfMaxParticles() const
+			{
+				return m_maxNrOfParticles;
+			}
+
+			ParticleEmitterComponent::D3DData * ParticleEmitterComponent::GetD3DData()
+			{
+				return &m_d3dData;
 			}
 
 			
