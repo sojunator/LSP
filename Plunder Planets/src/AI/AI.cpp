@@ -61,7 +61,9 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			enemyForward.Normalize();
 			eDotR = enemyForward.Dot(right);
 			eDotF = enemyForward.Dot(forward);
-			if (fEnemyDir >= 0.0)	//Right side
+			if (eDotF >= 0.8)	//Head on. turn right
+				turnDir = 1;
+			else if (fEnemyDir >= 0.0)	//Right side
 			{
 				if (eDotF >= 0.0 && eDotR <= 0.0)	//Turn left
 					turnDir = -1;
@@ -157,17 +159,19 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			{
 				if (pDotR <= 0.0)	//Turn left
 				{
-					if (!objectLeft)	//Turn left
-						return -1;
-					else	//Turn right
-						return 1;
+					return -1;
+					//if (!objectLeft)	//Turn left
+					//	return -1;
+					//else	//Turn right
+					//	return 1;
 				}
 				else	//Turn right
 				{
-					if (!objectRight)	//Turn right
-						return 1;
-					else	//Turn left
-						return -1;
+					return 1;
+					//if (!objectRight)	//Turn right
+					//	return 1;
+					//else	//Turn left
+					//	return -1;
 				}
 			}
 		}
@@ -228,17 +232,19 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			{
 				if (pDotR <= 0.0)	//Turn left
 				{
-					if (!objectLeft)	//Turn left
-						return -1;
-					else	//Turn right
-						return 1;
+					return -1;
+					//if (!objectLeft)	//Turn left
+					//	return -1;
+					//else	//Turn right
+					//	return 1;
 				}
 				else	//Turn right
 				{
-					if (!objectRight)	//Turn right
-						return 1;
-					else	//Turn left
-						return -1;
+					return 1;
+					//if (!objectRight)	//Turn right
+					//	return 1;
+					//else	//Turn left
+					//	return -1;
 				}
 			}
 		}
@@ -299,17 +305,19 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			{
 				if (pDotR <= 0.0)	//Turn left
 				{
-					if (!objectLeft)	//Turn left
-						return -1;
-					else	//Turn right
-						return 1;
+					return -1;
+					//if (!objectLeft)	//Turn left
+					//	return -1;
+					//else	//Turn right
+					//	return 1;
 				}
 				else	//Turn right
 				{
-					if (!objectRight)	//Turn right
-						return 1;
-					else	//Turn left
-						return -1;
+					return 1;
+					//if (!objectRight)	//Turn right
+					//	return 1;
+					//else	//Turn left
+					//	return -1;
 				}
 			}
 		}
