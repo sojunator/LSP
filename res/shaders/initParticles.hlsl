@@ -88,23 +88,29 @@ void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     float delay = max((w1 * randClamp * (initMaxDelay - initMinDelay)), 0) + initMinDelay;
     float speed = max((w2 * randClamp * (initMaxSpeed - initMinSpeed)), 0) + initMinSpeed;
 
-    float size = max((w4 * randClamp * (initMaxSize - initMinSize)), 0) + initMinSize;
-    float lifeTime = max((w5 * randClamp * (initMaxSize - initMinLifeTime)), 0) + initMinLifeTime;
-
+    float size = (w4 * randClamp * (initMaxSize - initMinSize)) + initMinSize;
+    float lifeTime = (w5 * randClamp * (initMaxLifeTime - initMinLifeTime)) + initMinLifeTime;
     float randClampTimes2 = randClamp * 2;
 
-    float x = (w3 * randClampTimes2) - 1;
-    float y = (w4 * randClampTimes2) - 1;
-    float z = (w5 * randClampTimes2) - 1;
+	float x = (w3 * randClamp);
+	float y = (w4 * randClamp);
+	float z = (w5 * randClamp);
 
     float3 rng = float3(x, y, z);
 	normalize(rng);
 
-	float3 proj = rng - (initDirection * dot(initDirection, rng));
-    normalize(proj);
-    proj *= initSpread;
+	float theta = x * 3.14159265359;
+	float phi = y * 3.14159265359 * 2;
+	float xAngle = sin(phi) * cos(theta);
+	float yAngle = sin(phi) * sin(theta);
+	float zAngle = cos(phi);
+	float3 randDir = float3(xAngle, yAngle, zAngle);
+	normalize(randDir);
+	//float3 proj = rng - (initDirection * dot(initDirection, rng));
+ //   normalize(proj);
+ //   proj *= initSpread;
 
-	float3 dir = proj + initDirection;
+	float3 dir = randDir;
     normalize(dir);
 
     particlesWrite[index].position = initPosition;
@@ -117,7 +123,7 @@ void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 	particlesWrite[index].size = size;
     particlesWrite[index].endSize = initEndSize;
     particlesWrite[index].lifeTimeLeft = lifeTime;
-    particlesWrite[index].timeElapsed = 0.0f;
+    particlesWrite[index].timeElapsed =	lifeTime;
     particlesWrite[index].rotationSpeed = initRotationSpeed;
     particlesWrite[index].rotation = initRotation;
     particlesWrite[index].looping = initLooping;
@@ -134,7 +140,7 @@ void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite2[index].size = size;
     particlesWrite2[index].endSize = initEndSize;
     particlesWrite2[index].lifeTimeLeft = lifeTime;
-    particlesWrite2[index].timeElapsed = 0.0f;
+    particlesWrite2[index].timeElapsed = lifeTime;
     particlesWrite2[index].rotationSpeed = initRotationSpeed;
     particlesWrite2[index].rotation = initRotation;
     particlesWrite2[index].looping = initLooping;
