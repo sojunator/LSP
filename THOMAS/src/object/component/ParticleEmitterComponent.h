@@ -88,6 +88,7 @@ namespace thomas
 				void SetPosition(float const x, float const y, float const z);
 				void SetSpread(float const other);
 				void SetDirection(math::Vector3 const other);
+				void SetDirection(float const x, float const y, float const z);
 				void SetSpeed(float const min, float const max);
 				void SetSpeed(float const speed);
 				void SetMaxSpeed(float const other);

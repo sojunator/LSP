@@ -54,23 +54,38 @@ public:
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
-
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}		
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}
 
 		//Init text

@@ -89,28 +89,28 @@ namespace thomas
 
 			if (s_cameraBuffer == nullptr)
 			{
-				s_cameraBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				s_cameraBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 			}
 			else
 			{
-				ThomasCore::GetDeviceContext()->UpdateSubresource(s_cameraBuffer, 0, NULL, &s_cameraBufferStruct, 0, 0);
+				thomas::utils::D3d::FillDynamicBufferStruct(s_cameraBuffer, s_cameraBufferStruct);
 			}
 			
 			if (s_matrixBuffer == nullptr)
 			{
-				s_matrixBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_matrixBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				s_matrixBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_matrixBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 			}
 			else
 			{
-				ThomasCore::GetDeviceContext()->UpdateSubresource(s_matrixBuffer, 0, NULL, &s_matrixBufferStruct, 0, 0);
+				thomas::utils::D3d::FillDynamicBufferStruct(s_matrixBuffer, s_matrixBufferStruct);
 			}
 			if (s_emitterPosBuffer == nullptr)
 			{
-				s_emitterPosBuffer = thomas::utils::D3d::CreateBufferFromStruct(s_emitterPos, D3D11_BIND_CONSTANT_BUFFER);
+				s_emitterPosBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_emitterPos, D3D11_BIND_CONSTANT_BUFFER);
 			}
 			else
 			{
-				ThomasCore::GetDeviceContext()->UpdateSubresource(s_emitterPosBuffer, 0, NULL, &s_emitterPos, 0, 0);
+				thomas::utils::D3d::FillDynamicBufferStruct(s_emitterPosBuffer, s_emitterPos);
 			}
 		}
 

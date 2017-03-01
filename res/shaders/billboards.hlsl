@@ -69,7 +69,6 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         particlesWrite[index].size = particlesRead[index].size;
         
         particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
-        particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed;
         
         float scale = particlesRead[index].size;
 
@@ -79,7 +78,6 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
             {
                 particlesWrite[index].position = particlesRead[index].initPosition;
                 particlesWrite[index].lifeTimeLeft = particlesRead[index].timeElapsed;
-                particlesWrite[index].timeElapsed = 0.0f;
             }
             else
             {
@@ -89,9 +87,8 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         else
         {
             particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
-            particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
+            
         }
-        
         //BILLBOARD
         float3 right = cameraRight * scale;
         float3 up =  -cameraUp* scale;
@@ -120,7 +117,7 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         billboards[index].uvs[1][1] = float2(0, 1);
         billboards[index].uvs[1][2] = float2(0, 0);
 
-        float a = particlesRead[index].lifeTimeLeft + particlesRead[index].timeElapsed;
+        float a = particlesRead[index].timeElapsed;
         float b = particlesRead[index].lifeTimeLeft / a;
         float c = 1 - b;
         billboards[index].colorFactor = particlesRead[index].startColor * b + particlesRead[index].endColor * c;

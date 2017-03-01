@@ -301,8 +301,8 @@ namespace ocean
 		fft512x512_create_plan(&m_fft_plan, m_pd3dDevice, 3);
 
 
-		m_oceanCollisionDataBuffer = thomas::utils::D3d::CreateBufferFromStruct(m_oceanCollisionData, D3D11_BIND_CONSTANT_BUFFER);
-		
+
+		m_oceanCollisionDataBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(m_oceanCollisionData, D3D11_BIND_CONSTANT_BUFFER);
 		m_oceanCPUBuffer = thomas::utils::D3d::CreateStagingBuffer(sizeof(float) * 2000, sizeof(float));
 		thomas::utils::D3d::CreateCPUReadBufferAndUAV(m_oceanCollisionHeightData,
 			sizeof(float)*2000, sizeof(float),
@@ -581,7 +581,7 @@ namespace ocean
 
 	void OceanSimulator::UpdateOceanCollision()
 	{
-		thomas::utils::D3d::FillBuffer(m_oceanCollisionDataBuffer, m_oceanCollisionData);
+		thomas::utils::D3d::FillDynamicBufferStruct(m_oceanCollisionDataBuffer, m_oceanCollisionData);
 		thomas::ThomasCore::GetDeviceContext()->CSSetShader(m_oceanColliderCS, NULL, 0);
 		thomas::ThomasCore::GetDeviceContext()->CSSetConstantBuffers(0, 1, &m_oceanCollisionDataBuffer);
 		thomas::ThomasCore::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_oceanCollisionHeightDataUAV, NULL);

@@ -20,7 +20,7 @@ public:
 		m_radius = 0.5;
 		m_transform->SetScale(m_radius);
 		m_mass = 625.0;
-
+		m_water = ((WaterObject*)Find("WaterObject"));
 	}
 
 	void SetMass(float m)
@@ -34,8 +34,8 @@ public:
 	float UpdateBoat(component::RigidBodyComponent* rb, bool moving) 
 	{
 
-		float deltaWater = ((WaterObject*)Find("WaterObject"))->GetWaterHeightAtColliderIndex(m_collisionIndex);
-		m_collisionIndex = ((WaterObject*)Find("WaterObject"))->RegisterColliderAt(m_transform->GetPosition());
+		float deltaWater = m_water->GetWaterHeightAtColliderIndex(m_collisionIndex);
+		m_collisionIndex = m_water->RegisterColliderAt(m_transform->GetPosition());
 		float heightBelowWater = deltaWater - m_transform->GetPosition().y;
 		
 		if (heightBelowWater > 0)
@@ -88,4 +88,5 @@ private:
 	int m_collisionIndex;
 	float m_radius;
 	float m_mass;
+	WaterObject* m_water;
 };

@@ -87,6 +87,10 @@ namespace thomas
 				m_particleBufferStruct.direction = other;
 				m_shouldUpdateResources = true;
 			}
+			void ParticleEmitterComponent::SetDirection(float const x, float const y, float const z)
+			{
+				SetDirection(math::Vector3(x, y, z));
+			}
 			void ParticleEmitterComponent::SetSpeed(float const min, float const max)
 			{
 				SetMinSpeed(min);
