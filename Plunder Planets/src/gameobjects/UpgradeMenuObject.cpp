@@ -304,40 +304,12 @@ void UpgradeMenuObject::Start()
 	m_backgrounds->SetColor(math::Color(1.0f, 1.0f, 1.0f));
 }
 
+
 void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - Time::GetDeltaTime();
-	for (int i = 0; i < 3; i++) //Move to own function
-	{
-		if ((m_yArray[i] == 1) && (m_xArray[0] == 1)) //Left side is selected, set highlights
-		{
-			if (i == 0)
-				m_cannonIcon->SetHovering(true);
-			if (i == 1)
-				m_movementIcon->SetHovering(true);
-			if (i == 2)
-				m_resourceIcon->SetHovering(true);
 
-			m_shieldIcon->SetHovering(false);		//Needs to change if more icons are added in column 2
-		}
-		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1))
-		{
-			if (i == 0)
-				m_cannonIcon->SetHovering(false);
-			if (i == 1)
-				m_movementIcon->SetHovering(false);
-			if (i == 2)
-				m_resourceIcon->SetHovering(false);
-			m_shieldIcon->SetHovering(false);
-		}
-		if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
-		{
-			m_shieldIcon->SetHovering(true);
-			m_cannonIcon->SetHovering(false);
-			m_movementIcon->SetHovering(false);
-			m_resourceIcon->SetHovering(false);
-		}
-	}
+	SetSelectedObject();
 
 	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back))
 	{
@@ -348,146 +320,363 @@ void UpgradeMenuObject::Update()
 		if (Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back)) //We decided to undo our upgrade
 			undo = true;
 
-		if (m_cannonIcon->isHovering()) //Move into CannonCheck function later
+		CannonCheck(upgrade, undo);
+
+		MovementCheck(upgrade, undo);
+		
+		ResourceCheck(upgrade, undo);
+
+		ShieldCheck(upgrade, undo);
+	}
+
+	Navigation();
+	
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
+		ThomasCore::Exit();
+
+	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
+		Scene::LoadScene<GameScene>();
+}
+
+
+
+void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
+{
+	if (m_cannonIcon->isHovering())
+	{
+		if (!m_cannonCheck[0] || (undo && !m_cannonCheck[1])) //First time choosing to upgrade Cannon
 		{
-			if (!m_cannonCheck[0]) //First time choosing to upgrade Cannon
+			if (upgrade)
 			{
-				if (upgrade)
-				{
-					m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-					m_cannonCheck[0] = true;
-				}
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonCheck[0] = true;
 				//Increase Cannon Dmg/Spread/Quantity first time
 			}
-			else if (m_cannonCheck[0] && !m_cannonCheck[1])
+			else if (undo) //Doesn't need an if(undo), could just be else, but more clear what is happening this way
+			{
+				m_cannonTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_cannonCheck[0] = false;
+				//Undo first upgrade
+			}
+		}
+		else if (m_cannonCheck[0] && !m_cannonCheck[1] || (undo && !m_cannonCheck[2]))
+		{
+			if (upgrade)
 			{
 				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[1] = true;
 				//Increase Cannon Dmg/Spread/Quantity second time
 			}
-			else if (m_cannonCheck[1] && !m_cannonCheck[2])
+			else if (undo)
+			{
+				m_cannonTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_cannonCheck[1] = false;
+				//Undo second upgrade
+			}
+		}
+		else if (m_cannonCheck[1] && !m_cannonCheck[2] || (undo && !m_cannonCheck[3]))
+		{
+			if (upgrade)
 			{
 				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[2] = true;
 				//Increase Cannon Dmg/Spread/Quantity third time
 			}
-			else if (m_cannonCheck[2] && !m_cannonCheck[3])
+			else if (undo)
+			{
+				m_cannonTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_cannonCheck[2] = false;
+				//Undo third upgrade
+			}
+		}
+		else if (m_cannonCheck[2] && !m_cannonCheck[3] || (undo && !m_cannonCheck[4]))
+		{
+			if (upgrade)
 			{
 				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[3] = true;
 				//Increase Cannon Dmg/Spread/Quantity fourth time
 			}
-			else if (m_cannonCheck[3])
+			else if (undo)
 			{
-				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				//Increase Cannon Dmg/Spread/Quantity fifth time
+				m_cannonTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_cannonCheck[3] = false;
+				//Undo fourth upgrade
 			}
 		}
-
-		if (m_movementIcon->isHovering()) //Move into Movement Check function
+		else if (m_cannonCheck[3] || (undo && m_cannonCheck[4]))
 		{
-			if (!m_movementCheck[0]) //First time choosing to upgrade Movement
+			if (upgrade)
+			{
+				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonCheck[4] = true;
+				//Increase Cannon Dmg/Spread/Quantity fifth time
+			}
+			else if (undo)
+			{
+				m_cannonTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_cannonCheck[4] = false;
+				//Undo fifth upgrade
+			}
+		}
+	}
+}
+
+void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
+{
+	if (m_movementIcon->isHovering())
+	{
+		if (!m_movementCheck[0] || (undo && !m_movementCheck[1])) //First time choosing to upgrade Movement
+		{
+			if (upgrade)
 			{
 				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[0] = true;
 				//Increase movement speed first time
 			}
-			else if (m_movementCheck[0] && !m_movementCheck[1])
+			if (undo)
+			{
+				m_movementTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_movementCheck[0] = false;
+				//Undo first movement upgrade
+			}
+		}
+		else if (m_movementCheck[0] && !m_movementCheck[1] || (undo && !m_movementCheck[2]))
+		{
+			if (upgrade)
 			{
 				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[1] = true;
 				//Increase movement speed second time
 			}
-			else if (m_movementCheck[1] && !m_movementCheck[2])
+			if (undo)
+			{
+				m_movementTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_movementCheck[1] = false;
+				//Undo second movement upgrade
+			}
+		}
+		else if (m_movementCheck[1] && !m_movementCheck[2] || (undo && !m_movementCheck[3]))
+		{
+			if (upgrade)
 			{
 				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[2] = true;
 				//Increase movement speed third time
 			}
-			else if (m_movementCheck[2] && !m_movementCheck[3])
+			if (undo)
+			{
+				m_movementTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_movementCheck[2] = false;
+				//Undo third movement upgrade
+			}
+		}
+		else if (m_movementCheck[2] && !m_movementCheck[3] || (undo && !m_movementCheck[4]))
+		{
+			if (upgrade)
 			{
 				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[3] = true;
 				//Increase movement speed fourth time
 			}
-			else if (m_movementCheck[3])
+			if (undo)
 			{
-				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				//Increase movement speed fifth time
+				m_movementTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_movementCheck[3] = false;
+				//Undo fourth movement upgrade
 			}
 		}
-		if (m_resourceIcon->isHovering()) //Move into Resource Check Function
+		else if (m_movementCheck[3] || (undo && m_movementCheck[4]))
 		{
-			if (!m_resourceCheck[0]) //First time choosing to upgrade Resource Cost Reduction
+			if (upgrade)
+			{
+				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementCheck[4] = true;
+				//Increase movement speed fifth time
+			}
+			if (undo)
+			{
+				m_movementTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_movementCheck[4] = false;
+				//Undo fifth movement upgrade
+			}
+		}
+	}
+}
+
+void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
+{
+	if (m_resourceIcon->isHovering())
+	{
+		if (!m_resourceCheck[0] || (undo && !m_resourceCheck[1])) //First time choosing to upgrade Resource Cost Reduction
+		{
+			if (upgrade)
 			{
 				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[0] = true;
 				//Decrease resource costs first time
 			}
-			else if (m_resourceCheck[0] && !m_resourceCheck[1])
+			else if (undo)
+			{
+				m_resourceTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_resourceCheck[0] = false;
+				//Undo first resource cost reduction
+			}
+		}
+		else if (m_resourceCheck[0] && !m_resourceCheck[1] || (undo && !m_resourceCheck[2]))
+		{
+			if (upgrade)
 			{
 				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[1] = true;
 				//Decrease resource costs second time
 			}
-			else if (m_resourceCheck[1] && !m_resourceCheck[2])
+			else if (undo)
+			{
+				m_resourceTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_resourceCheck[1] = false;
+				//Undo second resource cost reduction
+			}
+		}
+		else if (m_resourceCheck[1] && !m_resourceCheck[2] || (undo && !m_resourceCheck[3]))
+		{
+			if (upgrade)
 			{
 				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[2] = true;
 				//Decrease resource costs third time
 			}
-			else if (m_resourceCheck[2] && !m_resourceCheck[3])
+			else if (undo)
+			{
+				m_resourceTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_resourceCheck[2] = false;
+				//Undo third resource cost reduction
+			}
+		}
+		else if (m_resourceCheck[2] && !m_resourceCheck[3] || (undo && !m_resourceCheck[4]))
+		{
+			if (upgrade)
 			{
 				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[3] = true;
 				//Decrease resource costs fourth time
 			}
-			else if (m_resourceCheck[3])
+			else if (undo)
 			{
-				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				//Decrease resource costs fifth time
+				m_resourceTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_resourceCheck[3] = false;
+				//Undo fourth resource cost reduction
 			}
 		}
-		if (m_shieldIcon->isHovering()) //Move into Shield Check Function
+		else if (m_resourceCheck[3] || (undo && m_resourceCheck[4]))
 		{
-			if (!m_shieldCheck[0]) //First time choosing to upgrade Shield
+			if (upgrade)
+			{
+				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceCheck[4] = true;
+				//Decrease resource costs fifth time
+			}
+			else if (undo)
+			{
+				m_resourceTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_resourceCheck[4] = false;
+				//Undo fifth resource cost reduction
+			}
+		}
+	}
+}
+
+void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
+{
+	if (m_shieldIcon->isHovering())
+	{
+		if (!m_shieldCheck[0] || (undo && !m_shieldCheck[1])) //First time choosing to upgrade Shield
+		{
+			if (upgrade)
 			{
 				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[0] = true;
 				//Buy Shield
 			}
-			else if (m_shieldCheck[0] && !m_shieldCheck[1])
+			else if (undo)
+			{
+				m_shieldTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_shieldCheck[0] = false;
+				//Undo last shield upgrade
+			}
+		}
+		else if (m_shieldCheck[0] && !m_shieldCheck[1] || (undo && !m_shieldCheck[2]))
+		{
+			if (upgrade)
 			{
 				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[1] = true;
-				//Upgrade Shield first time
+				//Buy Shield
 			}
-			else if (m_shieldCheck[1] && !m_shieldCheck[2])
+			else if (undo)
+			{
+				m_shieldTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_shieldCheck[1] = false;
+				//Undo last shield upgrade
+			}
+		}
+		else if (m_shieldCheck[1] && !m_shieldCheck[2] || (undo && !m_shieldCheck[3]))
+		{
+			if (upgrade)
 			{
 				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[2] = true;
-				//Upgrade Shield second time
+				//Buy Shield
 			}
-			else if (m_shieldCheck[2] && !m_shieldCheck[3])
+			else if (undo)
+			{
+				m_shieldTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_shieldCheck[2] = false;
+				//Undo last shield upgrade
+			}
+		}
+		else if (m_shieldCheck[2] && !m_shieldCheck[3] || (undo && !m_shieldCheck[4]))
+		{
+			if (upgrade)
 			{
 				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[3] = true;
-				//Upgrade Shield third time
+				//Buy Shield
 			}
-			else if (m_shieldCheck[3])
+			else if (undo)
+			{
+				m_shieldTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_shieldCheck[3] = false;
+				//Undo last shield upgrade
+			}
+		}
+		else if (m_shieldCheck[3] || (undo && m_shieldCheck[4]))
+		{
+			if (upgrade)
 			{
 				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				//Upgrade Shield fourth time
+				m_shieldCheck[4] = true;
+				//Buy Shield
+			}
+			else if (undo)
+			{
+				m_shieldTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_shieldCheck[4] = false;
+				//Undo last shield upgrade
 			}
 		}
 	}
-	//Menu scrolling, move to own function, LONG if() statement
+}
+
+void UpgradeMenuObject::Navigation()
+{
+	//Menu navigation, check if any navigating buttons are pressed before making selection moves
 	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f)
 		|| (Input::GetButton(Input::Buttons::DPAD_UP) && m_delay < 0.1f) || (Input::GetKey(Input::Keys::Down) && m_delay < 0.1f)
 		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f) || Input::GetButton(Input::Buttons::DPAD_RIGHT) || Input::GetButton(Input::Buttons::DPAD_LEFT)
 		|| Input::GetLeftStickX())
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++) //three rows currently
 		{
 			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're already at the top
 			{
@@ -542,9 +731,39 @@ void UpgradeMenuObject::Update()
 		}
 		m_delay = 0.3f;
 	}
-	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
-		ThomasCore::Exit();
+}
 
-	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
-		Scene::LoadScene<GameScene>();
+void UpgradeMenuObject::SetSelectedObject()
+{
+	for (int i = 0; i < 3; i++) //Move to own function
+	{
+		if ((m_yArray[i] == 1) && (m_xArray[0] == 1)) //Left side is selected, set highlights
+		{
+			if (i == 0)
+				m_cannonIcon->SetHovering(true);
+			if (i == 1)
+				m_movementIcon->SetHovering(true);
+			if (i == 2)
+				m_resourceIcon->SetHovering(true);
+
+			m_shieldIcon->SetHovering(false);		//Needs to change if more icons are added in column 2
+		}
+		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1))
+		{
+			if (i == 0)
+				m_cannonIcon->SetHovering(false);
+			if (i == 1)
+				m_movementIcon->SetHovering(false);
+			if (i == 2)
+				m_resourceIcon->SetHovering(false);
+			m_shieldIcon->SetHovering(false);
+		}
+		if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
+		{
+			m_shieldIcon->SetHovering(true);
+			m_cannonIcon->SetHovering(false);
+			m_movementIcon->SetHovering(false);
+			m_resourceIcon->SetHovering(false);
+		}
+	}
 }
