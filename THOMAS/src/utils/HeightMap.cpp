@@ -63,6 +63,52 @@ namespace thomas
 			CalculateNormals(size, detail, plane);
 		}
 
+		void HeightMap::ApplyHeightMap(int size, float detail, Plane::PlaneData& plane)
+		{
+			float width = size * detail;
+			float height = width;
+			double e = 0.0f;
+
+			noise::module::Perlin myModule;
+
+			myModule.SetNoiseQuality(noise::NoiseQuality::QUALITY_BEST);
+
+			myModule.SetFrequency(1.f);
+
+			myModule.SetSeed(rand() % 1000);
+
+		
+			for (unsigned int i = 0; i < plane.verts.size(); i++)
+			{
+
+				int x = plane.verts[i].position.x;
+				int y = plane.verts[i].position.y;
+
+				e = 0.0f;
+				double nx = x / width - 0.5,
+					ny = y / height - 0.5;
+
+				e += myModule.GetValue(nx, ny, 0) / 2.0 + 0.5;
+				e += myModule.GetValue(2 * nx, 2 * ny, 0) / 2.0 + 0.5;
+				e += myModule.GetValue(4 * nx, 4 * ny, 0) / 2.0 + 0.5;
+				e += myModule.GetValue(8 * nx, 8 * ny, 0) / 2.0 + 0.5;
+				e += myModule.GetValue(16 * nx, 16 * ny, 0) / 2.0 + 0.5;
+				e += myModule.GetValue(32 * nx, 32 * ny, 0) / 2.0 + 0.5;
+				e = pow(e, 3.0f);
+
+
+				double d = 2 * sqrt(nx*nx + ny*ny);
+				e = (e + 1.00) * (1 - 2.00*pow(d, 1.70));
+
+			/*	if (e < 0.0f)
+					e = 0.0f;*/
+
+				plane.verts[i].position.y = e;
+			}
+
+			CalculateNormals(size, detail, plane);
+		}
+
 		void HeightMap::CalculateNormals(int size, float detail, Plane::PlaneData & plane)
 		{
 			int width = size * detail;

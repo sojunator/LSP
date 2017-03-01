@@ -220,7 +220,7 @@ namespace thomas
 			// Z-buffer view desc
 			depthViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 			#if THOMAS_AA_COUNT > 1
-				depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+				depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 			#else
 				depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 			#endif

@@ -11,8 +11,6 @@ namespace thomas
 	public:
 	
 		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance);
-		void GenerateMesh(utils::Plane::PlaneData tempPlanes, graphics::Material* m);
-		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
 		~Islands();
 
 		int GetPlunderRate();									//GetplunderRate
@@ -40,6 +38,9 @@ namespace thomas
 
 	private:
 		void GeneratePos();
+		void GenerateMesh(utils::Plane::PlaneData tempPlanes, graphics::Material* m);
+		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlanes, graphics::Material* m);
+		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
 
 	private:
 		int m_plunderRate;

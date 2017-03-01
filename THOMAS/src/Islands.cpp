@@ -6,13 +6,15 @@ namespace thomas
 	Islands::Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance)
 	{
 		std::srand(time(NULL));
-		utils::Plane::PlaneData plane = utils::Plane::CreatePlane(mapSize, detail);
+
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
-		m_nrOfIslands = nrOfIslands;
+		m_mapSize = mapSize;
+		m_minDistance = minDistance;
 		m_plunderRate = 30;
+		m_nrOfIslands = nrOfIslands;
 
-		for (int i = 0; i < nrOfIslands; i++)
+		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			m_lostTreasureSinceLastEnemySpawn.push_back(0);
 			m_size.push_back(size);
@@ -23,23 +25,27 @@ namespace thomas
 			m_collisionRadius.push_back(size*0.3);
 		}
 
-		GeneratePos();
+		GeneratePos(); // find suitable pos
+		std::vector<utils::Plane::PlaneData> planes;
+
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
-			m_islandCenterWorldPos[i].x -= mapSize / 2;
-			m_islandCenterWorldPos[i].z += mapSize / 2;
+			planes.push_back(utils::Plane::CreatePlane(size, detail));
 		}
 
-		for (int i = 0; i < plane.verts.size(); i++)
+		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-			plane.verts[i].position.x -= mapSize / 2;
-			plane.verts[i].position.z += mapSize / 2;
+			utils::HeightMap::ApplyHeightMap(size, detail, planes[i]);
+			//m_islandCenterWorldPos[i].x -= mapSize / 2;
+			//m_islandCenterWorldPos[i].z += mapSize / 2;
 		}
 
-
-		ChangeHeightMapValues(plane);
-		GenerateMesh(plane, m);
+		for (unsigned int i = 0; i < m_nrOfIslands; i++)
+		{
+			ApplyOffSet(i, planes[i]);
+		}
+		//ChangeHeightMapValues(planes);
+		GenerateMesh(planes, m);
 
 	}
 	
@@ -48,6 +54,16 @@ namespace thomas
 		std::vector<thomas::graphics::Mesh*> mesh;
 		mesh.push_back(new graphics::Mesh(tempPlane.verts, tempPlane.indices, "Islands", m));
 		m_mesh.push_back(mesh);
+	}
+
+	void Islands::GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlanes, graphics::Material* m)
+	{
+		std::vector<thomas::graphics::Mesh*> mesh;
+		for (auto plane : tempPlanes)
+		{
+			mesh.push_back(new graphics::Mesh(plane.verts, plane.indices, "Islands", m));
+			m_mesh.push_back(mesh);
+		}
 	}
 
 	void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
@@ -196,9 +212,7 @@ namespace thomas
 		int attempt = 0;
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
-		/*tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
-		tempOffset.y = 0;
-		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);*/
+
 
 		tempOffset.x = m_mapSize / 2;
 		tempOffset.y = 0;
