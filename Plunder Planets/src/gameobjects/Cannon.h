@@ -25,7 +25,7 @@ public:
 		m_emitterSmoke->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 		m_emitterSmoke->SetMaxDelay(1.75f);
 		m_emitterSmoke->SetMinDelay(0.15f);
 		m_emitterSmoke->SetMaxSpeed(9.0f);
@@ -45,7 +45,7 @@ public:
 		m_emitterSmoke2->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke2->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSmoke2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
+		m_emitterSmoke2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 		m_emitterSmoke2->SetMaxDelay(1.5f);
 		m_emitterSmoke2->SetMinDelay(0.15f);
 		m_emitterSmoke2->SetMaxSpeed(13.0f);
