@@ -144,35 +144,33 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return -1;
 		}
 
-		if (turnDir == 0)	//Forward
+		if (turnDir == 0)	//Forward, no enemies near
 		{
-			if (!objectFront)	//Forward
-			{
-				if (pDotF >= 0.8)	//Forward
-					return 0;
-				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
-					return 1;
-				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
-					return -1;
-			}
+			if (objectFront && objectLeft)	//Turn right
+				return 1; 
+			else if (objectFront && objectRight)	//Turn left
+				return -1;
 			else if (objectFront)	//Turn
 			{
-				if (pDotR <= 0.0)	//Turn left
-				{
-					return -1;
-					//if (!objectLeft)	//Turn left
-					//	return -1;
-					//else	//Turn right
-					//	return 1;
-				}
-				else	//Turn right
-				{
+				if (pDotR >= 0.0)
 					return 1;
-					//if (!objectRight)	//Turn right
-					//	return 1;
-					//else	//Turn left
-					//	return -1;
-				}
+				else
+					return -1;
+			}
+			else if (objectRight)	//Left or forward
+			{
+				if (pDotR >= 0.0 && pDotF >= 0.0)
+					return 0;
+				else
+					return -1;
+
+			}
+			else if (objectLeft)	//Right or forward
+			{
+				if (pDotR <= 0.0 && pDotF >= 0.0)
+					return 0;
+				else
+					return 1;
 			}
 		}
 		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
@@ -217,35 +215,29 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return -1;
 		}
 
-		if (turnDir == 0)	//Forward
+		if (turnDir == 0)	//Forward, no enemies near
 		{
-			if (!objectFront)	//Forward
+			if (objectFront)	//Turn
 			{
-				if (pDotF >= 0.8)	//Forward
-					return 0;
-				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+				if (pDotR >= 0.0)
 					return 1;
-				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+				else
 					return -1;
 			}
-			else if (objectFront)	//Turn
+			else if (objectRight)	//Left or forward
 			{
-				if (pDotR <= 0.0)	//Turn left
-				{
+				if (pDotR >= 0.0 && pDotF >= 0.0)
+					return 0;
+				else
 					return -1;
-					//if (!objectLeft)	//Turn left
-					//	return -1;
-					//else	//Turn right
-					//	return 1;
-				}
-				else	//Turn right
-				{
+
+			}
+			else if (objectLeft)	//Right or forward
+			{
+				if (pDotR <= 0.0 && pDotF >= 0.0)
+					return 0;
+				else
 					return 1;
-					//if (!objectRight)	//Turn right
-					//	return 1;
-					//else	//Turn left
-					//	return -1;
-				}
 			}
 		}
 		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
@@ -290,35 +282,29 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 				return -1;
 		}
 
-		if (turnDir == 0)	//Forward
+		if (turnDir == 0)	//Forward, no enemies near
 		{
-			if (!objectFront)	//Forward
+			if (objectFront)	//Turn
 			{
-				if (pDotR >= 0.9 || pDotR <= -0.9)	//Forward
-					return 0;
-				else if ((pDotR <= 0.0 && pDotF >= 0.1) || (pDotR >= 0.0 && pDotF <= -0.1))	//Turn right
+				if (pDotR >= 0.0)
 					return 1;
-				else if ((pDotR <= 0.0 && pDotF <= -0.1) || (pDotR >= 0.0 && pDotF >= 0.1))	//Turn left
+				else
 					return -1;
 			}
-			else if (objectFront)	//Turn
+			else if (objectRight)	//Left or forward
 			{
-				if (pDotR <= 0.0)	//Turn left
-				{
+				if (pDotF >= 0.0)
+					return 0;
+				else
 					return -1;
-					//if (!objectLeft)	//Turn left
-					//	return -1;
-					//else	//Turn right
-					//	return 1;
-				}
-				else	//Turn right
-				{
+
+			}
+			else if (objectLeft)	//Right or forward
+			{
+				if (pDotF >= 0.0)
+					return 0;
+				else
 					return 1;
-					//if (!objectRight)	//Turn right
-					//	return 1;
-					//else	//Turn left
-					//	return -1;
-				}
 			}
 		}
 		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.

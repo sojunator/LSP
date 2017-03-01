@@ -153,7 +153,7 @@ public:
 			Rotate();
 			break;
 		case AI::Behavior::Firing:
-			FireCannons();
+			//FireCannons();
 			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
 			Rotate();
 			break;
