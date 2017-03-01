@@ -95,7 +95,7 @@ public:
 		m_dead = false;
 		//Movement
 		m_speed = 80;
-		m_turnSpeed = 10;
+		m_turnSpeed = 20;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
@@ -182,9 +182,9 @@ public:
 		if (m_transform->Forward() != m_newForwardVec)
 		{
 			if (m_turnDir == 1)
-				m_rigidBody->applyTorque(btVector3(0, m_turnSpeed * m_rigidBody->GetMass(), 0));
-			else if (m_turnDir == -1)
 				m_rigidBody->applyTorque(btVector3(0, -m_turnSpeed * m_rigidBody->GetMass(), 0));
+			else if (m_turnDir == -1)
+				m_rigidBody->applyTorque(btVector3(0, m_turnSpeed * m_rigidBody->GetMass(), 0));
 		}
 	}
 
