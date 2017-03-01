@@ -265,7 +265,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	case AI::Behavior::Firing:
 	{
 		math::Vector3 playerFor = m_playerShip->m_transform->Forward();
-		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor) - pos;
+		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor*4) - pos;
 		playerDir.Normalize();
 		pDotR = playerDir.Dot(right);
 		pDotF = playerDir.Dot(forward);
@@ -344,7 +344,8 @@ int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
 	if (m_idleTimer >= m_idleTime)
 	{
 		right.Normalize();
-		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		math::Vector3 playerFor = m_playerShip->m_transform->Forward();
+		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor*4) - pos;
 		playerDir.Normalize();
 		float pDotR = playerDir.Dot(right);
 

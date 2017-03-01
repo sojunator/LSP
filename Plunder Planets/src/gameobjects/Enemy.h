@@ -206,8 +206,9 @@ public:
 			
 		else if (m_shootDir == -1)
 		{
+			math::Vector3 targetFor = m_ai->GetTargetForward();
 			math::Vector3 targetPos = m_ai->GetTargetPos();
-			math::Vector2 target(targetPos.x, targetPos.z);
+			math::Vector2 target(targetFor.x*4 + targetPos.x, targetFor.x * 4 + targetPos.z);
 			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
 			if (angle > -500.0)
