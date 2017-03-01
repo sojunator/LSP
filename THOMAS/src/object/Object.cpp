@@ -11,9 +11,22 @@ namespace thomas
 		{
 			m_type = type;
 			m_alive = true;
+			m_stateSet = false;
 		}
 		Object::~Object()
 		{
+		}
+		void Object::SetActive(bool active)
+		{
+			if (m_active != active ||!m_stateSet)
+			{
+				m_stateSet = true;
+				m_active = active;
+				if (m_active)
+					OnEnable();
+				else
+					OnDisable();
+			}
 		}
 		std::string Object::GetType()
 		{

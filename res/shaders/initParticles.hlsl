@@ -18,10 +18,13 @@ cbuffer InitBuffer : register(b0)
     float initMinLifeTime;
     float rand;
     float initRotationSpeed;
-    bool initLooping;
+    float initRotation;
 
     float4 initStartColor;
     float4 initEndColor;
+
+    bool initLooping;
+    float3 padddddd;
 };
 
 struct ParticleStruct
@@ -40,14 +43,14 @@ struct ParticleStruct
     float lifeTimeLeft;
     float timeElapsed;
     float rotationSpeed;
-    bool looping;
+    float rotation;
 
     float4 startColor;
 
     float4 endColor;
 
     float3 initPosition;
-    float paddd;
+    bool looping;
 };
 
 RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
@@ -67,7 +70,7 @@ uint rand_xorshift(uint rng_state)
 
 
 [numthreads(256, 1, 1)]
-void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
+void CSMain( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
 {
     //INITIALIZE
     float index = (Gid.x * 256) + GTid.x;
@@ -82,11 +85,11 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     float randClamp = (1.0 / 4294967296.0);
     
 	
-    float delay = (w1 * randClamp * (initMaxDelay - initMinDelay)) + initMinDelay;
-    float speed = (w2 * randClamp * (initMaxSpeed - initMinSpeed)) + initMinSpeed;
+    float delay = max((w1 * randClamp * (initMaxDelay - initMinDelay)), 0) + initMinDelay;
+    float speed = max((w2 * randClamp * (initMaxSpeed - initMinSpeed)), 0) + initMinSpeed;
 
-    float size = (w4 * randClamp * (initMaxSize - initMinSize)) + initMinSize;
-    float lifeTime = (w5 * randClamp * (initMaxSize - initMinLifeTime)) + initMinLifeTime;
+    float size = max((w4 * randClamp * (initMaxSize - initMinSize)), 0) + initMinSize;
+    float lifeTime = max((w5 * randClamp * (initMaxSize - initMinLifeTime)), 0) + initMinLifeTime;
 
     float randClampTimes2 = randClamp * 2;
 
@@ -116,6 +119,7 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite[index].lifeTimeLeft = lifeTime;
     particlesWrite[index].timeElapsed = 0.0f;
     particlesWrite[index].rotationSpeed = initRotationSpeed;
+    particlesWrite[index].rotation = initRotation;
     particlesWrite[index].looping = initLooping;
     particlesWrite[index].startColor = initStartColor;
     particlesWrite[index].endColor = initEndColor;
@@ -132,6 +136,7 @@ void main( uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID )
     particlesWrite2[index].lifeTimeLeft = lifeTime;
     particlesWrite2[index].timeElapsed = 0.0f;
     particlesWrite2[index].rotationSpeed = initRotationSpeed;
+    particlesWrite2[index].rotation = initRotation;
     particlesWrite2[index].looping = initLooping;
     particlesWrite2[index].startColor = initStartColor;
     particlesWrite2[index].endColor = initEndColor;

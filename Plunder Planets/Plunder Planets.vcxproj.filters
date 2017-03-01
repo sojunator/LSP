@@ -12,6 +12,7 @@
     <ClCompile Include="src\gameobjects\Ship.cpp" />
     <ClCompile Include="src\Ocean\FFT\fft_512x512_c2c.cpp" />
     <ClCompile Include="src\Ocean\OceanSimulator.cpp" />
+    <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -42,8 +43,11 @@
     <ClInclude Include="src\gameobjects\Cannon.h" />
     <ClInclude Include="src\gameobjects\StandardParticleEmitter.h" />
     <ClInclude Include="src\gameobjects\WaterSplashParticle.h" />
+    <ClInclude Include="src\scenes\UpgradeScene.h" />
+    <ClInclude Include="src\gameobjects\UpgradeMenuObject.h" />
     <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\Ocean\OceanSimulator.h" />
+    <ClInclude Include="src\gameobjects\Wormhole.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

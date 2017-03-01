@@ -190,8 +190,10 @@
     <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
+    <ClInclude Include="src\gameobjects\UpgradeMenuObject.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\gameobjects\WaterSplashParticle.h" />
+    <ClInclude Include="src\gameobjects\Wormhole.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />
@@ -202,6 +204,7 @@
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
+    <ClInclude Include="src\scenes\UpgradeScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />
@@ -214,6 +217,7 @@
     <ClCompile Include="src\AI\AI.cpp" />
     <ClCompile Include="src\AI\Pathfinding.cpp" />
     <ClCompile Include="src\gameobjects\Ship.cpp" />
+    <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />

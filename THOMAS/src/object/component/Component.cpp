@@ -11,6 +11,12 @@ namespace thomas
 			{
 			}
 
+			bool Component::GetActive()
+			{
+				return m_gameObject->GetActive() && m_active;
+			}
+
+
 		}
 	}
 }

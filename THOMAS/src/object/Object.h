@@ -13,12 +13,16 @@ namespace thomas
 		public:
 			Object(std::string type);
 			virtual ~Object();
+
+			virtual void OnEnable(){}
+			virtual void OnDisable(){}
 			virtual void Start() {}
 			virtual void Update() {}
 			virtual void FixedUpdate() {}
 			virtual void LateUpdate() {}
 			virtual void Render() {}
-
+			virtual void SetActive(bool active);
+			virtual bool GetActive() { return m_active; }
 			std::string GetType();
 			Scene* GetScene();
 
@@ -39,9 +43,10 @@ namespace thomas
 			static void Clean();
 
 		private:
-			
+			bool m_stateSet;
 			static std::vector<Object*> s_objects;
 		protected:
+			bool m_active;
 			bool m_alive;
 			std::string m_type;
 			Scene* m_scene;

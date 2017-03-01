@@ -181,7 +181,7 @@ namespace thomas
 			}
 			
 			m_shader->BindTextureSampler(Texture::GetSamplerState(Texture::SamplerState::WRAP), 0);
-			m_shader->BindTextures(prevRender, 0);
+			m_shader->BindResource(prevRender, 0);
 			
 			m_shader->BindBuffer(s_cameraBuffer, Shader::ResourceType::GAME_OBJECT);
 
@@ -189,7 +189,7 @@ namespace thomas
 			thomas::ThomasCore::GetDeviceContext()->Draw(4, 0);
 			Unbind();
 			m_shader->BindBuffer(NULL, Shader::ResourceType::GAME_OBJECT);
-			m_shader->BindTextures(NULL, 0);
+			m_shader->BindResource(NULL, 0);
 			m_shader->Unbind();
 			return true;
 		}

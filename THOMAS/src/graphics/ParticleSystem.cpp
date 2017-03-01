@@ -13,7 +13,8 @@ namespace thomas
 
 		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
 
-		ID3D11ComputeShader* ParticleSystem::s_billboardCS;
+		Shader* ParticleSystem::s_billboardCS;
+		Shader* ParticleSystem::s_initParticleCS;
 		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
 		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
 
@@ -42,12 +43,9 @@ namespace thomas
 			s_cameraBuffer = nullptr;
 			s_matrixBuffer = nullptr;
 			s_emitterPosBuffer = nullptr;
-			ID3DBlob* shaderBlob = thomas::graphics::Shader::Compile("../res/shaders/billboards.hlsl", "cs_5_0", "main");
-			HRESULT hr = ThomasCore::GetDevice()->CreateComputeShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, &s_billboardCS);
-			if (FAILED(hr))
-			{
-				LOG_HR(hr);
-			}
+			s_initParticleCS = Shader::CreateComputeShader("InitParticleCS","../res/shaders/initParticles.hlsl", NULL);
+			s_billboardCS = Shader::CreateComputeShader("ParticleCS", "../res/shaders/billboards.hlsl", NULL);
+
 			CreateBillboardUAVandSRV();
 
 
@@ -70,7 +68,7 @@ namespace thomas
 			blendDesc.RenderTarget[0] = rtbd;
 			
 
-			hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_particleBlendState);
+			HRESULT hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_particleBlendState);
 			
 			return;
 		}
@@ -128,42 +126,42 @@ namespace thomas
 				FLOAT blendfactor[4] = { 0, 0, 0, 0 };
 				ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
 
-				ID3D11DeviceContext* deviceContext = ThomasCore::GetDeviceContext();
-				deviceContext->CSSetShader(s_billboardCS, NULL, 0);
+						
 
 				emitter->SwapUAVsandSRVs(s_activeParticleUAV, s_activeParticleSRV);
 
-				//bind uavs and srvs
-				deviceContext->CSSetUnorderedAccessViews(0, 1, &s_activeParticleUAV, NULL);
-				deviceContext->CSSetUnorderedAccessViews(1, 1, &s_billboardsUAV, NULL);
-				deviceContext->CSSetShaderResources(0, 1, &s_activeParticleSRV);
-				deviceContext->CSSetConstantBuffers(0, 1, &s_cameraBuffer);
-				deviceContext->CSSetConstantBuffers(1, 1, &s_emitterPosBuffer);
+				//bind CS
+				s_billboardCS->Bind();
+				s_billboardCS->BindUAV(s_activeParticleUAV, 0);
+				s_billboardCS->BindUAV(s_billboardsUAV, 1);
+				s_billboardCS->BindResource(s_activeParticleSRV, 0);
+				s_billboardCS->BindBuffer(s_cameraBuffer, 0);
+				s_billboardCS->BindBuffer(s_emitterPosBuffer, 1);
 
-				deviceContext->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
-				//unbind uav
-				deviceContext->CSSetUnorderedAccessViews(0, 1, nulluav, NULL);
-				deviceContext->CSSetUnorderedAccessViews(1, 1, nulluav, NULL);
-				deviceContext->CSSetShaderResources(0, 1, nullsrv);
-
-				//bind srv
-				deviceContext->VSSetShaderResources(1, 1, &s_billboardsSRV);
-				deviceContext->VSSetConstantBuffers(0, 1, &s_matrixBuffer);
+				ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfParticles() / 256 + 1, 1, 1);
+				//unbind CS
+				s_billboardCS->BindUAV(NULL, 0);
+				s_billboardCS->BindUAV(NULL, 1);
+				s_billboardCS->BindResource(NULL, 0);
+				s_billboardCS->Unbind();
+				//bind Emitter
 
 				emitter->GetShader()->Bind();
-				deviceContext->IASetInputLayout(NULL);
-				deviceContext->IASetVertexBuffers(0, 0, nullptr, 0, 0);
+				emitter->GetShader()->BindResource(s_billboardsSRV,1);
+				emitter->GetShader()->BindBuffer(s_matrixBuffer, 0);
+				ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
+				emitter->GetShader()->BindVertexBuffer(NULL, 0, 0);
 					
 				emitter->GetTexture()->Bind();
-
-					
-				deviceContext->Draw(emitter->GetNrOfParticles() * 6, 0);
+	
+				ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfParticles() * 6, 0);
 
 				ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 
-				//undbind srv
+				//undbind Emitter
 				emitter->GetTexture()->Unbind();
-				deviceContext->VSSetShaderResources(1, 1, nullsrv);
+				emitter->GetShader()->BindResource(NULL, 1);
+				emitter->GetShader()->BindBuffer(NULL, 0);
 				emitter->GetShader()->Unbind();
 			}
 			
