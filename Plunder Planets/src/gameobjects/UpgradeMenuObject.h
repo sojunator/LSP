@@ -75,7 +75,7 @@ private:
 	bool m_resourceCheck[5] = { false };
 	bool m_shieldCheck[5] = { false };
 
-	int m_yArray[3] = { 0, 0, 0 };	//3 rows
-	int m_xArray[2] = { 0, 0 };		//2 columns
+	int m_yArray[3] = { 1, 0, 0 };	//3 rows
+	int m_xArray[2] = { 1, 0 };		//2 columns
 	float m_delay = 0.3f;
 };
