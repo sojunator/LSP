@@ -61,7 +61,8 @@ namespace thomas
 		std::vector<thomas::graphics::Mesh*> mesh;
 		for (auto plane : tempPlanes)
 		{
-			mesh.push_back(new graphics::Mesh(plane.verts, plane.indices, "Islands", m));
+			int index = 0;
+			mesh.push_back(new graphics::Mesh(plane.verts, plane.indices, "Island" + std::to_string(index++), m));
 			m_mesh.push_back(mesh);
 		}
 	}
@@ -214,9 +215,9 @@ namespace thomas
 		math::Vector3 tempOffset;
 
 
-		tempOffset.x = m_mapSize / 2;
+		tempOffset.x = 0;
 		tempOffset.y = 0;
-		tempOffset.z = m_mapSize / 2;
+		tempOffset.z = 0;
 
 
 		tempOffset.x += 10;
@@ -237,9 +238,9 @@ namespace thomas
 			bool foundPos = false;
 			while (!foundPos && MAX_ATTEMPTS != attempt)
 			{
-				tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+				tempOffset.x = rand() % 1024;
 				tempOffset.y = 0;
-				tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
+				tempOffset.z = rand() % 1024;
 				tempOffset.x += 10;
 				tempOffset.z += 10;
 				
@@ -276,7 +277,7 @@ namespace thomas
 			}
 
 		}
-		m_worldPosOffset.erase(m_worldPosOffset.begin());
+ 		m_worldPosOffset.erase(m_worldPosOffset.begin());
 		m_islandCenterWorldPos.erase(m_islandCenterWorldPos.begin());
 		m_nrOfIslands = --addedIslands;
 	}
