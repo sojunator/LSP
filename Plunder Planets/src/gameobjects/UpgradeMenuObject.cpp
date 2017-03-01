@@ -37,9 +37,6 @@ void UpgradeMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 
-	//m_yArray[0] = 1; //Start with first row selected
-	//m_xArray[0] = 1; //First column selected
-
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();

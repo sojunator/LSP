@@ -299,6 +299,10 @@ void Ship::ShipAimCannons()
 	//	
 	//}
 }
+void Ship::UpgradeSpeed(float speedIncrease)
+{
+	m_speed = m_speed + speedIncrease;
+}
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
 	m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
