@@ -307,9 +307,9 @@ void UpgradeMenuObject::Start()
 void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - Time::GetDeltaTime();
-	for (int i = 0; i < 5; i++) //Move to own function
+	for (int i = 0; i < 3; i++) //Move to own function
 	{
-		if ((m_yArray[i] == 1) && (m_xArray[0] == 1))
+		if ((m_yArray[i] == 1) && (m_xArray[0] == 1)) //Left side is selected, set highlights
 		{
 			if (i == 0)
 				m_cannonIcon->SetHovering(true);
@@ -317,9 +317,20 @@ void UpgradeMenuObject::Update()
 				m_movementIcon->SetHovering(true);
 			if (i == 2)
 				m_resourceIcon->SetHovering(true);
+
 			m_shieldIcon->SetHovering(false);		//Needs to change if more icons are added in column 2
 		}
-		else if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
+		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1))
+		{
+			if (i == 0)
+				m_cannonIcon->SetHovering(false);
+			if (i == 1)
+				m_movementIcon->SetHovering(false);
+			if (i == 2)
+				m_resourceIcon->SetHovering(false);
+			m_shieldIcon->SetHovering(false);
+		}
+		if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
 		{
 			m_shieldIcon->SetHovering(true);
 			m_cannonIcon->SetHovering(false);
@@ -328,29 +339,39 @@ void UpgradeMenuObject::Update()
 		}
 	}
 
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Space))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back))
 	{
+		bool upgrade = false;
+		bool undo = false;
+		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) //We decided to upgrade
+			upgrade = true;
+		if (Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back)) //We decided to undo our upgrade
+			undo = true;
+
 		if (m_cannonIcon->isHovering()) //Move into CannonCheck function later
 		{
 			if (!m_cannonCheck[0]) //First time choosing to upgrade Cannon
 			{
-				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				m_cannonCheck[0] = true;
+				if (upgrade)
+				{
+					m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+					m_cannonCheck[0] = true;
+				}
 				//Increase Cannon Dmg/Spread/Quantity first time
 			}
-			else if (m_cannonCheck[0])
+			else if (m_cannonCheck[0] && !m_cannonCheck[1])
 			{
 				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[1] = true;
 				//Increase Cannon Dmg/Spread/Quantity second time
 			}
-			else if (m_cannonCheck[1])
+			else if (m_cannonCheck[1] && !m_cannonCheck[2])
 			{
 				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[2] = true;
 				//Increase Cannon Dmg/Spread/Quantity third time
 			}
-			else if (m_cannonCheck[2])
+			else if (m_cannonCheck[2] && !m_cannonCheck[3])
 			{
 				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[3] = true;
@@ -371,19 +392,19 @@ void UpgradeMenuObject::Update()
 				m_movementCheck[0] = true;
 				//Increase movement speed first time
 			}
-			else if (m_movementCheck[0])
+			else if (m_movementCheck[0] && !m_movementCheck[1])
 			{
 				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[1] = true;
 				//Increase movement speed second time
 			}
-			else if (m_movementCheck[1])
+			else if (m_movementCheck[1] && !m_movementCheck[2])
 			{
 				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[2] = true;
 				//Increase movement speed third time
 			}
-			else if (m_movementCheck[2])
+			else if (m_movementCheck[2] && !m_movementCheck[3])
 			{
 				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[3] = true;
@@ -403,25 +424,25 @@ void UpgradeMenuObject::Update()
 				m_resourceCheck[0] = true;
 				//Decrease resource costs first time
 			}
-			if (m_resourceCheck[0])
+			else if (m_resourceCheck[0] && !m_resourceCheck[1])
 			{
 				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[1] = true;
 				//Decrease resource costs second time
 			}
-			if (m_resourceCheck[1])
+			else if (m_resourceCheck[1] && !m_resourceCheck[2])
 			{
 				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[2] = true;
 				//Decrease resource costs third time
 			}
-			if (m_resourceCheck[2])
+			else if (m_resourceCheck[2] && !m_resourceCheck[3])
 			{
 				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[3] = true;
 				//Decrease resource costs fourth time
 			}
-			if (m_resourceCheck[3])
+			else if (m_resourceCheck[3])
 			{
 				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				//Decrease resource costs fifth time
@@ -435,25 +456,25 @@ void UpgradeMenuObject::Update()
 				m_shieldCheck[0] = true;
 				//Buy Shield
 			}
-			if (m_shieldCheck[0])
+			else if (m_shieldCheck[0] && !m_shieldCheck[1])
 			{
 				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[1] = true;
 				//Upgrade Shield first time
 			}
-			if (m_shieldCheck[1])
+			else if (m_shieldCheck[1] && !m_shieldCheck[2])
 			{
 				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[2] = true;
 				//Upgrade Shield second time
 			}
-			if (m_shieldCheck[2])
+			else if (m_shieldCheck[2] && !m_shieldCheck[3])
 			{
 				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[3] = true;
 				//Upgrade Shield third time
 			}
-			if (m_shieldCheck[3])
+			else if (m_shieldCheck[3])
 			{
 				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				//Upgrade Shield fourth time
@@ -463,48 +484,57 @@ void UpgradeMenuObject::Update()
 	//Menu scrolling, move to own function, LONG if() statement
 	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f)
 		|| (Input::GetButton(Input::Buttons::DPAD_UP) && m_delay < 0.1f) || (Input::GetKey(Input::Keys::Down) && m_delay < 0.1f)
-		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f))
+		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f) || Input::GetButton(Input::Buttons::DPAD_RIGHT) || Input::GetButton(Input::Buttons::DPAD_LEFT)
+		|| Input::GetLeftStickX())
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			if ((m_yArray[0] == 1) && (Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up, we're already at the top
+			float tempMemes = Input::GetButton(Input::Buttons::DPAD_RIGHT); 
+			if ((m_yArray[0] == 1) && (Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up, we're already at the top
 			{
 				m_yArray[0] = 1;
 				break;
 			}
-			else if ((m_yArray[2] == 1) && (Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN)) //Player presses down, we're already at the bottom
+			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
 			{
-				m_yArray[2] = 1;
+				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_UP))) //Player presses up, we're right side, jump to left, continue scrolling
+				{
+					m_xArray[0] = 1;
+					m_xArray[1] = 0;
+					m_yArray[0] = 0;
+					m_yArray[1] = 0;
+					m_yArray[2] = 1;
+				}
+				else //Player wants to go up, we're already left side
+				{
+					m_yArray[i - 1] = 1;//Select Sprite Above
+					m_yArray[i] = 0;	//Deselect Current Sprite
+				}
 				break;
 			}
-			else if ((i > 0) && (m_yArray[i] == 1) && (Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up
+			else if ((m_yArray[i] == 1) && ((Input::GetLeftStickY() < -abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down
 			{
-				m_yArray[i - 1] = 1;//Select Sprite Above
-				m_yArray[i] = 0;	//Deselect Current Sprite
+				if ((m_yArray[2] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom, jump to right side, continue scrolling there
+				{
+					m_yArray[2] = 1;
+					m_xArray[0] = 1;
+					m_xArray[1] = 1;
+					break;
+				}
+				else //Player wants to go down, we're already left side
+				{
+					m_yArray[i + 1] = 1;
+					m_yArray[i] = 0;
+				}
 				break;
 			}
-			else if ((i < 2) && (m_yArray[i] == 1) && (Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down)) //Player presses down
-			{
-				m_yArray[i + 1] = 1;
-				m_yArray[i] = 0;
-				break;
-			}
-			else if ((m_xArray[0] == 1) && (Input::GetLeftStickX() < 0) || Input::GetButton(Input::Buttons::DPAD_LEFT)) //Player presses left, we're already left side
-			{
-				m_xArray[0] = 1;
-				break;
-			}
-			else if ((m_xArray[1] == 1) && ((Input::GetLeftStickX() > 0) || Input::GetButton(Input::Buttons::DPAD_RIGHT))) //Player presses right, we're already right side
-			{
-				m_xArray[1] = 1;
-				break;
-			}
-			else if ((m_xArray[0] == 1) && (Input::GetLeftStickX() > 0) || Input::GetButton(Input::Buttons::DPAD_RIGHT)) //Player presses right, we need to move from left to right
+			else if ((m_xArray[0] == 1) && ((Input::GetLeftStickX() > abs(Input::GetLeftStickY())) || Input::GetButton(Input::Buttons::DPAD_RIGHT))) //Player presses right
 			{
 				m_xArray[0] = 0;
 				m_xArray[1] = 1;
+				break;
 			}
-			else if ((m_xArray[1] == 1) && (Input::GetLeftStickX() < 0) || Input::GetButton(Input::Buttons::DPAD_LEFT)) //Player presses left, we need to move from right to left
+			else if ((m_xArray[1] == 1) && ((Input::GetLeftStickX() < -abs(Input::GetLeftStickY())) || Input::GetButton(Input::Buttons::DPAD_LEFT))) //Player presses left
 			{
 				m_xArray[0] = 1;
 				m_xArray[1] = 0;

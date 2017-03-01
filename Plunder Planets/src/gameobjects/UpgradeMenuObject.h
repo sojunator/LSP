@@ -63,10 +63,10 @@ private:
 	component::SoundComponent* m_music;
 
 	//Bool checks for talents
-	bool m_cannonCheck[3] = { false };
-	bool m_movementCheck[3] = { false };
-	bool m_resourceCheck[3] = { false };
-	bool m_shieldCheck[3] = { false };
+	bool m_cannonCheck[4] = { false };
+	bool m_movementCheck[4] = { false };
+	bool m_resourceCheck[4] = { false };
+	bool m_shieldCheck[4] = { false };
 
 	int m_yArray[3] = { 0, 0, 0 };	//3 rows
 	int m_xArray[2] = { 0, 0 };		//2 columns
