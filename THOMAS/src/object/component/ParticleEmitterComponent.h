@@ -4,7 +4,7 @@
 #include "..\..\graphics\Texture.h"
 #include "..\..\graphics\Shader.h"
 #include "..\..\graphics\ParticleSystem.h"
-
+#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -55,9 +55,9 @@ namespace thomas
 					float rotationSpeed;
 					float rotation;
 
-					math::Vector4 startColor;
+					math::Color startColor;
 
-					math::Vector4 endColor;
+					math::Color endColor;
 
 					math::Matrix directionMatrix;
 				};
@@ -90,7 +90,6 @@ namespace thomas
 				void CreateParticleUAVsandSRVs();
 				void CreateInitBuffer();
 				void CalculateMaxNrOfParticles();
-
 			public:
 				ParticleEmitterComponent();
 				
@@ -149,8 +148,10 @@ namespace thomas
 
 				D3DData* GetD3DData();
 
+				void AddToDebugMenu();
+
 			private:
-				
+				math::Vector3 m_directionVector;
 				D3DData m_d3dData;
 				graphics::Shader* m_shader;
 				graphics::Texture* m_texture;

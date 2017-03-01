@@ -98,7 +98,7 @@ void CSMain(uint3 Gid : SV_GroupID)
 	normalize(rng);
 
 	float theta = x * 3.14159265359 * 2;
-	float phi = y * (initSpread % 3.14159265359);
+	float phi = y * ((initSpread-1) % 3.14159265359);
 	float xAngle = sin(phi) * cos(theta);
 	float yAngle = sin(phi) * sin(theta);
 	float zAngle = cos(phi);
