@@ -81,8 +81,8 @@ namespace thomas
 			for (unsigned int i = 0; i < plane.verts.size(); i++)
 			{
 
-				int x = plane.verts[i].position.x;
-				int y = plane.verts[i].position.y;
+				int x = plane.verts[i].position.x * detail;
+				int y = -plane.verts[i].position.z * detail;
 
 				e = 0.0f;
 				double nx = x / width - 0.5,
