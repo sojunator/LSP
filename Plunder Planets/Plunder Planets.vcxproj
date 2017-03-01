@@ -193,6 +193,7 @@
     <ClInclude Include="src\gameobjects\UpgradeMenuObject.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\gameobjects\WaterSplashParticle.h" />
+    <ClInclude Include="src\gameobjects\Wormhole.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />

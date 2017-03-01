@@ -28,14 +28,14 @@ struct ParticleStruct
     float lifeTimeLeft;
     float timeElapsed;
     float rotationSpeed;
-    bool looping;
+    float rotation;
 
     float4 startColor;
 
     float4 endColor;
 
     float3 initPosition;
-    float paddd;
+    bool looping;
 };
 
 struct BillboardStruct
@@ -69,7 +69,6 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         particlesWrite[index].size = particlesRead[index].size;
         
         particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
-        particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed;
         
         float scale = particlesRead[index].size;
 
@@ -79,7 +78,6 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
             {
                 particlesWrite[index].position = particlesRead[index].initPosition;
                 particlesWrite[index].lifeTimeLeft = particlesRead[index].timeElapsed;
-                particlesWrite[index].timeElapsed = 0.0f;
             }
             else
             {
@@ -91,16 +89,14 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
             particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
             
         }
-        particlesWrite[index].timeElapsed = particlesRead[index].timeElapsed + deltaTime;
         //BILLBOARD
         float3 right = cameraRight * scale;
         float3 up =  -cameraUp* scale;
 
-        float angletest = 0;
-        //particlesRead[index].timeElapsed * 1.0f;
+        particlesWrite[index].rotation = particlesRead[index].rotation + particlesRead[index].rotationSpeed * deltaTime;
 
-        float sinangle = sin(angletest);
-        float cosangle = cos(angletest);
+        float sinangle = sin(particlesRead[index].rotation);
+        float cosangle = cos(particlesRead[index].rotation);
 
         float3 temp = cosangle * right - sinangle * up;
         right = sinangle * right + cosangle * up;
@@ -121,7 +117,7 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         billboards[index].uvs[1][1] = float2(0, 1);
         billboards[index].uvs[1][2] = float2(0, 0);
 
-        float a = particlesRead[index].lifeTimeLeft + particlesRead[index].timeElapsed;
+        float a = particlesRead[index].timeElapsed;
         float b = particlesRead[index].lifeTimeLeft / a;
         float c = 1 - b;
         billboards[index].colorFactor = particlesRead[index].startColor * b + particlesRead[index].endColor * c;
