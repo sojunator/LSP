@@ -99,7 +99,7 @@ void MainMenuObject::Update()
 		}
 			
 	}
-	if (Input::GetButton(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
 	{
 		if (m_startButton->isHovering())
 		{
@@ -136,6 +136,11 @@ void MainMenuObject::Update()
 				m_yArray[0] = 1;
 				break;
 			}
+			else if (m_yArray[4] == 1 && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom
+			{
+				m_yArray[4] = 1;
+				break;
+			}
 			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
 			{
 				m_yArray[i - 1] = 1; //Select Sprite Above
@@ -148,15 +153,12 @@ void MainMenuObject::Update()
 				m_yArray[i] = 0;
 				break;
 			} 
-			else if (m_yArray[4] == 1 && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom
-			{
-				m_yArray[4] = 1;
-				break;
-			}
 		}
 		m_delay = 0.3f;
 	}
+	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
+		Scene::LoadScene<UpgradeScene>();
 
-	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButton(Input::Buttons::BACK))
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		ThomasCore::Exit();
 }

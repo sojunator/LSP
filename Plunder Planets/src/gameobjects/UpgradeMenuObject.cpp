@@ -37,6 +37,9 @@ void UpgradeMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 
+	m_yArray[0] = 1; //Start with first row selected
+	m_xArray[0] = 1; //First column selected
+
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
@@ -64,8 +67,8 @@ void UpgradeMenuObject::Start()
 	m_cannonIcon->SetPositionY(200);
 	m_cannonIcon->SetScale(math::Vector2(1.0f, 1.0f));
 	m_cannonIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_cannonIcon->SetHoverColor(math::Color(1.0, 1.0, 1.0));
-	m_cannonIcon->SetInteractable(false);
+	m_cannonIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_cannonIcon->SetInteractable(true);
 
 	m_cannonCost->SetName("CannonCost");
 	m_cannonCost->SetPositionX(50);
@@ -81,7 +84,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent1->SetScale(math::Vector2(1.0f, 1.0f));
 	m_cannonTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_cannonTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_cannonTalent1->SetInteractable(true);
+	m_cannonTalent1->SetInteractable(false);
 
 	m_cannonTalent2->SetName("CannonTalent2");
 	m_cannonTalent2->SetPositionX(285);
@@ -89,7 +92,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent2->SetScale(math::Vector2(1.0f, 1.0f));
 	m_cannonTalent2->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_cannonTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_cannonTalent2->SetInteractable(true);
+	m_cannonTalent2->SetInteractable(false);
 
 	m_cannonTalent3->SetName("CannonTalent3");
 	m_cannonTalent3->SetPositionX(350);
@@ -97,7 +100,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent3->SetScale(math::Vector2(1.0f, 1.0f));
 	m_cannonTalent3->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_cannonTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_cannonTalent3->SetInteractable(true);
+	m_cannonTalent3->SetInteractable(false);
 
 	m_cannonTalent4->SetName("CannonTalent4");
 	m_cannonTalent4->SetPositionX(415);
@@ -105,7 +108,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent4->SetScale(math::Vector2(1.0f, 1.0f));
 	m_cannonTalent4->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_cannonTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_cannonTalent4->SetInteractable(true);
+	m_cannonTalent4->SetInteractable(false);
 
 	m_cannonTalent5->SetName("CannonTalent5");
 	m_cannonTalent5->SetPositionX(480);
@@ -113,7 +116,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent5->SetScale(math::Vector2(2.0f, 2.0f));
 	m_cannonTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_cannonTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_cannonTalent5->SetInteractable(true);
+	m_cannonTalent5->SetInteractable(false);
 
 	//Create Movement sprites
 	m_movementIcon->SetName("MovementIcon");
@@ -122,7 +125,7 @@ void UpgradeMenuObject::Start()
 	m_movementIcon->SetScale(math::Vector2(1.0f, 1.0f));
 	m_movementIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_movementIcon->SetInteractable(false);
+	m_movementIcon->SetInteractable(true);
 
 	m_movementCost->SetName("MovementCost");
 	m_movementCost->SetPositionX(50);
@@ -138,7 +141,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent1->SetScale(math::Vector2(1.0f, 1.0f));
 	m_movementTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_movementTalent1->SetInteractable(true);
+	m_movementTalent1->SetInteractable(false);
 
 	m_movementTalent2->SetName("MovementTalent2");
 	m_movementTalent2->SetPositionX(285);
@@ -146,7 +149,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent2->SetScale(math::Vector2(1.0f, 1.0f));
 	m_movementTalent2->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_movementTalent2->SetInteractable(true);
+	m_movementTalent2->SetInteractable(false);
 
 	m_movementTalent3->SetName("MovementTalent3");
 	m_movementTalent3->SetPositionX(350);
@@ -154,7 +157,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent3->SetScale(math::Vector2(1.0f, 1.0f));
 	m_movementTalent3->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_movementTalent3->SetInteractable(true);
+	m_movementTalent3->SetInteractable(false);
 
 	m_movementTalent4->SetName("MovementTalent4");
 	m_movementTalent4->SetPositionX(415);
@@ -162,7 +165,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent4->SetScale(math::Vector2(1.0f, 1.0f));
 	m_movementTalent4->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_movementTalent4->SetInteractable(true);
+	m_movementTalent4->SetInteractable(false);
 
 	m_movementTalent5->SetName("MovementTalent5");
 	m_movementTalent5->SetPositionX(480);
@@ -170,7 +173,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent5->SetScale(math::Vector2(2.0f, 2.0f));
 	m_movementTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_movementTalent5->SetInteractable(true);
+	m_movementTalent5->SetInteractable(false);
 
 	//Create Resource sprites
 	m_resourceIcon->SetName("ResourceIcon");
@@ -179,7 +182,7 @@ void UpgradeMenuObject::Start()
 	m_resourceIcon->SetScale(math::Vector2(1.0f, 1.0f));
 	m_resourceIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_resourceIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceIcon->SetInteractable(false);
+	m_resourceIcon->SetInteractable(true);
 
 	m_resourceCost->SetName("ResourceCost");
 	m_resourceCost->SetPositionX(50);
@@ -195,7 +198,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent1->SetScale(math::Vector2(1.0f, 1.0f));
 	m_resourceTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_resourceTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceTalent1->SetInteractable(true);
+	m_resourceTalent1->SetInteractable(false);
 
 	m_resourceTalent2->SetName("ResourceTalent2");
 	m_resourceTalent2->SetPositionX(285);
@@ -203,7 +206,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent2->SetScale(math::Vector2(1.0f, 1.0f));
 	m_resourceTalent2->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_resourceTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceTalent2->SetInteractable(true);
+	m_resourceTalent2->SetInteractable(false);
 
 	m_resourceTalent3->SetName("ResourceTalent3");
 	m_resourceTalent3->SetPositionX(350);
@@ -211,7 +214,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent3->SetScale(math::Vector2(1.0f, 1.0f));
 	m_resourceTalent3->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_resourceTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceTalent3->SetInteractable(true);
+	m_resourceTalent3->SetInteractable(false);
 
 	m_resourceTalent4->SetName("ResourceTalent4");
 	m_resourceTalent4->SetPositionX(415);
@@ -219,7 +222,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent4->SetScale(math::Vector2(1.0f, 1.0f));
 	m_resourceTalent4->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_resourceTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceTalent4->SetInteractable(true);
+	m_resourceTalent4->SetInteractable(false);
 
 	m_resourceTalent5->SetName("ResourceTalent5");
 	m_resourceTalent5->SetPositionX(480);
@@ -227,7 +230,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent5->SetScale(math::Vector2(2.0f, 2.0f));
 	m_resourceTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_resourceTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceTalent5->SetInteractable(true);
+	m_resourceTalent5->SetInteractable(false);
 
 	//Create Shield sprites
 	m_shieldIcon->SetName("ShieldIcon");
@@ -236,7 +239,7 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetScale(math::Vector2(1.0f, 1.0f));
 	m_shieldIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldIcon->SetInteractable(false);
+	m_shieldIcon->SetInteractable(true);
 
 	m_shieldCost->SetName("ShieldCost");
 	m_shieldCost->SetPositionX(1720);
@@ -252,7 +255,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent1->SetScale(math::Vector2(2.0f, 2.0f));
 	m_shieldTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldTalent1->SetInteractable(true);
+	m_shieldTalent1->SetInteractable(false);
 
 	m_shieldTalent2->SetName("ShieldTalent2");
 	m_shieldTalent2->SetPositionX(1535);
@@ -260,7 +263,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent2->SetScale(math::Vector2(1.0f, 1.0f));
 	m_shieldTalent2->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldTalent2->SetInteractable(true);
+	m_shieldTalent2->SetInteractable(false);
 
 	m_shieldTalent3->SetName("ShieldTalent3");
 	m_shieldTalent3->SetPositionX(1470);
@@ -268,7 +271,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent3->SetScale(math::Vector2(1.0f, 1.0f));
 	m_shieldTalent3->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldTalent3->SetInteractable(true);
+	m_shieldTalent3->SetInteractable(false);
 
 	m_shieldTalent4->SetName("ShieldTalent4");
 	m_shieldTalent4->SetPositionX(1405);
@@ -276,7 +279,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent4->SetScale(math::Vector2(1.0f, 1.0f));
 	m_shieldTalent4->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldTalent4->SetInteractable(true);
+	m_shieldTalent4->SetInteractable(false);
 
 	m_shieldTalent5->SetName("ShieldTalent5");
 	m_shieldTalent5->SetPositionX(1340);
@@ -284,7 +287,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent5->SetScale(math::Vector2(1.0f, 1.0f));
 	m_shieldTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldTalent5->SetInteractable(true);
+	m_shieldTalent5->SetInteractable(false);
 
 	m_exitButton->SetName("UpgradeMenuExit");
 	m_exitButton->SetPositionX(50);
@@ -303,161 +306,215 @@ void UpgradeMenuObject::Start()
 
 void UpgradeMenuObject::Update()
 {
-	if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
+	m_delay = m_delay - Time::GetDeltaTime();
+	for (int i = 0; i < 5; i++) //Move to own function
 	{
-		if (m_exitButton->isHovering())
-			ThomasCore::Exit();
-
-		if (m_startButton->isHovering())
-			Scene::LoadScene<GameScene>();
-
-
-		//Talents stop being interactable after it has been chosen.
-		//Nasty code incoming, wall of code
-		//Cannon checks
-		if (m_cannonTalent1->isHovering())
+		if ((m_yArray[i] == 1) && (m_xArray[0] == 1))
 		{
-			m_cannonTalent1->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_cannonTalent1->SetInteractable(false);
-			m_cannonCheck[0] = true;
+			if (i == 0)
+				m_cannonIcon->SetHovering(true);
+			if (i == 1)
+				m_movementIcon->SetHovering(true);
+			if (i == 2)
+				m_resourceIcon->SetHovering(true);
+			m_shieldIcon->SetHovering(false);		//Needs to change if more icons are added in column 2
 		}
-
-		if (m_cannonTalent2->isHovering() && m_cannonCheck[0])
+		else if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
 		{
-			m_cannonTalent2->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_cannonTalent2->SetInteractable(false);
-			m_cannonCheck[1] = true;
-		}
-
-		if (m_cannonTalent3->isHovering() && m_cannonCheck[1])
-		{
-			m_cannonTalent3->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_cannonTalent3->SetInteractable(false);
-			m_cannonCheck[2] = true;
-		}
-
-		if (m_cannonTalent4->isHovering() && m_cannonCheck[2])
-		{
-			m_cannonTalent4->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_cannonTalent4->SetInteractable(false);
-			m_cannonCheck[3] = true;
-		}
-
-		if (m_cannonTalent5->isHovering() && m_cannonCheck[3])
-		{
-			m_cannonTalent5->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_cannonTalent5->SetInteractable(false);
-		}
-
-		//Movement checks
-		if (m_movementTalent1->isHovering())
-		{
-			m_movementTalent1->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_movementTalent1->SetInteractable(false);
-			m_movementCheck[0] = true;
-		}
-
-		if (m_movementTalent2->isHovering() && m_movementCheck[0])
-		{
-			m_movementTalent2->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_movementTalent2->SetInteractable(false);
-			m_movementCheck[1] = true;
-		}
-
-		if (m_movementTalent3->isHovering() && m_movementCheck[1])
-		{
-			m_movementTalent3->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_movementTalent3->SetInteractable(false);
-			m_movementCheck[2] = true;
-		}
-
-		if (m_movementTalent4->isHovering() && m_movementCheck[2])
-		{
-			m_movementTalent4->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_movementTalent4->SetInteractable(false);
-			m_movementCheck[3] = true;
-		}
-
-		if (m_movementTalent5->isHovering() && m_movementCheck[3])
-		{
-			m_movementTalent5->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_movementTalent5->SetInteractable(false);
-		}
-
-		//Resource checks
-		if (m_resourceTalent1->isHovering())
-		{
-			m_resourceTalent1->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_resourceTalent1->SetInteractable(false);
-			m_resourceCheck[0] = true;
-		}
-
-		if (m_resourceTalent2->isHovering() && m_resourceCheck[0])
-		{
-			m_resourceTalent2->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_resourceTalent2->SetInteractable(false);
-			m_resourceCheck[1] = true;
-		}
-
-		if (m_resourceTalent3->isHovering() && m_resourceCheck[1])
-		{
-			m_resourceTalent3->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_resourceTalent3->SetInteractable(false);
-			m_resourceCheck[2] = true;
-		}
-
-		if (m_resourceTalent4->isHovering() && m_resourceCheck[2])
-		{
-			m_resourceTalent4->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_resourceTalent4->SetInteractable(false);
-			m_resourceCheck[3] = true;
-		}
-
-		if (m_resourceTalent5->isHovering() && m_resourceCheck[3])
-		{
-			m_resourceTalent5->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_resourceTalent5->SetInteractable(false);
-		}
-
-		//Shield checks
-		if (m_shieldTalent1->isHovering())
-		{
-			m_shieldTalent1->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_shieldTalent1->SetInteractable(false);
-			m_shieldCheck[0] = true;
-		}
-
-		if (m_shieldTalent2->isHovering() && m_shieldCheck[0])
-		{
-			m_shieldTalent2->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_shieldTalent2->SetInteractable(false);
-			m_shieldCheck[1] = true;
-		}
-
-		if (m_shieldTalent3->isHovering() && m_shieldCheck[1])
-		{
-			m_shieldTalent3->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_shieldTalent3->SetInteractable(false);
-			m_shieldCheck[2] = true;
-		}
-
-		if (m_shieldTalent4->isHovering() && m_shieldCheck[2])
-		{
-			m_shieldTalent4->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_shieldTalent4->SetInteractable(false);
-			m_shieldCheck[3] = true;
-		}
-
-		if (m_shieldTalent5->isHovering() && m_shieldCheck[3])
-		{
-			m_shieldTalent5->SetColor(math::Vector4(0.5f, 0.5f, 0.5f, 0.5f));
-			m_shieldTalent5->SetInteractable(false);
+			m_shieldIcon->SetHovering(true);
+			m_cannonIcon->SetHovering(false);
+			m_movementIcon->SetHovering(false);
+			m_resourceIcon->SetHovering(false);
 		}
 	}
 
-	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButton(Input::Buttons::BACK))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Space))
+	{
+		if (m_cannonIcon->isHovering()) //Move into CannonCheck function later
+		{
+			if (!m_cannonCheck[0]) //First time choosing to upgrade Cannon
+			{
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonCheck[0] = true;
+				//Increase Cannon Dmg/Spread/Quantity first time
+			}
+			else if (m_cannonCheck[0])
+			{
+				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonCheck[1] = true;
+				//Increase Cannon Dmg/Spread/Quantity second time
+			}
+			else if (m_cannonCheck[1])
+			{
+				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonCheck[2] = true;
+				//Increase Cannon Dmg/Spread/Quantity third time
+			}
+			else if (m_cannonCheck[2])
+			{
+				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonCheck[3] = true;
+				//Increase Cannon Dmg/Spread/Quantity fourth time
+			}
+			else if (m_cannonCheck[3])
+			{
+				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				//Increase Cannon Dmg/Spread/Quantity fifth time
+			}
+		}
+
+		if (m_movementIcon->isHovering()) //Move into Movement Check function
+		{
+			if (!m_movementCheck[0]) //First time choosing to upgrade Movement
+			{
+				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementCheck[0] = true;
+				//Increase movement speed first time
+			}
+			else if (m_movementCheck[0])
+			{
+				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementCheck[1] = true;
+				//Increase movement speed second time
+			}
+			else if (m_movementCheck[1])
+			{
+				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementCheck[2] = true;
+				//Increase movement speed third time
+			}
+			else if (m_movementCheck[2])
+			{
+				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementCheck[3] = true;
+				//Increase movement speed fourth time
+			}
+			else if (m_movementCheck[3])
+			{
+				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				//Increase movement speed fifth time
+			}
+		}
+		if (m_resourceIcon->isHovering()) //Move into Resource Check Function
+		{
+			if (!m_resourceCheck[0]) //First time choosing to upgrade Resource Cost Reduction
+			{
+				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceCheck[0] = true;
+				//Decrease resource costs first time
+			}
+			if (m_resourceCheck[0])
+			{
+				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceCheck[1] = true;
+				//Decrease resource costs second time
+			}
+			if (m_resourceCheck[1])
+			{
+				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceCheck[2] = true;
+				//Decrease resource costs third time
+			}
+			if (m_resourceCheck[2])
+			{
+				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceCheck[3] = true;
+				//Decrease resource costs fourth time
+			}
+			if (m_resourceCheck[3])
+			{
+				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				//Decrease resource costs fifth time
+			}
+		}
+		if (m_shieldIcon->isHovering()) //Move into Shield Check Function
+		{
+			if (!m_shieldCheck[0]) //First time choosing to upgrade Shield
+			{
+				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldCheck[0] = true;
+				//Buy Shield
+			}
+			if (m_shieldCheck[0])
+			{
+				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldCheck[1] = true;
+				//Upgrade Shield first time
+			}
+			if (m_shieldCheck[1])
+			{
+				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldCheck[2] = true;
+				//Upgrade Shield second time
+			}
+			if (m_shieldCheck[2])
+			{
+				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldCheck[3] = true;
+				//Upgrade Shield third time
+			}
+			if (m_shieldCheck[3])
+			{
+				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				//Upgrade Shield fourth time
+			}
+		}
+	}
+	//Menu scrolling, move to own function, LONG if() statement
+	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f)
+		|| (Input::GetButton(Input::Buttons::DPAD_UP) && m_delay < 0.1f) || (Input::GetKey(Input::Keys::Down) && m_delay < 0.1f)
+		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f))
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			if ((m_yArray[0] == 1) && (Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up, we're already at the top
+			{
+				m_yArray[0] = 1;
+				break;
+			}
+			else if ((m_yArray[2] == 1) && (Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN)) //Player presses down, we're already at the bottom
+			{
+				m_yArray[2] = 1;
+				break;
+			}
+			else if ((i > 0) && (m_yArray[i] == 1) && (Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up
+			{
+				m_yArray[i - 1] = 1;//Select Sprite Above
+				m_yArray[i] = 0;	//Deselect Current Sprite
+				break;
+			}
+			else if ((i < 2) && (m_yArray[i] == 1) && (Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down)) //Player presses down
+			{
+				m_yArray[i + 1] = 1;
+				m_yArray[i] = 0;
+				break;
+			}
+			else if ((m_xArray[0] == 1) && (Input::GetLeftStickX() < 0) || Input::GetButton(Input::Buttons::DPAD_LEFT)) //Player presses left, we're already left side
+			{
+				m_xArray[0] = 1;
+				break;
+			}
+			else if ((m_xArray[1] == 1) && ((Input::GetLeftStickX() > 0) || Input::GetButton(Input::Buttons::DPAD_RIGHT))) //Player presses right, we're already right side
+			{
+				m_xArray[1] = 1;
+				break;
+			}
+			else if ((m_xArray[0] == 1) && (Input::GetLeftStickX() > 0) || Input::GetButton(Input::Buttons::DPAD_RIGHT)) //Player presses right, we need to move from left to right
+			{
+				m_xArray[0] = 0;
+				m_xArray[1] = 1;
+			}
+			else if ((m_xArray[1] == 1) && (Input::GetLeftStickX() < 0) || Input::GetButton(Input::Buttons::DPAD_LEFT)) //Player presses left, we need to move from right to left
+			{
+				m_xArray[0] = 1;
+				m_xArray[1] = 0;
+			}
+		}
+		m_delay = 0.3f;
+	}
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		ThomasCore::Exit();
 
-	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButton(Input::Buttons::START))
+	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
 		Scene::LoadScene<GameScene>();
 }
