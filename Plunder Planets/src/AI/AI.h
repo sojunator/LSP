@@ -27,6 +27,7 @@ public:
 	void IdleTimer();
 
 	thomas::math::Vector3 GetTargetPos();
+	thomas::math::Vector3 GetTargetForward();
 
 private:
 	Behavior m_state;

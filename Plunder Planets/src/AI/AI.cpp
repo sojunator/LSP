@@ -61,6 +61,8 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			enemyForward.Normalize();
 			eDotR = enemyForward.Dot(right);
 			eDotF = enemyForward.Dot(forward);
+			if (eDotF >= 0.8)	//Head on, turn right
+				turnDir = 1;
 			if (fEnemyDir >= 0.0)	//Right side
 			{
 				if (eDotF >= 0.0 && eDotR <= 0.0)	//Turn left
@@ -262,7 +264,8 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	}
 	case AI::Behavior::Firing:
 	{
-		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		math::Vector3 playerFor = m_playerShip->m_transform->Forward();
+		math::Vector3 playerDir = (m_playerShip->m_transform->GetPosition() + playerFor) - pos;
 		playerDir.Normalize();
 		pDotR = playerDir.Dot(right);
 		pDotF = playerDir.Dot(forward);
@@ -345,9 +348,9 @@ int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
 		playerDir.Normalize();
 		float pDotR = playerDir.Dot(right);
 
-		if (pDotR >= 0.9)
+		if (pDotR >= 0.97)
 			return 1;
-		else if (pDotR <= -0.9)
+		else if (pDotR <= -0.97)
 			return -1;
 		else
 			return 0;
@@ -404,6 +407,11 @@ void AI::Escape()
 math::Vector3 AI::GetTargetPos()
 {
 	return m_playerShip->m_transform->GetPosition();
+}
+
+thomas::math::Vector3 AI::GetTargetForward()
+{
+	return -m_playerShip->m_transform->Forward();
 }
 
 void AI::IdleTimer()
