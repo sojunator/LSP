@@ -115,7 +115,7 @@ public:
 		m_emitterSpark->SetSpread(0.71f);
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetTexture("../res/textures/smokeParticle.png");
+		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
 		m_emitterSmoke->SetShader("particleShader");
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetMaxDelay(2.45f);

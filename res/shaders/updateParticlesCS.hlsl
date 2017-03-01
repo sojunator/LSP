@@ -62,7 +62,9 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
         
 		particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
         
-		float scale = particlesRead[index].size;
+		float lerpValue = 1 - (particlesRead[index].lifeTimeLeft / particlesRead[index].lifeTime);
+		float scale = lerp(particlesRead[index].size, particlesRead[index].endSize, lerpValue);
+		billboards[index].colorFactor = lerp(particlesRead[index].startColor, particlesRead[index].endColor, lerpValue);
 
 		if (particlesRead[index].lifeTimeLeft < 0.0f)
 		{
@@ -101,9 +103,7 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 		billboards[index].uvs[1][1] = float2(0, 1);
 		billboards[index].uvs[1][2] = float2(0, 0);
 
-		float lerpValue = 1-(particlesRead[index].lifeTimeLeft / particlesRead[index].lifeTime);
-		billboards[index].colorFactor = lerp(particlesRead[index].startColor, particlesRead[index].endColor, lerpValue);
-		particlesWrite[index].size = lerp(particlesRead[index].size, particlesRead[index].endSize, lerpValue);
+		
 	}
 	else
 	{
