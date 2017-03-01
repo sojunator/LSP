@@ -37,7 +37,8 @@ namespace thomas
 					
 					unsigned int currentParticleStartIndex;
 					float maxSpeed;
-					math::Vector2 padding;
+					float radius;
+					bool spawnAtSphereEdge;
 
 					float minSpeed;
 					float endSpeed;
@@ -126,6 +127,8 @@ namespace thomas
 				void SetStartColor(math::Vector4 const other);
 				void SetEndColor(math::Vector4 const other);
 				
+				void SetRadius(float radius);
+				void SpawnAtSphereEdge(bool other);
 				
 
 				void StartEmitting();

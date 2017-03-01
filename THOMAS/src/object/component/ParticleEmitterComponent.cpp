@@ -42,7 +42,8 @@ namespace thomas
 				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.currentParticleStartIndex = 0;
-
+				m_particleBufferStruct.spawnAtSphereEdge = false;
+				m_particleBufferStruct.radius = 0;
 				m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
 
 				m_shader = graphics::Shader::GetShaderByName("particleShader");
@@ -218,6 +219,16 @@ namespace thomas
 				m_particleBufferStruct.endColor = other;
 			}
 
+			void ParticleEmitterComponent::SetRadius(float radius)
+			{
+				m_particleBufferStruct.radius = radius;
+			}
+
+			void ParticleEmitterComponent::SpawnAtSphereEdge(bool other)
+			{
+				m_particleBufferStruct.spawnAtSphereEdge = other;
+			}
+
 			void ParticleEmitterComponent::StartEmitting()
 			{
 				m_isEmitting = true;
@@ -291,6 +302,7 @@ namespace thomas
 			void ParticleEmitterComponent::SetEmissionRate(float emissionRate)
 			{
 				m_emissionRate = emissionRate;
+				m_emissionTimer = m_emissionRate; //So we spawn one at least one at start :)
 				CalculateMaxNrOfParticles();
 			}
 

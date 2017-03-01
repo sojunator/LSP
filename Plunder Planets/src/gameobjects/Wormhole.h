@@ -37,26 +37,30 @@ public:
 		m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 		m_wormholeParticles = AddComponent<component::ParticleEmitterComponent>();
 		
-		m_wormhole->SetSize(1);
+		m_wormhole->SetSize(50);
 		m_wormhole->SetTexture("../res/textures/wormhole.png");
 		m_wormhole->SetRotationSpeed(math::DegreesToradians(20));
-
-		m_wormhole->SetEmissionDuration(10);
-		m_wormhole->SetEmissionRate(5);
-		m_wormhole->SetSpeed(5);
+		m_wormhole->SetLifeTime(18);
+		m_wormhole->SetLooping(true);
+		m_wormhole->SetDelay(0);
+		m_wormhole->SetEmissionRate(1.0f/18.0f);
+		m_wormhole->SetSpeed(0);
+		m_wormhole->StartEmitting();
 	//	SetActive(false);
 
 
 		m_wormholeParticles->SetLooping(true);
 		//m_wormholeParticles->SetDirection(0, 0, 1);
 		m_wormholeParticles->SetSpread(180);
-		m_wormholeParticles->SetSpeed(20, 20);
+		m_wormholeParticles->SetSpeed(5);
 		m_wormholeParticles->SetRotationSpeed(math::DegreesToradians(10));
-		m_wormholeParticles->SetLifeTime(5);
-		m_wormholeParticles->SetDelay(0.1, 0.1);
-		m_wormholeParticles->SetSize(1);
+		m_wormholeParticles->SetLifeTime(1.5,2.5);
+		m_wormholeParticles->SetDelay(0);
+		m_wormholeParticles->SetSize(0.5,1.5);
 		m_wormholeParticles->SetEmissionRate(100);
-	//	m_wormholeParticles->SetEndSize(0);
+		m_wormholeParticles->SetEndSize(0);
+		m_wormholeParticles->SetRadius(20);
+		m_wormholeParticles->SpawnAtSphereEdge(true);
 
 		m_wormholeParticles->SetTexture("../res/textures/wormholeParticles.png");
 		m_wormholeParticles->StartEmitting();

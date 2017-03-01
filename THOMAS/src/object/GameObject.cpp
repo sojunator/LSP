@@ -17,7 +17,7 @@ namespace thomas
 				if (this->m_components[i])
 				{
 					Object::Destroy(this->m_components[i]);
-				}
+				}            
 					
 			}
 			this->m_components.clear();

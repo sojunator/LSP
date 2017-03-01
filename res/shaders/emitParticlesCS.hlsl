@@ -5,7 +5,8 @@ cbuffer InitBuffer : register(b0)
 	
 	uint particleBlockIndex;
 	float initMaxSpeed;
-	float2 padding;
+	float radius;
+	bool spawnAtSphereEdge;
 
 	float initMinSpeed;
 	float initEndSpeed;
@@ -110,8 +111,13 @@ void CSMain(uint3 Gid : SV_GroupID)
 	float3 dir = mul(randDir, (float3x3) directionMatrix);;
 	normalize(dir);
 
+	float3 position = initPosition + dir * radius;
+	if(spawnAtSphereEdge)
+	{
+		dir *= -1; //make the particles go inward;
+	}
 
-	particlesWrite[index].position = initPosition;
+	particlesWrite[index].position = position;
 	particlesWrite[index].direction = dir;
 	particlesWrite[index].speed = speed;
 	particlesWrite[index].endSpeed = initEndSpeed;
@@ -125,7 +131,7 @@ void CSMain(uint3 Gid : SV_GroupID)
 	particlesWrite[index].startColor = initStartColor;
 	particlesWrite[index].endColor = initEndColor;
 
-	particlesWrite2[index].position = initPosition;
+	particlesWrite2[index].position = position;
 	particlesWrite2[index].direction = dir;
 	particlesWrite2[index].speed = speed;
 	particlesWrite2[index].endSpeed = initEndSpeed;
