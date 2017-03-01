@@ -109,6 +109,7 @@ void MainMenuObject::Update()
 		if (m_highScoreButton->isHovering())
 		{
 			//Add Highscore
+			//Scene::LoadScene<HighscoreScene>();
 		}
 		if (m_optionButton->isHovering())
 		{

@@ -489,7 +489,7 @@ void UpgradeMenuObject::Update()
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			if ((m_yArray[0] == 1) && (Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up, we're already at the top
+			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're already at the top
 			{
 				m_yArray[0] = 1;
 				break;
