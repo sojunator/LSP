@@ -91,7 +91,7 @@ public:
 		m_armbar->SetName("Armor");
 		m_armbar->SetPositionX(410); //Offset from top left corner
 		m_armbar->SetPositionY(964);
-		m_armbar->SetScale(math::Vector2(1.0f, 1.0f));
+		m_armbar->SetScale(math::Vector2(0.0f, 1.0f));
 		m_armbar->SetColor(math::Vector4(0.0f, 0.4f, 0.9f, 1.0f));
 
 		//HealthIcon
@@ -153,10 +153,21 @@ public:
 		}
 		else
 		{
-			m_healthbar->SetScale(math::Vector2(m_ship->m_health / m_ship->m_maxHealth, 1.0f));
+			//To add more armor, simply do: m_ship->m_armor++ and (m_armor / m_maxArmor)
+
+			if (m_ship->m_armor > 0)
+			{
+				m_armbar->SetScale(math::Vector2(m_ship->m_armor / m_ship->m_maxArmor, 1.0f));
+			}
+
+			else if (m_ship->m_armor <= 0)
+			{
+				m_healthbar->SetScale(math::Vector2(m_ship->m_health / m_ship->m_maxHealth, 1.0f));
+			}
+			
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
 		}
-		//Healthbar code here for now
+		
 		if (m_healthbar->GetScale().x > 0.6f)
 		{
 			m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
@@ -170,21 +181,21 @@ public:
 			m_healthbar->SetColor(math::Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		/*if (Input::GetKey(Input::Keys::K))
-		{
-			if (m_healthbar->GetScale().x < 1.0f)
-			{
-				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x + 0.01f, m_healthbar->GetScale().y));
-			}
-		}
+		//if (Input::GetKey(Input::Keys::K))
+		//{
+		//	if (m_armbar->GetScale().x < 1.0f)
+		//	{
+		//		m_armbar->SetScale(math::Vector2(m_armbar->GetScale().x + 0.01f, m_armbar->GetScale().y));
+		//	}
+		//}
 
-		if (Input::GetKey(Input::Keys::J))
-		{
-			if (m_healthbar->GetScale().x >= 0.0f)
-			{
-				m_healthbar->SetScale(math::Vector2(m_healthbar->GetScale().x - 0.01f, m_healthbar->GetScale().y));
-			}
-		}*/
+		//if (Input::GetKey(Input::Keys::J))
+		//{
+		//	if (m_armbar->GetScale().x >= 0.0f)
+		//	{
+		//		m_armbar->SetScale(math::Vector2(m_armbar->GetScale().x - 0.01f, m_armbar->GetScale().y));
+		//	}
+		//}
 
 		if (m_ship && m_ship->GetFreeCamera())
 		{

@@ -41,8 +41,13 @@ public:
 	void OnCollision(component::RigidBodyComponent* other);
 
 public:
+	//Health attributes
 	float m_health;
 	float m_maxHealth;
+
+	//Armor attributes
+	float m_armor;
+	float m_maxArmor;
 
 private:
 	float m_aimDistance;
