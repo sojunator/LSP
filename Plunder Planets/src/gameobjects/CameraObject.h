@@ -37,6 +37,9 @@ public:
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_backbar = AddComponent<component::SpriteComponent>();
 		m_healthbar = AddComponent<component::SpriteComponent>();
+		m_armbar = AddComponent<component::SpriteComponent>();
+		m_healthIcon = AddComponent<component::SpriteComponent>();
+		m_armIcon = AddComponent<component::SpriteComponent>();
 
 
 		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
@@ -83,6 +86,27 @@ public:
 		m_healthbar->SetPositionY(964);
 		m_healthbar->SetScale(math::Vector2(1.0f, 1.0f));
 		m_healthbar->SetColor(math::Vector4(0.0f, 0.7f, 0.0f, 1.0f));
+
+		//Armorbar
+		m_armbar->SetName("Armor");
+		m_armbar->SetPositionX(410); //Offset from top left corner
+		m_armbar->SetPositionY(964);
+		m_armbar->SetScale(math::Vector2(1.0f, 1.0f));
+		m_armbar->SetColor(math::Vector4(0.0f, 0.4f, 0.9f, 1.0f));
+
+		//HealthIcon
+		m_healthIcon->SetName("HealthIcon");
+		m_healthIcon->SetPositionX(10.7); //Offset from top left corner
+		m_healthIcon->SetPositionY(960);
+		m_healthIcon->SetScale(math::Vector2(1.0f, 1.0f));
+		m_healthIcon->SetColor(math::Vector4(0.0f, 0.4f, 0.9f, 1.0f));
+
+		//ArmorIcon
+		m_armIcon->SetName("ArmorIcon");
+		m_armIcon->SetPositionX(409); //Offset from top left corner
+		m_armIcon->SetPositionY(963);
+		m_armIcon->SetScale(math::Vector2(1.0f, 1.0f));
+		m_armIcon->SetColor(math::Vector4(0.0f, 0.4f, 0.9f, 1.0f));
 
 		//Simple font
 		m_text->SetFont("Name");
@@ -231,6 +255,9 @@ private:
 	component::SpriteComponent* m_sprite;
 	component::SpriteComponent* m_healthbar;
 	component::SpriteComponent* m_backbar;
+	component::SpriteComponent* m_armbar;
+	component::SpriteComponent* m_healthIcon;
+	component::SpriteComponent* m_armIcon;
 	float m_sensitivity;
 	float m_normalSpeed;
 	float m_fastSpeed;
@@ -239,5 +266,4 @@ private:
 	float m_pitch;
 	float m_far;
 	float m_fov;
-
 };
