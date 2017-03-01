@@ -53,14 +53,15 @@ namespace thomas
 
 					math::Vector4 endColor;
 
-					bool looping;
+					unsigned int currentParticleStartIndex;
+
 					math::Vector3 pad;
 				};
 
 				struct ParticleStruct
 				{
 					math::Vector3 position;
-					float spread;
+					float padding;
 
 					math::Vector3 direction;
 					float speed;
@@ -70,21 +71,20 @@ namespace thomas
 					float size;
 					float endSize;
 
+					float lifeTime;
 					float lifeTimeLeft;
 					float rotationSpeed;
 					float rotation;
+					
 
 					math::Vector4 startColor;
 
 					math::Vector4 endColor;
-
-					math::Vector3 initPosition;
-					bool looping;
+					
 				};
 			private:
 				void CreateParticleUAVsandSRVs();
 				void CreateInitBuffer();
-				void InitialDispatch();
 				void CalculateMaxNrOfParticles();
 
 			public:
@@ -95,8 +95,6 @@ namespace thomas
 				void Start();
 				void Update();
 
-				void SetPosition(math::Vector3 const other);
-				void SetPosition(float const x, float const y, float const z);
 				void SetSpread(float const other);
 				void SetDirection(math::Vector3 const other);
 				void SetDirection(float const x, float const y, float const z);
@@ -139,6 +137,7 @@ namespace thomas
 				graphics::Texture* GetTexture();
 
 				void SetEmissionRate(float emissionRate);
+				void SetEmissionDuration(float duration);
 				float GetEmissionRate();
 				unsigned int GetNrOfMaxParticles() const;
 
@@ -149,18 +148,17 @@ namespace thomas
 				D3DData m_d3dData;
 				graphics::Shader* m_shader;
 				graphics::Texture* m_texture;
-				
-								
 
 				InitParticleBufferStruct m_particleBufferStruct;
 
 				bool m_isEmitting;
-
+				bool m_looping;
+				float m_emissionDuration;
 				bool m_shouldUpdateResources;
 				unsigned int m_maxNrOfParticles;
-				unsigned int m_currentParticleStartIndex;
 				float m_emissionRate;
 				float m_emissionTimer;
+				float m_emissionTimeLeft;
 			};
 		}
 	}

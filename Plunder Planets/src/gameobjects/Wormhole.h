@@ -39,21 +39,17 @@ public:
 		m_wormhole->SetLooping(true);
 		
 		m_wormhole->SetSize(100);
-		m_wormhole->SetPosition(0, 300, 0);
-		m_wormhole->SetNrOfParticles(1);
 		m_wormhole->SetTexture("../res/textures/wormhole.png");
 		m_wormhole->SetRotationSpeed(math::DegreesToradians(20));
 	//	SetActive(false);
 
 
 		m_wormholeParticles->SetLooping(true);
-		m_wormholeParticles->SetPosition(0, 300, 0);
 		//m_wormholeParticles->SetDirection(0, 0, 1);
 		m_wormholeParticles->SetSpread(180);
 		m_wormholeParticles->SetSpeed(2, 2);
-		m_wormholeParticles->SetNrOfParticles(100000);
 		m_wormholeParticles->SetRotationSpeed(math::DegreesToradians(10));
-		m_wormholeParticles->SetLifeTime(0.5, 0.5);
+		m_wormholeParticles->SetLifeTime(5);
 		m_wormholeParticles->SetDelay(0.1, 0.1);
 		m_wormholeParticles->SetSize(4, 4);
 	//	m_wormholeParticles->SetEndSize(0);

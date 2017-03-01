@@ -40,8 +40,8 @@ namespace thomas
 			s_maxNumberOfBillboardsSupported = 1000000;
 			s_cameraBuffer = nullptr;
 			s_matrixBuffer = nullptr;
-			s_emitParticlesCS = Shader::CreateComputeShader("EmitParticlesCS","../res/shaders/initParticles.hlsl", NULL);
-			s_updateParticlesCS = Shader::CreateComputeShader("UpdateParticlesCS", "../res/shaders/billboards.hlsl", NULL);
+			s_emitParticlesCS = Shader::CreateComputeShader("EmitParticlesCS","../res/shaders/emitParticlesCS.hlsl", NULL);
+			s_updateParticlesCS = Shader::CreateComputeShader("UpdateParticlesCS", "../res/shaders/updateParticlesCS.hlsl", NULL);
 
 			CreateBillboardUAVandSRV();
 
@@ -119,13 +119,14 @@ namespace thomas
 
 		void ParticleSystem::SpawnParticles(object::component::ParticleEmitterComponent * emitter, int amountOfParticles)
 		{
+			object::component::ParticleEmitterComponent::D3DData* emitterD3D = emitter->GetD3DData();
 			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
 			s_emitParticlesCS->Bind();
-			s_emitParticlesCS->BindBuffer(emitter->m_particleBuffer, 0);
-			s_emitParticlesCS->BindUAV(m_particleUAV2, 0);
-			s_emitParticlesCS->BindUAV(m_particleUAV1, 1);
+			s_emitParticlesCS->BindBuffer(emitterD3D->m_particleBuffer, 0);
+			s_emitParticlesCS->BindUAV(emitterD3D->m_particleUAV2, 0);
+			s_emitParticlesCS->BindUAV(emitterD3D->m_particleUAV1, 1);
 
-			ThomasCore::GetDeviceContext()->Dispatch(GetNrOfParticles() / 256 + 1, 1, 1);
+			ThomasCore::GetDeviceContext()->Dispatch(amountOfParticles, 1, 1);
 
 			s_emitParticlesCS->BindUAV(NULL, 0);
 			s_emitParticlesCS->BindUAV(NULL, 0);

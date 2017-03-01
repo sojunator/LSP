@@ -19,10 +19,8 @@ public:
 	void Start()
 	{
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetNrOfParticles(256 * 2 + 254);
 		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
 		m_emitterSmoke->SetShader("particleShader");
-		m_emitterSmoke->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.0f));
@@ -39,10 +37,8 @@ public:
 		m_emitterSmoke->SetSpread(0.2f);
 		
 		m_emitterSmoke2 = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke2->SetNrOfParticles(256 * 3 + 254);
 		m_emitterSmoke2->SetTexture("../res/textures/smokethick.dds");
 		m_emitterSmoke2->SetShader("particleShader");
-		m_emitterSmoke2->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke2->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		m_emitterSmoke2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.0f));
@@ -59,10 +55,8 @@ public:
 
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
 
-		m_emitterSpark->SetNrOfParticles(360);
 		m_emitterSpark->SetTexture("../res/textures/spark.png");
 		m_emitterSpark->SetShader("particleShader");
-		m_emitterSpark->SetPosition(m_transform->GetPosition());
 		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
@@ -98,13 +92,10 @@ public:
 			{
 				math::Vector3 dir = m_transform->Forward();
 				dir.Normalize();
-				m_emitterSmoke->SetPosition(m_transform->GetPosition());
 				m_emitterSmoke->SetDirection(dir);
 				m_emitterSmoke->StartEmitting();
-				m_emitterSmoke2->SetPosition(m_transform->GetPosition());
 				m_emitterSmoke2->SetDirection(dir);
 				m_emitterSmoke2->StartEmitting();
-				m_emitterSpark->SetPosition(m_transform->GetPosition());
 				m_emitterSpark->SetDirection(dir);
 				m_emitterSpark->StartEmitting();
 				
