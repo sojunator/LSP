@@ -7,6 +7,8 @@
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
 #include "../scenes/MenuScene.h"
+#include "graphics\GeometryDraw.h"
+
 using namespace thomas;
 using namespace object;
 class TerrainObject;
@@ -78,6 +80,7 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
+	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;

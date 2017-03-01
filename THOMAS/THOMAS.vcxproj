@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\BulletDebugDraw.cpp" />
+    <ClCompile Include="src\graphics\GeometryDraw.cpp" />
     <ClCompile Include="src\object\component\RigidBodyComponent.cpp" />
     <ClCompile Include="src\graphics\ParticleSystem.cpp" />
     <ClCompile Include="src\object\component\ParticleEmitterComponent.cpp" />
@@ -312,6 +313,7 @@
     <ClInclude Include="include\LinearMath\btTransform.h" />
     <ClInclude Include="include\LinearMath\btTransformUtil.h" />
     <ClInclude Include="include\LinearMath\btVector3.h" />
+    <ClInclude Include="src\graphics\GeometryDraw.h" />
     <ClInclude Include="src\graphics\ParticleSystem.h" />
     <ClInclude Include="src\object\component\ParticleEmitterComponent.h" />
     <ClInclude Include="src\graphics\BulletDebugDraw.h" />

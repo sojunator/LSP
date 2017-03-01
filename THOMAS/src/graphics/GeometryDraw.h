@@ -22,7 +22,6 @@ namespace thomas
 				math::Matrix worldMatrix;
 				math::Matrix viewMatrix;
 				math::Matrix projectionMatrix;
-				math::Matrix  mvpMatrix;
 			}m_cbData;
 			ID3D11InputLayout* m_inputLayout;
 			ID3D11VertexShader* m_vertexShader;
