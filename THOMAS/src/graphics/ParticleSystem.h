@@ -20,7 +20,7 @@ namespace thomas
 		static class ParticleSystem
 		{
 		private:
-			static void CreateBillboardUAVandSRV();
+			
 
 			static void UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
 			static void SwapUAVsandSRVs(object::component::ParticleEmitterComponent * emitter);//ping pong
@@ -30,7 +30,7 @@ namespace thomas
 			~ParticleSystem();
 
 			
-			
+			static void CreateBillboardUAVandSRV(int maxAmountOfParticles, ID3D11Buffer*& buffer, ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv);
 			static void Init();
 			static void Destroy();
 			static void SpawnParticles(object::component::ParticleEmitterComponent* emitter, int amountOfParticles);

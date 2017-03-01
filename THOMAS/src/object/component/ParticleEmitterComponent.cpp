@@ -47,7 +47,8 @@ namespace thomas
 
 				m_shader = graphics::Shader::GetShaderByName("particleShader");
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/standardParticle.png");
-				m_d3dData.m_booleanSwapUAVandSRV = true;
+				m_d3dData.swapUAVandSRV = true;
+
 
 				CalculateMaxNrOfParticles();
 				CreateInitBuffer();
@@ -76,7 +77,7 @@ namespace thomas
 						}
 						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition();
 						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
-						utils::D3d::FillDynamicBufferStruct(m_d3dData.m_particleBuffer, m_particleBufferStruct);
+						utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
 						graphics::ParticleSystem::SpawnParticles(this, numberOfParticlesToEmit);
 						m_particleBufferStruct.currentParticleStartIndex = (m_particleBufferStruct.currentParticleStartIndex + numberOfParticlesToEmit) % m_maxNrOfParticles;
 					}
@@ -90,12 +91,15 @@ namespace thomas
 
 			void thomas::object::component::ParticleEmitterComponent::Destroy()
 			{
-				SAFE_RELEASE(m_d3dData.m_particleBuffer1);
-				SAFE_RELEASE(m_d3dData.m_particleBuffer2);
-				SAFE_RELEASE(m_d3dData.m_particleUAV1);
-				SAFE_RELEASE(m_d3dData.m_particleUAV2);
-				SAFE_RELEASE(m_d3dData.m_particleSRV1);
-				SAFE_RELEASE(m_d3dData.m_particleSRV2);
+				SAFE_RELEASE(m_d3dData.particleBuffer1);
+				SAFE_RELEASE(m_d3dData.particleBuffer2);
+				SAFE_RELEASE(m_d3dData.particleUAV1);
+				SAFE_RELEASE(m_d3dData.particleUAV2);
+				SAFE_RELEASE(m_d3dData.particleSRV1);
+				SAFE_RELEASE(m_d3dData.particleSRV2);
+				SAFE_RELEASE(m_d3dData.billboardBuffer);
+				SAFE_RELEASE(m_d3dData.billboardsSRV);
+				SAFE_RELEASE(m_d3dData.billboardsUAV);
 			}
 
 			void ParticleEmitterComponent::SetSpread(float const other)
@@ -232,7 +236,7 @@ namespace thomas
 			void ParticleEmitterComponent::StartEmitting()
 			{
 				m_isEmitting = true;
-				m_emissionTimeLeft = m_emissionTimer;
+				m_emissionTimeLeft = m_emissionDuration;
 
 			}
 
@@ -271,22 +275,25 @@ namespace thomas
 
 			void ParticleEmitterComponent::CreateParticleUAVsandSRVs()
 			{
-				SAFE_RELEASE(m_d3dData.m_particleBuffer1);
-				SAFE_RELEASE(m_d3dData.m_particleBuffer2);
-				SAFE_RELEASE(m_d3dData.m_particleUAV1);
-				SAFE_RELEASE(m_d3dData.m_particleUAV2);
-				SAFE_RELEASE(m_d3dData.m_particleSRV1);
-				SAFE_RELEASE(m_d3dData.m_particleSRV2);
-
+				SAFE_RELEASE(m_d3dData.particleBuffer1);
+				SAFE_RELEASE(m_d3dData.particleBuffer2);
+				SAFE_RELEASE(m_d3dData.particleUAV1);
+				SAFE_RELEASE(m_d3dData.particleUAV2);
+				SAFE_RELEASE(m_d3dData.particleSRV1);
+				SAFE_RELEASE(m_d3dData.particleSRV2);
+				SAFE_RELEASE(m_d3dData.billboardBuffer);
+				SAFE_RELEASE(m_d3dData.billboardsSRV);
+				SAFE_RELEASE(m_d3dData.billboardsUAV);
 				UINT bytewidth = sizeof(ParticleStruct) * m_maxNrOfParticles;
 				UINT structurebytestride = sizeof(ParticleStruct);
-				utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_d3dData.m_particleBuffer1, m_d3dData.m_particleUAV1, m_d3dData.m_particleSRV1);
-				utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_d3dData.m_particleBuffer2, m_d3dData.m_particleUAV2, m_d3dData.m_particleSRV2);
+				utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_d3dData.particleBuffer1, m_d3dData.particleUAV1, m_d3dData.particleSRV1);
+				utils::D3d::CreateBufferAndUAV(NULL, bytewidth, structurebytestride, m_d3dData.particleBuffer2, m_d3dData.particleUAV2, m_d3dData.particleSRV2);
+				graphics::ParticleSystem::CreateBillboardUAVandSRV(m_maxNrOfParticles, m_d3dData.billboardBuffer, m_d3dData.billboardsUAV, m_d3dData.billboardsSRV);
 			}
 
 			void ParticleEmitterComponent::CreateInitBuffer()
 			{
-				m_d3dData.m_particleBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(m_particleBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
+				m_d3dData.particleBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(m_particleBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
 			}
 
 

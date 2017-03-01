@@ -16,14 +16,18 @@ namespace thomas
 			public:
 				
 				struct D3DData {
-					ID3D11UnorderedAccessView* m_particleUAV1;
-					ID3D11ShaderResourceView* m_particleSRV1;
-					ID3D11Buffer* m_particleBuffer1;
-					ID3D11UnorderedAccessView* m_particleUAV2;
-					ID3D11ShaderResourceView* m_particleSRV2;
-					ID3D11Buffer* m_particleBuffer2;
-					ID3D11Buffer* m_particleBuffer;
-					bool m_booleanSwapUAVandSRV;
+					ID3D11UnorderedAccessView* particleUAV1;
+					ID3D11ShaderResourceView* particleSRV1;
+					ID3D11Buffer* particleBuffer1;
+					ID3D11UnorderedAccessView* particleUAV2;
+					ID3D11ShaderResourceView* particleSRV2;
+					ID3D11Buffer* particleBuffer2;
+					ID3D11Buffer* particleBuffer;
+					bool swapUAVandSRV;
+
+					ID3D11UnorderedAccessView* billboardsUAV;
+					ID3D11ShaderResourceView* billboardsSRV;
+					ID3D11Buffer* billboardBuffer;
 				};
 
 				struct InitParticleBufferStruct
