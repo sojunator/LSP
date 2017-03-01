@@ -36,11 +36,14 @@ public:
 		m_transform->SetPosition(0, 300, 0);
 		m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 		m_wormholeParticles = AddComponent<component::ParticleEmitterComponent>();
-		m_wormhole->SetLooping(true);
 		
-		m_wormhole->SetSize(100);
+		m_wormhole->SetSize(1);
 		m_wormhole->SetTexture("../res/textures/wormhole.png");
 		m_wormhole->SetRotationSpeed(math::DegreesToradians(20));
+
+		m_wormhole->SetEmissionDuration(10);
+		m_wormhole->SetEmissionRate(5);
+		m_wormhole->SetSpeed(5);
 	//	SetActive(false);
 
 
@@ -61,6 +64,8 @@ public:
 
 	void Update()
 	{
+		if (Input::GetKeyDown(Input::Keys::K))
+			m_wormhole->StartEmitting();
 	}
 
 private:
