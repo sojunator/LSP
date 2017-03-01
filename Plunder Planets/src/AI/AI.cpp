@@ -63,7 +63,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			eDotF = enemyForward.Dot(forward);
 			if (eDotF >= 0.8)	//Head on, turn right
 				turnDir = 1;
-			if (fEnemyDir >= 0.0)	//Right side
+			else if (fEnemyDir >= 0.0)	//Right side
 			{
 				if (eDotF >= 0.0 && eDotR <= 0.0)	//Turn left
 					turnDir = -1;
