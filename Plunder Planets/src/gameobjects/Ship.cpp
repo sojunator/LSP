@@ -171,8 +171,6 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 void Ship::ShipFireCannons()
 {
 }
-
-
 void Ship::Aim(float side, math::Vector2 aimPos)
 {
 	m_aiming = true;
@@ -210,7 +208,6 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, Time::GetDeltaTime()*2.5);
 }
-
 void Ship::ShipAimCannons()
 {
 	if (Input::GetButtonDown(Input::Buttons::RB))
@@ -233,10 +230,10 @@ void Ship::ShipAimCannons()
 		flatRight.y = 0;
 		flatRight.Normalize();
 		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
-		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D*m_aimDistance;
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D*m_aimDistance; //TODO: redo for better approx?
+		m_aimPosition = math::Vector3(target.x, 0, target.y);
 		Aim(1, target);
-		float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
-
+		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 		if (angle > -500.0)
 		{
 			m_broadSideLeft->SetCanonAngle(-angle);
@@ -262,8 +259,9 @@ void Ship::ShipAimCannons()
 		flatRight.Normalize();
 		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
 		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) + flatRight2D*m_aimDistance;
+		m_aimPosition = math::Vector3(target.x, 0, target.y);
 		Aim(-1, target);
-		float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
+		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 
 		if (angle > -500.0)
 		{

@@ -71,6 +71,7 @@ private:
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
 	math::Vector3 m_initPosition;	//Is this needed?
+	math::Vector3 m_aimPosition;
 
 	//components
 	component::RenderComponent* m_renderer;

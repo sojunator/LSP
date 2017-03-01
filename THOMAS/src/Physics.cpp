@@ -71,4 +71,12 @@ namespace thomas
 		//Destroy everything????
 	}
 
+	graphics::BulletDebugDraw * Physics::getDebugDraw()
+	{
+		if (s_debugDraw)
+			return s_debugDraw;
+		else
+			return nullptr;
+	}
+
 }
