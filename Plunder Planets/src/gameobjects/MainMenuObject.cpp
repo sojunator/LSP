@@ -1,5 +1,5 @@
 #include "MainMenuObject.h"
-//#include "../scenes/GameScene.h"
+#include "../scenes/HighscoreScene.h"
 #include "../scenes/UpgradeScene.h"
 void MainMenuObject::Start()
 {
@@ -73,6 +73,11 @@ void MainMenuObject::Update()
 		if (m_startButton->isHovering())
 		{
 			Scene::LoadScene<UpgradeScene>();
+		}
+
+		if (m_highScoreButton->isHovering())
+		{
+			Scene::LoadScene<HighscoreScene>();
 		}
 
 		//Highscore
