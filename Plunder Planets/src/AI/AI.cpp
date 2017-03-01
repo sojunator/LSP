@@ -8,14 +8,14 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_playerShip = thomas::object::GameObject::Find("Ship");
 	m_enemies = thomas::object::GameObject::FindAllOfType("Enemy");
 
-	m_state = Behavior::Attacking;		//Should be Idle on start
 	m_stateStr = "Attacking";			//Should be Idle on start
+	m_state = Behavior::Attacking;		//Should be Idle on start
 
 	m_lastKnownPos = math::Vector3::Zero;
 	m_escapeTimer = 0;
 	m_escapeTime = 600;	//Should be 60 seconds?
 	m_idleTimer = 0;
-	m_idleTime = 50;
+	m_idleTime = 30;
 	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0 max=10 step=0.01");
 	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0 max=10 step=0.01");
 }
@@ -51,7 +51,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	for (unsigned int i = 0; i < m_enemies.size(); ++i)
 	{
 		float distance = math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition());
-		if (distance <= 50 && distance != 0)
+		if (distance <= 100 && distance != 0)
 		{
 			math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
 			enemyDir.Normalize();
@@ -74,186 +74,266 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		}
 	}
 
-	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-	playerDir.Normalize();
-	pDotR = playerDir.Dot(right);
-	pDotF = playerDir.Dot(forward);
-
-	
-	//if (pDotF >= 0.8)	//Forward
-	//	turnDir = 0;
-	//else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
-	//	turnDir = 1;
-	//else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
-	//	turnDir = -1;
-	//return turnDir;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
+	switch (m_state)
 	{
-		if (turnDir == 0)	//No other enemies near
+	case AI::Behavior::Idle:
+	{
+		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
 		{
-			if (pDotF >= 0.8/* && pDotR >= -0.2 && pDotR <= 0.2*/)	//Forward
+			if (turnDir == 0)	//No other enemies near
 				return 0;
-			else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+			else if (turnDir == 1)	//Turn right
 				return 1;
-			else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+			else if (turnDir == -1)	//Turn left
 				return -1;
 		}
-		else if (turnDir == 1)	//Turn right
-			return 1;
-		else if (turnDir == -1)	//Turn left
-			return -1;
-	}
-	
-	if (turnDir == 0)	//Forward
-	{
-		if (!objectFront)	//Forward
+
+		if (turnDir == 0)	//Forward
 		{
-			if (pDotF >= 0.8/* && pDotR >= -0.2 && pDotR <= 0.2*/)	//Forward
+			if (!objectFront)	//Forward
 				return 0;
-			else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
-				return 1;
-			else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
-				return -1;
-		}
-		else if (objectFront)	//Turn
-		{
-			if (pDotR <= 0.0)	//Turn left
+			else if (objectFront)	//Turn
 			{
 				if (!objectLeft)	//Turn left
 					return -1;
 				else	//Turn right
 					return 1;
 			}
-			else	//Turn right
+		}
+		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
+		{
+			if (!objectRight)	//Turn right
+				return 1;
+			else if (objectRight)	//Forward
+				return 0;
+		}
+		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
+		{
+			if (!objectLeft)	//Turn left
+				return -1;
+			else if (objectLeft)	//Forward
+				return 0;
+		}
+		else
+			return 1;
+		break;
+	}
+	case AI::Behavior::Searching:
+	{
+		math::Vector3 playerDir = m_lastKnownPos - pos;
+		playerDir.Normalize();
+		pDotR = playerDir.Dot(right);
+		pDotF = playerDir.Dot(forward);
+
+		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
+		{
+			if (turnDir == 0)	//No other enemies near
 			{
-				if (!objectRight)	//Turn right
+				if (pDotF >= 0.8)	//Forward
+					return 0;
+				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
 					return 1;
-				else	//Turn left
+				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
 					return -1;
 			}
+			else if (turnDir == 1)	//Turn right
+				return 1;
+			else if (turnDir == -1)	//Turn left
+				return -1;
 		}
-	}
-	else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
-	{
-		if (!objectRight)	//Turn right
+
+		if (turnDir == 0)	//Forward
+		{
+			if (!objectFront)	//Forward
+			{
+				if (pDotF >= 0.8)	//Forward
+					return 0;
+				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+					return 1;
+				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+					return -1;
+			}
+			else if (objectFront)	//Turn
+			{
+				if (pDotR <= 0.0)	//Turn left
+				{
+					if (!objectLeft)	//Turn left
+						return -1;
+					else	//Turn right
+						return 1;
+				}
+				else	//Turn right
+				{
+					if (!objectRight)	//Turn right
+						return 1;
+					else	//Turn left
+						return -1;
+				}
+			}
+		}
+		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
+		{
+			if (!objectRight)	//Turn right
+				return 1;
+			else if (objectRight)	//Forward
+				return 0;
+		}
+		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
+		{
+			if (!objectLeft)	//Turn left
+				return -1;
+			else if (objectLeft)	//Forward
+				return 0;
+		}
+		else
 			return 1;
-		else if (objectRight)	//Forward
-			return 0;
+		break;
 	}
-	else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
+	case AI::Behavior::Attacking:
 	{
-		if (!objectLeft)	//Turn left
-			return -1;
-		else if (objectLeft)	//Forward
-			return 0;
+		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		playerDir.Normalize();
+		pDotR = playerDir.Dot(right);
+		pDotF = playerDir.Dot(forward);
+
+		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
+		{
+			if (turnDir == 0)	//No other enemies near
+			{
+				if (pDotF >= 0.8)	//Forward
+					return 0;
+				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+					return 1;
+				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+					return -1;
+			}
+			else if (turnDir == 1)	//Turn right
+				return 1;
+			else if (turnDir == -1)	//Turn left
+				return -1;
+		}
+
+		if (turnDir == 0)	//Forward
+		{
+			if (!objectFront)	//Forward
+			{
+				if (pDotF >= 0.8)	//Forward
+					return 0;
+				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+					return 1;
+				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+					return -1;
+			}
+			else if (objectFront)	//Turn
+			{
+				if (pDotR <= 0.0)	//Turn left
+				{
+					if (!objectLeft)	//Turn left
+						return -1;
+					else	//Turn right
+						return 1;
+				}
+				else	//Turn right
+				{
+					if (!objectRight)	//Turn right
+						return 1;
+					else	//Turn left
+						return -1;
+				}
+			}
+		}
+		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
+		{
+			if (!objectRight)	//Turn right
+				return 1;
+			else if (objectRight)	//Forward
+				return 0;
+		}
+		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
+		{
+			if (!objectLeft)	//Turn left
+				return -1;
+			else if (objectLeft)	//Forward
+				return 0;
+		}
+		else
+			return 1;
+		break;
 	}
-	else
-		return 1;
+	case AI::Behavior::Firing:
+	{
+		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
+		playerDir.Normalize();
+		pDotR = playerDir.Dot(right);
+		pDotF = playerDir.Dot(forward);
 
+		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
+		{
+			if (turnDir == 0)	//No other enemies near
+			{
+				if (pDotR >= 0.9 || pDotR <= -0.95)	//Forward
+					return 0;
+				else if (pDotR >= 0.0)
+					return 1;
+				else if (pDotR <= 0.0)
+					return -1;
+			}
+			else if (turnDir == 1)	//Turn right
+				return 1;
+			else if (turnDir == -1)	//Turn left
+				return -1;
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	//switch (m_state)
-	//{
-	//case Behavior::Attacking:
-	//{
-	//	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-	//	playerDir.Normalize();
-	//	pDotR = playerDir.Dot(norRight);
-	//	pDotF = playerDir.Dot(norFor);
-
-	//	if (pDotF >= 0.8 && pDotR >= -0.2 && pDotR <= 0.2 && !objectFront)	//Continue forward
-	//		return 0;
-	//	/*Left forward and no island on left*/			/*Left back and no island on left*/
-	//	else if (pDotR < 0.0 && pDotF < 0.0 || pDotR <= -0.2 && pDotF >= 0.0 && !objectRight || pDotF >= 0.8 && objectFront || objectFront && objectLeft)
-	//		return 1;
-	//	/*Right forward and no island on rigth*/		/*Right back and no island on right*/
-	//	else if (pDotR >= 0.0 && pDotF <= 0.0 || pDotR >= 0.2 && pDotF >= 0.0 && !objectLeft || objectFront && objectRight)
-	//		return -1;
-	//	/*Cone forward and no island forward*/
-	//	else
-	//		return 0;
-	//	break;
-	//}
-	//case Behavior::Firing:
-	//{
-	//	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-	//	playerDir.Normalize();
-	//	float pDotR = playerDir.Dot(norRight);
-	//	float pDotF = playerDir.Dot(norFor);
-
-	//	if (((pDotR >= 0.98 || pDotR <= -0.98) && !objectFront) || objectLeft && objectRight && !objectFront)
-	//		return 0;
-	//	else if (((pDotR <= 0.98 && pDotF > 0.0 || pDotR < 0.0 && pDotF >= -0.98) && (!objectRight || objectFront || objectLeft && objectFront)) || objectLeft && objectFront)
-	//		return -1;
-	//	else if (((pDotR <= 0.98 && pDotF > -1.0 || pDotR < 0.0 && pDotF >= 0.98) && (!objectLeft || objectFront && objectRight)) || objectFront && objectRight)
-	//		return 1;
-	//	else
-	//		return 0;
-
-	//	break;
-	//}
-	//case Behavior::Idle:
-	//{
-	//	if (!objectFront || objectLeft && objectRight && !objectFront)
-	//		return 0;
-	//	else if (objectLeft && objectFront || objectFront)
-	//		return 1;
-	//	else if (objectRight && objectFront)
-	//		return -1;
-	//	else
-	//		return 0;
-	//	break;
-	//}
-	//case Behavior::Searching:
-	//{
-	//	math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - m_lastKnownPos;
-	//	playerDir.Normalize();
-	//	float pDotR = playerDir.Dot(norRight);
-	//	float pDotF = playerDir.Dot(norFor);
-
-	//	if (pDotF >= 0.8 && pDotR >= -0.2 && pDotR <= 0.2 && !objectFront)	//Continue forward
-	//		return 0;
-	//	/*Left forward and no island on left*/			/*Left back and no island on left*/
-	//	else if (pDotR < 0.0 && pDotF < 0.0 || pDotR <= -0.2 && pDotF >= 0.0 && !objectRight || pDotF >= 0.8 && objectFront || objectFront && objectLeft)
-	//		return 1;
-	//	/*Right forward and no island on rigth*/		/*Right back and no island on right*/
-	//	else if (pDotR >= 0.0 && pDotF <= 0.0 || pDotR >= 0.2 && pDotF >= 0.0 && !objectLeft || objectFront && objectRight)
-	//		return -1;
-	//	/*Cone forward and no island forward*/
-	//	else
-	//		return 0;
-	//	break;
-	//}
-	//default:
-	//	break;
-	//}
-	
+		if (turnDir == 0)	//Forward
+		{
+			if (!objectFront)	//Forward
+			{
+				if (pDotF >= 0.8)	//Forward
+					return 0;
+				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
+					return 1;
+				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
+					return -1;
+			}
+			else if (objectFront)	//Turn
+			{
+				if (pDotR <= 0.0)	//Turn left
+				{
+					if (!objectLeft)	//Turn left
+						return -1;
+					else	//Turn right
+						return 1;
+				}
+				else	//Turn right
+				{
+					if (!objectRight)	//Turn right
+						return 1;
+					else	//Turn left
+						return -1;
+				}
+			}
+		}
+		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
+		{
+			if (!objectRight)	//Turn right
+				return 1;
+			else if (objectRight)	//Forward
+				return 0;
+		}
+		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
+		{
+			if (!objectLeft)	//Turn left
+				return -1;
+			else if (objectLeft)	//Forward
+				return 0;
+		}
+		else
+			return 1;
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
@@ -301,7 +381,7 @@ void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir
 {
 	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()) <= radius * radius)
 	{
-		dir = -m_playerShip->m_transform->Forward();		//Should maby be (-m_playerShip->m_transform->Forward())
+		dir = -m_playerShip->m_transform->Forward();
 		m_stateStr = "Firing";
 		m_state = Behavior::Firing;
 	}
@@ -316,8 +396,8 @@ void AI::Escape()
 {
 	if (m_escapeTimer >= m_escapeTime)
 	{
-		m_state = Behavior::Idle;
 		m_stateStr = "Idle";
+		m_state = Behavior::Idle;
 	}
 }
 

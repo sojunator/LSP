@@ -73,8 +73,8 @@ public:
 		m_ai = AddComponent<AI>();
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
 
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
@@ -95,7 +95,7 @@ public:
 		m_dead = false;
 		//Movement
 		m_speed = 80;
-		m_turnSpeed = 20;
+		m_turnSpeed = 30;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
@@ -162,6 +162,7 @@ public:
 			Rotate();
 			break;
 		case AI::Behavior::Idle:
+			//Slow down and stop
 			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
 			Rotate();
 			break;
@@ -195,12 +196,12 @@ public:
 			
 			math::Vector3 targetPos = m_ai->GetTargetPos();
 			math::Vector2 target(targetPos.x, targetPos.z);
-			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
+			float angle = m_broadSideRight->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
 			if (angle > -500.0)
 			{
-				m_broadSideLeft->SetCanonAngle(-angle);
-				m_broadSideLeft->Fire();
+				m_broadSideRight->SetCanonAngle(-angle);
+				m_broadSideRight->Fire();
 			}
 		}
 			
@@ -272,6 +273,7 @@ public:
 
 		m_moving = false;
 		m_ai->Escape();
+		//Checked if at last known pos and if not found go idle
 		m_ai->IdleTimer();
 		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
 		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);

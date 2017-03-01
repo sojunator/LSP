@@ -94,7 +94,7 @@ public:
 		{
 			center = m_islands->GetCenter(i);
 			distance = math::Vector3::DistanceSquared(pos, center);
-			if (distance <= m_islands->GetCollisionRadiusSquared(i))
+			if (distance <= m_islands->GetCollisionRadiusSquared(i) + 350*350)
 				return true;
 		}
 		return false;
