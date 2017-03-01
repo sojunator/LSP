@@ -489,7 +489,6 @@ void UpgradeMenuObject::Update()
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			float tempMemes = Input::GetButton(Input::Buttons::DPAD_RIGHT); 
 			if ((m_yArray[0] == 1) && (Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up)) //Player presses up, we're already at the top
 			{
 				m_yArray[0] = 1;
@@ -497,7 +496,8 @@ void UpgradeMenuObject::Update()
 			}
 			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
 			{
-				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_UP))) //Player presses up, we're right side, jump to left, continue scrolling
+				int x = 0;
+				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side, jump to left, continue scrolling
 				{
 					m_xArray[0] = 1;
 					m_xArray[1] = 0;
@@ -514,7 +514,7 @@ void UpgradeMenuObject::Update()
 			}
 			else if ((m_yArray[i] == 1) && ((Input::GetLeftStickY() < -abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down
 			{
-				if ((m_yArray[2] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom, jump to right side, continue scrolling there
+				if ((m_yArray[2] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom, jump to right side, continue scrolling there
 				{
 					m_yArray[2] = 1;
 					m_xArray[0] = 1;
@@ -528,13 +528,13 @@ void UpgradeMenuObject::Update()
 				}
 				break;
 			}
-			else if ((m_xArray[0] == 1) && ((Input::GetLeftStickX() > abs(Input::GetLeftStickY())) || Input::GetButton(Input::Buttons::DPAD_RIGHT))) //Player presses right
+			else if ((m_xArray[0] == 1) && ((Input::GetLeftStickX() > abs(Input::GetLeftStickY())) || Input::GetButton(Input::Buttons::DPAD_RIGHT) || Input::GetKey(Input::Keys::Right))) //Player presses right
 			{
 				m_xArray[0] = 0;
 				m_xArray[1] = 1;
 				break;
 			}
-			else if ((m_xArray[1] == 1) && ((Input::GetLeftStickX() < -abs(Input::GetLeftStickY())) || Input::GetButton(Input::Buttons::DPAD_LEFT))) //Player presses left
+			else if ((m_xArray[1] == 1) && ((Input::GetLeftStickX() < -abs(Input::GetLeftStickY())) || Input::GetButton(Input::Buttons::DPAD_LEFT) || Input::GetKey(Input::Keys::Left))) //Player presses left
 			{
 				m_xArray[0] = 1;
 				m_xArray[1] = 0;
