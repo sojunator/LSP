@@ -249,7 +249,7 @@ namespace thomas
 			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 			ZeroMemory(&srvDesc, sizeof(srvDesc));
 			srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 			srvDesc.Texture2D.MostDetailedMip = 0;
 			srvDesc.Texture2D.MipLevels = -1;
 
