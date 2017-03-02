@@ -36,7 +36,7 @@ void HighscoreMenuObject::Start()
 
 	//TODO: sort after level
 
-	//Read highscore file
+	//Read highscore file, text file for now
 	std::string line;
 	std::ifstream readFile("../res/GUI/Highscore/score.txt");
 
@@ -90,154 +90,167 @@ void HighscoreMenuObject::Start()
 	}
 	readFile.close();
 
+	//Sort should be done here
 	for (unsigned int i = 0; i < m_amount.size(); i++)
 	{
 		m_scoreReader.push_back(ScoreLayout(m_tempName[i], m_tempLevel[i], m_tempGold[i], m_tempDate[i]));
 	}
 
-	//Name1
-	m_name1->SetFont("Highscore");
-	m_name1->SetOutput(m_scoreReader[0].name);
-	m_name1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_name1->SetRotation(0.0f);
-	m_name1->SetScale(1.0f);
-	m_name1->SetPositionX(142);
-	m_name1->SetPositionY(m_nameYOffset);
-	m_name1->SetDropshadow(false);
-	m_name1->SetOutline(true);
-	m_name1->SetOrigin(false);
+	//User1
+	if (m_amount.size() == 1 || m_amount.size() > 1)
+	{
+		//Name1
+		m_name1->SetFont("Highscore");
+		m_name1->SetOutput(m_scoreReader[0].name);
+		m_name1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_name1->SetRotation(0.0f);
+		m_name1->SetScale(1.0f);
+		m_name1->SetPositionX(142);
+		m_name1->SetPositionY(m_nameYOffset);
+		m_name1->SetDropshadow(false);
+		m_name1->SetOutline(true);
+		m_name1->SetOrigin(false);
 
-	//Name2
-	m_name2->SetFont("Highscore");
-	m_name2->SetOutput(m_scoreReader[1].name);
-	m_name2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_name2->SetRotation(0.0f);
-	m_name2->SetScale(1.0f);
-	m_name2->SetPositionX(142);
-	m_name2->SetPositionY(m_nameYOffset + 40);
-	m_name2->SetDropshadow(false);
-	m_name2->SetOutline(true);
-	m_name2->SetOrigin(false);
+		//Level1
+		m_level1->SetFont("Highscore");
+		m_level1->SetOutput(m_scoreReader[0].level);
+		m_level1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_level1->SetRotation(0.0f);
+		m_level1->SetScale(1.0f);
+		m_level1->SetPositionX(535);
+		m_level1->SetPositionY(m_nameYOffset + 20);
+		m_level1->SetDropshadow(false);
+		m_level1->SetOutline(true);
+		m_level1->SetOrigin(true);
 
-	//Name3
-	m_name3->SetFont("Highscore");
-	m_name3->SetOutput(m_scoreReader[2].name);
-	m_name3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_name3->SetRotation(0.0f);
-	m_name3->SetScale(1.0f);
-	m_name3->SetPositionX(142);
-	m_name3->SetPositionY(m_nameYOffset + 80);
-	m_name3->SetDropshadow(false);
-	m_name3->SetOutline(true);
-	m_name3->SetOrigin(false);
+		//Gold1
+		m_gold1->SetFont("Highscore");
+		m_gold1->SetOutput(m_scoreReader[0].gold);
+		m_gold1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_gold1->SetRotation(0.0f);
+		m_gold1->SetScale(1.0f);
+		m_gold1->SetPositionX(890);
+		m_gold1->SetPositionY(m_nameYOffset + 20);
+		m_gold1->SetDropshadow(false);
+		m_gold1->SetOutline(true);
+		m_gold1->SetOrigin(true);
 
-	//Level1
-	m_level1->SetFont("Highscore");
-	m_level1->SetOutput(m_scoreReader[0].level);
-	m_level1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_level1->SetRotation(0.0f);
-	m_level1->SetScale(1.0f);
-	m_level1->SetPositionX(535);
-	m_level1->SetPositionY(m_nameYOffset + 20);
-	m_level1->SetDropshadow(false);
-	m_level1->SetOutline(true);
-	m_level1->SetOrigin(true);
+		//Date1
+		m_date1->SetFont("Highscore");
+		m_date1->SetOutput(m_scoreReader[0].date);
+		m_date1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_date1->SetRotation(0.0f);
+		m_date1->SetScale(1.0f);
+		m_date1->SetPositionX(1120);
+		m_date1->SetPositionY(m_nameYOffset);
+		m_date1->SetDropshadow(false);
+		m_date1->SetOutline(true);
+		m_date1->SetOrigin(false);
+	}
 
-	//Level2
-	m_level2->SetFont("Highscore");
-	m_level2->SetOutput(m_scoreReader[1].level);
-	m_level2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_level2->SetRotation(0.0f);
-	m_level2->SetScale(1.0f);
-	m_level2->SetPositionX(535);
-	m_level2->SetPositionY(m_nameYOffset + 60);
-	m_level2->SetDropshadow(false);
-	m_level2->SetOutline(true);
-	m_level2->SetOrigin(true);
+	//User2
+	if (m_amount.size() == 2 || m_amount.size() > 1)
+	{
+		//Name2
+		m_name2->SetFont("Highscore");
+		m_name2->SetOutput(m_scoreReader[1].name);
+		m_name2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_name2->SetRotation(0.0f);
+		m_name2->SetScale(1.0f);
+		m_name2->SetPositionX(142);
+		m_name2->SetPositionY(m_nameYOffset + 40);
+		m_name2->SetDropshadow(false);
+		m_name2->SetOutline(true);
+		m_name2->SetOrigin(false);
 
-	//Level3
-	m_level3->SetFont("Highscore");
-	m_level3->SetOutput(m_scoreReader[2].level);
-	m_level3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_level3->SetRotation(0.0f);
-	m_level3->SetScale(1.0f);
-	m_level3->SetPositionX(535);
-	m_level3->SetPositionY(m_nameYOffset + 100);
-	m_level3->SetDropshadow(false);
-	m_level3->SetOutline(true);
-	m_level3->SetOrigin(true);
+		//Level2
+		m_level2->SetFont("Highscore");
+		m_level2->SetOutput(m_scoreReader[1].level);
+		m_level2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_level2->SetRotation(0.0f);
+		m_level2->SetScale(1.0f);
+		m_level2->SetPositionX(535);
+		m_level2->SetPositionY(m_nameYOffset + 60);
+		m_level2->SetDropshadow(false);
+		m_level2->SetOutline(true);
+		m_level2->SetOrigin(true);
 
-	//Gold1
-	m_gold1->SetFont("Highscore");
-	m_gold1->SetOutput(m_scoreReader[0].gold);
-	m_gold1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_gold1->SetRotation(0.0f);
-	m_gold1->SetScale(1.0f);
-	m_gold1->SetPositionX(890);
-	m_gold1->SetPositionY(m_nameYOffset + 20);
-	m_gold1->SetDropshadow(false);
-	m_gold1->SetOutline(true);
-	m_gold1->SetOrigin(true);
+		//Gold2
+		m_gold2->SetFont("Highscore");
+		m_gold2->SetOutput(m_scoreReader[1].gold);
+		m_gold2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_gold2->SetRotation(0.0f);
+		m_gold2->SetScale(1.0f);
+		m_gold2->SetPositionX(890);
+		m_gold2->SetPositionY(m_nameYOffset + 60);
+		m_gold2->SetDropshadow(false);
+		m_gold2->SetOutline(true);
+		m_gold2->SetOrigin(true);
 
-	//Gold2
-	m_gold2->SetFont("Highscore");
-	m_gold2->SetOutput(m_scoreReader[1].gold);
-	m_gold2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_gold2->SetRotation(0.0f);
-	m_gold2->SetScale(1.0f);
-	m_gold2->SetPositionX(890);
-	m_gold2->SetPositionY(m_nameYOffset + 60);
-	m_gold2->SetDropshadow(false);
-	m_gold2->SetOutline(true);
-	m_gold2->SetOrigin(true);
+		//Date2
+		m_date2->SetFont("Highscore");
+		m_date2->SetOutput(m_scoreReader[1].date);
+		m_date2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_date2->SetRotation(0.0f);
+		m_date2->SetScale(1.0f);
+		m_date2->SetPositionX(1120);
+		m_date2->SetPositionY(m_nameYOffset + 40);
+		m_date2->SetDropshadow(false);
+		m_date2->SetOutline(true);
+		m_date2->SetOrigin(false);
+	}
 
-	//Gold3
-	m_gold3->SetFont("Highscore");
-	m_gold3->SetOutput(m_scoreReader[2].gold);
-	m_gold3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_gold3->SetRotation(0.0f);
-	m_gold3->SetScale(1.0f);
-	m_gold3->SetPositionX(890);
-	m_gold3->SetPositionY(m_nameYOffset + 100);
-	m_gold3->SetDropshadow(false);
-	m_gold3->SetOutline(true);
-	m_gold3->SetOrigin(true);
+	//User3
+	if (m_amount.size() == 3 || m_amount.size() > 2)
+	{
+		//Name3
+		m_name3->SetFont("Highscore");
+		m_name3->SetOutput(m_scoreReader[2].name);
+		m_name3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_name3->SetRotation(0.0f);
+		m_name3->SetScale(1.0f);
+		m_name3->SetPositionX(142);
+		m_name3->SetPositionY(m_nameYOffset + 80);
+		m_name3->SetDropshadow(false);
+		m_name3->SetOutline(true);
+		m_name3->SetOrigin(false);
 
-	//Date1
-	m_date1->SetFont("Highscore");
-	m_date1->SetOutput(m_scoreReader[0].date);
-	m_date1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_date1->SetRotation(0.0f);
-	m_date1->SetScale(1.0f);
-	m_date1->SetPositionX(1110);
-	m_date1->SetPositionY(m_nameYOffset);
-	m_date1->SetDropshadow(false);
-	m_date1->SetOutline(true);
-	m_date1->SetOrigin(false);
+		//Level3
+		m_level3->SetFont("Highscore");
+		m_level3->SetOutput(m_scoreReader[2].level);
+		m_level3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_level3->SetRotation(0.0f);
+		m_level3->SetScale(1.0f);
+		m_level3->SetPositionX(535);
+		m_level3->SetPositionY(m_nameYOffset + 100);
+		m_level3->SetDropshadow(false);
+		m_level3->SetOutline(true);
+		m_level3->SetOrigin(true);
 
-	//Date2
-	m_date2->SetFont("Highscore");
-	m_date2->SetOutput(m_scoreReader[1].date);
-	m_date2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_date2->SetRotation(0.0f);
-	m_date2->SetScale(1.0f);
-	m_date2->SetPositionX(1110);
-	m_date2->SetPositionY(m_nameYOffset + 40);
-	m_date2->SetDropshadow(false);
-	m_date2->SetOutline(true);
-	m_date2->SetOrigin(false);
+		//Gold3
+		m_gold3->SetFont("Highscore");
+		m_gold3->SetOutput(m_scoreReader[2].gold);
+		m_gold3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_gold3->SetRotation(0.0f);
+		m_gold3->SetScale(1.0f);
+		m_gold3->SetPositionX(890);
+		m_gold3->SetPositionY(m_nameYOffset + 100);
+		m_gold3->SetDropshadow(false);
+		m_gold3->SetOutline(true);
+		m_gold3->SetOrigin(true);
 
-	//Date3
-	m_date3->SetFont("Highscore");
-	m_date3->SetOutput(m_scoreReader[2].date);
-	m_date3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
-	m_date3->SetRotation(0.0f);
-	m_date3->SetScale(1.0f);
-	m_date3->SetPositionX(1110);
-	m_date3->SetPositionY(m_nameYOffset + 80);
-	m_date3->SetDropshadow(false);
-	m_date3->SetOutline(true);
-	m_date3->SetOrigin(false);
+		//Date3
+		m_date3->SetFont("Highscore");
+		m_date3->SetOutput(m_scoreReader[2].date);
+		m_date3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+		m_date3->SetRotation(0.0f);
+		m_date3->SetScale(1.0f);
+		m_date3->SetPositionX(1120);
+		m_date3->SetPositionY(m_nameYOffset + 80);
+		m_date3->SetDropshadow(false);
+		m_date3->SetOutline(true);
+		m_date3->SetOrigin(false);
+	}
 
 }
 

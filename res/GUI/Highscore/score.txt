@@ -1,15 +1,15 @@
 n Seth
 l 8
 g 300
-d 1 Mar 2017
+d 2017-03-02
 *
 n Ronny
 l 1
 g 2000
-d 3 Feb 2017
+d 2017-03-02
 *
 n Jonny
 l 4
 g 400
-d 27 Mar 2017
+d 2017-03-02
 *
