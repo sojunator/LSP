@@ -16,6 +16,26 @@ public:
 	{
 	}
 
+	void ApplyDamage(float damage)
+	{
+		m_health -= damage;
+	}
+
+	void SetHealth(float health)
+	{
+		m_health = health;
+	}
+
+	float GetHealth() const
+	{
+		return m_health;
+	}
+
+	component::RigidBodyComponent* GetRigidBody() const
+	{
+		return m_rigidBody;
+	}
+
 	void Start()
 	{
 		m_firstFrame = true;
@@ -90,7 +110,7 @@ public:
 		m_rigidBody->setGravity(btVector3(0, -15, 0));
 
 		//Sound
-		m_health = 20;
+		m_health = 50;
 		m_dead = false;
 		//Movement
 		m_speed = 600;

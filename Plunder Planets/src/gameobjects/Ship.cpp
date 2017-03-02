@@ -535,11 +535,31 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 
 	if (other->m_gameObject->GetType() == "Enemy")
 	{
-		math::Vector3 tempVector = other->m_gameObject->m_transform->GetPosition() - m_transform->GetPosition();
-		tempVector.Normalize();
-		math::Vector3 aids = other->m_gameObject->m_transform->Forward();
-		aids.Normalize();
-		float test = tempVector.Dot(aids);
+		math::Vector3 lineOfAction = other->m_gameObject->m_transform->GetPosition() - m_transform->GetPosition();
+		lineOfAction.Normalize();
+
+		float playerAngle = abs(lineOfAction.Dot(m_transform->Forward()));
+		float enemyAngle = abs(lineOfAction.Dot(other->m_gameObject->m_transform->Forward()));
+
+		if (playerAngle > enemyAngle - 0.0001f)
+		{
+			Enemy* tempEnemy = (Enemy*)(other->m_gameObject);
+			float playerSpeed = m_rigidBody->getLinearVelocity().length();
+
+			m_health -= playerSpeed * (1 - playerAngle);
+			tempEnemy->ApplyDamage(playerAngle * playerSpeed);
 		
+			LOG("AI should take most damage");
+		}
+		else if (playerAngle < enemyAngle - 0.0001f)
+		{
+			Enemy* tempEnemy = (Enemy*)(other->m_gameObject);
+			float enemySpeed = tempEnemy->GetRigidBody()->getLinearVelocity().length();
+
+			m_health -= enemySpeed * (enemyAngle);
+			tempEnemy->ApplyDamage(enemySpeed - enemySpeed * (1 - enemyAngle));
+
+			LOG("Player should take most damage");
+		}
 	}
 }
