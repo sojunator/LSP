@@ -51,27 +51,22 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	for (unsigned int i = 0; i < m_enemies.size(); ++i)
 	{
 		float distance = math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition());
-		if (distance <= 100 && distance != 0)
+		if (distance <= 200 && distance != 0)
 		{
 			math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
 			enemyDir.Normalize();
-			float fEnemyDir = enemyDir.Dot(right);
+			float fEnemyDir = enemyDir.Dot(forward);
 
-			math::Vector3 enemyForward = -m_enemies[i]->m_transform->Forward();
-			enemyForward.Normalize();
-			eDotR = enemyForward.Dot(right);
-			eDotF = enemyForward.Dot(forward);
-			if (eDotF >= 0.8)	//Head on. turn right
-				turnDir = 1;
-			else if (fEnemyDir >= 0.0)	//Right side
+			if (fEnemyDir >= 0.8)	//Turn
 			{
-				if (eDotF >= 0.0 && eDotR <= 0.0)	//Turn left
-					turnDir = -1;
-			}
-			else	//Left side
-			{
-				if (eDotF >= 0.0 && eDotR > 0.0)	//Turn right
+				math::Vector3 enemyForward = -m_enemies[i]->m_transform->Forward();
+				enemyForward.Normalize();
+				eDotR = enemyForward.Dot(right);
+				eDotF = enemyForward.Dot(forward);
+				if ((eDotF >= 0.0 && eDotR <= 0.0) || (eDotF <= 0.0 && eDotR >= 0.0))	//Turn right
 					turnDir = 1;
+				else if ((eDotF >= 0.0 && eDotR >= 0.0) || (eDotF <= 0.0 && eDotR <= 0.0))	//Turn left
+					turnDir - 1;
 			}
 		}
 	}
@@ -147,7 +142,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 		if (turnDir == 0)	//Forward, no enemies near
 		{
 			if (objectFront && objectLeft)	//Turn right
-				return 1; 
+				return 1;
 			else if (objectFront && objectRight)	//Turn left
 				return -1;
 			else if (objectFront)	//Turn
@@ -217,26 +212,30 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 
 		if (turnDir == 0)	//Forward, no enemies near
 		{
-			if (objectFront)	//Turn
+			if (objectFront && objectLeft)	//Turn right
+				return 1;
+			else if (objectFront && objectRight)	//Turn left
+				return -1;
+			else if (objectFront)	//Turn
 			{
-				if (pDotR >= 0.0)
+				if (pDotR >= 0.0)	//Turn right
 					return 1;
-				else
+				else	//Turn left
 					return -1;
 			}
 			else if (objectRight)	//Left or forward
 			{
-				if (pDotR >= 0.0 && pDotF >= 0.0)
+				if (pDotR >= 0.0 && pDotF >= 0.0)	//Forward
 					return 0;
 				else
-					return -1;
+					return -1;	//Turn left
 
 			}
 			else if (objectLeft)	//Right or forward
 			{
-				if (pDotR <= 0.0 && pDotF >= 0.0)
+				if (pDotR <= 0.0 && pDotF >= 0.0)	//Forward
 					return 0;
-				else
+				else	//Turn left
 					return 1;
 			}
 		}
@@ -254,7 +253,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			else if (objectLeft)	//Forward
 				return 0;
 		}
-		else
+		else	//Don't know what to do. If we get here, one or more cases are missing.
 			return 0;
 		break;
 	}
@@ -284,7 +283,11 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 
 		if (turnDir == 0)	//Forward, no enemies near
 		{
-			if (objectFront)	//Turn
+			if (objectFront && objectLeft)	//Turn right
+				return 1;
+			else if (objectFront && objectRight)	//Turn left
+				return -1;
+			else if (objectFront)	//Turn
 			{
 				if (pDotR >= 0.0)
 					return 1;

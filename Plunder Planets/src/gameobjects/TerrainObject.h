@@ -24,7 +24,7 @@ public:
 		m_sound->SetClip("fPlunder");
 		m_sound->SetLooping(true);
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(1, mat, 1024, 1/8.f, 4096, 1024);
+		m_islands = new thomas::Islands(20, mat, 1024, 1/8.f, 4096, 1024);
 		m_model = thomas::graphics::Model::CreateModel("Islands", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Islands");
@@ -94,7 +94,7 @@ public:
 		{
 			center = m_islands->GetCenter(i);
 			distance = math::Vector3::DistanceSquared(pos, center);
-			if (distance <= m_islands->GetCollisionRadiusSquared(i) + 350*350)
+			if (distance <= m_islands->GetCollisionRadiusSquared(i) + 400*400)
 				return true;
 		}
 		return false;
