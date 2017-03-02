@@ -2,6 +2,7 @@
 #pragma once
 
 #include <Thomas.h>
+#include "ShipStats.h"
 
 using namespace thomas;
 using namespace object;
@@ -67,7 +68,8 @@ private:
 	component::SpriteComponent* m_exitButton;
 	component::SpriteComponent* m_backgrounds;
 	component::SoundComponent* m_music;
-	ShipStats* m_shipStats;
+	//ShipStats* m_shipStats = ShipStats::GetPlayerStats();
+	ShipStats* m_shipStats = ShipStats::s_playerStats;
 
 	//Bool checks for talents
 	bool m_cannonCheck[5] = { false };

@@ -94,7 +94,7 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = m_shipStats->GetEnemySpeed();
+		m_speed = 600;// m_shipStats->GetEnemySpeed();
 		m_turnSpeed = 150;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
@@ -316,13 +316,13 @@ private:
 	
 	bool m_dead;
 	//Objects
-	ShipStats* m_shipStats;
 	ShipFloat* m_floats[12];
 	Broadside* m_broadSideRight;
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRightCannonball;
 	Broadside* m_broadSideLeftCannonball;
 	Broadside* m_broadSideFront;
+	ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components
 	component::ParticleEmitterComponent* m_emitterSpark;

@@ -54,6 +54,9 @@ void Ship::Start()
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
+	//m_shipStats = ShipStats::GetPlayerStats();
+	m_shipStats = ShipStats::s_playerStats;
+
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
@@ -362,6 +365,10 @@ int Ship::GetTreasure()
 {
 	return m_treasure + 0.5;
 }
+ShipStats * Ship::GetShipStats()
+{
+	return m_shipStats;
+}
 void Ship::Float(float dt)
 {
 	float waveHeight = 0;
@@ -532,6 +539,7 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		{
 			LOG("You are dead!");
 			Scene::LoadScene<MenuScene>(); //Load Game Over instead
+			//Delete shipStats;
 		}
 
 	}

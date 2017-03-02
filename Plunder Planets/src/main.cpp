@@ -30,11 +30,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//Init wavebank
 	thomas::Sound::LoadWaveBank("../res/sounds/soundlib.xwb");
-	Scene::SetStatPointer(new ShipStats());
 	Scene* menuScene = Scene::LoadScene<MenuScene>();
 
 	//start
-	ShipStats::ShipStats(); //Set ship stats
+	ShipStats::s_playerStats = new ShipStats(0); //Set ship stats
+	//ShipStats::SetPlayerStats(new ShipStats(0));
 	thomas::ThomasCore::Start();
 
 	return (int)msg.wParam;

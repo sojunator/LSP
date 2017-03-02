@@ -10,6 +10,8 @@ namespace thomas
 {
 	Scene* Scene::s_currentScene;
 	bool Scene::s_drawDebugPhysics;
+	//PlayerStats* Scene::s_stats;
+
 	std::vector<object::component::RenderComponent*> Scene::GetAllRenderComponents()
 	{
 		std::vector<object::component::RenderComponent*> renderComponents;
@@ -227,10 +229,10 @@ namespace thomas
 		LOG("No scene set")
 			return NULL;
 	}
-	void Scene::SetStatPointer(PlayerStats* stats)
+	/*void Scene::SetStatPointer(PlayerStats* stats)
 	{
 		s_stats = stats;
-	}
+	}*/
 	Scene::Scene(std::string name)
 	{
 		m_name = name;

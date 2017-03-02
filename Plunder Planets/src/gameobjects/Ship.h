@@ -35,6 +35,7 @@ public:
 	void PlaySounds(float const dt){}
 	void PlunderIsland();
 	int GetTreasure();
+	ShipStats* GetShipStats();
 
 	void Float(float dt);
 
