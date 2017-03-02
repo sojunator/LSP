@@ -20,12 +20,10 @@ private:
 		std::string date;
 	};
 
-private:
-	bool LevelGreater(const ScoreLayout& x, const ScoreLayout& y)
+	struct myOperator
 	{
-		return x.level > y.level;
-	}
-
+		bool operator() (const ScoreLayout& x, const ScoreLayout& y) { return (x.level > y.level); }
+	}myObject;
 
 public:
 	HighscoreMenuObject() : GameObject("HighscoreMenuObject")

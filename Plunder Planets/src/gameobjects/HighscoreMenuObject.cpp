@@ -94,7 +94,7 @@ void HighscoreMenuObject::Start()
 	}
 
 	//Sort the vector after level
-	//std::sort(m_scoreReader.begin(), m_scoreReader.end(), LevelGreater);
+	std::sort(m_scoreReader.begin(), m_scoreReader.end(), myObject);
 
 	//User1
 	if (m_amount.size() == 1 || m_amount.size() > 1)
