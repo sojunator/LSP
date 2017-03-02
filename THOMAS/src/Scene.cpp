@@ -110,6 +110,7 @@ namespace thomas
 							graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
 							for (graphics::Mesh* mesh : meshes)
 							{
+								
 								mesh->Bind();
 								mesh->Draw();
 							}

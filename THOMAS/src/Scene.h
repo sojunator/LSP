@@ -1,6 +1,8 @@
 #pragma once
 #include "graphics\Renderer.h"
 #include "graphics\ParticleSystem.h"
+#include "utils\FrustumCulling.h"
+
 namespace thomas
 {
 	class THOMAS_API Scene
