@@ -79,8 +79,8 @@ void Enemy::Start()
 	m_dead = false;
 	//Movement
 	m_maxSpeed = 70;
-	m_accelerate = 5;
-	m_retardation = -5;
+	m_accelerate = 10;
+	m_retardation = -10;
 	m_speed = 0;
 	m_turnSpeed = 20;
 	m_changeSpeed = 0;
@@ -315,6 +315,8 @@ void Enemy::ChangeSpeed(float dt)
 		newSpeed = m_speed + dt * m_accelerate;
 	else if (m_turnSpeed != 0)
 		newSpeed = m_speed + dt * m_retardation;
+	else
+		newSpeed = m_speed + dt * m_accelerate;
 
 	newSpeed = std::fmax(newSpeed, 0.0);
 	newSpeed = std::fmin(newSpeed, m_maxSpeed);
