@@ -20,7 +20,7 @@ ShipStats::ShipStats(int shipType)
 		m_speed = 600;
 		//m_boostCost = 20;
 		//m_cannonCost = 50;
-		m_shieldAmount = 0;
+		//m_shieldAmount = 0;
 	}
 }
 

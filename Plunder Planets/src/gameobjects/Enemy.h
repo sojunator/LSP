@@ -94,7 +94,7 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = 600;// m_shipStats->GetEnemySpeed();
+		m_speed = m_shipStats->GetSpeed();
 		m_turnSpeed = 150;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");

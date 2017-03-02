@@ -5,7 +5,6 @@ void Ship::Start()
 {
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
-
 	float mass = 20000;
 	//Front
 	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -54,8 +53,8 @@ void Ship::Start()
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
-	//m_shipStats = ShipStats::GetPlayerStats();
 	m_shipStats = ShipStats::s_playerStats;
+	LOG(m_shipStats->GetCannonDamage());
 
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);

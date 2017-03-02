@@ -62,7 +62,7 @@ public:
 		m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToradians(m_pitch)) * cosf(math::DegreesToradians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToradians(m_pitch))) + 
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToradians(m_pitch)) * sinf(math::DegreesToradians(m_yaw))));
-		m_spawnedBy = m_transform->GetParent()->GetParent()->GetParent()->m_gameObject;
+		//m_spawnedBy = m_transform->GetParent()->GetParent()->GetParent()->m_gameObject;
 		//Ship* temp = (Ship*)m_spawnedBy;
 		m_damageAmount = ShipStats::s_playerStats->GetCannonDamage();//5;// temp->GetShipStats()->GetCannonDamage();
 	}
