@@ -48,294 +48,48 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	* -1 is left
 	* 0 is forward
 	*/
-	//First check with other enemies
-	for (unsigned int i = 0; i < m_enemies.size(); ++i)
-	{
-		float distance = math::Vector3::Distance(pos, m_enemies[i]->m_transform->GetPosition());
-		if (distance <= 200 && distance != 0)
-		{
-			math::Vector3 enemyDir = m_enemies[i]->m_transform->GetPosition() - pos;
-			enemyDir.Normalize();
-			float fEnemyDir = enemyDir.Dot(forward);
 
-			if (fEnemyDir >= 0.8)	//Turn
-			{
-				math::Vector3 enemyForward = -m_enemies[i]->m_transform->Forward();
-				enemyForward.Normalize();
-				eDotR = enemyForward.Dot(right);
-				eDotF = enemyForward.Dot(forward);
-				if ((eDotF >= 0.0 && eDotR <= 0.0) || (eDotF <= 0.0 && eDotR >= 0.0))	//Turn right
-					turnDir = 1;
-				else if ((eDotF >= 0.0 && eDotR >= 0.0) || (eDotF <= 0.0 && eDotR <= 0.0))	//Turn left
-					turnDir - 1;
-			}
+	int avoidEnemy = 0;
+	int avoidIsland = 0;
+	int goToPlayer = 0;
+
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		float distance = math::Vector3::Distance(m_enemies[i]->m_transform->GetPosition(), pos);
+		if (distance <= 200)
+		{
+			eDotF = (m_enemies[i]->m_transform->GetPosition() - pos).Dot(forward);
+			if (eDotF >= 0.8)
+				avoidEnemy = 1;
 		}
 	}
 
-	switch (m_state)
-	{
-	case AI::Behavior::Idle:
-	{
-		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
-		{
-			if (turnDir == 0)	//No other enemies near
-				return 0;
-			else if (turnDir == 1)	//Turn right
-				return 1;
-			else if (turnDir == -1)	//Turn left
-				return -1;
-		}
+	if (objectFront && objectLeft)
+		avoidIsland = 1;
+	else if (objectFront && objectRight)
+		avoidIsland = -1;
+	else if (objectFront)
+		avoidIsland = 1;
+	else if (objectLeft)
+		avoidIsland = 1;
+	else if (objectRight)
+		avoidIsland = -1;
 
-		if (turnDir == 0)	//Forward
-		{
-			if (objectFront && objectLeft)	//Turn right
-				return 1;
-			else if (objectFront && objectRight)	//Turn left
-				return -1;
-			else if (objectFront)	//Turn
-				return 0;
-			else if (objectFront)	//Turn
-			{
-				if (!objectLeft)	//Turn left
-					return -1;
-				else	//Turn right
-					return 1;
-			}
-		}
-		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
-		{
-			if (!objectRight)	//Turn right
-				return 1;
-			else if (objectRight)	//Forward
-				return 0;
-		}
-		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
-		{
-			if (!objectLeft)	//Turn left
-				return -1;
-			else if (objectLeft)	//Forward
-				return 0;
-		}
-		else	//Don't know what to do. If we get here, one or more cases are missing.
-			return 0;
-		break;
-	}
-	case AI::Behavior::Searching:
-	{
-		math::Vector3 playerDir = m_lastKnownPos - pos;
-		playerDir.Normalize();
-		pDotR = playerDir.Dot(right);
-		pDotF = playerDir.Dot(forward);
+	pDotR = (m_playerShip->m_transform->GetPosition() - pos).Dot(right);
+	pDotF = (m_playerShip->m_transform->GetPosition() - pos).Dot(forward);
+	if (pDotR >= 0.0)
+		goToPlayer = 1;
+	if (pDotR <= 0.0)
+		goToPlayer = -1;
 
-		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
-		{
-			if (turnDir == 0)	//No other enemies near
-			{
-				if (pDotF >= 0.8)	//Forward
-					return 0;
-				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
-					return 1;
-				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
-					return -1;
-			}
-			else if (turnDir == 1)	//Turn right
-				return 1;
-			else if (turnDir == -1)	//Turn left
-				return -1;
-		}
+	if (avoidIsland != 0)
+		return avoidIsland;
+	else if (avoidEnemy != 0)
+		return avoidEnemy;
+	else if (goToPlayer != 0)
+		return goToPlayer;
 
-		if (turnDir == 0)	//Forward, no enemies near
-		{
-			if (objectFront && objectLeft)	//Turn right
-				return 1;
-			else if (objectFront && objectRight)	//Turn left
-				return -1;
-			else if (objectFront)	//Turn
-			{
-				if (pDotR >= 0.0)
-					return 1;
-				else
-					return -1;
-			}
-			else if (objectRight)	//Left or forward
-			{
-				if (pDotR >= 0.0 && pDotF >= 0.0)
-					return 0;
-				else
-					return -1;
 
-			}
-			else if (objectLeft)	//Right or forward
-			{
-				if (pDotR <= 0.0 && pDotF >= 0.0)
-					return 0;
-				else
-					return 1;
-			}
-		}
-		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
-		{
-			if (!objectRight)	//Turn right
-				return 1;
-			else if (objectRight)	//Forward
-				return 0;
-		}
-		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
-		{
-			if (!objectLeft)	//Turn left
-				return -1;
-			else if (objectLeft)	//Forward
-				return 0;
-		}
-		else	//Don't know what to do. If we get here, one or more cases are missing.
-			return 0;
-		break;
-	}
-	case AI::Behavior::Attacking:
-	{
-		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-		playerDir.Normalize();
-		pDotR = playerDir.Dot(right);
-		pDotF = playerDir.Dot(forward);
-
-		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
-		{
-			if (turnDir == 0)	//No other enemies near
-			{
-				if (pDotF >= 0.8)	//Forward
-					return 0;
-				else if ((pDotR >= 0.2 && pDotF >= 0.0) || (pDotR >= 0.0 && pDotF <= 0.0))	//Turn right
-					return 1;
-				else if ((pDotR <= -0.2 && pDotF >= 0.0) || (pDotR <= 0.0 && pDotF <= 0.0))	//Turn left
-					return -1;
-			}
-			else if (turnDir == 1)	//Turn right
-				return 1;
-			else if (turnDir == -1)	//Turn left
-				return -1;
-		}
-
-		if (turnDir == 0)	//Forward, no enemies near
-		{
-			if (objectFront && objectLeft)	//Turn right
-				return 1;
-			else if (objectFront && objectRight)	//Turn left
-				return -1;
-			else if (objectFront)	//Turn
-			{
-				if (pDotR >= 0.0)	//Turn right
-					return 1;
-				else	//Turn left
-					return -1;
-			}
-			else if (objectRight)	//Left or forward
-			{
-				if (pDotR >= 0.0 && pDotF >= 0.0)	//Forward
-					return 0;
-				else
-					return -1;	//Turn left
-
-			}
-			else if (objectLeft)	//Right or forward
-			{
-				if (pDotR <= 0.0 && pDotF >= 0.0)	//Forward
-					return 0;
-				else	//Turn left
-					return 1;
-			}
-		}
-		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
-		{
-			if (!objectRight)	//Turn right
-				return 1;
-			else if (objectRight)	//Forward
-				return 0;
-		}
-		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
-		{
-			if (!objectLeft)	//Turn left
-				return -1;
-			else if (objectLeft)	//Forward
-				return 0;
-		}
-		else	//Don't know what to do. If we get here, one or more cases are missing.
-			return 0;
-		break;
-	}
-	case AI::Behavior::Firing:
-	{
-		math::Vector3 playerDir = m_playerShip->m_transform->GetPosition() - pos;
-		playerDir.Normalize();
-		pDotR = playerDir.Dot(right);
-		pDotF = playerDir.Dot(forward);
-
-		if (!objectFront && !objectLeft && !objectRight) //Follow player, no islands near
-		{
-			if (turnDir == 0)	//No other enemies near
-			{
-				if (pDotR >= 0.9 || pDotR <= -0.9)	//Forward
-					return 0;
-				else if ((pDotR <= 0.0 && pDotF >= 0.1) || (pDotR >= 0.0 && pDotF <= -0.1))	//Turn right
-					return 1;
-				else if ((pDotR <= 0.0 && pDotF <= -0.1) || (pDotR >= 0.0 && pDotF >= 0.1))	//Turn left
-					return -1;
-			}
-			else if (turnDir == 1)	//Turn right
-				return 1;
-			else if (turnDir == -1)	//Turn left
-				return -1;
-		}
-
-		if (turnDir == 0)	//Forward, no enemies near
-		{
-			if (objectFront && objectLeft)	//Turn right
-				return 1;
-			else if (objectFront && objectRight)	//Turn left
-				return -1;
-			else if (objectFront)	//Turn
-			{
-				if (pDotR >= 0.0)
-					return 1;
-				else
-					return -1;
-			}
-			else if (objectRight)	//Left or forward
-			{
-				if (pDotF >= 0.0)
-					return 0;
-				else
-					return -1;
-
-			}
-			else if (objectLeft)	//Right or forward
-			{
-				if (pDotF >= 0.0)
-					return 0;
-				else
-					return 1;
-			}
-		}
-		else if (turnDir == 1)	//Turn right, boat to the left. Avoid turn left.
-		{
-			if (!objectRight)	//Turn right
-				return 1;
-			else if (objectRight)	//Forward
-				return 0;
-		}
-		else if (turnDir == -1)	//Turn left, boat to the right. Avoid turn right.
-		{
-			if (!objectLeft)	//Turn left
-				return -1;
-			else if (objectLeft)	//Forward
-				return 0;
-		}
-		else	//Don't know what to do. If we get here, one or more cases are missing.
-			return 0;
-		break;
-	}
-	default:
-		break;
-	}
 }
 
 int AI::FireCannons(math::Vector3 pos, math::Vector3 right)

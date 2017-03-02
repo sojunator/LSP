@@ -321,5 +321,6 @@ void Enemy::ChangeSpeed(float dt)
 	newSpeed = std::fmax(newSpeed, 30.0);
 	newSpeed = std::fmin(newSpeed, m_maxSpeed);
 	m_speed = newSpeed;
+	//m_speed = m_maxSpeed;	//Don't forgett to remove
 }
 
