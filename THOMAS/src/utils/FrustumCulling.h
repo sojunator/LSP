@@ -1,6 +1,6 @@
 #pragma once
 #include "../object/component/Camera.h"
-
+#include "../object/component/FrustumCullingComponent.h"
 
 namespace thomas
 {
@@ -24,7 +24,7 @@ namespace thomas
 			};
 		public:
 			static void GenerateClippingPlanes(object::component::Camera* camera);
-			static bool PointRadiusCulling(math::Vector3 const point, float const radius);
+			static bool Cull(object::component::FrustumCullingComponent* frustumCullingComponent);
 		private:
 			static ClippingPlane m_clippingPlanes[6];
 		public:

@@ -9,6 +9,7 @@ namespace thomas
 	{
 	private:
 		std::vector<object::component::RenderComponent*> GetAllRenderComponents();
+		std::vector<object::component::FrustumCullingComponent*> GetAllFrustrumCullingComponents();
 	public:
 		
 		static void UnloadScene();

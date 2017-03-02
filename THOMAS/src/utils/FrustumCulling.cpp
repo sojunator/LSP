@@ -44,12 +44,12 @@ void thomas::utils::FrustumCulling::GenerateClippingPlanes(object::component::Ca
 	return;
 }
 
-bool thomas::utils::FrustumCulling::PointRadiusCulling(math::Vector3 const point, float const radius)
+bool thomas::utils::FrustumCulling::Cull(object::component::FrustumCullingComponent* frustumCullingComponent)
 {
 	//check if point is inside the generated planes.
 	for (unsigned int i = 0; i < 6; ++i)
 	{
-		if (point.Dot(m_clippingPlanes[i].n) + m_clippingPlanes[i].d + radius <= 0.0f)
+		if (frustumCullingComponent->GetPosition().Dot(m_clippingPlanes[i].n) + m_clippingPlanes[i].d + frustumCullingComponent->GetRadius() <= 0.0f)
 		{
 			return false;
 		}

@@ -1,6 +1,7 @@
 #include "ParticleEmitterComponent.h"
 #include <cstdlib>
 #include <ctime>
+#include "../GameObject.h"
 
 namespace thomas
 {
