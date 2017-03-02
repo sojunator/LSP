@@ -213,6 +213,7 @@
     <Image Include="thomas.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gameobjects\Enemy.cpp" />
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\AI\AI.cpp" />
     <ClCompile Include="src\AI\Pathfinding.cpp" />

@@ -13,6 +13,7 @@
     <ClCompile Include="src\Ocean\FFT\fft_512x512_c2c.cpp" />
     <ClCompile Include="src\Ocean\OceanSimulator.cpp" />
     <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
+    <ClCompile Include="src\gameobjects\Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

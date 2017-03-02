@@ -407,3 +407,9 @@ void AI::IdleTimer()
 {
 	m_idleTimer += Time::GetDeltaTime();
 }
+
+int AI::ChangeSpeed()
+{
+
+	return 0;
+}
