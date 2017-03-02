@@ -17,12 +17,13 @@ namespace thomas
 			m_data.push_back(a); //Line end
 			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromVector(m_data, D3D11_BIND_VERTEX_BUFFER);
 			m_constantBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_cbData, D3D11_BIND_CONSTANT_BUFFER);
-			m_cbData.worldMatrix = worldMatrix;
+			//m_cbData.worldMatrix = worldMatrix;
 		}
 		void GeometryDraw::SetShaders(std::string path, std::string shaderModel, std::string VSEntryPoint, std::string GSEntryPoint, std::string PSEntryPoint)
 		{
 			//Create VS
-			ID3D10Blob* blob = Shader::Compile(path, "vs" + shaderModel, VSEntryPoint);
+			//ID3D10Blob* blob = Shader::Compile(path, "vs" + shaderModel, VSEntryPoint);
+			ID3D10Blob* blob = Shader::Compile("../res/thomasShaders/lineShader.hlsl", "vs_4_0", "VSMain");
 			if (blob)
 				ThomasCore::GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &m_vertexShader);
 
@@ -55,14 +56,16 @@ namespace thomas
 		{
 			DirectX::CommonStates states(ThomasCore::GetDevice());
 			ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
-			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
+			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthDefault(), 0);
 			ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());
 
 			ThomasCore::GetDeviceContext()->IASetInputLayout(m_inputLayout);
+			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP); //if not werk, set to pointlist
 			ThomasCore::GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
-			ThomasCore::GetDeviceContext()->GSSetShader(m_geometryShader, NULL, 0);
+			ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+			if(m_geometryShader)
+				ThomasCore::GetDeviceContext()->GSSetShader(m_geometryShader, NULL, 0);
 			ThomasCore::GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
 
 
@@ -82,13 +85,14 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->Draw(2, 0);
 
 			ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
-			ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+			if (m_geometryShader)
+				ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 			ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
 		}
 		void GeometryDraw::Update(object::component::Camera* camera)
 		{
-			m_cbData.projectionMatrix = camera->GetProjMatrix();
-			m_cbData.viewMatrix = camera->GetViewMatrix();
+			m_cbData.viewProjectionMatrix = camera->GetViewProjMatrix().Transpose();
+			utils::D3d::FillDynamicBufferStruct(m_constantBuffer, m_cbData);
 		}
 	}
 }

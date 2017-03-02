@@ -50,7 +50,7 @@ void Ship::Start()
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
 	m_arc = new GeometryDraw(m_transform->GetLocalWorldMatrix());
-	m_arc->SetShaders("../res/shaders/AimArc.hlsl", "_5_0", "VSMain", "GSMain", "PSMain");
+	m_arc->SetShaders("../res/shaders/AimArc.hlsl", "_5_0", "VSMain", "", "PSMain");
 
 	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 10, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
 	m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 10, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
@@ -213,18 +213,18 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 }
 void Ship::ShipAimCannons()
 {
-	if (Input::GetButtonDown(Input::Buttons::RB))
+	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKeyDown(Input::Keys::G))
 	{
 		m_aimRight = !m_aimRight;
 		m_aimLeft = false;
 	}
-	else if(Input::GetButtonDown(Input::Buttons::LB))
+	else if(Input::GetButtonDown(Input::Buttons::LB) || Input::GetKeyDown(Input::Keys::F))
 	{
 		m_aimLeft = !m_aimLeft;
 		m_aimRight = false;
 	}
 
-	if (m_aimRight) //RIGHT
+	if (m_aimRight)
 	{
 		float deltaX = Input::GetRightStickY();
 		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
@@ -242,7 +242,7 @@ void Ship::ShipAimCannons()
 			m_broadSideLeft->SetCanonAngle(-angle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			m_arc->DrawLine(m_transform->GetPosition(), m_aimPosition, math::Vector3(1,0,0), math::Vector3(1,0,0));
+			DrawAimArc();
 		}
 
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
@@ -252,7 +252,7 @@ void Ship::ShipAimCannons()
 		}
 	}
 
-	else if (m_aimLeft) //LEFT
+	else if (m_aimLeft)
 	{
 		float deltaX = Input::GetRightStickY();
 		
@@ -272,7 +272,7 @@ void Ship::ShipAimCannons()
 			m_broadSideRight->SetCanonAngle(-angle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			m_arc->DrawLine(m_transform->GetPosition(), m_aimPosition, math::Vector3(1, 0, 0), math::Vector3(1, 0, 0));
+			DrawAimArc();
 		}
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
@@ -302,6 +302,22 @@ void Ship::ShipAimCannons()
 	//	m_counter = 0;
 	//	
 	//}
+}
+void Ship::DrawAimArc()
+{
+	math::Vector3 p0 = m_transform->GetPosition(); //boat pos
+	math::Vector3 p3 = m_aimPosition; //aim pos
+
+	math::Vector3 p1 = p0 /*+ exitVector*/; //vector defining starting direction of projectiles
+	math::Vector3 p2 = p3 + math::Vector3(0, 1, 0)/* * scalar */;
+	math::Vector3 point, prevPoint = p0;
+	for (float f = 0; f <= 1; f += 0.1f)
+	{
+		point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
+		m_arc->DrawLine(prevPoint, point, math::Vector3(1, 0, 0), math::Vector3(1, 0, 0));
+		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
+		prevPoint = point;
+	}
 }
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
@@ -465,9 +481,6 @@ void Ship::Update()
 
 		newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
 
-
-
-
 		m_cameraObject->m_transform->SetPosition(newPos);
 	}
 
@@ -476,7 +489,6 @@ void Ship::Update()
 	m_turning = false;
 
 	m_arc->Update(m_cameraObject->GetComponent<object::component::Camera>());
-
 	//Ship Movement
 	ShipMove(dt);
 	ShipRotate(dt);

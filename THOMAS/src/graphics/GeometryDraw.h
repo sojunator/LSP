@@ -8,7 +8,7 @@ namespace thomas
 		{
 		public:
 			GeometryDraw(math::Matrix worldMatrix);
-			void SetShaders(std::string path, std::string shaderModel, std::string VSEntrypoint, _In_opt_ std::string GSEntryPoint, std::string PSEntryPoint);
+			void SetShaders(std::string path, std::string shaderModel, std::string VSEntrypoint, std::string GSEntryPoint, std::string PSEntryPoint);
 			void DrawLine(math::Vector3 start, math::Vector3 end, math::Vector3 startColor, math::Vector3 endColor);
 			void Update(object::component::Camera* camera);
 		private:
@@ -19,9 +19,7 @@ namespace thomas
 			};
 			struct ConstantBuffer
 			{
-				math::Matrix worldMatrix;
-				math::Matrix viewMatrix;
-				math::Matrix projectionMatrix;
+				math::Matrix viewProjectionMatrix;
 			}m_cbData;
 			ID3D11InputLayout* m_inputLayout;
 			ID3D11VertexShader* m_vertexShader;
