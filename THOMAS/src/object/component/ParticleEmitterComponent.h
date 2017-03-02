@@ -130,7 +130,7 @@ namespace thomas
 				
 
 				void StartEmitting();
-				void StopEmitting();
+				void StopEmitting(bool force=false);
 				
 				bool IsEmitting() const;
 				

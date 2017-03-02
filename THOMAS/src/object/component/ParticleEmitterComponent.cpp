@@ -241,9 +241,19 @@ namespace thomas
 
 			}
 
-			void ParticleEmitterComponent::StopEmitting()
+			void ParticleEmitterComponent::StopEmitting(bool force)
 			{
 				m_isEmitting = false;
+				if (force)
+				{
+					m_particleBufferStruct.currentParticleStartIndex = 0;
+					m_particleBufferStruct.minSize = 0;
+					m_particleBufferStruct.maxSize = 0;
+					m_particleBufferStruct.endSize = 0;
+					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
+					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
+					
+				}
 			}
 
 			bool ParticleEmitterComponent::IsEmitting() const

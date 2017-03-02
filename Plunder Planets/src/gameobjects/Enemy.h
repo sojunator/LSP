@@ -267,8 +267,12 @@ public:
 		m_moving = false;
 		m_ai->Escape();
 		m_ai->IdleTimer();
-		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
-		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		if (m_ai->HasTarget())
+		{
+			m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
+			m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		}
+		
 
 		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
 		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Right() * 30));	//Check island right

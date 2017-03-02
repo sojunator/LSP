@@ -42,6 +42,7 @@ public:
 	void OnCollision(component::RigidBodyComponent* other);
 
 public:
+	bool m_startUpSequence;
 	//Health attributes
 	float m_health;
 	float m_maxHealth;
@@ -51,8 +52,10 @@ public:
 	float m_maxArmor;
 
 private:
+	bool m_spawnedWormhole;
+
 	float m_aimDistance;
-	float roof;
+	float m_roof;
 	bool m_moving;
 	bool m_turning;
 	bool m_flying;
