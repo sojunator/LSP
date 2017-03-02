@@ -89,7 +89,7 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_constantBuffer);
 			ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
-			ThomasCore::GetDeviceContext()->Draw(2, 0);
+			ThomasCore::GetDeviceContext()->Draw(2, 0); // TODO: Batcha till scene
 
 			ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
 			if (m_geometryShader)
