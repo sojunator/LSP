@@ -2,8 +2,11 @@ cbuffer InitBuffer : register(b0)
 {
 	float3 initPosition;
 	float initSpread;
-	float3 initDirection;
+	
+	uint particleBlockIndex;
 	float initMaxSpeed;
+	float radius;
+	bool spawnAtSphereEdge;
 
 	float initMinSpeed;
 	float initEndSpeed;
@@ -23,8 +26,7 @@ cbuffer InitBuffer : register(b0)
 	float4 initStartColor;
 	float4 initEndColor;
 
-	uint particleBlockIndex;
-	float3 padding;
+	matrix directionMatrix;
 };
 
 struct ParticleStruct
@@ -95,8 +97,8 @@ void CSMain(uint3 Gid : SV_GroupID)
 	float3 rng = float3(x, y, z);
 	normalize(rng);
 
-	float theta = x * 3.14159265359;
-	float phi = y * 3.14159265359 * 2;
+	float theta = x * 3.14159265359 * 2;
+	float phi = y * ((initSpread-1) % 3.14159265359);
 	float xAngle = sin(phi) * cos(theta);
 	float yAngle = sin(phi) * sin(theta);
 	float zAngle = cos(phi);
@@ -106,10 +108,16 @@ void CSMain(uint3 Gid : SV_GroupID)
  //   normalize(proj);
  //   proj *= initSpread;
 
-	float3 dir = randDir;
+	float3 dir = mul(randDir, (float3x3) directionMatrix);;
 	normalize(dir);
 
-	particlesWrite[index].position = initPosition;
+	float3 position = initPosition + dir * radius;
+	if(spawnAtSphereEdge)
+	{
+		dir *= -1; //make the particles go inward;
+	}
+
+	particlesWrite[index].position = position;
 	particlesWrite[index].direction = dir;
 	particlesWrite[index].speed = speed;
 	particlesWrite[index].endSpeed = initEndSpeed;
@@ -123,7 +131,7 @@ void CSMain(uint3 Gid : SV_GroupID)
 	particlesWrite[index].startColor = initStartColor;
 	particlesWrite[index].endColor = initEndColor;
 
-	particlesWrite2[index].position = initPosition;
+	particlesWrite2[index].position = position;
 	particlesWrite2[index].direction = dir;
 	particlesWrite2[index].speed = speed;
 	particlesWrite2[index].endSpeed = initEndSpeed;

@@ -4,7 +4,7 @@
 #include "..\..\graphics\Texture.h"
 #include "..\..\graphics\Shader.h"
 #include "..\..\graphics\ParticleSystem.h"
-
+#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -16,23 +16,29 @@ namespace thomas
 			public:
 				
 				struct D3DData {
-					ID3D11UnorderedAccessView* m_particleUAV1;
-					ID3D11ShaderResourceView* m_particleSRV1;
-					ID3D11Buffer* m_particleBuffer1;
-					ID3D11UnorderedAccessView* m_particleUAV2;
-					ID3D11ShaderResourceView* m_particleSRV2;
-					ID3D11Buffer* m_particleBuffer2;
-					ID3D11Buffer* m_particleBuffer;
-					bool m_booleanSwapUAVandSRV;
+					ID3D11UnorderedAccessView* particleUAV1;
+					ID3D11ShaderResourceView* particleSRV1;
+					ID3D11Buffer* particleBuffer1;
+					ID3D11UnorderedAccessView* particleUAV2;
+					ID3D11ShaderResourceView* particleSRV2;
+					ID3D11Buffer* particleBuffer2;
+					ID3D11Buffer* particleBuffer;
+					bool swapUAVandSRV;
+
+					ID3D11UnorderedAccessView* billboardsUAV;
+					ID3D11ShaderResourceView* billboardsSRV;
+					ID3D11Buffer* billboardBuffer;
 				};
 
 				struct InitParticleBufferStruct
 				{
 					math::Vector3 position;
 					float spread;//This is a hack
-
-					math::Vector3 direction;
+					
+					unsigned int currentParticleStartIndex;
 					float maxSpeed;
+					float radius;
+					bool spawnAtSphereEdge;
 
 					float minSpeed;
 					float endSpeed;
@@ -49,13 +55,11 @@ namespace thomas
 					float rotationSpeed;
 					float rotation;
 
-					math::Vector4 startColor;
+					math::Color startColor;
 
-					math::Vector4 endColor;
+					math::Color endColor;
 
-					unsigned int currentParticleStartIndex;
-
-					math::Vector3 pad;
+					math::Matrix directionMatrix;
 				};
 
 				struct ParticleStruct
@@ -86,7 +90,6 @@ namespace thomas
 				void CreateParticleUAVsandSRVs();
 				void CreateInitBuffer();
 				void CalculateMaxNrOfParticles();
-
 			public:
 				ParticleEmitterComponent();
 				
@@ -96,7 +99,7 @@ namespace thomas
 				void Update();
 
 				void SetSpread(float const other);
-				void SetDirection(math::Vector3 const other);
+				void SetDirection(math::Vector3 other);
 				void SetDirection(float const x, float const y, float const z);
 				void SetSpeed(float const min, float const max);
 				void SetSpeed(float const speed);
@@ -123,6 +126,8 @@ namespace thomas
 				void SetStartColor(math::Vector4 const other);
 				void SetEndColor(math::Vector4 const other);
 				
+				void SetRadius(float radius);
+				void SpawnAtSphereEdge(bool other);
 				
 
 				void StartEmitting();
@@ -143,8 +148,10 @@ namespace thomas
 
 				D3DData* GetD3DData();
 
+				void AddToDebugMenu();
+
 			private:
-				
+				math::Vector3 m_directionVector;
 				D3DData m_d3dData;
 				graphics::Shader* m_shader;
 				graphics::Texture* m_texture;
