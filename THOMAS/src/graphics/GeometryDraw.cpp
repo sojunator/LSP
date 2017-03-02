@@ -21,11 +21,12 @@ namespace thomas
 		}
 		void GeometryDraw::SetShaders(std::string path, std::string shaderModel, std::string VSEntryPoint, std::string GSEntryPoint, std::string PSEntryPoint)
 		{
+			HRESULT hr;
 			//Create VS
 			//ID3D10Blob* blob = Shader::Compile(path, "vs" + shaderModel, VSEntryPoint);
 			ID3D10Blob* blob = Shader::Compile("../res/thomasShaders/lineShader.hlsl", "vs_4_0", "VSMain");
 			if (blob)
-				ThomasCore::GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &m_vertexShader);
+				hr = ThomasCore::GetDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), NULL, &m_vertexShader);
 
 			//Create input layout
 			std::vector<D3D11_INPUT_ELEMENT_DESC> layoutDesc;
@@ -34,7 +35,7 @@ namespace thomas
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 			};
-			ThomasCore::GetDevice()->CreateInputLayout(&layoutDesc.front(), layoutDesc.size(), blob->GetBufferPointer(), blob->GetBufferSize(), &m_inputLayout);
+			hr = ThomasCore::GetDevice()->CreateInputLayout(&layoutDesc.front(), layoutDesc.size(), blob->GetBufferPointer(), blob->GetBufferSize(), &m_inputLayout);
 
 			//If GSEntryPoint Create GS
 			if (GSEntryPoint != "")
@@ -55,12 +56,12 @@ namespace thomas
 		void GeometryDraw::DrawLine(math::Vector3 from, math::Vector3 to, math::Vector3 fromColor, math::Vector3 toColor)
 		{
 			DirectX::CommonStates states(ThomasCore::GetDevice());
-			ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
-			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthDefault(), 0);
+			//ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
+			//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
 			ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());
 
 			ThomasCore::GetDeviceContext()->IASetInputLayout(m_inputLayout);
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 			ThomasCore::GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
 			ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
@@ -69,10 +70,16 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
 
 
-			m_data[0].position = math::Vector3(from.x, from.y, from.z);
+			/*m_data[0].position = math::Vector3(from.x, from.y, from.z);
 			m_data[0].color = math::Vector3(fromColor.x, fromColor.y, fromColor.z);
 
 			m_data[1].position = math::Vector3(to.x, to.y, to.z);
+			m_data[1].color = math::Vector3(toColor.x, toColor.y, toColor.z);*/
+
+			m_data[0].position = math::Vector3(0, 0, 0);
+			m_data[0].color = math::Vector3(fromColor.x, fromColor.y, fromColor.z);
+
+			m_data[1].position = math::Vector3(0, 100, 0);
 			m_data[1].color = math::Vector3(toColor.x, toColor.y, toColor.z);
 
 			UINT stride = sizeof(VertexData);
