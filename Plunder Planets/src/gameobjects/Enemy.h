@@ -148,7 +148,9 @@ public:
 		m_emitterSmoke->SetMinLifeTime(2.4f);
 		m_emitterSmoke->SetSpread(0.8f);
 
-		
+		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
+		m_frustumCullingComponent->SetRadius(15);
+		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
 	}
 
 
@@ -352,6 +354,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;
+	component::FrustumCullingComponent* m_frustumCullingComponent;
 	AI* m_ai;
 
 	//Ship

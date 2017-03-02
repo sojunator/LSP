@@ -44,6 +44,8 @@
     <ClCompile Include="src\utils\DebugTools.cpp" />
     <ClCompile Include="src\graphics\BulletDebugDraw.cpp" />
     <ClCompile Include="src\object\component\ParticleEmitterComponent.cpp" />
+    <ClCompile Include="src\utils\FrustumCulling.cpp" />
+    <ClCompile Include="src\object\component\FrustumCullingComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\assimp\ai_assert.h" />
@@ -378,6 +380,8 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\graphics\TextRender.h" />
     <ClInclude Include="src\object\component\ParticleEmitterComponent.h" />
+    <ClInclude Include="src\utils\FrustumCulling.h" />
+    <ClInclude Include="src\object\component\FrustumCullingComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\assimp\color4.inl" />

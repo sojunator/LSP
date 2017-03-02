@@ -4,13 +4,15 @@
 #include "..\..\graphics\Texture.h"
 #include "..\..\graphics\Shader.h"
 #include "..\..\graphics\ParticleSystem.h"
+#include "../../utils/DebugTools.h"
+
 namespace thomas
 {
 	namespace object
 	{
 		namespace component
 		{
-			class ParticleEmitterComponent : public Component
+			class THOMAS_API ParticleEmitterComponent : public Component
 			{
 			public:
 				

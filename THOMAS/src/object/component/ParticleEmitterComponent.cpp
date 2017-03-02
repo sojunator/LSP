@@ -1,6 +1,8 @@
 #include "ParticleEmitterComponent.h"
 #include <cstdlib>
 #include <ctime>
+#include "../GameObject.h"
+
 #include "../../utils/DebugTools.h"
 namespace thomas
 {
@@ -234,10 +236,10 @@ namespace thomas
 			{
 				if (!m_isEmitting)
 				{
-					m_isEmitting = true;
-					m_emissionTimeLeft = m_emissionDuration;
+				m_isEmitting = true;
+				m_emissionTimeLeft = m_emissionDuration;
 				}
-				
+
 
 			}
 
