@@ -671,7 +671,7 @@ void UpgradeMenuObject::Navigation()
 	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f)
 		|| (Input::GetButton(Input::Buttons::DPAD_UP) && m_delay < 0.1f) || (Input::GetKey(Input::Keys::Down) && m_delay < 0.1f)
 		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f) || Input::GetButton(Input::Buttons::DPAD_RIGHT) || Input::GetButton(Input::Buttons::DPAD_LEFT)
-		|| Input::GetLeftStickX() || Input::GetKey(Input::Keys::Right) || Input::GetKey(Input::Keys::Left))
+		|| Input::GetLeftStickX() && m_delay < 0.1f || Input::GetKey(Input::Keys::Right) || Input::GetKey(Input::Keys::Left))
 	{
 		for (int i = 0; i < 3; i++) //three rows currently
 		{
@@ -683,7 +683,7 @@ void UpgradeMenuObject::Navigation()
 			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
 			{
 				int x = 0;
-				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side, jump to left, continue scrolling
+				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side, jump to left, continue scrolling
 				{
 					m_xArray[0] = 1;
 					m_xArray[1] = 0;
@@ -724,6 +724,9 @@ void UpgradeMenuObject::Navigation()
 			{
 				m_xArray[0] = 1;
 				m_xArray[1] = 0;
+				m_yArray[0] = 1;
+				m_yArray[1] = 0;
+				m_yArray[2] = 0;
 			}
 		}
 		m_delay = 0.3f;
