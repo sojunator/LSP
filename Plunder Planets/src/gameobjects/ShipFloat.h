@@ -54,21 +54,20 @@ public:
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
 			if (heightBelowWater < 0.3)
 			{
-				rb->setDamping(0.9, 0.9);
+				rb->setDamping(0.4, 0.4);
 			}
 			else if(heightBelowWater < 1.5)
 			{
-				rb->setDamping(0.7, 0.7);
+				rb->setDamping(0.3, 0.3);
 			}
 			else if (heightBelowWater < 2.0)
 			{
-				rb->setDamping(0.5, 0.5);
+				rb->setDamping(0.2, 0.2);
 			}
 			else
 			{
-				rb->setDamping(0.3, 0.3);
+				rb->setDamping(0.1, 0.1);
 			}
-			
 			rb->applyImpulse(force*Time::GetDeltaTime(), *(btVector3*)&pos);
 			if(!moving)
 				rb->applyDamping(Time::GetDeltaTime());
