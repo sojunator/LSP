@@ -81,7 +81,7 @@ void HighscoreMenuObject::Start()
 
 	//Level2
 	m_level2->SetFont("Highscore");
-	m_level2->SetOutput("20");
+	m_level2->SetOutput("1");
 	m_level2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_level2->SetRotation(0.0f);
 	m_level2->SetScale(1.0f);
@@ -109,17 +109,71 @@ void HighscoreMenuObject::Start()
 	m_gold1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_gold1->SetRotation(0.0f);
 	m_gold1->SetScale(1.0f);
-	m_gold1->SetPositionX(865);
-	m_gold1->SetPositionY(m_nameYOffset);
+	m_gold1->SetPositionX(890);
+	m_gold1->SetPositionY(m_nameYOffset + 20);
 	m_gold1->SetDropshadow(false);
 	m_gold1->SetOutline(true);
 	m_gold1->SetOrigin(true);
 
 	//Gold2
+	m_gold2->SetFont("Highscore");
+	m_gold2->SetOutput("1");
+	m_gold2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_gold2->SetRotation(0.0f);
+	m_gold2->SetScale(1.0f);
+	m_gold2->SetPositionX(890);
+	m_gold2->SetPositionY(m_nameYOffset + 60);
+	m_gold2->SetDropshadow(false);
+	m_gold2->SetOutline(true);
+	m_gold2->SetOrigin(true);
 
 	//Gold3
+	m_gold3->SetFont("Highscore");
+	m_gold3->SetOutput("1");
+	m_gold3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_gold3->SetRotation(0.0f);
+	m_gold3->SetScale(1.0f);
+	m_gold3->SetPositionX(890);
+	m_gold3->SetPositionY(m_nameYOffset + 100);
+	m_gold3->SetDropshadow(false);
+	m_gold3->SetOutline(true);
+	m_gold3->SetOrigin(true);
 
+	//Date1
+	m_date1->SetFont("Highscore");
+	m_date1->SetOutput("1 Mar 2017");
+	m_date1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_date1->SetRotation(0.0f);
+	m_date1->SetScale(1.0f);
+	m_date1->SetPositionX(1130);
+	m_date1->SetPositionY(m_nameYOffset);
+	m_date1->SetDropshadow(false);
+	m_date1->SetOutline(true);
+	m_date1->SetOrigin(false);
 
+	//Date2
+	m_date2->SetFont("Highscore");
+	m_date2->SetOutput("1 Mar 2017");
+	m_date2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_date2->SetRotation(0.0f);
+	m_date2->SetScale(1.0f);
+	m_date2->SetPositionX(1130);
+	m_date2->SetPositionY(m_nameYOffset + 40);
+	m_date2->SetDropshadow(false);
+	m_date2->SetOutline(true);
+	m_date2->SetOrigin(false);
+
+	//Date3
+	m_date3->SetFont("Highscore");
+	m_date3->SetOutput("1 Mar 2017");
+	m_date3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_date3->SetRotation(0.0f);
+	m_date3->SetScale(1.0f);
+	m_date3->SetPositionX(1130);
+	m_date3->SetPositionY(m_nameYOffset + 80);
+	m_date3->SetDropshadow(false);
+	m_date3->SetOutline(true);
+	m_date3->SetOrigin(false);
 
 }
 
