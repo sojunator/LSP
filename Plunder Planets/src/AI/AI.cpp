@@ -12,10 +12,12 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_state = Behavior::Attacking;		//Should be Idle on start
 
 	m_lastKnownPos = math::Vector3::Zero;
+	m_dodgePos = math::Vector3::Zero;
 	m_escapeTimer = 0;
 	m_escapeTime = 600;	//Should be 60 seconds?
 	m_idleTimer = 0;
 	m_idleTime = 30;
+	m_lastTurnDir = 0;
 
 	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0 max=10 step=0.01");
 	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0 max=10 step=0.01");
@@ -42,7 +44,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	pDotF = 0;
 	float eDotR = 0;
 	float eDotF = 0;
-	int turnDir = 0;
+
 	/**
 	* 1 is right
 	* -1 is left
@@ -56,13 +58,78 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		float distance = math::Vector3::Distance(m_enemies[i]->m_transform->GetPosition(), pos);
-		if (distance <= 200)
+		if (distance <= 200 && distance != 0.0)
 		{
+			float dodgeDirF;
+			float dodgeDirR;
+			/*if (avoidEnemy == 0)
+			{*/
 			eDotF = (m_enemies[i]->m_transform->GetPosition() - pos).Dot(forward);
+
 			if (eDotF >= 0.8)
-				avoidEnemy = 1;
+			{
+				m_state = Behavior::Dodge;
+				m_dodgePos = m_enemies[i]->m_transform->GetPosition() - 3 * -m_enemies[i]->m_transform->Forward();
+				dodgeDirF = (m_dodgePos - pos).Dot(forward);
+				dodgeDirR = (m_dodgePos - pos).Dot(right);
+				if (dodgeDirF >= 0.0 && dodgeDirR >= 0.0)
+					avoidEnemy = -1;
+				else if (dodgeDirF >= 0.0 && dodgeDirR <= 0.0)
+					avoidEnemy = 1;
+			}
+			//}
+			//else if (avoidEnemy == 1)
+			//{
+			//	if (eDotF >= 0.0 && eDotF <= 0.0)
+			//	{
+			//		float eForFor = m_enemies[i]->m_transform->Forward().Dot(forward);
+			//		float eForRig = m_enemies[i]->m_transform->Forward().Dot(right);
+			//		if (eForFor >= 0.0 && eForRig >= 0.0)
+			//		{
+			//			avoidEnemy = 1;
+			//		}
+			//	}
+			//}
+			//else if (avoidEnemy == -1)
+			//{
+
+			//}
 		}
 	}
+
+	switch (m_state)
+	{
+	case AI::Behavior::Idle:
+	{
+
+		break;
+	}
+	case AI::Behavior::Searching:
+	{
+
+		break;
+	}
+	case AI::Behavior::Attacking:
+	{
+
+		break;
+	}
+	case AI::Behavior::Firing:
+	{
+
+		break;
+	}
+	case AI::Behavior::Dodge:
+	{
+
+		break;
+	}
+	default:
+		break;
+	}
+
+
+
 
 	if (objectFront && objectLeft)
 		avoidIsland = 1;
@@ -112,7 +179,7 @@ int AI::FireCannons(math::Vector3 pos, math::Vector3 right)
 
 void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
 {
-	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()) <= radius * radius)
+	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()) <= radius * radius && m_state != Behavior::Dodge)
 	{
 		m_escapeTimer = 0;
 		dir = m_playerShip->m_transform->GetPosition() - pos;
@@ -130,12 +197,11 @@ void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
 	{
 		m_escapeTimer += Time::GetDeltaTime();
 	}
-
 }
 
 void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir)
 {
-	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()) <= radius * radius)
+	if (math::Vector3::DistanceSquared(pos, m_playerShip->m_transform->GetPosition()) <= radius * radius && m_state != Behavior::Dodge)
 	{
 		dir = -m_playerShip->m_transform->Forward();
 		m_stateStr = "Firing";

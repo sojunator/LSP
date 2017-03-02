@@ -78,7 +78,7 @@ void Enemy::Start()
 	m_health = 20;
 	m_dead = false;
 	//Movement
-	m_maxSpeed = 120;
+	m_maxSpeed = 80;
 	m_accelerate = 15;
 	m_retardation = -20;
 	m_speed = 0;
@@ -148,6 +148,10 @@ void Enemy::Move()
 		break;
 	case AI::Behavior::Idle:
 		//Slow down and stop
+		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
+		Rotate();
+		break;
+	case::AI::Behavior::Dodge:
 		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass()));
 		Rotate();
 		break;
@@ -320,7 +324,7 @@ void Enemy::ChangeSpeed(float dt)
 
 	newSpeed = std::fmax(newSpeed, 30.0);
 	newSpeed = std::fmin(newSpeed, m_maxSpeed);
-	m_speed = newSpeed;
-	//m_speed = m_maxSpeed;	//Don't forgett to remove
+	//m_speed = newSpeed;
+	m_speed = m_maxSpeed;	//Don't forgett to remove
 }
 

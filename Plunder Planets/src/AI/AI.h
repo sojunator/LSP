@@ -13,6 +13,7 @@ public:
 		Searching,
 		Attacking,
 		Firing,
+		Dodge,
 	};
 public:
 	AI();
@@ -38,6 +39,10 @@ private:
 
 	float m_idleTimer;
 	float m_idleTime;
+
+	int m_lastTurnDir;
+
+	thomas::math::Vector3 m_dodgePos;
 
 	TerrainObject* m_terrainObject;
 	thomas::object::GameObject* m_playerShip;
