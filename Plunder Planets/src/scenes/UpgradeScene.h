@@ -6,6 +6,7 @@ class UpgradeScene : public thomas::Scene
 public:
 	UpgradeScene() : Scene("UpgradeScene")
 	{
+		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("Header", "../res/GUI/upgrade/upgrade.png");

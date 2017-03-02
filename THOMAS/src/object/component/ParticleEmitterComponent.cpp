@@ -17,6 +17,7 @@ namespace thomas
 
 			void ParticleEmitterComponent::Start()
 			{
+				m_offset = math::Vector3(0, 0, 0);
 				m_shouldUpdateResources = true;
 				m_emissionDuration = 1.0;
 				m_emissionTimeLeft = m_emissionDuration;
@@ -78,7 +79,7 @@ namespace thomas
 							m_shouldUpdateResources = false;
 							CreateParticleUAVsandSRVs();
 						}
-						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition();
+						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + m_offset;
 						SetDirection(m_directionVector);
 						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
 						utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
@@ -261,6 +262,16 @@ namespace thomas
 			bool ParticleEmitterComponent::IsEmitting() const
 			{
 				return m_isEmitting;
+			}
+
+			void ParticleEmitterComponent::SetOffset(math::Vector3 offset)
+			{
+				m_offset = offset;
+			}
+
+			void ParticleEmitterComponent::SetOffset(float x, float y, float z)
+			{
+				SetOffset(math::Vector3(x, y, z));
 			}
 
 
