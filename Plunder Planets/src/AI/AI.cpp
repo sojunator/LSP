@@ -88,7 +88,11 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 
 		if (turnDir == 0)	//Forward
 		{
-			if (!objectFront)	//Forward
+			if (objectFront && objectLeft)	//Turn right
+				return 1;
+			else if (objectFront && objectRight)	//Turn left
+				return -1;
+			else if (objectFront)	//Turn
 				return 0;
 			else if (objectFront)	//Turn
 			{
@@ -112,7 +116,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			else if (objectLeft)	//Forward
 				return 0;
 		}
-		else
+		else	//Don't know what to do. If we get here, one or more cases are missing.
 			return 0;
 		break;
 	}
@@ -183,7 +187,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			else if (objectLeft)	//Forward
 				return 0;
 		}
-		else
+		else	//Don't know what to do. If we get here, one or more cases are missing.
 			return 0;
 		break;
 	}
@@ -325,7 +329,7 @@ int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, b
 			else if (objectLeft)	//Forward
 				return 0;
 		}
-		else
+		else	//Don't know what to do. If we get here, one or more cases are missing.
 			return 0;
 		break;
 	}

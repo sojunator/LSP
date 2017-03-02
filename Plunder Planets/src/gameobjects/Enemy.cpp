@@ -78,11 +78,11 @@ void Enemy::Start()
 	m_health = 20;
 	m_dead = false;
 	//Movement
-	m_maxSpeed = 70;
-	m_accelerate = 10;
-	m_retardation = -10;
+	m_maxSpeed = 120;
+	m_accelerate = 15;
+	m_retardation = -20;
 	m_speed = 0;
-	m_turnSpeed = 20;
+	m_turnSpeed = 25;
 	m_changeSpeed = 0;
 
 	//utils::DebugTools::AddBool(m_islandForward, "Island F");
@@ -311,14 +311,14 @@ void Enemy::ChangeSpeed(float dt)
 
 	if (m_ai->GetState() == AI::Behavior::Idle)
 		newSpeed = m_speed + dt * m_retardation;
-	else if (m_ai->GetState() == AI::Behavior::Searching || m_ai->GetState() == AI::Behavior::Attacking)
+	else if (m_ai->GetState() == AI::Behavior::Searching || (m_ai->GetState() == AI::Behavior::Attacking && m_turnDir == 0))
 		newSpeed = m_speed + dt * m_accelerate;
 	else if (m_turnSpeed != 0)
 		newSpeed = m_speed + dt * m_retardation;
 	else
 		newSpeed = m_speed + dt * m_accelerate;
 
-	newSpeed = std::fmax(newSpeed, 0.0);
+	newSpeed = std::fmax(newSpeed, 30.0);
 	newSpeed = std::fmin(newSpeed, m_maxSpeed);
 	m_speed = newSpeed;
 }
