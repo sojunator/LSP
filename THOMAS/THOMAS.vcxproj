@@ -54,6 +54,7 @@
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\DebugTools.cpp" />
+    <ClCompile Include="src\utils\FrustumCulling.cpp" />
     <ClCompile Include="src\utils\HeightMap.cpp" />
     <ClCompile Include="src\utils\Plane.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -348,6 +349,7 @@
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\DebugTools.h" />
+    <ClInclude Include="src\utils\FrustumCulling.h" />
     <ClInclude Include="src\utils\HeightMap.h" />
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\utils\Ocean\OceanSimulator.h" />

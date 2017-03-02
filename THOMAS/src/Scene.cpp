@@ -87,7 +87,7 @@ namespace thomas
 	}
 	void Scene::Render3D(object::component::Camera * camera)
 	{
-
+		utils::FrustumCulling::GenerateClippingPlanes(camera);
 		std::vector<object::component::RenderComponent*> renderComponents = GetAllRenderComponents();
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
@@ -104,15 +104,18 @@ namespace thomas
 				{
 					if (renderComponent->GetModel())
 					{
-						std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
-						if (!meshes.empty())
+						if (utils::FrustumCulling::PointRadiusCulling(renderComponent->m_gameObject->m_transform->GetPosition(), 0))
 						{
-							graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
-							for (graphics::Mesh* mesh : meshes)
+							std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
+							if (!meshes.empty())
 							{
-								
-								mesh->Bind();
-								mesh->Draw();
+								graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
+								for (graphics::Mesh* mesh : meshes)
+								{
+
+									mesh->Bind();
+									mesh->Draw();
+								}
 							}
 						}
 							

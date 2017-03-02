@@ -1,5 +1,7 @@
 #include "FrustumCulling.h"
 
+thomas::utils::FrustumCulling::ClippingPlane thomas::utils::FrustumCulling::m_clippingPlanes[6];
+
 void thomas::utils::FrustumCulling::GenerateClippingPlanes(object::component::Camera * camera)
 {
 	math::Matrix viewProjMatrix = camera->GetViewProjMatrix();
