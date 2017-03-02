@@ -4,7 +4,7 @@
 #include "..\..\graphics\Texture.h"
 #include "..\..\graphics\Shader.h"
 #include "..\..\graphics\ParticleSystem.h"
-
+#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -15,13 +15,30 @@ namespace thomas
 			{
 			public:
 				
+				struct D3DData {
+					ID3D11UnorderedAccessView* particleUAV1;
+					ID3D11ShaderResourceView* particleSRV1;
+					ID3D11Buffer* particleBuffer1;
+					ID3D11UnorderedAccessView* particleUAV2;
+					ID3D11ShaderResourceView* particleSRV2;
+					ID3D11Buffer* particleBuffer2;
+					ID3D11Buffer* particleBuffer;
+					bool swapUAVandSRV;
+
+					ID3D11UnorderedAccessView* billboardsUAV;
+					ID3D11ShaderResourceView* billboardsSRV;
+					ID3D11Buffer* billboardBuffer;
+				};
+
 				struct InitParticleBufferStruct
 				{
 					math::Vector3 position;
 					float spread;//This is a hack
-
-					math::Vector3 direction;
+					
+					unsigned int currentParticleStartIndex;
 					float maxSpeed;
+					float radius;
+					bool spawnAtSphereEdge;
 
 					float minSpeed;
 					float endSpeed;
@@ -36,17 +53,19 @@ namespace thomas
 					float minLifeTime;
 					float rand;
 					float rotationSpeed;
-					bool looping;
+					float rotation;
 
-					math::Vector4 startColor;
+					math::Color startColor;
 
-					math::Vector4 endColor;
+					math::Color endColor;
+
+					math::Matrix directionMatrix;
 				};
 
 				struct ParticleStruct
 				{
 					math::Vector3 position;
-					float spread;
+					float padding;
 
 					math::Vector3 direction;
 					float speed;
@@ -56,23 +75,21 @@ namespace thomas
 					float size;
 					float endSize;
 
+					float lifeTime;
 					float lifeTimeLeft;
-					float timeElapsed;
 					float rotationSpeed;
-					bool looping;
+					float rotation;
+					
 
 					math::Vector4 startColor;
 
 					math::Vector4 endColor;
-
-					math::Vector3 initPosition;
-					float padding;
+					
 				};
 			private:
 				void CreateParticleUAVsandSRVs();
 				void CreateInitBuffer();
-				void InitialDispatch();
-
+				void CalculateMaxNrOfParticles();
 			public:
 				ParticleEmitterComponent();
 				
@@ -81,27 +98,36 @@ namespace thomas
 				void Start();
 				void Update();
 
-				void SetAll(_In_opt_ unsigned int nrOfParticles, _In_opt_ math::Vector3 particleDirection, _In_opt_ float minDelay, _In_opt_ float maxDelay, _In_opt_ float minSpeed, _In_opt_ float maxSpeed, 
-					_In_opt_ float particleSpreadFactor, _In_opt_ float particleMinSize, _In_opt_ float particleMaxSize, _In_opt_ float particleMinLifeTime, _In_opt_ float particleMaxLifeTime);
-
-				void SetPosition(math::Vector3 const other);
 				void SetSpread(float const other);
-				void SetDirection(math::Vector3 const other);
+				void SetDirection(math::Vector3 other);
+				void SetDirection(float const x, float const y, float const z);
+				void SetSpeed(float const min, float const max);
+				void SetSpeed(float const speed);
 				void SetMaxSpeed(float const other);
 				void SetMinSpeed(float const other);
 				void SetEndSpeed(float const other);
+				void SetDelay(float const min, float const max);
+				void SetDelay(float const delay);
 				void SetMaxDelay(float const other);
 				void SetMinDelay(float const other);
+				void SetSize(float const min, float const max);
+				void SetSize(float const size);
 				void SetMaxSize(float const other);
 				void SetMinSize(float const other);
 				void SetEndSize(float const other);
+				void SetLifeTime(float const min, float const max);
+				void SetLifeTime(float lifeTime);
 				void SetMaxLifeTime(float const other);
 				void SetMinLifeTime(float const other);
 				void SetRotationSpeed(float const other);
+				void SetRotation(float const other);
 				void SetLooping(bool const other);
+				
 				void SetStartColor(math::Vector4 const other);
 				void SetEndColor(math::Vector4 const other);
 				
+				void SetRadius(float radius);
+				void SpawnAtSphereEdge(bool other);
 				
 
 				void StartEmitting();
@@ -109,36 +135,37 @@ namespace thomas
 				
 				bool IsEmitting() const;
 				
-				void SwapUAVsandSRVs(ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv);//ping pong
 				
 				void SetShader(std::string shaderName);
 				graphics::Shader* GetShader();
 				void SetTexture(std::string texturePath);
 				graphics::Texture* GetTexture();
 
-				void SetNrOfParticles(unsigned int other);
-				unsigned int GetNrOfParticles() const;
+				void SetEmissionRate(float emissionRate);
+				void SetEmissionDuration(float duration);
+				float GetEmissionRate();
+				unsigned int GetNrOfMaxParticles() const;
+
+				D3DData* GetD3DData();
+
+				void AddToDebugMenu();
+
 			private:
-				
+				math::Vector3 m_directionVector;
+				D3DData m_d3dData;
 				graphics::Shader* m_shader;
 				graphics::Texture* m_texture;
-				ID3D11UnorderedAccessView* m_particleUAV1;
-				ID3D11ShaderResourceView* m_particleSRV1;
-				ID3D11Buffer* m_particleBuffer1;
-				ID3D11UnorderedAccessView* m_particleUAV2;
-				ID3D11ShaderResourceView* m_particleSRV2;
-				ID3D11Buffer* m_particleBuffer2;
-				bool m_booleanSwapUAVandSRV;
-
-				graphics::Shader* m_particlesCS;
-				ID3D11Buffer* m_particleBuffer;
 
 				InitParticleBufferStruct m_particleBufferStruct;
 
 				bool m_isEmitting;
-
+				bool m_looping;
+				float m_emissionDuration;
 				bool m_shouldUpdateResources;
-				unsigned int m_nrOfParticles;
+				unsigned int m_maxNrOfParticles;
+				float m_emissionRate;
+				float m_emissionTimer;
+				float m_emissionTimeLeft;
 			};
 		}
 	}

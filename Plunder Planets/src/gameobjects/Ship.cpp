@@ -1,9 +1,10 @@
 #include "ship.h"
 #include "TerrainObject.h"
-
+#include "Wormhole.h"
 void Ship::Start()
 {
 	m_freeCamera = false;
+	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
 
 	float mass = 20000;
 	//Front
@@ -86,7 +87,9 @@ void Ship::Start()
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
 	m_health = 100;
+	m_armor = 0;
 	m_maxHealth = m_health;
+	m_maxArmor = 100;
 
 	m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
 	m_lookAtOffset = math::Vector3(0, 20, 0);
@@ -500,6 +503,11 @@ void Ship::Update()
 	Float(dt);
 
 
+	if (m_treasure > 500)
+	{
+		((Wormhole*)Find("Wormhole"))->SetActive(true);
+	}
+
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }
 void Ship::OnCollision(component::RigidBodyComponent* other)
@@ -509,8 +517,18 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		Projectile* p = ((Projectile*)other->m_gameObject);
 		if (p->m_spawnedBy == this)
 			return;
-		m_health -= p->GetDamageAmount();
-		LOG("hit hp: " << m_health);
+
+		if (m_armor > 0)
+		{
+			m_armor -= p->GetDamageAmount();
+			LOG("hit armor: " << m_armor);
+		}
+		else if (m_armor <= 0)
+		{
+			m_health -= p->GetDamageAmount();
+			LOG("hit hp: " << m_health);
+		}
+	
 		if (m_health <= 0)
 		{
 			LOG("You are dead!");
@@ -518,5 +536,4 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		}
 
 	}
-
 }

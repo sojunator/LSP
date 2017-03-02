@@ -43,14 +43,13 @@ namespace thomas
 			virtual void FixedUpdate() {}
 			virtual void LateUpdate() {}
 			virtual void Render() {}
-			void SetActive(bool active);
+			bool GetActive();
 			virtual void OnCollision(component::RigidBodyComponent* other) {}
 			static std::vector<GameObject*> GetAllGameObjectsInScene(Scene* scene);
 
-		private:		
+		private:
 			static std::vector<GameObject*> s_gameObjects;
 		protected:
-			bool m_active;
 			std::vector<component::Component*> m_components;
 			
 		};
@@ -63,6 +62,7 @@ namespace thomas
 				T* component = Object::Instantiate<T>(this->GetScene());
 				component->m_gameObject = this;
 				m_components.push_back(component);
+				component->SetActive(true);
 				component->Start();
 				return component;
 			}
@@ -114,6 +114,7 @@ namespace thomas
 			T* gameObject = Object::Instantiate<T>(scene);
 			s_gameObjects.push_back(gameObject);
 			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
+			gameObject->SetActive(true);
 			gameObject->Start();
 			return gameObject;
 		}
@@ -125,6 +126,7 @@ namespace thomas
 			s_gameObjects.push_back(gameObject);
 			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
 			gameObject->m_transform->SetParent(parent);
+			gameObject->SetActive(true);
 			gameObject->Start();
 			return gameObject;
 		}
@@ -137,6 +139,7 @@ namespace thomas
 			gameObject->m_transform = gameObject->AddComponent<component::Transform>();
 			gameObject->m_transform->SetRotation(rotation);
 			gameObject->m_transform->SetPosition(position);
+			gameObject->SetActive(true);
 			gameObject->Start();
 			return gameObject;
 		}
@@ -150,6 +153,7 @@ namespace thomas
 			gameObject->m_transform->SetParent(parent);
 			gameObject->m_transform->SetRotation(rotation);
 			gameObject->m_transform->SetPosition(position);
+			gameObject->SetActive(parent->m_gameObject->GetActive());
 			gameObject->Start();
 			return gameObject;
 		}

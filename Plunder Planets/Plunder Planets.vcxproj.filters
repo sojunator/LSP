@@ -47,6 +47,7 @@
     <ClInclude Include="src\gameobjects\UpgradeMenuObject.h" />
     <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\Ocean\OceanSimulator.h" />
+    <ClInclude Include="src\gameobjects\Wormhole.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

@@ -101,10 +101,8 @@ public:
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSpark->SetNrOfParticles(256 * 6 + 254);
 		m_emitterSpark->SetTexture("../res/textures/spark.png");
 		m_emitterSpark->SetShader("particleShader");
-		m_emitterSpark->SetPosition(m_transform->GetPosition());
 		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
@@ -117,10 +115,8 @@ public:
 		m_emitterSpark->SetSpread(0.71f);
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetNrOfParticles(256 * 6 + 254);
-		m_emitterSmoke->SetTexture("../res/textures/smokeParticle.png");
+		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
 		m_emitterSmoke->SetShader("particleShader");
-		m_emitterSmoke->SetPosition(m_transform->GetPosition());
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetMaxDelay(2.45f);
 		m_emitterSmoke->SetMinDelay(0.15f);

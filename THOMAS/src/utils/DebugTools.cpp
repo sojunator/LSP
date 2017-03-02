@@ -4,8 +4,7 @@ namespace thomas
 {
 	namespace utils
 	{
-		DebugTools::Data DebugTools::s_bar;
-		bool DebugTools::s_visible;
+		std::map<std::string, DebugTools::Bar> DebugTools::s_bars;
 
 		void TW_CALL DebugTools::ReloadShadersButtonCallback(void * clientData)
 		{
@@ -17,11 +16,11 @@ namespace thomas
 			TwInit(TW_DIRECT3D11, ThomasCore::GetDevice());
 			TwWindowSize(Window::GetWidth(), Window::GetHeight());
 
-			s_bar.bar = TwNewBar("Debug");
-			TwDefine("Debug fontsize=3 iconifiable=false");
+			CreateBar("mainBar");
+			TwDefine("mainBar fontsize=3 iconifiable=false");
 			Hide();
 
-			TwAddButton(s_bar.bar, "shaderReload", ReloadShadersButtonCallback, NULL, "label='Reload Shaders(F5)' key=F5");
+			RemoveAllVariables("mainBar");
 		}
 
 		void DebugTools::Destroy()
@@ -29,12 +28,12 @@ namespace thomas
 			TwTerminate();
 		}
 
-		void DebugTools::RemoveAllVariables()
+		void DebugTools::RemoveAllVariables(std::string barName)
 		{
-			if (s_bar.bar)
+			if (GetBar(barName))
 			{
-				TwRemoveAllVars(s_bar.bar);
-				TwAddButton(s_bar.bar, "shaderReload", ReloadShadersButtonCallback, NULL, "label='Reload Shaders(F5)' key=F5");
+				TwRemoveAllVars(GetBar(barName)->bar);
+				TwAddButton(GetBar(barName)->bar, "shaderReload", ReloadShadersButtonCallback, NULL, "label='Reload Shaders(F5)' key=F5");
 			}
 			
 		}
@@ -45,66 +44,85 @@ namespace thomas
 			TwSetParam(s_bar.bar, NULL, "position", TW_PARAM_INT32, 2, &barPos);*/
 		}
 
+
 		int DebugTools::ProcessMessages(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			TwEventWin(hWnd, message, wParam, lParam);
 			return 0;
 		}
 
-		TwBar* DebugTools::GetBar()
+		DebugTools::Bar * DebugTools::GetBar(std::string name)
 		{
-			return s_bar.bar;
+			if (s_bars.find(name) != s_bars.end())
+				return &s_bars[name];
+			else
+				return NULL;
 		}
 
-		void DebugTools::AddFloat(float &variable, const char* name)
+		void DebugTools::CreateBar(std::string name)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_FLOAT, &variable, "");
-		}
+			
+			if (s_bars.find(name) == s_bars.end())
+			{
+				Bar bar;
+				bar.visible = true;
+				bar.bar = TwNewBar(name.c_str());
 
-		void DebugTools::AddFloatWithStep(float &variable, const char* name, const char * input)
-		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_FLOAT, &variable, input);
-		}
+				s_bars[name] = bar;
+			}
 
-		void DebugTools::AddInteger(int &variable, const char* name)
-		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_INT16, &variable, "");
-		}
-
-		void DebugTools::AddIntegerWithStep(int &variable, const char* name, const char * input)
-		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_INT16, &variable, input);
-		}
-
-		void DebugTools::AddBool(bool & variable, const char * name)
-		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_BOOL16, &variable, "true='Enabled' false='Disabled'");
-		}
-
-		void DebugTools::AddColor(math::Color & color, const char * name)
-		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_COLOR4F, &color, "coloralpha=true");
 		}
 
 
-		void DebugTools::AddDirectionVector(math::Vector3 & vector, const char * name)
+		void DebugTools::AddFloat(float &variable, const char* name, std::string barName)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_DIR3F, &vector, "");
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_FLOAT, &variable, "");
 		}
 
-		void DebugTools::AddQuaternion(math::Quaternion & quaternion, const char * name)
+		void DebugTools::AddFloatWithStep(float &variable, const char* name, const char * input, std::string barName)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_QUAT4F, &quaternion, "");
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_FLOAT, &variable, input);
 		}
 
-		void DebugTools::AddRotation(math::Quaternion & rotation, const char * name)
+		void DebugTools::AddInteger(int &variable, const char* name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_INT16, &variable, "");
+		}
+
+		void DebugTools::AddIntegerWithStep(int &variable, const char* name, const char * input, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_INT16, &variable, input);
+		}
+
+		void DebugTools::AddBool(bool & variable, const char * name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_BOOL16, &variable, "true='Enabled' false='Disabled'");
+		}
+
+		void DebugTools::AddColor(math::Color & color, const char * name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_COLOR4F, &color, "coloralpha=true");
+		}
+
+
+		void DebugTools::AddDirectionVector(math::Vector3 & vector, const char * name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_DIR3F, &vector, "");
+		}
+
+		void DebugTools::AddQuaternion(math::Quaternion & quaternion, const char * name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_QUAT4F, &quaternion, "");
+		}
+
+		void DebugTools::AddRotation(math::Quaternion & rotation, const char * name, std::string barName)
 		{
 			AddQuaternion(rotation, name);
 		}
 
-		void DebugTools::AddString(std::string & string, const char * name)
+		void DebugTools::AddString(std::string & string, const char * name, std::string barName)
 		{
-			TwAddVarRW(s_bar.bar, name, TW_TYPE_STDSTRING, &string, "");
+			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_STDSTRING, &string, "");
 		}
 
 
@@ -113,25 +131,26 @@ namespace thomas
 			TwDraw();
 		}
 
-		void DebugTools::ToggleVisibility()
+		void DebugTools::ToggleVisibility(std::string barName)
 		{
-			s_visible = !s_visible;
-			if (s_visible)
-				Show();
+			if (GetBar(barName)->visible)
+				Hide(barName);
 			else
-				Hide();
+				Show(barName);
 		}
 
-		void DebugTools::Hide()
+		void DebugTools::Hide(std::string barName)
 		{
-			s_visible = false;
-			TwDefine("Debug visible=false");
+			GetBar(barName)->visible = false;
+			std::string s = barName + " visible=false";
+			TwDefine(s.c_str());
 		}
 
-		void DebugTools::Show()
+		void DebugTools::Show(std::string barName)
 		{
-			s_visible = true;
-			TwDefine("Debug visible=true");
+			GetBar(barName)->visible = true;
+			std::string s = barName + " visible=true";
+			TwDefine(s.c_str());
 		}
 
 	}

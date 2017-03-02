@@ -21,13 +21,25 @@ namespace thomas
 			{
 			}
 
+
 			RigidBodyComponent::~RigidBodyComponent()
+			{
+				Physics::s_world->removeRigidBody(this);
+			}
+
+			void RigidBodyComponent::OnEnable()
+			{
+				Physics::s_world->addRigidBody(this);
+			}
+
+			void RigidBodyComponent::OnDisable()
 			{
 				Physics::s_world->removeRigidBody(this);
 			}
 
 			void RigidBodyComponent::Start()
 			{
+				Physics::s_world->removeRigidBody(this);
 				btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(*(btQuaternion*)&m_gameObject->m_transform->GetRotation(), *(btVector3*)&m_gameObject->m_transform->GetPosition()));
 				btCollisionShape* collider = new btBoxShape(btVector3(1, 1, 1));
 				btVector3 inertia(0, 0, 0);

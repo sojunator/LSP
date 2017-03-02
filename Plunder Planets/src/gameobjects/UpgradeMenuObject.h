@@ -2,7 +2,6 @@
 #pragma once
 
 #include <Thomas.h>
-#include <string>
 
 using namespace thomas;
 using namespace object;
