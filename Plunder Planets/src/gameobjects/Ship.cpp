@@ -532,4 +532,14 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		}
 
 	}
+
+	if (other->m_gameObject->GetType() == "Enemy")
+	{
+		math::Vector3 tempVector = other->m_gameObject->m_transform->GetPosition() - m_transform->GetPosition();
+		tempVector.Normalize();
+		math::Vector3 aids = other->m_gameObject->m_transform->Forward();
+		aids.Normalize();
+		float test = tempVector.Dot(aids);
+		
+	}
 }
