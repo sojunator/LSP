@@ -9,9 +9,10 @@ namespace thomas
 		std::unique_ptr<DirectX::SpriteBatch> TextRender::s_spriteBatch;
 		std::unique_ptr<DirectX::CommonStates> TextRender::s_states;
 		std::unique_ptr<DirectX::BasicEffect> TextRender::s_effects;
+		math::Vector2 TextRender::s_textOrigin;
 
 		void TextRender::RenderText(std::string name, std::string output, float posX, float posY, float scale, float rotation,
-									math::Vector3 color, bool dropShadow, bool outline)
+									math::Vector3 color, bool dropShadow, bool outline, bool origin)
 		{		
 			if (!s_fonts[name])
 			{
@@ -27,26 +28,34 @@ namespace thomas
 
 				s_spriteBatch->Begin();
 
-				math::Vector2 origin = s_fonts[name]->MeasureString(result);
-				origin.operator/=(2.f);
+
+				if (origin)
+				{
+					s_textOrigin = s_fonts[name]->MeasureString(result);
+					s_textOrigin.operator/=(2.f);
+				}
+				else
+				{
+					s_textOrigin = math::Vector2(0.0f, 0.0f);
+				}
 
 				if (dropShadow)
 				{
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						math::Vector2(posX, posY) + math::Vector2(1.f, 1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(1.f, 1.f), DirectX::Colors::Black, rotation, s_textOrigin, scale);
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						math::Vector2(posX, posY) + math::Vector2(-1.f, 1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(-1.f, 1.f), DirectX::Colors::Black, rotation, s_textOrigin, scale);
 				}
 
 				if (outline)
 				{
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						math::Vector2(posX, posY) + math::Vector2(-1.f, -1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(-1.f, -1.f), DirectX::Colors::Black, rotation, s_textOrigin, scale);
 					s_fonts[name]->DrawString(s_spriteBatch.get(), result,
-						math::Vector2(posX, posY) + math::Vector2(1.f, -1.f), DirectX::Colors::Black, rotation, origin, scale);
+						math::Vector2(posX, posY) + math::Vector2(1.f, -1.f), DirectX::Colors::Black, rotation, s_textOrigin, scale);
 				}
 
-				s_fonts[name]->DrawString(s_spriteBatch.get(), result, math::Vector2(posX, posY), color, rotation, origin, scale);
+				s_fonts[name]->DrawString(s_spriteBatch.get(), result, math::Vector2(posX, posY), color, rotation, s_textOrigin, scale);
 
 				s_spriteBatch->End();
 
@@ -102,7 +111,7 @@ namespace thomas
 		void TextRender::RenderText(object::component::TextComponent* text)
 		{
 			RenderText(text->GetFont(), text->GetOutput(), text->GetPosition().x, text->GetPosition().y, text->GetScale(),
-				text->GetRotation(), text->GetColor(), text->GetDropshadow(), text->GetOutline());
+				text->GetRotation(), text->GetColor(), text->GetDropshadow(), text->GetOutline(), text->GetOrigin());
 		}
 	}
 }

@@ -6,6 +6,18 @@ void HighscoreMenuObject::Start()
 	AddComponent<component::Camera>();
 	m_highscoreBackground = AddComponent<component::SpriteComponent>();
 	m_centText = AddComponent<component::SpriteComponent>();
+	m_name1 = AddComponent<component::TextComponent>();
+	m_name2 = AddComponent<component::TextComponent>();
+	m_name3 = AddComponent<component::TextComponent>();
+	m_level1 = AddComponent<component::TextComponent>();
+	m_level2 = AddComponent<component::TextComponent>();
+	m_level3 = AddComponent<component::TextComponent>();
+	m_gold1 = AddComponent<component::TextComponent>();
+	m_gold2 = AddComponent<component::TextComponent>();
+	m_gold3 = AddComponent<component::TextComponent>();
+	m_date1 = AddComponent<component::TextComponent>();
+	m_date2 = AddComponent<component::TextComponent>();
+	m_date3 = AddComponent<component::TextComponent>();
 
 	m_highscoreBackground->SetName("HighscoreBackground");
 	m_highscoreBackground->SetPositionX(0);
@@ -18,6 +30,97 @@ void HighscoreMenuObject::Start()
 	m_centText->SetPositionY(10);
 	m_centText->SetScale(math::Vector2(1.0f, 1.0f));
 	m_centText->SetColor(math::Color(1.0f, 1.0f, 1.0f));
+
+	//Name1
+	m_name1->SetFont("Highscore");
+	m_name1->SetOutput("LingonGrova");
+	m_name1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_name1->SetRotation(0.0f);
+	m_name1->SetScale(1.0f);
+	m_name1->SetPositionX(142);
+	m_name1->SetPositionY(m_nameYOffset);
+	m_name1->SetDropshadow(false);
+	m_name1->SetOutline(true);
+	m_name1->SetOrigin(false);
+
+	//Name2
+	m_name2->SetFont("Highscore");
+	m_name2->SetOutput("Seth");
+	m_name2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_name2->SetRotation(0.0f);
+	m_name2->SetScale(1.0f);
+	m_name2->SetPositionX(142);
+	m_name2->SetPositionY(m_nameYOffset + 40);
+	m_name2->SetDropshadow(false);
+	m_name2->SetOutline(true);
+	m_name2->SetOrigin(false);
+
+	//Name3
+	m_name3->SetFont("Highscore");
+	m_name3->SetOutput("Rigid");
+	m_name3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_name3->SetRotation(0.0f);
+	m_name3->SetScale(1.0f);
+	m_name3->SetPositionX(142);
+	m_name3->SetPositionY(m_nameYOffset + 80);
+	m_name3->SetDropshadow(false);
+	m_name3->SetOutline(true);
+	m_name3->SetOrigin(false);
+
+	//Level1
+	m_level1->SetFont("Highscore");
+	m_level1->SetOutput("1");
+	m_level1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_level1->SetRotation(0.0f);
+	m_level1->SetScale(1.0f);
+	m_level1->SetPositionX(535);
+	m_level1->SetPositionY(m_nameYOffset + 20);
+	m_level1->SetDropshadow(false);
+	m_level1->SetOutline(true);
+	m_level1->SetOrigin(true);
+
+	//Level2
+	m_level2->SetFont("Highscore");
+	m_level2->SetOutput("20");
+	m_level2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_level2->SetRotation(0.0f);
+	m_level2->SetScale(1.0f);
+	m_level2->SetPositionX(535);
+	m_level2->SetPositionY(m_nameYOffset + 60);
+	m_level2->SetDropshadow(false);
+	m_level2->SetOutline(true);
+	m_level2->SetOrigin(true);
+
+	//Level3
+	m_level3->SetFont("Highscore");
+	m_level3->SetOutput("1");
+	m_level3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_level3->SetRotation(0.0f);
+	m_level3->SetScale(1.0f);
+	m_level3->SetPositionX(535);
+	m_level3->SetPositionY(m_nameYOffset + 100);
+	m_level3->SetDropshadow(false);
+	m_level3->SetOutline(true);
+	m_level3->SetOrigin(true);
+
+	//Gold1
+	m_gold1->SetFont("Highscore");
+	m_gold1->SetOutput("1");
+	m_gold1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_gold1->SetRotation(0.0f);
+	m_gold1->SetScale(1.0f);
+	m_gold1->SetPositionX(865);
+	m_gold1->SetPositionY(m_nameYOffset);
+	m_gold1->SetDropshadow(false);
+	m_gold1->SetOutline(true);
+	m_gold1->SetOrigin(true);
+
+	//Gold2
+
+	//Gold3
+
+
+
 }
 
 void HighscoreMenuObject::Update()

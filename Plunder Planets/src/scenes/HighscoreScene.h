@@ -27,6 +27,8 @@ public:
 			thomas::graphics::Sprite::LoadTexture("centText", "../res/GUI/Highscore/centText.png");
 		}
 
+		thomas::graphics::TextRender::LoadFont("Highscore", "../res/font/score.spritefont");
+
 		LoadObject<HighscoreMenuObject>();
 
 	};
