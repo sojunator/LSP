@@ -24,6 +24,13 @@ public:
 
 	void Update();
 
+	void CannonCheck(bool upgrade, bool undo);
+	void MovementCheck(bool upgrade, bool undo);
+	void ResourceCheck(bool upgrade, bool undo);
+	void ShieldCheck(bool upgrade, bool undo);
+	void Navigation();
+	void SetSelectedObject();
+
 
 
 private:
@@ -62,9 +69,12 @@ private:
 	component::SoundComponent* m_music;
 
 	//Bool checks for talents
-	bool m_cannonCheck[4] = { false };
-	bool m_movementCheck[4] = { false };
-	bool m_resourceCheck[4] = { false };
-	bool m_shieldCheck[4] = { false };
+	bool m_cannonCheck[5] = { false };
+	bool m_movementCheck[5] = { false };
+	bool m_resourceCheck[5] = { false };
+	bool m_shieldCheck[5] = { false };
 
+	int m_yArray[3] = { 1, 0, 0 };	//3 rows
+	int m_xArray[2] = { 1, 0 };		//2 columns
+	float m_delay = 0.3f;
 };

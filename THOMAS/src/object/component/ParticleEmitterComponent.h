@@ -4,7 +4,6 @@
 #include "..\..\graphics\Texture.h"
 #include "..\..\graphics\Shader.h"
 #include "..\..\graphics\ParticleSystem.h"
-#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -131,7 +130,7 @@ namespace thomas
 				
 
 				void StartEmitting();
-				void StopEmitting();
+				void StopEmitting(bool force=false);
 				
 				bool IsEmitting() const;
 				
