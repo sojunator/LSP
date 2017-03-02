@@ -3,6 +3,7 @@
 #include <ctime>
 #include "../GameObject.h"
 
+#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -233,14 +234,28 @@ namespace thomas
 
 			void ParticleEmitterComponent::StartEmitting()
 			{
+				if (!m_isEmitting)
+				{
 				m_isEmitting = true;
 				m_emissionTimeLeft = m_emissionDuration;
+				}
+
 
 			}
 
-			void ParticleEmitterComponent::StopEmitting()
+			void ParticleEmitterComponent::StopEmitting(bool force)
 			{
 				m_isEmitting = false;
+				if (force)
+				{
+					m_particleBufferStruct.currentParticleStartIndex = 0;
+					m_particleBufferStruct.minSize = 0;
+					m_particleBufferStruct.maxSize = 0;
+					m_particleBufferStruct.endSize = 0;
+					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
+					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
+					
+				}
 			}
 
 			bool ParticleEmitterComponent::IsEmitting() const

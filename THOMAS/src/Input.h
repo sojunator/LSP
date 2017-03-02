@@ -263,6 +263,7 @@ namespace thomas
 		static bool GetButtonDown(Buttons button);
 		static bool GetButtonUp(Buttons button);
 		static bool GetButton(Buttons button);
+		static void Vibrate(float left, float right, float time=0);
 
 		static float GetLeftStickY();
 		static float GetLeftStickX();
@@ -292,5 +293,7 @@ namespace thomas
 		static MouseMode s_mouseMode;
 		static bool s_recordPosition;
 		static math::Vector2 s_mousePosition;
+
+		static float s_vibrateTimeLeft;
 	};
 }

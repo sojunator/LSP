@@ -22,6 +22,7 @@ namespace thomas
 				math::Vector4 GetColor();
 				bool isHovering();
 
+				void SetHovering(bool set);
 				void SetName(std::string name);
 				void SetPositionX(float posX);
 				void SetPositionY(float posY);

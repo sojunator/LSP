@@ -25,6 +25,7 @@ public:
 	int FireCannons(math::Vector3 pos, math::Vector3 right);
 	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
 	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
+	bool HasTarget();
 	Behavior GetState();
 	void Escape();
 	void IdleTimer();
