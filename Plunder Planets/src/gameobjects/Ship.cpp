@@ -71,10 +71,10 @@ void Ship::Start()
 	m_soundDelay = 5;
 	m_soundDelayLeft = 5;
 	//movement
-	m_speed = 1500;
+	m_speed = m_shipStats->GetSpeed();
 	m_turnSpeed = 500;
 	roof = 1.0;
-	m_flyCost = 20;
+	m_flyCost = m_shipStats->GetBoostCost();
 
 	//controlls/camera
 	m_controlSensitivity = 0.13f;
@@ -87,7 +87,7 @@ void Ship::Start()
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
 	m_health = 100;
-	m_armor = 0;
+	m_armor = m_shipStats->GetShieldAmount();
 	m_maxHealth = m_health;
 	m_maxArmor = 100;
 
@@ -249,7 +249,7 @@ void Ship::ShipAimCannons()
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			m_broadSideLeft->Fire(); //Temporary fix
-			m_treasure -= 50;
+			m_treasure -= m_shipStats->GetCannonCost();
 		}
 	}
 
@@ -275,7 +275,7 @@ void Ship::ShipAimCannons()
 		}
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
-			m_treasure -= 50;
+			m_treasure -= m_shipStats->GetCannonCost();
 			m_broadSideRight->Fire(); //Temporary fix
 		}
 			
@@ -302,10 +302,7 @@ void Ship::ShipAimCannons()
 	//	
 	//}
 }
-void Ship::UpgradeSpeed(float speedIncrease)
-{
-	m_speed = m_speed + speedIncrease;
-}
+
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
 	m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
@@ -520,19 +517,21 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 
 		if (m_armor > 0)
 		{
-			m_armor -= p->GetDamageAmount();
+			//m_armor -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
+			m_armor -= 5;
 			LOG("hit armor: " << m_armor);
 		}
 		else if (m_armor <= 0)
 		{
-			m_health -= p->GetDamageAmount();
+			//m_health -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
+			m_health -= 5;
 			LOG("hit hp: " << m_health);
 		}
 	
 		if (m_health <= 0)
 		{
 			LOG("You are dead!");
-			Scene::LoadScene<MenuScene>();
+			Scene::LoadScene<MenuScene>(); //Load Game Over instead
 		}
 
 	}

@@ -3,6 +3,7 @@
 #include "Broadside.h"
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
+#include "ShipStats.h"
 
 using namespace thomas;
 using namespace object;
@@ -93,7 +94,7 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = 600;
+		m_speed = m_shipStats->GetEnemySpeed();
 		m_turnSpeed = 150;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
@@ -315,6 +316,7 @@ private:
 	
 	bool m_dead;
 	//Objects
+	ShipStats* m_shipStats;
 	ShipFloat* m_floats[12];
 	Broadside* m_broadSideRight;
 	Broadside* m_broadSideLeft;

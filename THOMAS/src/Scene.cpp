@@ -227,6 +227,10 @@ namespace thomas
 		LOG("No scene set")
 			return NULL;
 	}
+	void Scene::SetStatPointer(PlayerStats* stats)
+	{
+		s_stats = stats;
+	}
 	Scene::Scene(std::string name)
 	{
 		m_name = name;

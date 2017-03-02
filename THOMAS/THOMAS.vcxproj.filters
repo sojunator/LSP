@@ -378,6 +378,7 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\graphics\TextRender.h" />
     <ClInclude Include="src\object\component\ParticleEmitterComponent.h" />
+    <ClInclude Include="src\PlayerStats.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\assimp\color4.inl" />
