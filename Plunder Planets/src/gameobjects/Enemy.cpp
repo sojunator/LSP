@@ -1,8 +1,5 @@
 #include "Enemy.h"
-
-Enemy::Enemy() : GameObject("Enemy")
-{
-}
+#include "../../THOMAS/src/utils/DebugTools.h"
 
 void Enemy::Start()
 {
@@ -86,10 +83,12 @@ void Enemy::Start()
 	m_retardation = -5;
 	m_speed = 0;
 	m_turnSpeed = 20;
+	m_changeSpeed = 0;
 
 	//utils::DebugTools::AddBool(m_islandForward, "Island F");
 	//utils::DebugTools::AddBool(m_islandRight, "Island R");
 	//utils::DebugTools::AddBool(m_islandLeft, "Island L");
+	thomas::utils::DebugTools::AddInteger(m_turnDir, "Turn Dir");
 
 	m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
 	m_emitterSpark->SetNrOfParticles(256 * 6 + 254);
@@ -123,8 +122,6 @@ void Enemy::Start()
 	m_emitterSmoke->SetMinLifeTime(2.4f);
 	m_emitterSmoke->SetSpread(0.8f);
 
-
-	thomas::utils::DebugTools::AddInteger(m_turnDir, "Turn Dir");
 }
 
 void Enemy::Move()
@@ -132,8 +129,6 @@ void Enemy::Move()
 	math::Vector3 forward = m_transform->Forward();
 	forward.y = 0;		//Remove y so no flying
 	m_moving = true;
-	m_shootDir = m_ai->FireCannons(m_transform->GetPosition(), -m_transform->Right());
-	int changeSpeed = m_ai->ChangeSpeed();
 
 	switch (m_ai->GetState())
 	{
@@ -261,20 +256,26 @@ void Enemy::Update()
 	}
 
 	m_moving = false;
+
 	m_ai->Escape();
 	//Checked if at last known pos and if not found go idle
 	m_ai->IdleTimer();
 	m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
 	m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
 
+	//Check for islands
 	m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
 	m_islandRight = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Right() * 30));	//Check island right
 	m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (-m_transform->Right() * 30));	//Check island left
 
 	m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), -m_transform->Forward(), -m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
+	m_shootDir = m_ai->FireCannons(m_transform->GetPosition(), -m_transform->Right());
 
 	if (!m_firstFrame)
+	{
+		ChangeSpeed(dt);
 		Move();
+	}
 	m_firstFrame = false;
 
 	Float(dt);
@@ -302,5 +303,21 @@ void Enemy::Die()
 	m_emitterSmoke->StartEmitting();
 	m_emitterSpark->StartEmitting();
 	m_sound->PlayOneShot("fEnemyExplode", 0.7);
+}
+
+void Enemy::ChangeSpeed(float dt)
+{
+	float newSpeed = 0;
+
+	if (m_ai->GetState() == AI::Behavior::Idle)
+		newSpeed = m_speed + dt * m_retardation;
+	else if (m_ai->GetState() == AI::Behavior::Searching || m_ai->GetState() == AI::Behavior::Attacking)
+		newSpeed = m_speed + dt * m_accelerate;
+	else if (m_turnSpeed != 0)
+		newSpeed = m_speed + dt * m_retardation;
+
+	newSpeed = std::fmax(newSpeed, 0.0);
+	newSpeed = std::fmin(newSpeed, m_maxSpeed);
+	m_speed = newSpeed;
 }
 

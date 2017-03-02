@@ -16,6 +16,7 @@ AI::AI() : thomas::object::component::Component("AI")
 	m_escapeTime = 600;	//Should be 60 seconds?
 	m_idleTimer = 0;
 	m_idleTime = 30;
+
 	thomas::utils::DebugTools::AddFloatWithStep(pDotF, "pDotF", "min=0 max=10 step=0.01");
 	thomas::utils::DebugTools::AddFloatWithStep(pDotR, "pDotR", "min=0 max=10 step=0.01");
 }
@@ -408,8 +409,3 @@ void AI::IdleTimer()
 	m_idleTimer += Time::GetDeltaTime();
 }
 
-int AI::ChangeSpeed()
-{
-
-	return 0;
-}

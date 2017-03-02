@@ -2,7 +2,6 @@
 #include <Thomas.h>
 #include "Broadside.h"
 #include "../AI/AI.h"
-#include "../../THOMAS/src/utils/DebugTools.h"
 #include "ShipFloat.h"
 
 using namespace thomas;
@@ -13,7 +12,9 @@ class Enemy : public GameObject
 private:
 
 public:
-	Enemy();
+	Enemy::Enemy() : GameObject("Enemy")
+	{
+	}
 
 	void Start();
 	void Move();
@@ -23,18 +24,16 @@ public:
 	void Update();
 	void OnCollision(component::RigidBodyComponent* other);
 	void Die();
+	void ChangeSpeed(float dt);
 
 
 private:
-	
+
 	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
 	Broadside* m_broadSideRight;
 	Broadside* m_broadSideLeft;
-	Broadside* m_broadSideRightCannonball;
-	Broadside* m_broadSideLeftCannonball;
-	Broadside* m_broadSideFront;
 
 	//Components
 	component::ParticleEmitterComponent* m_emitterSpark;
@@ -52,6 +51,7 @@ private:
 	float m_speed;
 	float m_accelerate;
 	float m_retardation;
+	int m_changeSpeed;
 	float m_turnSpeed;
 	int m_turnDir;
 	int m_shootDir;

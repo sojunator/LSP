@@ -25,7 +25,6 @@ public:
 	Behavior GetState();
 	void Escape();
 	void IdleTimer();
-	int ChangeSpeed();
 
 	thomas::math::Vector3 GetTargetPos();
 
