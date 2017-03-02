@@ -40,6 +40,24 @@ private:
 	component::TextComponent* m_date2;
 	component::TextComponent* m_date3;
 
+	struct ScoreLayout
+	{
+		ScoreLayout() {}
+		ScoreLayout(std::string n, std::string l, std::string g, std::string d) : name(n), level(l), gold(g), date(d) {}
+
+		std::string name;
+		std::string level;
+		std::string gold;
+		std::string date;
+	};
+
+	std::vector <std::string> m_tempName;
+	std::vector <std::string> m_tempLevel;
+	std::vector <std::string> m_tempGold;
+	std::vector <std::string> m_tempDate;
+	std::vector <int> m_amount;
+	std::vector <ScoreLayout> m_scoreReader;
+
 	float m_nameYOffset = 290;
 };
 

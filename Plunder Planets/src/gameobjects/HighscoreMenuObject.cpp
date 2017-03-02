@@ -1,5 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "HighscoreMenuObject.h"
 #include "../scenes/MenuScene.h"
+#include <fstream>
 
 void HighscoreMenuObject::Start()
 {
@@ -31,9 +34,70 @@ void HighscoreMenuObject::Start()
 	m_centText->SetScale(math::Vector2(1.0f, 1.0f));
 	m_centText->SetColor(math::Color(1.0f, 1.0f, 1.0f));
 
+	//TODO: sort after level
+
+	//Read highscore file
+	std::string line;
+	std::ifstream readFile("../res/GUI/Highscore/score.txt");
+
+	while (!readFile.eof())
+	{
+		getline(readFile, line);
+		if (line[0] == 'n')
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				line.erase(line.begin());
+			}
+			m_tempName.push_back(line);
+		}
+
+		getline(readFile, line);
+		if (line[0] == 'l')
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				line.erase(line.begin());
+			}
+			m_tempLevel.push_back(line);
+		}
+
+		getline(readFile, line);
+		if (line[0] == 'g')
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				line.erase(line.begin());
+			}
+			m_tempGold.push_back(line);
+		}
+
+		getline(readFile, line);
+		if (line[0] == 'd')
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				line.erase(line.begin());
+			}
+			m_tempDate.push_back(line);
+		}
+
+		getline(readFile, line);
+		if (line[0] == '*')
+		{
+			m_amount.push_back(1);
+		}
+	}
+	readFile.close();
+
+	for (unsigned int i = 0; i < m_amount.size(); i++)
+	{
+		m_scoreReader.push_back(ScoreLayout(m_tempName[i], m_tempLevel[i], m_tempGold[i], m_tempDate[i]));
+	}
+
 	//Name1
 	m_name1->SetFont("Highscore");
-	m_name1->SetOutput("LingonGrova");
+	m_name1->SetOutput(m_scoreReader[0].name);
 	m_name1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_name1->SetRotation(0.0f);
 	m_name1->SetScale(1.0f);
@@ -45,7 +109,7 @@ void HighscoreMenuObject::Start()
 
 	//Name2
 	m_name2->SetFont("Highscore");
-	m_name2->SetOutput("Seth");
+	m_name2->SetOutput(m_scoreReader[1].name);
 	m_name2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_name2->SetRotation(0.0f);
 	m_name2->SetScale(1.0f);
@@ -57,7 +121,7 @@ void HighscoreMenuObject::Start()
 
 	//Name3
 	m_name3->SetFont("Highscore");
-	m_name3->SetOutput("Rigid");
+	m_name3->SetOutput(m_scoreReader[2].name);
 	m_name3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_name3->SetRotation(0.0f);
 	m_name3->SetScale(1.0f);
@@ -69,7 +133,7 @@ void HighscoreMenuObject::Start()
 
 	//Level1
 	m_level1->SetFont("Highscore");
-	m_level1->SetOutput("1");
+	m_level1->SetOutput(m_scoreReader[0].level);
 	m_level1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_level1->SetRotation(0.0f);
 	m_level1->SetScale(1.0f);
@@ -81,7 +145,7 @@ void HighscoreMenuObject::Start()
 
 	//Level2
 	m_level2->SetFont("Highscore");
-	m_level2->SetOutput("1");
+	m_level2->SetOutput(m_scoreReader[1].level);
 	m_level2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_level2->SetRotation(0.0f);
 	m_level2->SetScale(1.0f);
@@ -93,7 +157,7 @@ void HighscoreMenuObject::Start()
 
 	//Level3
 	m_level3->SetFont("Highscore");
-	m_level3->SetOutput("1");
+	m_level3->SetOutput(m_scoreReader[2].level);
 	m_level3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_level3->SetRotation(0.0f);
 	m_level3->SetScale(1.0f);
@@ -105,7 +169,7 @@ void HighscoreMenuObject::Start()
 
 	//Gold1
 	m_gold1->SetFont("Highscore");
-	m_gold1->SetOutput("1");
+	m_gold1->SetOutput(m_scoreReader[0].gold);
 	m_gold1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_gold1->SetRotation(0.0f);
 	m_gold1->SetScale(1.0f);
@@ -117,7 +181,7 @@ void HighscoreMenuObject::Start()
 
 	//Gold2
 	m_gold2->SetFont("Highscore");
-	m_gold2->SetOutput("1");
+	m_gold2->SetOutput(m_scoreReader[1].gold);
 	m_gold2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_gold2->SetRotation(0.0f);
 	m_gold2->SetScale(1.0f);
@@ -129,7 +193,7 @@ void HighscoreMenuObject::Start()
 
 	//Gold3
 	m_gold3->SetFont("Highscore");
-	m_gold3->SetOutput("1");
+	m_gold3->SetOutput(m_scoreReader[2].gold);
 	m_gold3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_gold3->SetRotation(0.0f);
 	m_gold3->SetScale(1.0f);
@@ -141,11 +205,11 @@ void HighscoreMenuObject::Start()
 
 	//Date1
 	m_date1->SetFont("Highscore");
-	m_date1->SetOutput("1 Mar 2017");
+	m_date1->SetOutput(m_scoreReader[0].date);
 	m_date1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_date1->SetRotation(0.0f);
 	m_date1->SetScale(1.0f);
-	m_date1->SetPositionX(1130);
+	m_date1->SetPositionX(1110);
 	m_date1->SetPositionY(m_nameYOffset);
 	m_date1->SetDropshadow(false);
 	m_date1->SetOutline(true);
@@ -153,11 +217,11 @@ void HighscoreMenuObject::Start()
 
 	//Date2
 	m_date2->SetFont("Highscore");
-	m_date2->SetOutput("1 Mar 2017");
+	m_date2->SetOutput(m_scoreReader[1].date);
 	m_date2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_date2->SetRotation(0.0f);
 	m_date2->SetScale(1.0f);
-	m_date2->SetPositionX(1130);
+	m_date2->SetPositionX(1110);
 	m_date2->SetPositionY(m_nameYOffset + 40);
 	m_date2->SetDropshadow(false);
 	m_date2->SetOutline(true);
@@ -165,11 +229,11 @@ void HighscoreMenuObject::Start()
 
 	//Date3
 	m_date3->SetFont("Highscore");
-	m_date3->SetOutput("1 Mar 2017");
+	m_date3->SetOutput(m_scoreReader[2].date);
 	m_date3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 	m_date3->SetRotation(0.0f);
 	m_date3->SetScale(1.0f);
-	m_date3->SetPositionX(1130);
+	m_date3->SetPositionX(1110);
 	m_date3->SetPositionY(m_nameYOffset + 80);
 	m_date3->SetDropshadow(false);
 	m_date3->SetOutline(true);
