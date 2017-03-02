@@ -72,8 +72,8 @@ public:
 		m_ai = AddComponent<AI>();
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(90)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(270)), m_transform, m_scene);
 
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();

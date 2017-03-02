@@ -89,9 +89,13 @@ namespace DirectX
 
         const Quaternion Quaternion::Identity = { 0.f, 0.f, 0.f, 1.f };
     #endif
-		float DegreesToradians(float degree)
+		float DegreesToRadians(float degree)
 		{
 			return degree* (PI / 180.0);
+		}
+		float Lerp(float from, float to, float amount)
+		{
+			return from + (to - from)*amount;
 		}
 	}
 }

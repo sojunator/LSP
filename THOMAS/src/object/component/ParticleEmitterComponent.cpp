@@ -1,7 +1,7 @@
 #include "ParticleEmitterComponent.h"
 #include <cstdlib>
 #include <ctime>
-
+#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -232,8 +232,12 @@ namespace thomas
 
 			void ParticleEmitterComponent::StartEmitting()
 			{
-				m_isEmitting = true;
-				m_emissionTimeLeft = m_emissionDuration;
+				if (!m_isEmitting)
+				{
+					m_isEmitting = true;
+					m_emissionTimeLeft = m_emissionDuration;
+				}
+				
 
 			}
 
