@@ -9,6 +9,23 @@ using namespace object;
 class HighscoreMenuObject : public GameObject
 {
 private:
+	struct ScoreLayout
+	{
+		ScoreLayout() {}
+		ScoreLayout(std::string n, std::string l, std::string g, std::string d) : name(n), level(l), gold(g), date(d) {}
+
+		std::string name;
+		std::string level;
+		std::string gold;
+		std::string date;
+	};
+
+private:
+	bool LevelGreater(const ScoreLayout& x, const ScoreLayout& y)
+	{
+		return x.level > y.level;
+	}
+
 
 public:
 	HighscoreMenuObject() : GameObject("HighscoreMenuObject")
@@ -39,17 +56,6 @@ private:
 	component::TextComponent* m_date1;
 	component::TextComponent* m_date2;
 	component::TextComponent* m_date3;
-
-	struct ScoreLayout
-	{
-		ScoreLayout() {}
-		ScoreLayout(std::string n, std::string l, std::string g, std::string d) : name(n), level(l), gold(g), date(d) {}
-
-		std::string name;
-		std::string level;
-		std::string gold;
-		std::string date;
-	};
 
 	std::vector <std::string> m_tempName;
 	std::vector <std::string> m_tempLevel;

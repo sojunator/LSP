@@ -34,8 +34,6 @@ void HighscoreMenuObject::Start()
 	m_centText->SetScale(math::Vector2(1.0f, 1.0f));
 	m_centText->SetColor(math::Color(1.0f, 1.0f, 1.0f));
 
-	//TODO: sort after level
-
 	//Read highscore file, text file for now
 	std::string line;
 	std::ifstream readFile("../res/GUI/Highscore/score.txt");
@@ -90,11 +88,13 @@ void HighscoreMenuObject::Start()
 	}
 	readFile.close();
 
-	//Sort should be done here
 	for (unsigned int i = 0; i < m_amount.size(); i++)
 	{
 		m_scoreReader.push_back(ScoreLayout(m_tempName[i], m_tempLevel[i], m_tempGold[i], m_tempDate[i]));
 	}
+
+	//Sort the vector after level
+	//std::sort(m_scoreReader.begin(), m_scoreReader.end(), LevelGreater);
 
 	//User1
 	if (m_amount.size() == 1 || m_amount.size() > 1)
