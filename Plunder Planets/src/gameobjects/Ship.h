@@ -35,7 +35,7 @@ public:
 	void PlaySounds(float const dt){}
 	void PlunderIsland();
 	int GetTreasure();
-	//ShipStats* GetShipStats();
+	ShipStats* GetShipStats();
 
 	void Float(float dt);
 
@@ -84,7 +84,7 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
-	//ShipStats* m_shipStats;
+	ShipStats* m_shipStats;
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;

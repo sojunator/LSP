@@ -62,7 +62,7 @@ public:
 		m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToradians(m_pitch)) * cosf(math::DegreesToradians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToradians(m_pitch))) + 
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToradians(m_pitch)) * sinf(math::DegreesToradians(m_yaw))));
-		m_damageAmount = 5;// ShipStats::s_playerStats->GetCannonDamage();
+		m_damageAmount = ShipStats::s_playerStats->GetCannonDamage();
 	}
 
 	float GetVelocity()
@@ -125,6 +125,6 @@ private:
 	component::RigidBodyComponent* m_rigidbody;
 	std::string m_SFXs[3] = { "fSplash1", "fSplash2", "fSplash3" };
 	WaterObject* m_water;
-	//ShipStats* m_shipStats;
+	ShipStats* m_shipStats;
 	bool m_hitWater;
 };
