@@ -387,11 +387,12 @@ void Ship::DrawAimArc()
 	for (int i = 1; i <= 10; ++i)
 	{
 		float f = float(i) / 10.f;
-		point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
-		m_arc->DrawLine(point, prevPoint, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
+		/*point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
+		m_arc->DrawLine(prevPoint, point, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));*/
 		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
+	m_arc->DrawLine(p0, p3, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
 }
 void Ship::UpgradeSpeed(float speedIncrease)
 {

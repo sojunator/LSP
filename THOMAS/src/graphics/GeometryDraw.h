@@ -22,6 +22,7 @@ namespace thomas
 			struct ConstantBuffer
 			{
 				math::Matrix viewProjectionMatrix;
+				math::Matrix worldMatrix;
 			}m_cbData;
 			ID3D11InputLayout* m_inputLayout;
 			ID3D11VertexShader* m_vertexShader;

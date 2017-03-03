@@ -18,7 +18,7 @@ namespace thomas
 			//m_data.push_back(a); //Line end
 			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromStruct(a, D3D11_BIND_VERTEX_BUFFER);
 			m_constantBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_cbData, D3D11_BIND_CONSTANT_BUFFER);
-			//m_cbData.worldMatrix = worldMatrix;
+			m_cbData.worldMatrix = worldMatrix;
 			s_geometry.push_back(this);
 		}
 		void GeometryDraw::SetShaders(std::string path, std::string shaderModel, std::string VSEntryPoint, std::string GSEntryPoint, std::string PSEntryPoint)
@@ -92,7 +92,8 @@ namespace thomas
 					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &geometry->m_constantBuffer);
 					ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &geometry->m_vertexBuffer, &stride, &offset);
 
-					ThomasCore::GetDeviceContext()->Draw(geometry->m_data.size(), 0);
+					ThomasCore::GetDeviceContext()->Draw(2, 0); 
+					geometry->m_data.clear();
 				}
 
 				ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
