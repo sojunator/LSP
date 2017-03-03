@@ -11,6 +11,7 @@ public:
 		{
 			thomas::graphics::Sprite::LoadTexture("HighscoreBackground", "../res/GUI/Highscore/highscore.jpg");
 			thomas::graphics::Sprite::LoadTexture("centText", "../res/GUI/Highscore/centText.png");
+			thomas::graphics::Sprite::LoadTexture("HighscoreExit", "../res/GUI/menu/exit.png");
 
 		}
 		else if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_1610)
@@ -25,6 +26,7 @@ public:
 		{
 			thomas::graphics::Sprite::LoadTexture("HighscoreBackground", "../res/GUI/Highscore/highscore.jpg");
 			thomas::graphics::Sprite::LoadTexture("centText", "../res/GUI/Highscore/centText.png");
+			thomas::graphics::Sprite::LoadTexture("HighscoreExit", "../res/GUI/menu/exit.png");
 		}
 
 		thomas::graphics::TextRender::LoadFont("Highscore", "../res/font/roman.spritefont");

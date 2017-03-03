@@ -10,6 +10,7 @@ void HighscoreMenuObject::Start()
 	AddComponent<component::Camera>();
 	m_highscoreBackground = AddComponent<component::SpriteComponent>();
 	m_centText = AddComponent<component::SpriteComponent>();
+	m_exitText = AddComponent<component::SpriteComponent>();
 	m_name1 = AddComponent<component::TextComponent>();
 	m_name2 = AddComponent<component::TextComponent>();
 	m_name3 = AddComponent<component::TextComponent>();
@@ -35,14 +36,35 @@ void HighscoreMenuObject::Start()
 	m_centText->SetScale(math::Vector2(1.0f, 1.0f));
 	m_centText->SetColor(math::Color(1.0f, 1.0f, 1.0f));
 
+	m_exitText->SetName("HighscoreExit");
+	m_exitText->SetPositionX(50);
+	m_exitText->SetPositionY(970);
+	m_exitText->SetScale(math::Vector2(1.0f, 1.0f));
+	m_exitText->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_exitText->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_exitText->SetInteractable(true);
+
+
+	////Get the date
+	//time_t rawtime;
+	//struct tm * timeinfo;
+	//char buffer[80];
+
+	//time(&rawtime);
+	//timeinfo = localtime(&rawtime);
+
+	//strftime(buffer, 80, "%Y-%m-%d", timeinfo);
+	//std::string str(buffer);
+
 	////Writing to the highscore file
-	//std::ofstream writeFile("example.txt", std::ios::app);
+	//std::ofstream writeFile("../res/GUI/Highscore/score.txt", std::ios::app);
 	//if (writeFile.is_open())
 	//{
 	//	writeFile << "n User\n";
-	//	writeFile << "l 8\n";
+	//	writeFile << "l 18\n";
 	//	writeFile << "g 1500\n";
-	//	writeFile << "d " << ;
+	//	writeFile << "d " << buffer << "\n";
+	//	writeFile << "*\n";
 	//	writeFile.close();
 	//}
 
@@ -281,7 +303,7 @@ void HighscoreMenuObject::Update()
 	//	//Highscore
 	//}
 
-	if (Input::GetKeyDown(Input::Keys::Escape))
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		Scene::LoadScene<MenuScene>();
 
 	/*if (Input::GetKeyDown(Input::Keys::Enter))

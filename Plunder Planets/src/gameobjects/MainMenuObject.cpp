@@ -116,8 +116,6 @@ void MainMenuObject::Update()
 		{
 			Scene::LoadScene<HighscoreScene>();
 		}
-
-		//Highscore
 	}
 
 		if (m_exitButton->isHovering())

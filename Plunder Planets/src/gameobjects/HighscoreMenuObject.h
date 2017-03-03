@@ -42,6 +42,7 @@ public:
 private:
 	component::SpriteComponent* m_highscoreBackground;
 	component::SpriteComponent* m_centText;
+	component::SpriteComponent* m_exitText;
 	component::TextComponent* m_name1;
 	component::TextComponent* m_name2;
 	component::TextComponent* m_name3;
