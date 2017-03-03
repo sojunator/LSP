@@ -28,7 +28,7 @@ public:
 	void Update()
 	{
 		m_dirLight->SetLightColor(m_lightColor);
-		float rotFactor = 3 * Time::GetDeltaTime();
+		float rotFactor = 3 * ThomasTime::GetDeltaTime();
 		if (Input::GetKey(Input::Keys::NumPad4))
 		{
 			m_rot -= rotFactor;

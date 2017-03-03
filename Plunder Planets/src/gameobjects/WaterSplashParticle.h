@@ -34,7 +34,7 @@ public:
 
 	void Update()
 	{
-		timer -= Time::GetDeltaTime();
+		timer -= ThomasTime::GetDeltaTime();
 		if (timer < 0.0f)
 		{
 			Destroy(this);

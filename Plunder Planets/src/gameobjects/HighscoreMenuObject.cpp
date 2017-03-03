@@ -3,6 +3,7 @@
 #include "HighscoreMenuObject.h"
 #include "../scenes/MenuScene.h"
 #include <fstream>
+#include <ctime>
 
 void HighscoreMenuObject::Start()
 {
@@ -33,6 +34,17 @@ void HighscoreMenuObject::Start()
 	m_centText->SetPositionY(10);
 	m_centText->SetScale(math::Vector2(1.0f, 1.0f));
 	m_centText->SetColor(math::Color(1.0f, 1.0f, 1.0f));
+
+	////Writing to the highscore file
+	//std::ofstream writeFile("example.txt", std::ios::app);
+	//if (writeFile.is_open())
+	//{
+	//	writeFile << "n User\n";
+	//	writeFile << "l 8\n";
+	//	writeFile << "g 1500\n";
+	//	writeFile << "d " << ;
+	//	writeFile.close();
+	//}
 
 	//Read highscore file, text file for now
 	std::string line;
@@ -141,7 +153,7 @@ void HighscoreMenuObject::Start()
 		m_date1->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 		m_date1->SetRotation(0.0f);
 		m_date1->SetScale(1.0f);
-		m_date1->SetPositionX(1120);
+		m_date1->SetPositionX(1155);
 		m_date1->SetPositionY(m_nameYOffset);
 		m_date1->SetDropshadow(false);
 		m_date1->SetOutline(true);
@@ -193,7 +205,7 @@ void HighscoreMenuObject::Start()
 		m_date2->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 		m_date2->SetRotation(0.0f);
 		m_date2->SetScale(1.0f);
-		m_date2->SetPositionX(1120);
+		m_date2->SetPositionX(1155);
 		m_date2->SetPositionY(m_nameYOffset + 40);
 		m_date2->SetDropshadow(false);
 		m_date2->SetOutline(true);
@@ -245,7 +257,7 @@ void HighscoreMenuObject::Start()
 		m_date3->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
 		m_date3->SetRotation(0.0f);
 		m_date3->SetScale(1.0f);
-		m_date3->SetPositionX(1120);
+		m_date3->SetPositionX(1155);
 		m_date3->SetPositionY(m_nameYOffset + 80);
 		m_date3->SetDropshadow(false);
 		m_date3->SetOutline(true);

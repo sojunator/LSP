@@ -101,7 +101,7 @@ public:
 
 	void Update()
 	{
-		float dt = Time::GetDeltaTime();
+		float dt = ThomasTime::GetDeltaTime();
 		m_delayLeft -= dt;
 
 	}

@@ -254,7 +254,7 @@ public:
 
 	void Update()
 	{
-		float const dt = Time::GetDeltaTime();
+		float const dt = ThomasTime::GetDeltaTime();
 
 		if (m_dead)
 		{
