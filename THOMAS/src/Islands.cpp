@@ -28,7 +28,7 @@ namespace thomas
 		{
 			tempPlane.push_back(thomas::utils::Plane::CreatePlane(size, detail));
 			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
-			//ApplyOffSet(i, tempPlane[i]);
+			ApplyOffSet(i, tempPlane[i]);
 			//m_islandCenterWorldPos[i].x -= mapSize / 2;
 			//m_islandCenterWorldPos[i].z += mapSize / 2;
 		}
@@ -63,7 +63,7 @@ namespace thomas
 		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
 			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-			tempPlanes.verts[i].position.z += m_worldPosOffset[island].z;
+			tempPlanes.verts[i].position.z -= m_worldPosOffset[island].z;
 		}
 	}
 
@@ -207,12 +207,17 @@ namespace thomas
 		int attempt = 0;
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
-		tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+		/*tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
 		tempOffset.y = 0;
-		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
+		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);*/
 
-		tempOffset.x += 10;
-		tempOffset.z += 10;
+		//tempOffset.x += 10;
+		//tempOffset.z += 10;
+
+		tempOffset.x = rand() % m_mapSize;
+		tempOffset.y = 0;
+		tempOffset.z = rand() % m_mapSize;
+
 
 		math::Vector3 tempCenter;
 		tempCenter.x = tempOffset.x + m_size[0] / 2;
@@ -229,13 +234,16 @@ namespace thomas
 			bool foundPos = false;
 			while (!foundPos && attempt != MAX_ATTEMPTS)
 			{
-				tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+				//tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+				//tempOffset.y = 0;
+				//tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
+				//tempOffset.x += 10;
+				//tempOffset.z += 10;
+				tempOffset.x = rand() % (m_mapSize);
 				tempOffset.y = 0;
-				tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
-				tempOffset.x += 10;
-				tempOffset.z += 10;
+				tempOffset.z = rand() % (m_mapSize);
 
-				tempCenter.x = tempOffset.x + m_size[0] / 2;
+				tempCenter.x = tempOffset.x - m_size[0] / 2;
 				tempCenter.y = 0;
 				tempCenter.z = -tempOffset.z - m_size[0] / 2;
 
