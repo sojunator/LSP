@@ -6,6 +6,7 @@ class MenuScene : public thomas::Scene
 public:
 	MenuScene() : Scene("MenuScene")
 	{
+		
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("MainMenuStart", "../res/GUI/menu/start.png");

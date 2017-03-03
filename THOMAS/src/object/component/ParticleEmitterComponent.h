@@ -136,6 +136,8 @@ namespace thomas
 				
 				bool IsEmitting() const;
 				
+				void SetOffset(math::Vector3 offset);
+				void SetOffset(float x, float y, float z);
 				
 				void SetShader(std::string shaderName);
 				graphics::Shader* GetShader();
@@ -152,6 +154,7 @@ namespace thomas
 				void AddToDebugMenu();
 
 			private:
+				math::Vector3 m_offset;
 				math::Vector3 m_directionVector;
 				D3DData m_d3dData;
 				graphics::Shader* m_shader;

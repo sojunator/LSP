@@ -11,7 +11,7 @@ void MainMenuObject::Start()
 	m_creditsButton = AddComponent<component::SpriteComponent>();
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
-
+	
 	m_yArray[0] = 1;
 
 	m_music->SetClip("mMenuTheme");
@@ -64,6 +64,12 @@ void MainMenuObject::Start()
 	m_backgrounds->SetPositionY(0);
 	m_backgrounds->SetScale(math::Vector2(1.0f, 1.0f));
 	m_backgrounds->SetColor(math::Color(1.0f, 1.0f, 1.0f));
+
+
+
+
+	
+
 }
 
 void MainMenuObject::Update()
@@ -157,7 +163,7 @@ void MainMenuObject::Update()
 		}
 		m_delay = 0.3f;
 	}
-	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
+	if (Input::GetButtonDown(Input::Buttons::START))
 		Scene::LoadScene<UpgradeScene>();
 
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
