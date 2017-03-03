@@ -281,10 +281,6 @@ public:
 		m_firstFrame = false;
 
 		Float(dt);
-
-
-			
-
 	}
 
 	void OnCollision(component::RigidBodyComponent* other)
