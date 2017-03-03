@@ -4,20 +4,22 @@ namespace thomas
 {
 	namespace graphics
 	{
+		std::vector<GeometryDraw*> GeometryDraw::s_geometry;
 		GeometryDraw::GeometryDraw(math::Matrix worldMatrix)
 		{
 			m_inputLayout = nullptr;
 			m_vertexShader = nullptr;
 			m_geometryShader = nullptr;
 			m_pixelShader = nullptr;
-			VertexData a;
-			a.position = math::Vector3(1, 0, 0);
-			a.color = math::Vector3(1, 1, 1);
-			m_data.push_back(a); //Line start
-			m_data.push_back(a); //Line end
+			//VertexData a;
+			//a.position = math::Vector3(1, 0, 0);
+			//a.color = math::Vector3(1, 1, 1);
+			//m_data.push_back(a); //Line start
+			//m_data.push_back(a); //Line end
 			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromVector(m_data, D3D11_BIND_VERTEX_BUFFER);
 			m_constantBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_cbData, D3D11_BIND_CONSTANT_BUFFER);
 			//m_cbData.worldMatrix = worldMatrix;
+			s_geometry.push_back(this);
 		}
 		void GeometryDraw::SetShaders(std::string path, std::string shaderModel, std::string VSEntryPoint, std::string GSEntryPoint, std::string PSEntryPoint)
 		{
@@ -55,46 +57,49 @@ namespace thomas
 		}
 		void GeometryDraw::DrawLine(math::Vector3 from, math::Vector3 to, math::Vector3 fromColor, math::Vector3 toColor)
 		{
-			DirectX::CommonStates states(ThomasCore::GetDevice());
-			//ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
-			//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
-			ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());
+			VertexData temp;
+			temp.position = math::Vector3(from.x, from.y, from.z);
+			temp.color = math::Vector3(fromColor.x, fromColor.y, fromColor.z);
+			m_data.push_back(temp);
+			temp.position = math::Vector3(to.x, to.y, to.z);
+			temp.color = math::Vector3(toColor.x, toColor.y, toColor.z);
+			m_data.push_back(temp);
 
-			ThomasCore::GetDeviceContext()->IASetInputLayout(m_inputLayout);
-			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		}
+		void GeometryDraw::Draw()
+		{
+			for (GeometryDraw* geometry : s_geometry)
+			{
+				DirectX::CommonStates states(ThomasCore::GetDevice());
+				//ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
+				//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
+				ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());
 
-			ThomasCore::GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
-			ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
-			if(m_geometryShader)
-				ThomasCore::GetDeviceContext()->GSSetShader(m_geometryShader, NULL, 0);
-			ThomasCore::GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
+				ThomasCore::GetDeviceContext()->IASetInputLayout(geometry->m_inputLayout);
+				ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-
-			/*m_data[0].position = math::Vector3(from.x, from.y, from.z);
-			m_data[0].color = math::Vector3(fromColor.x, fromColor.y, fromColor.z);
-
-			m_data[1].position = math::Vector3(to.x, to.y, to.z);
-			m_data[1].color = math::Vector3(toColor.x, toColor.y, toColor.z);*/
-
-			m_data[0].position = math::Vector3(0, 0, 0);
-			m_data[0].color = math::Vector3(fromColor.x, fromColor.y, fromColor.z);
-
-			m_data[1].position = math::Vector3(0, 100, 0);
-			m_data[1].color = math::Vector3(toColor.x, toColor.y, toColor.z);
-
-			UINT stride = sizeof(VertexData);
-			utils::D3d::FillDynamicBufferVector(m_vertexBuffer, m_data);
-
-			UINT offset = 0;
-			ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_constantBuffer);
-			ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-
-			ThomasCore::GetDeviceContext()->Draw(2, 0); // TODO: Batcha till scene
-
-			ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
-			if (m_geometryShader)
+				ThomasCore::GetDeviceContext()->VSSetShader(geometry->m_vertexShader, NULL, 0);
 				ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
-			ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
+				if (geometry->m_geometryShader)
+					ThomasCore::GetDeviceContext()->GSSetShader(geometry->m_geometryShader, NULL, 0);
+				ThomasCore::GetDeviceContext()->PSSetShader(geometry->m_pixelShader, NULL, 0);
+				UINT stride = sizeof(VertexData);
+				if (geometry->m_data.size())
+				{
+					utils::D3d::FillDynamicBufferVector(geometry->m_vertexBuffer, geometry->m_data);
+
+					UINT offset = 0;
+					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &geometry->m_constantBuffer);
+					ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &geometry->m_vertexBuffer, &stride, &offset);
+
+					ThomasCore::GetDeviceContext()->Draw(geometry->m_data.size(), 0);
+				}
+
+				ThomasCore::GetDeviceContext()->VSSetShader(NULL, NULL, 0);
+				if (geometry->m_geometryShader)
+					ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+				ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
+			}
 		}
 		void GeometryDraw::Update(object::component::Camera* camera)
 		{

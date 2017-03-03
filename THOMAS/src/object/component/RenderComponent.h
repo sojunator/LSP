@@ -18,6 +18,7 @@ namespace thomas
 				void Update();
 			private:
 				graphics::Model* m_model;
+				//graphics::Geometry* m_geometry;
 			};
 		}
 	}

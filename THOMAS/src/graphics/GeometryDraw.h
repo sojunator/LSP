@@ -10,8 +10,10 @@ namespace thomas
 			GeometryDraw(math::Matrix worldMatrix);
 			void SetShaders(std::string path, std::string shaderModel, std::string VSEntrypoint, std::string GSEntryPoint, std::string PSEntryPoint);
 			void DrawLine(math::Vector3 start, math::Vector3 end, math::Vector3 startColor, math::Vector3 endColor);
+			static void Draw();
 			void Update(object::component::Camera* camera);
 		private:
+			static std::vector<GeometryDraw*> s_geometry;
 			struct VertexData
 			{
 				math::Vector3 position;

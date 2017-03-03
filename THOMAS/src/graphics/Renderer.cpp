@@ -12,7 +12,7 @@ namespace thomas
 {
 	namespace graphics
 	{
-
+		
 		ID3D11RenderTargetView* Renderer::s_backBuffer = NULL;
 		ID3D11ShaderResourceView* Renderer::s_backBufferSRV = NULL;
 		ID3D11RasterizerState* Renderer::s_rasterState = NULL;

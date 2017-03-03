@@ -314,7 +314,7 @@ void Ship::DrawAimArc()
 	for (float f = 0; f <= 1; f += 0.1f)
 	{
 		point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
-		
+		m_arc->DrawLine(point, prevPoint, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
 		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
@@ -489,7 +489,6 @@ void Ship::Update()
 	m_turning = false;
 
 	m_arc->Update(m_cameraObject->GetComponent<object::component::Camera>());
-	m_arc->DrawLine(math::Vector3(1, 1, 0), math::Vector3(1, 1, 0), math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
 	//Ship Movement
 	ShipMove(dt);
 	ShipRotate(dt);
