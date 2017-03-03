@@ -66,9 +66,9 @@ namespace thomas
 				if (m_isEmitting)
 				{
 					if (!m_looping)
-						m_emissionTimeLeft -= Time::GetDeltaTime();
+						m_emissionTimeLeft -= ThomasTime::GetDeltaTime();
 
-					m_emissionTimer += Time::GetDeltaTime();
+					m_emissionTimer += ThomasTime::GetDeltaTime();
 					UINT numberOfParticlesToEmit = m_emissionTimer / (1.0f / m_emissionRate);
 					if (numberOfParticlesToEmit > 0)
 					{

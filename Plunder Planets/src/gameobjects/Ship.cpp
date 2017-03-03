@@ -247,7 +247,7 @@ void Ship::ShipFireCannons()
 void Ship::Aim(float side, math::Vector2 aimPos)
 {
 	m_aiming = true;
-	CameraZoom(Time::GetDeltaTime());
+	CameraZoom(ThomasTime::GetDeltaTime());
 	math::Vector3 lookAtPoint = math::Vector3(aimPos.x, 0, aimPos.y);
 	//Recalculate look at point and the new distance from cam to ship
 	m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
@@ -270,7 +270,7 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 	posBehindBoat.y = 35;
 	posBehindBoat += (math::Vector3::Up*distToTarget / 8);
 	posBehindBoat += (m_transform->Forward()*distToTarget / 8);
-	posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, Time::GetDeltaTime() * 2);
+	posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, ThomasTime::GetDeltaTime() * 2);
 
 	m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
@@ -279,7 +279,7 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 	math::Vector3 newPos = lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
 
-	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, Time::GetDeltaTime()*2.5);
+	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, ThomasTime::GetDeltaTime()*2.5);
 }
 
 void Ship::ShipAimCannons()
@@ -298,7 +298,7 @@ void Ship::ShipAimCannons()
 	if (m_aimRight) //RIGHT
 	{
 		float deltaX = Input::GetRightStickY();
-		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
+		m_aimDistance += deltaX*ThomasTime::GetDeltaTime() * 70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
@@ -327,7 +327,7 @@ void Ship::ShipAimCannons()
 	{
 		float deltaX = Input::GetRightStickY();
 		
-		m_aimDistance += deltaX*Time::GetDeltaTime()*70;
+		m_aimDistance += deltaX*ThomasTime::GetDeltaTime()*70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
@@ -487,7 +487,10 @@ void Ship::Float(float dt)
 }
 void Ship::Update()
 {
-	float const dt = Time::GetDeltaTime();
+
+
+
+	float const dt = ThomasTime::GetDeltaTime();
 
 
 	if (m_startUpSequence)

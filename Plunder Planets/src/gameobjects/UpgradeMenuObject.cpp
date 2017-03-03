@@ -310,7 +310,7 @@ void UpgradeMenuObject::Start()
 
 void UpgradeMenuObject::Update()
 {
-	m_delay = m_delay - Time::GetDeltaTime();
+	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	
 	SetSelectedObject();
 	

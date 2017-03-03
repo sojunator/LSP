@@ -51,6 +51,11 @@ namespace thomas
 				return m_outline;
 			}
 
+			bool TextComponent::GetOrigin()
+			{
+				return m_origin;
+			}
+
 			void TextComponent::SetFont(std::string font)
 			{
 				m_font = font;
@@ -94,6 +99,11 @@ namespace thomas
 			void TextComponent::SetOutput(std::string output)
 			{
 				m_output = output;
+			}
+
+			void TextComponent::SetOrigin(bool origin)
+			{
+				m_origin = origin;
 			}
 
 		}

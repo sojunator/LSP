@@ -115,7 +115,7 @@ public:
 			}
 			else
 			{
-				m_monteCarloDelay -= thomas::Time::GetDeltaTime();
+				m_monteCarloDelay -= thomas::ThomasTime::GetDeltaTime();
 			}
 		}
 	};

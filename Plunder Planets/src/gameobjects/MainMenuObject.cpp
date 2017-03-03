@@ -1,5 +1,5 @@
 #include "MainMenuObject.h"
-//#include "../scenes/GameScene.h"
+#include "../scenes/HighscoreScene.h"
 #include "../scenes/UpgradeScene.h"
 void MainMenuObject::Start()
 {
@@ -74,7 +74,7 @@ void MainMenuObject::Start()
 
 void MainMenuObject::Update()
 {
-	m_delay = m_delay - Time::GetDeltaTime();
+	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	for (int i = 0; i < 5; i++) //Move to own function
 	{
 		if (m_yArray[i] == 1)
@@ -114,21 +114,12 @@ void MainMenuObject::Update()
 
 		if (m_highScoreButton->isHovering())
 		{
-			//Add Highscore
-			//Scene::LoadScene<HighscoreScene>();
-		}
-		if (m_optionButton->isHovering())
-		{
-			//Add Settings
-		}
-		if (m_creditsButton->isHovering())
-		{
-			//Add Credits
+			Scene::LoadScene<HighscoreScene>();
 		}
 
+		//Highscore
 		if (m_exitButton->isHovering())
 			ThomasCore::Exit();
-
 	}
 
 	//Menu scrolling, move to own function, LONG if() statement
@@ -169,3 +160,4 @@ void MainMenuObject::Update()
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		ThomasCore::Exit();
 }
+

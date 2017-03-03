@@ -1,18 +1,18 @@
-#include "Time.h"
+#include "ThomasTime.h"
 #include <Windows.h>
 namespace thomas
 {
-	double Time::s_initTime;
-	double Time::s_startTime;
-	double Time::s_timeFreq;
-	double Time::s_DeltaTime;
-	float Time::s_FPS;
-	float Time::s_FrameTime;
-	float Time::s_timescale;
-	float Time::s_FpsUpdateFreq;
-	float Time::s_TimeLeftToUpdateFPS;
+	double ThomasTime::s_initTime;
+	double ThomasTime::s_startTime;
+	double ThomasTime::s_timeFreq;
+	double ThomasTime::s_DeltaTime;
+	float ThomasTime::s_FPS;
+	float ThomasTime::s_FrameTime;
+	float ThomasTime::s_timescale;
+	float ThomasTime::s_FpsUpdateFreq;
+	float ThomasTime::s_TimeLeftToUpdateFPS;
 
-	bool Time::Init()
+	bool ThomasTime::Init()
 	{
 		LARGE_INTEGER freq;
 	//	timeBeginPeriod(1);
@@ -30,7 +30,7 @@ namespace thomas
 		return true;
 	}
 
-	void Time::Update()
+	void ThomasTime::Update()
 	{
 
 		s_DeltaTime = GetElapsedTime();
@@ -44,38 +44,38 @@ namespace thomas
 		
 	}
 
-	float Time::GetDeltaTime()
+	float ThomasTime::GetDeltaTime()
 	{
 		return s_DeltaTime * s_timescale;
 	}
 
-	double Time::GetInitTime()
+	double ThomasTime::GetInitTime()
 	{
 		return s_initTime;
 	}
 
-	int Time::GetFPS()
+	int ThomasTime::GetFPS()
 	{
 		return s_FPS;
 	}
 
-	float Time::GetFrameTime()
+	float ThomasTime::GetFrameTime()
 	{
 		return 1000.0 / s_FPS;
 	}
 
-	void Time::SetTimescale(float timescale)
+	void ThomasTime::SetTimescale(float timescale)
 	{
 		s_timescale = timescale;
 	}
 
-	float Time::GetTimescale()
+	float ThomasTime::GetTimescale()
 	{
 		return s_timescale;
 	}
 
 
-	double Time::GetElapsedTime()
+	double ThomasTime::GetElapsedTime()
 	{
 
 		LARGE_INTEGER newTime;

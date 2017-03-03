@@ -51,7 +51,7 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Sound.cpp" />
     <ClCompile Include="src\ThomasCore.cpp" />
-    <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\ThomasTime.cpp" />
     <ClCompile Include="src\utils\AssimpLoader.cpp" />
     <ClCompile Include="src\utils\D3d.cpp" />
     <ClCompile Include="src\utils\DebugTools.cpp" />
@@ -347,7 +347,7 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Thomas.h" />
     <ClInclude Include="src\ThomasCore.h" />
-    <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\ThomasTime.h" />
     <ClInclude Include="src\utils\AssimpLoader.h" />
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\DebugTools.h" />

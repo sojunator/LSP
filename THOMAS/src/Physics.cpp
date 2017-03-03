@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include "Time.h"
+#include "ThomasTime.h"
 #include "object\component\RigidBodyComponent.h"
 #include "object\GameObject.h"
 #define PHYSICS_TIMESTEP 1.0f/60.0f
@@ -40,7 +40,7 @@ namespace thomas
 	void Physics::Update()
 	{
 
-		s_world->stepSimulation(Time::GetDeltaTime(), 7);
+		s_world->stepSimulation(ThomasTime::GetDeltaTime(), 7);
 
 		int numManifolds = s_world->getDispatcher()->getNumManifolds();
 		for (int i = 0; i < numManifolds; i++)

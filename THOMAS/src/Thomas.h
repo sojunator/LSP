@@ -2,7 +2,7 @@
 
 #include "ThomasCore.h"
 #include "Input.h"
-#include "Time.h"
+#include "ThomasTime.h"
 #include "Sound.h"
 #include "Physics.h"
 #include "Scene.h"
