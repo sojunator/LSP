@@ -22,7 +22,7 @@ public:
 
 	void Start()
 	{
-		m_far = 4000;
+		m_far = 40000;
 		m_fov = 70;
 
 

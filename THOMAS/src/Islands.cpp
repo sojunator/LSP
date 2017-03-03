@@ -7,7 +7,6 @@ namespace thomas
 	{
 		std::srand(time(NULL));
 		std::vector<thomas::utils::Plane::PlaneData> tempPlane;
-		//utils::Plane::PlaneData plane = utils::Plane::CreatePlane(mapSize, detail);
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;
@@ -29,18 +28,19 @@ namespace thomas
 		{
 			tempPlane.push_back(thomas::utils::Plane::CreatePlane(size, detail));
 			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
-			m_islandCenterWorldPos[i].x -= mapSize / 2;
-			m_islandCenterWorldPos[i].z += mapSize / 2;
+			//ApplyOffSet(i, tempPlane[i]);
+			//m_islandCenterWorldPos[i].x -= mapSize / 2;
+			//m_islandCenterWorldPos[i].z += mapSize / 2;
 		}
 
-		for (int i = 0; i < m_nrOfIslands; i++)
-		{
-			for (int j = 0; j < tempPlane[i].verts.size(); j++)
-			{
-				tempPlane[i].verts[j].position.x -= mapSize / 2;
-				tempPlane[i].verts[j].position.z += mapSize / 2;
-			}
-		}
+		//for (int i = 0; i < m_nrOfIslands; i++)
+		//{
+		//	for (int j = 0; j < tempPlane[i].verts.size(); j++)
+		//	{
+		//		tempPlane[i].verts[j].position.x -= mapSize / 2;
+		//		tempPlane[i].verts[j].position.z += mapSize / 2;
+		//	}
+		//}
 
 
 		//ChangeHeightMapValues(tempPlane);
@@ -58,14 +58,14 @@ namespace thomas
 		m_mesh.push_back(mesh);
 	}
 
-	//void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
-	//{
-	//	for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
-	//	{
-	//		tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-	//		tempPlanes.verts[i].position.z += m_worldPosOffset[island].z;
-	//	}
-	//}
+	void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
+	{
+		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
+		{
+			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
+			tempPlanes.verts[i].position.z += m_worldPosOffset[island].z;
+		}
+	}
 
 	Islands::~Islands()
 	{
@@ -186,7 +186,7 @@ namespace thomas
 
 	int Islands::GetSizeOFIsland(int island)
 	{
-		return m_size[island]/* * m_detail[island]*/;
+		return m_size[island];
 	}
 
 	void Islands::ChangeHeightMapValues(std::vector<utils::Plane::PlaneData> &tempPlane)
@@ -207,14 +207,9 @@ namespace thomas
 		int attempt = 0;
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
-		/*tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+		tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
 		tempOffset.y = 0;
-		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);*/
-
-		tempOffset.x = m_mapSize / 2;
-		tempOffset.y = 0;
-		tempOffset.z = m_mapSize / 2;
-
+		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
 
 		tempOffset.x += 10;
 		tempOffset.z += 10;
@@ -232,7 +227,7 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			bool foundPos = false;
-			while (!foundPos && MAX_ATTEMPTS != attempt)
+			while (!foundPos && attempt != MAX_ATTEMPTS)
 			{
 				tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
 				tempOffset.y = 0;
@@ -273,6 +268,7 @@ namespace thomas
 			}
 
 		}
+
 		m_worldPosOffset.erase(m_worldPosOffset.begin());
 		m_islandCenterWorldPos.erase(m_islandCenterWorldPos.begin());
 		m_nrOfIslands = --addedIslands;
