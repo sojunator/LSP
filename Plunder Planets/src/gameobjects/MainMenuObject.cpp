@@ -116,10 +116,11 @@ void MainMenuObject::Update()
 		{
 			Scene::LoadScene<HighscoreScene>();
 		}
-	}
 
+		//Highscore
 		if (m_exitButton->isHovering())
 			ThomasCore::Exit();
+	}
 
 	//Menu scrolling, move to own function, LONG if() statement
 	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f) 
