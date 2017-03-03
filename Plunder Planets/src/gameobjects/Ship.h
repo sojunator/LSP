@@ -26,6 +26,7 @@ public:
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt);
 	void ShipFireCannons();
 	void ShipAimCannons();
+	void UpgradeSpeed(float speedIncrease);
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
 	void CameraZoom(float const dt);
@@ -41,6 +42,7 @@ public:
 	void OnCollision(component::RigidBodyComponent* other);
 
 public:
+	bool m_startUpSequence;
 	//Health attributes
 	float m_health;
 	float m_maxHealth;
@@ -50,8 +52,10 @@ public:
 	float m_maxArmor;
 
 private:
+	bool m_spawnedWormhole;
+
 	float m_aimDistance;
-	float roof;
+	float m_roof;
 	bool m_moving;
 	bool m_turning;
 	bool m_flying;
@@ -82,6 +86,9 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitter1;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitter2;
+
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;

@@ -11,6 +11,8 @@ void MainMenuObject::Start()
 	m_creditsButton = AddComponent<component::SpriteComponent>();
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
+	
+	m_yArray[0] = 1;
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
@@ -23,6 +25,7 @@ void MainMenuObject::Start()
 	m_startButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_startButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_startButton->SetInteractable(true);
+	m_startButton->SetHovering(true);
 
 	m_highScoreButton->SetName("MainMenuHighScore");
 	m_highScoreButton->SetPositionX(150);
@@ -61,15 +64,49 @@ void MainMenuObject::Start()
 	m_backgrounds->SetPositionY(0);
 	m_backgrounds->SetScale(math::Vector2(1.0f, 1.0f));
 	m_backgrounds->SetColor(math::Color(1.0f, 1.0f, 1.0f));
+
+
+
+
+	
+
 }
 
 void MainMenuObject::Update()
 {
-	if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
+	m_delay = m_delay - ThomasTime::GetDeltaTime();
+	for (int i = 0; i < 5; i++) //Move to own function
 	{
-		if (m_exitButton->isHovering())
-			ThomasCore::Exit();
-
+		if (m_yArray[i] == 1)
+		{
+			if (i == 0)
+				m_startButton->SetHovering(true);
+			if (i == 1)
+				m_highScoreButton->SetHovering(true);
+			if (i == 2)
+				m_optionButton->SetHovering(true);
+			if (i == 3)
+				m_creditsButton->SetHovering(true);
+			if (i == 4)
+				m_exitButton->SetHovering(true);
+		}
+		else
+		{
+			if (i == 0)
+				m_startButton->SetHovering(false);
+			if (i == 1)
+				m_highScoreButton->SetHovering(false);
+			if (i == 2)
+				m_optionButton->SetHovering(false);
+			if (i == 3)
+				m_creditsButton->SetHovering(false);
+			if (i == 4)
+				m_exitButton->SetHovering(false);
+		}
+			
+	}
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
+	{
 		if (m_startButton->isHovering())
 		{
 			Scene::LoadScene<UpgradeScene>();
@@ -83,9 +120,45 @@ void MainMenuObject::Update()
 		//Highscore
 	}
 
-	if (Input::GetKeyDown(Input::Keys::Escape))
-		ThomasCore::Exit();
+		if (m_exitButton->isHovering())
+			ThomasCore::Exit();
 
-	if (Input::GetKeyDown(Input::Keys::Enter))
+	//Menu scrolling, move to own function, LONG if() statement
+	if ((Input::GetLeftStickY() && m_delay < 0.1f) || (Input::GetButton(Input::Buttons::DPAD_DOWN) && m_delay < 0.1f) 
+		|| (Input::GetButton(Input::Buttons::DPAD_UP) && m_delay < 0.1f) || (Input::GetKey(Input::Keys::Down) && m_delay < 0.1f) 
+		|| (Input::GetKey(Input::Keys::Up) && m_delay < 0.1f))
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're already at the top
+			{
+				m_yArray[0] = 1;
+				break;
+			}
+			else if (m_yArray[4] == 1 && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN))) //Player presses down, we're already at the bottom
+			{
+				m_yArray[4] = 1;
+				break;
+			}
+			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > 0) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
+			{
+				m_yArray[i - 1] = 1; //Select Sprite Above
+				m_yArray[i] = 0; //Deselect Current Sprite
+				break;
+			}
+			else if ((i < 4) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() < 0) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down
+			{
+				m_yArray[i + 1] = 1;
+				m_yArray[i] = 0;
+				break;
+			} 
+		}
+		m_delay = 0.3f;
+	}
+	if (Input::GetButtonDown(Input::Buttons::START))
 		Scene::LoadScene<UpgradeScene>();
+
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
+		ThomasCore::Exit();
 }
+

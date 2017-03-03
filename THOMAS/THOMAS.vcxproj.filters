@@ -43,6 +43,8 @@
     <ClCompile Include="src\utils\DebugTools.cpp" />
     <ClCompile Include="src\graphics\BulletDebugDraw.cpp" />
     <ClCompile Include="src\object\component\ParticleEmitterComponent.cpp" />
+    <ClCompile Include="src\utils\FrustumCulling.cpp" />
+    <ClCompile Include="src\object\component\FrustumCullingComponent.cpp" />
     <ClCompile Include="src\ThomasTime.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +379,8 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\graphics\TextRender.h" />
     <ClInclude Include="src\object\component\ParticleEmitterComponent.h" />
+    <ClInclude Include="src\utils\FrustumCulling.h" />
+    <ClInclude Include="src\object\component\FrustumCullingComponent.h" />
     <ClInclude Include="src\ThomasTime.h" />
   </ItemGroup>
   <ItemGroup>

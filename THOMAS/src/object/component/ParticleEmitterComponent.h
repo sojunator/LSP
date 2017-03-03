@@ -4,6 +4,7 @@
 #include "..\..\graphics\Texture.h"
 #include "..\..\graphics\Shader.h"
 #include "..\..\graphics\ParticleSystem.h"
+#include "../../utils/DebugTools.h"
 
 namespace thomas
 {
@@ -11,7 +12,7 @@ namespace thomas
 	{
 		namespace component
 		{
-			class ParticleEmitterComponent : public Component
+			class THOMAS_API ParticleEmitterComponent : public Component
 			{
 			public:
 				
@@ -55,9 +56,9 @@ namespace thomas
 					float rotationSpeed;
 					float rotation;
 
-					math::Vector4 startColor;
+					math::Color startColor;
 
-					math::Vector4 endColor;
+					math::Color endColor;
 
 					math::Matrix directionMatrix;
 				};
@@ -90,7 +91,6 @@ namespace thomas
 				void CreateParticleUAVsandSRVs();
 				void CreateInitBuffer();
 				void CalculateMaxNrOfParticles();
-
 			public:
 				ParticleEmitterComponent();
 				
@@ -132,10 +132,12 @@ namespace thomas
 				
 
 				void StartEmitting();
-				void StopEmitting();
+				void StopEmitting(bool force=false);
 				
 				bool IsEmitting() const;
 				
+				void SetOffset(math::Vector3 offset);
+				void SetOffset(float x, float y, float z);
 				
 				void SetShader(std::string shaderName);
 				graphics::Shader* GetShader();
@@ -149,8 +151,11 @@ namespace thomas
 
 				D3DData* GetD3DData();
 
+				void AddToDebugMenu();
+
 			private:
-				
+				math::Vector3 m_offset;
+				math::Vector3 m_directionVector;
 				D3DData m_d3dData;
 				graphics::Shader* m_shader;
 				graphics::Texture* m_texture;

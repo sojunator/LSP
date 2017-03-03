@@ -44,6 +44,7 @@ namespace thomas
 			TwSetParam(s_bar.bar, NULL, "position", TW_PARAM_INT32, 2, &barPos);*/
 		}
 
+
 		int DebugTools::ProcessMessages(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			TwEventWin(hWnd, message, wParam, lParam);

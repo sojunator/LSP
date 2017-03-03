@@ -32,6 +32,8 @@ bool AI::Collision(math::Vector3 pos)
 
 int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft)
 {
+	if (!HasTarget())
+		return 0;
 	math::Vector3 norFor = forward;
 	norFor.Normalize();
 	math::Vector3 norRight = right;
@@ -167,6 +169,11 @@ void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir
 		m_stateStr = "Firing";
 		m_state = Behavior::Firing;
 	}
+}
+
+bool AI::HasTarget()
+{
+	return m_playerShip;
 }
 
 AI::Behavior AI::GetState()

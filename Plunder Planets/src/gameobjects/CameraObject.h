@@ -248,8 +248,11 @@ public:
 			m_flySpeed = m_normalSpeed;
 
 		
-		if (Input::GetKeyDown(Input::Keys::Escape))
+		if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 			Scene::LoadScene<MenuScene>();
+
+		/*if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START)) //When pause scene implemented
+			Scene::LoadScene<PauseScene>();*/
 	}
 
 	math::Matrix GetCameraMatrix()

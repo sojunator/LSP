@@ -72,8 +72,8 @@ public:
 		m_ai = AddComponent<AI>();
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(90)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(270)), m_transform, m_scene);
 
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
@@ -101,9 +101,8 @@ public:
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSpark->SetTexture("../res/textures/spark.png");
+		m_emitterSpark->SetTexture("../res/textures/fire.png");
 		m_emitterSpark->SetShader("particleShader");
-		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
 		m_emitterSpark->SetMaxSpeed(20.0f);
@@ -115,9 +114,8 @@ public:
 		m_emitterSpark->SetSpread(0.71f);
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
+		m_emitterSmoke->SetTexture("../res/textures/smokethick.png");
 		m_emitterSmoke->SetShader("particleShader");
-		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetMaxDelay(2.45f);
 		m_emitterSmoke->SetMinDelay(0.15f);
 		m_emitterSmoke->SetMaxSpeed(9.0f);
@@ -128,7 +126,9 @@ public:
 		m_emitterSmoke->SetMinLifeTime(2.4f);
 		m_emitterSmoke->SetSpread(0.8f);
 
-		
+		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
+		m_frustumCullingComponent->SetRadius(15);
+		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
 	}
 
 
@@ -267,8 +267,12 @@ public:
 		m_moving = false;
 		m_ai->Escape();
 		m_ai->IdleTimer();
-		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
-		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		if (m_ai->HasTarget())
+		{
+			m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
+			m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		}
+		
 
 		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
 		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Right() * 30));	//Check island right
@@ -328,6 +332,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;
+	component::FrustumCullingComponent* m_frustumCullingComponent;
 	AI* m_ai;
 
 	//Ship
