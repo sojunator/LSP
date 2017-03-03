@@ -52,41 +52,80 @@ void Ship::Start()
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
-	m_boosterParticlesEmitter1 = AddComponent<component::ParticleEmitterComponent>();
-	m_boosterParticlesEmitter1->SetTexture("../res/textures/spark.png");
-	m_boosterParticlesEmitter1->SetShader("particleShader");
-	m_boosterParticlesEmitter1->SetEmissionRate(1500);
-	m_boosterParticlesEmitter1->SetEmissionDuration(0.1f);
-	m_boosterParticlesEmitter1->AddToDebugMenu();
-	m_boosterParticlesEmitter1->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_boosterParticlesEmitter1->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
-	m_boosterParticlesEmitter1->SetMaxSpeed(30.0f);
-	m_boosterParticlesEmitter1->SetMinSpeed(10.0f);
-	m_boosterParticlesEmitter1->SetMaxSize(0.4f);
-	m_boosterParticlesEmitter1->SetMinSize(0.2f);
-	m_boosterParticlesEmitter1->SetEndSize(0.0f);
-	m_boosterParticlesEmitter1->SetMaxLifeTime(0.3f);
-	m_boosterParticlesEmitter1->SetMinLifeTime(0.2f);
-	m_boosterParticlesEmitter1->SetRotationSpeed(2.0f);
-	m_boosterParticlesEmitter1->SetSpread(3.24f);
+	
+	m_boosterParticlesEmitterLeft1 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterLeft1->SetTexture("../res/textures/fire.png");
+	m_boosterParticlesEmitterLeft1->SetShader("particleShader");
+	m_boosterParticlesEmitterLeft1->SetEmissionRate(2500);
+	m_boosterParticlesEmitterLeft1->SetEmissionDuration(0.1f);
+	m_boosterParticlesEmitterLeft1->SetStartColor(math::Vector4(1.0f, 0.3f, 0.0f, 1.0f));
+	m_boosterParticlesEmitterLeft1->SetEndColor(math::Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+	m_boosterParticlesEmitterLeft1->SetMaxSpeed(20.0f);
+	m_boosterParticlesEmitterLeft1->SetMinSpeed(10.0f);
+	m_boosterParticlesEmitterLeft1->SetMaxSize(0.8f);
+	m_boosterParticlesEmitterLeft1->SetMinSize(0.4f);
+	m_boosterParticlesEmitterLeft1->SetEndSize(0.0f);
+	m_boosterParticlesEmitterLeft1->SetMaxLifeTime(0.42f);
+	m_boosterParticlesEmitterLeft1->SetMinLifeTime(0.2f);
+	m_boosterParticlesEmitterLeft1->SetRotationSpeed(10.0f);
+	m_boosterParticlesEmitterLeft1->SetRadius(1.9f);
+	m_boosterParticlesEmitterLeft1->SpawnAtSphereEdge(true);
+	m_boosterParticlesEmitterLeft1->SetSpread(2.7f);
 
-	m_boosterParticlesEmitter2 = AddComponent<component::ParticleEmitterComponent>();
-	m_boosterParticlesEmitter2->SetTexture("../res/textures/fire.png");
-	m_boosterParticlesEmitter2->SetShader("particleShader");
-	m_boosterParticlesEmitter2->SetEmissionRate(2500);
-	m_boosterParticlesEmitter2->SetEmissionDuration(0.2f);
-	m_boosterParticlesEmitter1->AddToDebugMenu();
-	m_boosterParticlesEmitter2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_boosterParticlesEmitter2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_boosterParticlesEmitter2->SetMaxSpeed(30.0f);
-	m_boosterParticlesEmitter2->SetMinSpeed(10.0f);
-	m_boosterParticlesEmitter2->SetMaxSize(0.6f);
-	m_boosterParticlesEmitter2->SetMinSize(0.3f);
-	m_boosterParticlesEmitter2->SetEndSize(0.0f);
-	m_boosterParticlesEmitter2->SetMaxLifeTime(0.9f);
-	m_boosterParticlesEmitter2->SetMinLifeTime(0.6f);
-	m_boosterParticlesEmitter2->SetRotationSpeed(2.0f);
-	m_boosterParticlesEmitter2->SetSpread(1.24f);
+	m_boosterParticlesEmitterLeft2 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterLeft2->SetTexture("../res/textures/fire2.png");
+	m_boosterParticlesEmitterLeft2->SetShader("particleShader");
+	m_boosterParticlesEmitterLeft2->SetEmissionRate(1000);
+	m_boosterParticlesEmitterLeft2->SetEmissionDuration(0.2f);
+	m_boosterParticlesEmitterLeft2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_boosterParticlesEmitterLeft2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+	m_boosterParticlesEmitterLeft2->SetMaxSpeed(30.0f);
+	m_boosterParticlesEmitterLeft2->SetMinSpeed(10.0f);
+	m_boosterParticlesEmitterLeft2->SetMaxSize(0.6f);
+	m_boosterParticlesEmitterLeft2->SetMinSize(0.3f);
+	m_boosterParticlesEmitterLeft2->SetEndSize(0.0f);
+	m_boosterParticlesEmitterLeft2->SetMaxLifeTime(0.9f);
+	m_boosterParticlesEmitterLeft2->SetMinLifeTime(0.6f);
+	m_boosterParticlesEmitterLeft2->SetRotationSpeed(2.0f);
+	m_boosterParticlesEmitterLeft2->SetSpread(1.24f);
+
+	m_boosterParticlesEmitterRight1 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterRight1->SetTexture("../res/textures/fire.png");
+	m_boosterParticlesEmitterRight1->SetShader("particleShader");
+	m_boosterParticlesEmitterRight1->SetEmissionRate(2500);
+	m_boosterParticlesEmitterRight1->SetEmissionDuration(0.1f);
+	m_boosterParticlesEmitterRight1->SetStartColor(math::Vector4(1.0f, 0.3f, 0.0f, 1.0f));
+	m_boosterParticlesEmitterRight1->SetEndColor(math::Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+	m_boosterParticlesEmitterRight1->SetMaxSpeed(20.0f);
+	m_boosterParticlesEmitterRight1->SetMinSpeed(10.0f);
+	m_boosterParticlesEmitterRight1->SetMaxSize(0.8f);
+	m_boosterParticlesEmitterRight1->SetMinSize(0.4f);
+	m_boosterParticlesEmitterRight1->SetEndSize(0.0f);
+	m_boosterParticlesEmitterRight1->SetMaxLifeTime(0.42f);
+	m_boosterParticlesEmitterRight1->SetMinLifeTime(0.2f);
+	m_boosterParticlesEmitterRight1->SetRotationSpeed(10.0f);
+	m_boosterParticlesEmitterRight1->SetRadius(1.9f);
+	m_boosterParticlesEmitterRight1->SpawnAtSphereEdge(true);
+	m_boosterParticlesEmitterRight1->SetSpread(2.7f);
+	m_boosterParticlesEmitterRight1->AddToDebugMenu();
+
+	m_boosterParticlesEmitterRight2 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterRight2->SetTexture("../res/textures/fire2.png");
+	m_boosterParticlesEmitterRight2->SetShader("particleShader");
+	m_boosterParticlesEmitterRight2->SetEmissionRate(1000);
+	m_boosterParticlesEmitterRight2->SetEmissionDuration(0.2f);
+	m_boosterParticlesEmitterRight2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_boosterParticlesEmitterRight2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+	m_boosterParticlesEmitterRight2->SetMaxSpeed(30.0f);
+	m_boosterParticlesEmitterRight2->SetMinSpeed(10.0f);
+	m_boosterParticlesEmitterRight2->SetMaxSize(0.6f);
+	m_boosterParticlesEmitterRight2->SetMinSize(0.3f);
+	m_boosterParticlesEmitterRight2->SetEndSize(0.0f);
+	m_boosterParticlesEmitterRight2->SetMaxLifeTime(0.9f);
+	m_boosterParticlesEmitterRight2->SetMinLifeTime(0.6f);
+	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
+	m_boosterParticlesEmitterRight2->SetSpread(1.24f);
+	m_boosterParticlesEmitterRight2->AddToDebugMenu();
 
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
@@ -450,19 +489,23 @@ void Ship::Float(float dt)
 }
 void Ship::Update()
 {
-
-
-
 	float const dt = Time::GetDeltaTime();
 
 
 	if (m_startUpSequence)
 	{
-		//m_modelIndex = ((m_modelIndex + 1) % 3) + 1;
-		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
-		m_boosterParticlesEmitter1->SetOffset(m_transform->Forward() * 10.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitter1->SetDirection(m_transform->Forward());
-		m_boosterParticlesEmitter1->StartEmitting();
+		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft1->StartEmitting();
+		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft2->StartEmitting();
+		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight1->StartEmitting();
+		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight2->StartEmitting();
 		m_boostSound->Play();
 		Float(dt);
 		return;
@@ -549,12 +592,19 @@ void Ship::Update()
 	{
 		//Input::Vibrate(0.1, 0.1);
 		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
-		m_boosterParticlesEmitter1->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitter1->SetDirection(m_transform->Forward());
-		m_boosterParticlesEmitter1->StartEmitting();
-		m_boosterParticlesEmitter2->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitter2->SetDirection(m_transform->Forward());
-		m_boosterParticlesEmitter2->StartEmitting();
+		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft1->StartEmitting();
+		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft2->StartEmitting();
+		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight1->StartEmitting();
+		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 11.25f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight2->StartEmitting();
+		
 		m_boostSound->Play();
 	}
 	else

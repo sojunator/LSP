@@ -39,7 +39,7 @@ public:
 		m_emitterSmoke->SetEmissionDuration(1.2f);
 		
 		m_emitterSmoke2 = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke2->SetTexture("../res/textures/smokethick.dds");
+		m_emitterSmoke2->SetTexture("../res/textures/smokethick.png");
 		m_emitterSmoke2->SetShader("particleShader");
 		m_emitterSmoke2->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -60,7 +60,7 @@ public:
 
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
 
-		m_emitterSpark->SetTexture("../res/textures/spark.png");
+		m_emitterSpark->SetTexture("../res/textures/fire.png");
 		m_emitterSpark->SetShader("particleShader");
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);

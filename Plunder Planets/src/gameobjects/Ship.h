@@ -86,8 +86,10 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
-	component::ParticleEmitterComponent* m_boosterParticlesEmitter1;
-	component::ParticleEmitterComponent* m_boosterParticlesEmitter2;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight1;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight2;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;

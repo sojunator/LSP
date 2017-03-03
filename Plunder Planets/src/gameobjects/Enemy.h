@@ -121,7 +121,7 @@ public:
 		m_emitterSmoke->SetEmissionDuration(1.2f);
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetTexture("../res/textures/smokethick.dds");
+		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
 		m_emitterSmoke->SetShader("particleShader");
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
