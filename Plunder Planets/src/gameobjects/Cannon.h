@@ -111,6 +111,7 @@ public:
 				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
 				
 				m_fire = false;
+				ReseedDelay();
 			}
 			else
 			{

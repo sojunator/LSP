@@ -96,6 +96,7 @@ private:
 
 	Broadside* m_broadSideLeft;
 	Broadside* m_broadSideRight;
+	
 
 	int m_modelIndex;
 
