@@ -20,6 +20,7 @@ namespace thomas
 				float GetScale();
 				bool GetDropshadow();
 				bool GetOutline();
+				bool GetOrigin();
 
 				void SetFont(std::string font);
 				void SetPositionX(float posX);
@@ -30,6 +31,7 @@ namespace thomas
 				void SetDropshadow(bool dropshadow);
 				void SetOutline(bool outline);
 				void SetOutput(std::string output);
+				void SetOrigin(bool origin);
 	
 			private:
 				std::string m_font;
@@ -40,6 +42,7 @@ namespace thomas
 				float m_scale;
 				bool m_dropshadow;
 				bool m_outline;
+				bool m_origin;
 			};
 		}
 	}

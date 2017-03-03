@@ -16,10 +16,8 @@ public:
 		//m_emitterComponent = AddComponent<component::ParticleEmitterComponent>();
 		
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSpark->SetNrOfParticles( 254);
 		m_emitterSpark->SetTexture("../res/textures/spark.png");
 		m_emitterSpark->SetShader("particleShader");
-		m_emitterSpark->SetPosition(m_transform->GetPosition());
 		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
@@ -36,7 +34,7 @@ public:
 
 	void Update()
 	{
-		timer -= Time::GetDeltaTime();
+		timer -= ThomasTime::GetDeltaTime();
 		if (timer < 0.0f)
 		{
 			Destroy(this);

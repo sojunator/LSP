@@ -28,6 +28,7 @@ public:
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt);
 	void ShipFireCannons();
 	void ShipAimCannons();
+	void UpgradeSpeed(float speedIncrease);
 	void DrawAimArc();
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
@@ -44,12 +45,20 @@ public:
 	void OnCollision(component::RigidBodyComponent* other);
 
 public:
+	bool m_startUpSequence;
+	//Health attributes
 	float m_health;
 	float m_maxHealth;
 
+	//Armor attributes
+	float m_armor;
+	float m_maxArmor;
+
 private:
+	bool m_spawnedWormhole;
+
 	float m_aimDistance;
-	float roof;
+	float m_roof;
 	bool m_moving;
 	bool m_turning;
 	bool m_flying;
@@ -75,12 +84,20 @@ private:
 	math::Vector3 m_lookAtOffset;
 	math::Vector3 m_initPosition;	//Is this needed?
 	math::Vector3 m_aimPosition;
+	math::Vector3 p0;// = m_transform->GetPosition(); //boat pos
+	math::Vector3 p3;// = math::Vector3(m_aimPosition.x, m_aimPosition.y, m_aimPosition.z); //aim pos
+
+	math::Vector3 p1;// = p0 /*+ exitVector*/; //vector defining starting direction of projectiles
+	math::Vector3 p2;// = p3 + math::Vector3(0, 1, 0)/* * scalar */;
 
 	//components
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitter1;
+	component::ParticleEmitterComponent* m_boosterParticlesEmitter2;
+
 	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;

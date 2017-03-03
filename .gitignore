@@ -255,3 +255,4 @@ paket-files/
 *.wav
 *.xwb
 
+*.etl

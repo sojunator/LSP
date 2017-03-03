@@ -11,12 +11,12 @@ namespace thomas
 			m_vertexShader = nullptr;
 			m_geometryShader = nullptr;
 			m_pixelShader = nullptr;
-			//VertexData a;
-			//a.position = math::Vector3(1, 0, 0);
-			//a.color = math::Vector3(1, 1, 1);
+			VertexData a;
+			a.position = math::Vector3(1, 0, 0);
+			a.color = math::Vector3(1, 1, 1);
 			//m_data.push_back(a); //Line start
 			//m_data.push_back(a); //Line end
-			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromVector(m_data, D3D11_BIND_VERTEX_BUFFER);
+			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromStruct(a, D3D11_BIND_VERTEX_BUFFER);
 			m_constantBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_cbData, D3D11_BIND_CONSTANT_BUFFER);
 			//m_cbData.worldMatrix = worldMatrix;
 			s_geometry.push_back(this);
@@ -71,9 +71,9 @@ namespace thomas
 			for (GeometryDraw* geometry : s_geometry)
 			{
 				DirectX::CommonStates states(ThomasCore::GetDevice());
-				//ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
-				//ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
-				ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());
+				/*ThomasCore::GetDeviceContext()->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
+				ThomasCore::GetDeviceContext()->OMSetDepthStencilState(states.DepthNone(), 0);
+				ThomasCore::GetDeviceContext()->RSSetState(states.CullNone());*/
 
 				ThomasCore::GetDeviceContext()->IASetInputLayout(geometry->m_inputLayout);
 				ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);

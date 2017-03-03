@@ -9,3 +9,4 @@
 #include "SpriteComponent.h"
 #include "RigidBodyComponent.h"
 #include "ParticleEmitterComponent.h"
+#include "FrustumCullingComponent.h"

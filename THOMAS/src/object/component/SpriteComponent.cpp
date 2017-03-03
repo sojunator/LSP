@@ -53,6 +53,21 @@ namespace thomas
 				return m_hovering;
 			}
 
+			void SpriteComponent::SetHovering(bool set)
+			{
+				if (set)
+				{
+					OnHover();
+					m_interactable = false;
+				}
+				else
+				{
+					m_currentColor = m_baseColor;
+					m_hovering = false;
+					m_interactable = true;
+				}
+			}
+
 			void SpriteComponent::SetName(std::string name)
 			{
 				m_name = name;
@@ -91,28 +106,29 @@ namespace thomas
 
 			void SpriteComponent::Update()
 			{
-				m_currentColor = m_baseColor;
-				m_hovering = false;
+				
 		
 				if (m_interactable)
 				{
-					Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
-					math::Vector2 mousePos = Input::GetMousePosition();
+					m_currentColor = m_baseColor;
+					m_hovering = false;
+					//Input::SetMouseMode(Input::MouseMode::POSITION_ABSOLUTE);
+					//math::Vector2 mousePos = Input::GetMousePosition();
 
-					//Construct boundaries
-					float xLeft = GetPosition().x;
-					float xRight = GetPosition().x + GetWidth();
-					float yTop = GetPosition().y;
-					float yDown = GetPosition().y + GetHeight();
+					////Construct boundaries
+					//float xLeft = GetPosition().x;
+					//float xRight = GetPosition().x + GetWidth();
+					//float yTop = GetPosition().y;
+					//float yDown = GetPosition().y + GetHeight();
 
-					if (mousePos.x >= xLeft && mousePos.x <= xRight && mousePos.y <= yDown && mousePos.y >= yTop)
-					{
-						OnHover();
-					}
-					else
-					{
-						m_currentColor = m_baseColor;
-					}
+					//if (mousePos.x >= xLeft && mousePos.x <= xRight && mousePos.y <= yDown && mousePos.y >= yTop)
+					//{
+					//	OnHover();
+					//}
+					//else
+					//{
+					//	m_currentColor = m_baseColor;
+					//}
 				}
 			}
 		}

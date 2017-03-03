@@ -54,23 +54,38 @@ public:
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
-
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/1610tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/43tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}		
 		else
 		{
 			thomas::graphics::Sprite::LoadTexture("GUI", "../res/GUI/169tex.png");
-			thomas::graphics::Sprite::LoadTexture("Button", "../res/GUI/le.png");
+			thomas::graphics::Sprite::LoadTexture("Health", "../res/GUI/health.png");
+			thomas::graphics::Sprite::LoadTexture("BackHealth", "../res/GUI/back.png");
+			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
+			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
+			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 		}
 
 		//Init text
@@ -80,14 +95,13 @@ public:
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
-		m_ship = LoadObject<Ship>();
-		//for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI
-		//{
-		//	m_enemyShip.push_back(LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity));
-		//}
+		for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI
+		{
+			//m_enemyShip.push_back(LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity));
+		}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
-		LoadObject<Wormhole>();
+		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		//LoadObject<PhysicsObject>();
 
 	};

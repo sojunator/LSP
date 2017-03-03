@@ -72,9 +72,9 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 
 void WaterMaterial::Update()
 {
-	timeSinceLastUpdate += Time::GetDeltaTime();
+	timeSinceLastUpdate += ThomasTime::GetDeltaTime();
 	m_materialProperties.perlinMovement = -m_oceanSettings.wind_dir*time*0.06;
-	time += Time::GetDeltaTime();
+	time += ThomasTime::GetDeltaTime();
 
 	if (timeSinceLastUpdate > 0.05 && play)
 	{

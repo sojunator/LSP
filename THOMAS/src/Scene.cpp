@@ -77,8 +77,8 @@ namespace thomas
 			s_currentScene->Render3D(camera);
 			if (s_drawDebugPhysics)
 				Physics::DrawDebug(camera);
-			graphics::GeometryDraw::Draw();
 			s_currentScene->Render2D(camera);
+			graphics::GeometryDraw::Draw();
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
 
@@ -88,8 +88,10 @@ namespace thomas
 	}
 	void Scene::Render3D(object::component::Camera * camera)
 	{
-
 		std::vector<object::component::RenderComponent*> renderComponents = GetAllRenderComponents();
+
+		utils::FrustumCulling::GenerateClippingPlanes(camera);
+		
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
@@ -105,17 +107,21 @@ namespace thomas
 				{
 					if (renderComponent->GetModel())
 					{
-						std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
-						if (!meshes.empty())
+						object::component::FrustumCullingComponent* frustumCullingComponent = renderComponent->m_gameObject->GetComponent<object::component::FrustumCullingComponent>();
+						if (frustumCullingComponent == NULL || utils::FrustumCulling::Cull(frustumCullingComponent))
 						{
-							graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
-							for (graphics::Mesh* mesh : meshes)
+							std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
+							if (!meshes.empty())
 							{
-								mesh->Bind();
-								mesh->Draw();
+								graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
+								for (graphics::Mesh* mesh : meshes)
+								{
+									mesh->Bind();
+									mesh->Draw();
+								}
 							}
 						}
-					}
+					}	
 				}
 			}
 			shader->Unbind();
