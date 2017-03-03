@@ -79,7 +79,6 @@ public:
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
 
-
 		m_renderer->SetModel("testModelEnemy");
 		m_moving = false;
 
@@ -94,7 +93,7 @@ public:
 		m_health = 20;
 		m_dead = false;
 		//Movement
-		m_speed = m_shipStats->GetSpeed();
+		m_speed = 600;// m_shipStats->GetSpeed();
 		m_turnSpeed = 150;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
@@ -322,7 +321,7 @@ private:
 	Broadside* m_broadSideRightCannonball;
 	Broadside* m_broadSideLeftCannonball;
 	Broadside* m_broadSideFront;
-	ShipStats* m_shipStats = new ShipStats(1);
+	//ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components
 	component::ParticleEmitterComponent* m_emitterSpark;
