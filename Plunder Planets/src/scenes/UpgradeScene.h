@@ -96,7 +96,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
 		}
-		//thomas::graphics::TextRender::LoadFont("CurrentGold", "../res/font/pirate.spritefont");
+		thomas::graphics::TextRender::LoadFont("CurrentGold", "../res/font/pirate.spritefont");
 
 		LoadObject<UpgradeMenuObject>();
 

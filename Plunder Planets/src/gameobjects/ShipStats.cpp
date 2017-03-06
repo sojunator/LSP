@@ -12,7 +12,7 @@ ShipStats::ShipStats()
 	m_boostCost = 20;
 	m_cannonCost = 50;
 	m_shieldAmount = 0;
-	m_healthAmount = 1;
+	m_healthAmount = 0.5f;
 	m_placeHolderHealthAmount = 1;
 	m_plunderSpeed = 30;
 	s_currentLevel = 1;
@@ -21,6 +21,11 @@ ShipStats::ShipStats()
 float ShipStats::GetTreasure()
 {
 	return m_currentGold;
+}
+
+void ShipStats::SetTreasure(float goldDifference)
+{
+	m_currentGold = m_currentGold + goldDifference;
 }
 
 float ShipStats::GetCannonDamage()
@@ -61,6 +66,11 @@ float ShipStats::GetShieldAmount()
 float ShipStats::GetHealthAmount()
 {
 	return m_healthAmount;
+}
+
+float ShipStats::GetPlaceholderHealthAmount()
+{
+	return m_placeHolderHealthAmount;
 }
 
 float ShipStats::GetPlunderSpeed()
@@ -116,7 +126,9 @@ void ShipStats::RepairHealth(float talentAmount)
 		m_healthAmount = 1;
 	}
 	if (talentAmount == 0)
+	{
 		m_healthAmount = m_placeHolderHealthAmount;
+	}
 	LOG("Health Amount: " + std::to_string(m_healthAmount));
 }
 

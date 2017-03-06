@@ -23,7 +23,7 @@ public:
 
 
 	void Update();
-
+	void UpdateGoldCounter();
 	void CannonCheck(bool upgrade, bool undo);
 	void MovementCheck(bool upgrade, bool undo);
 	void ResourceCheck(bool upgrade, bool undo);
@@ -79,7 +79,7 @@ private:
 	component::SpriteComponent* m_plunderTalent5;
 	component::SpriteComponent* m_exitButton;
 	component::SoundComponent* m_music;
-	//component::TextComponent* m_currentGold;
+	component::TextComponent* m_currentGold;
 
 	//Bool checks for talents
 	bool m_cannonCheck[5] = { false };

@@ -13,6 +13,7 @@ private:
 public:
 	ShipStats();
 	float GetTreasure();
+	void SetTreasure(float goldDifference);
 	float GetCannonDamage();
 	float GetCannonSpread();
 	float GetCannonQuantity();
@@ -21,6 +22,7 @@ public:
 	float GetCannonCost();
 	float GetShieldAmount();
 	float GetHealthAmount();
+	float GetPlaceholderHealthAmount();
 	float GetPlunderSpeed();
 
 	void IncreaseCannonDamage(float talentAmount);
