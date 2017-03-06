@@ -623,7 +623,7 @@ void Ship::Update()
 
 	if (m_treasure > 500 && !m_spawnedWormhole)
 	{
-		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,150,0),math::Quaternion::Identity,m_scene);
+		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0,0),math::Quaternion::Identity,m_scene);
 		wormhole->SetEndLevel(true);
 		m_spawnedWormhole = true;
 	}
