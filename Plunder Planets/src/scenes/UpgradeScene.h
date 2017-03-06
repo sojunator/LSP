@@ -42,6 +42,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("RepairIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("RepairCost", "../res/GUI/upgrade/cost.png");
 			thomas::graphics::Sprite::LoadTexture("RepairTalent1", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
 

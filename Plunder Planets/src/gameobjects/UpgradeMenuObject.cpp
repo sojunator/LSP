@@ -37,7 +37,13 @@ void UpgradeMenuObject::Start()
 	m_repairIcon = AddComponent<component::SpriteComponent>();
 	m_repairCost = AddComponent<component::SpriteComponent>();
 	m_repairTalent1 = AddComponent<component::SpriteComponent>();
-	m_exitButton = AddComponent<component::SpriteComponent>();
+	m_plunderIcon = AddComponent<component::SpriteComponent>();
+	m_plunderCost = AddComponent<component::SpriteComponent>();
+	m_plunderTalent1 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent2 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent3 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent4 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent5 = AddComponent<component::SpriteComponent>(); m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 
@@ -315,6 +321,14 @@ void UpgradeMenuObject::Start()
 	m_repairTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_repairTalent1->SetInteractable(false);
 
+	//Create Plunder sprites
+	m_plunderIcon->SetName("PlunderIcon");
+	m_plunderIcon->SetPositionX(1720);
+	m_plunderIcon->SetPositionY(650);
+	m_plunderIcon->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderIcon->SetInteractable(true);
 
 	m_exitButton->SetName("UpgradeMenuExit");
 	m_exitButton->SetPositionX(50);
@@ -360,6 +374,8 @@ void UpgradeMenuObject::Update()
 		ResourceCheck(upgrade, undo);
 
 		ShieldCheck(upgrade, undo);
+
+		RepairCheck(upgrade, undo);
 	}
 
 	Navigation();
@@ -702,6 +718,27 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 	}
 }
 
+void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
+{
+	if (m_repairIcon->isHovering())
+	{
+		if (!m_repairCheck[0] || (m_repairCheck[0] && undo)) //If upgrading or undoing
+		{
+			if (upgrade)
+			{
+				m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				//Repair health
+			}
+			else if (undo)
+			{
+				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				//Reset health
+			}
+
+		}
+	}
+}
+
 void UpgradeMenuObject::Navigation()
 {
 	//Menu navigation, check if any navigating buttons are pressed before making selection moves
@@ -712,18 +749,20 @@ void UpgradeMenuObject::Navigation()
 	{
 		for (int i = 0; i < 3; i++) //three rows currently
 		{
-			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're already at the top
+			if ((m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
 			{
-				m_yArray[0] = 1;
-				break;
-			}
-			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
-			{
-				int x = 0;
-				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side, jump to left, continue scrolling
+				if ((m_xArray[1] == 1) && (m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side top, jump to left, continue scrolling
 				{
 					m_xArray[0] = 1;
 					m_xArray[1] = 0;
+					m_yArray[0] = 0;
+					m_yArray[1] = 0;
+					m_yArray[2] = 1;
+				}
+				if ((m_xArray[0] == 1) && (m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're left side top, jump to right bottom, continue scrolling
+				{
+					m_xArray[0] = 0;
+					m_xArray[1] = 1;
 					m_yArray[0] = 0;
 					m_yArray[1] = 0;
 					m_yArray[2] = 1;
@@ -737,11 +776,20 @@ void UpgradeMenuObject::Navigation()
 			}
 			else if ((m_yArray[i] == 1) && ((Input::GetLeftStickY() < -abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down
 			{
-				if ((m_yArray[2] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom, jump to right side, continue scrolling there
+				if ((m_yArray[2] == 1) && (m_xArray[0] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom left, jump to right side, continue scrolling there
 				{
-					m_yArray[2] = 1;
-					m_xArray[0] = 1;
-					m_xArray[1] = 1;
+					m_yArray[0] = 1; //set
+					m_yArray[2] = 0; //reset 
+					m_xArray[0] = 0; //reset
+					m_xArray[1] = 1; //set
+					break;
+				}
+				if ((m_yArray[2] == 1) && (m_xArray[1] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom left, jump to right side, continue scrolling there
+				{
+					m_yArray[0] = 1; //set
+					m_yArray[2] = 0; //reset 
+					m_xArray[0] = 1; //reset
+					m_xArray[1] = 0; //set
 					break;
 				}
 				else //Player wants to go down, we're already left side
@@ -761,9 +809,6 @@ void UpgradeMenuObject::Navigation()
 			{
 				m_xArray[0] = 1;
 				m_xArray[1] = 0;
-				m_yArray[0] = 1;
-				m_yArray[1] = 0;
-				m_yArray[2] = 0;
 			}
 		}
 		m_delay = 0.3f;
@@ -783,9 +828,11 @@ void UpgradeMenuObject::SetSelectedObject()
 			if (i == 2)
 				m_resourceIcon->SetHovering(true);
 
-			m_shieldIcon->SetHovering(false);		//Needs to change if more icons are added in column 2
+			m_shieldIcon->SetHovering(false);
+			m_repairIcon->SetHovering(false);
+			m_plunderIcon->SetHovering(false);
 		}
-		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1))
+		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1)) //Left side is selected, remove highlights
 		{
 			if (i == 0)
 				m_cannonIcon->SetHovering(false);
@@ -795,12 +842,27 @@ void UpgradeMenuObject::SetSelectedObject()
 				m_resourceIcon->SetHovering(false);
 			m_shieldIcon->SetHovering(false);
 		}
-		if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
+		else if (m_xArray[1] == 1 && m_yArray[i] == 1) //Right side is selected, set highlights
 		{
-			m_shieldIcon->SetHovering(true);
+			if (i == 0)
+				m_shieldIcon->SetHovering(true);
+			if (i == 1)
+				m_repairIcon->SetHovering(true);
+			if (i == 2)
+				m_plunderIcon->SetHovering(true);
+		}
+		else if ((m_yArray[i] == 0) && (m_xArray[1] == 1)) //Right side selected, remove highlights
+		{
+			if (i == 0)
+				m_shieldIcon->SetHovering(false);
+			if (i == 1)
+				m_repairIcon->SetHovering(false);
+			if (i == 2)
+				m_plunderIcon->SetHovering(false);
 			m_cannonIcon->SetHovering(false);
 			m_movementIcon->SetHovering(false);
 			m_resourceIcon->SetHovering(false);
 		}
 	}
 }
+
