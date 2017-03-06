@@ -4,7 +4,7 @@ unsigned int ShipStats::s_currentLevel;
 
 ShipStats::ShipStats()
 {
-	m_currentGold = 300;
+	m_currentGold = 1000;
 	m_cannonDamage = 5;
 	//m_cannonSpread; //Add later
 	//m_cannonQuantity; //Add later
@@ -14,7 +14,7 @@ ShipStats::ShipStats()
 	m_shieldAmount = 0;
 	m_healthAmount = 1;
 	m_placeHolderHealthAmount = 1;
-	m_plunderSpeed = 0.5f;
+	m_plunderSpeed = 30;
 	s_currentLevel = 1;
 }
 
@@ -123,8 +123,8 @@ void ShipStats::RepairHealth(float talentAmount)
 void ShipStats::IncreasePlunderSpeed(float talentAmount)
 {
 	if (talentAmount == 5)
-		m_plunderSpeed = 15;
+		m_plunderSpeed = 250;
 	else
-		m_plunderSpeed = 5 + (1.25f * talentAmount);
+		m_plunderSpeed = 30 + (30 * talentAmount); //30, 60, 90, 120, 150
 	LOG("Plunder speed: " + std::to_string(m_plunderSpeed));
 }

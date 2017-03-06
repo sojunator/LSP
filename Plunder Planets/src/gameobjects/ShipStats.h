@@ -1,5 +1,5 @@
 #pragma once
-#include <Thomas.h>
+#include "Thomas.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
 //#include"../src/PlayerStats.h"
 
@@ -24,7 +24,6 @@ public:
 	float GetPlunderSpeed();
 
 	void IncreaseCannonDamage(float talentAmount);
-	//void IncreaseCannonSpread();
 	//void IncreaseCannonQuantity();
 	void IncreaseSpeed(float talentAmount);
 	void DecreaseCosts(float talentAmount);
