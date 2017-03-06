@@ -120,7 +120,6 @@ public:
 		m_emitterSpark->SetSpread(2.44f);
 		m_emitterSpark->SetEmissionRate(900);
 		m_emitterSpark->SetEmissionDuration(0.7f);
-		m_emitterSpark->AddToDebugMenu();
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
@@ -141,7 +140,6 @@ public:
 		m_emitterSmoke->SetSpread(1.84f);
 		m_emitterSmoke->SetEmissionRate(600);
 		m_emitterSmoke->SetEmissionDuration(1.0f);
-		m_emitterSmoke->AddToDebugMenu();
 
 		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
 		m_frustumCullingComponent->SetRadius(15);

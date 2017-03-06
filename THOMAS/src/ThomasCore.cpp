@@ -18,6 +18,8 @@
 #include <atlconv.h>
 #include "utils/d3d.h"
 #include "graphics\ParticleSystem.h"
+#include "Scene.h"
+
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
 	ID3D11Device* ThomasCore::s_device;
@@ -69,10 +71,8 @@ namespace thomas {
 
 		utils::DebugTools::Init();
 
-
 		graphics::ParticleSystem::Init();
 		
-
 		return s_initialized;
 	}
 

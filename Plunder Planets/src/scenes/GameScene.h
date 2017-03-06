@@ -23,7 +23,7 @@ public:
 	GameScene() : Scene("GameScene")
 	{
 		//Init shaders
-
+		
 		LoadShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/phong.hlsl");
 		LoadShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/oceanShader.hlsl");
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
@@ -39,7 +39,7 @@ public:
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
 		
-		//Init models
+		//Init models		
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("testModel0", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("testModel1", "../res/models/Boat/ship1fbx.fbx", "phongMaterial");
@@ -47,9 +47,8 @@ public:
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
 		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
-
 		
-
+		
 		//Init 2D-images for GUI
 		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 		{
@@ -103,10 +102,9 @@ public:
 		LoadObject<OceanFloor>();
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		//LoadObject<PhysicsObject>();
-
+		
 	};
 	
-
 private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;

@@ -29,7 +29,6 @@ namespace thomas
 			ParticleSystem();
 			~ParticleSystem();
 
-			
 			static void CreateBillboardUAVandSRV(int maxAmountOfParticles, ID3D11Buffer*& buffer, ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv);
 			static void Init();
 			static void Destroy();

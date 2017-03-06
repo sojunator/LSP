@@ -16,6 +16,7 @@ namespace thomas
 			SpriteComponent::SpriteComponent() : Component("SpriteComponent")
 			{
 				m_interactable = false;
+				m_hovering = false;
 			}
 
 			math::Vector2 SpriteComponent::GetPosition()

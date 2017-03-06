@@ -105,20 +105,20 @@ void MainMenuObject::Update()
 		}
 			
 	}
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter))
 	{
 		if (m_startButton->isHovering())
 		{
 			Scene::LoadScene<UpgradeScene>();
 		}
 
-		if (m_highScoreButton->isHovering())
+		else if (m_highScoreButton->isHovering())
 		{
 			Scene::LoadScene<HighscoreScene>();
 		}
 
 		//Highscore
-		if (m_exitButton->isHovering())
+		else if (m_exitButton->isHovering())
 			ThomasCore::Exit();
 	}
 

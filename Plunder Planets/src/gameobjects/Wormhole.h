@@ -160,7 +160,6 @@ public:
 		if (other->m_gameObject->GetType() == "Ship")
 		{
 			LOG("End the scene");
-			thomas::Scene::UnloadScene();
 			Scene::LoadScene<UpgradeScene>();
 		}
 	}

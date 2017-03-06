@@ -97,6 +97,7 @@ namespace thomas
 			{
 				SAFE_RELEASE(m_d3dData.particleBuffer1);
 				SAFE_RELEASE(m_d3dData.particleBuffer2);
+				SAFE_RELEASE(m_d3dData.particleBuffer);
 				SAFE_RELEASE(m_d3dData.particleUAV1);
 				SAFE_RELEASE(m_d3dData.particleUAV2);
 				SAFE_RELEASE(m_d3dData.particleSRV1);

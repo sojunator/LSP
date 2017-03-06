@@ -34,7 +34,11 @@ namespace thomas
 		graphics::Shader::Destroy(s_currentScene);
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
+		//graphics::Sprite::Destroy();
+		//graphics::TextRender::Destroy();
 		object::Object::Destroy(s_currentScene);
+		object::Object::Clean();
+		object::Object::Destroy();
 		delete s_currentScene;
 		s_currentScene = nullptr;
 	}
@@ -44,15 +48,21 @@ namespace thomas
 		graphics::Renderer::RenderSetup(NULL);
 		if (s_currentScene)
 		{
+			char name = s_currentScene->GetName().at(0);
+			std::vector<object::Object*> objects = object::Object::GetAllObjectsInScene(s_currentScene);
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
 					object->Update();
+				if (name != s_currentScene->GetName().at(0))
+					break;
 			}
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
 					object->LateUpdate();
+				if (name != s_currentScene->GetName().at(0))
+					break;
 			}
 
 		}
@@ -93,7 +103,7 @@ namespace thomas
 		std::vector<object::component::RenderComponent*> renderComponents = GetAllRenderComponents();
 
 		utils::FrustumCulling::GenerateClippingPlanes(camera);
-		
+
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
@@ -123,7 +133,7 @@ namespace thomas
 								}
 							}
 						}
-					}	
+					}
 				}
 			}
 			shader->Unbind();
@@ -167,7 +177,7 @@ namespace thomas
 			graphics::Renderer::UnbindDepthBufferTexture();
 			graphics::Renderer::UnBindGameObjectBuffer();
 		}
-
+		
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 

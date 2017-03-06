@@ -434,7 +434,9 @@ void UpgradeMenuObject::Update()
 		ThomasCore::Exit();
 
 	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
-		Scene::LoadScene<GameScene>();
+	{
+		Scene::LoadScene<GameScene>();		
+	}
 }
 
 

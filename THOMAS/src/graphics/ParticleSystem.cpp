@@ -9,12 +9,8 @@ namespace thomas
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
 
-		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
-
 		Shader* ParticleSystem::s_updateParticlesCS;
 		Shader* ParticleSystem::s_emitParticlesCS;
-		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
-		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
 
 		ID3D11UnorderedAccessView* ParticleSystem::s_activeParticleUAV; //ping
 		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV; //pong
@@ -120,7 +116,7 @@ namespace thomas
 		void ParticleSystem::SpawnParticles(object::component::ParticleEmitterComponent * emitter, int amountOfParticles)
 		{
 			object::component::ParticleEmitterComponent::D3DData* emitterD3D = emitter->GetD3DData();
-			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
+			
 			s_emitParticlesCS->Bind();
 			s_emitParticlesCS->BindBuffer(emitterD3D->particleBuffer, 0);
 			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 0);
@@ -157,8 +153,6 @@ namespace thomas
 
 		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter)
 		{
-
-
 			UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
 			UpdateParticles(emitter);
 
