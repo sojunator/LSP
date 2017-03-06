@@ -34,6 +34,9 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent3 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent4 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent5 = AddComponent<component::SpriteComponent>();
+	m_repairIcon = AddComponent<component::SpriteComponent>();
+	m_repairCost = AddComponent<component::SpriteComponent>();
+	m_repairTalent1 = AddComponent<component::SpriteComponent>();
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
@@ -286,6 +289,32 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent5->SetInteractable(false);
+
+	//Create Repair sprites
+	m_repairIcon->SetName("RepairIcon");
+	m_repairIcon->SetPositionX(1720);
+	m_repairIcon->SetPositionY(425);
+	m_repairIcon->SetScale(math::Vector2(1.0f, 1.0f));
+	m_repairIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_repairIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_repairIcon->SetInteractable(true);
+
+	m_repairCost->SetName("RepairCost");
+	m_repairCost->SetPositionX(1720);
+	m_repairCost->SetPositionY(375);
+	m_repairCost->SetScale(math::Vector2(1.0f, 1.0f));
+	m_repairCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_repairCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_repairCost->SetInteractable(false);
+
+	m_repairTalent1->SetName("RepairTalent1");
+	m_repairTalent1->SetPositionX(1600);
+	m_repairTalent1->SetPositionY(450);
+	m_repairTalent1->SetScale(math::Vector2(2.0f, 2.0f));
+	m_repairTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_repairTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_repairTalent1->SetInteractable(false);
+
 
 	m_exitButton->SetName("UpgradeMenuExit");
 	m_exitButton->SetPositionX(50);
@@ -601,13 +630,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[0] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[0] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(0);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[0] && !m_shieldCheck[1] || (undo && !m_shieldCheck[2]))
@@ -616,13 +645,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[1] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[1] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[1] && !m_shieldCheck[2] || (undo && !m_shieldCheck[3]))
@@ -631,13 +660,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[2] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[2] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[2] && !m_shieldCheck[3] || (undo && !m_shieldCheck[4]))
@@ -646,13 +675,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[3] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[3] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[3] || (undo && m_shieldCheck[4]))
@@ -661,13 +690,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[4] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(5);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[4] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Undo last shield upgrade
 			}
 		}
 	}

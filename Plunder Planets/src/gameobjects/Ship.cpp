@@ -229,7 +229,7 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 		math::Vector3 forward = m_transform->Forward();
 		m_moving = true;
 		forward.y = 0;
-		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2 * m_speed*m_rigidBody->GetMass()));
+		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 1.5 * m_speed*m_rigidBody->GetMass()));
 		float turnDelta = -Input::GetLeftStickY();
 
 		/*m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));

@@ -65,6 +65,9 @@ private:
 	component::SpriteComponent* m_shieldTalent3;
 	component::SpriteComponent* m_shieldTalent4;
 	component::SpriteComponent* m_shieldTalent5;
+	component::SpriteComponent* m_repairIcon;
+	component::SpriteComponent* m_repairCost;
+	component::SpriteComponent* m_repairTalent1;
 	component::SpriteComponent* m_exitButton;
 	component::SoundComponent* m_music;
 
@@ -73,6 +76,7 @@ private:
 	bool m_movementCheck[5] = { false };
 	bool m_resourceCheck[5] = { false };
 	bool m_shieldCheck[5] = { false };
+	bool m_repairCheck[5] = { false };
 
 	int m_yArray[3] = { 1, 0, 0 };	//3 rows
 	int m_xArray[2] = { 1, 0 };		//2 columns
