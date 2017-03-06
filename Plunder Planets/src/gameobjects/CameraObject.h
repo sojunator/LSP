@@ -114,10 +114,11 @@ public:
 		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_text->SetRotation(0.0f);
 		m_text->SetScale(1.0f);
-		m_text->SetPositionX(Window::GetWidth() / 2.f);
-		m_text->SetPositionY(Window::GetHeight() / 21.5f);
+		m_text->SetPositionX((Window::GetWidth() / 2.f) - 210);
+		m_text->SetPositionY(10);
 		m_text->SetDropshadow(true);
 		m_text->SetOutline(true);
+		m_text->SetOrigin(false);
 
 		//Gold font
 		m_gold->SetFont("Name");
@@ -125,17 +126,19 @@ public:
 		m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
 		m_gold->SetRotation(0.0f);
 		m_gold->SetScale(1.0f);
+		m_gold->SetPositionX(250);
 
-		if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
+	/*	if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
 			m_gold->SetPositionX(Window::GetWidth() / 6.4f);
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 			m_gold->SetPositionX(Window::GetWidth() / 7.2f);
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
-			m_gold->SetPositionX(Window::GetWidth() / 6.5f);
+			m_gold->SetPositionX(Window::GetWidth() / 6.5f);*/
 
-		m_gold->SetPositionY(Window::GetHeight() / 21.5f);
+		m_gold->SetPositionY(20);
 		m_gold->SetDropshadow(true);
 		m_gold->SetOutline(true);
+		m_gold->SetOrigin(false);
 
 		m_transform->SetPosition(0, 1, 3);
 	};
@@ -201,25 +204,25 @@ public:
 		{
 			if (Input::GetKey(Input::Keys::A))
 			{
-				m_transform->Translate(-m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::D))
 			{
-				m_transform->Translate(m_transform->Right()*m_flySpeed*Time::GetDeltaTime());
+				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::W))
 			{
-				m_transform->Translate(m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::S))
 			{
-				m_transform->Translate(-m_transform->Forward()*m_flySpeed*Time::GetDeltaTime());
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
 			}
 		}
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*Time::GetDeltaTime();
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);

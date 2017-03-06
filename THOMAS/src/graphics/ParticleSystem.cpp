@@ -81,7 +81,7 @@ namespace thomas
 		{
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
-			s_cameraBufferStruct.deltaTime = Time::GetDeltaTime();
+			s_cameraBufferStruct.deltaTime = ThomasTime::GetDeltaTime();
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
 

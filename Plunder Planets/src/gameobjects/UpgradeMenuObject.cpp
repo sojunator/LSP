@@ -3,8 +3,7 @@
 #include "ShipStats.h"
 void UpgradeMenuObject::Start()
 {
-	AddComponent<component::Camera>();
-	m_backgrounds = AddComponent<component::SpriteComponent>();
+	component::Camera* cam = AddComponent<component::Camera>();
 	m_header = AddComponent<component::SpriteComponent>();
 	m_startButton = AddComponent<component::SpriteComponent>();
 	m_cannonIcon = AddComponent<component::SpriteComponent>();
@@ -37,6 +36,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent5 = AddComponent<component::SpriteComponent>();
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
+	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
@@ -295,17 +295,23 @@ void UpgradeMenuObject::Start()
 	m_exitButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_exitButton->SetInteractable(true);
 
-	m_backgrounds->SetName("UpgradeMenuBackground");
-	m_backgrounds->SetPositionX(0);
-	m_backgrounds->SetPositionY(0);
-	m_backgrounds->SetScale(math::Vector2(1.0f, 1.0f));
-	m_backgrounds->SetColor(math::Color(1.0f, 1.0f, 1.0f));
+
+	m_wormhole->SetTexture("../res/textures/wormhole.png");
+	m_wormhole->SetLooping(true);
+	m_wormhole->SetSpeed(0);
+	m_wormhole->SetLifeTime(72.0);
+	m_wormhole->SetEmissionRate(1.0f / 72.0);
+	m_wormhole->SetSize(65);
+	m_wormhole->SetRotationSpeed(math::DegreesToRadians(5));
+	m_wormhole->SetOffset(cam->m_gameObject->m_transform->Forward() * 50);
+	m_wormhole->StartEmitting();
+
 }
 
 
 void UpgradeMenuObject::Update()
 {
-	m_delay = m_delay - Time::GetDeltaTime();
+	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	
 	SetSelectedObject();
 	

@@ -73,8 +73,8 @@ public:
 		m_ai = AddComponent<AI>();
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(90)), m_transform, m_scene);
+		m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 8, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(270)), m_transform, m_scene);
 
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
@@ -92,6 +92,7 @@ public:
 		//Sound
 		m_health = 20;
 		m_dead = false;
+		m_deathTime = 10;
 		//Movement
 		m_speed = m_shipStats->GetSpeed();
 		m_turnSpeed = 150;
@@ -101,34 +102,50 @@ public:
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSpark->SetTexture("../res/textures/spark.png");
+		m_emitterSpark->SetTexture("../res/textures/fire.png");
 		m_emitterSpark->SetShader("particleShader");
-		m_emitterSpark->SetDirection(math::Vector3(0, 0, 1));
+		m_emitterSpark->SetDirection(math::Vector3(0, 1, 0));
+		m_emitterSpark->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_emitterSpark->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
 		m_emitterSpark->SetMaxDelay(0.0f);
 		m_emitterSpark->SetMinDelay(0.0f);
-		m_emitterSpark->SetMaxSpeed(20.0f);
-		m_emitterSpark->SetMinSpeed(12.0f);
-		m_emitterSpark->SetMaxSize(2.0f);
-		m_emitterSpark->SetMinSize(1.0f);
-		m_emitterSpark->SetMaxLifeTime(0.5f);
-		m_emitterSpark->SetMinLifeTime(0.3f);
-		m_emitterSpark->SetSpread(0.71f);
+		m_emitterSpark->SetMaxSpeed(16.0f);
+		m_emitterSpark->SetMinSpeed(10.0f);
+		m_emitterSpark->SetMaxSize(3.4f);
+		m_emitterSpark->SetMinSize(2.4f);
+		m_emitterSpark->SetEndSize(0.4f);
+		m_emitterSpark->SetMaxLifeTime(1.85f);
+		m_emitterSpark->SetMinLifeTime(0.7f);
+		m_emitterSpark->SetRotationSpeed(1.0f);
+		m_emitterSpark->SetSpread(2.44f);
+		m_emitterSpark->SetEmissionRate(900);
+		m_emitterSpark->SetEmissionDuration(0.7f);
+		m_emitterSpark->AddToDebugMenu();
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
 		m_emitterSmoke->SetShader("particleShader");
 		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
-		m_emitterSmoke->SetMaxDelay(2.45f);
+		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
+		m_emitterSmoke->SetMaxDelay(0.75f);
 		m_emitterSmoke->SetMinDelay(0.15f);
-		m_emitterSmoke->SetMaxSpeed(9.0f);
-		m_emitterSmoke->SetMinSpeed(6.0f);
-		m_emitterSmoke->SetMaxSize(3.2f);
-		m_emitterSmoke->SetMinSize(2.4f);
-		m_emitterSmoke->SetMaxLifeTime(3.55f);
-		m_emitterSmoke->SetMinLifeTime(2.4f);
-		m_emitterSmoke->SetSpread(0.8f);
+		m_emitterSmoke->SetMaxSpeed(8.0f);
+		m_emitterSmoke->SetMinSpeed(4.0f);
+		m_emitterSmoke->SetMaxSize(2.1f);
+		m_emitterSmoke->SetMinSize(1.4f);
+		m_emitterSmoke->SetEndSize(3.4f);
+		m_emitterSmoke->SetMaxLifeTime(5.85f);
+		m_emitterSmoke->SetMinLifeTime(2.7f);
+		m_emitterSmoke->SetRotationSpeed(2.4f);
+		m_emitterSmoke->SetSpread(1.84f);
+		m_emitterSmoke->SetEmissionRate(600);
+		m_emitterSmoke->SetEmissionDuration(1.0f);
+		m_emitterSmoke->AddToDebugMenu();
 
-		
+		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
+		m_frustumCullingComponent->SetRadius(15);
+		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
 	}
 
 
@@ -254,12 +271,13 @@ public:
 
 	void Update()
 	{
-		float const dt = Time::GetDeltaTime();
+		float const dt = ThomasTime::GetDeltaTime();
 
 		if (m_dead)
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
-			if (m_transform->GetPosition().y < -10)
+			m_deathTime -= dt;
+			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 				Destroy(this);
 			return;
 		}
@@ -267,8 +285,12 @@ public:
 		m_moving = false;
 		m_ai->Escape();
 		m_ai->IdleTimer();
-		m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
-		m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		if (m_ai->HasTarget())
+		{
+			m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
+			m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
+		}
+		
 
 		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
 		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Right() * 30));	//Check island right
@@ -308,7 +330,8 @@ public:
 	}
 
 private:
-	
+
+	float m_deathTime;
 	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
@@ -325,6 +348,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;
+	component::FrustumCullingComponent* m_frustumCullingComponent;
 	AI* m_ai;
 
 	//Ship
@@ -335,6 +359,8 @@ private:
 	float m_turnSpeed;
 	int m_turnDir;
 	int m_shootDir;
+
+
 
 	math::Vector3 m_newForwardVec;
 

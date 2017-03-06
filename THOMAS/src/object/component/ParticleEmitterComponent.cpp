@@ -1,7 +1,9 @@
 #include "ParticleEmitterComponent.h"
 #include <cstdlib>
 #include <ctime>
+#include "../GameObject.h"
 
+#include "../../utils/DebugTools.h"
 namespace thomas
 {
 	namespace object
@@ -15,6 +17,7 @@ namespace thomas
 
 			void ParticleEmitterComponent::Start()
 			{
+				m_offset = math::Vector3(0, 0, 0);
 				m_shouldUpdateResources = true;
 				m_emissionDuration = 1.0;
 				m_emissionTimeLeft = m_emissionDuration;
@@ -63,9 +66,9 @@ namespace thomas
 				if (m_isEmitting)
 				{
 					if (!m_looping)
-						m_emissionTimeLeft -= Time::GetDeltaTime();
+						m_emissionTimeLeft -= ThomasTime::GetDeltaTime();
 
-					m_emissionTimer += Time::GetDeltaTime();
+					m_emissionTimer += ThomasTime::GetDeltaTime();
 					UINT numberOfParticlesToEmit = m_emissionTimer / (1.0f / m_emissionRate);
 					if (numberOfParticlesToEmit > 0)
 					{
@@ -76,7 +79,7 @@ namespace thomas
 							m_shouldUpdateResources = false;
 							CreateParticleUAVsandSRVs();
 						}
-						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition();
+						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + m_offset;
 						SetDirection(m_directionVector);
 						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
 						utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
@@ -232,19 +235,43 @@ namespace thomas
 
 			void ParticleEmitterComponent::StartEmitting()
 			{
+				if (!m_isEmitting)
+				{
 				m_isEmitting = true;
 				m_emissionTimeLeft = m_emissionDuration;
+				}
+
 
 			}
 
-			void ParticleEmitterComponent::StopEmitting()
+			void ParticleEmitterComponent::StopEmitting(bool force)
 			{
 				m_isEmitting = false;
+				if (force)
+				{
+					m_particleBufferStruct.currentParticleStartIndex = 0;
+					m_particleBufferStruct.minSize = 0;
+					m_particleBufferStruct.maxSize = 0;
+					m_particleBufferStruct.endSize = 0;
+					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
+					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
+					
+				}
 			}
 
 			bool ParticleEmitterComponent::IsEmitting() const
 			{
 				return m_isEmitting;
+			}
+
+			void ParticleEmitterComponent::SetOffset(math::Vector3 offset)
+			{
+				m_offset = offset;
+			}
+
+			void ParticleEmitterComponent::SetOffset(float x, float y, float z)
+			{
+				SetOffset(math::Vector3(x, y, z));
 			}
 
 

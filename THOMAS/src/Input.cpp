@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "Window.h"
-
+#include "ThomasTime.h"
 namespace thomas
 {
 	std::unique_ptr<DirectX::Keyboard> Input::s_keyboard;
@@ -22,6 +22,8 @@ namespace thomas
 
 	bool Input::s_initialized;
 
+	float Input::s_vibrateTimeLeft = 0;
+
 	bool Input::Init()
 	{
 		s_keyboard = std::make_unique<DirectX::Keyboard>();
@@ -41,12 +43,18 @@ namespace thomas
 		{
 			s_keyboardState = s_keyboard->GetState();
 			s_gamePadState = s_gamePad->GetState(0);
+			
 			s_mouseState = s_mouse->GetState();
+
+			s_vibrateTimeLeft -= ThomasTime::GetDeltaTime();
+			if(s_vibrateTimeLeft < 0.0f)
+				s_gamePad->SetVibration(0, 0, 0);
 
 			s_keyboardTracker.Update(s_keyboardState);
 			s_mouseTracker.Update(s_mouseState);
 			s_gamePadTracker.Update(s_gamePadState);
 			s_mousePosition = math::Vector2(s_mouseState.x, s_mouseState.y);
+			
 			if (s_mousePosition == math::Vector2(0, 0))
 				s_recordPosition = true;
 		}
@@ -258,6 +266,16 @@ namespace thomas
 
 		}
 		return false;
+	}
+
+	void Input::Vibrate(float left, float right, float time)
+	{
+		if (s_gamePadState.IsConnected()) //Always false if no gamePad.
+		{
+			s_gamePad->SetVibration(0, left, right);
+			s_vibrateTimeLeft = time;
+		}
+			
 	}
 
 	//mouse

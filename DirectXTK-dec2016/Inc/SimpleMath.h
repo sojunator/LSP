@@ -43,7 +43,8 @@ struct Quaternion;
 struct Plane;
 
 
-float DegreesToradians(float degree);
+float DegreesToRadians(float degree);
+float Lerp(float from, float to, float amount);
 
 //------------------------------------------------------------------------------
 // 2D rectangle

@@ -160,7 +160,7 @@ namespace thomas
 
 	float Islands::StealTreasure(int island)
 	{
-		float dt = Time::GetDeltaTime();
+		float dt = ThomasTime::GetDeltaTime();
 		if (m_treasure[island] < m_plunderRate*dt)
 		{
 			float temp = m_treasure[island];

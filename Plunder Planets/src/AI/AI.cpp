@@ -32,6 +32,8 @@ bool AI::Collision(math::Vector3 pos)
 
 int AI::TurnDir(math::Vector3 pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft)
 {
+	if (!HasTarget())
+		return 0;
 	math::Vector3 norFor = forward;
 	norFor.Normalize();
 	math::Vector3 norRight = right;
@@ -148,13 +150,13 @@ void AI::InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir)
 	else if (m_state == Behavior::Attacking || m_state == Behavior::Firing)
 	{
 		m_lastKnownPos = m_playerShip->m_transform->GetPosition();
-		m_escapeTimer += Time::GetDeltaTime();
+		m_escapeTimer += ThomasTime::GetDeltaTime();
 		m_stateStr = "Searching";
 		m_state = Behavior::Searching;
 	}
 	else
 	{
-		m_escapeTimer += Time::GetDeltaTime();
+		m_escapeTimer += ThomasTime::GetDeltaTime();
 	}
 
 }
@@ -167,6 +169,11 @@ void AI::InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3 & dir
 		m_stateStr = "Firing";
 		m_state = Behavior::Firing;
 	}
+}
+
+bool AI::HasTarget()
+{
+	return m_playerShip;
 }
 
 AI::Behavior AI::GetState()
@@ -190,5 +197,5 @@ math::Vector3 AI::GetTargetPos()
 
 void AI::IdleTimer()
 {
-	m_idleTimer += Time::GetDeltaTime();
+	m_idleTimer += ThomasTime::GetDeltaTime();
 }

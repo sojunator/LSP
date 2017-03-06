@@ -18,7 +18,7 @@ namespace thomas
 			static void Destroy();
 			static void RenderText(object::component::TextComponent* text);
 			static void RenderText(std::string name, std::string output, float posX, float posY, float scale, float rotation,
-								   math::Vector3 color, bool dropShadow, bool outline);
+								   math::Vector3 color, bool dropShadow, bool outline, bool origin);
 			static bool LoadFont(std::string name, std::string font);
 			static bool Initialize();
 
@@ -28,6 +28,7 @@ namespace thomas
 			static std::unique_ptr<DirectX::SpriteBatch> s_spriteBatch;
 			static std::unique_ptr<DirectX::CommonStates> s_states;
 			static std::unique_ptr<DirectX::BasicEffect> s_effects;
+			static math::Vector2 s_textOrigin;
 		};
 	}
 }

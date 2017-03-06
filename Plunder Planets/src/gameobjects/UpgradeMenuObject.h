@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #include <Thomas.h>
 #include "ShipStats.h"
@@ -35,6 +34,7 @@ public:
 
 
 private:
+	component::ParticleEmitterComponent* m_wormhole;
 	component::SpriteComponent* m_header;
 	component::SpriteComponent* m_startButton;
 	component::SpriteComponent* m_cannonIcon;
@@ -66,7 +66,6 @@ private:
 	component::SpriteComponent* m_shieldTalent4;
 	component::SpriteComponent* m_shieldTalent5;
 	component::SpriteComponent* m_exitButton;
-	component::SpriteComponent* m_backgrounds;
 	component::SoundComponent* m_music;
 	ShipStats* m_shipStats = ShipStats::s_playerStats;
 

@@ -1,13 +1,15 @@
 #pragma once
 #include "graphics\Renderer.h"
 #include "graphics\ParticleSystem.h"
-//#include "PlayerStats.h"
+#include "utils\FrustumCulling.h"
+
 namespace thomas
 {
 	class THOMAS_API Scene
 	{
 	private:
 		std::vector<object::component::RenderComponent*> GetAllRenderComponents();
+		std::vector<object::component::FrustumCullingComponent*> GetAllFrustrumCullingComponents();
 	public:
 		
 		static void UnloadScene();

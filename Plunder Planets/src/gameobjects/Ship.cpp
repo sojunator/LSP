@@ -38,8 +38,6 @@ void Ship::Start()
 	m_floats[10]->SetMass(0.5*mass);
 	m_floats[11]->SetMass(0.5*mass);
 
-	m_transform->SetPosition(0, 0.5, 0);
-
 	m_renderer = AddComponent<component::RenderComponent>();
 	m_sound = AddComponent<component::SoundComponent>();
 	m_boostSound = AddComponent<component::SoundComponent>();
@@ -48,12 +46,83 @@ void Ship::Start()
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 10, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(90)), m_transform, m_scene);
-	m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 10, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToradians(270)), m_transform, m_scene);
+	m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 10, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(90)), m_transform, m_scene);
+	m_broadSideRight = Instantiate<Broadside>(math::Vector3(6, 10, -2.8), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(270)), m_transform, m_scene);
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
-	m_shipStats = ShipStats::s_playerStats;
+	
+	m_boosterParticlesEmitterLeft1 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterLeft1->SetTexture("../res/textures/fire.png");
+	m_boosterParticlesEmitterLeft1->SetShader("particleShader");
+	m_boosterParticlesEmitterLeft1->SetEmissionRate(2500);
+	m_boosterParticlesEmitterLeft1->SetEmissionDuration(0.1f);
+	m_boosterParticlesEmitterLeft1->SetStartColor(math::Vector4(1.0f, 0.3f, 0.0f, 1.0f));
+	m_boosterParticlesEmitterLeft1->SetEndColor(math::Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+	m_boosterParticlesEmitterLeft1->SetMaxSpeed(20.0f);
+	m_boosterParticlesEmitterLeft1->SetMinSpeed(13.0f);
+	m_boosterParticlesEmitterLeft1->SetMaxSize(0.8f);
+	m_boosterParticlesEmitterLeft1->SetMinSize(0.4f);
+	m_boosterParticlesEmitterLeft1->SetEndSize(0.0f);
+	m_boosterParticlesEmitterLeft1->SetMaxLifeTime(0.25f);
+	m_boosterParticlesEmitterLeft1->SetMinLifeTime(0.15f);
+	m_boosterParticlesEmitterLeft1->SetRotationSpeed(10.0f);
+	m_boosterParticlesEmitterLeft1->SetRadius(2.2f);
+	m_boosterParticlesEmitterLeft1->SpawnAtSphereEdge(true);
+	m_boosterParticlesEmitterLeft1->SetSpread(2.7f);
+
+	m_boosterParticlesEmitterLeft2 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterLeft2->SetTexture("../res/textures/fire2.png");
+	m_boosterParticlesEmitterLeft2->SetShader("particleShader");
+	m_boosterParticlesEmitterLeft2->SetEmissionRate(5000);
+	m_boosterParticlesEmitterLeft2->SetEmissionDuration(0.1f);
+	m_boosterParticlesEmitterLeft2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_boosterParticlesEmitterLeft2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+	m_boosterParticlesEmitterLeft2->SetMaxSpeed(10.0f);
+	m_boosterParticlesEmitterLeft2->SetMinSpeed(6.0f);
+	m_boosterParticlesEmitterLeft2->SetMaxSize(0.6f);
+	m_boosterParticlesEmitterLeft2->SetMinSize(0.3f);
+	m_boosterParticlesEmitterLeft2->SetEndSize(0.0f);
+	m_boosterParticlesEmitterLeft2->SetMaxLifeTime(0.8f);
+	m_boosterParticlesEmitterLeft2->SetMinLifeTime(0.3f);
+	m_boosterParticlesEmitterLeft2->SetRotationSpeed(2.0f);
+	m_boosterParticlesEmitterLeft2->SetSpread(2.5f);
+
+	m_boosterParticlesEmitterRight1 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterRight1->SetTexture("../res/textures/fire.png");
+	m_boosterParticlesEmitterRight1->SetShader("particleShader");
+	m_boosterParticlesEmitterRight1->SetEmissionRate(2500);
+	m_boosterParticlesEmitterRight1->SetEmissionDuration(0.1f);
+	m_boosterParticlesEmitterRight1->SetStartColor(math::Vector4(1.0f, 0.3f, 0.0f, 1.0f));
+	m_boosterParticlesEmitterRight1->SetEndColor(math::Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+	m_boosterParticlesEmitterRight1->SetMaxSpeed(20.0f);
+	m_boosterParticlesEmitterRight1->SetMinSpeed(13.0f);
+	m_boosterParticlesEmitterRight1->SetMaxSize(0.8f);
+	m_boosterParticlesEmitterRight1->SetMinSize(0.4f);
+	m_boosterParticlesEmitterRight1->SetEndSize(0.0f);
+	m_boosterParticlesEmitterRight1->SetMaxLifeTime(0.25f);
+	m_boosterParticlesEmitterRight1->SetMinLifeTime(0.15f);
+	m_boosterParticlesEmitterRight1->SetRotationSpeed(10.0f);
+	m_boosterParticlesEmitterRight1->SetRadius(2.2f);
+	m_boosterParticlesEmitterRight1->SpawnAtSphereEdge(true);
+	m_boosterParticlesEmitterRight1->SetSpread(2.7f);
+
+	m_boosterParticlesEmitterRight2 = AddComponent<component::ParticleEmitterComponent>();
+	m_boosterParticlesEmitterRight2->SetTexture("../res/textures/fire2.png");
+	m_boosterParticlesEmitterRight2->SetShader("particleShader");
+	m_boosterParticlesEmitterRight2->SetEmissionRate(5000);
+	m_boosterParticlesEmitterRight2->SetEmissionDuration(0.1f);
+	m_boosterParticlesEmitterRight2->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_boosterParticlesEmitterRight2->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+	m_boosterParticlesEmitterRight2->SetMaxSpeed(10.0f);
+	m_boosterParticlesEmitterRight2->SetMinSpeed(6.0f);
+	m_boosterParticlesEmitterRight2->SetMaxSize(0.6f);
+	m_boosterParticlesEmitterRight2->SetMinSize(0.3f);
+	m_boosterParticlesEmitterRight2->SetEndSize(0.0f);
+	m_boosterParticlesEmitterRight2->SetMaxLifeTime(0.8f);
+	m_boosterParticlesEmitterRight2->SetMinLifeTime(0.3f);
+	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
+	m_boosterParticlesEmitterRight2->SetSpread(2.5f);
 
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
@@ -61,6 +130,7 @@ void Ship::Start()
 	m_rigidBody->setSleepingThresholds(0.2, 0.5);
 	m_rigidBody->setGravity(btVector3(0, -15, 0));
 	m_treasure = 300;
+
 
 	//model
 	m_modelIndex = 0;
@@ -73,13 +143,13 @@ void Ship::Start()
 	m_soundDelayLeft = 5;
 	//movement
 	m_speed = m_shipStats->GetSpeed();
-	m_turnSpeed = 500;
+	m_turnSpeed = 20;
 	roof = 1.0;
 	m_flyCost = m_shipStats->GetBoostCost();
 
 	//controlls/camera
 	m_controlSensitivity = 0.13f;
-
+	m_startUpSequence = true;
 	m_elevateCamSpeed = 38;
 	m_camZoomSpeed = 45.0f;
 	m_camRotationSpeed = 2.0f;
@@ -92,10 +162,7 @@ void Ship::Start()
 	m_maxHealth = m_health;
 	m_maxArmor = 100;
 
-	m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
-	m_lookAtOffset = math::Vector3(0, 20, 0);
-	m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-	m_cameraObject->m_transform->LookAt(m_lookAtPoint);
+	m_spawnedWormhole = false;
 	m_aiming = false;
 }
 bool Ship::GetFreeCamera()
@@ -112,7 +179,7 @@ void Ship::ShipMove(float const dt)
 		//Remove y part;
 		forward.y = 0;
 		m_moving = true;
-		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*dt*m_rigidBody->GetMass()));
+		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*m_rigidBody->GetMass()));
 	}
 }
 void Ship::ShipRotate(float const dt)
@@ -148,7 +215,7 @@ void Ship::ShipRotate(float const dt)
 	m_rigidBody->activate();
 	if (!m_moving)
 		turnDelta *= 2;
-	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*dt*m_rigidBody->GetMass(), 0));
+	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*m_rigidBody->GetMass(), 0));
 
 	if (abs(turnDelta) > 0.02)
 		m_turning = true;
@@ -161,7 +228,7 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 		math::Vector3 forward = m_transform->Forward();
 		m_moving = true;
 		forward.y = 0;
-		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2 * m_speed*dt*m_rigidBody->GetMass()));
+		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2 * m_speed*m_rigidBody->GetMass()));
 		float turnDelta = -Input::GetLeftStickY();
 
 		/*m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
@@ -179,7 +246,7 @@ void Ship::ShipFireCannons()
 void Ship::Aim(float side, math::Vector2 aimPos)
 {
 	m_aiming = true;
-	CameraZoom(Time::GetDeltaTime());
+	CameraZoom(ThomasTime::GetDeltaTime());
 	math::Vector3 lookAtPoint = math::Vector3(aimPos.x, 0, aimPos.y);
 	//Recalculate look at point and the new distance from cam to ship
 	m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
@@ -202,7 +269,7 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 	posBehindBoat.y = 35;
 	posBehindBoat += (math::Vector3::Up*distToTarget / 8);
 	posBehindBoat += (m_transform->Forward()*distToTarget / 8);
-	posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, Time::GetDeltaTime() * 2);
+	posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, ThomasTime::GetDeltaTime() * 2);
 
 	m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
@@ -211,7 +278,7 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 	math::Vector3 newPos = lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
 
-	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, Time::GetDeltaTime()*2.5);
+	newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, ThomasTime::GetDeltaTime()*2.5);
 }
 
 void Ship::ShipAimCannons()
@@ -230,7 +297,7 @@ void Ship::ShipAimCannons()
 	if (m_aimRight) //RIGHT
 	{
 		float deltaX = Input::GetRightStickY();
-		m_aimDistance += deltaX*Time::GetDeltaTime() * 70;
+		m_aimDistance += deltaX*ThomasTime::GetDeltaTime() * 70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
@@ -249,6 +316,7 @@ void Ship::ShipAimCannons()
 
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
+			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->Fire(); //Temporary fix
 			m_treasure -= m_shipStats->GetCannonCost();
 		}
@@ -258,7 +326,7 @@ void Ship::ShipAimCannons()
 	{
 		float deltaX = Input::GetRightStickY();
 		
-		m_aimDistance += deltaX*Time::GetDeltaTime()*70;
+		m_aimDistance += deltaX*ThomasTime::GetDeltaTime()*70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
 		flatRight.y = 0;
@@ -277,6 +345,7 @@ void Ship::ShipAimCannons()
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
 			m_treasure -= m_shipStats->GetCannonCost();
+			Input::Vibrate(0.5, 0, 0.5);
 			m_broadSideRight->Fire(); //Temporary fix
 		}
 			
@@ -398,18 +467,51 @@ void Ship::Float(float dt)
 
 	bois /= 8;
 	waveHeight /= 8;
-	if (bois.y > waveHeight + roof && waveHeight > -5)
+	if (bois.y > waveHeight + m_roof && waveHeight > -10)
 	{
 		btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
 		float oldY = v.getY();
-		float newY = waveHeight + roof;
+		float newY = waveHeight + m_roof;
 		newY = oldY + dt*4.0 * (newY - oldY);
 		v.setY(newY);
+	}
+	else if (bois.y < waveHeight && m_startUpSequence)
+	{
+		m_roof = 1.0f;
+		m_startUpSequence = false;
+		//m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
+		m_lookAtOffset = math::Vector3(0, 20, 0);
+		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
+		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 	}
 }
 void Ship::Update()
 {
-	float const dt = Time::GetDeltaTime();
+
+
+
+	float const dt = ThomasTime::GetDeltaTime();
+
+
+	if (m_startUpSequence)
+	{
+		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft1->StartEmitting();
+		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft2->StartEmitting();
+		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight1->StartEmitting();
+		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight2->StartEmitting();
+		m_boostSound->Play();
+		Float(dt);
+		return;
+	}
+
 	float right_x = Input::GetRightStickX();
 	float right_y = Input::GetRightStickY();
 	float left_x = Input::GetLeftStickX(); //not used?
@@ -489,12 +591,26 @@ void Ship::Update()
 
 	if (m_flying)
 	{
-		m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+		//Input::Vibrate(0.1, 0.1);
+		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft1->StartEmitting();
+		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterLeft2->StartEmitting();
+		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight1->StartEmitting();
+		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
+		m_boosterParticlesEmitterRight2->StartEmitting();
+		
 		m_boostSound->Play();
 	}
 	else
 	{
-		m_renderer->SetModel("testModel0");
+		//m_renderer->SetModel("testModel0");
 		m_boostSound->Pause();
 	}
 
@@ -505,9 +621,11 @@ void Ship::Update()
 	Float(dt);
 
 
-	if (m_treasure > 500)
+	if (m_treasure > 500 && !m_spawnedWormhole)
 	{
-		((Wormhole*)Find("Wormhole"))->SetActive(true);
+		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,150,0),math::Quaternion::Identity,m_scene);
+		wormhole->SetEndLevel(true);
+		m_spawnedWormhole = true;
 	}
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
