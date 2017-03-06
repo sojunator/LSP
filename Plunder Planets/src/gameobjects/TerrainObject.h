@@ -24,7 +24,7 @@ public:
 		m_sound->SetClip("fPlunder");
 		m_sound->SetLooping(true);
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(6, mat, 512, 1/8.f, 4096, 512);
+		m_islands = new thomas::Islands(20, mat, 512, 1/8.f, 4096, 512);
 		m_model = thomas::graphics::Model::CreateModel("Islands", m_islands->GetIslands(0));
 
 		m_renderer->SetModel("Islands");

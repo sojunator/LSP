@@ -27,7 +27,7 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			tempPlane.push_back(thomas::utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
+			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));	//Changed from sending .z and .x  to .x and .z
 			ApplyOffSet(i, tempPlane[i]);
 			//m_islandCenterWorldPos[i].x -= mapSize / 2;
 			//m_islandCenterWorldPos[i].z += mapSize / 2;
@@ -207,16 +207,10 @@ namespace thomas
 		int attempt = 0;
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
-		/*tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
-		tempOffset.y = 0;
-		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);*/
 
-		//tempOffset.x += 10;
-		//tempOffset.z += 10;
-
-		tempOffset.x = rand() % m_mapSize;
+		tempOffset.x = rand() % m_mapSize - (m_mapSize / 2);
 		tempOffset.y = 0;
-		tempOffset.z = rand() % m_mapSize;
+		tempOffset.z = rand() % m_mapSize - (m_mapSize / 2);
 
 
 		math::Vector3 tempCenter;
@@ -239,11 +233,11 @@ namespace thomas
 				//tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
 				//tempOffset.x += 10;
 				//tempOffset.z += 10;
-				tempOffset.x = rand() % (m_mapSize);
+				tempOffset.x = rand() % m_mapSize - (m_mapSize / 2);
 				tempOffset.y = 0;
-				tempOffset.z = rand() % (m_mapSize);
+				tempOffset.z = rand() % m_mapSize - (m_mapSize / 2);
 
-				tempCenter.x = tempOffset.x - m_size[0] / 2;
+				tempCenter.x = tempOffset.x + m_size[0] / 2;
 				tempCenter.y = 0;
 				tempCenter.z = -tempOffset.z - m_size[0] / 2;
 
