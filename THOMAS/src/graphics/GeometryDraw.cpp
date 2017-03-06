@@ -14,9 +14,9 @@ namespace thomas
 			VertexData a;
 			a.position = math::Vector3(1, 0, 0);
 			a.color = math::Vector3(1, 1, 1);
-			//m_data.push_back(a); //Line start
-			//m_data.push_back(a); //Line end
-			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromStruct(a, D3D11_BIND_VERTEX_BUFFER);
+			for(int i = 0; i < 100; ++i)
+				m_data.push_back(a);
+			m_vertexBuffer = utils::D3d::CreateDynamicBufferFromVector(m_data, D3D11_BIND_VERTEX_BUFFER);
 			m_constantBuffer = utils::D3d::CreateDynamicBufferFromStruct(m_cbData, D3D11_BIND_CONSTANT_BUFFER);
 			m_cbData.worldMatrix = worldMatrix;
 			s_geometry.push_back(this);
@@ -86,13 +86,13 @@ namespace thomas
 				UINT stride = sizeof(VertexData);
 				if (geometry->m_data.size())
 				{
-					utils::D3d::FillDynamicBufferVector(geometry->m_vertexBuffer, geometry->m_data);
+					utils::D3d::FillDynamicBufferVector(geometry->m_vertexBuffer, geometry->m_data); //TODO: for some reason nothing is written to the second position of the vertexbuffer
 
 					UINT offset = 0;
 					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &geometry->m_constantBuffer);
 					ThomasCore::GetDeviceContext()->IASetVertexBuffers(0, 1, &geometry->m_vertexBuffer, &stride, &offset);
 
-					ThomasCore::GetDeviceContext()->Draw(2, 0); 
+					ThomasCore::GetDeviceContext()->Draw(geometry->m_data.size(), 0); 
 					geometry->m_data.clear();
 				}
 

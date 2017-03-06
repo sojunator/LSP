@@ -313,10 +313,10 @@ void Ship::ShipAimCannons()
 			m_broadSideLeft->SetCanonAngle(-angle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			DrawAimArc();
+			DrawAimArc(m_broadSideLeft->m_transform->Forward());
 		}
 
-		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A)|| Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->Fire(); //Temporary fix
@@ -344,9 +344,9 @@ void Ship::ShipAimCannons()
 			m_broadSideRight->SetCanonAngle(-angle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			DrawAimArc();
+			DrawAimArc(m_broadSideRight->m_transform->Forward());
 		}
-		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideRight->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
 			m_treasure -= 50;
 			Input::Vibrate(0.5, 0, 0.5);
@@ -376,23 +376,23 @@ void Ship::ShipAimCannons()
 	//	
 	//}
 }
-void Ship::DrawAimArc()
+void Ship::DrawAimArc(math::Vector3 exitVector)
 {
 	p0 = m_transform->GetPosition(); //boat pos
 	p3 = math::Vector3(m_aimPosition.x, m_aimPosition.y, m_aimPosition.z); //aim pos
 
-	p1 = p0 /*+ exitVector*/; //vector defining starting direction of projectiles
+	p1 = p0 + exitVector; //vector defining starting direction of projectiles
 	p2 = p3 + math::Vector3(0, 1, 0)/* * scalar */;
 	math::Vector3 point, prevPoint = p0;
 	for (int i = 1; i <= 10; ++i)
 	{
 		float f = float(i) / 10.f;
-		/*point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
-		m_arc->DrawLine(prevPoint, point, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));*/
+		point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
+		m_arc->DrawLine(prevPoint, point, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
 		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
-	m_arc->DrawLine(p0, p3, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
+
 }
 void Ship::UpgradeSpeed(float speedIncrease)
 {
