@@ -29,6 +29,7 @@ public:
 	void ResourceCheck(bool upgrade, bool undo);
 	void ShieldCheck(bool upgrade, bool undo);
 	void RepairCheck(bool upgrade, bool undo);
+	void PlunderCheck(bool upgrade, bool undo);
 	void Navigation();
 	void SetSelectedObject();
 

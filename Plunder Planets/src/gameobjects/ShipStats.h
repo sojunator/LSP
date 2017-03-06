@@ -27,6 +27,7 @@ public:
 	//void DecreaseCannonCost();
 	void IncreaseShieldAmount(float talentAmount);
 	static ShipStats* s_playerStats;
+	static unsigned int s_currentLevel;
 private:
 	float m_cannonDamage;
 	float m_cannonSpread;

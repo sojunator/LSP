@@ -43,6 +43,12 @@ public:
 			thomas::graphics::Sprite::LoadTexture("RepairCost", "../res/GUI/upgrade/cost.png");
 			thomas::graphics::Sprite::LoadTexture("RepairTalent1", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderCost", "../res/GUI/upgrade/cost.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent1", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent2", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent3", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent4", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent5", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
 

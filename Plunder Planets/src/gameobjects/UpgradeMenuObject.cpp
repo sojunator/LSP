@@ -43,7 +43,8 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent2 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent3 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent4 = AddComponent<component::SpriteComponent>();
-	m_plunderTalent5 = AddComponent<component::SpriteComponent>(); m_exitButton = AddComponent<component::SpriteComponent>();
+	m_plunderTalent5 = AddComponent<component::SpriteComponent>(); 
+	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 
@@ -329,6 +330,55 @@ void UpgradeMenuObject::Start()
 	m_plunderIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderIcon->SetInteractable(true);
+
+	m_plunderCost->SetName("PlunderCost");
+	m_plunderCost->SetPositionX(1720);
+	m_plunderCost->SetPositionY(600);
+	m_plunderCost->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderCost->SetInteractable(false);
+
+	m_plunderTalent1->SetName("PlunderTalent1");
+	m_plunderTalent1->SetPositionX(1650);
+	m_plunderTalent1->SetPositionY(700);
+	m_plunderTalent1->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent1->SetInteractable(false);
+
+	m_plunderTalent2->SetName("PlunderTalent2");
+	m_plunderTalent2->SetPositionX(1585);
+	m_plunderTalent2->SetPositionY(700);
+	m_plunderTalent2->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent2->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent2->SetInteractable(false);
+
+	m_plunderTalent3->SetName("PlunderTalent3");
+	m_plunderTalent3->SetPositionX(1520);
+	m_plunderTalent3->SetPositionY(700);
+	m_plunderTalent3->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent3->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent3->SetInteractable(false);
+
+	m_plunderTalent4->SetName("PlunderTalent4");
+	m_plunderTalent4->SetPositionX(1455);
+	m_plunderTalent4->SetPositionY(700);
+	m_plunderTalent4->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent4->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent4->SetInteractable(false);
+
+	m_plunderTalent5->SetName("PlunderTalent5");
+	m_plunderTalent5->SetPositionX(1340);
+	m_plunderTalent5->SetPositionY(675);
+	m_plunderTalent5->SetScale(math::Vector2(2.0f, 2.0f));
+	m_plunderTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent5->SetInteractable(false);
+
 
 	m_exitButton->SetName("UpgradeMenuExit");
 	m_exitButton->SetPositionX(50);
@@ -734,7 +784,6 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				//Reset health
 			}
-
 		}
 	}
 }
