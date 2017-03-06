@@ -17,9 +17,9 @@ public:
 
 	void Start()
 	{
-		m_sound = AddComponent<component::SoundComponent>();
+		/*m_sound = AddComponent<component::SoundComponent>();
 		m_sound->SetClip("fPlunder");
-		m_sound->SetLooping(true);
+		m_sound->SetLooping(true);*/
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(20, mat, 1024, 1 / 8.f, 4096);
 		int nrOfIslands = m_islands->GetNrOfIslands();
@@ -77,10 +77,10 @@ public:
 			}
 
 		}
-		if (gotLoot)
+		/*if (gotLoot)
 			m_sound->Play();
 		else
-			m_sound->Pause();
+			m_sound->Pause();*/
 		return treasure;
 	}
 
@@ -102,6 +102,7 @@ public:
 
 private:
 	thomas::Islands* m_islands;
-	component::SoundComponent* m_sound;
+	std::vector<IslandObject*> m_
+	//component::SoundComponent* m_sound;
 
 };

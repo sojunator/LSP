@@ -7,11 +7,12 @@ public:
 	IslandObject() : thomas::object::GameObject("IslandObject")
 	{
 	}
-
 	~IslandObject();
+
+	void PlaceRigidBody();
 
 private:
 	thomas::object::component::RenderComponent* m_renderer;
 	thomas::object::component::SoundComponent* m_sound;
-	thomas::object::component::RigidBodyComponent* m_rigidbody;
+	thomas::object::component::RigidBodyComponent* m_rigidBody;
 };
