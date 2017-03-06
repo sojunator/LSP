@@ -800,11 +800,13 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 			{
 				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_plunderCheck[0] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(1); //Increase plunder speed first time
 			}
 			if (undo)
 			{
 				m_plunderTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_plunderCheck[0] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(0); //Increase plunder speed first time
 			}
 		}
 		else if ((m_plunderCheck[0] && !m_plunderCheck[1]) || (!m_plunderCheck[2] && undo))
@@ -813,11 +815,13 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 			{
 				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_plunderCheck[1] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(2); //Increase plunder speed second time
 			}
 			if (undo)
 			{
 				m_plunderTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_plunderCheck[1] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(1); //Decrease second plunder speed
 			}
 		}
 		else if ((m_plunderCheck[1] && !m_plunderCheck[2]) || (!m_plunderCheck[3] && undo))
@@ -826,11 +830,13 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 			{
 				m_plunderTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_plunderCheck[2] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(3); //Decrease third plunder speed
 			}
 			if (undo)
 			{
 				m_plunderTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_plunderCheck[2] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(2); //Decrease third plunder speed
 			}
 		}
 		else if ((m_plunderCheck[2] && !m_plunderCheck[3]) || (!m_plunderCheck[4] && undo))
@@ -839,11 +845,13 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 			{
 				m_plunderTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_plunderCheck[3] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(4); //Increase plunder speed fourth time
 			}
 			if (undo)
 			{
 				m_plunderTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_plunderCheck[3] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(3); //Decrease fourth plunder speed
 			}
 		}
 		else if ((m_plunderCheck[3] && !m_plunderCheck[4]) || (m_plunderCheck[4] && undo))
@@ -852,11 +860,13 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 			{
 				m_plunderTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_plunderCheck[4] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(5); //Increase plunder speed fifth time
 			}
 			if (undo)
 			{
 				m_plunderTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_plunderCheck[4] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(4); //Decrease fifth plunder speed
 			}
 		}
 	}

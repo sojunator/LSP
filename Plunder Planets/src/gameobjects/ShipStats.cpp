@@ -13,6 +13,7 @@ ShipStats::ShipStats()
 	m_shieldAmount = 0;
 	m_healthAmount = 1;
 	m_placeHolderHealthAmount = 1;
+	m_plunderSpeed = 0.5f;
 	s_currentLevel = 1;
 }
 
@@ -54,6 +55,11 @@ float ShipStats::GetShieldAmount()
 float ShipStats::GetHealthAmount()
 {
 	return m_healthAmount;
+}
+
+float ShipStats::GetPlunderSpeed()
+{
+	return m_plunderSpeed;
 }
 
 void ShipStats::IncreaseCannonDamage(float talentAmount)
@@ -106,4 +112,13 @@ void ShipStats::RepairHealth(float talentAmount)
 	if (talentAmount == 0)
 		m_healthAmount = m_placeHolderHealthAmount;
 	LOG("Health Amount: " + std::to_string(m_healthAmount));
+}
+
+void ShipStats::IncreasePlunderSpeed(float talentAmount)
+{
+	if (talentAmount == 5)
+		m_plunderSpeed = 15;
+	else
+		m_plunderSpeed = 5 + (1.25f * talentAmount);
+	LOG("Plunder speed: " + std::to_string(m_plunderSpeed));
 }

@@ -451,7 +451,7 @@ void Ship::PlunderIsland()
 }
 int Ship::GetTreasure()
 {
-	return m_treasure + 0.5;
+	return m_treasure + 0.5f;
 }
 
 void Ship::Float(float dt)

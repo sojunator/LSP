@@ -20,6 +20,7 @@ public:
 	float GetCannonCost();
 	float GetShieldAmount();
 	float GetHealthAmount();
+	float GetPlunderSpeed();
 
 	void IncreaseCannonDamage(float talentAmount);
 	//void IncreaseCannonSpread();
@@ -28,6 +29,7 @@ public:
 	void DecreaseCosts(float talentAmount);
 	void IncreaseShieldAmount(float talentAmount);
 	void RepairHealth(float talentAmount);
+	void IncreasePlunderSpeed(float talentAmount);
 
 	static ShipStats* s_playerStats;
 	static unsigned int s_currentLevel;
@@ -41,4 +43,5 @@ private:
 	float m_shieldAmount;
 	float m_healthAmount;
 	float m_placeHolderHealthAmount;
+	float m_plunderSpeed;
 };
