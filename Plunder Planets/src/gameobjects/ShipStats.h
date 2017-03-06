@@ -6,12 +6,12 @@
 using namespace thomas;
 using namespace object;
 
-class ShipStats
+static class ShipStats
 {
 private:
 
 public:
-	ShipStats(int shipType);
+	ShipStats();
 	float GetCannonDamage();
 	float GetCannonSpread();
 	float GetCannonQuantity();
@@ -22,12 +22,11 @@ public:
 	void IncreaseCannonDamage(float talentAmount);
 	//void IncreaseCannonSpread();
 	//void IncreaseCannonQuantity();
-	//void IncreaseSpeed();
+	void IncreaseSpeed(float talentAmount);
 	//void DecreaseBoostCost();
 	//void DecreaseCannonCost();
 	//void IncreaseShieldAmount();
 	static ShipStats* s_playerStats;
-
 private:
 	float m_cannonDamage;
 	float m_cannonSpread;

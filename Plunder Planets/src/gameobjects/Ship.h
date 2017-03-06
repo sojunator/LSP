@@ -35,7 +35,6 @@ public:
 	void PlaySounds(float const dt){}
 	void PlunderIsland();
 	int GetTreasure();
-	ShipStats* GetShipStats();
 
 	void Float(float dt);
 
@@ -87,7 +86,6 @@ private:
 	component::SoundComponent* m_sound;
 	component::SoundComponent* m_boostSound;
 	component::RigidBodyComponent* m_rigidBody;
-	ShipStats* m_shipStats;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight2;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;

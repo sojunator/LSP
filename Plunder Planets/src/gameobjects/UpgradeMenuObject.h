@@ -67,7 +67,6 @@ private:
 	component::SpriteComponent* m_shieldTalent5;
 	component::SpriteComponent* m_exitButton;
 	component::SoundComponent* m_music;
-	ShipStats* m_shipStats = ShipStats::s_playerStats;
 
 	//Bool checks for talents
 	bool m_cannonCheck[5] = { false };

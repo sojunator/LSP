@@ -83,9 +83,9 @@ public:
 		{
 			m_hitWater = false;
 		}
-		m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToradians(m_pitch)) * cosf(math::DegreesToradians(m_yaw))+ 
-			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToradians(m_pitch))) + 
-			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToradians(m_pitch)) * sinf(math::DegreesToradians(m_yaw))));
+		m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+ 
+			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToRadians(m_pitch))) + 
+			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw))));
 		m_damageAmount = ShipStats::s_playerStats->GetCannonDamage();
 	}
 
@@ -161,6 +161,5 @@ private:
 	component::ParticleEmitterComponent* m_emitterSplash;
 	std::string m_SFXs[3] = { "fSplash1", "fSplash2", "fSplash3" };
 	WaterObject* m_water;
-	ShipStats* m_shipStats;
 	bool m_hitWater;
 };

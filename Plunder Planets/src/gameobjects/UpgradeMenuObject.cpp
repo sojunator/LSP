@@ -354,13 +354,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[0] = true;
-				m_shipStats->IncreaseCannonDamage(1); //Increase Cannon Dmg/Spread/Quantity first time
+				ShipStats::s_playerStats->IncreaseCannonDamage(1); //Increase Cannon Dmg/Spread/Quantity first time
 			}
 			else if (undo) //Doesn't need an if(undo), could just be else, but more clear what is happening this way
 			{
 				m_cannonTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[0] = false;
-				m_shipStats->IncreaseCannonDamage(0); //Undo first upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(0); //Undo first upgrade
 			}
 		}
 		else if (m_cannonCheck[0] && !m_cannonCheck[1] || (undo && !m_cannonCheck[2]))
@@ -369,13 +369,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[1] = true;
-				m_shipStats->IncreaseCannonDamage(2);//Increase Cannon Dmg/Spread/Quantity second time
+				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Increase Cannon Dmg/Spread/Quantity second time
 			}
 			else if (undo)
 			{
 				m_cannonTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[1] = false;
-				m_shipStats->IncreaseCannonDamage(1);//Undo second upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(1);//Undo second upgrade
 			}
 		}
 		else if (m_cannonCheck[1] && !m_cannonCheck[2] || (undo && !m_cannonCheck[3]))
@@ -384,13 +384,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[2] = true;
-				m_shipStats->IncreaseCannonDamage(3);//Increase Cannon Dmg/Spread/Quantity third time
+				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Increase Cannon Dmg/Spread/Quantity third time
 			}
 			else if (undo)
 			{
 				m_cannonTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[2] = false;
-				m_shipStats->IncreaseCannonDamage(2);//Undo third upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Undo third upgrade
 			}
 		}
 		else if (m_cannonCheck[2] && !m_cannonCheck[3] || (undo && !m_cannonCheck[4]))
@@ -399,13 +399,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[3] = true;
-				m_shipStats->IncreaseCannonDamage(4);//Increase Cannon Dmg/Spread/Quantity fourth time
+				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Increase Cannon Dmg/Spread/Quantity fourth time
 			}
 			else if (undo)
 			{
 				m_cannonTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[3] = false;
-				m_shipStats->IncreaseCannonDamage(3);//Undo fourth upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Undo fourth upgrade
 			}
 		}
 		else if (m_cannonCheck[3] || (undo && m_cannonCheck[4]))
@@ -414,13 +414,14 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[4] = true;
-				m_shipStats->IncreaseCannonDamage(5);//Increase Cannon Dmg/Spread/Quantity fifth time
+				ShipStats::s_playerStats->IncreaseCannonDamage(5);//Increase Cannon Dmg/Spread/Quantity fifth time
+				//Shoot double projectiles
 			}
 			else if (undo)
 			{
 				m_cannonTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[4] = false;
-				m_shipStats->IncreaseCannonDamage(4);//Undo fifth upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Undo fifth upgrade
 			}
 		}
 	}

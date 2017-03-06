@@ -6,6 +6,7 @@ void Ship::Start()
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
 	float mass = 20000;
+
 	//Front
 	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -142,10 +143,10 @@ void Ship::Start()
 	m_soundDelay = 5;
 	m_soundDelayLeft = 5;
 	//movement
-	m_speed = m_shipStats->GetSpeed();
+	m_speed = ShipStats::s_playerStats->GetSpeed();
 	m_turnSpeed = 20;
-	roof = 1.0;
-	m_flyCost = m_shipStats->GetBoostCost();
+	m_roof = 1.0;
+	m_flyCost = ShipStats::s_playerStats->GetBoostCost();
 
 	//controlls/camera
 	m_controlSensitivity = 0.13f;
@@ -158,7 +159,7 @@ void Ship::Start()
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
 	m_health = 100;
-	m_armor = m_shipStats->GetShieldAmount();
+	m_armor = ShipStats::s_playerStats->GetShieldAmount();
 	m_maxHealth = m_health;
 	m_maxArmor = 100;
 
@@ -283,12 +284,12 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 
 void Ship::ShipAimCannons()
 {
-	if (Input::GetButtonDown(Input::Buttons::RB))
+	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKeyDown(Input::Keys::E))
 	{
 		m_aimRight = !m_aimRight;
 		m_aimLeft = false;
 	}
-	else if(Input::GetButtonDown(Input::Buttons::LB))
+	else if(Input::GetButtonDown(Input::Buttons::LB) || Input::GetKeyDown(Input::Keys::Q))
 	{
 		m_aimLeft = !m_aimLeft;
 		m_aimRight = false;
@@ -314,11 +315,11 @@ void Ship::ShipAimCannons()
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 		}
 
-		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideLeft->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->Fire(); //Temporary fix
-			m_treasure -= m_shipStats->GetCannonCost();
+			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 		}
 	}
 
@@ -344,7 +345,7 @@ void Ship::ShipAimCannons()
 		}
 		if (Input::GetButtonDown(Input::Buttons::A) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
-			m_treasure -= m_shipStats->GetCannonCost();
+			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
 			m_broadSideRight->Fire(); //Temporary fix
 		}
@@ -432,10 +433,7 @@ int Ship::GetTreasure()
 {
 	return m_treasure + 0.5;
 }
-ShipStats * Ship::GetShipStats()
-{
-	return m_shipStats;
-}
+
 void Ship::Float(float dt)
 {
 	float waveHeight = 0;

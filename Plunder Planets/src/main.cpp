@@ -33,7 +33,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	Scene* menuScene = Scene::LoadScene<MenuScene>();
 
 	//start
-	ShipStats::s_playerStats = new ShipStats(0); //Set ship stats
+	ShipStats::s_playerStats = new ShipStats();
 	thomas::ThomasCore::Start();
 
 	return (int)msg.wParam;
