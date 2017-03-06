@@ -40,7 +40,9 @@ namespace thomas
 
 				float GetAspectRatio();
 
-				void SetSkybox(std::string path, std::string shaderName);
+				void SetSkybox(std::string path, std::string shaderName, int slot);
+
+				void AddSkybox(std::string path, int slot);
 
 				void BindSkybox();
 				void BindReflection();

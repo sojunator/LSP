@@ -70,6 +70,20 @@ namespace thomas
 			return texture;
 		}
 
+		Texture * Texture::CreateTexture(SamplerState samplerState, int slot, TextureType type, std::string path)
+		{
+			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
+			{
+				if (s_loadedTextures[i]->GetName() == path && s_loadedTextures[i]->GetTextureType() == type)
+					return s_loadedTextures[i];
+			}
+
+			Texture* texture = new Texture(samplerState, slot, type, path);
+			if (texture)
+				s_loadedTextures.push_back(texture);
+			return texture;
+		}
+
 		ID3D11SamplerState * Texture::GetSamplerState(SamplerState samplerState)
 		{
 			ID3D11SamplerState* sampler;
@@ -141,6 +155,11 @@ namespace thomas
 				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, m_resourceSlot);
 				return Shader::GetCurrentBoundShader()->BindResource(m_data.textureView, m_resourceSlot);
 			}
+			else if (m_textureType == TextureType::CUBEMAP)
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindResource(m_data.textureView, m_resourceSlot);
+			}
 			else
 			{
 				Shader::GetCurrentBoundShader()->BindTextureSampler(m_samplerState, (int)m_textureType);
@@ -155,11 +174,35 @@ namespace thomas
 				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, m_resourceSlot);
 				return Shader::GetCurrentBoundShader()->BindResource(NULL, m_resourceSlot);
 			}
+			else if (m_textureType == TextureType::CUBEMAP)
+			{
+				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, m_resourceSlot);
+				return Shader::GetCurrentBoundShader()->BindResource(NULL, m_resourceSlot);
+			}
 			else
 			{
 				Shader::GetCurrentBoundShader()->BindTextureSampler(NULL, (int)m_textureType);
 				return Shader::GetCurrentBoundShader()->BindResource(NULL, (int)m_textureType);
 			}
+		}
+		Texture::Texture(SamplerState samplerState, int slot, TextureType type, std::string path)
+		{
+			m_textureType = type;
+			m_name = path;
+			m_resourceSlot = slot;
+
+			switch (type)
+			{
+			case TextureType::CUBEMAP:
+				m_initialized = utils::D3d::LoadCubeTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+				break;
+			default:
+				m_initialized = utils::D3d::LoadTextureFromFile(ThomasCore::GetDevice(), ThomasCore::GetDeviceContext(), path, m_data.texture, m_data.textureView);
+				break;
+			}
+
+			if (m_initialized)
+				SetTextureSampler(samplerState);
 		}
 		Texture::Texture(int mappingMode, TextureType type, std::string path)
 		{

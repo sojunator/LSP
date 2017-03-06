@@ -1,25 +1,22 @@
 #pragma once
 #include "../utils/Math.h"
 #include "Shader.h"
+#include "Texture.h"
 
 namespace thomas
 {
 	namespace graphics
 	{
-		class Texture;
-		
-
 		class Skybox
 		{
 		private:
 			void SetupBuffers();
 			void CreateRasterizer();
 			void CreateDepthStencilState();
-			void LoadCubeMap(std::string path);
-
 		public:
-			Skybox(std::string path, std::string shaderName);
+			Skybox(std::string path, std::string shaderName, int slot);
 			~Skybox();
+			void LoadCubeMap(std::string path, int slot);
 			bool Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix);
 			bool BindCubemap();
 			bool Unbind();
@@ -38,7 +35,7 @@ namespace thomas
 				ID3D11Buffer* constantBuffer;
 				ID3D11RasterizerState* rasterizerState;
 				ID3D11DepthStencilState* depthStencilState;
-				Texture* texture;
+				std::vector<Texture*> texture;
 				Shader* shader;
 			};
 
@@ -50,6 +47,8 @@ namespace thomas
 				math::Matrix viewMatrix;
 				math::Vector3 camPosition;
 				float paddeo;
+				math::Vector3 random;
+				float padding;
 			};
 
 			std::vector <math::Vector3> vertices =
