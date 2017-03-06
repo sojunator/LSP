@@ -37,9 +37,11 @@ namespace thomas
 		//void UnloadObject(std::string name);
 		static Scene* GetCurrentScene();
 		std::string GetName() { return m_name; }
+		//static void SetStatPointer(PlayerStats* stats);
 	private:
 		static Scene* s_currentScene;
 		static bool s_drawDebugPhysics;
+		//static PlayerStats* s_stats;
 	protected:
 		std::string m_name;
 		Scene(std::string name);

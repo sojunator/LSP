@@ -83,7 +83,7 @@ public:
 
 		float v = 200;
 
-		float g = Physics::s_world->getGravity().getY()*2.5f;
+		float g = Physics::s_world->getGravity().getY();
 
 		float square = (v*v*v*v) - (g*(g*(x*x) + 2 * y*(v*v)));
 
@@ -101,7 +101,7 @@ public:
 
 	void Update()
 	{
-		float dt = Time::GetDeltaTime();
+		float dt = ThomasTime::GetDeltaTime();
 		m_delayLeft -= dt;
 
 	}
@@ -148,6 +148,10 @@ public:
 	float GetYaw()
 	{
 		return m_yaw;
+	}
+	GameObject* GetCannon()
+	{
+		return m_cannons[0];
 	}
 private:
 	float m_delay;

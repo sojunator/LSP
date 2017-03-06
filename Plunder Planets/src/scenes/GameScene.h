@@ -3,6 +3,7 @@
 #include "../../THOMAS/src/object/Object.h"
 #include "../gameobjects/CameraObject.h"
 #include "../gameobjects/Terrain/TerrainObject.h"
+#include "../gameobjects/Terrain/IslandObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
 #include "../gameobjects/OceanFloor.h"
@@ -111,7 +112,7 @@ private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	Ship* m_ship;
-	std::vector<Enemy*> m_enemyShip;
+	//std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
 	float test = 0.0f;

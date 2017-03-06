@@ -2,6 +2,7 @@
 
 #include "Thomas.h"
 #include "CameraObject.h"
+#include "../scenes/UpgradeScene.h"
 using namespace thomas;
 using namespace object;
 class Wormhole : public GameObject
@@ -36,7 +37,7 @@ public:
 		LOG(m_transform->GetPosition().y);
 		m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 		m_wormholeParticles = AddComponent<component::ParticleEmitterComponent>();
-		
+
 		m_wormhole->SetTexture("../res/textures/wormhole.png");
 		m_wormhole->SetRotationSpeed(math::DegreesToRadians(180));
 		m_wormhole->SetLifeTime(2);
@@ -78,7 +79,7 @@ public:
 	{
 		if (!m_spawned)
 		{
-			m_time += Time::GetDeltaTime();
+			m_time += ThomasTime::GetDeltaTime();
 			m_camera->m_transform->SetPosition(m_transform->GetPosition() + math::Vector3(200, 20, 0));
 			m_camera->m_transform->LookAt(m_transform->GetPosition());
 		}
@@ -119,7 +120,7 @@ public:
 
 	void EndLevel()
 	{
-		m_time += Time::GetDeltaTime();
+		m_time += ThomasTime::GetDeltaTime();
 		if (m_time < 5.0)
 		{	
 			Input::Vibrate(1, 1);
@@ -136,13 +137,17 @@ public:
 				m_wormhole->SetLifeTime(18);
 				m_wormhole->SetEmissionRate(1.0f / 18.0f);
 				m_wormholeParticles->StartEmitting();
+				m_rigidBody = AddComponent<component::RigidBodyComponent>();
+				m_rigidBody->setCollisionShape(new btBoxShape(btVector3(45.0f, 45.0f, 0.0f)));
+				m_rigidBody->SetKinematic(true);
+				m_rigidBody->setCollisionFlags(m_rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 				m_spawned = true;
 				m_spawning = false;
 			}
 		}
 	}
 
-	void LateUpdate()
+	void Update()
 	{
 		if (m_endLevel)
 			EndLevel();
@@ -150,6 +155,15 @@ public:
 			StartLevel();
 	}
 
+	void OnCollision(component::RigidBodyComponent* other)
+	{
+		if (other->m_gameObject->GetType() == "Ship")
+		{
+			LOG("End the scene");
+			thomas::Scene::UnloadScene();
+			Scene::LoadScene<UpgradeScene>();
+		}
+	}
 
 	void SetEndLevel(bool state)
 	{
@@ -166,4 +180,5 @@ private:
 	CameraObject* m_camera;
 	component::ParticleEmitterComponent* m_wormhole;
 	component::ParticleEmitterComponent* m_wormholeParticles;
+	component::RigidBodyComponent*		 m_rigidBody;
 };

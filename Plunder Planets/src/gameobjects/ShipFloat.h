@@ -69,9 +69,9 @@ public:
 				rb->setDamping(0.3, 0.3);
 			}
 			
-			rb->applyImpulse(force*Time::GetDeltaTime(), *(btVector3*)&pos);
+			rb->applyImpulse(force*ThomasTime::GetDeltaTime(), *(btVector3*)&pos);
 			if(!moving)
-				rb->applyDamping(Time::GetDeltaTime());
+				rb->applyDamping(ThomasTime::GetDeltaTime());
 		}
 		
 		return deltaWater;

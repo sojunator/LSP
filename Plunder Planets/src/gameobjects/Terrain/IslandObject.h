@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Thomas.h"
+#include <Thomas.h>
 
 class IslandObject : public GameObject
 {

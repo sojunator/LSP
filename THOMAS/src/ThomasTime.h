@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include <Windows.h>
+#include <ctime>
 
 /**
 *Time calss, holds delta time(DT), FPS and timescale.
@@ -9,7 +10,7 @@
 
 namespace thomas
 {
-	class THOMAS_API Time
+	class THOMAS_API ThomasTime
 	{
 	private:
 		static double GetElapsedTime();

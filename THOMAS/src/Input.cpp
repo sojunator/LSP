@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "Window.h"
-#include "Time.h"
+#include "ThomasTime.h"
 namespace thomas
 {
 	std::unique_ptr<DirectX::Keyboard> Input::s_keyboard;
@@ -46,7 +46,7 @@ namespace thomas
 			
 			s_mouseState = s_mouse->GetState();
 
-			s_vibrateTimeLeft -= Time::GetDeltaTime();
+			s_vibrateTimeLeft -= ThomasTime::GetDeltaTime();
 			if(s_vibrateTimeLeft < 0.0f)
 				s_gamePad->SetVibration(0, 0, 0);
 

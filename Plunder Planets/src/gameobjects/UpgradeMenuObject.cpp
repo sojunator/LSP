@@ -1,5 +1,6 @@
 #include "UpgradeMenuObject.h"
 #include "../scenes/GameScene.h"
+#include "ShipStats.h"
 void UpgradeMenuObject::Start()
 {
 	component::Camera* cam = AddComponent<component::Camera>();
@@ -33,6 +34,16 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent3 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent4 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent5 = AddComponent<component::SpriteComponent>();
+	m_repairIcon = AddComponent<component::SpriteComponent>();
+	m_repairCost = AddComponent<component::SpriteComponent>();
+	m_repairTalent1 = AddComponent<component::SpriteComponent>();
+	m_plunderIcon = AddComponent<component::SpriteComponent>();
+	m_plunderCost = AddComponent<component::SpriteComponent>();
+	m_plunderTalent1 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent2 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent3 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent4 = AddComponent<component::SpriteComponent>();
+	m_plunderTalent5 = AddComponent<component::SpriteComponent>(); 
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
@@ -286,6 +297,89 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent5->SetInteractable(false);
 
+	//Create Repair sprites
+	m_repairIcon->SetName("RepairIcon");
+	m_repairIcon->SetPositionX(1720);
+	m_repairIcon->SetPositionY(425);
+	m_repairIcon->SetScale(math::Vector2(1.0f, 1.0f));
+	m_repairIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_repairIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_repairIcon->SetInteractable(true);
+
+	m_repairCost->SetName("RepairCost");
+	m_repairCost->SetPositionX(1720);
+	m_repairCost->SetPositionY(375);
+	m_repairCost->SetScale(math::Vector2(1.0f, 1.0f));
+	m_repairCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_repairCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_repairCost->SetInteractable(false);
+
+	m_repairTalent1->SetName("RepairTalent1");
+	m_repairTalent1->SetPositionX(1600);
+	m_repairTalent1->SetPositionY(450);
+	m_repairTalent1->SetScale(math::Vector2(2.0f, 2.0f));
+	m_repairTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_repairTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_repairTalent1->SetInteractable(false);
+
+	//Create Plunder sprites
+	m_plunderIcon->SetName("PlunderIcon");
+	m_plunderIcon->SetPositionX(1720);
+	m_plunderIcon->SetPositionY(650);
+	m_plunderIcon->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderIcon->SetInteractable(true);
+
+	m_plunderCost->SetName("PlunderCost");
+	m_plunderCost->SetPositionX(1720);
+	m_plunderCost->SetPositionY(600);
+	m_plunderCost->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderCost->SetInteractable(false);
+
+	m_plunderTalent1->SetName("PlunderTalent1");
+	m_plunderTalent1->SetPositionX(1650);
+	m_plunderTalent1->SetPositionY(700);
+	m_plunderTalent1->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent1->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent1->SetInteractable(false);
+
+	m_plunderTalent2->SetName("PlunderTalent2");
+	m_plunderTalent2->SetPositionX(1585);
+	m_plunderTalent2->SetPositionY(700);
+	m_plunderTalent2->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent2->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent2->SetInteractable(false);
+
+	m_plunderTalent3->SetName("PlunderTalent3");
+	m_plunderTalent3->SetPositionX(1520);
+	m_plunderTalent3->SetPositionY(700);
+	m_plunderTalent3->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent3->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent3->SetInteractable(false);
+
+	m_plunderTalent4->SetName("PlunderTalent4");
+	m_plunderTalent4->SetPositionX(1455);
+	m_plunderTalent4->SetPositionY(700);
+	m_plunderTalent4->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderTalent4->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent4->SetInteractable(false);
+
+	m_plunderTalent5->SetName("PlunderTalent5");
+	m_plunderTalent5->SetPositionX(1340);
+	m_plunderTalent5->SetPositionY(675);
+	m_plunderTalent5->SetScale(math::Vector2(2.0f, 2.0f));
+	m_plunderTalent5->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderTalent5->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderTalent5->SetInteractable(false);
+
+
 	m_exitButton->SetName("UpgradeMenuExit");
 	m_exitButton->SetPositionX(50);
 	m_exitButton->SetPositionY(970);
@@ -310,7 +404,7 @@ void UpgradeMenuObject::Start()
 
 void UpgradeMenuObject::Update()
 {
-	m_delay = m_delay - Time::GetDeltaTime();
+	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	
 	SetSelectedObject();
 	
@@ -330,6 +424,8 @@ void UpgradeMenuObject::Update()
 		ResourceCheck(upgrade, undo);
 
 		ShieldCheck(upgrade, undo);
+
+		RepairCheck(upgrade, undo);
 	}
 
 	Navigation();
@@ -353,13 +449,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[0] = true;
-				//Increase Cannon Dmg/Spread/Quantity first time
+				ShipStats::s_playerStats->IncreaseCannonDamage(1); //Increase Cannon Dmg/Spread/Quantity first time
 			}
 			else if (undo) //Doesn't need an if(undo), could just be else, but more clear what is happening this way
 			{
 				m_cannonTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[0] = false;
-				//Undo first upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(0); //Undo first upgrade
 			}
 		}
 		else if (m_cannonCheck[0] && !m_cannonCheck[1] || (undo && !m_cannonCheck[2]))
@@ -368,13 +464,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[1] = true;
-				//Increase Cannon Dmg/Spread/Quantity second time
+				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Increase Cannon Dmg/Spread/Quantity second time
 			}
 			else if (undo)
 			{
 				m_cannonTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[1] = false;
-				//Undo second upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(1);//Undo second upgrade
 			}
 		}
 		else if (m_cannonCheck[1] && !m_cannonCheck[2] || (undo && !m_cannonCheck[3]))
@@ -383,13 +479,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[2] = true;
-				//Increase Cannon Dmg/Spread/Quantity third time
+				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Increase Cannon Dmg/Spread/Quantity third time
 			}
 			else if (undo)
 			{
 				m_cannonTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[2] = false;
-				//Undo third upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Undo third upgrade
 			}
 		}
 		else if (m_cannonCheck[2] && !m_cannonCheck[3] || (undo && !m_cannonCheck[4]))
@@ -398,13 +494,13 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[3] = true;
-				//Increase Cannon Dmg/Spread/Quantity fourth time
+				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Increase Cannon Dmg/Spread/Quantity fourth time
 			}
 			else if (undo)
 			{
 				m_cannonTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[3] = false;
-				//Undo fourth upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Undo fourth upgrade
 			}
 		}
 		else if (m_cannonCheck[3] || (undo && m_cannonCheck[4]))
@@ -413,13 +509,14 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 			{
 				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[4] = true;
-				//Increase Cannon Dmg/Spread/Quantity fifth time
+				ShipStats::s_playerStats->IncreaseCannonDamage(5);//Increase Cannon Dmg/Spread/Quantity fifth time
+				//Shoot double projectiles
 			}
 			else if (undo)
 			{
 				m_cannonTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[4] = false;
-				//Undo fifth upgrade
+				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Undo fifth upgrade
 			}
 		}
 	}
@@ -435,13 +532,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[0] = true;
-				//Increase movement speed first time
+				ShipStats::s_playerStats->IncreaseSpeed(1);//Increase movement speed first time
 			}
 			if (undo)
 			{
 				m_movementTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[0] = false;
-				//Undo first movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(0);//Undo first movement upgrade
 			}
 		}
 		else if (m_movementCheck[0] && !m_movementCheck[1] || (undo && !m_movementCheck[2]))
@@ -450,13 +547,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[1] = true;
-				//Increase movement speed second time
+				ShipStats::s_playerStats->IncreaseSpeed(2);//Increase movement speed second time
 			}
 			if (undo)
 			{
 				m_movementTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[1] = false;
-				//Undo second movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(1);//Undo second movement upgrade
 			}
 		}
 		else if (m_movementCheck[1] && !m_movementCheck[2] || (undo && !m_movementCheck[3]))
@@ -465,13 +562,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[2] = true;
-				//Increase movement speed third time
+				ShipStats::s_playerStats->IncreaseSpeed(3);//Increase movement speed third time
 			}
 			if (undo)
 			{
 				m_movementTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[2] = false;
-				//Undo third movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(2);//Undo third movement upgrade
 			}
 		}
 		else if (m_movementCheck[2] && !m_movementCheck[3] || (undo && !m_movementCheck[4]))
@@ -480,13 +577,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[3] = true;
-				//Increase movement speed fourth time
+				ShipStats::s_playerStats->IncreaseSpeed(4);//Increase movement speed fourth time
 			}
 			if (undo)
 			{
 				m_movementTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[3] = false;
-				//Undo fourth movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(3);//Undo fourth movement upgrade
 			}
 		}
 		else if (m_movementCheck[3] || (undo && m_movementCheck[4]))
@@ -495,13 +592,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[4] = true;
-				//Increase movement speed fifth time
+				ShipStats::s_playerStats->IncreaseSpeed(5);//Increase movement speed fifth time
 			}
 			if (undo)
 			{
 				m_movementTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[4] = false;
-				//Undo fifth movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(4);//Undo fifth movement upgrade
 			}
 		}
 	}
@@ -599,13 +696,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[0] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[0] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(0);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[0] && !m_shieldCheck[1] || (undo && !m_shieldCheck[2]))
@@ -614,13 +711,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[1] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[1] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[1] && !m_shieldCheck[2] || (undo && !m_shieldCheck[3]))
@@ -629,13 +726,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[2] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[2] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[2] && !m_shieldCheck[3] || (undo && !m_shieldCheck[4]))
@@ -644,13 +741,13 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[3] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[3] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Undo last shield upgrade
 			}
 		}
 		else if (m_shieldCheck[3] || (undo && m_shieldCheck[4]))
@@ -659,13 +756,33 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 			{
 				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[4] = true;
-				//Buy Shield
+				ShipStats::s_playerStats->IncreaseShieldAmount(5);//Buy Shield
 			}
 			else if (undo)
 			{
 				m_shieldTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[4] = false;
-				//Undo last shield upgrade
+				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Undo last shield upgrade
+			}
+		}
+	}
+}
+
+void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
+{
+	if (m_repairIcon->isHovering())
+	{
+		if (!m_repairCheck[0] || (m_repairCheck[0] && undo)) //If upgrading or undoing
+		{
+			if (upgrade)
+			{
+				m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				//Repair health
+			}
+			else if (undo)
+			{
+				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				//Reset health
 			}
 		}
 	}
@@ -681,18 +798,20 @@ void UpgradeMenuObject::Navigation()
 	{
 		for (int i = 0; i < 3; i++) //three rows currently
 		{
-			if ((m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're already at the top
+			if ((m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
 			{
-				m_yArray[0] = 1;
-				break;
-			}
-			else if ((i > 0) && (m_yArray[i] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up
-			{
-				int x = 0;
-				if ((m_xArray[1] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side, jump to left, continue scrolling
+				if ((m_xArray[1] == 1) && (m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're right side top, jump to left, continue scrolling
 				{
 					m_xArray[0] = 1;
 					m_xArray[1] = 0;
+					m_yArray[0] = 0;
+					m_yArray[1] = 0;
+					m_yArray[2] = 1;
+				}
+				if ((m_xArray[0] == 1) && (m_yArray[0] == 1) && ((Input::GetLeftStickY() > abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetKey(Input::Keys::Up))) //Player presses up, we're left side top, jump to right bottom, continue scrolling
+				{
+					m_xArray[0] = 0;
+					m_xArray[1] = 1;
 					m_yArray[0] = 0;
 					m_yArray[1] = 0;
 					m_yArray[2] = 1;
@@ -706,11 +825,20 @@ void UpgradeMenuObject::Navigation()
 			}
 			else if ((m_yArray[i] == 1) && ((Input::GetLeftStickY() < -abs(Input::GetLeftStickX())) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down
 			{
-				if ((m_yArray[2] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom, jump to right side, continue scrolling there
+				if ((m_yArray[2] == 1) && (m_xArray[0] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom left, jump to right side, continue scrolling there
 				{
-					m_yArray[2] = 1;
-					m_xArray[0] = 1;
-					m_xArray[1] = 1;
+					m_yArray[0] = 1; //set
+					m_yArray[2] = 0; //reset 
+					m_xArray[0] = 0; //reset
+					m_xArray[1] = 1; //set
+					break;
+				}
+				if ((m_yArray[2] == 1) && (m_xArray[1] == 1) && ((Input::GetLeftStickY() < -(abs(Input::GetLeftStickX()))) || Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetKey(Input::Keys::Down))) //Player presses down, we're already at the bottom left, jump to right side, continue scrolling there
+				{
+					m_yArray[0] = 1; //set
+					m_yArray[2] = 0; //reset 
+					m_xArray[0] = 1; //reset
+					m_xArray[1] = 0; //set
 					break;
 				}
 				else //Player wants to go down, we're already left side
@@ -730,9 +858,6 @@ void UpgradeMenuObject::Navigation()
 			{
 				m_xArray[0] = 1;
 				m_xArray[1] = 0;
-				m_yArray[0] = 1;
-				m_yArray[1] = 0;
-				m_yArray[2] = 0;
 			}
 		}
 		m_delay = 0.3f;
@@ -752,9 +877,11 @@ void UpgradeMenuObject::SetSelectedObject()
 			if (i == 2)
 				m_resourceIcon->SetHovering(true);
 
-			m_shieldIcon->SetHovering(false);		//Needs to change if more icons are added in column 2
+			m_shieldIcon->SetHovering(false);
+			m_repairIcon->SetHovering(false);
+			m_plunderIcon->SetHovering(false);
 		}
-		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1))
+		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1)) //Left side is selected, remove highlights
 		{
 			if (i == 0)
 				m_cannonIcon->SetHovering(false);
@@ -764,12 +891,27 @@ void UpgradeMenuObject::SetSelectedObject()
 				m_resourceIcon->SetHovering(false);
 			m_shieldIcon->SetHovering(false);
 		}
-		if (m_xArray[1] == 1) //if more rows added in 2nd column change this, now all left icons lead to shieldIcon when pressing right
+		else if (m_xArray[1] == 1 && m_yArray[i] == 1) //Right side is selected, set highlights
 		{
-			m_shieldIcon->SetHovering(true);
+			if (i == 0)
+				m_shieldIcon->SetHovering(true);
+			if (i == 1)
+				m_repairIcon->SetHovering(true);
+			if (i == 2)
+				m_plunderIcon->SetHovering(true);
+		}
+		else if ((m_yArray[i] == 0) && (m_xArray[1] == 1)) //Right side selected, remove highlights
+		{
+			if (i == 0)
+				m_shieldIcon->SetHovering(false);
+			if (i == 1)
+				m_repairIcon->SetHovering(false);
+			if (i == 2)
+				m_plunderIcon->SetHovering(false);
 			m_cannonIcon->SetHovering(false);
 			m_movementIcon->SetHovering(false);
 			m_resourceIcon->SetHovering(false);
 		}
 	}
 }
+

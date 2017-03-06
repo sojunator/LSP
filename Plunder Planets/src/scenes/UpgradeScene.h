@@ -11,7 +11,7 @@ public:
 		{
 			thomas::graphics::Sprite::LoadTexture("Header", "../res/GUI/upgrade/upgrade.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuStart", "../res/GUI/upgrade/continue.png");
-			thomas::graphics::Sprite::LoadTexture("CannonIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("CannonIcon", "../res/GUI/upgrade/cannon.png");
 			thomas::graphics::Sprite::LoadTexture("CannonCost", "../res/GUI/upgrade/cost.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent1", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent2", "../res/GUI/upgrade/talent.png");
@@ -39,6 +39,16 @@ public:
 			thomas::graphics::Sprite::LoadTexture("ShieldTalent3", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("ShieldTalent4", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("ShieldTalent5", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("RepairIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("RepairCost", "../res/GUI/upgrade/cost.png");
+			thomas::graphics::Sprite::LoadTexture("RepairTalent1", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderCost", "../res/GUI/upgrade/cost.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent1", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent2", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent3", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent4", "../res/GUI/upgrade/talent.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderTalent5", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
 
@@ -55,7 +65,7 @@ public:
 		{
 			thomas::graphics::Sprite::LoadTexture("Header", "../res/GUI/upgrade/upgrade.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuStart", "../res/GUI/upgrade/continue.png");
-			thomas::graphics::Sprite::LoadTexture("CannonIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("CannonIcon", "../res/GUI/upgrade/cannon.png");
 			thomas::graphics::Sprite::LoadTexture("CannonCost", "../res/GUI/upgrade/cost.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent1", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent2", "../res/GUI/upgrade/talent.png");

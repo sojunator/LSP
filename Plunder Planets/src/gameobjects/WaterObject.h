@@ -39,7 +39,7 @@ public:
 
 	void Update()
 	{
-		delayLeft -= Time::GetDeltaTime();
+		delayLeft -= ThomasTime::GetDeltaTime();
 
 		if (delayLeft < 0)
 		{

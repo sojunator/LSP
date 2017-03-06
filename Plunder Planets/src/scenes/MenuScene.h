@@ -1,12 +1,14 @@
 #pragma once
 #include "Thomas.h"
 #include "../gameobjects/MainMenuObject.h"
+#include "../gameobjects/ShipStats.h"
 class MenuScene : public thomas::Scene
 {
 public:
 	MenuScene() : Scene("MenuScene")
 	{
-		
+		ShipStats::s_playerStats = new ShipStats();
+		ShipStats::s_currentLevel = 1;
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
 			thomas::graphics::Sprite::LoadTexture("MainMenuStart", "../res/GUI/menu/start.png");

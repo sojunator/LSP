@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Thomas.h"
+#include <Thomas.h>
 #include <string>
 #include "../Enemy.h"
-#include "IslandObject.h"
 
+class IslandObject;
 
 class TerrainObject : public GameObject
 {
