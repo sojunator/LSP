@@ -14,6 +14,7 @@
     <ClCompile Include="src\Ocean\OceanSimulator.cpp" />
     <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\HighscoreMenuObject.cpp" />
+    <ClCompile Include="src\gameobjects\ShipStats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\gameobjects\Wormhole.h" />
+    <ClInclude Include="src\gameobjects\ShipStats.h" />
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="src\scenes\HighscoreScene.h" />
   </ItemGroup>

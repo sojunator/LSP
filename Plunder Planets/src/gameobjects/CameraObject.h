@@ -158,9 +158,11 @@ public:
 		{
 			//To add more armor, simply do: m_ship->m_armor++ and (m_armor / m_maxArmor)
 
+
+
 			if (m_ship->m_armor > 0)
 			{
-				m_armbar->SetScale(math::Vector2(m_ship->m_armor / m_ship->m_maxArmor, 1.0f));
+				m_armbar->SetScale(math::Vector2(m_ship->m_armor, 1.0f));
 			}
 
 			else if (m_ship->m_armor <= 0)

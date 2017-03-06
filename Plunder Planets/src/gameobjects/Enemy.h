@@ -3,6 +3,7 @@
 #include "Broadside.h"
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
+#include "ShipStats.h"
 
 using namespace thomas;
 using namespace object;
@@ -78,7 +79,6 @@ public:
 
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
-
 
 		m_renderer->SetModel("testModelEnemy");
 		m_moving = false;
@@ -262,12 +262,16 @@ public:
 			{
 				if (realDir == left)
 				{
-					m_broadSideLeft->SetCanonAngle(m_broadSideLeft->CalculateCanonAngle(m_ai->GetTargetPos()));
+					float angle = m_broadSideLeft->CalculateCanonAngle(m_ai->GetTargetPos());
+					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+					m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
 					m_broadSideLeft->Fire();
 				}
 				else
 				{
-					m_broadSideRight->SetCanonAngle(m_broadSideRight->CalculateCanonAngle(m_ai->GetTargetPos()));
+					float angle = m_broadSideRight->CalculateCanonAngle(m_ai->GetTargetPos());
+					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+					m_broadSideRight->SetCanonAngle(-angle - boatAngle);
 					m_broadSideRight->Fire();
 				}
 			}
@@ -346,10 +350,6 @@ public:
 		
 
 		Float(dt);
-
-
-			
-
 	}
 
 	void OnCollision(component::RigidBodyComponent* other)
@@ -387,6 +387,7 @@ private:
 	Broadside* m_broadSideRightCannonball;
 	Broadside* m_broadSideLeftCannonball;
 	Broadside* m_broadSideFront;
+	//ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components
 	component::ParticleEmitterComponent* m_emitterSpark;
