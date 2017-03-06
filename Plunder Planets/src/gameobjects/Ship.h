@@ -8,6 +8,8 @@
 #include "PhysicsObject.h"
 #include "../scenes/MenuScene.h"
 #include "ShipStats.h"
+#include "graphics\GeometryDraw.h"
+
 using namespace thomas;
 using namespace object;
 class TerrainObject;
@@ -27,6 +29,7 @@ public:
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt);
 	void ShipFireCannons();
 	void ShipAimCannons();
+	void DrawAimArc(Broadside* broadside);
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
 	void CameraZoom(float const dt);
@@ -80,6 +83,12 @@ private:
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
 	math::Vector3 m_initPosition;	//Is this needed?
+	math::Vector3 m_aimPosition;
+	math::Vector3 p0;// = m_transform->GetPosition(); //boat pos
+	math::Vector3 p3;// = math::Vector3(m_aimPosition.x, m_aimPosition.y, m_aimPosition.z); //aim pos
+
+	math::Vector3 p1;// = p0 /*+ exitVector*/; //vector defining starting direction of projectiles
+	math::Vector3 p2;// = p3 + math::Vector3(0, 1, 0)/* * scalar */;
 
 	//components
 	component::RenderComponent* m_renderer;
@@ -91,6 +100,7 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 
+	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
