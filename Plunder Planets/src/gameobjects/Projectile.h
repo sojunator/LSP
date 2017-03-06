@@ -10,9 +10,10 @@ class Projectile : public GameObject
 private:
 	void CalculateDrag()
 	{
-		btScalar temp_vel = m_rigidbody->getLinearVelocity().length(); // ehm, borde vara length2
-		btVector3 temp = constant * temp_vel * temp_vel * m_rigidbody->getLinearVelocity().normalized();
-		m_force = temp;
+		//btScalar temp_vel = m_rigidbody->getLinearVelocity().length();
+		//btVector3 temp = constant * temp_vel * m_rigidbody->getLinearVelocity().normalized();
+		/*btVector3 temp = m_mass * Physics::s_world->getGravity() * ThomasTime::GetDeltaTime();
+		m_force = temp;*/
 	}
 
 	float MonteCarloAngle()
@@ -35,7 +36,7 @@ public:
 
 	void Start()
 	{
-		m_mass = 2.5f;
+		m_mass = 25.f;
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_renderer->SetModel("cannonball");
 		m_transform->SetScale(2);
@@ -44,7 +45,7 @@ public:
 		constant = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI;
 		m_rigidbody->setCollisionShape(new btSphereShape(0.35f));
 		m_rigidbody->SetMass(m_mass); 
-		m_velocity = 200;
+		m_velocity = 130.f;
 		m_water = (WaterObject*)Find("WaterObject");
 		
 		m_deathTime = 4.0f;
@@ -81,9 +82,12 @@ public:
 		{
 			m_hitWater = false;
 		}
-		m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+ 
+		m_rigidbody->setLinearVelocity(*(btVector3*)&(m_velocity * (m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw)) +
+			m_transform->Up() * sinf(math::DegreesToRadians(m_pitch)) +
+			m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw)))));
+		/*m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToRadians(m_pitch))) + 
-			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw))));
+			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw))));*/
 		m_damageAmount = 5;
 	}
 

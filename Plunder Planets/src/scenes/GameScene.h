@@ -111,7 +111,7 @@ private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;
 	Ship* m_ship;
-	std::vector<Enemy*> m_enemyShip;
+	//std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;
 	TestDirectionalLight* m_testDirectionalLight;
 	float test = 0.0f;

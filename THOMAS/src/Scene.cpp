@@ -4,7 +4,7 @@
 #include "graphics\Sprite.h"
 #include "graphics\Shader.h"
 #include "utils\DebugTools.h"
-
+#include "graphics\GeometryDraw.h"
 
 namespace thomas
 {
@@ -15,10 +15,10 @@ namespace thomas
 		std::vector<object::component::RenderComponent*> renderComponents;
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::RenderComponent>())
 		{
-			if(gameObject->GetActive())
+			if (gameObject->GetActive())
 				for (object::component::RenderComponent* renderComponent : gameObject->GetComponents<object::component::RenderComponent>())
 				{
-					if(renderComponent->GetActive())
+					if (renderComponent->GetActive())
 						renderComponents.push_back(renderComponent);
 				}
 		}
@@ -31,7 +31,7 @@ namespace thomas
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy(s_currentScene);
 		graphics::Texture::Destroy();
-		graphics::Model::Destroy();	
+		graphics::Model::Destroy();
 		object::Object::Destroy(s_currentScene);
 		delete s_currentScene;
 		s_currentScene = nullptr;
@@ -44,15 +44,15 @@ namespace thomas
 		{
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
-				if(object->GetActive())
+				if (object->GetActive())
 					object->Update();
 			}
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
-				if(object->GetActive())
+				if (object->GetActive())
 					object->LateUpdate();
 			}
-				
+
 		}
 		else
 			LOG("No scene set");
@@ -73,14 +73,15 @@ namespace thomas
 		{
 			graphics::Renderer::Clear();
 			graphics::Renderer::RenderSetup(camera);
-			
+
 			s_currentScene->Render3D(camera);
-			if(s_drawDebugPhysics)
+			if (s_drawDebugPhysics)
 				Physics::DrawDebug(camera);
 			s_currentScene->Render2D(camera);
+			graphics::GeometryDraw::Draw();
 
 			graphics::PostEffect::Render(graphics::Renderer::GetDepthBufferSRV(), graphics::Renderer::GetBackBuffer(), camera);
-			
+
 			utils::DebugTools::Draw();
 			ThomasCore::GetSwapChain()->Present(0, 0);
 		}
@@ -163,21 +164,21 @@ namespace thomas
 			oceanShader->Unbind();
 			graphics::Renderer::UnbindDepthBufferTexture();
 			graphics::Renderer::UnBindGameObjectBuffer();
-			}
-		
+		}
+
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::ParticleEmitterComponent>())
 		{
-			if(gameObject->GetActive())
+			if (gameObject->GetActive())
 				for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
 				{
-					if(emitterComponent->GetActive())
+					if (emitterComponent->GetActive())
 						graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
 				}
 		}
-		
+
 	}
 
 
@@ -188,20 +189,20 @@ namespace thomas
 
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::SpriteComponent>())
 		{
-			if(gameObject->GetActive())
+			if (gameObject->GetActive())
 				for (object::component::SpriteComponent* sprite : gameObject->GetComponents<object::component::SpriteComponent>())
 				{
-					if(sprite->GetActive())
+					if (sprite->GetActive())
 						graphics::Sprite::RenderImage(sprite);
 				}
 		}
 
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::TextComponent>())
-		{	
-			if(gameObject->GetActive())
+		{
+			if (gameObject->GetActive())
 				for (object::component::TextComponent* text : gameObject->GetComponents<object::component::TextComponent>())
 				{
-					if(text->GetActive())
+					if (text->GetActive())
 						graphics::TextRender::RenderText(text);
 				}
 		}
@@ -218,7 +219,7 @@ namespace thomas
 	}
 	graphics::Shader * Scene::LoadShader(std::string name, thomas::graphics::Shader::InputLayouts inputLayout, std::string vertexShader, std::string geometryShader, std::string hullShader, std::string domainShader, std::string pixelShader)
 	{
-		return thomas::graphics::Shader::CreateShader(name, inputLayout, vertexShader,geometryShader, hullShader, domainShader, pixelShader, this);
+		return thomas::graphics::Shader::CreateShader(name, inputLayout, vertexShader, geometryShader, hullShader, domainShader, pixelShader, this);
 	}
 	graphics::Model * Scene::LoadModel(std::string name, std::string path, std::string type)
 	{
