@@ -5,13 +5,13 @@
 #include "../Enemy.h"
 #include "IslandObject.h"
 
-class TerrainObject : public GameObject
+class IslandManager : public GameObject
 {
 
 private:
 
 public:
-	TerrainObject() : GameObject("TerrainObject")
+	IslandManager() : GameObject("IslandManager")
 	{
 	}
 
@@ -39,10 +39,10 @@ public:
 		LOG(m_islands->GetNrOfIslands());
 		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
 		{
-			m_rigidBodyVec.push_back(AddComponent<component::RigidBodyComponent>());
-			m_rigidBodyVec[i]->SetMass(0);
-			m_rigidBodyVec[i]->SetCollider(new btSphereShape(m_islands->GetCollisionRadius(i)));
-			m_rigidBodyVec[i]->setWorldTransform(btTransform(btQuaternion(), btVector3(m_islands->GetCenter(i).x, 0, m_islands->GetCenter(i).z)));
+			//m_rigidBodyVec.push_back(AddComponent<component::RigidBodyComponent>());
+			//m_rigidBodyVec[i]->SetMass(0);
+			//m_rigidBodyVec[i]->SetCollider(new btSphereShape(m_islands->GetCollisionRadius(i)));
+			//m_rigidBodyVec[i]->setWorldTransform(btTransform(btQuaternion(), btVector3(m_islands->GetCenter(i).x, 0, m_islands->GetCenter(i).z)));
 		}
 	}
 

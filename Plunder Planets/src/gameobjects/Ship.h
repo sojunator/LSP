@@ -12,7 +12,7 @@
 
 using namespace thomas;
 using namespace object;
-class TerrainObject;
+class IslandManager;
 class Ship : public GameObject
 {
 
@@ -104,7 +104,7 @@ private:
 	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
-	TerrainObject* m_terrainObject;
+	IslandManager* m_islandManager;
 	WaterObject* m_waterObject;
 
 	Broadside* m_broadSideLeft;

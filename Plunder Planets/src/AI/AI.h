@@ -5,7 +5,7 @@
 #include "Thomas.h"
 #include "../../THOMAS/src/object/component/Component.h"
 
-class TerrainObject;
+class IslandManager;
 class THOMAS_API AI : public thomas::object::component::Component
 {
 public:
@@ -43,7 +43,7 @@ private:
 	float m_idleTimer;
 	float m_idleTime;
 
-	TerrainObject* m_terrainObject;
+	IslandManager* m_IslandManager;
 	Ship* m_playerShip;
 
 	float pDotR;

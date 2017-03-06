@@ -1,5 +1,5 @@
 #include "ship.h"
-#include "Terrain/TerrainObject.h"
+#include "Terrain/IslandManager.h"
 #include "Wormhole.h"
 void Ship::Start()
 {
@@ -43,7 +43,7 @@ void Ship::Start()
 	m_sound = AddComponent<component::SoundComponent>();
 	m_boostSound = AddComponent<component::SoundComponent>();
 	m_cameraObject = Find("CameraObject");
-	m_terrainObject = (TerrainObject*)Find("TerrainObject");
+	m_islandManager = (IslandManager*)Find("IslandManager");
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
@@ -454,7 +454,7 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
+	m_treasure += m_islandManager->Plunder(m_transform->GetPosition());
 }
 int Ship::GetTreasure()
 {

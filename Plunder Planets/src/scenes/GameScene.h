@@ -2,7 +2,7 @@
 #include "../src/Scene.h"
 #include "../../THOMAS/src/object/Object.h"
 #include "../gameobjects/CameraObject.h"
-#include "../gameobjects/Terrain/TerrainObject.h"
+#include "../gameobjects/Terrain/IslandManager.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
 #include "../gameobjects/OceanFloor.h"
@@ -93,7 +93,7 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
-		m_terrainObject = LoadObject<TerrainObject>();
+		m_islandManager = LoadObject<IslandManager>();
 		m_waterObject = LoadObject<WaterObject>();
 		for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI
 		{
@@ -109,7 +109,7 @@ public:
 
 private:
 	CameraObject* m_cameraObject;
-	TerrainObject* m_terrainObject;
+	IslandManager* m_islandManager;
 	Ship* m_ship;
 	//std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;

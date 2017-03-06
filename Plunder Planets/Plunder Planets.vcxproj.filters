@@ -53,8 +53,8 @@
     <ClInclude Include="src\gameobjects\ShipStats.h" />
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="src\scenes\HighscoreScene.h" />
-    <ClInclude Include="src\gameobjects\Terrain\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandObject.h" />
+    <ClInclude Include="src\gameobjects\Terrain\IslandManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

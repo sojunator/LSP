@@ -1,10 +1,10 @@
 #include "AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
-#include "../gameobjects/Terrain/TerrainObject.h"
+#include "../gameobjects/Terrain/IslandManager.h"
 
 AI::AI() : thomas::object::component::Component("AI")
 {
-	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");
+	m_IslandManager = (IslandManager*)thomas::object::GameObject::Find("IslandManager");
 	m_playerShip = (Ship*)thomas::object::GameObject::Find("Ship");
 
 	m_state = Behavior::Searching;
@@ -24,7 +24,7 @@ AI::~AI()
 
 bool AI::Collision(math::Vector3 pos)
 {
-	if (m_terrainObject->Collision(pos))
+	if (m_IslandManager->Collision(pos))
 	{
 		return true;
 	}

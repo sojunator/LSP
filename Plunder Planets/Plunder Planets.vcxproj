@@ -191,7 +191,7 @@
     <ClInclude Include="src\gameobjects\ShipStats.h" />
     <ClInclude Include="src\gameobjects\StandardParticleEmitter.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandObject.h" />
-    <ClInclude Include="src\gameobjects\Terrain\TerrainObject.h" />
+    <ClInclude Include="src\gameobjects\Terrain\IslandManager.h" />
     <ClInclude Include="src\gameobjects\TestCube.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
     <ClInclude Include="src\gameobjects\UpgradeMenuObject.h" />
