@@ -616,13 +616,13 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 			{
 				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[0] = true;
-				//Decrease resource costs first time
+				ShipStats::s_playerStats->DecreaseCosts(1);//Decrease resource costs first time
 			}
 			else if (undo)
 			{
 				m_resourceTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[0] = false;
-				//Undo first resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(0);//Undo first resource cost reduction
 			}
 		}
 		else if (m_resourceCheck[0] && !m_resourceCheck[1] || (undo && !m_resourceCheck[2]))
@@ -631,13 +631,13 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 			{
 				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[1] = true;
-				//Decrease resource costs second time
+				ShipStats::s_playerStats->DecreaseCosts(2);//Decrease resource costs second time
 			}
 			else if (undo)
 			{
 				m_resourceTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[1] = false;
-				//Undo second resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(1);//Undo second resource cost reduction
 			}
 		}
 		else if (m_resourceCheck[1] && !m_resourceCheck[2] || (undo && !m_resourceCheck[3]))
@@ -646,13 +646,13 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 			{
 				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[2] = true;
-				//Decrease resource costs third time
+				ShipStats::s_playerStats->DecreaseCosts(3);//Decrease resource costs third time
 			}
 			else if (undo)
 			{
 				m_resourceTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[2] = false;
-				//Undo third resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(2);//Undo third resource cost reduction
 			}
 		}
 		else if (m_resourceCheck[2] && !m_resourceCheck[3] || (undo && !m_resourceCheck[4]))
@@ -661,13 +661,13 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 			{
 				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[3] = true;
-				//Decrease resource costs fourth time
+				ShipStats::s_playerStats->DecreaseCosts(4);//Decrease resource costs fourth time
 			}
 			else if (undo)
 			{
 				m_resourceTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[3] = false;
-				//Undo fourth resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(3);//Undo fourth resource cost reduction
 			}
 		}
 		else if ((m_resourceCheck[3] && !m_resourceCheck[4]) || (undo && m_resourceCheck[4]))
@@ -676,13 +676,13 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 			{
 				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[4] = true;
-				//Decrease resource costs fifth time
+				ShipStats::s_playerStats->DecreaseCosts(5);//Decrease resource costs fifth time
 			}
 			else if (undo)
 			{
 				m_resourceTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[4] = false;
-				//Undo fifth resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(4);//Undo fifth resource cost reduction
 			}
 		}
 	}
@@ -779,12 +779,12 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 			if (upgrade)
 			{
 				m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				//Repair health
+				ShipStats::s_playerStats->RepairHealth(1); //Repair health
 			}
 			else if (undo)
 			{
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
-				//Reset health
+				ShipStats::s_playerStats->RepairHealth(0); //Reset health
 			}
 		}
 	}

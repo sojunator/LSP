@@ -161,10 +161,8 @@ void Ship::Start()
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
-	m_health = 100;
+	m_health = ShipStats::s_playerStats->GetHealthAmount();
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
-	m_maxHealth = m_health;
-	m_maxArmor = 100;
 
 	m_spawnedWormhole = false;
 	m_aiming = false;

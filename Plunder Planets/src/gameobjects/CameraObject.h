@@ -156,10 +156,6 @@ public:
 		}
 		else
 		{
-			//To add more armor, simply do: m_ship->m_armor++ and (m_armor / m_maxArmor)
-
-
-
 			if (m_ship->m_armor > 0)
 			{
 				m_armbar->SetScale(math::Vector2(m_ship->m_armor, 1.0f));
@@ -167,7 +163,7 @@ public:
 
 			else if (m_ship->m_armor <= 0)
 			{
-				m_healthbar->SetScale(math::Vector2(m_ship->m_health / m_ship->m_maxHealth, 1.0f));
+				m_healthbar->SetScale(math::Vector2(m_ship->m_health, 1.0f));
 			}
 			
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
