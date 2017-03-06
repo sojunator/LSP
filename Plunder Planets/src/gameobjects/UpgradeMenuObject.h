@@ -79,6 +79,7 @@ private:
 	component::SpriteComponent* m_plunderTalent5;
 	component::SpriteComponent* m_exitButton;
 	component::SoundComponent* m_music;
+	component::TextComponent* m_currentGold;
 
 	//Bool checks for talents
 	bool m_cannonCheck[5] = { false };

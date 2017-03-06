@@ -5,6 +5,7 @@ void UpgradeMenuObject::Start()
 {
 	component::Camera* cam = AddComponent<component::Camera>();
 	m_header = AddComponent<component::SpriteComponent>();
+	m_currentGold = AddComponent<component::TextComponent>();
 	m_startButton = AddComponent<component::SpriteComponent>();
 	m_cannonIcon = AddComponent<component::SpriteComponent>();
 	m_cannonCost = AddComponent<component::SpriteComponent>();
@@ -51,6 +52,18 @@ void UpgradeMenuObject::Start()
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
+
+	/*m_currentGold->SetFont("CurrentGold");
+	m_currentGold->SetFont("Highscore");
+	m_currentGold->SetOutput(std::to_string(ShipStats::s_playerStats->GetTreasure()));
+	m_currentGold->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_currentGold->SetRotation(0.0f);
+	m_currentGold->SetScale(1.0f);
+	m_currentGold->SetPositionX(142);
+	m_currentGold->SetPositionY(m_nameYOffset);
+	m_currentGold->SetDropshadow(false);
+	m_currentGold->SetOutline(true);
+	m_currentGold->SetOrigin(false);*/
 
 	m_header->SetName("Header");
 	m_header->SetPositionX(722);

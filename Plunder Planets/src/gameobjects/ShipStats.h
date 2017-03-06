@@ -12,6 +12,7 @@ private:
 
 public:
 	ShipStats();
+	float GetTreasure();
 	float GetCannonDamage();
 	float GetCannonSpread();
 	float GetCannonQuantity();
@@ -34,6 +35,7 @@ public:
 	static ShipStats* s_playerStats;
 	static unsigned int s_currentLevel;
 private:
+	float m_currentGold;
 	float m_cannonDamage;
 	float m_cannonSpread;
 	float m_cannonQuantity;

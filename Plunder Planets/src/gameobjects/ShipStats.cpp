@@ -4,6 +4,7 @@ unsigned int ShipStats::s_currentLevel;
 
 ShipStats::ShipStats()
 {
+	m_currentGold = 300;
 	m_cannonDamage = 5;
 	//m_cannonSpread; //Add later
 	//m_cannonQuantity; //Add later
@@ -17,14 +18,19 @@ ShipStats::ShipStats()
 	s_currentLevel = 1;
 }
 
-float ShipStats::GetSpeed()
+float ShipStats::GetTreasure()
 {
-	return m_speed;
+	return m_currentGold;
 }
 
 float ShipStats::GetCannonDamage()
 {
 	return m_cannonDamage;
+}
+
+float ShipStats::GetSpeed()
+{
+	return m_speed;
 }
 
 float ShipStats::GetCannonSpread()

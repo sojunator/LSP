@@ -133,7 +133,7 @@ void Ship::Start()
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
 	m_rigidBody->setSleepingThresholds(0.2, 0.5);
 	m_rigidBody->setGravity(btVector3(0, -15, 0));
-	m_treasure = 300;
+	m_treasure = ShipStats::s_playerStats->GetTreasure(); //300;
 
 
 	//model
