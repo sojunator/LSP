@@ -7,6 +7,7 @@
 #include "ShipFloat.h"
 #include "PhysicsObject.h"
 #include "../scenes/MenuScene.h"
+#include "ShipStats.h"
 #include "graphics\GeometryDraw.h"
 
 using namespace thomas;
@@ -28,7 +29,6 @@ public:
 	void ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt);
 	void ShipFireCannons();
 	void ShipAimCannons();
-	void UpgradeSpeed(float speedIncrease);
 	void DrawAimArc(Broadside* broadside);
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);

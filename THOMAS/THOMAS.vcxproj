@@ -354,6 +354,7 @@
     <ClInclude Include="src\utils\d3d.h" />
     <ClInclude Include="src\utils\DebugTools.h" />
     <ClInclude Include="src\utils\FrustumCulling.h" />
+    <ClInclude Include="src\PlayerStats.h" />
     <ClInclude Include="src\utils\HeightMap.h" />
     <ClInclude Include="src\utils\Math.h" />
     <ClInclude Include="src\utils\Ocean\OceanSimulator.h" />

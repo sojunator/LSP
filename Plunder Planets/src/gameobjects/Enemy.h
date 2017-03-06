@@ -3,6 +3,7 @@
 #include "Broadside.h"
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
+#include "ShipStats.h"
 
 using namespace thomas;
 using namespace object;
@@ -78,7 +79,6 @@ public:
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
 
-
 		m_renderer->SetModel("testModelEnemy");
 		m_moving = false;
 
@@ -94,7 +94,7 @@ public:
 		m_dead = false;
 		m_deathTime = 10;
 		//Movement
-		m_speed = 600;
+		m_speed = 600;// m_shipStats->GetSpeed();
 		m_turnSpeed = 150;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
@@ -303,10 +303,6 @@ public:
 		m_firstFrame = false;
 
 		Float(dt);
-
-
-			
-
 	}
 
 	void OnCollision(component::RigidBodyComponent* other)
@@ -344,6 +340,7 @@ private:
 	Broadside* m_broadSideRightCannonball;
 	Broadside* m_broadSideLeftCannonball;
 	Broadside* m_broadSideFront;
+	//ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components
 	component::ParticleEmitterComponent* m_emitterSpark;

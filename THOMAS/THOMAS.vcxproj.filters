@@ -380,6 +380,7 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\graphics\TextRender.h" />
     <ClInclude Include="src\object\component\ParticleEmitterComponent.h" />
+    <ClInclude Include="src\PlayerStats.h" />
     <ClInclude Include="src\utils\FrustumCulling.h" />
     <ClInclude Include="src\object\component\FrustumCullingComponent.h" />
     <ClInclude Include="src\ThomasTime.h" />

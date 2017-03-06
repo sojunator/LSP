@@ -2,6 +2,8 @@
 #include "Thomas.h"
 #include "WaterObject.h"
 #include "WaterSplashParticle.h"
+#include "ShipStats.h"
+#include "Ship.h"
 using namespace thomas;
 using namespace object;
 class Projectile : public GameObject
@@ -88,7 +90,7 @@ public:
 		/*m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToRadians(m_pitch))) + 
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw))));*/
-		m_damageAmount = 5;
+		m_damageAmount = ShipStats::s_playerStats->GetCannonDamage();
 	}
 
 	float GetVelocity()

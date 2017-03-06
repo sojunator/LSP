@@ -5,8 +5,8 @@ void Ship::Start()
 {
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
-
 	float mass = 20000;
+
 	//Front
 	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -151,10 +151,10 @@ void Ship::Start()
 	m_soundDelay = 5;
 	m_soundDelayLeft = 5;
 	//movement
-	m_speed = 70;
+	m_speed = ShipStats::s_playerStats->GetSpeed();
 	m_turnSpeed = 20;
-	m_roof = 1000000.0;
-	m_flyCost = 20;
+	m_roof = 1.0;
+	m_flyCost = ShipStats::s_playerStats->GetBoostCost();
 
 	//controlls/camera
 	m_controlSensitivity = 0.13f;
@@ -167,7 +167,7 @@ void Ship::Start()
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
 	m_health = 100;
-	m_armor = 0;
+	m_armor = ShipStats::s_playerStats->GetShieldAmount();
 	m_maxHealth = m_health;
 	m_maxArmor = 100;
 
@@ -237,7 +237,7 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 		math::Vector3 forward = m_transform->Forward();
 		m_moving = true;
 		forward.y = 0;
-		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 2 * m_speed*m_rigidBody->GetMass()));
+		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * 1.5 * m_speed*m_rigidBody->GetMass()));
 		float turnDelta = -Input::GetLeftStickY();
 
 		/*m_rigidBody->applyForce(btVector3(0, turnDelta*m_flyTurnSpeed*dt*m_rigidBody->GetMass(), 0), btVector3(0,0,8));
@@ -289,12 +289,12 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 }
 void Ship::ShipAimCannons()
 {
-	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKeyDown(Input::Keys::G))
+	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKeyDown(Input::Keys::E))
 	{
 		m_aimRight = !m_aimRight;
 		m_aimLeft = false;
 	}
-	else if(Input::GetButtonDown(Input::Buttons::LB) || Input::GetKeyDown(Input::Keys::F))
+	else if(Input::GetButtonDown(Input::Buttons::LB) || Input::GetKeyDown(Input::Keys::Q))
 	{
 		m_aimLeft = !m_aimLeft;
 		m_aimRight = false;
@@ -322,11 +322,11 @@ void Ship::ShipAimCannons()
 			DrawAimArc(m_broadSideLeft);
 		}
 
-		if ((Input::GetButtonDown(Input::Buttons::A)|| Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->Fire(); //Temporary fix
-			m_treasure -= 50;
+			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 		}
 	}
 
@@ -354,7 +354,7 @@ void Ship::ShipAimCannons()
 		}
 		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
-			m_treasure -= 50;
+			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
 			m_broadSideRight->Fire(); //Temporary fix
 		}
@@ -400,10 +400,7 @@ void Ship::DrawAimArc(Broadside* broadside)
 	}
 
 }
-void Ship::UpgradeSpeed(float speedIncrease)
-{
-	m_speed = m_speed + speedIncrease;
-}
+
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
 {
 	m_cameraObject->m_transform->Translate(distanceVector);//move camera into the boat to make rotations for the camera!
@@ -463,6 +460,7 @@ int Ship::GetTreasure()
 {
 	return m_treasure + 0.5;
 }
+
 void Ship::Float(float dt)
 {
 	float waveHeight = 0;
@@ -675,19 +673,22 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 
 		if (m_armor > 0)
 		{
-			m_armor -= p->GetDamageAmount();
+			//m_armor -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
+			m_armor -= 5;
 			LOG("hit armor: " << m_armor);
 		}
 		else if (m_armor <= 0)
 		{
-			m_health -= p->GetDamageAmount();
+			//m_health -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
+			m_health -= 5;
 			LOG("hit hp: " << m_health);
 		}
 	
 		if (m_health <= 0)
 		{
 			LOG("You are dead!");
-			Scene::LoadScene<MenuScene>();
+			Scene::LoadScene<MenuScene>(); //Load Game Over instead
+			//Delete shipStats;
 		}
 
 	}
