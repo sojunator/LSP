@@ -99,6 +99,7 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight2;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
+	component::TextComponent* m_safeToLeave;
 
 	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];

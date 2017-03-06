@@ -128,6 +128,11 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterRight2->SetSpread(2.5f);
 
+	thomas::graphics::TextRender::LoadFont("SafeToLeave", "../res/font/pirate.spritefont");
+
+	m_safeToLeave = AddComponent<component::TextComponent>();
+
+
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
@@ -641,11 +646,21 @@ void Ship::Update()
 	Float(dt);
 
 
-	if (m_treasure > 500 && !m_spawnedWormhole)
+	if (m_treasure > 500 && !m_spawnedWormhole && !m_startUpSequence)
 	{
-		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0,0),math::Quaternion::Identity,m_scene);
+		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0f,0),math::Quaternion::Identity,m_scene);
 		wormhole->SetEndLevel(true);
 		m_spawnedWormhole = true;
+		m_safeToLeave->SetFont("SafeToLeave");
+		m_safeToLeave->SetOutput("Wormhole open\nEnter it to leave planet");
+		m_safeToLeave->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
+		m_safeToLeave->SetRotation(0.0f);
+		m_safeToLeave->SetScale(1.0f);
+		m_safeToLeave->SetPositionX(Window::GetWidth() - 620);
+		m_safeToLeave->SetPositionY(Window::GetHeight() - 155);
+		m_safeToLeave->SetDropshadow(true);
+		m_safeToLeave->SetOutline(true);
+		m_safeToLeave->SetOrigin(false);
 	}
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
