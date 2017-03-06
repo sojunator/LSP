@@ -437,13 +437,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[0] = true;
-				//Increase movement speed first time
+				ShipStats::s_playerStats->IncreaseSpeed(1);//Increase movement speed first time
 			}
 			if (undo)
 			{
 				m_movementTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[0] = false;
-				//Undo first movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(0);//Undo first movement upgrade
 			}
 		}
 		else if (m_movementCheck[0] && !m_movementCheck[1] || (undo && !m_movementCheck[2]))
@@ -452,13 +452,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[1] = true;
-				//Increase movement speed second time
+				ShipStats::s_playerStats->IncreaseSpeed(2);//Increase movement speed second time
 			}
 			if (undo)
 			{
 				m_movementTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[1] = false;
-				//Undo second movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(1);//Undo second movement upgrade
 			}
 		}
 		else if (m_movementCheck[1] && !m_movementCheck[2] || (undo && !m_movementCheck[3]))
@@ -467,13 +467,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[2] = true;
-				//Increase movement speed third time
+				ShipStats::s_playerStats->IncreaseSpeed(3);//Increase movement speed third time
 			}
 			if (undo)
 			{
 				m_movementTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[2] = false;
-				//Undo third movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(2);//Undo third movement upgrade
 			}
 		}
 		else if (m_movementCheck[2] && !m_movementCheck[3] || (undo && !m_movementCheck[4]))
@@ -482,13 +482,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[3] = true;
-				//Increase movement speed fourth time
+				ShipStats::s_playerStats->IncreaseSpeed(4);//Increase movement speed fourth time
 			}
 			if (undo)
 			{
 				m_movementTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[3] = false;
-				//Undo fourth movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(3);//Undo fourth movement upgrade
 			}
 		}
 		else if (m_movementCheck[3] || (undo && m_movementCheck[4]))
@@ -497,13 +497,13 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 			{
 				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[4] = true;
-				//Increase movement speed fifth time
+				ShipStats::s_playerStats->IncreaseSpeed(5);//Increase movement speed fifth time
 			}
 			if (undo)
 			{
 				m_movementTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[4] = false;
-				//Undo fifth movement upgrade
+				ShipStats::s_playerStats->IncreaseSpeed(4);//Undo fifth movement upgrade
 			}
 		}
 	}

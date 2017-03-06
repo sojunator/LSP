@@ -7,7 +7,7 @@ ShipStats::ShipStats()
 	m_cannonDamage = 5;
 	//m_cannonSpread; //Add later
 	//m_cannonQuantity; //Add later
-	m_speed = 200;
+	m_speed = 150;
 	m_boostCost = 20;
 	m_cannonCost = 50;
 	m_shieldAmount = 0;
@@ -56,5 +56,6 @@ void ShipStats::IncreaseCannonDamage(float talentAmount)
 
 void ShipStats::IncreaseSpeed(float talentAmount)
 {
-	m_speed = 20 + talentAmount * 3;
+	m_speed = 150 + (talentAmount * 30);
+	LOG(m_speed);
 }
