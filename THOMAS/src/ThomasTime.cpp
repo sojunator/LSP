@@ -1,4 +1,5 @@
 #include "ThomasTime.h"
+#include "../src/utils/DebugTools.h"
 #include <Windows.h>
 namespace thomas
 {
@@ -23,10 +24,11 @@ namespace thomas
 		QueryPerformanceCounter(&currentTime);
 		s_initTime = double(currentTime.QuadPart);
 		s_startTime = double(currentTime.QuadPart);
-		s_FPS = 0;
-		s_timescale = 1;
-		s_FpsUpdateFreq = 0.7;
+		s_FPS = 0.0f;
+		s_timescale = 1.0f;
+		s_FpsUpdateFreq = 0.7f;
 		s_TimeLeftToUpdateFPS = s_FpsUpdateFreq;
+
 		return true;
 	}
 
@@ -41,7 +43,7 @@ namespace thomas
 			s_FrameTime = 1000.0 / s_FPS;
 			s_TimeLeftToUpdateFPS = s_FpsUpdateFreq;
 		}
-		
+	
 	}
 
 	float ThomasTime::GetDeltaTime()
