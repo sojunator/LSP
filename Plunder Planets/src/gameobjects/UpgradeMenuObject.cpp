@@ -5,41 +5,34 @@ void UpgradeMenuObject::Start()
 {
 	component::Camera* cam = AddComponent<component::Camera>();
 	m_header = AddComponent<component::SpriteComponent>();
-	m_currentGold = AddComponent<component::TextComponent>();
 	m_startButton = AddComponent<component::SpriteComponent>();
 	m_cannonIcon = AddComponent<component::SpriteComponent>();
-	m_cannonCost = AddComponent<component::SpriteComponent>();
 	m_cannonTalent1 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent2 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent3 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent4 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent5 = AddComponent<component::SpriteComponent>();
 	m_movementIcon = AddComponent<component::SpriteComponent>();
-	m_movementCost = AddComponent<component::SpriteComponent>();
 	m_movementTalent1 = AddComponent<component::SpriteComponent>();
 	m_movementTalent2 = AddComponent<component::SpriteComponent>();
 	m_movementTalent3 = AddComponent<component::SpriteComponent>();
 	m_movementTalent4 = AddComponent<component::SpriteComponent>();
 	m_movementTalent5 = AddComponent<component::SpriteComponent>();
 	m_resourceIcon = AddComponent<component::SpriteComponent>();
-	m_resourceCost = AddComponent<component::SpriteComponent>();
 	m_resourceTalent1 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent2 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent3 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent4 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent5 = AddComponent<component::SpriteComponent>();
 	m_shieldIcon = AddComponent<component::SpriteComponent>();
-	m_shieldCost = AddComponent<component::SpriteComponent>();
 	m_shieldTalent1 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent2 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent3 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent4 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent5 = AddComponent<component::SpriteComponent>();
 	m_repairIcon = AddComponent<component::SpriteComponent>();
-	m_repairCost = AddComponent<component::SpriteComponent>();
 	m_repairTalent1 = AddComponent<component::SpriteComponent>();
 	m_plunderIcon = AddComponent<component::SpriteComponent>();
-	m_plunderCost = AddComponent<component::SpriteComponent>();
 	m_plunderTalent1 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent2 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent3 = AddComponent<component::SpriteComponent>();
@@ -48,13 +41,20 @@ void UpgradeMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
+	m_currentGold = AddComponent<component::TextComponent>();
+	m_cannonCosts = AddComponent<component::TextComponent>();
+	m_movementCosts = AddComponent<component::TextComponent>();
+	m_resourceCosts = AddComponent<component::TextComponent>();
+	m_shieldCosts = AddComponent<component::TextComponent>();
+	m_repairCosts = AddComponent<component::TextComponent>();
+	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
 
 	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
-	m_currentGold->SetFont("CurrentGold");
+	m_currentGold->SetFont("Pirate");
 	m_currentGold->SetOutput("Current gold: " + std::to_string(currentGoldCast));
 	m_currentGold->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
 	m_currentGold->SetRotation(0.0f);
@@ -91,13 +91,16 @@ void UpgradeMenuObject::Start()
 	m_cannonIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonIcon->SetInteractable(true);
 
-	m_cannonCost->SetName("CannonCost");
-	m_cannonCost->SetPositionX(50);
-	m_cannonCost->SetPositionY(150);
-	m_cannonCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_cannonCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_cannonCost->SetHoverColor(math::Color(1.0, 1.0, 1.0));
-	m_cannonCost->SetInteractable(false);
+	m_cannonCosts->SetFont("Pirate");
+	m_cannonCosts->SetOutput("200/300/500/750/1000");
+	m_cannonCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_cannonCosts->SetRotation(0.0f);
+	m_cannonCosts->SetScale(1.0f);
+	m_cannonCosts->SetPositionX(50);
+	m_cannonCosts->SetPositionY(150);
+	m_cannonCosts->SetDropshadow(false);
+	m_cannonCosts->SetOutline(true);
+	m_cannonCosts->SetOrigin(false);
 
 	m_cannonTalent1->SetName("CannonTalent1");
 	m_cannonTalent1->SetPositionX(220);
@@ -148,13 +151,16 @@ void UpgradeMenuObject::Start()
 	m_movementIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementIcon->SetInteractable(true);
 
-	m_movementCost->SetName("MovementCost");
-	m_movementCost->SetPositionX(50);
-	m_movementCost->SetPositionY(375);
-	m_movementCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_movementCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_movementCost->SetHoverColor(math::Color(1.0, 1.0, 1.0));
-	m_movementCost->SetInteractable(false);
+	m_movementCosts->SetFont("Pirate");
+	m_movementCosts->SetOutput("200/300/500/750/1000");
+	m_movementCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_movementCosts->SetRotation(0.0f);
+	m_movementCosts->SetScale(1.0f);
+	m_movementCosts->SetPositionX(50);
+	m_movementCosts->SetPositionY(375);
+	m_movementCosts->SetDropshadow(false);
+	m_movementCosts->SetOutline(true);
+	m_movementCosts->SetOrigin(false);
 
 	m_movementTalent1->SetName("MovementTalent1");
 	m_movementTalent1->SetPositionX(220);
@@ -205,13 +211,16 @@ void UpgradeMenuObject::Start()
 	m_resourceIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceIcon->SetInteractable(true);
 
-	m_resourceCost->SetName("ResourceCost");
-	m_resourceCost->SetPositionX(50);
-	m_resourceCost->SetPositionY(600);
-	m_resourceCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_resourceCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_resourceCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceCost->SetInteractable(false);
+	m_resourceCosts->SetFont("Pirate");
+	m_resourceCosts->SetOutput("200/300/500/750/1000");
+	m_resourceCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_resourceCosts->SetRotation(0.0f);
+	m_resourceCosts->SetScale(1.0f);
+	m_resourceCosts->SetPositionX(50);
+	m_resourceCosts->SetPositionY(600);
+	m_resourceCosts->SetDropshadow(false);
+	m_resourceCosts->SetOutline(true);
+	m_resourceCosts->SetOrigin(false);
 
 	m_resourceTalent1->SetName("ResourceTalent1");
 	m_resourceTalent1->SetPositionX(220);
@@ -262,13 +271,16 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldIcon->SetInteractable(true);
 
-	m_shieldCost->SetName("ShieldCost");
-	m_shieldCost->SetPositionX(1720);
-	m_shieldCost->SetPositionY(150);
-	m_shieldCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_shieldCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_shieldCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldCost->SetInteractable(false);
+	m_shieldCosts->SetFont("Pirate");
+	m_shieldCosts->SetOutput("200/300/500/750/1000");
+	m_shieldCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_shieldCosts->SetRotation(0.0f);
+	m_shieldCosts->SetScale(1.0f);
+	m_shieldCosts->SetPositionX(1320);
+	m_shieldCosts->SetPositionY(150);
+	m_shieldCosts->SetDropshadow(false);
+	m_shieldCosts->SetOutline(true);
+	m_shieldCosts->SetOrigin(false);
 
 	m_shieldTalent1->SetName("ShieldTalent1");
 	m_shieldTalent1->SetPositionX(1600);
@@ -319,13 +331,16 @@ void UpgradeMenuObject::Start()
 	m_repairIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_repairIcon->SetInteractable(true);
 
-	m_repairCost->SetName("RepairCost");
-	m_repairCost->SetPositionX(1720);
-	m_repairCost->SetPositionY(375);
-	m_repairCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_repairCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_repairCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_repairCost->SetInteractable(false);
+	m_repairCosts->SetFont("Pirate");
+	m_repairCosts->SetOutput("15 gold / health missing");
+	m_repairCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_repairCosts->SetRotation(0.0f);
+	m_repairCosts->SetScale(1.0f);
+	m_repairCosts->SetPositionX(1320);
+	m_repairCosts->SetPositionY(375);
+	m_repairCosts->SetDropshadow(false);
+	m_repairCosts->SetOutline(true);
+	m_repairCosts->SetOrigin(false);
 
 	m_repairTalent1->SetName("RepairTalent1");
 	m_repairTalent1->SetPositionX(1600);
@@ -344,13 +359,16 @@ void UpgradeMenuObject::Start()
 	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderIcon->SetInteractable(true);
 
-	m_plunderCost->SetName("PlunderCost");
-	m_plunderCost->SetPositionX(1720);
-	m_plunderCost->SetPositionY(600);
-	m_plunderCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_plunderCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_plunderCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_plunderCost->SetInteractable(false);
+	m_plunderSpeedCosts->SetFont("Pirate");
+	m_plunderSpeedCosts->SetOutput("200/300/500/750/1000");
+	m_plunderSpeedCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_plunderSpeedCosts->SetRotation(0.0f);
+	m_plunderSpeedCosts->SetScale(1.0f);
+	m_plunderSpeedCosts->SetPositionX(1320);
+	m_plunderSpeedCosts->SetPositionY(600);
+	m_plunderSpeedCosts->SetDropshadow(false);
+	m_plunderSpeedCosts->SetOutline(true);
+	m_plunderSpeedCosts->SetOrigin(false);
 
 	m_plunderTalent1->SetName("PlunderTalent1");
 	m_plunderTalent1->SetPositionX(1650);
@@ -411,9 +429,7 @@ void UpgradeMenuObject::Start()
 	m_wormhole->SetRotationSpeed(math::DegreesToRadians(5));
 	m_wormhole->SetOffset(cam->m_gameObject->m_transform->Forward() * 50);
 	m_wormhole->StartEmitting();
-
 }
-
 
 void UpgradeMenuObject::Update()
 {
@@ -457,7 +473,6 @@ void UpgradeMenuObject::Update()
 void UpgradeMenuObject::UpdateGoldCounter()
 {
 	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
-	m_currentGold->SetFont("CurrentGold");
 	m_currentGold->SetOutput("Current gold: " + std::to_string(currentGoldCast));
 }
 
