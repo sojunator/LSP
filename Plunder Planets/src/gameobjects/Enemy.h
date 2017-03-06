@@ -1,5 +1,5 @@
 #pragma once
-#include <Thomas.h>
+#include "Thomas.h"
 #include "Broadside.h"
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"

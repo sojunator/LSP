@@ -3,7 +3,6 @@
 #include "../../THOMAS/src/object/Object.h"
 #include "../gameobjects/CameraObject.h"
 #include "../gameobjects/Terrain/TerrainObject.h"
-#include "../gameobjects/Terrain/IslandObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
 #include "../gameobjects/OceanFloor.h"

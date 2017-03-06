@@ -6,7 +6,6 @@
 
 #include "Thomas.h"
 #include "gameobjects\CameraObject.h"
-#include "gameobjects\Terrain\TerrainObject.h"
 #include "gameobjects\WaterObject.h"
 #include "materials\PhongMaterial.h"
 #include "materials\WaterMaterial.h"

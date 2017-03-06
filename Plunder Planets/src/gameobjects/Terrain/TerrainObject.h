@@ -1,10 +1,9 @@
 #pragma once
 
-#include <Thomas.h>
+#include "Thomas.h"
 #include <string>
 #include "../Enemy.h"
-
-class IslandObject;
+#include "IslandObject.h"
 
 class TerrainObject : public GameObject
 {
@@ -18,8 +17,6 @@ public:
 
 	void Start()
 	{
-
-		//m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_sound->SetClip("fPlunder");
 		m_sound->SetLooping(true);
@@ -29,8 +26,6 @@ public:
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
-			m_renderers.push_back(AddComponent<component::RenderComponent>());
-			m_renderers[i]->SetModel("Island-" + std::to_string(i));
 		}
 
 
@@ -107,9 +102,6 @@ public:
 
 private:
 	thomas::Islands* m_islands;
-
-	std::vector<component::RigidBodyComponent*> m_rigidBodyVec;
-	std::vector<component::RenderComponent*> m_renderers;
 	component::SoundComponent* m_sound;
 
 };
