@@ -93,7 +93,8 @@ public:
 	{
 		if (m_fire)
 		{
-			if (m_monteCarloDelay < 0)
+			m_monteCarloDelay = 0;
+			if (m_monteCarloDelay <= 0)
 			{
 				math::Vector3 dir = m_transform->Forward() * 3 + m_transform->Up();
 				dir.Normalize();

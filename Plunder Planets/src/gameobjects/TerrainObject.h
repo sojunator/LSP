@@ -71,7 +71,7 @@ public:
 					float rads = r * math::PI * 2;
 					math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
 					randDir.Normalize();
-					math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 10)*math::Vector3(randDir.x, 0, randDir.y);
+					math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 30)*math::Vector3(randDir.x, 0, randDir.y);
 					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, m_scene);
 				}
 			}
