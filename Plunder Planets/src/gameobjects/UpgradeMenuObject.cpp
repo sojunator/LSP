@@ -426,6 +426,8 @@ void UpgradeMenuObject::Update()
 		ShieldCheck(upgrade, undo);
 
 		RepairCheck(upgrade, undo);
+
+		PlunderCheck(upgrade, undo);
 	}
 
 	Navigation();
@@ -503,7 +505,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Undo fourth upgrade
 			}
 		}
-		else if (m_cannonCheck[3] || (undo && m_cannonCheck[4]))
+		else if ((m_cannonCheck[3] && !m_cannonCheck[4]) || (undo && m_cannonCheck[4]))
 		{
 			if (upgrade)
 			{
@@ -586,7 +588,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Undo fourth movement upgrade
 			}
 		}
-		else if (m_movementCheck[3] || (undo && m_movementCheck[4]))
+		else if ((m_movementCheck[3] && !m_movementCheck[4]) || (undo && m_movementCheck[4]))
 		{
 			if (upgrade)
 			{
@@ -668,7 +670,7 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 				//Undo fourth resource cost reduction
 			}
 		}
-		else if (m_resourceCheck[3] || (undo && m_resourceCheck[4]))
+		else if ((m_resourceCheck[3] && !m_resourceCheck[4]) || (undo && m_resourceCheck[4]))
 		{
 			if (upgrade)
 			{
@@ -750,7 +752,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Undo last shield upgrade
 			}
 		}
-		else if (m_shieldCheck[3] || (undo && m_shieldCheck[4]))
+		else if ((m_shieldCheck[3] && !m_shieldCheck[4]) || (undo && m_shieldCheck[4]))
 		{
 			if (upgrade)
 			{
@@ -783,6 +785,78 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 			{
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				//Reset health
+			}
+		}
+	}
+}
+
+void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
+{
+	if (m_plunderIcon->isHovering())
+	{
+		if (!m_plunderCheck[0] || (!m_plunderCheck[1] && undo))
+		{
+			if (upgrade)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[0] = true;
+			}
+			if (undo)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[0] = false;
+			}
+		}
+		else if ((m_plunderCheck[0] && !m_plunderCheck[1]) || (!m_plunderCheck[2] && undo))
+		{
+			if (upgrade)
+			{
+				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[1] = true;
+			}
+			if (undo)
+			{
+				m_plunderTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[1] = false;
+			}
+		}
+		else if ((m_plunderCheck[1] && !m_plunderCheck[2]) || (!m_plunderCheck[3] && undo))
+		{
+			if (upgrade)
+			{
+				m_plunderTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[2] = true;
+			}
+			if (undo)
+			{
+				m_plunderTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[2] = false;
+			}
+		}
+		else if ((m_plunderCheck[2] && !m_plunderCheck[3]) || (!m_plunderCheck[4] && undo))
+		{
+			if (upgrade)
+			{
+				m_plunderTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[3] = true;
+			}
+			if (undo)
+			{
+				m_plunderTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[3] = false;
+			}
+		}
+		else if ((m_plunderCheck[3] && !m_plunderCheck[4]) || (m_plunderCheck[4] && undo))
+		{
+			if (upgrade)
+			{
+				m_plunderTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[4] = true;
+			}
+			if (undo)
+			{
+				m_plunderTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[4] = false;
 			}
 		}
 	}
