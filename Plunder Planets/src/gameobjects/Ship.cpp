@@ -304,16 +304,17 @@ void Ship::ShipAimCannons()
 		flatRight.y = 0;
 		flatRight.Normalize();
 		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
-		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D*m_aimDistance; //TODO: redo for better approx?
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) - flatRight2D * m_aimDistance;
 		m_aimPosition = math::Vector3(target.x, 0, target.y);
 		Aim(1, target);
 		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 		if (angle > -500.0)
 		{
-			m_broadSideLeft->SetCanonAngle(-angle);
+			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+			m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			DrawAimArc(m_broadSideLeft->m_transform->Forward());
+			DrawAimArc(m_broadSideLeft);
 		}
 
 		if ((Input::GetButtonDown(Input::Buttons::A)|| Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
@@ -334,17 +335,17 @@ void Ship::ShipAimCannons()
 		flatRight.y = 0;
 		flatRight.Normalize();
 		math::Vector2 flatRight2D = math::Vector2(flatRight.x, flatRight.z);
-		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) + flatRight2D*m_aimDistance;
+		math::Vector2 target = math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z) + flatRight2D * m_aimDistance;
 		m_aimPosition = math::Vector3(target.x, 0, target.y);
 		Aim(-1, target);
 		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
-
 		if (angle > -500.0)
 		{
-			m_broadSideRight->SetCanonAngle(-angle);
+			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+			m_broadSideRight->SetCanonAngle(-angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			DrawAimArc(m_broadSideRight->m_transform->Forward());
+			DrawAimArc(m_broadSideRight);
 		}
 		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
@@ -376,13 +377,13 @@ void Ship::ShipAimCannons()
 	//	
 	//}
 }
-void Ship::DrawAimArc(math::Vector3 exitVector)
+void Ship::DrawAimArc(Broadside* broadside)
 {
-	p0 = m_transform->GetPosition(); //boat pos
-	p3 = math::Vector3(m_aimPosition.x, m_aimPosition.y, m_aimPosition.z); //aim pos
+	p0 = math::Vector3(broadside->m_transform->GetPosition().x, broadside->m_transform->GetPosition().y - 10, broadside->m_transform->GetPosition().z); //boat pos
+	p3 = m_aimPosition; //aim pos
 
-	p1 = p0 + exitVector; //vector defining starting direction of projectiles
-	p2 = p3 + math::Vector3(0, 1, 0)/* * scalar */;
+	p1 = p0 + broadside->m_transform->Forward() * 50; //vector defining starting direction of projectiles
+	p2 = p3 + math::Vector3(0, 1, 0) * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f);
 	math::Vector3 point, prevPoint = p0;
 	for (int i = 1; i <= 10; ++i)
 	{

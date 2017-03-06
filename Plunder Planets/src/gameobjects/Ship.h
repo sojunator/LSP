@@ -29,7 +29,7 @@ public:
 	void ShipFireCannons();
 	void ShipAimCannons();
 	void UpgradeSpeed(float speedIncrease);
-	void DrawAimArc(math::Vector3 exitVector);
+	void DrawAimArc(Broadside* broadside);
 	//cam
 	void CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector);
 	void CameraZoom(float const dt);
