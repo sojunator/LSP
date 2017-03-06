@@ -1,5 +1,5 @@
 #include "ship.h"
-#include "TerrainObject.h"
+#include "Terrain/TerrainObject.h"
 #include "Wormhole.h"
 void Ship::Start()
 {

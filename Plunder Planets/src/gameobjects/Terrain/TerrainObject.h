@@ -1,9 +1,9 @@
-
 #pragma once
 
-#include <Thomas.h>
+#include "Thomas.h"
 #include <string>
-#include "Enemy.h"
+#include "../Enemy.h"
+#include "IslandObject.h"
 
 
 class TerrainObject : public GameObject
@@ -19,17 +19,22 @@ public:
 	void Start()
 	{
 
-		m_renderer = AddComponent<component::RenderComponent>();
+		//m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_sound->SetClip("fPlunder");
 		m_sound->SetLooping(true);
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 512, 1/8.f, 4096, 512);
-		m_model = thomas::graphics::Model::CreateModel("Islands", m_islands->GetIslands(0));
+		m_islands = new thomas::Islands(20, mat, 1024, 1 / 8.f, 4096);
+		int nrOfIslands = m_islands->GetNrOfIslands();
+		for (int i = 0; i < nrOfIslands; i++)
+		{
+			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
+			m_renderers.push_back(AddComponent<component::RenderComponent>());
+			m_renderers[i]->SetModel("Island-" + std::to_string(i));
+		}
 
-		m_renderer->SetModel("Islands");
 
-		m_transform->SetPosition(math::Vector3(0, -5.5, 0));
+		m_transform->SetPosition(math::Vector3(0, -2, 0));
 		PlaceRigidBody();
 
 	}
@@ -102,10 +107,9 @@ public:
 
 private:
 	thomas::Islands* m_islands;
-	thomas::graphics::Model* m_model;
-	
+
 	std::vector<component::RigidBodyComponent*> m_rigidBodyVec;
-	component::RenderComponent* m_renderer;
+	std::vector<component::RenderComponent*> m_renderers;
 	component::SoundComponent* m_sound;
 
 };

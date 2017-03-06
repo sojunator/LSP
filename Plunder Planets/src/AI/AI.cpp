@@ -1,6 +1,6 @@
 #include "AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
-#include "../gameobjects/TerrainObject.h"
+#include "../gameobjects/Terrain/TerrainObject.h"
 AI::AI() : thomas::object::component::Component("AI")
 {
 	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");

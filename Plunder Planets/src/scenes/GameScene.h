@@ -2,7 +2,7 @@
 #include "../src/Scene.h"
 #include "../../THOMAS/src/object/Object.h"
 #include "../gameobjects/CameraObject.h"
-#include "../gameobjects/TerrainObject.h"
+#include "../gameobjects/Terrain/TerrainObject.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
 #include "../gameobjects/OceanFloor.h"

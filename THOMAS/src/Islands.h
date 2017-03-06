@@ -10,7 +10,7 @@ namespace thomas
 	{
 	public:
 	
-		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance);
+		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize);
 		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m);
 		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
 		~Islands();
@@ -18,7 +18,7 @@ namespace thomas
 		int GetPlunderRate();									//GetplunderRate
 		int GetNrOfIslands();									//Get nr of islands
 		int GetMapSize();										//Get size of the whole play area
-		int GetMinDistance();									//Get minimum allowed distance between islands
+		int GetMinDistance(int island);									//Get minimum allowed distance between islands
 		float GetTreasure(int island);							//Get treasure for specific island
 		float GetTreasureLostSinceLastEnemy(int island);
 		void resetTreasureLost(int island);
@@ -45,7 +45,7 @@ namespace thomas
 		int m_plunderRate;
 		int m_nrOfIslands;
 		int m_mapSize;
-		int m_minDistance;
+		std::vector<int> m_minDistance;
 		std::vector<float> m_lostTreasureSinceLastEnemySpawn;
 		std::vector<float> m_treasure;
 		std::vector<int> m_totalTreasure;

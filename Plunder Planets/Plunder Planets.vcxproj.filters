@@ -20,7 +20,6 @@
     <ClInclude Include="src\gameobjects\Broadside.h" />
     <ClInclude Include="src\gameobjects\Projectile.h" />
     <ClInclude Include="src\gameobjects\Ship.h" />
-    <ClInclude Include="src\gameobjects\TerrainObject.h" />
     <ClInclude Include="src\gameobjects\TestDirectionalLight.h" />
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
@@ -48,6 +47,8 @@
     <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
     <ClInclude Include="src\Ocean\OceanSimulator.h" />
     <ClInclude Include="src\gameobjects\Wormhole.h" />
+    <ClInclude Include="src\gameobjects\Terrain\TerrainObject.h" />
+    <ClInclude Include="src\gameobjects\Terrain\IslandObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />
