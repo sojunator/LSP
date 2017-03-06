@@ -92,6 +92,7 @@ public:
 		//Sound
 		m_health = 20;
 		m_dead = false;
+		m_deathTime = 10;
 		//Movement
 		m_speed = 600;
 		m_turnSpeed = 150;
@@ -100,25 +101,26 @@ public:
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 
-		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetTexture("../res/textures/fire.png");
-		m_emitterSmoke->SetShader("particleShader");
-		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
-		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
-		m_emitterSmoke->SetMaxDelay(0.75f);
-		m_emitterSmoke->SetMinDelay(0.15f);
-		m_emitterSmoke->SetMaxSpeed(6.0f);
-		m_emitterSmoke->SetMinSpeed(3.0f);
-		m_emitterSmoke->SetMaxSize(2.4f);
-		m_emitterSmoke->SetMinSize(1.4f);
-		m_emitterSmoke->SetEndSize(3.4f);
-		m_emitterSmoke->SetMaxLifeTime(1.85f);
-		m_emitterSmoke->SetMinLifeTime(0.7f);
-		m_emitterSmoke->SetRotationSpeed(1.0f);
-		m_emitterSmoke->SetSpread(1.44f);
-		m_emitterSmoke->SetEmissionRate(250);
-		m_emitterSmoke->SetEmissionDuration(1.2f);
+		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterSpark->SetTexture("../res/textures/fire.png");
+		m_emitterSpark->SetShader("particleShader");
+		m_emitterSpark->SetDirection(math::Vector3(0, 1, 0));
+		m_emitterSpark->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_emitterSpark->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
+		m_emitterSpark->SetMaxDelay(0.0f);
+		m_emitterSpark->SetMinDelay(0.0f);
+		m_emitterSpark->SetMaxSpeed(16.0f);
+		m_emitterSpark->SetMinSpeed(10.0f);
+		m_emitterSpark->SetMaxSize(3.4f);
+		m_emitterSpark->SetMinSize(2.4f);
+		m_emitterSpark->SetEndSize(0.4f);
+		m_emitterSpark->SetMaxLifeTime(1.85f);
+		m_emitterSpark->SetMinLifeTime(0.7f);
+		m_emitterSpark->SetRotationSpeed(1.0f);
+		m_emitterSpark->SetSpread(2.44f);
+		m_emitterSpark->SetEmissionRate(900);
+		m_emitterSpark->SetEmissionDuration(0.7f);
+		m_emitterSpark->AddToDebugMenu();
 
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
@@ -128,17 +130,18 @@ public:
 		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
 		m_emitterSmoke->SetMaxDelay(0.75f);
 		m_emitterSmoke->SetMinDelay(0.15f);
-		m_emitterSmoke->SetMaxSpeed(6.0f);
-		m_emitterSmoke->SetMinSpeed(3.0f);
-		m_emitterSmoke->SetMaxSize(2.4f);
+		m_emitterSmoke->SetMaxSpeed(8.0f);
+		m_emitterSmoke->SetMinSpeed(4.0f);
+		m_emitterSmoke->SetMaxSize(2.1f);
 		m_emitterSmoke->SetMinSize(1.4f);
 		m_emitterSmoke->SetEndSize(3.4f);
-		m_emitterSmoke->SetMaxLifeTime(1.85f);
-		m_emitterSmoke->SetMinLifeTime(0.7f);
-		m_emitterSmoke->SetRotationSpeed(1.0f);
-		m_emitterSmoke->SetSpread(1.44f);
-		m_emitterSmoke->SetEmissionRate(250);
-		m_emitterSmoke->SetEmissionDuration(1.2f);
+		m_emitterSmoke->SetMaxLifeTime(5.85f);
+		m_emitterSmoke->SetMinLifeTime(2.7f);
+		m_emitterSmoke->SetRotationSpeed(2.4f);
+		m_emitterSmoke->SetSpread(1.84f);
+		m_emitterSmoke->SetEmissionRate(600);
+		m_emitterSmoke->SetEmissionDuration(1.0f);
+		m_emitterSmoke->AddToDebugMenu();
 
 		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
 		m_frustumCullingComponent->SetRadius(15);
@@ -273,7 +276,8 @@ public:
 		if (m_dead)
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
-			if (m_transform->GetPosition().y < -10)
+			m_deathTime -= dt;
+			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 				Destroy(this);
 			return;
 		}
@@ -330,7 +334,8 @@ public:
 	}
 
 private:
-	
+
+	float m_deathTime;
 	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
@@ -357,6 +362,8 @@ private:
 	float m_turnSpeed;
 	int m_turnDir;
 	int m_shootDir;
+
+
 
 	math::Vector3 m_newForwardVec;
 
