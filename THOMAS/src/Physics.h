@@ -19,6 +19,9 @@ namespace thomas
 
 		static btVector3 ToBullet(math::Vector3& vector);
 		static math::Vector3 ToSimple(btVector3& vector);
+
+		static btQuaternion ToBullet(math::Quaternion& quaternion);
+		static math::Quaternion ToSimple(btQuaternion& quaternion);
 	private:
 		static graphics::BulletDebugDraw* s_debugDraw;
 		static float s_accumulator;

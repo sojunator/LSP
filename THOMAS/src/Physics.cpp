@@ -95,5 +95,16 @@ namespace thomas
 	{
 		return (math::Vector3)vector;
 	}
+	btQuaternion Physics::ToBullet(math::Quaternion& quaternion)
+	{
+		return *(btQuaternion*)&quaternion;
+	}
+
+	math::Quaternion Physics::ToSimple(btQuaternion & quaternion)
+	{
+		return (math::Quaternion)quaternion;
+	}
+
+
 
 }

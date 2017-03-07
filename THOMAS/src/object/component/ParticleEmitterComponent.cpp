@@ -237,8 +237,8 @@ namespace thomas
 			{
 				if (!m_isEmitting)
 				{
-				m_isEmitting = true;
-				m_emissionTimeLeft = m_emissionDuration;
+					m_isEmitting = true;
+					m_emissionTimeLeft = m_emissionDuration;
 				}
 
 

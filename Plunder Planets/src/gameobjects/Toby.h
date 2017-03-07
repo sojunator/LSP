@@ -20,7 +20,7 @@ public:
 
 	void Start()
 	{
-
+		m_mass = 500000;
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 
@@ -75,15 +75,16 @@ public:
 		m_rigidBody->setGravity(btVector3(0, -15, 0));
 
 
+		m_explosionRadius = 50;
 		m_explosionCollider = AddComponent<component::RigidBodyComponent>();
-		m_explosionCollider->SetCollider(new btSphereShape(10));
+		m_explosionCollider->SetCollider(new btSphereShape(m_explosionRadius));
 		m_explosionCollider->SetKinematic(true);
 		m_explosionCollider->setCollisionFlags(m_explosionCollider->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
 		//Sound
 		m_health = 20;
 		m_dead = false;
-		m_deathTime = 10;
+		m_deathTime = 2;
 		//Movement
 		m_speed = 200;
 		m_turnSpeed = 50;
@@ -91,47 +92,6 @@ public:
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
 		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
-
-		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSpark->SetTexture("../res/textures/fire.png");
-		m_emitterSpark->SetShader("particleShader");
-		m_emitterSpark->SetDirection(math::Vector3(0, 1, 0));
-		m_emitterSpark->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSpark->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
-		m_emitterSpark->SetMaxDelay(0.0f);
-		m_emitterSpark->SetMinDelay(0.0f);
-		m_emitterSpark->SetMaxSpeed(16.0f);
-		m_emitterSpark->SetMinSpeed(10.0f);
-		m_emitterSpark->SetMaxSize(3.4f);
-		m_emitterSpark->SetMinSize(2.4f);
-		m_emitterSpark->SetEndSize(0.4f);
-		m_emitterSpark->SetMaxLifeTime(1.85f);
-		m_emitterSpark->SetMinLifeTime(0.7f);
-		m_emitterSpark->SetRotationSpeed(1.0f);
-		m_emitterSpark->SetSpread(2.44f);
-		m_emitterSpark->SetEmissionRate(900);
-		m_emitterSpark->SetEmissionDuration(0.7f);
-
-		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
-		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
-		m_emitterSmoke->SetShader("particleShader");
-		m_emitterSmoke->SetDirection(math::Vector3(0, 1, 0));
-		m_emitterSmoke->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSmoke->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.4f));
-		m_emitterSmoke->SetMaxDelay(0.75f);
-		m_emitterSmoke->SetMinDelay(0.15f);
-		m_emitterSmoke->SetMaxSpeed(8.0f);
-		m_emitterSmoke->SetMinSpeed(4.0f);
-		m_emitterSmoke->SetMaxSize(2.1f);
-		m_emitterSmoke->SetMinSize(1.4f);
-		m_emitterSmoke->SetEndSize(3.4f);
-		m_emitterSmoke->SetMaxLifeTime(5.85f);
-		m_emitterSmoke->SetMinLifeTime(2.7f);
-		m_emitterSmoke->SetRotationSpeed(2.4f);
-		m_emitterSmoke->SetSpread(1.84f);
-		m_emitterSmoke->SetEmissionRate(600);
-		m_emitterSmoke->SetEmissionDuration(1.0f);
-
 
 		m_boosterParticlesEmitterLeft1 = AddComponent<component::ParticleEmitterComponent>();
 		m_boosterParticlesEmitterLeft1->SetTexture("../res/textures/fire.png");
@@ -205,6 +165,13 @@ public:
 		m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 		m_boosterParticlesEmitterRight2->SetSpread(2.5f);
 
+
+
+		m_explosionParticle = AddComponent<component::ParticleEmitterComponent>();
+		m_explosionParticle->SetTexture("../res/textures/fire2.png");
+		m_explosionParticle->SetLooping(true);
+		m_explosionParticle->AddToDebugMenu();
+
 		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
 		m_frustumCullingComponent->SetRadius(15);
 		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
@@ -277,11 +244,6 @@ public:
 		return dir;
 	}
 
-	void Explode()
-	{
-
-	}
-
 	void Float(float dt)
 	{
 		float waveHeight = 0;
@@ -324,6 +286,7 @@ public:
 
 	void Update()
 	{
+		m_explosionParticle->StartEmitting();
 		float const dt = ThomasTime::GetDeltaTime();
 
 		if (m_dead)
@@ -341,7 +304,7 @@ public:
 		{
 			if (thomas::object::GameObject::Find("Ship"))
 			{
-				m_ai->SetActive(true);
+				//m_ai->SetActive(true);
 			}
 		}
 		else
@@ -383,15 +346,17 @@ public:
 			if (m_health <= 0)
 				Die();
 		}
-		else if (collision.thisRigidbody == m_explosionCollider && m_explode)
+		else if (collision.thisRigidbody == m_explosionCollider && collision.otherRigidbody != m_rigidBody && m_explode)
 		{
 			math::Vector3 impulseVector = collision.otherRigidbody->m_gameObject->m_transform->GetPosition() - m_transform->GetPosition();
-			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*1000000);
-
+			float distanceFromCenter = impulseVector.Length();
+			float dmgModifier =  1-(distanceFromCenter / m_explosionRadius);
+			impulseVector.Normalize();
+			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier);
 		}
 		else if (collision.thisRigidbody == m_rigidBody && collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
-			Explode();
+			Die();
 		}
 		
 
@@ -401,12 +366,8 @@ public:
 	void Die()
 	{
 		m_dead = true;
-		m_emitterSpark->SetDirection(m_transform->Up());
-		m_emitterSmoke->SetDirection(m_transform->Up());
-		m_emitterSmoke->StartEmitting();
-		m_emitterSpark->StartEmitting();
+		m_explode = true;
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
-		Explode();
 	}
 
 private:
@@ -423,13 +384,13 @@ private:
 	//ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components
-	component::ParticleEmitterComponent* m_emitterSpark;
-	component::ParticleEmitterComponent* m_emitterSmoke;
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;
 	component::RigidBodyComponent* m_explosionCollider;
 	component::FrustumCullingComponent* m_frustumCullingComponent;
+
+	component::ParticleEmitterComponent* m_explosionParticle;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight2;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;
@@ -445,6 +406,7 @@ private:
 	bool m_boosting;
 	bool m_moving;
 	bool m_explode;
+	float m_explosionRadius;
 
 	//Sound
 	float m_soundDelay;

@@ -611,7 +611,6 @@ void Ship::Update()
 	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 	ShipFireCannons();
 	ShipAimCannons();
-
 	if (m_flying)
 	{
 		//Input::Vibrate(0.1, 0.1);

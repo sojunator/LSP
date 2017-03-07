@@ -53,14 +53,27 @@ namespace thomas
 
 			void RigidBodyComponent::Update()
 			{
-				//Update our transform to match the rigidbody.
-				btTransform trans;
-				btDefaultMotionState *myMotionState = (btDefaultMotionState *)getMotionState();
-				trans = myMotionState->m_graphicsWorldTrans;
-				math::Vector3 pos = (math::Vector3)trans.getOrigin();
-				math::Quaternion rot = (math::Quaternion)trans.getRotation();
-				m_gameObject->m_transform->SetRotation(rot);
-				m_gameObject->m_transform->SetPosition(pos);
+				if (m_kinematic)
+				{
+					btTransform trans;
+					getMotionState()->getWorldTransform(trans);
+					trans.setOrigin(Physics::ToBullet(m_gameObject->m_transform->GetPosition()));
+					trans.setRotation(Physics::ToBullet(m_gameObject->m_transform->GetRotation()));
+					getMotionState()->setWorldTransform(trans);
+					setCenterOfMassTransform(trans);
+				}
+				else
+				{
+					//Update our transform to match the rigidbody.
+					btTransform trans;
+					btDefaultMotionState *myMotionState = (btDefaultMotionState *)getMotionState();
+					trans = myMotionState->m_graphicsWorldTrans;
+					math::Vector3 pos = (math::Vector3)trans.getOrigin();
+					math::Quaternion rot = (math::Quaternion)trans.getRotation();
+					m_gameObject->m_transform->SetRotation(rot);
+					m_gameObject->m_transform->SetPosition(pos);
+				}
+				
 			}
 			void RigidBodyComponent::SetKinematic(bool kinematic)
 			{
