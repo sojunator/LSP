@@ -4,7 +4,12 @@
 void UpgradeMenuObject::Start()
 {
 	component::Camera* cam = AddComponent<component::Camera>();
-	m_header = AddComponent<component::SpriteComponent>();
+	m_cannonInfo = AddComponent<component::SpriteComponent>();
+	m_movementInfo = AddComponent<component::SpriteComponent>();
+	m_resourceInfo = AddComponent<component::SpriteComponent>();
+	m_shieldInfo = AddComponent<component::SpriteComponent>();
+	m_healthInfo = AddComponent<component::SpriteComponent>();
+	m_plunderInfo = AddComponent<component::SpriteComponent>();
 	m_startButton = AddComponent<component::SpriteComponent>();
 	m_cannonIcon = AddComponent<component::SpriteComponent>();
 	m_cannonTalent1 = AddComponent<component::SpriteComponent>();
@@ -78,13 +83,53 @@ void UpgradeMenuObject::Start()
 	m_currentHealth->SetOutline(true);
 	m_currentHealth->SetOrigin(false);
 
-	m_header->SetName("Header");
-	m_header->SetPositionX(722);
-	m_header->SetPositionY(20);
-	m_header->SetScale(math::Vector2(2.0f, 2.0f));
-	m_header->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_header->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_header->SetInteractable(false);
+	m_cannonInfo->SetName("CannonInfo");
+	m_cannonInfo->SetPositionX(680);
+	m_cannonInfo->SetPositionY(150);
+	m_cannonInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_cannonInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_cannonInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_cannonInfo->SetInteractable(false);
+
+	m_movementInfo->SetName("MovementInfo");
+	m_movementInfo->SetPositionX(680);
+	m_movementInfo->SetPositionY(150);
+	m_movementInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_movementInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_movementInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_movementInfo->SetInteractable(false);
+
+	m_resourceInfo->SetName("ResourceInfo");
+	m_resourceInfo->SetPositionX(680);
+	m_resourceInfo->SetPositionY(150);
+	m_resourceInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_resourceInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_resourceInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_resourceInfo->SetInteractable(false);
+
+	m_shieldInfo->SetName("ShieldInfo");
+	m_shieldInfo->SetPositionX(680);
+	m_shieldInfo->SetPositionY(150);
+	m_shieldInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_shieldInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_shieldInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_shieldInfo->SetInteractable(false);
+
+	m_healthInfo->SetName("HealthInfo");
+	m_healthInfo->SetPositionX(680);
+	m_healthInfo->SetPositionY(150);
+	m_healthInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_healthInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_healthInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_healthInfo->SetInteractable(false);
+
+	m_plunderInfo->SetName("PlunderInfo");
+	m_plunderInfo->SetPositionX(680);
+	m_plunderInfo->SetPositionY(150);
+	m_plunderInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderInfo->SetInteractable(false);
 
 	m_startButton->SetName("UpgradeMenuStart");
 	m_startButton->SetPositionX(1450);
@@ -1070,46 +1115,86 @@ void UpgradeMenuObject::SetSelectedObject()
 		if ((m_yArray[i] == 1) && (m_xArray[0] == 1)) //Left side is selected, set highlights
 		{
 			if (i == 0)
+			{
 				m_cannonIcon->SetHovering(true);
+				m_cannonInfo->SetActive(true);
+			}
 			if (i == 1)
+			{
 				m_movementIcon->SetHovering(true);
+				m_movementInfo->SetActive(true);
+			}
 			if (i == 2)
+			{
 				m_resourceIcon->SetHovering(true);
-
+				m_resourceInfo->SetActive(true);
+			}
 			m_shieldIcon->SetHovering(false);
+			m_shieldInfo->SetActive(false);
 			m_repairIcon->SetHovering(false);
+			m_healthInfo->SetActive(false);
 			m_plunderIcon->SetHovering(false);
+			m_plunderInfo->SetActive(false);
 		}
 		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1)) //Left side is selected, remove highlights
 		{
 			if (i == 0)
+			{
 				m_cannonIcon->SetHovering(false);
+				m_cannonInfo->SetActive(false);
+			}
 			if (i == 1)
+			{
 				m_movementIcon->SetHovering(false);
+				m_movementInfo->SetActive(false);
+			}
 			if (i == 2)
+			{
 				m_resourceIcon->SetHovering(false);
-			m_shieldIcon->SetHovering(false);
+				m_resourceInfo->SetActive(false);
+			}
 		}
 		else if (m_xArray[1] == 1 && m_yArray[i] == 1) //Right side is selected, set highlights
 		{
 			if (i == 0)
+			{
 				m_shieldIcon->SetHovering(true);
+				m_shieldInfo->SetActive(true);
+			}
 			if (i == 1)
+			{
 				m_repairIcon->SetHovering(true);
+				m_healthInfo->SetActive(true);
+			}
 			if (i == 2)
+			{
 				m_plunderIcon->SetHovering(true);
+				m_plunderInfo->SetActive(true);
+			}
 		}
 		else if ((m_yArray[i] == 0) && (m_xArray[1] == 1)) //Right side selected, remove highlights
 		{
 			if (i == 0)
+			{
 				m_shieldIcon->SetHovering(false);
+				m_shieldInfo->SetActive(false);
+			}
 			if (i == 1)
+			{
 				m_repairIcon->SetHovering(false);
+				m_healthInfo->SetActive(false);
+			}
 			if (i == 2)
+			{
 				m_plunderIcon->SetHovering(false);
+				m_plunderInfo->SetActive(false);
+			}
 			m_cannonIcon->SetHovering(false);
+			m_cannonInfo->SetActive(false);
 			m_movementIcon->SetHovering(false);
+			m_movementInfo->SetActive(false);
 			m_resourceIcon->SetHovering(false);
+			m_resourceInfo->SetActive(false);
 		}
 	}
 }

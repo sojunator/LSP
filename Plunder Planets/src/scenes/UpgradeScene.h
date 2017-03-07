@@ -9,7 +9,12 @@ public:
 		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
-			thomas::graphics::Sprite::LoadTexture("Header", "../res/GUI/upgrade/upgrade.png");
+			thomas::graphics::Sprite::LoadTexture("CannonInfo", "../res/GUI/upgrade/cannoninfo.png");
+			thomas::graphics::Sprite::LoadTexture("MovementInfo", "../res/GUI/upgrade/movementinfo.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceInfo", "../res/GUI/upgrade/resourceinfo.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldInfo", "../res/GUI/upgrade/shieldinfo.png");
+			thomas::graphics::Sprite::LoadTexture("HealthInfo", "../res/GUI/upgrade/healthinfo.png");
+			thomas::graphics::Sprite::LoadTexture("PlunderInfo", "../res/GUI/upgrade/plunderinfo.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuStart", "../res/GUI/upgrade/continue.png");
 			thomas::graphics::Sprite::LoadTexture("CannonIcon", "../res/GUI/upgrade/cannon.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent1", "../res/GUI/upgrade/talent.png");
@@ -17,7 +22,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("CannonTalent3", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent4", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("CannonTalent5", "../res/GUI/upgrade/talent.png");
-			thomas::graphics::Sprite::LoadTexture("MovementIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("MovementIcon", "../res/GUI/upgrade/speed.png");
 			thomas::graphics::Sprite::LoadTexture("MovementTalent1", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("MovementTalent2", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("MovementTalent3", "../res/GUI/upgrade/talent.png");

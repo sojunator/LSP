@@ -93,15 +93,6 @@ void ShipStats::IncreaseSpeed(float talentAmount)
 	LOG("Speed: " + std::to_string(m_speed));
 }
 
-void ShipStats::IncreaseShieldAmount(float talentAmount)
-{
-	if (talentAmount == 1)
-		m_shieldAmount = 0.3;
-	else
-		m_shieldAmount = 0.3 + (0.175 * (talentAmount-1)); //0.3, 0.475, 0.65, 0.825, 1
-	LOG("Shield amount: " + std::to_string(m_shieldAmount));
-}
-
 void ShipStats::DecreaseCosts(float talentAmount)
 {
 	if (talentAmount == 5)
@@ -116,6 +107,15 @@ void ShipStats::DecreaseCosts(float talentAmount)
 	}
 	LOG("Cannon cost: " + std::to_string(m_cannonCost));
 	LOG("Boost cost: " + std::to_string(m_boostCost));
+}
+
+void ShipStats::IncreaseShieldAmount(float talentAmount)
+{
+	if (talentAmount == 1)
+		m_shieldAmount = 0.3;
+	else
+		m_shieldAmount = 0.3 + (0.175 * (talentAmount-1)); //0.3, 0.475, 0.65, 0.825, 1
+	LOG("Shield amount: " + std::to_string(m_shieldAmount));
 }
 
 void ShipStats::RepairHealth(float talentAmount)
