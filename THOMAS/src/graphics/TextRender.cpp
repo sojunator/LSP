@@ -16,7 +16,7 @@ namespace thomas
 		{		
 			if (!s_fonts[name])
 			{
-				LOG(name << " doesn't match any font names.");
+				//LOG(name << " doesn't match any font names.");
 			}
 
 			else
