@@ -57,6 +57,8 @@ namespace thomas
 
 			void Draw();
 
+			void ReleaseBuffers();
+
 		private:
 			std::string m_name;
 			MeshData m_data;

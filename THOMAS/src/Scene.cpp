@@ -29,16 +29,19 @@ namespace thomas
 	void Scene::UnloadScene()
 	{
 		utils::DebugTools::RemoveAllVariables();
+
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy(s_currentScene);
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
+		Physics::Destroy();
 		//graphics::Sprite::Destroy();
 		//graphics::TextRender::Destroy();
-		object::Object::Destroy(s_currentScene);
-		object::Object::Clean();
+		//object::Object::Destroy(s_currentScene);
+		//object::Object::Clean();
 		object::Object::Destroy();
+		
 		delete s_currentScene;
 		s_currentScene = nullptr;
 	}
@@ -48,20 +51,20 @@ namespace thomas
 		graphics::Renderer::RenderSetup(NULL);
 		if (s_currentScene)
 		{
-			char name = s_currentScene->GetName().at(0);
+			std::string name = s_currentScene->GetName();
 			std::vector<object::Object*> objects = object::Object::GetAllObjectsInScene(s_currentScene);
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
 					object->Update();
-				if (name != s_currentScene->GetName().at(0))
+				if (name != s_currentScene->GetName())
 					break;
 			}
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
 					object->LateUpdate();
-				if (name != s_currentScene->GetName().at(0))
+				if (name != s_currentScene->GetName())
 					break;
 			}
 
@@ -130,11 +133,13 @@ namespace thomas
 								{
 									mesh->Bind();
 									mesh->Draw();
+									mesh->Unbind();
 								}
 							}
 						}
 					}
 				}
+				material->Unbind();
 			}
 			shader->Unbind();
 		}
@@ -165,12 +170,14 @@ namespace thomas
 							{
 								mesh->Bind();
 								mesh->Draw();
+								mesh->Unbind();
 							}
 						}
 
 					}
 
 				}
+				material->Unbind();
 			}
 			graphics::LightManager::Unbind();
 			oceanShader->Unbind();

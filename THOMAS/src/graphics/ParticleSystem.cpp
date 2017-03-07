@@ -119,13 +119,13 @@ namespace thomas
 			
 			s_emitParticlesCS->Bind();
 			s_emitParticlesCS->BindBuffer(emitterD3D->particleBuffer, 0);
-			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 0);
-			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV1, 1);
+			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 6);
+			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV1, 7);
 
 			ThomasCore::GetDeviceContext()->Dispatch(amountOfParticles, 1, 1);
 
-			s_emitParticlesCS->BindUAV(NULL, 0);
-			s_emitParticlesCS->BindUAV(NULL, 0);
+			s_emitParticlesCS->BindUAV(NULL, 6);
+			s_emitParticlesCS->BindUAV(NULL, 7);
 			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_emitParticlesCS->Unbind();
 		}
@@ -137,16 +137,17 @@ namespace thomas
 
 			//bind CS
 			s_updateParticlesCS->Bind();
-			s_updateParticlesCS->BindUAV(s_activeParticleUAV, 0);
-			s_updateParticlesCS->BindUAV(emitter->GetD3DData()->billboardsUAV, 1);
+			s_updateParticlesCS->BindUAV(s_activeParticleUAV, 6);
+			s_updateParticlesCS->BindUAV(emitter->GetD3DData()->billboardsUAV, 7);
 			s_updateParticlesCS->BindResource(s_activeParticleSRV, 0);
 			s_updateParticlesCS->BindBuffer(s_cameraBuffer, 0);
 
 			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfMaxParticles() / 256 + 1, 1, 1);
 			//unbind CS
-			s_updateParticlesCS->BindUAV(NULL, 0);
-			s_updateParticlesCS->BindUAV(NULL, 1);
+			s_updateParticlesCS->BindUAV(NULL, 6);
+			s_updateParticlesCS->BindUAV(NULL, 7);
 			s_updateParticlesCS->BindResource(NULL, 0);
+			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_updateParticlesCS->Unbind();
 
 		}

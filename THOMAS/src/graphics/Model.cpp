@@ -73,6 +73,14 @@ namespace thomas {
 
 		void Model::Destroy()
 		{
+			for (unsigned int i = 0; i < s_loadedModels.size(); ++i)
+			{
+				for (unsigned int j = 0; j < s_loadedModels.at(i)->m_meshes.size(); ++j)
+				{
+					s_loadedModels.at(i)->m_meshes.at(j)->ReleaseBuffers();
+				}
+				
+			}
 			s_loadedModels.clear();
 		}
 

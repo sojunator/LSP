@@ -454,7 +454,8 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
+	if (m_terrainObject)
+		m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
 }
 int Ship::GetTreasure()
 {

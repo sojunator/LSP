@@ -69,6 +69,10 @@ namespace thomas
 	void Physics::Destroy()
 	{
 		//Destroy everything????
+		btCollisionObjectArray arr = s_world->getCollisionObjectArray();
+		
+			arr.clear();
+		
 	}
 
 	graphics::BulletDebugDraw * Physics::getDebugDraw()

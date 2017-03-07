@@ -158,9 +158,11 @@ namespace thomas {
 		s_context->Release();
 		s_device->Release();
 
+		
 		s_swapchain = nullptr;
 		s_context = nullptr;
 		s_device = nullptr;
+		
 
 		#ifdef _DEBUG
 		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);

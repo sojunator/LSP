@@ -113,7 +113,6 @@ namespace thomas
 					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix());
 					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
 				}
-					
 			}
 
 			void Camera::BindReflection()

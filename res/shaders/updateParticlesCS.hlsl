@@ -39,8 +39,8 @@ struct BillboardStruct
 };
 
 StructuredBuffer<ParticleStruct> particlesRead : register(t0);
-RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
-RWStructuredBuffer<BillboardStruct> billboards : register(u1);
+RWStructuredBuffer<ParticleStruct> particlesWrite : register(u6);
+RWStructuredBuffer<BillboardStruct> billboards : register(u7);
 
 
 [numthreads(256, 1, 1)]

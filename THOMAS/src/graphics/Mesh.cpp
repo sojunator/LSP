@@ -80,6 +80,15 @@ namespace thomas {
 			thomas::ThomasCore::GetDeviceContext()->DrawIndexed(GetIndexCount(), 0, 0);
 		}
 
+		void Mesh::ReleaseBuffers()
+		{
+			SAFE_RELEASE(m_data.vertexBuffer);
+			SAFE_RELEASE(m_data.indexBuffer);
+			m_data.vertices.clear();
+			m_data.indices.clear();
+			return;
+		}
+
 		void Mesh::SetupMesh()
 		{
 			m_data.vertexBuffer = utils::D3d::CreateBufferFromVector(m_data.vertices, D3D11_BIND_VERTEX_BUFFER);

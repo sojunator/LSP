@@ -41,8 +41,6 @@ public:
 		m_healthIcon = AddComponent<component::SpriteComponent>();
 		m_armIcon = AddComponent<component::SpriteComponent>();
 
-
-		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;
@@ -143,6 +141,10 @@ public:
 		m_transform->SetPosition(0, 1, 3);
 	};
 
+	void SetSkybox(std::string texturePath, std::string shaderName)
+	{
+		m_camera->SetSkybox(texturePath, shaderName);
+	}
 
 
 	void Update()

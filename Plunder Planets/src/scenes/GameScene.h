@@ -42,10 +42,11 @@ public:
 		//Init models		
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("testModel0", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
+		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
+
 		LoadModel("testModel1", "../res/models/Boat/ship1fbx.fbx", "phongMaterial");
 		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
 		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
-		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 		
 		
@@ -92,6 +93,7 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
+		m_cameraObject->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI

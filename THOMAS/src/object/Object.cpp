@@ -55,6 +55,10 @@ namespace thomas
 
 		void Object::Destroy()
 		{
+			for (int i = 0; i < s_objects.size(); ++i)
+			{
+				delete s_objects[i];
+			}
 			s_objects.clear();
 		}
 		bool Object::IsAlive(const Object* object)

@@ -41,7 +41,7 @@ namespace thomas
 
 		void thomas::graphics::Renderer::Clear()
 		{
-			float color[4] = { 0.3f, 0.4f, 0.3f, 0.0f };
+			float color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 			ThomasCore::GetDeviceContext()->ClearRenderTargetView(s_backBuffer, color);
 			ThomasCore::GetDeviceContext()->ClearDepthStencilView(s_depthStencilView, D3D11_CLEAR_DEPTH, 1, 0);
 
