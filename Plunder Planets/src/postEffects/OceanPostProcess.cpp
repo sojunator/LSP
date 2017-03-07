@@ -1,5 +1,6 @@
 #include "OceanPostProcess.h"
 #include "../d3d.h"
+#include "../gameobjects/ShipStats.h"
 OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffect(name, shader)
 {
 	// The size of displacement map. In this sample, it's fixed to 512.
@@ -42,7 +43,8 @@ OceanPostProcess::OceanPostProcess(std::string name, Shader * shader) : PostEffe
 	m_oceanPropertiesStruct.texelLengthX2 = m_oceanSettings.patch_length / m_oceanSettings.dmap_dim * 2;
 
 	m_oceanPropertiesStruct.skyColor = math::Color(0.38f, 0.45f, 0.56f);
-	m_oceanPropertiesStruct.waterColor = math::Color(0.07f, 0.15f, 0.2f, 1.0);
+	srand(ShipStats::s_currentLevel - 1);
+	m_oceanPropertiesStruct.waterColor = math::Color(0.07f + (float)rand() / (float)RAND_MAX, 0.15f + (float)rand() / (float)RAND_MAX, 0.2f + (float)rand() / (float)RAND_MAX, 1.0);
 	m_oceanPropertiesStruct.shininess = 200;
 	m_oceanPropertiesStruct.bendParam = math::Vector3(0.1f, -0.4f, 0.2f);
 
