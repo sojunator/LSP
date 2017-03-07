@@ -96,9 +96,9 @@ public:
 		m_cameraObject = LoadObject<CameraObject>();
 		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
-		for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI
+		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
 		{
-			//m_enemyShip.push_back(LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity));
+			LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
 		}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();

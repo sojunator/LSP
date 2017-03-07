@@ -138,7 +138,7 @@ void Ship::Start()
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
 	m_rigidBody->setSleepingThresholds(0.2, 0.5);
 	m_rigidBody->setGravity(btVector3(0, -15, 0));
-	m_treasure = 300;
+	m_treasure = ShipStats::s_playerStats->GetTreasure(); //300;
 
 
 	//model
@@ -166,10 +166,8 @@ void Ship::Start()
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
-	m_health = 100;
+	m_health = ShipStats::s_playerStats->GetHealthAmount();
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
-	m_maxHealth = m_health;
-	m_maxArmor = 100;
 
 	m_spawnedWormhole = false;
 	m_aiming = false;
@@ -458,7 +456,7 @@ void Ship::PlunderIsland()
 }
 int Ship::GetTreasure()
 {
-	return m_treasure + 0.5;
+	return m_treasure + 0.5f;
 }
 
 void Ship::Float(float dt)

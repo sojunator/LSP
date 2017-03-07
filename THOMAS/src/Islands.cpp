@@ -1,5 +1,5 @@
 #include "Islands.h"
-
+#include "../../Plunder Planets/src/gameobjects/ShipStats.h"
 
 namespace thomas
 {
@@ -10,7 +10,7 @@ namespace thomas
 		m_mapSize = mapSize;
 		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;
-		m_plunderRate = 30;
+		m_plunderRate = ShipStats::s_playerStats->GetPlunderSpeed();
 
 		for (int i = 0; i < nrOfIslands; i++)
 		{
