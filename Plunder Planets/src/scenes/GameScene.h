@@ -93,8 +93,11 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
-		m_islandManager = LoadObject<IslandManager>();
 		m_waterObject = LoadObject<WaterObject>();
+
+		//Not a GameObject
+		s_islandManager = new IslandManager();
+
 		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
 		{
 			//LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
@@ -106,11 +109,16 @@ public:
 
 	};
 	
+	~GameScene()
+	{
+		delete s_islandManager;
+	}
+
+public:
+	static IslandManager* s_islandManager;
 
 private:
 	CameraObject* m_cameraObject;
-	IslandManager* m_islandManager;
-	IslandObject* m_islandObject;
 	Ship* m_ship;
 	//std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;

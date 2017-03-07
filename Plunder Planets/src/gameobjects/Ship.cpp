@@ -1,6 +1,10 @@
 #include "ship.h"
 #include "Terrain/IslandManager.h"
 #include "Wormhole.h"
+#include "../scenes/GameScene.h"
+
+IslandManager* GameScene::s_islandManager;
+
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -43,7 +47,7 @@ void Ship::Start()
 	m_sound = AddComponent<component::SoundComponent>();
 	m_boostSound = AddComponent<component::SoundComponent>();
 	m_cameraObject = Find("CameraObject");
-	m_islandManager = (IslandManager*)Find("IslandManager");
+	m_islandManager = GameScene::s_islandManager;
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 

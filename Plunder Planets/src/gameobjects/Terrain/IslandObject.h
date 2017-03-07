@@ -15,11 +15,13 @@ public:
 	void Destroy();
 	void SetModel(int island);
 	void SinkIsland();
+	void Looting(bool gotLoot);
 	void PlaceRigidBody(float radius, thomas::math::Vector3 center);
 
 private:
 	thomas::object::component::RenderComponent* m_renderer;
 	thomas::object::component::RigidBodyComponent* m_rigidBody;
+	static thomas::object::component::SoundComponent* m_sound;
 	//thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
 	bool m_falling;
 };

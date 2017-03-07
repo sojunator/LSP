@@ -5,31 +5,33 @@
 #include "../Enemy.h"
 #include "IslandObject.h"
 
-class IslandManager : public GameObject
+class IslandManager
 {
 
 private:
 
 public:
-	IslandManager() : GameObject("IslandManager")
+	IslandManager()
 	{
-	}
-
-	void Start()
-	{
-		m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
-		m_sound->SetClip("fPlunder");
-		m_sound->SetLooping(true);
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(20, mat, 1024, 1 / 8.f, 4096);
 		int nrOfIslands = m_islands->GetNrOfIslands();
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
-			m_islandObjects.push_back(Instantiate<IslandObject>(m_scene));
+			m_islandObjects.push_back(thomas::object::GameObject::Instantiate<IslandObject>(Scene::GetCurrentScene()));
 			m_islandObjects[i]->SetModel(i);
 			m_islandObjects[i]->PlaceRigidBody(m_islands->GetCollisionRadius(i), m_islands->GetCenter(i));
 		}
+	}
+
+	~IslandManager()
+	{
+		delete m_islands;
+	}
+
+	void Start()
+	{
 	}
 
 	void Update()
@@ -58,19 +60,15 @@ public:
 					math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
 					randDir.Normalize();
 					math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 30)*math::Vector3(randDir.x, 0, randDir.y);
-					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, m_scene);*/
+					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, Scene::GetCurrentScene());*/
 				}
 			}
 			else if (!m_islands->GetTreasure(i))
 			{
 				m_islandObjects[i]->SinkIsland();
 			}
-
+			m_islandObjects[i]->Looting(gotLoot);
 		}
-		if (gotLoot)
-			m_sound->Play();
-		else
-			m_sound->Pause();
 		return treasure;
 	}
 
@@ -93,6 +91,4 @@ public:
 private:
 	thomas::Islands* m_islands;
 	std::vector<IslandObject*> m_islandObjects;
-	component::SoundComponent* m_sound;
-
 };
