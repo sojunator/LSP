@@ -42,6 +42,7 @@ void UpgradeMenuObject::Start()
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 	m_currentGold = AddComponent<component::TextComponent>();
+	m_currentHealth = AddComponent<component::TextComponent>();
 	m_cannonCosts = AddComponent<component::TextComponent>();
 	m_movementCosts = AddComponent<component::TextComponent>();
 	m_resourceCosts = AddComponent<component::TextComponent>();
@@ -64,6 +65,18 @@ void UpgradeMenuObject::Start()
 	m_currentGold->SetDropshadow(false);
 	m_currentGold->SetOutline(true);
 	m_currentGold->SetOrigin(false);
+
+	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
+	m_currentHealth->SetFont("Pirate");
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+	m_currentHealth->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_currentHealth->SetRotation(0.0f);
+	m_currentHealth->SetScale(1.0f);
+	m_currentHealth->SetPositionX(1330);
+	m_currentHealth->SetPositionY(45);
+	m_currentHealth->SetDropshadow(false);
+	m_currentHealth->SetOutline(true);
+	m_currentHealth->SetOrigin(false);
 
 	m_header->SetName("Header");
 	m_header->SetPositionX(722);
@@ -272,7 +285,7 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetInteractable(true);
 
 	m_shieldCosts->SetFont("Pirate");
-	m_shieldCosts->SetOutput("750/250/250/250/250");
+	m_shieldCosts->SetOutput("250/250/250/250/750");
 	m_shieldCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
 	m_shieldCosts->SetRotation(0.0f);
 	m_shieldCosts->SetScale(1.0f);
@@ -360,7 +373,7 @@ void UpgradeMenuObject::Start()
 	m_plunderIcon->SetInteractable(true);
 
 	m_plunderSpeedCosts->SetFont("Pirate");
-	m_plunderSpeedCosts->SetOutput("200/300/500/750/1000");
+	m_plunderSpeedCosts->SetOutput("1000/750/500/300/200");
 	m_plunderSpeedCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
 	m_plunderSpeedCosts->SetRotation(0.0f);
 	m_plunderSpeedCosts->SetScale(1.0f);
@@ -434,12 +447,14 @@ void UpgradeMenuObject::Start()
 void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - ThomasTime::GetDeltaTime();
+	m_upgradeDelay = m_upgradeDelay - ThomasTime::GetDeltaTime(); //Upgrade delay so can't spam and glitch out upgrades.
 
 	UpdateGoldCounter();
+	UpdateHealthCounter();
 
 	SetSelectedObject();
 	
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back))
+	if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back)) && m_upgradeDelay < 0.1f)
 	{
 		bool upgrade = false;
 		bool undo = false;
@@ -459,6 +474,8 @@ void UpgradeMenuObject::Update()
 		RepairCheck(upgrade, undo);
 
 		PlunderCheck(upgrade, undo);
+
+		m_upgradeDelay = 0.3f; //Reset upgrade delay
 	}
 
 	Navigation();
@@ -474,6 +491,12 @@ void UpgradeMenuObject::UpdateGoldCounter()
 {
 	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
 	m_currentGold->SetOutput("Current gold: " + std::to_string(currentGoldCast));
+}
+
+void UpgradeMenuObject::UpdateHealthCounter()
+{
+	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
 }
 
 void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)

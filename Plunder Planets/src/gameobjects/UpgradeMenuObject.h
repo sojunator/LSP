@@ -24,6 +24,7 @@ public:
 
 	void Update();
 	void UpdateGoldCounter();
+	void UpdateHealthCounter();
 	void CannonCheck(bool upgrade, bool undo);
 	void MovementCheck(bool upgrade, bool undo);
 	void ResourceCheck(bool upgrade, bool undo);
@@ -72,6 +73,7 @@ private:
 	component::SpriteComponent* m_exitButton;
 	component::SoundComponent* m_music;
 	component::TextComponent* m_currentGold;
+	component::TextComponent* m_currentHealth;
 	component::TextComponent* m_cannonCosts;
 	component::TextComponent* m_movementCosts;
 	component::TextComponent* m_resourceCosts;
@@ -90,4 +92,5 @@ private:
 	int m_yArray[3] = { 1, 0, 0 };	//3 rows
 	int m_xArray[2] = { 1, 0 };		//2 columns
 	float m_delay = 0.3f;
+	float m_upgradeDelay = 0.3f;
 };
