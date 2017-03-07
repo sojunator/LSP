@@ -30,37 +30,37 @@ public:
 	void InitMenu()
 	{
 		m_pauseHeadLine->SetFont("SafeToLeave");
-		m_pauseHeadLine->SetOutput("Your mother is a whore, and the game has been paused");
+		m_pauseHeadLine->SetOutput("Paused");
 		m_pauseHeadLine->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseHeadLine->SetRotation(0.0f);
 		m_pauseHeadLine->SetScale(1.0f);
-		m_pauseHeadLine->SetPositionX(Window::GetWidth() / 8);
+		m_pauseHeadLine->SetPositionX(Window::GetWidth() / 4);
 		m_pauseHeadLine->SetPositionY(Window::GetHeight() / 4);
 		m_pauseHeadLine->SetDropshadow(true);
 		m_pauseHeadLine->SetOutline(true);
 		m_pauseHeadLine->SetOrigin(false);
 
-		m_pauseQuit->SetFont("SafeToLeave");
-		m_pauseQuit->SetOutput("Give up, because you're weak shit");
-		m_pauseQuit->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
-		m_pauseQuit->SetRotation(0.0f);
-		m_pauseQuit->SetScale(1.0f);
-		m_pauseQuit->SetPositionX(Window::GetWidth() / 8);
-		m_pauseQuit->SetPositionY(Window::GetHeight() / 4 + 100 );
-		m_pauseQuit->SetDropshadow(true);
-		m_pauseQuit->SetOutline(true);
-		m_pauseQuit->SetOrigin(false);
-
 		m_pauseResume->SetFont("SafeToLeave");
-		m_pauseResume->SetOutput("Resume, you cuck");
+		m_pauseResume->SetOutput("Resume");
 		m_pauseResume->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseResume->SetRotation(0.0f);
 		m_pauseResume->SetScale(1.0f);
-		m_pauseResume->SetPositionX(Window::GetWidth() / 8);
-		m_pauseResume->SetPositionY(Window::GetHeight() / 4 + 200);
+		m_pauseResume->SetPositionX(Window::GetWidth() / 4);
+		m_pauseResume->SetPositionY(Window::GetHeight() / 4 + 100);
 		m_pauseResume->SetDropshadow(true);
 		m_pauseResume->SetOutline(true);
 		m_pauseResume->SetOrigin(false);
+
+		m_pauseQuit->SetFont("SafeToLeave");
+		m_pauseQuit->SetOutput("Quit");
+		m_pauseQuit->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
+		m_pauseQuit->SetRotation(0.0f);
+		m_pauseQuit->SetScale(1.0f);
+		m_pauseQuit->SetPositionX(Window::GetWidth() / 4);
+		m_pauseQuit->SetPositionY(Window::GetHeight() / 4 + 200 );
+		m_pauseQuit->SetDropshadow(true);
+		m_pauseQuit->SetOutline(true);
+		m_pauseQuit->SetOrigin(false);
 
 		m_resumeActive = true;
 		m_quitActive = false;
@@ -171,7 +171,10 @@ public:
 			}
 
 			if (m_resumeActive)
+			{
 				m_isPaused = false;
+				HideMenu();
+			}
 		}
 	}
 
