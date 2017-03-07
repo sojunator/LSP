@@ -160,7 +160,7 @@ void UpgradeMenuObject::Start()
 	m_cannonCosts->SetOutline(true);
 	m_cannonCosts->SetOrigin(false);
 
-	m_cannonTalent1->SetName("CannonTalent1");
+	m_cannonTalent1->SetName("Talent");
 	m_cannonTalent1->SetPositionX(220);
 	m_cannonTalent1->SetPositionY(250);
 	m_cannonTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -168,7 +168,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent1->SetInteractable(false);
 
-	m_cannonTalent2->SetName("CannonTalent2");
+	m_cannonTalent2->SetName("Talent");
 	m_cannonTalent2->SetPositionX(285);
 	m_cannonTalent2->SetPositionY(250);
 	m_cannonTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -176,7 +176,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent2->SetInteractable(false);
 
-	m_cannonTalent3->SetName("CannonTalent3");
+	m_cannonTalent3->SetName("Talent");
 	m_cannonTalent3->SetPositionX(350);
 	m_cannonTalent3->SetPositionY(250);
 	m_cannonTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -184,7 +184,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent3->SetInteractable(false);
 
-	m_cannonTalent4->SetName("CannonTalent4");
+	m_cannonTalent4->SetName("Talent");
 	m_cannonTalent4->SetPositionX(415);
 	m_cannonTalent4->SetPositionY(250);
 	m_cannonTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -192,7 +192,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent4->SetInteractable(false);
 
-	m_cannonTalent5->SetName("CannonTalent5");
+	m_cannonTalent5->SetName("Talent");
 	m_cannonTalent5->SetPositionX(480);
 	m_cannonTalent5->SetPositionY(225);
 	m_cannonTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -220,7 +220,7 @@ void UpgradeMenuObject::Start()
 	m_movementCosts->SetOutline(true);
 	m_movementCosts->SetOrigin(false);
 
-	m_movementTalent1->SetName("MovementTalent1");
+	m_movementTalent1->SetName("Talent");
 	m_movementTalent1->SetPositionX(220);
 	m_movementTalent1->SetPositionY(475);
 	m_movementTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -228,7 +228,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent1->SetInteractable(false);
 
-	m_movementTalent2->SetName("MovementTalent2");
+	m_movementTalent2->SetName("Talent");
 	m_movementTalent2->SetPositionX(285);
 	m_movementTalent2->SetPositionY(475);
 	m_movementTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -236,7 +236,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent2->SetInteractable(false);
 
-	m_movementTalent3->SetName("MovementTalent3");
+	m_movementTalent3->SetName("Talent");
 	m_movementTalent3->SetPositionX(350);
 	m_movementTalent3->SetPositionY(475);
 	m_movementTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -244,7 +244,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent3->SetInteractable(false);
 
-	m_movementTalent4->SetName("MovementTalent4");
+	m_movementTalent4->SetName("Talent");
 	m_movementTalent4->SetPositionX(415);
 	m_movementTalent4->SetPositionY(475);
 	m_movementTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -252,7 +252,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent4->SetInteractable(false);
 
-	m_movementTalent5->SetName("MovementTalent5");
+	m_movementTalent5->SetName("Talent");
 	m_movementTalent5->SetPositionX(480);
 	m_movementTalent5->SetPositionY(450);
 	m_movementTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -280,7 +280,7 @@ void UpgradeMenuObject::Start()
 	m_resourceCosts->SetOutline(true);
 	m_resourceCosts->SetOrigin(false);
 
-	m_resourceTalent1->SetName("ResourceTalent1");
+	m_resourceTalent1->SetName("Talent");
 	m_resourceTalent1->SetPositionX(220);
 	m_resourceTalent1->SetPositionY(700);
 	m_resourceTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -288,7 +288,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent1->SetInteractable(false);
 
-	m_resourceTalent2->SetName("ResourceTalent2");
+	m_resourceTalent2->SetName("Talent");
 	m_resourceTalent2->SetPositionX(285);
 	m_resourceTalent2->SetPositionY(700);
 	m_resourceTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -296,7 +296,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent2->SetInteractable(false);
 
-	m_resourceTalent3->SetName("ResourceTalent3");
+	m_resourceTalent3->SetName("Talent");
 	m_resourceTalent3->SetPositionX(350);
 	m_resourceTalent3->SetPositionY(700);
 	m_resourceTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -304,7 +304,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent3->SetInteractable(false);
 
-	m_resourceTalent4->SetName("ResourceTalent4");
+	m_resourceTalent4->SetName("Talent");
 	m_resourceTalent4->SetPositionX(415);
 	m_resourceTalent4->SetPositionY(700);
 	m_resourceTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -312,7 +312,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent4->SetInteractable(false);
 
-	m_resourceTalent5->SetName("ResourceTalent5");
+	m_resourceTalent5->SetName("Talent");
 	m_resourceTalent5->SetPositionX(480);
 	m_resourceTalent5->SetPositionY(675);
 	m_resourceTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -340,7 +340,7 @@ void UpgradeMenuObject::Start()
 	m_shieldCosts->SetOutline(true);
 	m_shieldCosts->SetOrigin(false);
 
-	m_shieldTalent1->SetName("ShieldTalent1");
+	m_shieldTalent1->SetName("Talent");
 	m_shieldTalent1->SetPositionX(1600);
 	m_shieldTalent1->SetPositionY(225);
 	m_shieldTalent1->SetScale(math::Vector2(2.0f, 2.0f));
@@ -348,7 +348,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent1->SetInteractable(false);
 
-	m_shieldTalent2->SetName("ShieldTalent2");
+	m_shieldTalent2->SetName("Talent");
 	m_shieldTalent2->SetPositionX(1535);
 	m_shieldTalent2->SetPositionY(250);
 	m_shieldTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -356,7 +356,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent2->SetInteractable(false);
 
-	m_shieldTalent3->SetName("ShieldTalent3");
+	m_shieldTalent3->SetName("Talent");
 	m_shieldTalent3->SetPositionX(1470);
 	m_shieldTalent3->SetPositionY(250);
 	m_shieldTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -364,7 +364,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent3->SetInteractable(false);
 
-	m_shieldTalent4->SetName("ShieldTalent4");
+	m_shieldTalent4->SetName("Talent");
 	m_shieldTalent4->SetPositionX(1405);
 	m_shieldTalent4->SetPositionY(250);
 	m_shieldTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -372,7 +372,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent4->SetInteractable(false);
 
-	m_shieldTalent5->SetName("ShieldTalent5");
+	m_shieldTalent5->SetName("Talent");
 	m_shieldTalent5->SetPositionX(1340);
 	m_shieldTalent5->SetPositionY(250);
 	m_shieldTalent5->SetScale(math::Vector2(1.0f, 1.0f));
@@ -400,7 +400,7 @@ void UpgradeMenuObject::Start()
 	m_repairCosts->SetOutline(true);
 	m_repairCosts->SetOrigin(false);
 
-	m_repairTalent1->SetName("RepairTalent1");
+	m_repairTalent1->SetName("Talent");
 	m_repairTalent1->SetPositionX(1600);
 	m_repairTalent1->SetPositionY(450);
 	m_repairTalent1->SetScale(math::Vector2(2.0f, 2.0f));
@@ -428,7 +428,7 @@ void UpgradeMenuObject::Start()
 	m_plunderSpeedCosts->SetOutline(true);
 	m_plunderSpeedCosts->SetOrigin(false);
 
-	m_plunderTalent1->SetName("PlunderTalent1");
+	m_plunderTalent1->SetName("Talent");
 	m_plunderTalent1->SetPositionX(1650);
 	m_plunderTalent1->SetPositionY(700);
 	m_plunderTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -436,7 +436,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent1->SetInteractable(false);
 
-	m_plunderTalent2->SetName("PlunderTalent2");
+	m_plunderTalent2->SetName("Talent");
 	m_plunderTalent2->SetPositionX(1585);
 	m_plunderTalent2->SetPositionY(700);
 	m_plunderTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -444,7 +444,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent2->SetInteractable(false);
 
-	m_plunderTalent3->SetName("PlunderTalent3");
+	m_plunderTalent3->SetName("Talent");
 	m_plunderTalent3->SetPositionX(1520);
 	m_plunderTalent3->SetPositionY(700);
 	m_plunderTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -452,7 +452,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent3->SetInteractable(false);
 
-	m_plunderTalent4->SetName("PlunderTalent4");
+	m_plunderTalent4->SetName("Talent");
 	m_plunderTalent4->SetPositionX(1455);
 	m_plunderTalent4->SetPositionY(700);
 	m_plunderTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -460,7 +460,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent4->SetInteractable(false);
 
-	m_plunderTalent5->SetName("PlunderTalent5");
+	m_plunderTalent5->SetName("Talent");
 	m_plunderTalent5->SetPositionX(1340);
 	m_plunderTalent5->SetPositionY(675);
 	m_plunderTalent5->SetScale(math::Vector2(2.0f, 2.0f));
