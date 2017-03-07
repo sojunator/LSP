@@ -272,7 +272,7 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetInteractable(true);
 
 	m_shieldCosts->SetFont("Pirate");
-	m_shieldCosts->SetOutput("200/300/500/750/1000");
+	m_shieldCosts->SetOutput("750/250/250/250/250");
 	m_shieldCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
 	m_shieldCosts->SetRotation(0.0f);
 	m_shieldCosts->SetScale(1.0f);
