@@ -51,6 +51,11 @@ namespace thomas
 		return s_DeltaTime * s_timescale;
 	}
 
+	float ThomasTime::GetActualDeltaTime()
+	{
+		return s_DeltaTime;
+	}
+
 	double ThomasTime::GetInitTime()
 	{
 		return s_initTime;
