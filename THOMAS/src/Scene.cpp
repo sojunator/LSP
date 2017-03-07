@@ -41,6 +41,8 @@ namespace thomas
 		//object::Object::Destroy(s_currentScene);
 		//object::Object::Clean();
 		object::Object::Destroy();
+		graphics::ParticleSystem::Destroy();
+		graphics::ParticleSystem::Init();
 		
 		delete s_currentScene;
 		s_currentScene = nullptr;

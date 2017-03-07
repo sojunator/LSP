@@ -14,12 +14,7 @@ namespace thomas
 		void TextRender::RenderText(std::string name, std::string output, float posX, float posY, float scale, float rotation,
 									math::Vector3 color, bool dropShadow, bool outline, bool origin)
 		{		
-			if (!s_fonts[name])
-			{
-				LOG(name << " doesn't match any font names.");
-			}
-
-			else
+			if (s_fonts[name])
 			{
 				ThomasCore::GetDeviceContext()->OMSetBlendState(s_states->Opaque(), DirectX::Colors::Black, 0xFFFFFFFF);
 	
