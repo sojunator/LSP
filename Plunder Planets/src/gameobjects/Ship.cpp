@@ -314,10 +314,10 @@ void Ship::ShipAimCannons()
 		if (angle > -500.0)
 		{
 			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
-			m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
+			m_broadSideLeft->SetCanonAngle(angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			DrawAimArc(m_broadSideLeft);
+			DrawAimArc(m_broadSideLeft, angle - boatAngle);
 		}
 
 		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
@@ -345,10 +345,10 @@ void Ship::ShipAimCannons()
 		if (angle > -500.0)
 		{
 			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
-			m_broadSideRight->SetCanonAngle(-angle - boatAngle);
+			m_broadSideRight->SetCanonAngle(angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
-			DrawAimArc(m_broadSideRight);
+			DrawAimArc(m_broadSideRight, angle - boatAngle);
 		}
 		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
@@ -380,10 +380,27 @@ void Ship::ShipAimCannons()
 	//	
 	//}
 }
-void Ship::DrawAimArc(Broadside* broadside)
+void Ship::DrawAimArc(Broadside* broadside, float angle)
 {
 	p0 = math::Vector3(broadside->m_transform->GetPosition().x, broadside->m_transform->GetPosition().y - 10, broadside->m_transform->GetPosition().z); //boat pos
 	p3 = m_aimPosition; //aim pos
+	//math::Vector3 direction = p3 - p0;
+	//float distance = direction.Length();
+	//math::Vector3 point, prevPoint = p0;
+	//for (int i = 1; i <= 10; ++i)
+	//{
+	//	point = math::Vector3(0, 0, 0);
+	//	float currDistance = distance * ((float)i / 10.f);
+	//	point.y = p0.y + currDistance * tanf(angle) + (float)Physics::s_world->getGravity().y() * currDistance * currDistance / (2 * 13 * 13 /*TODO: GETTER*/ * cosf(angle) * cosf(angle));
+	//	if (point.y < 0)
+	//	{
+	//		i = 10;
+	//		continue;
+	//	}
+	//	point += math::Vector3(p0.x + currDistance * direction.x, 0, p0.z + currDistance * direction.z);
+	//	m_arc->DrawLine(prevPoint, point, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
+	//	prevPoint = point;
+	//}
 
 	p1 = p0 + broadside->m_transform->Forward() * 50; //vector defining starting direction of projectiles
 	p2 = p3 + math::Vector3(0, 1, 0) * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f);
@@ -393,7 +410,6 @@ void Ship::DrawAimArc(Broadside* broadside)
 		float f = float(i) / 10.f;
 		point = (1 - f) * (1 - f) * (1 - f) * p0 + 3 * (1 - f) * (1 - f) * f * p1 + 3 * (1 - f) * f * f * p2 + f * f * f * p3;
 		m_arc->DrawLine(prevPoint, point, math::Vector3(1, 1, 0), math::Vector3(1, 1, 0));
-		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
 

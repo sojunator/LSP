@@ -11,7 +11,7 @@ void AI::Start()
 	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");
 
 	m_currentState = State::Searching;
-	m_searchRadius = 800;
+	m_searchRadius = 0;
 	m_fireRadius = 300;
 	m_moveToPos = math::Vector3(0,0,0);
 }
