@@ -110,6 +110,7 @@ public:
 private:
 	CameraObject* m_cameraObject;
 	IslandManager* m_islandManager;
+	IslandObject* m_islandObject;
 	Ship* m_ship;
 	//std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;

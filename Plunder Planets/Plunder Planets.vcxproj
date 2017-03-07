@@ -177,7 +177,6 @@
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\AI\AI.h" />
-    <ClInclude Include="src\AI\Pathfinding.h" />
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\Broadside.h" />
     <ClInclude Include="src\gameobjects\Cannon.h" />
@@ -221,7 +220,6 @@
     <ClCompile Include="src\gameobjects\HighscoreMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\AI\AI.cpp" />
-    <ClCompile Include="src\AI\Pathfinding.cpp" />
     <ClCompile Include="src\gameobjects\Ship.cpp" />
     <ClCompile Include="src\gameobjects\ShipStats.cpp" />
     <ClCompile Include="src\gameobjects\Terrain\IslandObject.cpp" />

@@ -17,32 +17,18 @@ public:
 
 	void Start()
 	{
-		/*m_sound = AddComponent<component::SoundComponent>();
+		m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
 		m_sound->SetClip("fPlunder");
-		m_sound->SetLooping(true);*/
+		m_sound->SetLooping(true);
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(20, mat, 1024, 1 / 8.f, 4096);
 		int nrOfIslands = m_islands->GetNrOfIslands();
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
-		}
-
-
-		m_transform->SetPosition(math::Vector3(0, -2, 0));
-		PlaceRigidBody();
-
-	}
-
-	void PlaceRigidBody()
-	{
-		LOG(m_islands->GetNrOfIslands());
-		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
-		{
-			//m_rigidBodyVec.push_back(AddComponent<component::RigidBodyComponent>());
-			//m_rigidBodyVec[i]->SetMass(0);
-			//m_rigidBodyVec[i]->SetCollider(new btSphereShape(m_islands->GetCollisionRadius(i)));
-			//m_rigidBodyVec[i]->setWorldTransform(btTransform(btQuaternion(), btVector3(m_islands->GetCenter(i).x, 0, m_islands->GetCenter(i).z)));
+			m_islandObjects.push_back(Instantiate<IslandObject>(m_scene));
+			m_islandObjects[i]->SetModel(i);
+			m_islandObjects[i]->PlaceRigidBody(m_islands->GetCollisionRadius(i), m_islands->GetCenter(i));
 		}
 	}
 
@@ -75,12 +61,16 @@ public:
 					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, m_scene);
 				}
 			}
+			else if (!m_islands->GetTreasure(i))
+			{
+				m_islandObjects[i]->SinkIsland();
+			}
 
 		}
-		/*if (gotLoot)
+		if (gotLoot)
 			m_sound->Play();
 		else
-			m_sound->Pause();*/
+			m_sound->Pause();
 		return treasure;
 	}
 
@@ -102,7 +92,7 @@ public:
 
 private:
 	thomas::Islands* m_islands;
-	std::vector<IslandObject*> m_
-	//component::SoundComponent* m_sound;
+	std::vector<IslandObject*> m_islandObjects;
+	component::SoundComponent* m_sound;
 
 };

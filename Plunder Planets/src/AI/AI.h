@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../gameobjects/Ship.h"
-#include "Pathfinding.h"
 #include "Thomas.h"
 #include "../../THOMAS/src/object/component/Component.h"
 

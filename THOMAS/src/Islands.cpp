@@ -22,7 +22,7 @@ namespace thomas
 			m_treasure.push_back(1000);
 			m_totalTreasure.push_back(1000);
 			m_plunderRadius.push_back(size*0.43);
-			m_collisionRadius.push_back(size*0.3);
+			m_collisionRadius.push_back(size*0.33);
 		}
 
 		GeneratePos();
