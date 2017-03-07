@@ -155,9 +155,9 @@ public:
 			StartLevel();
 	}
 
-	void OnCollision(component::RigidBodyComponent* other)
+	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if (other->m_gameObject->GetType() == "Ship")
+		if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
 			LOG("End the scene");
 			thomas::Scene::UnloadScene();

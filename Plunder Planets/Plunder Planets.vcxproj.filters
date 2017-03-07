@@ -32,7 +32,6 @@
     <ClInclude Include="src\scenes\LoadScreenScene.h" />
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
-    <ClInclude Include="src\gameobjects\Enemy.h" />
     <ClInclude Include="src\AI\Pathfinding.h" />
     <ClInclude Include="src\AI\AI.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
@@ -53,6 +52,8 @@
     <ClInclude Include="src\gameobjects\ShipStats.h" />
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="src\scenes\HighscoreScene.h" />
+    <ClInclude Include="src\gameobjects\BasicEnemy.h" />
+    <ClInclude Include="src\gameobjects\Toby.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

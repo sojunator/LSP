@@ -13,7 +13,8 @@
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
-#include "../gameobjects/Enemy.h"
+#include "../gameobjects/BasicEnemy.h"
+#include "../gameobjects/Toby.h"
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
 
@@ -97,7 +98,7 @@ public:
 		m_waterObject = LoadObject<WaterObject>();
 		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
 		{
-			LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
+			LoadObject<Toby>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
 		}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();

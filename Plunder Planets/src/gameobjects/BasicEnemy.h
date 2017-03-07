@@ -8,29 +8,18 @@
 using namespace thomas;
 using namespace object;
 
-class Enemy : public GameObject
+class BasicEnemy : public GameObject
 {
 private:
 
 public:
-	Enemy() : GameObject("Enemy")
+	BasicEnemy() : GameObject("BasicEnemy")
 	{
 	}
 
 	void Start()
 	{
-		m_firstFrame = true;
 		m_mass = 500000;
-		m_searchRadius = 1000;
-		m_attackRadius = 200;
-		m_turnDir = 0;
-		m_shootDir = 0;
-		m_newForwardVec = math::Vector3::Zero;
-
-		m_islandForward = false;
-		m_islandLeft = false;
-		m_islandRight = false;
-
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 
@@ -72,6 +61,7 @@ public:
 		m_sound = AddComponent<component::SoundComponent>();
 		m_ai = AddComponent<AI>();
 		m_ai->SetActive(false);
+
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(90)), m_transform, m_scene);
@@ -81,9 +71,6 @@ public:
 		m_broadSideLeft->CreateCannons();
 
 		m_renderer->SetModel("testModelEnemy");
-		m_moving = false;
-
-
 		//Rigidbody init
 		m_rigidBody->SetMass(m_mass);
 		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 12, 8)));
@@ -95,12 +82,9 @@ public:
 		m_dead = false;
 		m_deathTime = 10;
 		//Movement
+		m_moving = false;
 		m_speed = 150;
 		m_turnSpeed = 80;
-
-		//utils::DebugTools::AddBool(m_islandForward, "Island F");
-		//utils::DebugTools::AddBool(m_islandRight, "Island R");
-		//utils::DebugTools::AddBool(m_islandLeft, "Island L");
 
 		m_emitterSpark = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSpark->SetTexture("../res/textures/fire.png");
@@ -352,11 +336,11 @@ public:
 		Float(dt);
 	}
 
-	void OnCollision(component::RigidBodyComponent* other)
+	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if (other->m_gameObject->GetType() == "Projectile")
+		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 		{
-			Projectile* p = ((Projectile*)other->m_gameObject);
+			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy == this)
 				return;
 			m_health -= p->GetDamageAmount();
@@ -400,28 +384,13 @@ private:
 
 	//Ship
 	float m_health;
-	bool m_moving;
 	float m_mass;
 	float m_speed;
 	float m_turnSpeed;
-	int m_turnDir;
-	int m_shootDir;
-
-
-
-	math::Vector3 m_newForwardVec;
-
-	float m_searchRadius;
-	float m_attackRadius;
-
-	bool m_islandForward;
-	bool m_islandLeft;
-	bool m_islandRight;
+	bool m_moving;
 
 	//Sound
 	float m_soundDelay;
 	float m_soundDelayLeft;
 
-
-	bool m_firstFrame;
 };

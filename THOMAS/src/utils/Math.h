@@ -5,5 +5,4 @@
 namespace thomas
 {
 	namespace math = DirectX::SimpleMath;
-
 }

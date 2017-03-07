@@ -9,12 +9,16 @@ namespace thomas
 	{
 	private:
 	public:
+	public:
 		static btDiscreteDynamicsWorld* s_world;
 		static bool Init();
 		static void Update();
 		static void DrawDebug(object::component::Camera* camera);
 		static void Destroy();
 		static graphics::BulletDebugDraw* getDebugDraw();
+
+		static btVector3 ToBullet(math::Vector3& vector);
+		static math::Vector3 ToSimple(btVector3& vector);
 	private:
 		static graphics::BulletDebugDraw* s_debugDraw;
 		static float s_accumulator;

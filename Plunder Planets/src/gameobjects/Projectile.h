@@ -130,9 +130,9 @@ public:
 			
 	}
 
-	void OnCollision(component::RigidBodyComponent* other)
+	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if(other->m_gameObject != m_spawnedBy && other->m_gameObject->GetType() != "Projectile")
+		if(collision.otherRigidbody->m_gameObject != m_spawnedBy && collision.otherRigidbody->m_gameObject->GetType() != "Projectile")
 			Destroy(this);
 
 	}

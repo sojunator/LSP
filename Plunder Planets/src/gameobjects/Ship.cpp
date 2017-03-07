@@ -663,11 +663,11 @@ void Ship::Update()
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }
-void Ship::OnCollision(component::RigidBodyComponent* other)
+void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 {
-	if (other->m_gameObject->GetType() == "Projectile")
+	if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 	{
-		Projectile* p = ((Projectile*)other->m_gameObject);
+		Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 		if (p->m_spawnedBy == this)
 			return;
 
