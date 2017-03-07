@@ -71,6 +71,6 @@ float4 PSMain(VSOutput input) : SV_TARGET
     float4 cube1 = SkyMap.Sample(ObjSamplerState, input.texCoord);
     float4 cube2 = SkyMap2.Sample(ObjSamplerState, input.texCoord);
     float4 output = lerp(cube1, cube2, 0.3);
-    return lerp(output, float4(rando, 1.f), 0.65);
+    return lerp(output, float4(rando, 1.f), 0.35);
 	//return SkyMap.Sample(ObjSamplerState, input.texCoord);
 }

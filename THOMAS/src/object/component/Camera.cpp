@@ -111,6 +111,11 @@ namespace thomas
 				m_skybox->LoadCubeMap(path, slot);
 			}
 
+			void Camera::SetSkyboxLerpValue(math::Vector3 lerp)
+			{
+				m_skybox->SetLerp(lerp);
+			}
+
 			void Camera::BindSkybox()
 			{
 				if (m_skybox)

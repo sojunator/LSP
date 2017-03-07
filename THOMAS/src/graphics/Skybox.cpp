@@ -15,8 +15,6 @@ namespace thomas
 			CreateRasterizer();
 			CreateDepthStencilState();
 			m_data.shader = Shader::GetShaderByName(shaderName);
-			srand(time(NULL));
-			m_mvpStruct.random = math::Vector3((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
 		}
 
 
@@ -118,6 +116,10 @@ namespace thomas
 			for (Texture* texture : m_data.texture)
 				texture->Bind();
 			return;
+		}
+		void Skybox::SetLerp(math::Vector3 lerp)
+		{
+			m_mvpStruct.lerp = lerp;
 		}
 	}
 }
