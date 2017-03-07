@@ -20,5 +20,6 @@ public:
 private:
 	thomas::object::component::RenderComponent* m_renderer;
 	thomas::object::component::RigidBodyComponent* m_rigidBody;
+	//thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
 	bool m_falling;
 };

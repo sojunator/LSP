@@ -1,5 +1,5 @@
 #include "Islands.h"
-
+#include "../../Plunder Planets/src/gameobjects/ShipStats.h"
 
 namespace thomas
 {
@@ -9,7 +9,7 @@ namespace thomas
 		std::vector<thomas::utils::Plane::PlaneData> tempPlane;
 		m_mapSize = mapSize;
 		m_nrOfIslands = nrOfIslands;
-		m_plunderRate = 30;
+		m_plunderRate = ShipStats::s_playerStats->GetPlunderSpeed();
 
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{

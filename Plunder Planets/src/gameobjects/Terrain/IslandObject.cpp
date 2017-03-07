@@ -6,6 +6,7 @@ IslandObject::~IslandObject()
 
 void IslandObject::Start()
 {
+	//m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
 	m_transform->SetPosition(thomas::math::Vector3(0, -5, 0));
 	m_falling = false;
 }
@@ -40,5 +41,6 @@ void IslandObject::PlaceRigidBody(float radius, thomas::math::Vector3 center)
 	m_rigidBody->SetCollider(new btSphereShape(radius));
 	m_rigidBody->SetKinematic(true);
 	m_rigidBody->setWorldTransform(btTransform(btQuaternion(), btVector3(center.x, 0, center.z)));
-	//m_transform->SetPosition(center);
+	//m_frustrumCullingComponent->SetRadius(radius);
+	m_transform->SetPosition(center);
 }

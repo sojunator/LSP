@@ -8,45 +8,34 @@ class IslandManager;
 class THOMAS_API AI : public thomas::object::component::Component
 {
 public:
-	enum class Behavior
+	enum class State
 	{
-		Idle,
 		Searching,
-		Attacking,
-		Firing,
+		Chasing,
+		Attacking
 	};
 public:
 	AI();
-	~AI();
+	void Start();
+	void OnEnable();
+	void Update();
+	void ChasingUpdate();
+	void SearchingUpdate();
+	void AttackingUpdate();
+	float GetDistanceToTarget();
+	math::Vector3 GetTargetVector();
+	bool LineOfSight(math::Vector3 dir, float maxLength);
+	State GetState();
 	
-	bool Collision(math::Vector3 pos);
-	int TurnDir(math::Vector3  pos, math::Vector3 forward, math::Vector3 right, bool objectFront, bool objectRight, bool objectLeft);
-	int FireCannons(math::Vector3 pos, math::Vector3 right);
-	void InsideRadius(float radius, math::Vector3 pos, math::Vector3& dir);
-	void InsideAttackRadius(float radius, math::Vector3 pos, math::Vector3& dir);
-	bool HasTarget();
-	Behavior GetState();
-	void Escape();
-	void IdleTimer();
-
+	math::Vector3 GetMovePos();
 	math::Vector3 GetTargetPos();
 
 private:
-	Behavior m_state;
-	std::string m_stateStr;
+	State m_currentState;
+	float m_searchRadius;
+	float m_fireRadius;
+	IslandManager* m_islandManager;
+	GameObject* m_target;
 	math::Vector3 m_lastKnownPos;
-
-	float m_escapeTimer;
-	float m_escapeTime;
-
-	float m_idleTimer;
-	float m_idleTime;
-
-	IslandManager* m_IslandManager;
-	Ship* m_playerShip;
-
-	float pDotR;
-	float pDotF;
-
-
+	math::Vector3 m_moveToPos;
 };

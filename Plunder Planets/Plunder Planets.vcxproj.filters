@@ -14,6 +14,7 @@
     <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\HighscoreMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\ShipStats.cpp" />
+    <ClCompile Include="src\materials\SkyboxMaterial.cpp" />
     <ClCompile Include="src\gameobjects\Terrain\IslandObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +52,7 @@
     <ClInclude Include="src\gameobjects\ShipStats.h" />
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="src\scenes\HighscoreScene.h" />
+    <ClInclude Include="src\materials\SkyboxMaterial.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandObject.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandManager.h" />
   </ItemGroup>
