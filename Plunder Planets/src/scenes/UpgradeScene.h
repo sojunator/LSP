@@ -25,7 +25,17 @@ public:
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
-
+			//Upgrade icons
+			thomas::graphics::Sprite::LoadTexture("CannonIcon1", "../res/GUI/upgrade/cannon1.png");
+			thomas::graphics::Sprite::LoadTexture("CannonIcon2", "../res/GUI/upgrade/cannon2.png");
+			thomas::graphics::Sprite::LoadTexture("CannonIcon3", "../res/GUI/upgrade/cannon3.png");
+			thomas::graphics::Sprite::LoadTexture("CannonIcon4", "../res/GUI/upgrade/cannon4.png");
+			thomas::graphics::Sprite::LoadTexture("CannonIcon5", "../res/GUI/upgrade/cannon5.png");
+			thomas::graphics::Sprite::LoadTexture("MovementIcon1", "../res/GUI/upgrade/speed1.png");
+			thomas::graphics::Sprite::LoadTexture("MovementIcon2", "../res/GUI/upgrade/speed2.png");
+			thomas::graphics::Sprite::LoadTexture("MovementIcon3", "../res/GUI/upgrade/speed3.png");
+			thomas::graphics::Sprite::LoadTexture("MovementIcon4", "../res/GUI/upgrade/speed4.png");
+			thomas::graphics::Sprite::LoadTexture("MovementIcon5", "../res/GUI/upgrade/speed5.png");
 		}
 		else if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_1610) //FIX FITTING LATER
 		{

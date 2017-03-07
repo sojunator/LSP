@@ -556,6 +556,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(1); //Increase Cannon Dmg/Spread/Quantity first time
 				ShipStats::s_playerStats->SetTreasure(-200);
+				m_cannonIcon->SetName("CannonIcon1");
 			}
 			else if (undo) //Doesn't need an if(undo), could just be else, but more clear what is happening this way
 			{
@@ -563,6 +564,8 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(0); //Undo first upgrade
 				ShipStats::s_playerStats->SetTreasure(200);
+				m_cannonIcon->SetName("CannonIcon");
+
 			}
 		}
 		else if ((upgrade && m_cannonCheck[0] && !m_cannonCheck[1]) || (undo && !m_cannonCheck[2] && m_cannonCheck[1]))
@@ -573,6 +576,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Increase Cannon Dmg/Spread/Quantity second time
 				ShipStats::s_playerStats->SetTreasure(-300);
+				m_cannonIcon->SetName("CannonIcon2");
 			}
 			else if (undo)
 			{
@@ -580,6 +584,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(1);//Undo second upgrade
 				ShipStats::s_playerStats->SetTreasure(300);
+				m_cannonIcon->SetName("CannonIcon1");
 			}
 		}
 		else if ((upgrade && m_cannonCheck[1] && !m_cannonCheck[2]) || (undo && !m_cannonCheck[3] && m_cannonCheck[2]))
@@ -590,6 +595,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Increase Cannon Dmg/Spread/Quantity third time
 				ShipStats::s_playerStats->SetTreasure(-500);
+				m_cannonIcon->SetName("CannonIcon3");
 			}
 			else if (undo)
 			{
@@ -597,6 +603,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Undo third upgrade
 				ShipStats::s_playerStats->SetTreasure(500);
+				m_cannonIcon->SetName("CannonIcon2");
 			}
 		}
 		else if ((upgrade && m_cannonCheck[2] && !m_cannonCheck[3]) || (undo && !m_cannonCheck[4] && m_cannonCheck[3]))
@@ -607,6 +614,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Increase Cannon Dmg/Spread/Quantity fourth time
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_cannonIcon->SetName("CannonIcon4");
 			}
 			else if (undo)
 			{
@@ -614,6 +622,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Undo fourth upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_cannonIcon->SetName("CannonIcon3");
 			}
 		}
 		else if ((upgrade && m_cannonCheck[3] && !m_cannonCheck[4]) || (undo && m_cannonCheck[4]))
@@ -624,6 +633,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(5);//Increase Cannon Dmg/Spread/Quantity fifth time
 				ShipStats::s_playerStats->SetTreasure(-1000);
+				m_cannonIcon->SetName("CannonIcon5");
 				//Shoot double projectiles
 			}
 			else if (undo)
@@ -632,6 +642,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Undo fifth upgrade
 				ShipStats::s_playerStats->SetTreasure(1000);
+				m_cannonIcon->SetName("CannonIcon4");
 			}
 		}
 	}
@@ -649,6 +660,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(1);//Increase movement speed first time
 				ShipStats::s_playerStats->SetTreasure(-200);
+				m_movementIcon->SetName("MovementIcon1");
 			}
 			if (undo)
 			{
@@ -656,6 +668,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(0);//Undo first movement upgrade
 				ShipStats::s_playerStats->SetTreasure(200);
+				m_movementIcon->SetName("MovementIcon");
 			}
 		}
 		else if ((upgrade && m_movementCheck[0] && !m_movementCheck[1]) || (undo && !m_movementCheck[2] && m_movementCheck[1]))
@@ -666,6 +679,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(2);//Increase movement speed second time
 				ShipStats::s_playerStats->SetTreasure(-300);
+				m_movementIcon->SetName("MovementIcon2");
 			}
 			if (undo)
 			{
@@ -673,6 +687,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(1);//Undo second movement upgrade
 				ShipStats::s_playerStats->SetTreasure(300);
+				m_movementIcon->SetName("MovementIcon1");
 			}
 		}
 		else if ((upgrade && m_movementCheck[1] && !m_movementCheck[2]) || (undo && !m_movementCheck[3] && m_movementCheck[2]))
@@ -683,6 +698,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Increase movement speed third time
 				ShipStats::s_playerStats->SetTreasure(-500);
+				m_movementIcon->SetName("MovementIcon3");
 			}
 			if (undo)
 			{
@@ -690,6 +706,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(2);//Undo third movement upgrade
 				ShipStats::s_playerStats->SetTreasure(500);
+				m_movementIcon->SetName("MovementIcon2");
 			}
 		}
 		else if ((upgrade && m_movementCheck[2] && !m_movementCheck[3]) || (undo && !m_movementCheck[4] && m_movementCheck[3]))
@@ -700,6 +717,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(4);//Increase movement speed fourth time
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_movementIcon->SetName("MovementIcon4");
 			}
 			if (undo)
 			{
@@ -707,6 +725,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Undo fourth movement upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_movementIcon->SetName("MovementIcon3");
 			}
 		}
 		else if ((upgrade && m_movementCheck[3] && !m_movementCheck[4]) || (undo && m_movementCheck[4] && m_movementCheck[4]))
@@ -717,6 +736,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(5);//Increase movement speed fifth time
 				ShipStats::s_playerStats->SetTreasure(-1000);
+				m_movementIcon->SetName("MovementIcon5");
 			}
 			if (undo)
 			{
@@ -724,6 +744,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(4);//Undo fifth movement upgrade
 				ShipStats::s_playerStats->SetTreasure(1000);
+				m_movementIcon->SetName("MovementIcon4");
 			}
 		}
 	}
