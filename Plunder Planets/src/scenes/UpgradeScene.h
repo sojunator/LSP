@@ -20,7 +20,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("Talent", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("MovementIcon", "../res/GUI/upgrade/speed.png");
 			thomas::graphics::Sprite::LoadTexture("ResourceIcon", "../res/GUI/upgrade/icon.png");
-			thomas::graphics::Sprite::LoadTexture("ShieldIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldIcon", "../res/GUI/upgrade/shield.png");
 			thomas::graphics::Sprite::LoadTexture("RepairIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
@@ -36,6 +36,11 @@ public:
 			thomas::graphics::Sprite::LoadTexture("MovementIcon3", "../res/GUI/upgrade/speed3.png");
 			thomas::graphics::Sprite::LoadTexture("MovementIcon4", "../res/GUI/upgrade/speed4.png");
 			thomas::graphics::Sprite::LoadTexture("MovementIcon5", "../res/GUI/upgrade/speed5.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldIcon1", "../res/GUI/upgrade/shield1.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldIcon2", "../res/GUI/upgrade/shield2.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldIcon3", "../res/GUI/upgrade/shield3.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldIcon4", "../res/GUI/upgrade/shield4.png");
+			thomas::graphics::Sprite::LoadTexture("ShieldIcon5", "../res/GUI/upgrade/shield5.png");
 		}
 		else if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_1610) //FIX FITTING LATER
 		{

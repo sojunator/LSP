@@ -67,7 +67,7 @@ void UpgradeMenuObject::Start()
 	m_currentGold->SetScale(2.0f);
 	m_currentGold->SetPositionX(35);
 	m_currentGold->SetPositionY(15);
-	m_currentGold->SetDropshadow(false);
+	m_currentGold->SetDropshadow(true);
 	m_currentGold->SetOutline(true);
 	m_currentGold->SetOrigin(false);
 
@@ -79,7 +79,7 @@ void UpgradeMenuObject::Start()
 	m_currentHealth->SetScale(1.0f);
 	m_currentHealth->SetPositionX(1330);
 	m_currentHealth->SetPositionY(45);
-	m_currentHealth->SetDropshadow(false);
+	m_currentHealth->SetDropshadow(true);
 	m_currentHealth->SetOutline(true);
 	m_currentHealth->SetOrigin(false);
 
@@ -788,6 +788,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_shieldIcon->SetName("ShieldIcon1");
 			}
 			else if (undo)
 			{
@@ -795,6 +796,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(0);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_shieldIcon->SetName("ShieldIcon");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[0] && !m_shieldCheck[1]) || (undo && !m_shieldCheck[2] && m_shieldCheck[1]))
@@ -805,6 +807,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon2");
 			}
 			else if (undo)
 			{
@@ -812,6 +815,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon1");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[1] && !m_shieldCheck[2]) || (undo && !m_shieldCheck[3] && m_shieldCheck[2]))
@@ -822,6 +826,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon3");
 			}
 			else if (undo)
 			{
@@ -829,6 +834,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon2");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[2] && !m_shieldCheck[3]) || (undo && !m_shieldCheck[4] && m_shieldCheck[3]))
@@ -839,6 +845,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon4");
 			}
 			else if (undo)
 			{
@@ -846,6 +853,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon3");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[3] && !m_shieldCheck[4]) || (undo && m_shieldCheck[4]))
@@ -856,6 +864,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(5);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon5");
 			}
 			else if (undo)
 			{
@@ -863,6 +872,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon4");
 			}
 		}
 	}
