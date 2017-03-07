@@ -101,9 +101,14 @@ namespace thomas
 				return m_viewport.AspectRatio();
 			}
 
-			void Camera::SetSkybox(std::string path, std::string shaderName)
+			void Camera::SetSkybox(std::string path, std::string shaderName, int slot)
 			{
-				m_skybox = new graphics::Skybox(path, shaderName);
+				m_skybox = new graphics::Skybox(path, shaderName, slot);
+			}
+
+			void Camera::AddSkybox(std::string path, int slot)
+			{
+				m_skybox->LoadCubeMap(path, slot);
 			}
 
 			void Camera::BindSkybox()

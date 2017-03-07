@@ -42,7 +42,8 @@ public:
 		m_armIcon = AddComponent<component::SpriteComponent>();
 
 
-		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
+		m_camera->SetSkybox("../res/textures/day.dds", "skyboxShader", 0);
+		m_camera->AddSkybox("../res/textures/test.dds", 1);
 		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;

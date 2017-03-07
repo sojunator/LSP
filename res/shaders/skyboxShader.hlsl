@@ -1,6 +1,7 @@
 
-SamplerState ObjSamplerState : register(s4);
-TextureCube SkyMap : register (t4);
+SamplerState ObjSamplerState : register(s0);
+TextureCube SkyMap : register(t0);
+TextureCube SkyMap2 : register(t1);
 
 struct VSInput
 {
@@ -13,6 +14,8 @@ cbuffer mvp : register(b0)
 	matrix viewMatrix;
 	float3 camPosition;
 	float padding;
+    float3 rando;
+    float padding3;
 };
 
 //Struct coupled with LightManager
@@ -65,5 +68,9 @@ VSOutput VSMain(in VSInput input)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-	return SkyMap.Sample(ObjSamplerState, input.texCoord);
+    float4 cube1 = SkyMap.Sample(ObjSamplerState, input.texCoord);
+    float4 cube2 = SkyMap2.Sample(ObjSamplerState, input.texCoord);
+    float4 output = lerp(cube1, cube2, 0.2);
+    return lerp(output, float4(rando, 1.f), 0.65);
+	//return SkyMap.Sample(ObjSamplerState, input.texCoord);
 }
