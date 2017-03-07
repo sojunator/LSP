@@ -52,13 +52,13 @@ public:
 				gotLoot = true;
 				if (m_islands->GetTreasureLostSinceLastEnemy(i) > 500)
 				{
-					m_islands->resetTreasureLost(i);
+					/*m_islands->resetTreasureLost(i);
 					float r = ((double)rand() / (RAND_MAX)) + 1;
 					float rads = r * math::PI * 2;
 					math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
 					randDir.Normalize();
 					math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 30)*math::Vector3(randDir.x, 0, randDir.y);
-					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, m_scene);
+					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, m_scene);*/
 				}
 			}
 			else if (!m_islands->GetTreasure(i))

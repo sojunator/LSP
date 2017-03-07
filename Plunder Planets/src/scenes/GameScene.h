@@ -97,7 +97,7 @@ public:
 		m_waterObject = LoadObject<WaterObject>();
 		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
 		{
-			LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
+			//LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
 		}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
