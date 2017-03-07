@@ -115,5 +115,6 @@ void WaterMaterial::DisableAim()
 
 WaterMaterial::~WaterMaterial()
 {
+
 	delete m_oceanSim;
 }

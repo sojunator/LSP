@@ -24,7 +24,6 @@ namespace thomas
 		{
 			m_materialName = name;
 			m_shader = shader;
-
 		}
 
 		Material::Material(std::string name, std::string shader)
@@ -121,6 +120,7 @@ namespace thomas
 				s_materialTypes[type] = material;
 				//return true;
 			}
+			
 			//return false;
 			return material;
 		}

@@ -32,9 +32,6 @@ public:
 		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 
 		//Init materials
-		thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
-		thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
-		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 		LoadMaterial("phongMaterial", new PhongMaterial("Phong"));
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
@@ -94,7 +91,7 @@ public:
 
 		m_cameraObject = LoadObject<CameraObject>();
 		m_cameraObject->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
-		m_terrainObject = LoadObject<TerrainObject>();
+		//m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		for (int startEnemies = 0; startEnemies < 5; startEnemies++) //10 = number of AI
 		{
@@ -106,6 +103,8 @@ public:
 		//LoadObject<PhysicsObject>();
 		
 	};
+
+	
 	
 private:
 	CameraObject* m_cameraObject;
