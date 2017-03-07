@@ -317,10 +317,13 @@ namespace thomas
 		{
 			for (unsigned int i = 0; i < s_loadedTextures.size(); ++i)
 			{
-				if(s_loadedTextures[i]->m_data.texture)
-					s_loadedTextures[i]->m_data.texture->Release();
+				if (s_loadedTextures[i]->m_data.texture)
+					 s_loadedTextures[i]->m_data.texture->Release();
 				if(s_loadedTextures[i]->m_data.textureView)
 					s_loadedTextures[i]->m_data.textureView->Release();
+
+				// Clean up heap
+				delete s_loadedTextures[i];
 
 			}
 			s_loadedTextures.clear();
