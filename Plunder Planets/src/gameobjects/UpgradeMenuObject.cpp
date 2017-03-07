@@ -149,17 +149,6 @@ void UpgradeMenuObject::Start()
 	m_cannonIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonIcon->SetInteractable(true);
 
-	m_cannonCosts->SetFont("Pirate");
-	m_cannonCosts->SetOutput("200/300/500/750/1000");
-	m_cannonCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_cannonCosts->SetRotation(0.0f);
-	m_cannonCosts->SetScale(1.0f);
-	m_cannonCosts->SetPositionX(50);
-	m_cannonCosts->SetPositionY(150);
-	m_cannonCosts->SetDropshadow(false);
-	m_cannonCosts->SetOutline(true);
-	m_cannonCosts->SetOrigin(false);
-
 	m_cannonTalent1->SetName("Talent");
 	m_cannonTalent1->SetPositionX(220);
 	m_cannonTalent1->SetPositionY(250);
@@ -208,17 +197,6 @@ void UpgradeMenuObject::Start()
 	m_movementIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_movementIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementIcon->SetInteractable(true);
-
-	m_movementCosts->SetFont("Pirate");
-	m_movementCosts->SetOutput("200/300/500/750/1000");
-	m_movementCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_movementCosts->SetRotation(0.0f);
-	m_movementCosts->SetScale(1.0f);
-	m_movementCosts->SetPositionX(50);
-	m_movementCosts->SetPositionY(375);
-	m_movementCosts->SetDropshadow(false);
-	m_movementCosts->SetOutline(true);
-	m_movementCosts->SetOrigin(false);
 
 	m_movementTalent1->SetName("Talent");
 	m_movementTalent1->SetPositionX(220);
@@ -269,17 +247,6 @@ void UpgradeMenuObject::Start()
 	m_resourceIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceIcon->SetInteractable(true);
 
-	m_resourceCosts->SetFont("Pirate");
-	m_resourceCosts->SetOutput("200/300/500/750/1000");
-	m_resourceCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_resourceCosts->SetRotation(0.0f);
-	m_resourceCosts->SetScale(1.0f);
-	m_resourceCosts->SetPositionX(50);
-	m_resourceCosts->SetPositionY(600);
-	m_resourceCosts->SetDropshadow(false);
-	m_resourceCosts->SetOutline(true);
-	m_resourceCosts->SetOrigin(false);
-
 	m_resourceTalent1->SetName("Talent");
 	m_resourceTalent1->SetPositionX(220);
 	m_resourceTalent1->SetPositionY(700);
@@ -328,17 +295,6 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_shieldIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldIcon->SetInteractable(true);
-
-	m_shieldCosts->SetFont("Pirate");
-	m_shieldCosts->SetOutput("250/250/250/250/750");
-	m_shieldCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_shieldCosts->SetRotation(0.0f);
-	m_shieldCosts->SetScale(1.0f);
-	m_shieldCosts->SetPositionX(1320);
-	m_shieldCosts->SetPositionY(150);
-	m_shieldCosts->SetDropshadow(false);
-	m_shieldCosts->SetOutline(true);
-	m_shieldCosts->SetOrigin(false);
 
 	m_shieldTalent1->SetName("Talent");
 	m_shieldTalent1->SetPositionX(1600);
@@ -389,17 +345,6 @@ void UpgradeMenuObject::Start()
 	m_repairIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_repairIcon->SetInteractable(true);
 
-	m_repairCosts->SetFont("Pirate");
-	m_repairCosts->SetOutput("15 gold / health missing");
-	m_repairCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_repairCosts->SetRotation(0.0f);
-	m_repairCosts->SetScale(1.0f);
-	m_repairCosts->SetPositionX(1320);
-	m_repairCosts->SetPositionY(375);
-	m_repairCosts->SetDropshadow(false);
-	m_repairCosts->SetOutline(true);
-	m_repairCosts->SetOrigin(false);
-
 	m_repairTalent1->SetName("Talent");
 	m_repairTalent1->SetPositionX(1600);
 	m_repairTalent1->SetPositionY(450);
@@ -416,17 +361,6 @@ void UpgradeMenuObject::Start()
 	m_plunderIcon->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderIcon->SetInteractable(true);
-
-	m_plunderSpeedCosts->SetFont("Pirate");
-	m_plunderSpeedCosts->SetOutput("1000/750/500/300/200");
-	m_plunderSpeedCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_plunderSpeedCosts->SetRotation(0.0f);
-	m_plunderSpeedCosts->SetScale(1.0f);
-	m_plunderSpeedCosts->SetPositionX(1320);
-	m_plunderSpeedCosts->SetPositionY(600);
-	m_plunderSpeedCosts->SetDropshadow(false);
-	m_plunderSpeedCosts->SetOutline(true);
-	m_plunderSpeedCosts->SetOrigin(false);
 
 	m_plunderTalent1->SetName("Talent");
 	m_plunderTalent1->SetPositionX(1650);

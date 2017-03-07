@@ -95,7 +95,6 @@ public:
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
 		}
 		thomas::graphics::TextRender::LoadFont("Pirate", "../res/font/pirate.spritefont");
-		thomas::graphics::TextRender::LoadFont("Pirate2", "../res/font/pirate.spritefont");
 		LoadObject<UpgradeMenuObject>();
 
 	};
