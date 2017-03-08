@@ -15,6 +15,20 @@ namespace thomas
 
 			}
 
+			ParticleEmitterComponent::~ParticleEmitterComponent()
+			{
+				SAFE_RELEASE(m_d3dData.particleBuffer1);
+				SAFE_RELEASE(m_d3dData.particleBuffer2);
+				SAFE_RELEASE(m_d3dData.particleBuffer);
+				SAFE_RELEASE(m_d3dData.particleUAV1);
+				SAFE_RELEASE(m_d3dData.particleUAV2);
+				SAFE_RELEASE(m_d3dData.particleSRV1);
+				SAFE_RELEASE(m_d3dData.particleSRV2);
+				SAFE_RELEASE(m_d3dData.billboardBuffer);
+				SAFE_RELEASE(m_d3dData.billboardsSRV);
+				SAFE_RELEASE(m_d3dData.billboardsUAV);
+			}
+
 			void ParticleEmitterComponent::Start()
 			{
 				m_offset = math::Vector3(0, 0, 0);
@@ -87,26 +101,9 @@ namespace thomas
 						m_particleBufferStruct.currentParticleStartIndex = (m_particleBufferStruct.currentParticleStartIndex + numberOfParticlesToEmit) % m_maxNrOfParticles;
 					}
 				}
-
-
-
-
 			}
 
-			void thomas::object::component::ParticleEmitterComponent::Destroy()
-			{
-				SAFE_RELEASE(m_d3dData.particleBuffer1);
-				SAFE_RELEASE(m_d3dData.particleBuffer2);
-				SAFE_RELEASE(m_d3dData.particleBuffer);
-				SAFE_RELEASE(m_d3dData.particleUAV1);
-				SAFE_RELEASE(m_d3dData.particleUAV2);
-				SAFE_RELEASE(m_d3dData.particleSRV1);
-				SAFE_RELEASE(m_d3dData.particleSRV2);
-				SAFE_RELEASE(m_d3dData.billboardBuffer);
-				SAFE_RELEASE(m_d3dData.billboardsSRV);
-				SAFE_RELEASE(m_d3dData.billboardsUAV);
-			}
-
+			
 			void ParticleEmitterComponent::SetSpread(float const other)
 			{
 				m_particleBufferStruct.spread = other;

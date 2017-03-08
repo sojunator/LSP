@@ -39,8 +39,6 @@ namespace thomas
 			s_emitParticlesCS = Shader::CreateComputeShader("EmitParticlesCS", "../res/shaders/emitParticlesCS.hlsl", NULL);
 			s_updateParticlesCS = Shader::CreateComputeShader("UpdateParticlesCS", "../res/shaders/updateParticlesCS.hlsl", NULL);
 
-			//CreateBillboardUAVandSRV();
-
 
 			D3D11_BLEND_DESC blendDesc;
 			ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -166,6 +164,7 @@ namespace thomas
 			emitter->GetShader()->BindResource(emitter->GetD3DData()->billboardsSRV, 1);
 			emitter->GetShader()->BindBuffer(s_matrixBuffer, 0);
 			ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
+			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			emitter->GetShader()->BindVertexBuffer(NULL, 0, 0);
 
 			emitter->GetTexture()->Bind();

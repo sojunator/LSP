@@ -84,7 +84,6 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
-		m_cameraObject->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
 		//m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
 		//for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI

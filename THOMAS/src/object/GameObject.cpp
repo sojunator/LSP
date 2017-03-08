@@ -74,6 +74,13 @@ namespace thomas
 
 			return true;
 		}
+		void GameObject::Destroy()
+		{
+			for (unsigned int i = 0; i < s_gameObjects.size(); ++i)
+			{
+				Destroy(s_gameObjects[i]);
+			}
+		}
 		bool GameObject::GetActive()
 		{
 			if (m_transform->GetParent() && m_transform->GetParent()->m_gameObject)

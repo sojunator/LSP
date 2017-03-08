@@ -61,12 +61,8 @@ namespace thomas
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
 			
-			static ID3D11Buffer* s_billboardsBuffer;
-			
 			static Shader* s_updateParticlesCS;
 			static Shader* s_emitParticlesCS;
-			static ID3D11UnorderedAccessView* s_billboardsUAV;
-			static ID3D11ShaderResourceView* s_billboardsSRV;
 
 			static ID3D11UnorderedAccessView* s_activeParticleUAV;
 			static ID3D11ShaderResourceView* s_activeParticleSRV;

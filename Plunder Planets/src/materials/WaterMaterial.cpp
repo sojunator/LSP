@@ -45,6 +45,7 @@ WaterMaterial::WaterMaterial(std::string name, Shader* shader) : Material(name, 
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::HEIGHT_MAP, "OceanDisplacement", m_oceanSim->getD3D11DisplacementMap()));
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::NORMAL, "OceanNormal", m_oceanSim->getD3D11GradientMap()));
 	m_textures.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::SPECULAR, "../res/textures/foam.png"));
+
 	
 	m_materialProperties.uvScale = 1.0 / m_oceanSettings.patch_length;
 	m_materialProperties.uvOffset = 0.5f / m_oceanSettings.dmap_dim;

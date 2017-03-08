@@ -93,8 +93,7 @@ namespace thomas
 				void CalculateMaxNrOfParticles();
 			public:
 				ParticleEmitterComponent();
-				
-				void Destroy();
+				~ParticleEmitterComponent();
 
 				void Start();
 				void Update();

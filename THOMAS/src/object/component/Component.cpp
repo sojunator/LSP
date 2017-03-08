@@ -16,7 +16,7 @@ namespace thomas
 				return m_gameObject->GetActive() && m_active;
 			}
 
-
+			
 		}
 	}
 }

@@ -436,7 +436,7 @@ void Ship::DrawAimArc(Broadside* broadside)
 		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
-
+	
 }
 
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)

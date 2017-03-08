@@ -41,6 +41,7 @@ namespace thomas
 		//graphics::TextRender::Destroy();
 		object::Object::Destroy(s_currentScene);
 		
+		object::GameObject::Destroy();
 		//object::Object::Destroy();
 		//graphics::ParticleSystem::Destroy();
 		//graphics::ParticleSystem::Init();
@@ -49,6 +50,7 @@ namespace thomas
 		s_currentScene = nullptr;
 
 		object::Object::Clean();
+		graphics::GeometryDraw::Destroy();
 	}
 	void Scene::UpdateCurrentScene()
 	{
