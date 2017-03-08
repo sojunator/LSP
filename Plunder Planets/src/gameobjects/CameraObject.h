@@ -205,25 +205,25 @@ public:
 		{
 			if (Input::GetKey(Input::Keys::A))
 			{
-				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::D))
 			{
-				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::W))
 			{
-				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::S))
 			{
-				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 		}
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetDeltaTime();
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetActualDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);

@@ -16,6 +16,7 @@
 #include "../gameobjects/Enemy.h"
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
+#include "../gameobjects/PauseObjectMenuObject.h"
 
 class GameScene : public thomas::Scene
 {
@@ -101,7 +102,9 @@ public:
 		//}
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
+		LoadObject<PauseObjectMenuObject>();
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
+		
 		//LoadObject<PhysicsObject>();
 
 	};

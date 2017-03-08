@@ -550,11 +550,7 @@ void Ship::Float(float dt)
 }
 void Ship::Update()
 {
-
-
-
 	float const dt = ThomasTime::GetDeltaTime();
-
 
 	if (m_startUpSequence)
 	{

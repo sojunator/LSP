@@ -20,6 +20,7 @@ namespace thomas
 		static void Update();		///Updates delta time and FPS
 
 		static float GetDeltaTime();		///Delta time
+		static float GetActualDeltaTime();
 		static double GetInitTime();
 		static int GetFPS();
 		static float GetFrameTime();
