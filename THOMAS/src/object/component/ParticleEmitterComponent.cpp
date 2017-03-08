@@ -89,7 +89,7 @@ namespace thomas
 				}
 
 
-			
+
 
 			}
 
@@ -237,11 +237,9 @@ namespace thomas
 			{
 				if (!m_isEmitting)
 				{
-				m_isEmitting = true;
-				m_emissionTimeLeft = m_emissionDuration;
+					m_isEmitting = true;
+					m_emissionTimeLeft = m_emissionDuration;
 				}
-
-
 			}
 
 			void ParticleEmitterComponent::StopEmitting(bool force)
@@ -255,7 +253,7 @@ namespace thomas
 					m_particleBufferStruct.endSize = 0;
 					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
 					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
-					
+
 				}
 			}
 
@@ -330,7 +328,7 @@ namespace thomas
 			void ParticleEmitterComponent::SetEmissionRate(float emissionRate)
 			{
 				m_emissionRate = emissionRate;
-				m_emissionTimer = 1.0f/m_emissionRate; //So we spawn one at least one at start :)
+				m_emissionTimer = 1.0f / m_emissionRate; //So we spawn one at least one at start :)
 				CalculateMaxNrOfParticles();
 			}
 
@@ -392,9 +390,9 @@ namespace thomas
 
 				utils::DebugTools::AddBool(m_particleBufferStruct.spawnAtSphereEdge, "Spawn at edge", barName);
 
-				
 
-				
+
+
 				utils::DebugTools::AddFloat(m_emissionRate, "Emission rate", barName);
 				utils::DebugTools::AddBool(m_shouldUpdateResources, "Update", barName);
 			}

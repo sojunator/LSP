@@ -22,6 +22,7 @@ namespace thomas
 			bool Unbind();
 			void Draw();
 			void BindSkyboxTexture();
+			void SetLerp(math::Vector3 lerp);
 
 		private:
 			ID3D11RasterizerState* m_rasterizerP;
@@ -47,7 +48,7 @@ namespace thomas
 				math::Matrix viewMatrix;
 				math::Vector3 camPosition;
 				float paddeo;
-				math::Vector3 random;
+				math::Vector3 lerp;
 				float padding;
 			};
 
