@@ -14,10 +14,12 @@ public:
 	IslandManager(Scene* scene)
 	{
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(20, mat, 1024, 1 / 8.f, 4096);
+		m_islands = new thomas::Islands(5, mat, 1024, 1 / 8.f, 4096);
 		int nrOfIslands = m_islands->GetNrOfIslands();
 		for (int i = 0; i < nrOfIslands; i++)
 		{
+			math::Vector3 pos = m_islands->GetCenter(i);
+			math::Vector3 off = m_islands->GetOffSet(i);
 			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
 			m_islandObjects.push_back(thomas::object::GameObject::Instantiate<IslandObject>(m_islands->GetCenter(i), thomas::math::Quaternion::Identity, scene));
 			m_islandObjects[i]->SetModel(i);

@@ -29,7 +29,7 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			tempPlane.push_back(thomas::utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
+			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
 			ApplyOffSet(i, tempPlane[i]);
 		}
 		GenerateMesh(tempPlane, m);
@@ -196,15 +196,18 @@ namespace thomas
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
 
-		tempOffset.x = m_mapSize - (m_mapSize / 2);
+		//tempOffset.x = m_mapSize - (m_mapSize / 2);
+		//tempOffset.y = 0;
+		//tempOffset.z = m_mapSize - (m_mapSize / 2);
+		tempOffset.x = 0;
 		tempOffset.y = 0;
-		tempOffset.z = m_mapSize - (m_mapSize / 2);
+		tempOffset.z = 0;
 
 
 		math::Vector3 tempCenter;
 		tempCenter.x = tempOffset.x + m_size[0] / 2;
 		tempCenter.y = 0;
-		tempCenter.z = -tempOffset.z - m_size[0] / 2;
+		tempCenter.z = tempOffset.z - m_size[0] / 2;
 
 		m_worldPosOffset.push_back(tempOffset);
 		m_islandCenterWorldPos.push_back(tempCenter);
@@ -222,7 +225,7 @@ namespace thomas
 
 				tempCenter.x = tempOffset.x + m_size[0] / 2;
 				tempCenter.y = 0;
-				tempCenter.z = -tempOffset.z - m_size[0] / 2;
+				tempCenter.z = tempOffset.z - m_size[0] / 2;
 
 				for (int j = 0; j < m_islandCenterWorldPos.size(); ++j)
 				{
