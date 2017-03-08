@@ -2,6 +2,7 @@
 #pragma once
 #include <Thomas.h>
 #include "PauseObjectMenuObject.h"
+#include "ShipStats.h"
 
 using namespace thomas;
 using namespace object;
@@ -23,8 +24,8 @@ public:
 	{
 		m_settingsActive = false;
 		m_settingsHeadLine = AddComponent<component::TextComponent>();
-		/*m_pauseQuit = AddComponent<component::TextComponent>();
-		m_pauseResume = AddComponent<component::TextComponent>();*/
+		/*m_pauseQuit = AddComponent<component::TextComponent>();*/
+		m_settingsCamRotateX = AddComponent<component::TextComponent>();
 		m_pauseObj = (PauseObjectMenuObject*)Find("PauseObjectMenuObject");
 
 		InitMenu();
@@ -43,18 +44,20 @@ public:
 		m_settingsHeadLine->SetOutline(true);
 		m_settingsHeadLine->SetOrigin(false);
 
-		/*m_pauseResume->SetFont("SafeToLeave");
-		m_pauseResume->SetOutput("Resume");
-		m_pauseResume->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
-		m_pauseResume->SetRotation(0.0f);
-		m_pauseResume->SetScale(1.0f);
-		m_pauseResume->SetPositionX(Window::GetWidth() / 4);
-		m_pauseResume->SetPositionY(Window::GetHeight() / 4 + 100);
-		m_pauseResume->SetDropshadow(true);
-		m_pauseResume->SetOutline(true);
-		m_pauseResume->SetOrigin(false);
+		m_settingsCamRotateX->SetFont("SafeToLeave");
+		m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (No)");
+		m_settingsCamRotateX->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
+		m_settingsCamRotateX->SetRotation(0.0f);
+		m_settingsCamRotateX->SetScale(1.0f);
+		m_settingsCamRotateX->SetPositionX((Window::GetWidth() / 4) * 2);
+		m_settingsCamRotateX->SetPositionY(Window::GetHeight() / 4 + 100);
+		m_settingsCamRotateX->SetDropshadow(true);
+		m_settingsCamRotateX->SetOutline(true);
+		m_settingsCamRotateX->SetOrigin(false);
 
-		m_pauseQuit->SetFont("SafeToLeave");
+		m_camRotXActive = true;
+
+		/*m_pauseQuit->SetFont("SafeToLeave");
 		m_pauseQuit->SetOutput("Quit");
 		m_pauseQuit->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseQuit->SetRotation(0.0f);
@@ -75,16 +78,16 @@ public:
 	void DisplayMenu()
 	{
 		m_settingsHeadLine->SetActive(true);
+		m_settingsCamRotateX->SetActive(true);
 		/*
-		m_pauseQuit->SetActive(true);
-		m_pauseResume->SetActive(true);*/
+		m_pauseQuit->SetActive(true);*/
 	}
 
 	void HideMenu()
 	{
 		m_settingsHeadLine->SetActive(false);
-		/*m_pauseQuit->SetActive(false);
-		m_pauseResume->SetActive(false);*/
+		m_settingsCamRotateX->SetActive(false);
+		/*m_pauseQuit->SetActive(false);*/
 	}
 
 	void CheckState()
@@ -152,12 +155,12 @@ public:
 
 	void SetTextActive()
 	{
-		/*if (m_resumeActive)
+		if (m_camRotXActive)
 		{
-			m_pauseResume->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
-			m_pauseQuit->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
+			m_settingsCamRotateX->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
+			//m_pauseQuit->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		}
-		else
+		/*else
 		{
 			m_pauseResume->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 			m_pauseQuit->SetColor(math::Vector3(1.0f, 0.0f, 0.0f));
@@ -166,14 +169,24 @@ public:
 
 	void Choice()
 	{
-		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) //FIX IF PRESS B, m_pauseObj->SetSettingsState(false)
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_pauseObj->GetSettingsState()) //FIX IF PRESS B, m_pauseObj->SetSettingsState(false)
 		{
-			/*if (m_quitActive)
+			if (m_camRotXActive)
 			{
-				thomas::Scene::UnloadScene();
-				Scene::LoadScene<MenuScene>();
-			}
+				if (ShipStats::s_playerStats->GetInvertCamX() == -1)
+				{
+					ShipStats::s_playerStats->SetInvertCamX(true);
+					m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (Yes)");
 
+				}
+				else
+				{
+					ShipStats::s_playerStats->SetInvertCamX(false);
+					m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (No)");
+
+				}
+			}
+			/*
 			if (m_resumeActive)
 			{
 				m_isPaused = false;
@@ -194,7 +207,7 @@ public:
 
 		if (m_pauseObj->GetSettingsState())
 		{
-			//SetTextActive();
+			SetTextActive();
 			Choice();
 		}
 	};
@@ -202,10 +215,11 @@ public:
 private:
 	//float m_inputDelay;
 	bool m_settingsActive;
+	bool m_camRotXActive;
 	//bool m_resumeActive;
 	//bool m_quitActive;
 	PauseObjectMenuObject* m_pauseObj;
 	component::TextComponent* m_settingsHeadLine;
-	//component::TextComponent* m_pauseQuit;
+	component::TextComponent* m_settingsCamRotateX;
 	//component::TextComponent* m_pauseResume;
 };

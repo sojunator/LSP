@@ -6,6 +6,7 @@
 #include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
 #include "Ship.h"
+#include "PauseObjectMenuObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -157,6 +158,8 @@ public:
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
+		else if (m_pauseObj == nullptr)
+			m_pauseObj = (PauseObjectMenuObject*)Find("PauseObjectMenuObject");
 		else
 		{
 			if (m_ship->m_armor > 0)
@@ -249,7 +252,7 @@ public:
 			m_flySpeed = m_normalSpeed;
 
 		
-		if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
+		if ((Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK)) && !m_pauseObj->GetPauseState())
 			Scene::LoadScene<MenuScene>();
 
 		/*if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START)) //When pause scene implemented
@@ -263,6 +266,7 @@ public:
 
 private:
 	Ship* m_ship;
+	PauseObjectMenuObject* m_pauseObj;
 	component::Camera* m_camera;
 	component::SoundComponent* m_seagull;
 	component::SoundComponent* m_creak;

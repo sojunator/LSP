@@ -92,6 +92,22 @@ float ShipStats::GetInvertCamY()
 	return m_settingsInvertCamY;
 }
 
+void ShipStats::SetInvertCamX(bool state)
+{
+	if (state)
+		m_settingsInvertCamX = 1;
+	else
+		m_settingsInvertCamX = -1;
+}
+
+void ShipStats::SetInvertCamY(bool state)
+{
+	if (state)
+		m_settingsInvertCamY = 1;
+	else
+		m_settingsInvertCamY = -1;
+}
+
 void ShipStats::IncreaseCannonDamage(float talentAmount)
 {
 	m_cannonDamage = 5 + (talentAmount * 2);

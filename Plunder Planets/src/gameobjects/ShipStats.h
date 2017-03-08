@@ -27,6 +27,8 @@ public:
 	float GetFOV();
 	float GetInvertCamX();
 	float GetInvertCamY();
+	void SetInvertCamX(bool state);
+	void SetInvertCamY(bool state);
 
 	void IncreaseCannonDamage(float talentAmount);
 	//void IncreaseCannonQuantity();

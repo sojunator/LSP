@@ -77,6 +77,7 @@ public:
 		m_pauseQuit->SetOrigin(false);
 
 		m_resumeActive = true;
+		m_settingsActive = false;
 		m_quitActive = false;
 		
 		m_inputDelay = 0.0f; // so that we don't do 500 inputs per second.
@@ -265,6 +266,11 @@ public:
 	void SetSettingsState(bool state)
 	{
 		m_settingsChosen = state;
+	}
+
+	bool GetPauseState()
+	{
+		return m_isPaused;
 	}
 
 
