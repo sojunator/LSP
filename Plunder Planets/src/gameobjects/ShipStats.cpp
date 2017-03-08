@@ -6,7 +6,6 @@ ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
 	m_cannonDamage = 5;
-	//m_cannonSpread; //Add later
 	//m_cannonQuantity; //Add later
 	m_speed = 50;
 	m_boostCost = 20;
@@ -15,6 +14,11 @@ ShipStats::ShipStats()
 	m_healthAmount = 1;
 	m_placeHolderHealthAmount = 1;
 	m_plunderSpeed = 30;
+	m_settingsFOV = 70;
+	m_settingsInvertCamX = -1;
+	m_settingsInvertCamY = -1;
+	m_settingsInvertShip = 0;
+	m_settingsCamRotateSpeed = 0;
 	s_currentLevel = 1;
 }
 
@@ -36,11 +40,6 @@ float ShipStats::GetCannonDamage()
 float ShipStats::GetSpeed()
 {
 	return m_speed;
-}
-
-float ShipStats::GetCannonSpread()
-{
-	return m_cannonSpread;
 }
 
 float ShipStats::GetCannonQuantity()
@@ -76,6 +75,21 @@ float ShipStats::GetPlaceholderHealthAmount()
 float ShipStats::GetPlunderSpeed()
 {
 	return m_plunderSpeed;
+}
+
+float ShipStats::GetFOV()
+{
+	return m_settingsFOV;
+}
+
+float ShipStats::GetInvertCamX()
+{
+	return m_settingsInvertCamX;
+}
+
+float ShipStats::GetInvertCamY()
+{
+	return m_settingsInvertCamY;
 }
 
 void ShipStats::IncreaseCannonDamage(float talentAmount)

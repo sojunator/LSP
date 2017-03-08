@@ -35,6 +35,7 @@ public:
 	void SetSelectedObject();
 
 private:
+	component::Camera* fov;
 	component::ParticleEmitterComponent* m_wormhole;
 	component::SpriteComponent* m_cannonInfo;
 	component::SpriteComponent* m_movementInfo;

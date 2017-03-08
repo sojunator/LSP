@@ -1,7 +1,7 @@
 #pragma once
 #include "Thomas.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
-//#include"../src/PlayerStats.h"
+#include "../../THOMAS/src/object/component/Camera.h"
 
 using namespace thomas;
 using namespace object;
@@ -24,6 +24,9 @@ public:
 	float GetHealthAmount();
 	float GetPlaceholderHealthAmount();
 	float GetPlunderSpeed();
+	float GetFOV();
+	float GetInvertCamX();
+	float GetInvertCamY();
 
 	void IncreaseCannonDamage(float talentAmount);
 	//void IncreaseCannonQuantity();
@@ -38,7 +41,6 @@ public:
 private:
 	float m_currentGold;
 	float m_cannonDamage;
-	float m_cannonSpread;
 	float m_cannonQuantity;
 	float m_speed;
 	float m_boostCost;
@@ -47,4 +49,9 @@ private:
 	float m_healthAmount;
 	float m_placeHolderHealthAmount;
 	float m_plunderSpeed;
+	float m_settingsFOV;
+	float m_settingsInvertCamX;
+	float m_settingsInvertCamY;
+	float m_settingsInvertShip;
+	float m_settingsCamRotateSpeed;
 };
