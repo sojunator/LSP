@@ -2,8 +2,6 @@
 #include "EditorGameObject.h"
 
 
-std::string Helper::s_texturePath;
-
 void TW_CALL Helper::AddSystem(void * clientData)
 {
 	thomas::Scene* scene = (thomas::Scene*)clientData;
@@ -235,7 +233,6 @@ void TW_CALL Helper::LoadSystem(void * clientData)
 		char* textureName = (char*)malloc(textureSize + 1);
 		file.read(textureName, sizeof(char) * textureSize);
 		textureName[textureSize] = 0;
-		s_texturePath = textureName;
 		file.close();
 		particle->ImportEmitter(fResult);
 	}
@@ -243,6 +240,8 @@ void TW_CALL Helper::LoadSystem(void * clientData)
 
 void TW_CALL Helper::BrowseTextures(void * clientData)
 {
+	thomas::object::component::ParticleEmitterComponent* particle = (thomas::object::component::ParticleEmitterComponent*)clientData;
+
 	std::string fResult;
 
 	HRESULT hr = CoInitializeEx(NULL,
@@ -324,7 +323,9 @@ void TW_CALL Helper::BrowseTextures(void * clientData)
 		GetCurrentDirectory(MAX_PATH, NPath);
 
 		std::string relativeTexPath = GetRelativePath(fResult, WCHAR_TO_STRING(NPath));
-		s_texturePath = relativeTexPath;
+		
+		particle->SetTexture(relativeTexPath);
+
 	}
 
 }

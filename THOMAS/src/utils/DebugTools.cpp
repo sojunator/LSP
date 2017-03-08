@@ -79,6 +79,11 @@ namespace thomas
 
 		}
 
+		void DebugTools::RemoveBar(std::string name)
+		{
+			TwDeleteBar(GetBar(name)->bar);
+		}
+
 
 		void DebugTools::AddFloat(float &variable, const char* name, std::string barName)
 		{

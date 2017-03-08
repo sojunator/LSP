@@ -39,6 +39,7 @@ namespace thomas
 			static int ProcessMessages(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 			static Bar* GetBar(std::string name);
 			static void CreateBar(std::string name);
+			static void RemoveBar(std::string name);
 		private:
 
 			static std::map<std::string, Bar> s_bars;

@@ -11,8 +11,6 @@
 class Helper
 {
 public:
-
-	static std::string s_texturePath;
 	
 	static void TW_CALL AddSystem(void* clientData);
 

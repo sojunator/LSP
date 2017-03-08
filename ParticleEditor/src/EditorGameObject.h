@@ -20,18 +20,19 @@ public:
 		m_particleEmitter->StartEmitting();
 		m_particleEmitter->AddToDebugMenu();
 
-		m_textureName = m_particleEmitter->GetTexture()->GetName();
-		utils::DebugTools::AddString(m_textureName, "Texture path", m_particleEmitter->GetDebugMenuName());
+		m_tempTextureName = m_particleEmitter->GetTexture()->GetName();
+		m_textureName = m_tempTextureName;
+		m_temp2TextureName = m_textureName;
+		utils::DebugTools::AddString(m_tempTextureName, "Texture path", m_particleEmitter->GetDebugMenuName());
 		utils::DebugTools::Bar* bar = utils::DebugTools::GetBar(m_particleEmitter->GetDebugMenuName());
 		
 		
-		TwAddButton(bar->bar, "Browse Textures", Helper::BrowseTextures, NULL, "label='Browse Textures'");
+		TwAddButton(bar->bar, "Browse Textures", Helper::BrowseTextures, m_particleEmitter, "label='Browse Textures'");
 		TwAddButton(bar->bar, "Play/Pause", Helper::PauseToggle, m_particleEmitter, "label='Play/Pause'");
 		TwAddButton(bar->bar, "Restart", Helper::Restart, m_particleEmitter, "label='Restart System'");
 		TwAddButton(bar->bar, "Export", Helper::SaveSystem, m_particleEmitter, "label='Export system'");
 		TwAddButton(bar->bar, "Import", Helper::LoadSystem, m_particleEmitter, "label='Import system'");
 		TwAddButton(bar->bar, "Close", Helper::CloseSystem, this, "label='Close System'");
-		Helper::s_texturePath = "";
 		
 		
 	}
@@ -40,15 +41,18 @@ public:
 
 	void Update()
 	{
+		m_textureName = m_particleEmitter->GetTexture()->GetName();
 
-		if (!Helper::s_texturePath.empty())
+		if (m_textureName != m_temp2TextureName)
 		{
-			m_textureName = Helper::s_texturePath;
-			Helper::s_texturePath = "";
+			m_temp2TextureName = m_textureName;
+			m_tempTextureName = m_textureName;
 		}
 
-		if (m_particleEmitter->GetTexture()->GetName() != m_textureName)
+		if (m_tempTextureName != m_textureName)
 		{
+			m_temp2TextureName = m_tempTextureName;
+			m_textureName = m_tempTextureName;
 			m_particleEmitter->SetTexture(m_textureName);
 			m_textureName = m_particleEmitter->GetTexture()->GetName();
 		}
@@ -56,5 +60,7 @@ public:
 
 private:
 	std::string m_textureName;
+	std::string m_tempTextureName;
+	std::string m_temp2TextureName;
 	component::ParticleEmitterComponent* m_particleEmitter;
 };
