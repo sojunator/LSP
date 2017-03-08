@@ -21,8 +21,8 @@ public:
 	{
 		m_firstFrame = true;
 		m_mass = 500000;
-		m_searchRadius = 1000;
-		m_attackRadius = 200;
+		m_searchRadius = 0;
+		m_attackRadius = 0;
 		m_turnDir = 0;
 		m_shootDir = 0;
 		m_newForwardVec = math::Vector3::Zero;
