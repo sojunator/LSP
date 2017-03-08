@@ -24,7 +24,7 @@ public:
 	void Start()
 	{
 		m_far = 4000;
-		m_fov = 70;
+		m_fov = ShipStats::s_playerStats->GetFOV();
 
 
 		m_camera = AddComponent<component::Camera>();
@@ -152,7 +152,7 @@ public:
 	void Update()
 	{
 		m_camera->SetFar(m_far);
-		m_camera->SetFov(m_fov);
+		m_camera->SetFov(ShipStats::s_playerStats->GetFOV());
 
 		if (m_ship == nullptr)
 		{

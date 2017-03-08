@@ -25,6 +25,7 @@ public:
 	float GetPlaceholderHealthAmount();
 	float GetPlunderSpeed();
 	float GetFOV();
+	void SetFOV(bool minorplus);
 	float GetInvertCamX();
 	float GetInvertCamY();
 	void SetInvertCamX(bool state);

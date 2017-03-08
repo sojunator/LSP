@@ -55,6 +55,8 @@ void UpgradeMenuObject::Start()
 	m_repairCosts = AddComponent<component::TextComponent>();
 	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
+	cam->SetFov(50); //makes wormhole fit screen
+
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
@@ -421,6 +423,7 @@ void UpgradeMenuObject::Start()
 	m_wormhole->SetRotationSpeed(math::DegreesToRadians(5));
 	m_wormhole->SetOffset(cam->m_gameObject->m_transform->Forward() * 50);
 	m_wormhole->StartEmitting();
+
 }
 
 void UpgradeMenuObject::Update()

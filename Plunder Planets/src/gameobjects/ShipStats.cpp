@@ -14,7 +14,7 @@ ShipStats::ShipStats()
 	m_healthAmount = 1;
 	m_placeHolderHealthAmount = 1;
 	m_plunderSpeed = 30;
-	m_settingsFOV = 70;
+	m_settingsFOV = 50;
 	m_settingsInvertCamX = -1;
 	m_settingsInvertCamY = -1;
 	m_settingsInvertShip = 0;
@@ -80,6 +80,14 @@ float ShipStats::GetPlunderSpeed()
 float ShipStats::GetFOV()
 {
 	return m_settingsFOV;
+}
+
+void ShipStats::SetFOV(bool minorplus)
+{
+	if (minorplus)
+		m_settingsFOV += 10;
+	else
+		m_settingsFOV -= 10;
 }
 
 float ShipStats::GetInvertCamX()

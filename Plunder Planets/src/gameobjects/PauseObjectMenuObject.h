@@ -117,7 +117,7 @@ public:
 				m_isPaused = true;
 			}
 		}
-		if ((Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::OemBackslash)) && !m_settingsChosen)
+		if ((Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back)) && !m_settingsChosen)
 		{
 			if (m_isPaused)
 			{
