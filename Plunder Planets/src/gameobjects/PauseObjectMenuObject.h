@@ -33,9 +33,9 @@ public:
 		m_pauseHeadLine->SetOutput("Paused");
 		m_pauseHeadLine->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseHeadLine->SetRotation(0.0f);
-		m_pauseHeadLine->SetScale(1.0f);
+		m_pauseHeadLine->SetScale(2.0f);
 		m_pauseHeadLine->SetPositionX(Window::GetWidth() / 4);
-		m_pauseHeadLine->SetPositionY(Window::GetHeight() / 4);
+		m_pauseHeadLine->SetPositionY(Window::GetHeight() / 4.5);
 		m_pauseHeadLine->SetDropshadow(true);
 		m_pauseHeadLine->SetOutline(true);
 		m_pauseHeadLine->SetOrigin(false);
@@ -162,7 +162,7 @@ public:
 
 	void Choice()
 	{
-		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
+		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space))
 		{
 			if (m_quitActive)
 			{
