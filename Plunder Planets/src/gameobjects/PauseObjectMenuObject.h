@@ -85,7 +85,7 @@ public:
 
 	void CheckState()
 	{
-		if (Input::GetButtonDown(Input::Buttons::START))
+		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter))
 		{
 			
 			if (m_isPaused)
@@ -107,7 +107,7 @@ public:
 		{
 			if (m_isPaused)
 			{
-				if (Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetLeftStickY() > 0.0f)
+				if (Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetLeftStickY() > 0.0f || Input::GetKey(Input::Keys::Down))
 				{
 					if (m_resumeActive)
 					{
@@ -123,7 +123,7 @@ public:
 					m_inputDelay = 0.3f;
 				}
 
-				if (Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetLeftStickY() < 0.0f)
+				if (Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetLeftStickY() < 0.0f || Input::GetKey(Input::Keys::Up))
 				{
 					if (m_resumeActive)
 					{
@@ -162,12 +162,12 @@ public:
 
 	void Choice()
 	{
-		if (Input::GetButtonDown(Input::Buttons::A))
+		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
 		{
 			if (m_quitActive)
 			{
 				thomas::Scene::UnloadScene();
-				Scene::LoadScene<UpgradeScene>();
+				Scene::LoadScene<MenuScene>();
 			}
 
 			if (m_resumeActive)
