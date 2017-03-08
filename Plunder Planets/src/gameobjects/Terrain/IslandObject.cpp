@@ -18,7 +18,11 @@ void IslandObject::Start()
 
 void IslandObject::Update()
 {
-	float y = m_rigidBody->getWorldTransform().getOrigin().getY();
+	//float y = m_rigidBody->getWorldTransform().getOrigin().getY();
+	//if (y <= -200)
+	//{
+	//	m_rigidBody->
+	//}
 }
 
 void IslandObject::Destroy()
