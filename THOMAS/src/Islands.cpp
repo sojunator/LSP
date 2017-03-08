@@ -29,7 +29,7 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			tempPlane.push_back(thomas::utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
+			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
 			ApplyOffSet(i, tempPlane[i]);
 		}
 		GenerateMesh(tempPlane, m);
