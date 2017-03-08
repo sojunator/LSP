@@ -16,7 +16,7 @@ public:
 
 	void Start()
 	{
-		m_delay = 4.0;
+		m_delay = 0;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
 		m_pitch = 0.f;
@@ -75,7 +75,7 @@ public:
 	float CalculateCanonAngle(math::Vector3 target)
 	{
 		math::Vector3 broadsidePos = m_transform->GetPosition();
-		float y = broadsidePos.y+5 - target.y;
+		float y = m_cannons[0]->m_transform->GetPosition().y - target.y;
 
 		float xx = target.x - broadsidePos.x;
 		float xz = target.z - broadsidePos.z;

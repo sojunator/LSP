@@ -21,8 +21,8 @@ public:
 	{
 		m_firstFrame = true;
 		m_mass = 500000;
-		m_searchRadius = 1000;
-		m_attackRadius = 200;
+		m_searchRadius = 0;
+		m_attackRadius = 0;
 		m_turnDir = 0;
 		m_shootDir = 0;
 		m_newForwardVec = math::Vector3::Zero;
@@ -71,6 +71,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_ai = AddComponent<AI>();
+		m_ai->SetActive(false);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
 		m_broadSideLeft = Instantiate<Broadside>(math::Vector3(-6, 8, 2.3), math::Quaternion::CreateFromAxisAngle(math::Vector3(0, 1, 0), math::DegreesToRadians(90)), m_transform, m_scene);
@@ -94,8 +95,8 @@ public:
 		m_dead = false;
 		m_deathTime = 10;
 		//Movement
-		m_speed = 600;// m_shipStats->GetSpeed();
-		m_turnSpeed = 150;
+		m_speed = 150;
+		m_turnSpeed = 80;
 
 		//utils::DebugTools::AddBool(m_islandForward, "Island F");
 		//utils::DebugTools::AddBool(m_islandRight, "Island R");
@@ -149,80 +150,130 @@ public:
 
 	void Move(float dt)
 	{
-		math::Vector3 forward = m_transform->Forward();
-		forward.y = 0;		//Remove y so no flying
-		m_moving = true;
-		m_shootDir = m_ai->FireCannons(m_transform->GetPosition(), -m_transform->Right());
-
-		switch (m_ai->GetState())
+		if (m_ai->GetState() == AI::State::Chasing || m_ai->GetState() == AI::State::Searching || m_ai->GetState() == AI::State::Attacking)
 		{
-		case AI::Behavior::Attacking:
-			//FireCannons();
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
-			break;
-		case AI::Behavior::Firing:
-			FireCannons();
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
-			break;
-		case AI::Behavior::Searching:
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
-			break;
-		case AI::Behavior::Idle:
-			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * dt * m_rigidBody->GetMass()));
-			Rotate(dt);
-			break;
-		default:
-			break;
+			math::Vector3 forward = m_transform->Forward();
+			forward.y = 0;		//Remove y so no flying
+			m_moving = true;
+
+			float dir = calcDir();
+
+			float moveSpeed = 1 - abs(dir);
+
+			if (m_ai->GetState() == AI::State::Attacking)
+			{
+				m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * 0.5 * m_rigidBody->GetMass() * moveSpeed));
+			}
+			else
+			{
+				m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * m_rigidBody->GetMass() * moveSpeed));
+			}
+
+			
+			
 		}
+		
 	}
 
 	void Rotate(float dt)
 	{
-		math::Vector3 right = m_transform->Right();
-		right.y = 0;		//Remove y so no flying
-		m_rigidBody->activate();
-
-
-
-		float dir = m_newForwardVec.Dot(m_transform->Right());
-		if (m_transform->Forward() != m_newForwardVec)
+		
+		if (m_ai->GetState() == AI::State::Chasing || m_ai->GetState() == AI::State::Searching || m_ai->GetState() == AI::State::Attacking)
 		{
-			if (m_turnDir == 1)
-				m_rigidBody->applyTorque(btVector3(0, m_turnSpeed * dt * m_rigidBody->GetMass(), 0));
-			else if (m_turnDir == -1)
-				m_rigidBody->applyTorque(btVector3(0, -m_turnSpeed * dt * m_rigidBody->GetMass(), 0));
+
+			float dir = calcDir();
+
+			m_rigidBody->applyTorque(btVector3(0, m_turnSpeed * m_rigidBody->GetMass() * dir, 0));
+	
+		}
+		
+	}
+
+
+	float calcDir()
+	{
+		if (m_ai->GetState() == AI::State::Chasing || m_ai->GetState() == AI::State::Searching)
+		{
+			math::Vector3 forward = m_transform->Forward();
+			forward.y = 0;		//Remove y so no flying
+			m_rigidBody->activate();
+			math::Vector3 targetD = m_ai->GetMovePos() - m_transform->GetPosition();
+			targetD.Normalize();
+
+			float dir = AngleDir(-forward, targetD, math::Vector3::Up);
+
+			return dir;
+		}
+		else if (m_ai->GetState() == AI::State::Attacking)
+		{
+			math::Vector3 right = m_transform->Right();
+			right.y = 0;		//Remove y so no flying
+			math::Vector3 left = -right;
+			//find out if left or right is closer.
+			float distL = math::Vector3::Distance(m_transform->GetPosition() + left * 5, m_ai->GetTargetPos());
+			float distR = math::Vector3::Distance(m_transform->GetPosition() + right * 5, m_ai->GetTargetPos());
+
+
+			math::Vector3 realDir;
+			if (distL < distR)
+				realDir = left;
+			else
+				realDir = right;
+
+			m_rigidBody->activate();
+			math::Vector3 targetD = m_ai->GetTargetPos() - m_transform->GetPosition();
+			targetD.Normalize();
+
+			float dir = AngleDir(realDir, targetD, math::Vector3::Up);
+			return dir;
 		}
 	}
 
+	float AngleDir(math::Vector3 fwd, math::Vector3 targetDir, math::Vector3 up)
+	{
+		math::Vector3 perp = fwd.Cross(targetDir);
+		float dir = perp.Dot(up);
+		return dir;
+	}
+
+
 	void FireCannons()
 	{
-		if (m_shootDir == 1)
+		if (m_ai->GetState() == AI::State::Attacking)
 		{
-			
-			math::Vector3 targetPos = m_ai->GetTargetPos();
-			math::Vector2 target(targetPos.x, targetPos.z);
-			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
+			math::Vector3 right = m_transform->Right();
+			right.y = 0;		//Remove y so no flying
+			math::Vector3 left = -right;
+			//find out if left or right is closer.
+			float distL = math::Vector3::Distance(m_transform->GetPosition() + left * 5, m_ai->GetTargetPos());
+			float distR = math::Vector3::Distance(m_transform->GetPosition() + right * 5, m_ai->GetTargetPos());
 
-			if (angle > -500.0)
-			{
-				m_broadSideLeft->SetCanonAngle(-angle);
-				m_broadSideLeft->Fire();
-			}
-		}
-			
-		else if (m_shootDir == -1)
-		{
-			math::Vector3 targetPos = m_ai->GetTargetPos();
-			math::Vector2 target(targetPos.x, targetPos.z);
-			float angle = m_broadSideLeft->CalculateCanonAngle(math::Vector3(target.x, 0, target.y));
 
-			if (angle > -500.0)
+			math::Vector3 realDir;
+			if (distL < distR)
+				realDir = left;
+			else
+				realDir = right;
+
+			math::Vector3 targetD = m_ai->GetTargetPos() - m_transform->GetPosition();
+			targetD.Normalize();
+			float dir = AngleDir(realDir, targetD, math::Vector3::Up);
+			if (abs(dir) <= 0.1)
 			{
-				m_broadSideLeft->SetCanonAngle(-angle);
-				m_broadSideLeft->Fire();
+				if (realDir == left)
+				{
+					float angle = m_broadSideLeft->CalculateCanonAngle(m_ai->GetTargetPos());
+					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+					m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
+					m_broadSideLeft->Fire();
+				}
+				else
+				{
+					float angle = m_broadSideRight->CalculateCanonAngle(m_ai->GetTargetPos());
+					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+					m_broadSideRight->SetCanonAngle(-angle - boatAngle);
+					m_broadSideRight->Fire();
+				}
 			}
 		}
 	}
@@ -280,25 +331,23 @@ public:
 			return;
 		}
 
-		m_moving = false;
-		m_ai->Escape();
-		m_ai->IdleTimer();
-		if (m_ai->HasTarget())
-		{
-			m_ai->InsideRadius(m_searchRadius, m_transform->GetPosition(), m_newForwardVec);
-			m_ai->InsideAttackRadius(m_attackRadius, m_transform->GetPosition(), m_newForwardVec);
-		}
 		
 
-		m_islandForward = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Forward() * 60));	//Check island front
-		m_islandRight = m_ai->Collision(m_transform->GetPosition() + (-m_transform->Right() * 30));	//Check island right
-		m_islandLeft = m_ai->Collision(m_transform->GetPosition() - (-m_transform->Right() * 30));	//Check island left
-
-		m_turnDir = m_ai->TurnDir(m_transform->GetPosition(), -m_transform->Forward(), -m_transform->Right(), m_islandForward, m_islandRight, m_islandLeft);
-
-		if (!m_firstFrame)
+		if (!m_ai->GetActive())
+		{
+			if (thomas::object::GameObject::Find("Ship"))
+			{
+				m_ai->SetActive(true);
+			}
+		}
+		else
+		{
+			Rotate(dt);
 			Move(dt);
-		m_firstFrame = false;
+			FireCannons();
+		}
+
+		
 
 		Float(dt);
 	}

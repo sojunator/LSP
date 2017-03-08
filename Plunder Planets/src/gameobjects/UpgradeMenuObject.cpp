@@ -7,38 +7,32 @@ void UpgradeMenuObject::Start()
 	m_header = AddComponent<component::SpriteComponent>();
 	m_startButton = AddComponent<component::SpriteComponent>();
 	m_cannonIcon = AddComponent<component::SpriteComponent>();
-	m_cannonCost = AddComponent<component::SpriteComponent>();
 	m_cannonTalent1 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent2 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent3 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent4 = AddComponent<component::SpriteComponent>();
 	m_cannonTalent5 = AddComponent<component::SpriteComponent>();
 	m_movementIcon = AddComponent<component::SpriteComponent>();
-	m_movementCost = AddComponent<component::SpriteComponent>();
 	m_movementTalent1 = AddComponent<component::SpriteComponent>();
 	m_movementTalent2 = AddComponent<component::SpriteComponent>();
 	m_movementTalent3 = AddComponent<component::SpriteComponent>();
 	m_movementTalent4 = AddComponent<component::SpriteComponent>();
 	m_movementTalent5 = AddComponent<component::SpriteComponent>();
 	m_resourceIcon = AddComponent<component::SpriteComponent>();
-	m_resourceCost = AddComponent<component::SpriteComponent>();
 	m_resourceTalent1 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent2 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent3 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent4 = AddComponent<component::SpriteComponent>();
 	m_resourceTalent5 = AddComponent<component::SpriteComponent>();
 	m_shieldIcon = AddComponent<component::SpriteComponent>();
-	m_shieldCost = AddComponent<component::SpriteComponent>();
 	m_shieldTalent1 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent2 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent3 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent4 = AddComponent<component::SpriteComponent>();
 	m_shieldTalent5 = AddComponent<component::SpriteComponent>();
 	m_repairIcon = AddComponent<component::SpriteComponent>();
-	m_repairCost = AddComponent<component::SpriteComponent>();
 	m_repairTalent1 = AddComponent<component::SpriteComponent>();
 	m_plunderIcon = AddComponent<component::SpriteComponent>();
-	m_plunderCost = AddComponent<component::SpriteComponent>();
 	m_plunderTalent1 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent2 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent3 = AddComponent<component::SpriteComponent>();
@@ -47,10 +41,42 @@ void UpgradeMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_music = AddComponent<component::SoundComponent>();
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
+	m_currentGold = AddComponent<component::TextComponent>();
+	m_currentHealth = AddComponent<component::TextComponent>();
+	m_cannonCosts = AddComponent<component::TextComponent>();
+	m_movementCosts = AddComponent<component::TextComponent>();
+	m_resourceCosts = AddComponent<component::TextComponent>();
+	m_shieldCosts = AddComponent<component::TextComponent>();
+	m_repairCosts = AddComponent<component::TextComponent>();
+	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
+
+	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
+	m_currentGold->SetFont("Pirate");
+	m_currentGold->SetOutput("Current gold: " + std::to_string(currentGoldCast));
+	m_currentGold->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_currentGold->SetRotation(0.0f);
+	m_currentGold->SetScale(2.0f);
+	m_currentGold->SetPositionX(35);
+	m_currentGold->SetPositionY(15);
+	m_currentGold->SetDropshadow(false);
+	m_currentGold->SetOutline(true);
+	m_currentGold->SetOrigin(false);
+
+	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
+	m_currentHealth->SetFont("Pirate");
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+	m_currentHealth->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_currentHealth->SetRotation(0.0f);
+	m_currentHealth->SetScale(1.0f);
+	m_currentHealth->SetPositionX(1330);
+	m_currentHealth->SetPositionY(45);
+	m_currentHealth->SetDropshadow(false);
+	m_currentHealth->SetOutline(true);
+	m_currentHealth->SetOrigin(false);
 
 	m_header->SetName("Header");
 	m_header->SetPositionX(722);
@@ -78,13 +104,16 @@ void UpgradeMenuObject::Start()
 	m_cannonIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonIcon->SetInteractable(true);
 
-	m_cannonCost->SetName("CannonCost");
-	m_cannonCost->SetPositionX(50);
-	m_cannonCost->SetPositionY(150);
-	m_cannonCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_cannonCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_cannonCost->SetHoverColor(math::Color(1.0, 1.0, 1.0));
-	m_cannonCost->SetInteractable(false);
+	m_cannonCosts->SetFont("Pirate");
+	m_cannonCosts->SetOutput("200/300/500/750/1000");
+	m_cannonCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_cannonCosts->SetRotation(0.0f);
+	m_cannonCosts->SetScale(1.0f);
+	m_cannonCosts->SetPositionX(50);
+	m_cannonCosts->SetPositionY(150);
+	m_cannonCosts->SetDropshadow(false);
+	m_cannonCosts->SetOutline(true);
+	m_cannonCosts->SetOrigin(false);
 
 	m_cannonTalent1->SetName("CannonTalent1");
 	m_cannonTalent1->SetPositionX(220);
@@ -135,13 +164,16 @@ void UpgradeMenuObject::Start()
 	m_movementIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementIcon->SetInteractable(true);
 
-	m_movementCost->SetName("MovementCost");
-	m_movementCost->SetPositionX(50);
-	m_movementCost->SetPositionY(375);
-	m_movementCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_movementCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_movementCost->SetHoverColor(math::Color(1.0, 1.0, 1.0));
-	m_movementCost->SetInteractable(false);
+	m_movementCosts->SetFont("Pirate");
+	m_movementCosts->SetOutput("200/300/500/750/1000");
+	m_movementCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_movementCosts->SetRotation(0.0f);
+	m_movementCosts->SetScale(1.0f);
+	m_movementCosts->SetPositionX(50);
+	m_movementCosts->SetPositionY(375);
+	m_movementCosts->SetDropshadow(false);
+	m_movementCosts->SetOutline(true);
+	m_movementCosts->SetOrigin(false);
 
 	m_movementTalent1->SetName("MovementTalent1");
 	m_movementTalent1->SetPositionX(220);
@@ -192,13 +224,16 @@ void UpgradeMenuObject::Start()
 	m_resourceIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceIcon->SetInteractable(true);
 
-	m_resourceCost->SetName("ResourceCost");
-	m_resourceCost->SetPositionX(50);
-	m_resourceCost->SetPositionY(600);
-	m_resourceCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_resourceCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_resourceCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_resourceCost->SetInteractable(false);
+	m_resourceCosts->SetFont("Pirate");
+	m_resourceCosts->SetOutput("200/300/500/750/1000");
+	m_resourceCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_resourceCosts->SetRotation(0.0f);
+	m_resourceCosts->SetScale(1.0f);
+	m_resourceCosts->SetPositionX(50);
+	m_resourceCosts->SetPositionY(600);
+	m_resourceCosts->SetDropshadow(false);
+	m_resourceCosts->SetOutline(true);
+	m_resourceCosts->SetOrigin(false);
 
 	m_resourceTalent1->SetName("ResourceTalent1");
 	m_resourceTalent1->SetPositionX(220);
@@ -249,13 +284,16 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldIcon->SetInteractable(true);
 
-	m_shieldCost->SetName("ShieldCost");
-	m_shieldCost->SetPositionX(1720);
-	m_shieldCost->SetPositionY(150);
-	m_shieldCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_shieldCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_shieldCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_shieldCost->SetInteractable(false);
+	m_shieldCosts->SetFont("Pirate");
+	m_shieldCosts->SetOutput("250/250/250/250/750");
+	m_shieldCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_shieldCosts->SetRotation(0.0f);
+	m_shieldCosts->SetScale(1.0f);
+	m_shieldCosts->SetPositionX(1320);
+	m_shieldCosts->SetPositionY(150);
+	m_shieldCosts->SetDropshadow(false);
+	m_shieldCosts->SetOutline(true);
+	m_shieldCosts->SetOrigin(false);
 
 	m_shieldTalent1->SetName("ShieldTalent1");
 	m_shieldTalent1->SetPositionX(1600);
@@ -306,13 +344,16 @@ void UpgradeMenuObject::Start()
 	m_repairIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_repairIcon->SetInteractable(true);
 
-	m_repairCost->SetName("RepairCost");
-	m_repairCost->SetPositionX(1720);
-	m_repairCost->SetPositionY(375);
-	m_repairCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_repairCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_repairCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_repairCost->SetInteractable(false);
+	m_repairCosts->SetFont("Pirate");
+	m_repairCosts->SetOutput("15 gold / health missing");
+	m_repairCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_repairCosts->SetRotation(0.0f);
+	m_repairCosts->SetScale(1.0f);
+	m_repairCosts->SetPositionX(1320);
+	m_repairCosts->SetPositionY(375);
+	m_repairCosts->SetDropshadow(false);
+	m_repairCosts->SetOutline(true);
+	m_repairCosts->SetOrigin(false);
 
 	m_repairTalent1->SetName("RepairTalent1");
 	m_repairTalent1->SetPositionX(1600);
@@ -331,13 +372,16 @@ void UpgradeMenuObject::Start()
 	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderIcon->SetInteractable(true);
 
-	m_plunderCost->SetName("PlunderCost");
-	m_plunderCost->SetPositionX(1720);
-	m_plunderCost->SetPositionY(600);
-	m_plunderCost->SetScale(math::Vector2(1.0f, 1.0f));
-	m_plunderCost->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_plunderCost->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_plunderCost->SetInteractable(false);
+	m_plunderSpeedCosts->SetFont("Pirate");
+	m_plunderSpeedCosts->SetOutput("1000/750/500/300/200");
+	m_plunderSpeedCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
+	m_plunderSpeedCosts->SetRotation(0.0f);
+	m_plunderSpeedCosts->SetScale(1.0f);
+	m_plunderSpeedCosts->SetPositionX(1320);
+	m_plunderSpeedCosts->SetPositionY(600);
+	m_plunderSpeedCosts->SetDropshadow(false);
+	m_plunderSpeedCosts->SetOutline(true);
+	m_plunderSpeedCosts->SetOrigin(false);
 
 	m_plunderTalent1->SetName("PlunderTalent1");
 	m_plunderTalent1->SetPositionX(1650);
@@ -398,17 +442,19 @@ void UpgradeMenuObject::Start()
 	m_wormhole->SetRotationSpeed(math::DegreesToRadians(5));
 	m_wormhole->SetOffset(cam->m_gameObject->m_transform->Forward() * 50);
 	m_wormhole->StartEmitting();
-
 }
-
 
 void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - ThomasTime::GetDeltaTime();
-	
+	m_upgradeDelay = m_upgradeDelay - ThomasTime::GetDeltaTime(); //Upgrade delay so can't spam and glitch out upgrades.
+
+	UpdateGoldCounter();
+	UpdateHealthCounter();
+
 	SetSelectedObject();
 	
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back))
+	if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space) || Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back)) && m_upgradeDelay < 0.1f)
 	{
 		bool upgrade = false;
 		bool undo = false;
@@ -426,6 +472,10 @@ void UpgradeMenuObject::Update()
 		ShieldCheck(upgrade, undo);
 
 		RepairCheck(upgrade, undo);
+
+		PlunderCheck(upgrade, undo);
+
+		m_upgradeDelay = 0.3f; //Reset upgrade delay
 	}
 
 	Navigation();
@@ -439,79 +489,98 @@ void UpgradeMenuObject::Update()
 	}
 }
 
+void UpgradeMenuObject::UpdateGoldCounter()
+{
+	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
+	m_currentGold->SetOutput("Current gold: " + std::to_string(currentGoldCast));
+}
 
+void UpgradeMenuObject::UpdateHealthCounter()
+{
+	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+}
 
 void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 {
 	if (m_cannonIcon->isHovering())
 	{
-		if (!m_cannonCheck[0] || (undo && !m_cannonCheck[1])) //First time choosing to upgrade Cannon
+		if ((upgrade && !m_cannonCheck[0]) || (undo && !m_cannonCheck[1] && m_cannonCheck[0])) //First time choosing to upgrade Cannon
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 200))
 			{
 				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(1); //Increase Cannon Dmg/Spread/Quantity first time
+				ShipStats::s_playerStats->SetTreasure(-200);
 			}
 			else if (undo) //Doesn't need an if(undo), could just be else, but more clear what is happening this way
 			{
 				m_cannonTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(0); //Undo first upgrade
+				ShipStats::s_playerStats->SetTreasure(200);
 			}
 		}
-		else if (m_cannonCheck[0] && !m_cannonCheck[1] || (undo && !m_cannonCheck[2]))
+		else if ((upgrade && m_cannonCheck[0] && !m_cannonCheck[1]) || (undo && !m_cannonCheck[2] && m_cannonCheck[1]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 300))
 			{
 				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Increase Cannon Dmg/Spread/Quantity second time
+				ShipStats::s_playerStats->SetTreasure(-300);
 			}
 			else if (undo)
 			{
 				m_cannonTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(1);//Undo second upgrade
+				ShipStats::s_playerStats->SetTreasure(300);
 			}
 		}
-		else if (m_cannonCheck[1] && !m_cannonCheck[2] || (undo && !m_cannonCheck[3]))
+		else if ((upgrade && m_cannonCheck[1] && !m_cannonCheck[2]) || (undo && !m_cannonCheck[3] && m_cannonCheck[2]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 500))
 			{
 				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Increase Cannon Dmg/Spread/Quantity third time
+				ShipStats::s_playerStats->SetTreasure(-500);
 			}
 			else if (undo)
 			{
 				m_cannonTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Undo third upgrade
+				ShipStats::s_playerStats->SetTreasure(500);
 			}
 		}
-		else if (m_cannonCheck[2] && !m_cannonCheck[3] || (undo && !m_cannonCheck[4]))
+		else if ((upgrade && m_cannonCheck[2] && !m_cannonCheck[3]) || (undo && !m_cannonCheck[4] && m_cannonCheck[3]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 750))
 			{
 				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Increase Cannon Dmg/Spread/Quantity fourth time
+				ShipStats::s_playerStats->SetTreasure(-750);
 			}
 			else if (undo)
 			{
 				m_cannonTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Undo fourth upgrade
+				ShipStats::s_playerStats->SetTreasure(750);
 			}
 		}
-		else if (m_cannonCheck[3] || (undo && m_cannonCheck[4]))
+		else if ((upgrade && m_cannonCheck[3] && !m_cannonCheck[4]) || (undo && m_cannonCheck[4]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 1000))
 			{
 				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_cannonCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(5);//Increase Cannon Dmg/Spread/Quantity fifth time
+				ShipStats::s_playerStats->SetTreasure(-1000);
 				//Shoot double projectiles
 			}
 			else if (undo)
@@ -519,6 +588,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_cannonCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Undo fifth upgrade
+				ShipStats::s_playerStats->SetTreasure(1000);
 			}
 		}
 	}
@@ -528,79 +598,89 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 {
 	if (m_movementIcon->isHovering())
 	{
-		if (!m_movementCheck[0] || (undo && !m_movementCheck[1])) //First time choosing to upgrade Movement
+		if ((upgrade && !m_movementCheck[0]) || (undo && !m_movementCheck[1] && m_movementCheck[0])) //First time choosing to upgrade Movement
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 200))
 			{
 				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(1);//Increase movement speed first time
+				ShipStats::s_playerStats->SetTreasure(-200);
 			}
 			if (undo)
 			{
 				m_movementTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(0);//Undo first movement upgrade
+				ShipStats::s_playerStats->SetTreasure(200);
 			}
 		}
-		else if (m_movementCheck[0] && !m_movementCheck[1] || (undo && !m_movementCheck[2]))
+		else if ((upgrade && m_movementCheck[0] && !m_movementCheck[1]) || (undo && !m_movementCheck[2] && m_movementCheck[1]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 300))
 			{
 				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(2);//Increase movement speed second time
+				ShipStats::s_playerStats->SetTreasure(-300);
 			}
 			if (undo)
 			{
 				m_movementTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(1);//Undo second movement upgrade
+				ShipStats::s_playerStats->SetTreasure(300);
 			}
 		}
-		else if (m_movementCheck[1] && !m_movementCheck[2] || (undo && !m_movementCheck[3]))
+		else if ((upgrade && m_movementCheck[1] && !m_movementCheck[2]) || (undo && !m_movementCheck[3] && m_movementCheck[2]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 500))
 			{
 				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Increase movement speed third time
+				ShipStats::s_playerStats->SetTreasure(-500);
 			}
 			if (undo)
 			{
 				m_movementTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(2);//Undo third movement upgrade
+				ShipStats::s_playerStats->SetTreasure(500);
 			}
 		}
-		else if (m_movementCheck[2] && !m_movementCheck[3] || (undo && !m_movementCheck[4]))
+		else if ((upgrade && m_movementCheck[2] && !m_movementCheck[3]) || (undo && !m_movementCheck[4] && m_movementCheck[3]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 750))
 			{
 				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(4);//Increase movement speed fourth time
+				ShipStats::s_playerStats->SetTreasure(-750);
 			}
 			if (undo)
 			{
 				m_movementTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Undo fourth movement upgrade
+				ShipStats::s_playerStats->SetTreasure(750);
 			}
 		}
-		else if (m_movementCheck[3] || (undo && m_movementCheck[4]))
+		else if ((upgrade && m_movementCheck[3] && !m_movementCheck[4]) || (undo && m_movementCheck[4] && m_movementCheck[4]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 1000))
 			{
 				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_movementCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(5);//Increase movement speed fifth time
+				ShipStats::s_playerStats->SetTreasure(-1000);
 			}
 			if (undo)
 			{
 				m_movementTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_movementCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(4);//Undo fifth movement upgrade
+				ShipStats::s_playerStats->SetTreasure(1000);
 			}
 		}
 	}
@@ -610,79 +690,89 @@ void UpgradeMenuObject::ResourceCheck(bool upgrade, bool undo)
 {
 	if (m_resourceIcon->isHovering())
 	{
-		if (!m_resourceCheck[0] || (undo && !m_resourceCheck[1])) //First time choosing to upgrade Resource Cost Reduction
+		if ((upgrade && !m_resourceCheck[0]) || (undo && !m_resourceCheck[1] && m_resourceCheck[0])) //First time choosing to upgrade Resource Cost Reduction
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 200))
 			{
 				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[0] = true;
-				//Decrease resource costs first time
+				ShipStats::s_playerStats->DecreaseCosts(1);//Decrease resource costs first time
+				ShipStats::s_playerStats->SetTreasure(-200);
 			}
 			else if (undo)
 			{
 				m_resourceTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[0] = false;
-				//Undo first resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(0);//Undo first resource cost reduction
+				ShipStats::s_playerStats->SetTreasure(200);
 			}
 		}
-		else if (m_resourceCheck[0] && !m_resourceCheck[1] || (undo && !m_resourceCheck[2]))
+		else if ((upgrade && m_resourceCheck[0] && !m_resourceCheck[1]) || (undo && !m_resourceCheck[2] && m_resourceCheck[1]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 300))
 			{
 				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[1] = true;
-				//Decrease resource costs second time
+				ShipStats::s_playerStats->DecreaseCosts(2);//Decrease resource costs second time
+				ShipStats::s_playerStats->SetTreasure(-300);
 			}
 			else if (undo)
 			{
 				m_resourceTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[1] = false;
-				//Undo second resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(1);//Undo second resource cost reduction
+				ShipStats::s_playerStats->SetTreasure(300);
 			}
 		}
-		else if (m_resourceCheck[1] && !m_resourceCheck[2] || (undo && !m_resourceCheck[3]))
+		else if ((upgrade && m_resourceCheck[1] && !m_resourceCheck[2]) || (undo && !m_resourceCheck[3] && m_resourceCheck[2]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 500))
 			{
 				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[2] = true;
-				//Decrease resource costs third time
+				ShipStats::s_playerStats->DecreaseCosts(3);//Decrease resource costs third time
+				ShipStats::s_playerStats->SetTreasure(-500);
 			}
 			else if (undo)
 			{
 				m_resourceTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[2] = false;
-				//Undo third resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(2);//Undo third resource cost reduction
+				ShipStats::s_playerStats->SetTreasure(500);
 			}
 		}
-		else if (m_resourceCheck[2] && !m_resourceCheck[3] || (undo && !m_resourceCheck[4]))
+		else if ((upgrade && m_resourceCheck[2] && !m_resourceCheck[3]) || (undo && !m_resourceCheck[4] && m_resourceCheck[3]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 750))
 			{
 				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[3] = true;
-				//Decrease resource costs fourth time
+				ShipStats::s_playerStats->DecreaseCosts(4);//Decrease resource costs fourth time
+				ShipStats::s_playerStats->SetTreasure(-750);
 			}
 			else if (undo)
 			{
 				m_resourceTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[3] = false;
-				//Undo fourth resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(3);//Undo fourth resource cost reduction
+				ShipStats::s_playerStats->SetTreasure(750);
 			}
 		}
-		else if (m_resourceCheck[3] || (undo && m_resourceCheck[4]))
+		else if ((upgrade && m_resourceCheck[3] && !m_resourceCheck[4]) || (undo && m_resourceCheck[4]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 1000))
 			{
 				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_resourceCheck[4] = true;
-				//Decrease resource costs fifth time
+				ShipStats::s_playerStats->DecreaseCosts(5);//Decrease resource costs fifth time
+				ShipStats::s_playerStats->SetTreasure(-1000);
 			}
 			else if (undo)
 			{
 				m_resourceTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_resourceCheck[4] = false;
-				//Undo fifth resource cost reduction
+				ShipStats::s_playerStats->DecreaseCosts(4);//Undo fifth resource cost reduction
+				ShipStats::s_playerStats->SetTreasure(1000);
 			}
 		}
 	}
@@ -692,79 +782,89 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 {
 	if (m_shieldIcon->isHovering())
 	{
-		if (!m_shieldCheck[0] || (undo && !m_shieldCheck[1])) //First time choosing to upgrade Shield
+		if ((upgrade && !m_shieldCheck[0]) || (undo && !m_shieldCheck[1] && m_shieldCheck[0])) //First time choosing to upgrade Shield
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 750))
 			{
 				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Buy Shield
+				ShipStats::s_playerStats->SetTreasure(-750);
 			}
 			else if (undo)
 			{
 				m_shieldTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(0);//Undo last shield upgrade
+				ShipStats::s_playerStats->SetTreasure(750);
 			}
 		}
-		else if (m_shieldCheck[0] && !m_shieldCheck[1] || (undo && !m_shieldCheck[2]))
+		else if ((upgrade && m_shieldCheck[0] && !m_shieldCheck[1]) || (undo && !m_shieldCheck[2] && m_shieldCheck[1]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 250))
 			{
 				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Buy Shield
+				ShipStats::s_playerStats->SetTreasure(-250);
 			}
 			else if (undo)
 			{
 				m_shieldTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Undo last shield upgrade
+				ShipStats::s_playerStats->SetTreasure(250);
 			}
 		}
-		else if (m_shieldCheck[1] && !m_shieldCheck[2] || (undo && !m_shieldCheck[3]))
+		else if ((upgrade && m_shieldCheck[1] && !m_shieldCheck[2]) || (undo && !m_shieldCheck[3] && m_shieldCheck[2]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 250))
 			{
 				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Buy Shield
+				ShipStats::s_playerStats->SetTreasure(-250);
 			}
 			else if (undo)
 			{
 				m_shieldTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Undo last shield upgrade
+				ShipStats::s_playerStats->SetTreasure(250);
 			}
 		}
-		else if (m_shieldCheck[2] && !m_shieldCheck[3] || (undo && !m_shieldCheck[4]))
+		else if ((upgrade && m_shieldCheck[2] && !m_shieldCheck[3]) || (undo && !m_shieldCheck[4] && m_shieldCheck[3]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 250))
 			{
 				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Buy Shield
+				ShipStats::s_playerStats->SetTreasure(-250);
 			}
 			else if (undo)
 			{
 				m_shieldTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Undo last shield upgrade
+				ShipStats::s_playerStats->SetTreasure(250);
 			}
 		}
-		else if (m_shieldCheck[3] || (undo && m_shieldCheck[4]))
+		else if ((upgrade && m_shieldCheck[3] && !m_shieldCheck[4]) || (undo && m_shieldCheck[4]))
 		{
-			if (upgrade)
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 250))
 			{
 				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
 				m_shieldCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(5);//Buy Shield
+				ShipStats::s_playerStats->SetTreasure(-250);
 			}
 			else if (undo)
 			{
 				m_shieldTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
 				m_shieldCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Undo last shield upgrade
+				ShipStats::s_playerStats->SetTreasure(250);
 			}
 		}
 	}
@@ -774,17 +874,116 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 {
 	if (m_repairIcon->isHovering())
 	{
-		if (!m_repairCheck[0] || (m_repairCheck[0] && undo)) //If upgrading or undoing
+		if ((!m_repairCheck[0] && upgrade && (ShipStats::s_playerStats->GetHealthAmount() != 1))|| (m_repairCheck[0] && undo)) //If upgrading or undoing, checks if not already full hp
 		{
-			if (upgrade)
+			float goldCost = 100 * (1 - ShipStats::s_playerStats->GetHealthAmount()) * 15;
+			float goldRefund = 100 * (ShipStats::s_playerStats->GetPlaceholderHealthAmount()) * 15;
+
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= goldCost))
 			{
 				m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				//Repair health
+				ShipStats::s_playerStats->RepairHealth(1); //Repair health
+				ShipStats::s_playerStats->SetTreasure(-goldCost);
+				m_repairCheck[0] = true;
 			}
 			else if (undo)
 			{
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
-				//Reset health
+				ShipStats::s_playerStats->RepairHealth(0); //Reset health
+				ShipStats::s_playerStats->SetTreasure(goldRefund);
+				m_repairCheck[0] = false;
+			}
+		}
+	}
+}
+
+void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
+{
+	if (m_plunderIcon->isHovering())
+	{
+		if ((upgrade && !m_plunderCheck[0]) || (!m_plunderCheck[1] && undo && m_plunderCheck[0]))
+		{
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 200))
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[0] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(1); //Increase plunder speed first time
+				ShipStats::s_playerStats->SetTreasure(-200);
+			}
+			if (undo)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[0] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(0); //Increase plunder speed first time
+				ShipStats::s_playerStats->SetTreasure(200);
+			}
+		}
+		else if ((upgrade && m_plunderCheck[0] && !m_plunderCheck[1]) || (!m_plunderCheck[2] && undo && m_plunderCheck[1]))
+		{
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 300))
+			{
+				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[1] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(2); //Increase plunder speed second time
+				ShipStats::s_playerStats->SetTreasure(-300);
+			}
+			if (undo)
+			{
+				m_plunderTalent2->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[1] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(1); //Decrease second plunder speed
+				ShipStats::s_playerStats->SetTreasure(300);
+			}
+		}
+		else if ((upgrade && m_plunderCheck[1] && !m_plunderCheck[2]) || (!m_plunderCheck[3] && undo && m_plunderCheck[2]))
+		{
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 500))
+			{
+				m_plunderTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[2] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(3); //Decrease third plunder speed
+				ShipStats::s_playerStats->SetTreasure(-500);
+			}
+			if (undo)
+			{
+				m_plunderTalent3->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[2] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(2); //Decrease third plunder speed
+				ShipStats::s_playerStats->SetTreasure(500);
+			}
+		}
+		else if ((upgrade && m_plunderCheck[2] && !m_plunderCheck[3]) || (!m_plunderCheck[4] && undo && m_plunderCheck[3]))
+		{
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 750))
+			{
+				m_plunderTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[3] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(4); //Increase plunder speed fourth time
+				ShipStats::s_playerStats->SetTreasure(-750);
+			}
+			if (undo)
+			{
+				m_plunderTalent4->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[3] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(3); //Decrease fourth plunder speed
+				ShipStats::s_playerStats->SetTreasure(750);
+			}
+		}
+		else if ((upgrade && m_plunderCheck[3] && !m_plunderCheck[4]) || (m_plunderCheck[4] && undo))
+		{
+			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= 1000))
+			{
+				m_plunderTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderCheck[4] = true;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(5); //Increase plunder speed fifth time
+				ShipStats::s_playerStats->SetTreasure(-1000);
+			}
+			if (undo)
+			{
+				m_plunderTalent5->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_plunderCheck[4] = false;
+				ShipStats::s_playerStats->IncreasePlunderSpeed(4); //Decrease fifth plunder speed
+				ShipStats::s_playerStats->SetTreasure(1000);
 			}
 		}
 	}

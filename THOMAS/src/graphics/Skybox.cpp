@@ -2,15 +2,16 @@
 #include "Texture.h"
 #include "LightManager.h"
 #include "../utils/d3d.h"
+#include "time.h"
 namespace thomas
 {
 	namespace graphics
 	{
 
-		Skybox::Skybox(std::string path, std::string shaderName)
+		Skybox::Skybox(std::string path, std::string shaderName, int slot)
 		{
 			SetupBuffers();
-			LoadCubeMap(path);
+			LoadCubeMap(path, slot);
 			CreateRasterizer();
 			CreateDepthStencilState();
 			m_data.shader = Shader::GetShaderByName(shaderName);
@@ -44,7 +45,8 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_data.depthStencilState, 1);
 
 			m_data.shader->BindBuffer(m_data.constantBuffer, Shader::ResourceType::GAME_OBJECT);
-			m_data.texture->Bind();
+			for (Texture* texture : m_data.texture)
+				texture->Bind();
 
 			Draw();
 
@@ -53,7 +55,8 @@ namespace thomas
 
 		bool Skybox::BindCubemap()
 		{
-			m_data.texture->Bind();
+			for(Texture* texture : m_data.texture)
+				texture->Bind();
 			return true;
 		}
 
@@ -66,7 +69,8 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->RSSetState(m_rasterizerP);
 			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(m_depthstencilP, m_depthRefP);
 
-			m_data.texture->Unbind();
+			for (Texture* texture : m_data.texture)
+				texture->Unbind();
 			m_data.shader->Unbind();
 
 			return v && i;
@@ -103,14 +107,19 @@ namespace thomas
 			m_data.depthStencilState = utils::D3d::CreateDepthStencilState(D3D11_COMPARISON_LESS_EQUAL, true);
 		}
 
-		void Skybox::LoadCubeMap(std::string path)
+		void Skybox::LoadCubeMap(std::string path, int slot)
 		{
-			m_data.texture = Texture::CreateTexture(Texture::SamplerState::WRAP, Texture::TextureType::CUBEMAP, path);
+			m_data.texture.push_back(Texture::CreateTexture(Texture::SamplerState::WRAP, slot, Texture::TextureType::CUBEMAP, path));
 		}
 		void Skybox::BindSkyboxTexture()
 		{
-			m_data.texture->Bind();
+			for (Texture* texture : m_data.texture)
+				texture->Bind();
 			return;
+		}
+		void Skybox::SetLerp(math::Vector3 lerp)
+		{
+			m_mvpStruct.lerp = lerp;
 		}
 	}
 }

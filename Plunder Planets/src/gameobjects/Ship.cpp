@@ -128,6 +128,44 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterRight2->SetSpread(2.5f);
 
+	//Fire cost
+	m_firingCost = AddComponent<component::ParticleEmitterComponent>();
+	m_firingCost->SetTexture("../res/textures/FiringCost" + std::to_string((int)ShipStats::s_playerStats->GetCannonCost()) + ".png");
+	m_firingCost->SetShader("particleShader");
+	//m_firingCost->SetLooping(false);
+	m_firingCost->SetDirection(0, 1, 0);
+	m_firingCost->SetSpread(0);
+	m_firingCost->SetSpeed(25);
+	//m_firingCost->SetEndSpeed(200);
+	//m_firingCost->SetRotationSpeed(11);
+	m_firingCost->SetLifeTime(1.5);
+	m_firingCost->SetSize(3);
+	m_firingCost->SetEmissionRate(1);
+	m_firingCost->SetEmissionDuration(1);
+	m_firingCost->SetEndSize(3);
+	//m_firingCost->SetRadius(70);
+	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
+	//m_firingCost->SpawnAtSphereEdge(true);
+
+
+	m_boostCost = AddComponent<component::ParticleEmitterComponent>();
+	m_boostCost->SetTexture("../res/textures/BoostCost" + std::to_string((int)ShipStats::s_playerStats->GetBoostCost()) + ".png");
+	m_boostCost->SetShader("particleShader");
+	//m_firingCost->SetLooping(false);
+	m_boostCost->SetDirection(0, 1, 0);
+	m_boostCost->SetSpread(0);
+	m_boostCost->SetSpeed(25);
+	//m_firingCost->SetEndSpeed(200);
+	//m_firingCost->SetRotationSpeed(11);
+	m_boostCost->SetLifeTime(1.5);
+	m_boostCost->SetSize(3);
+	m_boostCost->SetEmissionRate(1);
+	m_boostCost->SetEmissionDuration(1);
+	m_boostCost->SetEndSize(3);
+	//m_firingCost->SetRadius(70);
+	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
+	//m_firingCost->SpawnAtSphereEdge(true);
+
 	thomas::graphics::TextRender::LoadFont("SafeToLeave", "../res/font/pirate.spritefont");
 
 	m_safeToLeave = AddComponent<component::TextComponent>();
@@ -138,7 +176,7 @@ void Ship::Start()
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
 	m_rigidBody->setSleepingThresholds(0.2, 0.5);
 	m_rigidBody->setGravity(btVector3(0, -15, 0));
-	m_treasure = 300;
+	m_treasure = ShipStats::s_playerStats->GetTreasure(); //300;
 
 
 	//model
@@ -166,10 +204,8 @@ void Ship::Start()
 	m_camMaxDistanceFromBoat = 220.0f;
 	m_cameraDistance = 50.0;
 	m_aimDistance = 20;
-	m_health = 100;
+	m_health = ShipStats::s_playerStats->GetHealthAmount();
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
-	m_maxHealth = m_health;
-	m_maxArmor = 100;
 
 	m_spawnedWormhole = false;
 	m_aiming = false;
@@ -327,6 +363,7 @@ void Ship::ShipAimCannons()
 			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->Fire(); //Temporary fix
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
+			m_firingCost->StartEmitting();
 		}
 	}
 
@@ -357,6 +394,7 @@ void Ship::ShipAimCannons()
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
 			m_broadSideRight->Fire(); //Temporary fix
+			m_firingCost->StartEmitting();
 		}
 			
 
@@ -459,7 +497,7 @@ void Ship::PlunderIsland()
 }
 int Ship::GetTreasure()
 {
-	return m_treasure + 0.5;
+	return m_treasure + 0.5f;
 }
 
 void Ship::Float(float dt)
@@ -629,6 +667,8 @@ void Ship::Update()
 		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
 		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight2->StartEmitting();
+
+		m_boostCost->StartEmitting();
 		
 		m_boostSound->Play();
 	}
@@ -645,7 +685,7 @@ void Ship::Update()
 	Float(dt);
 
 
-	if (m_treasure > 500 && !m_spawnedWormhole && !m_startUpSequence)
+	if (m_treasure > 100000 && !m_spawnedWormhole && !m_startUpSequence)
 	{
 		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0f,0),math::Quaternion::Identity,m_scene);
 		wormhole->SetEndLevel(true);
