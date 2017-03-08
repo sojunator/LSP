@@ -8,7 +8,7 @@ IslandObject::~IslandObject()
 
 void IslandObject::Start()
 {
-	//m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
+	m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
 	m_renderer = thomas::object::GameObject::AddComponent<thomas::object::component::RenderComponent>();
 	m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
 	m_sound->SetClip("fPlunder");
@@ -65,5 +65,6 @@ void IslandObject::PlaceRigidBody(float radius, thomas::math::Vector3 center)
 	m_rigidBody->SetCollider(new btSphereShape(radius));
 	m_rigidBody->SetKinematic(true);
 	m_rigidBody->setWorldTransform(btTransform(btQuaternion(), btVector3(center.x, 0, center.z)));
-	//m_frustrumCullingComponent->SetRadius(radius);
+	m_frustrumCullingComponent->SetRadius(radius);
+	//m_frustrumCullingComponent->SetPosition(center);
 }

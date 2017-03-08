@@ -19,7 +19,7 @@ public:
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
-			m_islandObjects.push_back(thomas::object::GameObject::Instantiate<IslandObject>(scene));
+			m_islandObjects.push_back(thomas::object::GameObject::Instantiate<IslandObject>(m_islands->GetCenter(i), thomas::math::Quaternion::Identity, scene));
 			m_islandObjects[i]->SetModel(i);
 			m_islandObjects[i]->PlaceRigidBody(m_islands->GetCollisionRadius(i), m_islands->GetCenter(i));
 		}
