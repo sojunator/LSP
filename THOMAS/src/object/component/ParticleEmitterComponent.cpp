@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "../GameObject.h"
-
+#include <fstream>
 #include "../../utils/DebugTools.h"
 namespace thomas
 {
@@ -23,6 +23,7 @@ namespace thomas
 				m_emissionTimeLeft = m_emissionDuration;
 				m_emissionTimer = 0;
 				m_emissionRate = 1.0;
+				m_tempEmissionRate = 1.0;
 				m_looping = false;
 				m_maxNrOfParticles = 0;//256 * 100 + 254;
 				m_isEmitting = false;
@@ -34,21 +35,24 @@ namespace thomas
 				m_particleBufferStruct.minSpeed = 0.0f;
 				m_particleBufferStruct.endSpeed = 0.0f;
 				m_particleBufferStruct.maxDelay = 0.0f;
+				m_tempMaxDelay = 0.0f;
 				m_particleBufferStruct.minDelay = 0.0f;
 				m_particleBufferStruct.maxSize = 1.0f;
 				m_particleBufferStruct.minSize = 1.0f;
 				m_particleBufferStruct.endSize = 1.0f;
 				m_particleBufferStruct.maxLifeTime = 1.0f;
 				m_particleBufferStruct.minLifeTime = 1.0f;
+				m_tempMaxLifeTime = 1.0f;
 				m_particleBufferStruct.rotationSpeed = 0.0f;
-				m_particleBufferStruct.rotation = math::PI / 2;
+				m_particleBufferStruct.rotation = -math::PI / 2;
 				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.currentParticleStartIndex = 0;
 				m_particleBufferStruct.spawnAtSphereEdge = false;
 				m_particleBufferStruct.radius = 0;
 				m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
-
+				m_particleBufferStruct.gravity = 0.0f;
+				m_paused = false;
 				m_shader = graphics::Shader::GetShaderByName("particleShader");
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/standardParticle.png");
 				m_d3dData.swapUAVandSRV = true;
@@ -60,10 +64,14 @@ namespace thomas
 
 			void ParticleEmitterComponent::Update()
 			{
+
+				if (m_particleBufferStruct.maxLifeTime != m_tempMaxLifeTime || m_particleBufferStruct.maxDelay != m_tempMaxDelay || m_emissionRate != m_tempEmissionRate)
+					CalculateMaxNrOfParticles();
+
 				if (m_emissionTimeLeft < 0.0f)
 					StopEmitting();
 
-				if (m_isEmitting)
+				if (m_isEmitting && !m_paused)
 				{
 					if (!m_looping)
 						m_emissionTimeLeft -= ThomasTime::GetDeltaTime();
@@ -75,7 +83,6 @@ namespace thomas
 						m_emissionTimer = 0;
 						if (m_shouldUpdateResources)
 						{
-							CalculateMaxNrOfParticles();
 							m_shouldUpdateResources = false;
 							CreateParticleUAVsandSRVs();
 						}
@@ -91,6 +98,11 @@ namespace thomas
 
 			
 
+			}
+
+			void ParticleEmitterComponent::TogglePause()
+			{
+				m_paused = !m_paused;
 			}
 
 			void thomas::object::component::ParticleEmitterComponent::Destroy()
@@ -113,8 +125,10 @@ namespace thomas
 			void ParticleEmitterComponent::SetDirection(math::Vector3 other)
 			{
 				m_directionVector = other;
+				math::Vector3 temp = math::Vector3::TransformNormal(other, m_gameObject->m_transform->GetWorldMatrix());
+				//m_directionVector = other;
 				other.x += 0.0000001;
-				m_particleBufferStruct.directionMatrix = math::Matrix::CreateLookAt(math::Vector3(0, 0, 0), -other, math::Vector3::Up).Invert().Transpose();
+				m_particleBufferStruct.directionMatrix = math::Matrix::CreateLookAt(math::Vector3(0, 0, 0), -temp, math::Vector3::Up).Invert().Transpose();
 			}
 			void ParticleEmitterComponent::SetDirection(float const x, float const y, float const z)
 			{
@@ -155,6 +169,7 @@ namespace thomas
 			void ParticleEmitterComponent::SetMaxDelay(float const other)
 			{
 				m_particleBufferStruct.maxDelay = other;
+				m_tempMaxDelay = other;
 				CalculateMaxNrOfParticles();
 			}
 			void ParticleEmitterComponent::SetMinDelay(float const other)
@@ -200,6 +215,7 @@ namespace thomas
 			void ParticleEmitterComponent::SetMaxLifeTime(float const other)
 			{
 				m_particleBufferStruct.maxLifeTime = other;
+				m_tempMaxLifeTime = other;
 				CalculateMaxNrOfParticles();
 			}
 			void ParticleEmitterComponent::SetRotationSpeed(float const other)
@@ -213,6 +229,10 @@ namespace thomas
 			void ParticleEmitterComponent::SetLooping(bool const other)
 			{
 				m_looping = other;
+			}
+			void ParticleEmitterComponent::SetGravity(float const other)
+			{
+				m_particleBufferStruct.gravity = other;
 			}
 			void ParticleEmitterComponent::SetStartColor(math::Vector4 const other)
 			{
@@ -250,10 +270,11 @@ namespace thomas
 				if (force)
 				{
 					m_particleBufferStruct.currentParticleStartIndex = 0;
-					m_particleBufferStruct.minSize = 0;
-					m_particleBufferStruct.maxSize = 0;
-					m_particleBufferStruct.endSize = 0;
-					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
+					ParticleEmitterComponent::InitParticleBufferStruct tempStruct = m_particleBufferStruct;
+					tempStruct.minSize = 0;
+					tempStruct.maxSize = 0;
+					tempStruct.endSize = 0;
+					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, tempStruct);
 					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
 					
 				}
@@ -287,7 +308,9 @@ namespace thomas
 
 			void ParticleEmitterComponent::SetTexture(std::string texturePath)
 			{
-				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
+				graphics::Texture* tempTex = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, texturePath);
+				if (tempTex->Initialized())
+					m_texture = tempTex;
 			}
 
 			graphics::Texture * ParticleEmitterComponent::GetTexture()
@@ -321,15 +344,20 @@ namespace thomas
 
 			void ParticleEmitterComponent::CalculateMaxNrOfParticles()
 			{
+				m_particleBufferStruct.maxLifeTime = m_tempMaxLifeTime;
+				m_particleBufferStruct.maxDelay = m_tempMaxDelay;
+				m_emissionRate = m_tempEmissionRate;
 				m_maxNrOfParticles = (m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay)*m_emissionRate;
 				m_maxNrOfParticles += m_emissionRate + 1; //add some padding :)
 				m_shouldUpdateResources = true;
 
 			}
 
+	
 			void ParticleEmitterComponent::SetEmissionRate(float emissionRate)
 			{
 				m_emissionRate = emissionRate;
+				m_tempEmissionRate = emissionRate;
 				m_emissionTimer = 1.0f/m_emissionRate; //So we spawn one at least one at start :)
 				CalculateMaxNrOfParticles();
 			}
@@ -357,46 +385,133 @@ namespace thomas
 
 			void ParticleEmitterComponent::AddToDebugMenu()
 			{
-				std::string barName = "particleEmitter " + std::to_string(rand());
-				utils::DebugTools::CreateBar(barName);
+				m_debugBarName = "particleEmitter-" + std::to_string(rand());
+				utils::DebugTools::CreateBar(m_debugBarName);
+				std::string def = m_debugBarName + " size='400 600' valueswidth=fit refresh=0.001 iconifiable=false buttonalign=center";
+				TwDefine(def.c_str());
 
-				utils::DebugTools::AddBool(m_isEmitting, "Active", barName);
-				utils::DebugTools::AddFloat(m_emissionTimeLeft, "timeLeft", barName);
-				utils::DebugTools::AddFloat(m_emissionDuration, "Duration", barName);
-				utils::DebugTools::AddBool(m_looping, "Looping", barName);
+				utils::DebugTools::AddBool(m_isEmitting, "Active", m_debugBarName);
+				utils::DebugTools::AddFloat(m_emissionTimeLeft, "timeLeft", m_debugBarName);	
+				utils::DebugTools::AddFloat(m_emissionDuration, "Duration", m_debugBarName);
+				utils::DebugTools::AddBool(m_looping, "Looping", m_debugBarName);
 
-				utils::DebugTools::AddDirectionVector(m_directionVector, "direction", barName);
+				utils::DebugTools::AddDirectionVector(m_offset, "offset", m_debugBarName);
+				utils::DebugTools::AddDirectionVector(m_directionVector, "direction", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.spread, "spread", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.spread, "spread", m_debugBarName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.gravity, "gravity", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.minSize, "minSize", barName);
-				utils::DebugTools::AddFloat(m_particleBufferStruct.maxSize, "maxSize", barName);
-				utils::DebugTools::AddFloat(m_particleBufferStruct.endSize, "endSize", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.minSize, "minSize", m_debugBarName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.maxSize, "maxSize", m_debugBarName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.endSize, "endSize", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.minSpeed, "minSpeed", barName);
-				utils::DebugTools::AddFloat(m_particleBufferStruct.maxSpeed, "maxSpeed", barName);
-				utils::DebugTools::AddFloat(m_particleBufferStruct.endSpeed, "endSpeed", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.minSpeed, "minSpeed", m_debugBarName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.maxSpeed, "maxSpeed", m_debugBarName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.endSpeed, "endSpeed", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.minDelay, "minDelay", barName);
-				utils::DebugTools::AddFloat(m_particleBufferStruct.maxDelay, "maxDelay", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.minDelay, "minDelay", m_debugBarName);
+				utils::DebugTools::AddFloat(m_tempMaxDelay, "maxDelay", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.minLifeTime, "minLifeTime", barName);
-				utils::DebugTools::AddFloat(m_particleBufferStruct.maxLifeTime, "maxLifeTime", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.minLifeTime, "minLifeTime", m_debugBarName);
+				utils::DebugTools::AddFloat(m_tempMaxLifeTime, "maxLifeTime", m_debugBarName);
 
-				utils::DebugTools::AddColor(m_particleBufferStruct.startColor, "startColor", barName);
-				utils::DebugTools::AddColor(m_particleBufferStruct.endColor, "endColor", barName);
+				utils::DebugTools::AddColor(m_particleBufferStruct.startColor, "startColor", m_debugBarName);
+				utils::DebugTools::AddColor(m_particleBufferStruct.endColor, "endColor", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.radius, "radius", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.radius, "radius", m_debugBarName);
 
-				utils::DebugTools::AddFloat(m_particleBufferStruct.rotationSpeed, "rotationSpeed", barName);
+				utils::DebugTools::AddFloat(m_particleBufferStruct.rotationSpeed, "rotationSpeed", m_debugBarName);
 
-				utils::DebugTools::AddBool(m_particleBufferStruct.spawnAtSphereEdge, "Spawn at edge", barName);
+				utils::DebugTools::AddBool(m_particleBufferStruct.spawnAtSphereEdge, "Spawn at edge", m_debugBarName);
+				
+				utils::DebugTools::AddFloat(m_tempEmissionRate, "Emission rate", m_debugBarName);
+				
+			}
+
+			std::string ParticleEmitterComponent::GetDebugMenuName()
+			{
+				return m_debugBarName;
+			}
+
+			ParticleEmitterComponent::InitParticleBufferStruct * ParticleEmitterComponent::GetInitData()
+			{
+				return &m_particleBufferStruct;
+			}
+
+			bool ParticleEmitterComponent::IsPaused()
+			{
+				return m_paused;
+			}
+
+			void ParticleEmitterComponent::ExportEmitter(std::string path)
+			{
+				//Header size and texture size
+				int texturesize;
+				int totalsize;
+
+				std::string texName = m_texture->GetName();
+				//Texturesize is how long the string is * bytes
+				texturesize = texName.length() * sizeof(char);
+
+				//Opens file
+				std::ofstream file;
+				file.open(path, std::ios::binary | std::ios::out);
+
+				//Header
+				file.write(reinterpret_cast<char*>(&texturesize), sizeof(int));
+				file.write(texName.c_str(), texturesize);
+
+				//Particle System variables
+				file.write(reinterpret_cast<char*>(&m_offset), sizeof(math::Vector3));
+				file.write(reinterpret_cast<char*>(&m_looping), sizeof(bool));
+				file.write(reinterpret_cast<char*>(&m_directionVector), sizeof(math::Vector3));
+				file.write(reinterpret_cast<char*>(&m_emissionDuration), sizeof(float));
+				file.write(reinterpret_cast<char*>(&m_emissionRate), sizeof(float));
+
+				file.write(reinterpret_cast<char*>(&m_particleBufferStruct), sizeof(ParticleEmitterComponent::InitParticleBufferStruct));
+				file.close();
+			}
+
+			void ParticleEmitterComponent::ImportEmitter(std::string path)
+			{
+				//Test reading file
+				std::ifstream file;
+				file.open(path, std::ios::binary | std::ios::in);
+
+				int textureSize;
+				file.read((char*)&textureSize, sizeof(int));
+
+				//Read texture name
+				char* textureName = (char*)malloc(textureSize + 1);
+				file.read(textureName, sizeof(char) * textureSize);
+				textureName[textureSize] = 0;
+
+				//read data
+				file.read((char*)&m_offset, sizeof(math::Vector3));
+				file.read((char*)&m_looping, sizeof(bool));
+				file.read((char*)&m_directionVector, sizeof(math::Vector3));
+				file.read((char*)&m_emissionDuration, sizeof(float));
+				file.read((char*)&m_emissionRate, sizeof(float));
 
 				
 
+				//Read Particle struct
+				file.read((char*)&m_particleBufferStruct, sizeof(ParticleEmitterComponent::InitParticleBufferStruct));
+				//file.read((char*)&variable, sizeof(vartype));
+				file.close();
+
+				m_particleBufferStruct.currentParticleStartIndex = 0;
+
+
+				m_tempEmissionRate = m_emissionRate;
+				m_particleBufferStruct.maxDelay = m_tempMaxDelay;
+				m_particleBufferStruct.maxLifeTime = m_tempMaxLifeTime;
 				
-				utils::DebugTools::AddFloat(m_emissionRate, "Emission rate", barName);
-				utils::DebugTools::AddBool(m_shouldUpdateResources, "Update", barName);
+
+				CalculateMaxNrOfParticles();
+				StartEmitting();
+
+				SetTexture(textureName);
 			}
 
 

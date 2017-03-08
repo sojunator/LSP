@@ -8,12 +8,15 @@ namespace thomas
 	{
 		class DebugTools
 		{
-		private:
+		public:
 			struct Bar {
 				TwBar *bar;
 				bool visible;
 			};
+		private:
+			
 			static void TW_CALL ReloadShadersButtonCallback(void* clientData);
+			static void TW_CALL CopyStdStringToClient(std::string& destClientString, const std::string& sourceLibraryString);
 		public:
 			static void Init();
 			static void Destroy();
