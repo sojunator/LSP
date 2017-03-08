@@ -11,7 +11,7 @@ class IslandManager
 private:
 
 public:
-	IslandManager()
+	IslandManager(Scene* scene)
 	{
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(20, mat, 1024, 1 / 8.f, 4096);
@@ -19,7 +19,7 @@ public:
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			thomas::graphics::Model::CreateModel("Island-" + std::to_string(i), m_islands->GetIslands(i));
-			m_islandObjects.push_back(thomas::object::GameObject::Instantiate<IslandObject>(Scene::GetCurrentScene()));
+			m_islandObjects.push_back(thomas::object::GameObject::Instantiate<IslandObject>(scene));
 			m_islandObjects[i]->SetModel(i);
 			m_islandObjects[i]->PlaceRigidBody(m_islands->GetCollisionRadius(i), m_islands->GetCenter(i));
 		}

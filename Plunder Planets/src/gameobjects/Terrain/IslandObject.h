@@ -6,7 +6,6 @@ class IslandObject : public thomas::object::GameObject
 public:
 	IslandObject() : thomas::object::GameObject("IslandObject")
 	{
-		m_renderer = thomas::object::GameObject::AddComponent<thomas::object::component::RenderComponent>();
 	}
 	~IslandObject();
 
@@ -24,4 +23,5 @@ private:
 	static thomas::object::component::SoundComponent* m_sound;
 	//thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
 	bool m_falling;
+	float m_startY;
 };

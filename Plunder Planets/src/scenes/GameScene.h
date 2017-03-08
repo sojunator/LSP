@@ -96,7 +96,7 @@ public:
 		m_waterObject = LoadObject<WaterObject>();
 
 		//Not a GameObject
-		s_islandManager = new IslandManager();
+		s_islandManager = new IslandManager(this);
 
 		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
 		{

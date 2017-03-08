@@ -196,9 +196,9 @@ namespace thomas
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
 
-		tempOffset.x = rand() % m_mapSize - (m_mapSize / 2);
+		tempOffset.x = m_mapSize - (m_mapSize / 2);
 		tempOffset.y = 0;
-		tempOffset.z = rand() % m_mapSize - (m_mapSize / 2);
+		tempOffset.z = m_mapSize - (m_mapSize / 2);
 
 
 		math::Vector3 tempCenter;
