@@ -20,6 +20,7 @@ public:
 	void Start()
 	{
 		m_isPaused = false;
+		m_settingsChosen = false;
 		m_pauseHeadLine = AddComponent<component::TextComponent>();
 		m_pauseResume = AddComponent<component::TextComponent>();
 		m_pauseSettings = AddComponent<component::TextComponent>();
@@ -115,6 +116,14 @@ public:
 				m_isPaused = true;
 			}
 		}
+		if ((Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::OemBackslash)) && !m_settingsChosen)
+		{
+			if (m_isPaused)
+			{
+				HideMenu();
+				m_isPaused = false;
+			}
+		}
 	}
 
 	void CheckInput()
@@ -123,7 +132,7 @@ public:
 		{
 			if (m_isPaused)
 			{
-				if (Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetLeftStickY() < 0.0f || Input::GetKey(Input::Keys::Down))
+				if ((Input::GetButton(Input::Buttons::DPAD_DOWN) || Input::GetLeftStickY() < 0.0f || Input::GetKey(Input::Keys::Down)) && !m_settingsChosen)
 				{
 					if (m_resumeActive)
 					{
@@ -147,7 +156,7 @@ public:
 					m_inputDelay = 0.3f;
 				}
 
-				if (Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetLeftStickY() > 0.0f || Input::GetKey(Input::Keys::Up))
+				if ((Input::GetButton(Input::Buttons::DPAD_UP) || Input::GetLeftStickY() > 0.0f || Input::GetKey(Input::Keys::Up)) && !m_settingsChosen)
 				{
 					if (m_resumeActive)
 					{
@@ -203,7 +212,7 @@ public:
 
 	void Choice()
 	{
-		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space))
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && !m_settingsChosen)
 		{
 			if (m_quitActive)
 			{
@@ -219,7 +228,7 @@ public:
 
 			if (m_settingsActive)
 			{
-				//soon^tm
+				m_settingsChosen = true;
 			}
 		}
 	}
@@ -248,9 +257,14 @@ public:
 		}
 	}
 
-	bool GetSettingsActive()
+	bool GetSettingsState()
 	{
-		return m_settingsActive;
+		return m_settingsChosen;
+	}
+
+	void SetSettingsState(bool state)
+	{
+		m_settingsChosen = state;
 	}
 
 
@@ -260,6 +274,7 @@ private:
 	bool m_resumeActive;
 	bool m_settingsActive;
 	bool m_quitActive;
+	bool m_settingsChosen;
 	component::TextComponent* m_pauseHeadLine;
 	component::TextComponent* m_pauseResume;
 	component::TextComponent* m_pauseSettings;

@@ -25,6 +25,7 @@ public:
 		m_settingsHeadLine = AddComponent<component::TextComponent>();
 		/*m_pauseQuit = AddComponent<component::TextComponent>();
 		m_pauseResume = AddComponent<component::TextComponent>();*/
+		m_pauseObj = (PauseObjectMenuObject*)Find("PauseObjectMenuObject");
 
 		InitMenu();
 	}
@@ -36,7 +37,7 @@ public:
 		m_settingsHeadLine->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsHeadLine->SetRotation(0.0f);
 		m_settingsHeadLine->SetScale(2.0f);
-		m_settingsHeadLine->SetPositionX((Window::GetWidth() / 4) * 3);
+		m_settingsHeadLine->SetPositionX((Window::GetWidth() / 4) * 2);
 		m_settingsHeadLine->SetPositionY(Window::GetHeight() / 4.5);
 		m_settingsHeadLine->SetDropshadow(true);
 		m_settingsHeadLine->SetOutline(true);
@@ -68,39 +69,40 @@ public:
 		m_quitActive = false;*/
 
 		//m_inputDelay = 0.0f; // so that we don't do 500 inputs per second.
-		//HideMenu();
+		HideMenu();
 	}
 
 	void DisplayMenu()
 	{
-		/*m_settingsHeadLine->SetActive(true);
+		m_settingsHeadLine->SetActive(true);
+		/*
 		m_pauseQuit->SetActive(true);
 		m_pauseResume->SetActive(true);*/
 	}
 
 	void HideMenu()
 	{
-		/*m_settingsHeadLine->SetActive(false);
-		m_pauseQuit->SetActive(false);
+		m_settingsHeadLine->SetActive(false);
+		/*m_pauseQuit->SetActive(false);
 		m_pauseResume->SetActive(false);*/
 	}
 
 	void CheckState()
 	{
-		/*if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter))
+		if (m_pauseObj->GetSettingsState())
 		{
-
-			if (m_isPaused)
+			DisplayMenu();
+			if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter))
 			{
+				m_pauseObj->SetSettingsState(false);
 				HideMenu();
-				m_isPaused = false;
 			}
-			else
-			{
-				DisplayMenu();
-				m_isPaused = true;
-			}
-		}*/
+		}
+		else
+		{
+			HideMenu();
+		}
+		
 	}
 
 	void CheckInput()
@@ -164,7 +166,7 @@ public:
 
 	void Choice()
 	{
-		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space))
+		if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) //FIX IF PRESS B, m_pauseObj->SetSettingsState(false)
 		{
 			/*if (m_quitActive)
 			{
@@ -178,18 +180,23 @@ public:
 				HideMenu();
 			}*/
 		}
+		if (Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::OemBackslash))
+		{
+			m_pauseObj->SetSettingsState(false);
+			HideMenu();
+		}
 	}
 
 	void Update()
 	{
-		/*CheckState();
-		CheckInput();
+		CheckState();
+		/*CheckInput();*/
 
-		if (m_isPaused)
+		if (m_pauseObj->GetSettingsState())
 		{
-			SetTextActive();
+			//SetTextActive();
 			Choice();
-		}*/
+		}
 	};
 
 private:
@@ -197,6 +204,7 @@ private:
 	bool m_settingsActive;
 	//bool m_resumeActive;
 	//bool m_quitActive;
+	PauseObjectMenuObject* m_pauseObj;
 	component::TextComponent* m_settingsHeadLine;
 	//component::TextComponent* m_pauseQuit;
 	//component::TextComponent* m_pauseResume;

@@ -17,6 +17,7 @@
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
 #include "../gameobjects/PauseObjectMenuObject.h"
+#include "../gameobjects/SettingsMenuObject.h"
 
 class GameScene : public thomas::Scene
 {
@@ -104,6 +105,7 @@ public:
 		LoadObject<OceanFloor>();
 		LoadObject<PauseObjectMenuObject>();
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
+		LoadObject<SettingsMenuObject>();
 		
 		//LoadObject<PhysicsObject>();
 
