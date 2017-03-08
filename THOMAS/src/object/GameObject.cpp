@@ -27,7 +27,6 @@ namespace thomas
 				if (s_gameObjects[i] == this)
 				{
 					s_gameObjects.erase(s_gameObjects.begin() + i);
-				
 				}
 			}
 
@@ -67,7 +66,7 @@ namespace thomas
 				if (s_gameObjects[i] == gameObject)
 				{
 					s_gameObjects.erase(s_gameObjects.begin() + i);
-					
+
 				}
 			}
 

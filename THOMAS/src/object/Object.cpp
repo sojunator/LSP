@@ -53,7 +53,7 @@ namespace thomas
 
 		
 
-		void Object::Destroy()
+		void Object::Destroy()//this should be static right
 		{
 			for (int i = 0; i < s_objects.size(); ++i)
 			{

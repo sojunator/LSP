@@ -323,6 +323,7 @@ namespace thomas
 				if(s_loadedTextures[i]->m_data.textureView)
 					s_loadedTextures[i]->m_data.textureView->Release();
 
+
 				// Clean up heap
 				delete s_loadedTextures[i];
 

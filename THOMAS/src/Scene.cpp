@@ -35,17 +35,20 @@ namespace thomas
 		graphics::Shader::Destroy(s_currentScene);
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
+		
 		Physics::Destroy();
 		//graphics::Sprite::Destroy();
 		//graphics::TextRender::Destroy();
-		//object::Object::Destroy(s_currentScene);
-		//object::Object::Clean();
-		object::Object::Destroy();
-		graphics::ParticleSystem::Destroy();
-		graphics::ParticleSystem::Init();
+		object::Object::Destroy(s_currentScene);
+		
+		//object::Object::Destroy();
+		//graphics::ParticleSystem::Destroy();
+		//graphics::ParticleSystem::Init();
 		
 		delete s_currentScene;
 		s_currentScene = nullptr;
+
+		object::Object::Clean();
 	}
 	void Scene::UpdateCurrentScene()
 	{
