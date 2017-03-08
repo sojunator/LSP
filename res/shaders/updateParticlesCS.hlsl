@@ -10,7 +10,7 @@ cbuffer cameraBuffer : register(b0)
 struct ParticleStruct
 {
 	float3 position;
-	float padding2;
+	float gravity;
 	float3 direction;
 	float speed;
 
@@ -52,8 +52,7 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 	if (particlesRead[index].delay < 0.0f)
 	{
         //ANIMATE
-		float3 particlePosWS = particlesRead[index].position + particlesRead[index].direction * particlesRead[index].speed * deltaTime;
-		particlesWrite[index].position = particlePosWS;
+		
         
 		particlesWrite[index].delay = particlesRead[index].delay;
 		particlesWrite[index].speed = particlesRead[index].speed;
@@ -63,6 +62,13 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 		particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft;
         
 		float lerpValue = 1 - (particlesRead[index].lifeTimeLeft / particlesRead[index].lifeTime);
+
+		float speed = lerp(particlesRead[index].speed, particlesRead[index].endSpeed, lerpValue);
+
+		float3 particlePosWS = particlesRead[index].position + particlesRead[index].direction * speed * deltaTime + float3(0, 1, 0) * particlesRead[index].gravity * deltaTime;
+		particlesWrite[index].position = particlePosWS;
+
+
 		float scale = lerp(particlesRead[index].size, particlesRead[index].endSize, lerpValue);
 		billboards[index].colorFactor = lerp(particlesRead[index].startColor, particlesRead[index].endColor, lerpValue);
 
