@@ -17,6 +17,8 @@ namespace thomas {
 		{
 			SAFE_RELEASE(m_data.vertexBuffer);
 			SAFE_RELEASE(m_data.indexBuffer);
+			m_data.vertices.clear();
+			m_data.indices.clear();
 		}
 
 
@@ -78,16 +80,6 @@ namespace thomas {
 		void Mesh::Draw()
 		{
 			thomas::ThomasCore::GetDeviceContext()->DrawIndexed(GetIndexCount(), 0, 0);
-		}
-
-		void Mesh::ReleaseBuffers()
-		{
-			
-			SAFE_RELEASE(m_data.vertexBuffer);
-			SAFE_RELEASE(m_data.indexBuffer);
-			m_data.vertices.clear();
-			m_data.indices.clear();
-			return;
 		}
 
 		void Mesh::SetupMesh()

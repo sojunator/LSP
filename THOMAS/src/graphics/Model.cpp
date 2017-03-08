@@ -75,11 +75,7 @@ namespace thomas {
 		{
 			for (unsigned int i = 0; i < s_loadedModels.size(); ++i)
 			{
-				for (unsigned int j = 0; j < s_loadedModels.at(i)->m_meshes.size(); ++j)
-				{
-					s_loadedModels.at(i)->m_meshes.at(j)->ReleaseBuffers();
-				}
-				
+				delete s_loadedModels[i];
 			}
 			s_loadedModels.clear();
 		}
