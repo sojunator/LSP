@@ -182,6 +182,7 @@
     <ClInclude Include="src\gameobjects\Broadside.h" />
     <ClInclude Include="src\gameobjects\Cannon.h" />
     <ClInclude Include="src\gameobjects\PauseObjectMenuObject.h" />
+    <ClInclude Include="src\gameobjects\SettingsMenuObject.h" />
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
