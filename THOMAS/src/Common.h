@@ -5,10 +5,17 @@
 #define THOMAS_API 
 
 
+#ifdef _DEBUG
 #define LOG(msg) std::cout <<__FUNCTION__  << ": "<< msg << std::endl;
+#else
+#define LOG(msg) 
+#endif
 
+#ifdef _DEBUG
 #define LOG_HR(hr) 	_com_error err(hr); LPCTSTR  errMsg = err.ErrorMessage(); std::cout <<__FUNCTION__  << ": "; std::wcout << errMsg << std::endl;
-
+#else
+#define LOG_HR(hr) 
+#endif
 
 #define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p)=NULL; } }
 

@@ -55,21 +55,22 @@ public:
 	float m_maxArmor;
 
 private:
+	int m_flyCost;
 	bool m_spawnedWormhole;
-
-	float m_aimDistance;
-	float m_roof;
 	bool m_moving;
 	bool m_turning;
 	bool m_flying;
+	bool m_retardControllsOn;
+	bool m_notDead;
+	//used for the camera
+	bool m_freeCamera;
+	float m_aimDistance;
+	float m_roof;
 	float m_treasure;
 	float m_mass;
 	float m_flyTurnSpeed;
 	float m_speed;
 	float m_turnSpeed;
-	int m_flyCost;
-	//used for the camera
-	bool m_freeCamera;
 	float m_elevateCamSpeed;//for moving cam up and down
 	float m_camRotationSpeed;
 	float m_camZoomSpeed;
@@ -78,7 +79,7 @@ private:
 	float m_camMaxDistanceFromBoat;
 	//used for both
 	float m_controlSensitivity;
-	bool m_retardControllsOn;
+
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;

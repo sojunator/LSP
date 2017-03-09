@@ -1,6 +1,8 @@
 #include "ship.h"
 #include "TerrainObject.h"
 #include "Wormhole.h"
+#include "../scenes/HighScoreScene.h"
+
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -206,6 +208,7 @@ void Ship::Start()
 	m_aimDistance = 20;
 	m_health = ShipStats::s_playerStats->GetHealthAmount();
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
+	m_notDead = true;
 
 	m_spawnedWormhole = false;
 	m_aiming = false;
@@ -677,7 +680,18 @@ void Ship::Update()
 
 	PlunderIsland();
 
-	Float(dt);
+	if (m_notDead)
+	{
+		Float(dt);
+	}
+	else
+	{
+		if (m_transform->GetPosition().y < -27.0)
+		{
+			thomas::Scene::UnloadScene();
+			Scene::LoadScene<HighscoreScene>();
+		}
+	}
 
 
 	if (m_treasure > 1500 && !m_spawnedWormhole && !m_startUpSequence)
@@ -722,9 +736,7 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 	
 		if (m_health <= 0)
 		{
-			LOG("You are dead!");
-			Scene::LoadScene<MenuScene>(); //Load Game Over instead
-			//Delete shipStats;
+			m_notDead = true;
 		}
 
 	}
