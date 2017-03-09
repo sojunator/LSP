@@ -46,6 +46,7 @@ namespace thomas
 		//graphics::ParticleSystem::Destroy();
 		//graphics::ParticleSystem::Init();
 		
+		
 		delete s_currentScene;
 		s_currentScene = nullptr;
 
@@ -77,6 +78,7 @@ namespace thomas
 		}
 		else
 			LOG("No scene set");
+		graphics::Renderer::ResetDepthStencilState();
 		object::Object::Clean();
 	}
 	void Scene::Render()
@@ -208,7 +210,7 @@ namespace thomas
 			if (gameObject->GetActive())
 				for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
 				{
-					if (emitterComponent->GetActive() && emitterComponent->GetSpawnedParticleCount() > 0)
+					if (emitterComponent->GetActive() && emitterComponent->GetSpawnedParticleCount() > 0 && emitterComponent->GetDrawTimer() > 0)
 						graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
 				}
 		}
