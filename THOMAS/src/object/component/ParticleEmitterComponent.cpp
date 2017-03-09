@@ -318,7 +318,6 @@ namespace thomas
 			void ParticleEmitterComponent::CalculateMaxNrOfParticles()
 			{
 				m_maxNrOfParticles = (m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay)*m_emissionRate;
-				m_maxNrOfParticles += m_emissionRate + 1; //add some padding :)
 				m_shouldUpdateResources = true;
 
 			}
