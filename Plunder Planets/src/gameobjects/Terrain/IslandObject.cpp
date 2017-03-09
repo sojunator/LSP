@@ -26,7 +26,6 @@ void IslandObject::Update()
 		if (m_rigidBody->getWorldTransform().getOrigin().getY() <= -800)
 		{
 			m_destroy = true;
-			//Destroy(this);
 		}
 	}
 }
