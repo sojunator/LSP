@@ -9,12 +9,8 @@ namespace thomas
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
 
-		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
-
 		Shader* ParticleSystem::s_updateParticlesCS;
 		Shader* ParticleSystem::s_emitParticlesCS;
-		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
-		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
 
 		ID3D11UnorderedAccessView* ParticleSystem::s_activeParticleUAV; //ping
 		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV; //pong
@@ -43,8 +39,6 @@ namespace thomas
 			s_matrixBuffer = nullptr;
 			s_emitParticlesCS = Shader::CreateComputeShader("EmitParticlesCS", "../res/shaders/emitParticlesCS.hlsl", NULL);
 			s_updateParticlesCS = Shader::CreateComputeShader("UpdateParticlesCS", "../res/shaders/updateParticlesCS.hlsl", NULL);
-
-			//CreateBillboardUAVandSRV();
 
 
 			D3D11_BLEND_DESC blendDesc;
@@ -103,6 +97,10 @@ namespace thomas
 
 		void ParticleSystem::Destroy()
 		{
+			SAFE_RELEASE(s_blendStates.additive);
+			SAFE_RELEASE(s_blendStates.alphaBlend);
+			SAFE_RELEASE(s_cameraBuffer);
+			SAFE_RELEASE(s_matrixBuffer);
 		}
 
 		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, bool paused)
@@ -156,16 +154,16 @@ namespace thomas
 		void ParticleSystem::SpawnParticles(object::component::ParticleEmitterComponent * emitter, int amountOfParticles)
 		{
 			object::component::ParticleEmitterComponent::D3DData* emitterD3D = emitter->GetD3DData();
-			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
+			
 			s_emitParticlesCS->Bind();
 			s_emitParticlesCS->BindBuffer(emitterD3D->particleBuffer, 0);
-			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 0);
-			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV1, 1);
+			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 6);
+			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV1, 7);
 
 			ThomasCore::GetDeviceContext()->Dispatch(amountOfParticles, 1, 1);
 
-			s_emitParticlesCS->BindUAV(NULL, 0);
-			s_emitParticlesCS->BindUAV(NULL, 0);
+			s_emitParticlesCS->BindUAV(NULL, 6);
+			s_emitParticlesCS->BindUAV(NULL, 7);
 			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_emitParticlesCS->Unbind();
 		}
@@ -177,16 +175,17 @@ namespace thomas
 
 			//bind CS
 			s_updateParticlesCS->Bind();
-			s_updateParticlesCS->BindUAV(s_activeParticleUAV, 0);
-			s_updateParticlesCS->BindUAV(emitter->GetD3DData()->billboardsUAV, 1);
+			s_updateParticlesCS->BindUAV(s_activeParticleUAV, 6);
+			s_updateParticlesCS->BindUAV(emitter->GetD3DData()->billboardsUAV, 7);
 			s_updateParticlesCS->BindResource(s_activeParticleSRV, 0);
 			s_updateParticlesCS->BindBuffer(s_cameraBuffer, 0);
 
-			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfMaxParticles() / 256 + 1, 1, 1);
+			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetSpawnedParticleCount() / 256 + 1, 1, 1);
 			//unbind CS
-			s_updateParticlesCS->BindUAV(NULL, 0);
-			s_updateParticlesCS->BindUAV(NULL, 1);
+			s_updateParticlesCS->BindUAV(NULL, 6);
+			s_updateParticlesCS->BindUAV(NULL, 7);
 			s_updateParticlesCS->BindResource(NULL, 0);
+			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_updateParticlesCS->Unbind();
 
 		}
@@ -220,6 +219,7 @@ namespace thomas
 			emitter->GetShader()->BindResource(emitter->GetD3DData()->billboardsSRV, 1);
 			emitter->GetShader()->BindBuffer(s_matrixBuffer, 0);
 			ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
+			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			emitter->GetShader()->BindVertexBuffer(NULL, 0, 0);
 
 			emitter->GetTexture()->Bind();

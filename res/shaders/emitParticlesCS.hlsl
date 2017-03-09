@@ -56,8 +56,8 @@ struct ParticleStruct
 	float4 endColor;
 };
 
-RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
-RWStructuredBuffer<ParticleStruct> particlesWrite2 : register(u1);
+RWStructuredBuffer<ParticleStruct> particlesWrite : register(u6);
+RWStructuredBuffer<ParticleStruct> particlesWrite2 : register(u7);
 
 
 uint rand_xorshift(uint rng_state)

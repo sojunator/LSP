@@ -29,7 +29,6 @@ namespace thomas
 			ParticleSystem();
 			~ParticleSystem();
 
-			
 			static void CreateBillboardUAVandSRV(int maxAmountOfParticles, ID3D11Buffer*& buffer, ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv);
 			static void Init();
 			static void Destroy();
@@ -73,12 +72,8 @@ namespace thomas
 			static ID3D11Buffer* s_cameraBuffer;
 			static ID3D11Buffer* s_matrixBuffer;
 			
-			static ID3D11Buffer* s_billboardsBuffer;
-			
 			static Shader* s_updateParticlesCS;
 			static Shader* s_emitParticlesCS;
-			static ID3D11UnorderedAccessView* s_billboardsUAV;
-			static ID3D11ShaderResourceView* s_billboardsSRV;
 
 			static ID3D11UnorderedAccessView* s_activeParticleUAV;
 			static ID3D11ShaderResourceView* s_activeParticleSRV;

@@ -18,6 +18,7 @@
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
 #include "../gameobjects/PauseObjectMenuObject.h"
+#include "../gameobjects/SettingsMenuObject.h"
 
 class GameScene : public thomas::Scene
 {
@@ -25,7 +26,7 @@ public:
 	GameScene() : Scene("GameScene")
 	{
 		//Init shaders
-
+		
 		LoadShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/phong.hlsl");
 		LoadShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/oceanShader.hlsl");
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
@@ -34,14 +35,11 @@ public:
 		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 
 		//Init materials
-		thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
-		thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
-		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 		LoadMaterial("phongMaterial", new PhongMaterial("Phong"));
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
 		
-		//Init models
+		//Init models		
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("playerModel", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("basicEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
@@ -102,12 +100,14 @@ public:
 		LoadObject<OceanFloor>();
 		LoadObject<PauseObjectMenuObject>();
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
+		LoadObject<SettingsMenuObject>();
 		
 		//LoadObject<PhysicsObject>();
-
+		
 	};
-	
 
+	
+	
 private:
 	CameraObject* m_cameraObject;
 	TerrainObject* m_terrainObject;

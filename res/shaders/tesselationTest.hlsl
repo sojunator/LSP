@@ -1,14 +1,4 @@
 //Globals
-
-Texture2D diffuseTexture : register(t0);
-SamplerState diffuseSampler : register(s0);
-
-Texture2D specularTexture : register(t1);
-SamplerState specularSampler : register(s1);
-
-Texture2D normalTexture : register(t2);
-SamplerState normalSampler : register(s2);
-
 Texture2D displacementTexture : register(t3);
 SamplerState displacementSampler : register(s3);
 

@@ -12,8 +12,8 @@ SamplerState normalSampler : register(s2);
 Texture2D displacementTexture : register(t3);
 SamplerState displacementSampler : register(s3);
 
-TextureCube reflectionTexture : register(t4);
-SamplerState reflectionSampler : register(s4);
+TextureCube reflectionTexture : register(t10);
+SamplerState reflectionSampler : register(s10);
 
 Texture2D depthBufferTexture : register(t5);
 SamplerState depthBufferSampler : register(s5);

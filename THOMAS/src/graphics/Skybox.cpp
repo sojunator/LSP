@@ -20,11 +20,11 @@ namespace thomas
 
 		Skybox::~Skybox()
 		{
-			m_data.vertexBuffer->Release();
-			m_data.indexBuffer->Release();
-			m_data.constantBuffer->Release();
-			m_data.rasterizerState->Release();
-			m_data.depthStencilState->Release();
+			SAFE_RELEASE(m_data.vertexBuffer);
+			SAFE_RELEASE(m_data.indexBuffer);
+			SAFE_RELEASE(m_data.constantBuffer);
+			SAFE_RELEASE(m_data.rasterizerState);
+			SAFE_RELEASE(m_data.depthStencilState);
 		}
 
 		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)

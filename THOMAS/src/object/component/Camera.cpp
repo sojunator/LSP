@@ -9,7 +9,7 @@ namespace thomas
 		{
 			void Camera::UpdateProjMatrix()
 			{
-				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(m_fov, m_viewport.AspectRatio(), m_near, m_far);
+				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(math::DegreesToRadians(m_fov), m_viewport.AspectRatio(), m_near, m_far);
 			}
 
 			Camera::Camera(): Component("CameraComponent")
@@ -123,7 +123,6 @@ namespace thomas
 					math::Matrix mvpMatrix = (m_gameObject->m_transform->GetWorldMatrix()*GetViewProjMatrix());
 					m_skybox->Bind(GetViewMatrix(), mvpMatrix);
 				}
-					
 			}
 
 			void Camera::BindReflection()
@@ -140,8 +139,8 @@ namespace thomas
 
 			void Camera::ReleaseSkybox()
 			{
-				if(m_skybox)
-					m_skybox->~Skybox();
+				if (m_skybox)
+					delete m_skybox;// ->~Skybox();
 			}
 		}
 	}

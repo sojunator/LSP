@@ -6,7 +6,6 @@ ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
 	m_cannonDamage = 5;
-	//m_cannonSpread; //Add later
 	//m_cannonQuantity; //Add later
 	m_speed = 50;
 	m_boostCost = 20;
@@ -15,6 +14,11 @@ ShipStats::ShipStats()
 	m_healthAmount = 1;
 	m_placeHolderHealthAmount = 1;
 	m_plunderSpeed = 30;
+	m_settingsFOV = 50;
+	m_settingsInvertCamX = -1;
+	m_settingsInvertCamY = -1;
+	m_settingsInvertShip = 0;
+	m_settingsCamRotateSpeed = 0;
 	s_currentLevel = 1;
 }
 
@@ -36,11 +40,6 @@ float ShipStats::GetCannonDamage()
 float ShipStats::GetSpeed()
 {
 	return m_speed;
-}
-
-float ShipStats::GetCannonSpread()
-{
-	return m_cannonSpread;
 }
 
 float ShipStats::GetCannonQuantity()
@@ -78,6 +77,45 @@ float ShipStats::GetPlunderSpeed()
 	return m_plunderSpeed;
 }
 
+float ShipStats::GetFOV()
+{
+	return m_settingsFOV;
+}
+
+void ShipStats::SetFOV(bool minorplus)
+{
+	if (minorplus)
+		m_settingsFOV += 10;
+	else
+		m_settingsFOV -= 10;
+}
+
+float ShipStats::GetInvertCamX()
+{
+	return m_settingsInvertCamX;
+}
+
+float ShipStats::GetInvertCamY()
+{
+	return m_settingsInvertCamY;
+}
+
+void ShipStats::SetInvertCamX(bool state)
+{
+	if (state)
+		m_settingsInvertCamX = 1;
+	else
+		m_settingsInvertCamX = -1;
+}
+
+void ShipStats::SetInvertCamY(bool state)
+{
+	if (state)
+		m_settingsInvertCamY = 1;
+	else
+		m_settingsInvertCamY = -1;
+}
+
 void ShipStats::IncreaseCannonDamage(float talentAmount)
 {
 	m_cannonDamage = 5 + (talentAmount * 2);
@@ -91,15 +129,6 @@ void ShipStats::IncreaseSpeed(float talentAmount)
 	else
 		m_speed = 50 + (talentAmount * 25); //50, 75, 100, 125, 150
 	LOG("Speed: " + std::to_string(m_speed));
-}
-
-void ShipStats::IncreaseShieldAmount(float talentAmount)
-{
-	if (talentAmount == 1)
-		m_shieldAmount = 0.3;
-	else
-		m_shieldAmount = 0.3 + (0.175 * (talentAmount-1)); //0.3, 0.475, 0.65, 0.825, 1
-	LOG("Shield amount: " + std::to_string(m_shieldAmount));
 }
 
 void ShipStats::DecreaseCosts(float talentAmount)
@@ -118,16 +147,33 @@ void ShipStats::DecreaseCosts(float talentAmount)
 	LOG("Boost cost: " + std::to_string(m_boostCost));
 }
 
-void ShipStats::RepairHealth(float talentAmount)
+void ShipStats::IncreaseShieldAmount(float talentAmount)
 {
 	if (talentAmount == 1)
+		m_shieldAmount = 0.3;
+	else
+		m_shieldAmount = 0.3 + (0.175 * (talentAmount-1)); //0.3, 0.475, 0.65, 0.825, 1
+	LOG("Shield amount: " + std::to_string(m_shieldAmount));
+}
+
+void ShipStats::RepairHealth(float talentAmount)
+{
+	if (talentAmount == 1 && m_healthAmount <= 0.75)
+	{
+		m_healthAmount += 0.25;
+		/*m_placeHolderHealthAmount = 1 - m_healthAmount;
+		m_healthAmount = 1;*/
+	}
+	else if (talentAmount == 1 && m_healthAmount > 0.75)
 	{
 		m_placeHolderHealthAmount = 1 - m_healthAmount;
 		m_healthAmount = 1;
 	}
-	if (talentAmount == 0)
+	else if (talentAmount == 0)
 	{
-		m_healthAmount = m_placeHolderHealthAmount;
+		m_placeHolderHealthAmount = 0.25;
+		m_healthAmount -= 0.25;
+		//m_healthAmount = m_placeHolderHealthAmount;
 	}
 	LOG("Health Amount: " + std::to_string(m_healthAmount));
 }

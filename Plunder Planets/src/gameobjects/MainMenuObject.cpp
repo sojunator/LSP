@@ -1,6 +1,7 @@
 #include "MainMenuObject.h"
 #include "../scenes/HighscoreScene.h"
 #include "../scenes/UpgradeScene.h"
+#include "../scenes/SettingsScene.h"
 void MainMenuObject::Start()
 {
 	m_backgrounds = AddComponent<component::SpriteComponent>();
@@ -105,20 +106,20 @@ void MainMenuObject::Update()
 		}
 			
 	}
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter))
 	{
 		if (m_startButton->isHovering())
 		{
 			Scene::LoadScene<UpgradeScene>();
 		}
-
-		if (m_highScoreButton->isHovering())
+		else if (m_highScoreButton->isHovering())
 		{
 			Scene::LoadScene<HighscoreScene>();
 		}
+		else if (m_optionButton->isHovering())
+			Scene::LoadScene<SettingsScene>();
 
-		//Highscore
-		if (m_exitButton->isHovering())
+		else if (m_exitButton->isHovering())
 			ThomasCore::Exit();
 	}
 

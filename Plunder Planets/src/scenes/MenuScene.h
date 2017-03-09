@@ -7,7 +7,6 @@ class MenuScene : public thomas::Scene
 public:
 	MenuScene() : Scene("MenuScene")
 	{
-		ShipStats::s_playerStats = new ShipStats();
 		ShipStats::s_currentLevel = 1;
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{

@@ -451,7 +451,7 @@ void Ship::DrawAimArc(Broadside* broadside)
 		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
-
+	
 }
 
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
@@ -507,7 +507,8 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
+	if (m_terrainObject)
+		m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
 }
 int Ship::GetTreasure()
 {
@@ -635,8 +636,8 @@ void Ship::Update()
 		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
 		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
-
-		CameraRotate(right_x, right_y, dt, distanceVector);
+		
+		CameraRotate(ShipStats::s_playerStats->GetInvertCamX() * right_x, ShipStats::s_playerStats->GetInvertCamY() * right_y, dt, distanceVector);
 
 		//Move camera "distance" away from boat.
 		/*math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
@@ -700,7 +701,7 @@ void Ship::Update()
 	Float(dt);
 
 
-	if (m_treasure > 100000 && !m_spawnedWormhole && !m_startUpSequence)
+	if (m_treasure > 1500 && !m_spawnedWormhole && !m_startUpSequence)
 	{
 		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0f,0),math::Quaternion::Identity,m_scene);
 		wormhole->SetEndLevel(true);

@@ -42,7 +42,7 @@ namespace thomas
 			std::string GetName();
 			Shader* GetShader();
 
-			~Material();
+			virtual ~Material();
 
 		private:
 

@@ -24,7 +24,11 @@ namespace thomas
 
 			RigidBodyComponent::~RigidBodyComponent()
 			{
+				delete getMotionState();
+				delete getCollisionShape();
+				
 				Physics::s_world->removeRigidBody(this);
+				
 			}
 
 			void RigidBodyComponent::OnEnable()
@@ -102,6 +106,7 @@ namespace thomas
 			void RigidBodyComponent::SetCollider(btCollisionShape * collider)
 			{
 				Physics::s_world->removeRigidBody(this);
+				delete getCollisionShape();
 				setCollisionShape(collider);
 				UpdateRigidbodyMass(m_mass);
 				Physics::s_world->addRigidBody(this);

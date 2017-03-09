@@ -12,6 +12,7 @@ namespace thomas
 			void DrawLine(math::Vector3 start, math::Vector3 end, math::Vector3 startColor, math::Vector3 endColor);
 			static void Draw();
 			void Update(object::component::Camera* camera);
+			static void Destroy();
 		private:
 			static std::vector<GeometryDraw*> s_geometry;
 			struct VertexData

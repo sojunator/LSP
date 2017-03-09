@@ -590,7 +590,7 @@ void HighscoreMenuObject::Update()
 	//	//Highscore
 	//}
 
-	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
+	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK) || Input::GetButtonDown(Input::Buttons::B))
 		Scene::LoadScene<MenuScene>();
 
 	/*if (Input::GetKeyDown(Input::Keys::Enter))

@@ -88,7 +88,7 @@ public:
 			m_wormhole->StartEmitting();
 
 
-			if (m_time > 5.5f)
+			if (m_time > 4.5f)
 			{
 				m_wormhole->SetSize(50);
 				m_wormhole->SetRotationSpeed(math::DegreesToRadians(20));
@@ -160,7 +160,6 @@ public:
 	{
 		if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
-			thomas::Scene::UnloadScene();
 			Scene::LoadScene<UpgradeScene>();
 		}
 	}

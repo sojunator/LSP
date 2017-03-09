@@ -27,7 +27,6 @@ namespace thomas
 				if (s_gameObjects[i] == this)
 				{
 					s_gameObjects.erase(s_gameObjects.begin() + i);
-				
 				}
 			}
 
@@ -67,13 +66,20 @@ namespace thomas
 				if (s_gameObjects[i] == gameObject)
 				{
 					s_gameObjects.erase(s_gameObjects.begin() + i);
-					
+
 				}
 			}
 
 			Object::Destroy(gameObject);
 
 			return true;
+		}
+		void GameObject::Destroy()
+		{
+			for (unsigned int i = 0; i < s_gameObjects.size(); ++i)
+			{
+				Destroy(s_gameObjects[i]);
+			}
 		}
 		bool GameObject::GetActive()
 		{

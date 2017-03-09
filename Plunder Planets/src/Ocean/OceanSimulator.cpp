@@ -357,11 +357,9 @@ namespace ocean
 		SAFE_RELEASE(m_pSRV_Dxyz);
 
 		SAFE_RELEASE(m_pDisplacementMap);
-		SAFE_RELEASE(m_pDisplacementSRV);
 		SAFE_RELEASE(m_pDisplacementRTV);
 
 		SAFE_RELEASE(m_pGradientMap);
-		SAFE_RELEASE(m_pGradientSRV);
 		SAFE_RELEASE(m_pGradientRTV);
 
 		SAFE_RELEASE(m_pUpdateSpectrumCS);

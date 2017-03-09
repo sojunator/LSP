@@ -29,6 +29,7 @@ namespace thomas
 			static std::vector<GameObject*> GetGameObjects();
 
 			static bool Destroy(GameObject *object);
+			static void Destroy();
 			template<typename T>
 			static T* Instantiate(Scene* scene);
 			template<typename T>

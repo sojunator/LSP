@@ -48,7 +48,9 @@ namespace thomas
 			{
 				itr = s_texture.erase(itr);
 			}
+			s_spriteBatch.release();
 			s_spriteBatch.reset();
+			s_states.release();
 			s_states.reset();
 		}
 
