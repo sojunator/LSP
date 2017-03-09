@@ -75,11 +75,11 @@ void UpgradeMenuObject::Start()
 
 	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
 	m_currentHealth->SetFont("Pirate");
-	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast) + "/ 100");
 	m_currentHealth->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
 	m_currentHealth->SetRotation(0.0f);
 	m_currentHealth->SetScale(1.0f);
-	m_currentHealth->SetPositionX(1330);
+	m_currentHealth->SetPositionX(1250);
 	m_currentHealth->SetPositionY(45);
 	m_currentHealth->SetDropshadow(true);
 	m_currentHealth->SetOutline(true);
@@ -478,7 +478,7 @@ void UpgradeMenuObject::UpdateGoldCounter()
 void UpgradeMenuObject::UpdateHealthCounter()
 {
 	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
-	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast) + "/ 100");
 }
 
 void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
