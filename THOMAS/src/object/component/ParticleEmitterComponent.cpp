@@ -17,6 +17,7 @@ namespace thomas
 
 			ParticleEmitterComponent::~ParticleEmitterComponent()
 			{
+				
 				SAFE_RELEASE(m_d3dData.particleBuffer1);
 				SAFE_RELEASE(m_d3dData.particleBuffer2);
 				SAFE_RELEASE(m_d3dData.particleUAV1);
@@ -80,12 +81,32 @@ namespace thomas
 
 			void ParticleEmitterComponent::Update()
 			{
-
 				if (m_particleBufferStruct.maxLifeTime != m_tempMaxLifeTime || m_particleBufferStruct.maxDelay != m_tempMaxDelay || m_emissionRate != m_tempEmissionRate)
 					CalculateMaxNrOfParticles();
 
 				if (m_emissionTimeLeft < 0.0f)
 					StopEmitting();
+
+
+				if (m_shouldUpdateResources)
+				{
+					m_shouldUpdateResources = false;
+					CreateParticleUAVsandSRVs();
+
+					m_particleBufferStruct.currentParticleStartIndex = 0;
+					ParticleEmitterComponent::InitParticleBufferStruct tempStruct = m_particleBufferStruct;
+					tempStruct.startColor = math::Color(0, 0, 0, 0);
+					tempStruct.endColor = math::Color(0, 0, 0, 0);
+					tempStruct.minSize = 0;
+					tempStruct.maxSize = 0;
+					tempStruct.endSize = 0;
+					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, tempStruct);
+					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
+					m_spawnedParticleCount = m_maxNrOfParticles;
+					graphics::ParticleSystem::UpdateParticles(this);
+					m_firstFrame = true;
+				}
+
 
 				if (m_isEmitting && !m_paused)
 				{
@@ -97,22 +118,6 @@ namespace thomas
 					if (numberOfParticlesToEmit > 0)
 					{
 						m_emissionTimer = 0;
-						if (m_shouldUpdateResources)
-						{
-							m_shouldUpdateResources = false;
-							CreateParticleUAVsandSRVs();
-
-							float minSize = m_particleBufferStruct.minSize;
-							float maxSize = m_particleBufferStruct.maxSize;
-							float endSize = m_particleBufferStruct.endSize;
-							m_particleBufferStruct.minSize = m_particleBufferStruct.maxDelay = m_particleBufferStruct.endSize = 0;
-							graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
-							m_particleBufferStruct.minSize = minSize;
-							m_particleBufferStruct.maxSize = maxSize;
-							m_particleBufferStruct.endSize = endSize;
-
-
-						}
 						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + math::Vector3::Transform(m_offset, math::Matrix::CreateFromQuaternion(m_gameObject->m_transform->GetRotation())) ;
 						SetDirection(m_directionVector);
 						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;

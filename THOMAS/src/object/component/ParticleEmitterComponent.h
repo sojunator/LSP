@@ -16,7 +16,8 @@ namespace thomas
 			{
 			public:
 				
-
+				bool m_firstFrame;
+				bool m_secondFrame;
 				enum class BlendStates {
 					ADDITIVE,
 					ALPHA_BLEND
