@@ -16,6 +16,7 @@ public:
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
 		m_islands = new thomas::Islands(30, mat, 512, 2048, 1 / 8.f, 4096);
 		int nrOfIslands = m_islands->GetNrOfIslands();
+		m_lootedTreasure = 0;
 		for (int i = 0; i < nrOfIslands; i++)
 		{
 			math::Vector3 pos = m_islands->GetCenter(i);
@@ -76,6 +77,7 @@ public:
 				m_islandObjects[i]->Looting(gotLoot);
 			}
 		}
+		m_lootedTreasure = 0;
 		return treasure;
 	}
 
@@ -110,7 +112,12 @@ public:
 		}
 	}
 
+	int GetLootedTreasure()
+	{
+		return (int)m_lootedTreasure;
+	}
 private:
 	thomas::Islands* m_islands;
 	std::vector<IslandObject*> m_islandObjects;
+	float m_lootedTreasure;
 };
