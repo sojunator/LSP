@@ -39,6 +39,8 @@ namespace thomas {
 			static void BindDepthBufferTexture();
 			static void UnbindDepthBufferTexture();
 
+			static void ResetDepthStencilState();
+
 		private:
 			struct GameObjectBuffer
 			{
