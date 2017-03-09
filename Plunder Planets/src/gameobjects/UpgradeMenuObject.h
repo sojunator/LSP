@@ -35,8 +35,14 @@ public:
 	void SetSelectedObject();
 
 private:
+	component::Camera* fov;
 	component::ParticleEmitterComponent* m_wormhole;
-	component::SpriteComponent* m_header;
+	component::SpriteComponent* m_cannonInfo;
+	component::SpriteComponent* m_movementInfo;
+	component::SpriteComponent* m_resourceInfo;
+	component::SpriteComponent* m_shieldInfo;
+	component::SpriteComponent* m_healthInfo;
+	component::SpriteComponent* m_plunderInfo;
 	component::SpriteComponent* m_startButton;
 	component::SpriteComponent* m_cannonIcon;
 	component::SpriteComponent* m_cannonTalent1;
@@ -93,4 +99,6 @@ private:
 	int m_xArray[2] = { 1, 0 };		//2 columns
 	float m_delay = 0.3f;
 	float m_upgradeDelay = 0.3f;
+	int m_healthRepairCounts = 0;
+	int m_refundHolder = 0;
 };

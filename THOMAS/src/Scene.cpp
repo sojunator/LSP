@@ -171,6 +171,9 @@ namespace thomas
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
+
+
+		ThomasCore::GetDeviceContext()->OMSetDepthStencilState(graphics::ParticleSystem::GetDepthStencilState(), 1);
 		for (object::GameObject* gameObject : object::GameObject::FindGameObjectsWithComponent<object::component::ParticleEmitterComponent>())
 		{
 			if (gameObject->GetActive())
@@ -181,6 +184,7 @@ namespace thomas
 				}
 		}
 
+		graphics::Renderer::ResetDepthStencilState();
 	}
 
 

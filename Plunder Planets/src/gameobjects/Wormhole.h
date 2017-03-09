@@ -79,7 +79,7 @@ public:
 	{
 		if (!m_spawned)
 		{
-			m_time += ThomasTime::GetDeltaTime();
+			m_time += ThomasTime::GetActualDeltaTime();
 			m_camera->m_transform->SetPosition(m_transform->GetPosition() + math::Vector3(200, 20, 0));
 			m_camera->m_transform->LookAt(m_transform->GetPosition());
 		}
@@ -120,7 +120,9 @@ public:
 
 	void EndLevel()
 	{
-		m_time += ThomasTime::GetDeltaTime();
+		m_time += ThomasTime::GetActualDeltaTime();
+		
+
 		if (m_time < 5.0)
 		{	
 			Input::Vibrate(1, 1);

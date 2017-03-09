@@ -4,7 +4,12 @@
 void UpgradeMenuObject::Start()
 {
 	component::Camera* cam = AddComponent<component::Camera>();
-	m_header = AddComponent<component::SpriteComponent>();
+	m_cannonInfo = AddComponent<component::SpriteComponent>();
+	m_movementInfo = AddComponent<component::SpriteComponent>();
+	m_resourceInfo = AddComponent<component::SpriteComponent>();
+	m_shieldInfo = AddComponent<component::SpriteComponent>();
+	m_healthInfo = AddComponent<component::SpriteComponent>();
+	m_plunderInfo = AddComponent<component::SpriteComponent>();
 	m_startButton = AddComponent<component::SpriteComponent>();
 	m_cannonIcon = AddComponent<component::SpriteComponent>();
 	m_cannonTalent1 = AddComponent<component::SpriteComponent>();
@@ -50,6 +55,8 @@ void UpgradeMenuObject::Start()
 	m_repairCosts = AddComponent<component::TextComponent>();
 	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
+	cam->SetFov(50); //makes wormhole fit screen
+
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
@@ -62,29 +69,69 @@ void UpgradeMenuObject::Start()
 	m_currentGold->SetScale(2.0f);
 	m_currentGold->SetPositionX(35);
 	m_currentGold->SetPositionY(15);
-	m_currentGold->SetDropshadow(false);
+	m_currentGold->SetDropshadow(true);
 	m_currentGold->SetOutline(true);
 	m_currentGold->SetOrigin(false);
 
 	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
 	m_currentHealth->SetFont("Pirate");
-	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast) + "/ 100");
 	m_currentHealth->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
 	m_currentHealth->SetRotation(0.0f);
 	m_currentHealth->SetScale(1.0f);
-	m_currentHealth->SetPositionX(1330);
+	m_currentHealth->SetPositionX(1250);
 	m_currentHealth->SetPositionY(45);
-	m_currentHealth->SetDropshadow(false);
+	m_currentHealth->SetDropshadow(true);
 	m_currentHealth->SetOutline(true);
 	m_currentHealth->SetOrigin(false);
 
-	m_header->SetName("Header");
-	m_header->SetPositionX(722);
-	m_header->SetPositionY(20);
-	m_header->SetScale(math::Vector2(2.0f, 2.0f));
-	m_header->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_header->SetHoverColor(math::Color(0.5, 0.5, 0.5));
-	m_header->SetInteractable(false);
+	m_cannonInfo->SetName("CannonInfo");
+	m_cannonInfo->SetPositionX(680);
+	m_cannonInfo->SetPositionY(150);
+	m_cannonInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_cannonInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_cannonInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_cannonInfo->SetInteractable(false);
+
+	m_movementInfo->SetName("MovementInfo");
+	m_movementInfo->SetPositionX(680);
+	m_movementInfo->SetPositionY(150);
+	m_movementInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_movementInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_movementInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_movementInfo->SetInteractable(false);
+
+	m_resourceInfo->SetName("ResourceInfo");
+	m_resourceInfo->SetPositionX(680);
+	m_resourceInfo->SetPositionY(150);
+	m_resourceInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_resourceInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_resourceInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_resourceInfo->SetInteractable(false);
+
+	m_shieldInfo->SetName("ShieldInfo");
+	m_shieldInfo->SetPositionX(680);
+	m_shieldInfo->SetPositionY(150);
+	m_shieldInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_shieldInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_shieldInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_shieldInfo->SetInteractable(false);
+
+	m_healthInfo->SetName("HealthInfo");
+	m_healthInfo->SetPositionX(680);
+	m_healthInfo->SetPositionY(150);
+	m_healthInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_healthInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_healthInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_healthInfo->SetInteractable(false);
+
+	m_plunderInfo->SetName("PlunderInfo");
+	m_plunderInfo->SetPositionX(680);
+	m_plunderInfo->SetPositionY(150);
+	m_plunderInfo->SetScale(math::Vector2(1.0f, 1.0f));
+	m_plunderInfo->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_plunderInfo->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_plunderInfo->SetInteractable(false);
 
 	m_startButton->SetName("UpgradeMenuStart");
 	m_startButton->SetPositionX(1450);
@@ -104,18 +151,7 @@ void UpgradeMenuObject::Start()
 	m_cannonIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonIcon->SetInteractable(true);
 
-	m_cannonCosts->SetFont("Pirate");
-	m_cannonCosts->SetOutput("200/300/500/750/1000");
-	m_cannonCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_cannonCosts->SetRotation(0.0f);
-	m_cannonCosts->SetScale(1.0f);
-	m_cannonCosts->SetPositionX(50);
-	m_cannonCosts->SetPositionY(150);
-	m_cannonCosts->SetDropshadow(false);
-	m_cannonCosts->SetOutline(true);
-	m_cannonCosts->SetOrigin(false);
-
-	m_cannonTalent1->SetName("CannonTalent1");
+	m_cannonTalent1->SetName("Talent");
 	m_cannonTalent1->SetPositionX(220);
 	m_cannonTalent1->SetPositionY(250);
 	m_cannonTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -123,7 +159,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent1->SetInteractable(false);
 
-	m_cannonTalent2->SetName("CannonTalent2");
+	m_cannonTalent2->SetName("Talent");
 	m_cannonTalent2->SetPositionX(285);
 	m_cannonTalent2->SetPositionY(250);
 	m_cannonTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -131,7 +167,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent2->SetInteractable(false);
 
-	m_cannonTalent3->SetName("CannonTalent3");
+	m_cannonTalent3->SetName("Talent");
 	m_cannonTalent3->SetPositionX(350);
 	m_cannonTalent3->SetPositionY(250);
 	m_cannonTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -139,7 +175,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent3->SetInteractable(false);
 
-	m_cannonTalent4->SetName("CannonTalent4");
+	m_cannonTalent4->SetName("Talent");
 	m_cannonTalent4->SetPositionX(415);
 	m_cannonTalent4->SetPositionY(250);
 	m_cannonTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -147,7 +183,7 @@ void UpgradeMenuObject::Start()
 	m_cannonTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_cannonTalent4->SetInteractable(false);
 
-	m_cannonTalent5->SetName("CannonTalent5");
+	m_cannonTalent5->SetName("Talent");
 	m_cannonTalent5->SetPositionX(480);
 	m_cannonTalent5->SetPositionY(225);
 	m_cannonTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -164,18 +200,7 @@ void UpgradeMenuObject::Start()
 	m_movementIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementIcon->SetInteractable(true);
 
-	m_movementCosts->SetFont("Pirate");
-	m_movementCosts->SetOutput("200/300/500/750/1000");
-	m_movementCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_movementCosts->SetRotation(0.0f);
-	m_movementCosts->SetScale(1.0f);
-	m_movementCosts->SetPositionX(50);
-	m_movementCosts->SetPositionY(375);
-	m_movementCosts->SetDropshadow(false);
-	m_movementCosts->SetOutline(true);
-	m_movementCosts->SetOrigin(false);
-
-	m_movementTalent1->SetName("MovementTalent1");
+	m_movementTalent1->SetName("Talent");
 	m_movementTalent1->SetPositionX(220);
 	m_movementTalent1->SetPositionY(475);
 	m_movementTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -183,7 +208,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent1->SetInteractable(false);
 
-	m_movementTalent2->SetName("MovementTalent2");
+	m_movementTalent2->SetName("Talent");
 	m_movementTalent2->SetPositionX(285);
 	m_movementTalent2->SetPositionY(475);
 	m_movementTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -191,7 +216,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent2->SetInteractable(false);
 
-	m_movementTalent3->SetName("MovementTalent3");
+	m_movementTalent3->SetName("Talent");
 	m_movementTalent3->SetPositionX(350);
 	m_movementTalent3->SetPositionY(475);
 	m_movementTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -199,7 +224,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent3->SetInteractable(false);
 
-	m_movementTalent4->SetName("MovementTalent4");
+	m_movementTalent4->SetName("Talent");
 	m_movementTalent4->SetPositionX(415);
 	m_movementTalent4->SetPositionY(475);
 	m_movementTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -207,7 +232,7 @@ void UpgradeMenuObject::Start()
 	m_movementTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_movementTalent4->SetInteractable(false);
 
-	m_movementTalent5->SetName("MovementTalent5");
+	m_movementTalent5->SetName("Talent");
 	m_movementTalent5->SetPositionX(480);
 	m_movementTalent5->SetPositionY(450);
 	m_movementTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -224,18 +249,7 @@ void UpgradeMenuObject::Start()
 	m_resourceIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceIcon->SetInteractable(true);
 
-	m_resourceCosts->SetFont("Pirate");
-	m_resourceCosts->SetOutput("200/300/500/750/1000");
-	m_resourceCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_resourceCosts->SetRotation(0.0f);
-	m_resourceCosts->SetScale(1.0f);
-	m_resourceCosts->SetPositionX(50);
-	m_resourceCosts->SetPositionY(600);
-	m_resourceCosts->SetDropshadow(false);
-	m_resourceCosts->SetOutline(true);
-	m_resourceCosts->SetOrigin(false);
-
-	m_resourceTalent1->SetName("ResourceTalent1");
+	m_resourceTalent1->SetName("Talent");
 	m_resourceTalent1->SetPositionX(220);
 	m_resourceTalent1->SetPositionY(700);
 	m_resourceTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -243,7 +257,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent1->SetInteractable(false);
 
-	m_resourceTalent2->SetName("ResourceTalent2");
+	m_resourceTalent2->SetName("Talent");
 	m_resourceTalent2->SetPositionX(285);
 	m_resourceTalent2->SetPositionY(700);
 	m_resourceTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -251,7 +265,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent2->SetInteractable(false);
 
-	m_resourceTalent3->SetName("ResourceTalent3");
+	m_resourceTalent3->SetName("Talent");
 	m_resourceTalent3->SetPositionX(350);
 	m_resourceTalent3->SetPositionY(700);
 	m_resourceTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -259,7 +273,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent3->SetInteractable(false);
 
-	m_resourceTalent4->SetName("ResourceTalent4");
+	m_resourceTalent4->SetName("Talent");
 	m_resourceTalent4->SetPositionX(415);
 	m_resourceTalent4->SetPositionY(700);
 	m_resourceTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -267,7 +281,7 @@ void UpgradeMenuObject::Start()
 	m_resourceTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_resourceTalent4->SetInteractable(false);
 
-	m_resourceTalent5->SetName("ResourceTalent5");
+	m_resourceTalent5->SetName("Talent");
 	m_resourceTalent5->SetPositionX(480);
 	m_resourceTalent5->SetPositionY(675);
 	m_resourceTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -284,18 +298,7 @@ void UpgradeMenuObject::Start()
 	m_shieldIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldIcon->SetInteractable(true);
 
-	m_shieldCosts->SetFont("Pirate");
-	m_shieldCosts->SetOutput("250/250/250/250/750");
-	m_shieldCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_shieldCosts->SetRotation(0.0f);
-	m_shieldCosts->SetScale(1.0f);
-	m_shieldCosts->SetPositionX(1320);
-	m_shieldCosts->SetPositionY(150);
-	m_shieldCosts->SetDropshadow(false);
-	m_shieldCosts->SetOutline(true);
-	m_shieldCosts->SetOrigin(false);
-
-	m_shieldTalent1->SetName("ShieldTalent1");
+	m_shieldTalent1->SetName("Talent");
 	m_shieldTalent1->SetPositionX(1600);
 	m_shieldTalent1->SetPositionY(225);
 	m_shieldTalent1->SetScale(math::Vector2(2.0f, 2.0f));
@@ -303,7 +306,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent1->SetInteractable(false);
 
-	m_shieldTalent2->SetName("ShieldTalent2");
+	m_shieldTalent2->SetName("Talent");
 	m_shieldTalent2->SetPositionX(1535);
 	m_shieldTalent2->SetPositionY(250);
 	m_shieldTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -311,7 +314,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent2->SetInteractable(false);
 
-	m_shieldTalent3->SetName("ShieldTalent3");
+	m_shieldTalent3->SetName("Talent");
 	m_shieldTalent3->SetPositionX(1470);
 	m_shieldTalent3->SetPositionY(250);
 	m_shieldTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -319,7 +322,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent3->SetInteractable(false);
 
-	m_shieldTalent4->SetName("ShieldTalent4");
+	m_shieldTalent4->SetName("Talent");
 	m_shieldTalent4->SetPositionX(1405);
 	m_shieldTalent4->SetPositionY(250);
 	m_shieldTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -327,7 +330,7 @@ void UpgradeMenuObject::Start()
 	m_shieldTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_shieldTalent4->SetInteractable(false);
 
-	m_shieldTalent5->SetName("ShieldTalent5");
+	m_shieldTalent5->SetName("Talent");
 	m_shieldTalent5->SetPositionX(1340);
 	m_shieldTalent5->SetPositionY(250);
 	m_shieldTalent5->SetScale(math::Vector2(1.0f, 1.0f));
@@ -344,18 +347,7 @@ void UpgradeMenuObject::Start()
 	m_repairIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_repairIcon->SetInteractable(true);
 
-	m_repairCosts->SetFont("Pirate");
-	m_repairCosts->SetOutput("15 gold / health missing");
-	m_repairCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_repairCosts->SetRotation(0.0f);
-	m_repairCosts->SetScale(1.0f);
-	m_repairCosts->SetPositionX(1320);
-	m_repairCosts->SetPositionY(375);
-	m_repairCosts->SetDropshadow(false);
-	m_repairCosts->SetOutline(true);
-	m_repairCosts->SetOrigin(false);
-
-	m_repairTalent1->SetName("RepairTalent1");
+	m_repairTalent1->SetName("Talent");
 	m_repairTalent1->SetPositionX(1600);
 	m_repairTalent1->SetPositionY(450);
 	m_repairTalent1->SetScale(math::Vector2(2.0f, 2.0f));
@@ -372,18 +364,7 @@ void UpgradeMenuObject::Start()
 	m_plunderIcon->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderIcon->SetInteractable(true);
 
-	m_plunderSpeedCosts->SetFont("Pirate");
-	m_plunderSpeedCosts->SetOutput("1000/750/500/300/200");
-	m_plunderSpeedCosts->SetColor(math::Vector3(1.0f, 0.85f, 0.0f));
-	m_plunderSpeedCosts->SetRotation(0.0f);
-	m_plunderSpeedCosts->SetScale(1.0f);
-	m_plunderSpeedCosts->SetPositionX(1320);
-	m_plunderSpeedCosts->SetPositionY(600);
-	m_plunderSpeedCosts->SetDropshadow(false);
-	m_plunderSpeedCosts->SetOutline(true);
-	m_plunderSpeedCosts->SetOrigin(false);
-
-	m_plunderTalent1->SetName("PlunderTalent1");
+	m_plunderTalent1->SetName("Talent");
 	m_plunderTalent1->SetPositionX(1650);
 	m_plunderTalent1->SetPositionY(700);
 	m_plunderTalent1->SetScale(math::Vector2(1.0f, 1.0f));
@@ -391,7 +372,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent1->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent1->SetInteractable(false);
 
-	m_plunderTalent2->SetName("PlunderTalent2");
+	m_plunderTalent2->SetName("Talent");
 	m_plunderTalent2->SetPositionX(1585);
 	m_plunderTalent2->SetPositionY(700);
 	m_plunderTalent2->SetScale(math::Vector2(1.0f, 1.0f));
@@ -399,7 +380,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent2->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent2->SetInteractable(false);
 
-	m_plunderTalent3->SetName("PlunderTalent3");
+	m_plunderTalent3->SetName("Talent");
 	m_plunderTalent3->SetPositionX(1520);
 	m_plunderTalent3->SetPositionY(700);
 	m_plunderTalent3->SetScale(math::Vector2(1.0f, 1.0f));
@@ -407,7 +388,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent3->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent3->SetInteractable(false);
 
-	m_plunderTalent4->SetName("PlunderTalent4");
+	m_plunderTalent4->SetName("Talent");
 	m_plunderTalent4->SetPositionX(1455);
 	m_plunderTalent4->SetPositionY(700);
 	m_plunderTalent4->SetScale(math::Vector2(1.0f, 1.0f));
@@ -415,7 +396,7 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent4->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_plunderTalent4->SetInteractable(false);
 
-	m_plunderTalent5->SetName("PlunderTalent5");
+	m_plunderTalent5->SetName("Talent");
 	m_plunderTalent5->SetPositionX(1340);
 	m_plunderTalent5->SetPositionY(675);
 	m_plunderTalent5->SetScale(math::Vector2(2.0f, 2.0f));
@@ -442,6 +423,7 @@ void UpgradeMenuObject::Start()
 	m_wormhole->SetRotationSpeed(math::DegreesToRadians(5));
 	m_wormhole->SetOffset(cam->m_gameObject->m_transform->Forward() * 50);
 	m_wormhole->StartEmitting();
+
 }
 
 void UpgradeMenuObject::Update()
@@ -481,7 +463,7 @@ void UpgradeMenuObject::Update()
 	Navigation();
 	
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
-		ThomasCore::Exit();
+		Scene::LoadScene<MenuScene>();
 
 	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
 		Scene::LoadScene<GameScene>();
@@ -496,7 +478,7 @@ void UpgradeMenuObject::UpdateGoldCounter()
 void UpgradeMenuObject::UpdateHealthCounter()
 {
 	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
-	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast));
+	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast) + "/ 100");
 }
 
 void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
@@ -511,6 +493,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(1); //Increase Cannon Dmg/Spread/Quantity first time
 				ShipStats::s_playerStats->SetTreasure(-200);
+				m_cannonIcon->SetName("CannonIcon1");
 			}
 			else if (undo) //Doesn't need an if(undo), could just be else, but more clear what is happening this way
 			{
@@ -518,6 +501,8 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(0); //Undo first upgrade
 				ShipStats::s_playerStats->SetTreasure(200);
+				m_cannonIcon->SetName("CannonIcon");
+
 			}
 		}
 		else if ((upgrade && m_cannonCheck[0] && !m_cannonCheck[1]) || (undo && !m_cannonCheck[2] && m_cannonCheck[1]))
@@ -528,6 +513,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Increase Cannon Dmg/Spread/Quantity second time
 				ShipStats::s_playerStats->SetTreasure(-300);
+				m_cannonIcon->SetName("CannonIcon2");
 			}
 			else if (undo)
 			{
@@ -535,6 +521,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(1);//Undo second upgrade
 				ShipStats::s_playerStats->SetTreasure(300);
+				m_cannonIcon->SetName("CannonIcon1");
 			}
 		}
 		else if ((upgrade && m_cannonCheck[1] && !m_cannonCheck[2]) || (undo && !m_cannonCheck[3] && m_cannonCheck[2]))
@@ -545,6 +532,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Increase Cannon Dmg/Spread/Quantity third time
 				ShipStats::s_playerStats->SetTreasure(-500);
+				m_cannonIcon->SetName("CannonIcon3");
 			}
 			else if (undo)
 			{
@@ -552,6 +540,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(2);//Undo third upgrade
 				ShipStats::s_playerStats->SetTreasure(500);
+				m_cannonIcon->SetName("CannonIcon2");
 			}
 		}
 		else if ((upgrade && m_cannonCheck[2] && !m_cannonCheck[3]) || (undo && !m_cannonCheck[4] && m_cannonCheck[3]))
@@ -562,6 +551,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Increase Cannon Dmg/Spread/Quantity fourth time
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_cannonIcon->SetName("CannonIcon4");
 			}
 			else if (undo)
 			{
@@ -569,6 +559,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(3);//Undo fourth upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_cannonIcon->SetName("CannonIcon3");
 			}
 		}
 		else if ((upgrade && m_cannonCheck[3] && !m_cannonCheck[4]) || (undo && m_cannonCheck[4]))
@@ -579,6 +570,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseCannonDamage(5);//Increase Cannon Dmg/Spread/Quantity fifth time
 				ShipStats::s_playerStats->SetTreasure(-1000);
+				m_cannonIcon->SetName("CannonIcon5");
 				//Shoot double projectiles
 			}
 			else if (undo)
@@ -587,6 +579,7 @@ void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)
 				m_cannonCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseCannonDamage(4);//Undo fifth upgrade
 				ShipStats::s_playerStats->SetTreasure(1000);
+				m_cannonIcon->SetName("CannonIcon4");
 			}
 		}
 	}
@@ -604,6 +597,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(1);//Increase movement speed first time
 				ShipStats::s_playerStats->SetTreasure(-200);
+				m_movementIcon->SetName("MovementIcon1");
 			}
 			if (undo)
 			{
@@ -611,6 +605,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(0);//Undo first movement upgrade
 				ShipStats::s_playerStats->SetTreasure(200);
+				m_movementIcon->SetName("MovementIcon");
 			}
 		}
 		else if ((upgrade && m_movementCheck[0] && !m_movementCheck[1]) || (undo && !m_movementCheck[2] && m_movementCheck[1]))
@@ -621,6 +616,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(2);//Increase movement speed second time
 				ShipStats::s_playerStats->SetTreasure(-300);
+				m_movementIcon->SetName("MovementIcon2");
 			}
 			if (undo)
 			{
@@ -628,6 +624,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(1);//Undo second movement upgrade
 				ShipStats::s_playerStats->SetTreasure(300);
+				m_movementIcon->SetName("MovementIcon1");
 			}
 		}
 		else if ((upgrade && m_movementCheck[1] && !m_movementCheck[2]) || (undo && !m_movementCheck[3] && m_movementCheck[2]))
@@ -638,6 +635,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Increase movement speed third time
 				ShipStats::s_playerStats->SetTreasure(-500);
+				m_movementIcon->SetName("MovementIcon3");
 			}
 			if (undo)
 			{
@@ -645,6 +643,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(2);//Undo third movement upgrade
 				ShipStats::s_playerStats->SetTreasure(500);
+				m_movementIcon->SetName("MovementIcon2");
 			}
 		}
 		else if ((upgrade && m_movementCheck[2] && !m_movementCheck[3]) || (undo && !m_movementCheck[4] && m_movementCheck[3]))
@@ -655,6 +654,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(4);//Increase movement speed fourth time
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_movementIcon->SetName("MovementIcon4");
 			}
 			if (undo)
 			{
@@ -662,6 +662,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(3);//Undo fourth movement upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_movementIcon->SetName("MovementIcon3");
 			}
 		}
 		else if ((upgrade && m_movementCheck[3] && !m_movementCheck[4]) || (undo && m_movementCheck[4] && m_movementCheck[4]))
@@ -672,6 +673,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseSpeed(5);//Increase movement speed fifth time
 				ShipStats::s_playerStats->SetTreasure(-1000);
+				m_movementIcon->SetName("MovementIcon5");
 			}
 			if (undo)
 			{
@@ -679,6 +681,7 @@ void UpgradeMenuObject::MovementCheck(bool upgrade, bool undo)
 				m_movementCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseSpeed(4);//Undo fifth movement upgrade
 				ShipStats::s_playerStats->SetTreasure(1000);
+				m_movementIcon->SetName("MovementIcon4");
 			}
 		}
 	}
@@ -788,6 +791,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[0] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_shieldIcon->SetName("ShieldIcon1");
 			}
 			else if (undo)
 			{
@@ -795,6 +799,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[0] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(0);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_shieldIcon->SetName("ShieldIcon");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[0] && !m_shieldCheck[1]) || (undo && !m_shieldCheck[2] && m_shieldCheck[1]))
@@ -805,6 +810,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[1] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon2");
 			}
 			else if (undo)
 			{
@@ -812,6 +818,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[1] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon1");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[1] && !m_shieldCheck[2]) || (undo && !m_shieldCheck[3] && m_shieldCheck[2]))
@@ -822,6 +829,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[2] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon3");
 			}
 			else if (undo)
 			{
@@ -829,6 +837,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[2] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(2);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon2");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[2] && !m_shieldCheck[3]) || (undo && !m_shieldCheck[4] && m_shieldCheck[3]))
@@ -839,6 +848,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[3] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon4");
 			}
 			else if (undo)
 			{
@@ -846,6 +856,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[3] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(3);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon3");
 			}
 		}
 		else if ((upgrade && m_shieldCheck[3] && !m_shieldCheck[4]) || (undo && m_shieldCheck[4]))
@@ -856,6 +867,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[4] = true;
 				ShipStats::s_playerStats->IncreaseShieldAmount(5);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-250);
+				m_shieldIcon->SetName("ShieldIcon5");
 			}
 			else if (undo)
 			{
@@ -863,6 +875,7 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				m_shieldCheck[4] = false;
 				ShipStats::s_playerStats->IncreaseShieldAmount(4);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(250);
+				m_shieldIcon->SetName("ShieldIcon4");
 			}
 		}
 	}
@@ -872,23 +885,49 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 {
 	if (m_repairIcon->isHovering())
 	{
-		if ((!m_repairCheck[0] && upgrade && (ShipStats::s_playerStats->GetHealthAmount() != 1))|| (m_repairCheck[0] && undo)) //If upgrading or undoing, checks if not already full hp
+		if ((!m_repairCheck[0] && upgrade && (ShipStats::s_playerStats->GetHealthAmount() != 1))|| (m_healthRepairCounts > 0 && undo)) //If upgrading or undoing, checks if not already full hp
 		{
 			float goldCost = 100 * (1 - ShipStats::s_playerStats->GetHealthAmount()) * 15;
 			float goldRefund = 100 * (ShipStats::s_playerStats->GetPlaceholderHealthAmount()) * 15;
 
 			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= goldCost))
 			{
-				m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				ShipStats::s_playerStats->RepairHealth(1); //Repair health
-				ShipStats::s_playerStats->SetTreasure(-goldCost);
-				m_repairCheck[0] = true;
+				if (ShipStats::s_playerStats->GetHealthAmount() <= 0.75)
+				{
+					m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+					m_refundHolder = 25;
+					m_healthRepairCounts += 1;
+
+					goldCost = 25 * 15; //Can Repair 25 health, costs 15 each
+					ShipStats::s_playerStats->RepairHealth(1); //Repair health
+					ShipStats::s_playerStats->SetTreasure(-goldCost);
+					if(ShipStats::s_playerStats->GetHealthAmount() == 1)
+						m_repairCheck[0] = true;
+				}
+				else if (ShipStats::s_playerStats->GetHealthAmount() > 0.75)
+				{
+					m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+					int castHealth = ShipStats::s_playerStats->GetHealthAmount() * 100;
+					m_refundHolder = 100 - castHealth;
+					m_healthRepairCounts += 1;
+					
+					goldCost = (100 - castHealth) * 15; //Can Repair less than 25 health, costs 15 each
+					ShipStats::s_playerStats->RepairHealth(1); //Repair health
+					ShipStats::s_playerStats->SetTreasure(-goldCost);
+					if (ShipStats::s_playerStats->GetHealthAmount() == 1)
+						m_repairCheck[0] = true;
+				}
 			}
 			else if (undo)
 			{
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				if (ShipStats::s_playerStats->GetHealthAmount() == 1)
+					goldRefund = m_refundHolder * 15; //Refunds less than 25 health * 15 gold each
+				else
+					goldRefund = 25 * 15;
 				ShipStats::s_playerStats->RepairHealth(0); //Reset health
 				ShipStats::s_playerStats->SetTreasure(goldRefund);
+				m_healthRepairCounts -= 1;
 				m_repairCheck[0] = false;
 			}
 		}
@@ -1070,46 +1109,86 @@ void UpgradeMenuObject::SetSelectedObject()
 		if ((m_yArray[i] == 1) && (m_xArray[0] == 1)) //Left side is selected, set highlights
 		{
 			if (i == 0)
+			{
 				m_cannonIcon->SetHovering(true);
+				m_cannonInfo->SetActive(true);
+			}
 			if (i == 1)
+			{
 				m_movementIcon->SetHovering(true);
+				m_movementInfo->SetActive(true);
+			}
 			if (i == 2)
+			{
 				m_resourceIcon->SetHovering(true);
-
+				m_resourceInfo->SetActive(true);
+			}
 			m_shieldIcon->SetHovering(false);
+			m_shieldInfo->SetActive(false);
 			m_repairIcon->SetHovering(false);
+			m_healthInfo->SetActive(false);
 			m_plunderIcon->SetHovering(false);
+			m_plunderInfo->SetActive(false);
 		}
 		else if ((m_yArray[i] == 0) && (m_xArray[0] == 1)) //Left side is selected, remove highlights
 		{
 			if (i == 0)
+			{
 				m_cannonIcon->SetHovering(false);
+				m_cannonInfo->SetActive(false);
+			}
 			if (i == 1)
+			{
 				m_movementIcon->SetHovering(false);
+				m_movementInfo->SetActive(false);
+			}
 			if (i == 2)
+			{
 				m_resourceIcon->SetHovering(false);
-			m_shieldIcon->SetHovering(false);
+				m_resourceInfo->SetActive(false);
+			}
 		}
 		else if (m_xArray[1] == 1 && m_yArray[i] == 1) //Right side is selected, set highlights
 		{
 			if (i == 0)
+			{
 				m_shieldIcon->SetHovering(true);
+				m_shieldInfo->SetActive(true);
+			}
 			if (i == 1)
+			{
 				m_repairIcon->SetHovering(true);
+				m_healthInfo->SetActive(true);
+			}
 			if (i == 2)
+			{
 				m_plunderIcon->SetHovering(true);
+				m_plunderInfo->SetActive(true);
+			}
 		}
 		else if ((m_yArray[i] == 0) && (m_xArray[1] == 1)) //Right side selected, remove highlights
 		{
 			if (i == 0)
+			{
 				m_shieldIcon->SetHovering(false);
+				m_shieldInfo->SetActive(false);
+			}
 			if (i == 1)
+			{
 				m_repairIcon->SetHovering(false);
+				m_healthInfo->SetActive(false);
+			}
 			if (i == 2)
+			{
 				m_plunderIcon->SetHovering(false);
+				m_plunderInfo->SetActive(false);
+			}
 			m_cannonIcon->SetHovering(false);
+			m_cannonInfo->SetActive(false);
 			m_movementIcon->SetHovering(false);
+			m_movementInfo->SetActive(false);
 			m_resourceIcon->SetHovering(false);
+			m_resourceInfo->SetActive(false);
 		}
 	}
 }
