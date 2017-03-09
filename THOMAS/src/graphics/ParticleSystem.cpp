@@ -69,6 +69,9 @@ namespace thomas
 
 		void ParticleSystem::Destroy()
 		{
+			SAFE_RELEASE(s_particleBlendState);
+			SAFE_RELEASE(s_cameraBuffer);
+			SAFE_RELEASE(s_matrixBuffer);
 		}
 
 		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix)

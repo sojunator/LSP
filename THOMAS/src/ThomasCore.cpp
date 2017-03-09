@@ -145,6 +145,7 @@ namespace thomas {
 	{
 		Scene::UnloadScene();
 		graphics::LightManager::Destroy();
+		graphics::ParticleSystem::Destroy();
 		graphics::Sprite::Destroy();
 		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
