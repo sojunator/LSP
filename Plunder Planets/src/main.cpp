@@ -36,6 +36,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//start
 	thomas::ThomasCore::Start();
+	
+	delete ShipStats::s_playerStats;
 
 	return (int)msg.wParam;
 }
