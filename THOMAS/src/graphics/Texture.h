@@ -41,6 +41,7 @@ namespace thomas
 			void SetTextureSampler(int textureMode);
 			void SetTextureSampler(SamplerState samplerState);
 		public:
+			static void ReleaseSamplers(); // Called upon exiting thomas core
 			static bool Init();
 			static Texture* CreateTexture(int mappingMode, TextureType type, std::string path);
 			static Texture* CreateTexture(SamplerState samplerState, TextureType type, std::string path);

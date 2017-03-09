@@ -150,6 +150,7 @@ namespace thomas {
 		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
+		graphics::Texture::ReleaseSamplers();
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
 		graphics::Renderer::Destroy();

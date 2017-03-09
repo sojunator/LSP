@@ -9,6 +9,13 @@ namespace thomas
 	{
 		std::vector<Texture*> Texture::s_loadedTextures;
 		Texture::SamplerStates Texture::s_samplerStates;
+		void Texture::ReleaseSamplers()
+		{
+			s_samplerStates.CLAMP->Release();
+			s_samplerStates.WRAP->Release();
+			s_samplerStates.DECAL->Release();
+			s_samplerStates.MIRROR->Release();
+		}
 		bool Texture::Init()
 		{
 			LOG("Creating Texture samplers");
@@ -372,11 +379,7 @@ namespace thomas
 
 			}
 			s_loadedTextures.clear();
-			
-			//s_samplerStates.CLAMP->Release();
-			//s_samplerStates.WRAP->Release();
-			//s_samplerStates.DECAL->Release();
-			//s_samplerStates.MIRROR->Release();
+		
 		}
 
 	}
