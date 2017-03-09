@@ -11,7 +11,6 @@ public:
 
 	void Start();
 	void Update();
-	void Destroy();
 	void SetModel(int island);
 	void SinkIsland();
 	void Looting(bool gotLoot);
@@ -23,5 +22,4 @@ private:
 	static thomas::object::component::SoundComponent* m_sound;
 	//thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
 	bool m_falling;
-	float m_startY;
 };

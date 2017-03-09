@@ -50,8 +50,10 @@ namespace thomas
 	{
 		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
-			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-			tempPlanes.verts[i].position.z -= m_worldPosOffset[island].z;
+			tempPlanes.verts[i].position.x -= m_size[island] / 2;
+			tempPlanes.verts[i].position.z += m_size[island] / 2;
+			//tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
+			//tempPlanes.verts[i].position.z -= m_worldPosOffset[island].z;
 		}
 	}
 
