@@ -361,6 +361,7 @@ void Ship::ShipAimCannons()
 		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
+			m_broadSideLeft->SetProjectileDmg(ShipStats::s_playerStats->GetCannonDamage());
 			m_broadSideLeft->Fire(); //Temporary fix
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			m_firingCost->StartEmitting();
@@ -393,6 +394,7 @@ void Ship::ShipAimCannons()
 		{
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
+			m_broadSideRight->SetProjectileDmg(ShipStats::s_playerStats->GetCannonDamage());
 			m_broadSideRight->Fire(); //Temporary fix
 			m_firingCost->StartEmitting();
 		}
@@ -546,6 +548,24 @@ void Ship::Float(float dt)
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
+	}
+}
+void Ship::TakeDamage(float dmg)
+{
+	float dmgRemaining = dmg;
+	if (m_armor > 0)
+	{
+		m_armor -= dmgRemaining;
+		dmgRemaining -= m_armor;
+	}
+	if (dmgRemaining > 0)
+	{
+		m_health -= dmgRemaining;
+	}
+
+	if (m_health <= 0)
+	{
+		Die();
 	}
 }
 void Ship::Update()
@@ -703,28 +723,10 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 	if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 	{
 		Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
-		if (p->m_spawnedBy == this)
-			return;
-
-		if (m_armor > 0)
+		
+		if (p->m_spawnedBy != this)
 		{
-			//m_armor -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
-			m_armor -= 5;
-			LOG("hit armor: " << m_armor);
+			TakeDamage(p->GetDamageAmount());
 		}
-		else if (m_armor <= 0)
-		{
-			//m_health -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
-			m_health -= 5;
-			LOG("hit hp: " << m_health);
-		}
-	
-		if (m_health <= 0)
-		{
-			LOG("You are dead!");
-			Scene::LoadScene<MenuScene>(); //Load Game Over instead
-			//Delete shipStats;
-		}
-
 	}
 }

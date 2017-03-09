@@ -17,6 +17,18 @@ public:
 	{
 	}
 
+	void Init(float difficulty)
+	{
+		float randVal = ((double)rand() / (RAND_MAX));
+		m_health = 20 + difficulty * randVal * 25;
+		m_speed = 150 + difficulty * randVal * 10;
+		m_turnSpeed = 80 + difficulty * randVal * 2.5f;
+
+		float projectileDmg = 5 + difficulty * randVal * 5;
+		m_broadSideLeft->SetProjectileDmg(projectileDmg);
+		m_broadSideRight->SetProjectileDmg(projectileDmg);
+	}
+
 	void Start()
 	{
 		m_mass = 500000;
@@ -337,16 +349,21 @@ public:
 		Float(dt);
 	}
 
+
+	void TakeDamage(float dmg)
+	{
+		m_health -= dmg;
+		if (m_health <= 0)
+			Die();
+	}
+
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
 		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
-			if (p->m_spawnedBy == this)
-				return;
-			m_health -= p->GetDamageAmount();
-			if (m_health <= 0)
-				Die();
+			if (p->m_spawnedBy != this)
+				TakeDamage(p->GetDamageAmount());
 		}
 
 	}

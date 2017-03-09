@@ -32,7 +32,7 @@ namespace thomas
 
 			void ParticleEmitterComponent::Start()
 			{
-				m_blendState = BlendStates::ADDITIVE;
+				m_blendState = BlendStates::ALPHA_BLEND;
 				m_offset = math::Vector3(0, 0, 0);
 				m_shouldUpdateResources = true;
 				m_emissionDuration = 1.0;

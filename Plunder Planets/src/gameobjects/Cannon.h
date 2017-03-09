@@ -110,7 +110,7 @@ public:
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
-				
+				p->SetDamageAmount(m_projectileDamage);
 				m_fire = false;
 				ReseedDelay();
 			}
@@ -134,6 +134,11 @@ public:
 		}
 	}
 
+	void SetProjectileDamage(float dmg)
+	{
+		m_projectileDamage = dmg;
+	}
+
 	~Cannon()
 	{
 
@@ -143,6 +148,7 @@ private:
 	bool m_fire;
 	float roof;
 	float m_monteCarloDelay;
+	float m_projectileDamage;
 	component::ParticleEmitterComponent* m_emitterSmoke;
 	component::ParticleEmitterComponent* m_emitterSmoke2;
 	component::ParticleEmitterComponent* m_emitterSpark;

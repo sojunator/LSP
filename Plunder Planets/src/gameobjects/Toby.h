@@ -18,6 +18,16 @@ public:
 	{
 	}
 
+	void Init(float difficulty)
+	{
+		float randVal = ((double)rand() / (RAND_MAX));
+		m_health = 5 + difficulty * randVal * 5;
+		m_speed = 200 + difficulty * randVal * 20;
+		m_turnSpeed = 50 + difficulty * randVal * 2.5f;
+		m_explosionDamage = 25 + difficulty * randVal * 10;
+	}
+
+
 	void Start()
 	{
 		m_mass = 500000;
@@ -335,16 +345,20 @@ public:
 		Float(dt);
 	}
 
+	void TakeDamage(float dmg)
+	{
+		m_health -= dmg;
+		if (m_health <= 0)
+			Die();
+	}
+
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
 		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile" && collision.thisRigidbody == m_rigidBody)
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
-			if (p->m_spawnedBy == this)
-				return;
-			m_health -= p->GetDamageAmount();
-			if (m_health <= 0)
-				Die();
+			if (p->m_spawnedBy != this)
+				TakeDamage(p->GetDamageAmount());
 		}
 		else if (collision.thisRigidbody == m_explosionCollider && collision.otherRigidbody != m_rigidBody && m_explode)
 		{
@@ -353,15 +367,38 @@ public:
 			float dmgModifier =  1-(distanceFromCenter / m_explosionRadius);
 			impulseVector.Normalize();
 			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier);
+
+
+			if(collision.otherRigidbody->m_gameObject->GetType() == "TobyEnemy")
+			{
+
+				Toby* tobyEnemy = (Toby*)collision.otherRigidbody->m_gameObject;
+				tobyEnemy->TakeDamage(dmgModifier*m_explosionDamage);
+			}
+			else if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
+			{
+
+				Ship* player = (Ship*)collision.otherRigidbody->m_gameObject;
+				player->TakeDamage(dmgModifier*m_explosionDamage);
+			}
+			else if (collision.otherRigidbody->m_gameObject->GetType() == "BasicEnemy")
+			{
+
+				BasicEnemy* basicEnemy = (BasicEnemy*)collision.otherRigidbody->m_gameObject;
+				basicEnemy->TakeDamage(dmgModifier*m_explosionDamage);
+			}
+
+
 		}
 		else if (collision.thisRigidbody == m_rigidBody && collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
 			Die();
 		}
-		
+
 
 
 	}
+
 
 	void Die()
 	{
@@ -376,11 +413,6 @@ private:
 	bool m_dead;
 	//Objects
 	ShipFloat* m_floats[12];
-	Broadside* m_broadSideRight;
-	Broadside* m_broadSideLeft;
-	Broadside* m_broadSideRightCannonball;
-	Broadside* m_broadSideLeftCannonball;
-	Broadside* m_broadSideFront;
 	//ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components
@@ -407,7 +439,7 @@ private:
 	bool m_moving;
 	bool m_explode;
 	float m_explosionRadius;
-
+	float m_explosionDamage;
 	//Sound
 	float m_soundDelay;
 	float m_soundDelayLeft;

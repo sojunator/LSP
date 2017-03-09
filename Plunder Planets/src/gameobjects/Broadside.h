@@ -105,6 +105,15 @@ public:
 		m_delayLeft -= dt;
 
 	}
+
+	void SetProjectileDmg(float dmg)
+	{
+		for (auto cannon : m_cannons)
+		{
+			cannon->SetProjectileDamage(dmg);
+		}
+	}
+
 	bool IncreasePitch(float pitch)
 	{
 		if (m_pitch < 10.f)
