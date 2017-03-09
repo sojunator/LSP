@@ -14,6 +14,7 @@ void IslandObject::Start()
 	m_sound->SetClip("fPlunder");
 	m_sound->SetLooping(true);
 	m_falling = false;
+	m_destroy = false;
 }
 
 void IslandObject::Update()
@@ -22,11 +23,10 @@ void IslandObject::Update()
 	thomas::math::Vector3 posTran = m_transform->GetPosition();
 	if (m_falling)
 	{
-
 		if (m_rigidBody->getWorldTransform().getOrigin().getY() <= -800)
 		{
-			m_rigidBody->SetActive(false);
-			Destroy(this);
+			m_destroy = true;
+			//Destroy(this);
 		}
 	}
 }
@@ -42,6 +42,7 @@ void IslandObject::SinkIsland()
 	{
 		m_rigidBody->SetKinematic(false);
 		m_rigidBody->SetMass(8000000);
+		m_rigidBody->activate();
 		m_falling = true;
 	}
 }
@@ -60,4 +61,9 @@ void IslandObject::PlaceRigidBody(float radius, thomas::math::Vector3 center)
 	m_rigidBody->SetCollider(new btSphereShape(radius));
 	m_rigidBody->SetKinematic(true);
 	m_frustrumCullingComponent->SetRadius(radius);
+}
+
+bool IslandObject::CheckDestory()
+{
+	return m_destroy;
 }

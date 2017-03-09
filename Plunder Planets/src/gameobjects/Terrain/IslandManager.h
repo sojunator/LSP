@@ -42,34 +42,39 @@ public:
 
 	float Plunder(math::Vector3 pos)
 	{
+		CheckForDeadIslands();
 		bool gotLoot = false;
 		math::Vector3 center;
 		float distance = 0;
 		float treasure = 0;
 		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
 		{
-			center = m_islands->GetCenter(i);
-			distance = math::Vector3::DistanceSquared(pos, center);
-			if (distance <= m_islands->GetPlunderRadiusSquared(i) && m_islands->GetTreasure(i))
+			if (m_islandObjects[i] != nullptr)	//If the island has been deleted
 			{
-				treasure = m_islands->StealTreasure(i);
-				gotLoot = true;
-				if (m_islands->GetTreasureLostSinceLastEnemy(i) > 500)
+				center = m_islands->GetCenter(i);
+				distance = math::Vector3::DistanceSquared(pos, center);
+				if (distance <= m_islands->GetPlunderRadiusSquared(i) && m_islands->GetTreasure(i))
 				{
-					/*m_islands->resetTreasureLost(i);
-					float r = ((double)rand() / (RAND_MAX)) + 1;
-					float rads = r * math::PI * 2;
-					math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
-					randDir.Normalize();
-					math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 30)*math::Vector3(randDir.x, 0, randDir.y);
-					Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, Scene::GetCurrentScene());*/
+					treasure = m_islands->StealTreasure(i);
+					gotLoot = true;
+					if (m_islands->GetTreasureLostSinceLastEnemy(i) > 500)
+					{
+						/*m_islands->resetTreasureLost(i);
+						float r = ((double)rand() / (RAND_MAX)) + 1;
+						float rads = r * math::PI * 2;
+						math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
+						randDir.Normalize();
+						math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 30)*math::Vector3(randDir.x, 0, randDir.y);
+						Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, Scene::GetCurrentScene());*/
+					}
 				}
+				else if (!m_islands->GetTreasure(i))
+				{
+					m_islandObjects[i]->SinkIsland();
+					//m_islandObjects.erase(i);
+				}
+				m_islandObjects[i]->Looting(gotLoot);
 			}
-			else if (!m_islands->GetTreasure(i))
-			{
-				m_islandObjects[i]->SinkIsland();
-			}
-			m_islandObjects[i]->Looting(gotLoot);
 		}
 		return treasure;
 	}
@@ -88,6 +93,21 @@ public:
 				return true;
 		}
 		return false;
+	}
+
+	void CheckForDeadIslands()
+	{
+		for (int i = 0; i < m_islandObjects.size(); i++)
+		{
+			if (m_islandObjects[i] != nullptr)
+			{
+				if (m_islandObjects[i]->CheckDestory())
+				{
+					delete m_islandObjects[i];
+					m_islandObjects[i] = nullptr;
+				}
+			}
+		}
 	}
 
 private:
