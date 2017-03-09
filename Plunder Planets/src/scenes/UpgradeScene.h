@@ -19,7 +19,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("CannonIcon", "../res/GUI/upgrade/cannon.png");
 			thomas::graphics::Sprite::LoadTexture("Talent", "../res/GUI/upgrade/talent.png");
 			thomas::graphics::Sprite::LoadTexture("MovementIcon", "../res/GUI/upgrade/speed.png");
-			thomas::graphics::Sprite::LoadTexture("ResourceIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceIcon", "../res/GUI/upgrade/moneys.png");
 			thomas::graphics::Sprite::LoadTexture("ShieldIcon", "../res/GUI/upgrade/shield.png");
 			thomas::graphics::Sprite::LoadTexture("RepairIcon", "../res/GUI/upgrade/repair.png");
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/plunder.png");
@@ -45,6 +45,12 @@ public:
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon3", "../res/GUI/upgrade/plunder3.png");
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon4", "../res/GUI/upgrade/plunder4.png");
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon5", "../res/GUI/upgrade/plunder5.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceIcon1", "../res/GUI/upgrade/moneys1.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceIcon2", "../res/GUI/upgrade/moneys2.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceIcon3", "../res/GUI/upgrade/moneys3.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceIcon4", "../res/GUI/upgrade/moneys4.png");
+			thomas::graphics::Sprite::LoadTexture("ResourceIcon5", "../res/GUI/upgrade/moneys5.png");
+
 		}
 		else if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_1610) //FIX FITTING LATER
 		{
