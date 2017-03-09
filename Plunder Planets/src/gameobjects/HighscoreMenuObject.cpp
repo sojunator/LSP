@@ -583,22 +583,6 @@ void HighscoreMenuObject::Start()
 
 void HighscoreMenuObject::Update()
 {
-	//if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
-	//{
-	//	if (m_exitButton->isHovering())
-	//		ThomasCore::Exit();
-
-	//	if (m_startButton->isHovering())
-	//	{
-	//		Scene::LoadScene<UpgradeScene>();
-	//	}
-
-	//	//Highscore
-	//}
-
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK) || Input::GetButtonDown(Input::Buttons::B))
 		Scene::LoadScene<MenuScene>();
-
-	/*if (Input::GetKeyDown(Input::Keys::Enter))
-		Scene::LoadScene<UpgradeScene>();*/
 }

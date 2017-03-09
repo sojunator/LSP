@@ -2,6 +2,8 @@
 #include "../scenes/HighscoreScene.h"
 #include "../scenes/UpgradeScene.h"
 #include "../scenes/SettingsScene.h"
+#include "../scenes/CreditsScene.h"
+
 void MainMenuObject::Start()
 {
 	m_backgrounds = AddComponent<component::SpriteComponent>();
@@ -118,6 +120,9 @@ void MainMenuObject::Update()
 		}
 		if (m_optionButton->isHovering())
 			Scene::LoadScene<SettingsScene>();
+
+		if (m_creditsButton->isHovering())
+			Scene::LoadScene<CreditsScene>();
 
 		if (m_exitButton->isHovering())
 			ThomasCore::Exit();
