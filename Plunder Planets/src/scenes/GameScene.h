@@ -32,9 +32,6 @@ public:
 		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 
 		//Init materials
-		thomas::graphics::Material::RegisterNewMaterialType("phongMaterial", new PhongMaterial("Phong"));
-		thomas::graphics::Material::RegisterNewMaterialType("waterMaterial", new WaterMaterial("oceanShader"));
-		thomas::graphics::Material::RegisterNewMaterialType("terrainMaterial", new TerrainMaterial("Terrain"));
 		LoadMaterial("phongMaterial", new PhongMaterial("Phong"));
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));

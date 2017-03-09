@@ -59,4 +59,5 @@ void IslandObject::PlaceRigidBody(float radius, thomas::math::Vector3 center)
 	m_rigidBody = thomas::object::GameObject::AddComponent<thomas::object::component::RigidBodyComponent>();
 	m_rigidBody->SetCollider(new btSphereShape(radius));
 	m_rigidBody->SetKinematic(true);
+	m_frustrumCullingComponent->SetRadius(radius);
 }

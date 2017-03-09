@@ -13,9 +13,10 @@ namespace thomas
 
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-			float islandSize = rand() % maxSize + minSize;
+			int randNumber = rand() % (maxSize - minSize) + minSize;
+			float islandSize = std::round(randNumber * detail) / detail;	//Generates a size that is divisible by "detail". This ensures that the islands don't have holes in them.
 			float powIsland = std::pow(islandSize / 2, 2);
-			float min = std::sqrt(powIsland + powIsland) * 1.5;		//Depends on size of island
+			float min = std::sqrt(powIsland + powIsland) + 300/** 1.5*/;		//Depends on size of island
 
 			float treasure = rand() % 800 + islandSize;
 
@@ -25,8 +26,8 @@ namespace thomas
 			m_detail.push_back(detail);
 			m_treasure.push_back(islandSize * 1.5);
 			m_totalTreasure.push_back(treasure);
-			m_plunderRadius.push_back(islandSize * 0.43);
 			m_collisionRadius.push_back(islandSize * 0.33);
+			m_plunderRadius.push_back(m_collisionRadius[i] + 100);
 		}
 
 		GeneratePos();
@@ -188,9 +189,9 @@ namespace thomas
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
 
-		tempOffset.x = 0;			//Should be +mapSize / 2. So that we can't spawn in an island
+		tempOffset.x = m_mapSize / 2;			//Should be +mapSize / 2. So that we can't spawn in an island
 		tempOffset.y = 0;
-		tempOffset.z = 0;			//Should be -mapSize / 2. So that we can't spawn in an island
+		tempOffset.z = -m_mapSize / 2;			//Should be -mapSize / 2. So that we can't spawn in an island
 
 
 		math::Vector3 tempCenter;
