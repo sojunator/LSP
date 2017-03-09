@@ -180,6 +180,7 @@ namespace thomas
 
 				float GetSpawnedParticleCount();
 
+				float GetDrawTimer();
 			private:
 				std::string m_debugBarName;
 				math::Vector3 m_offset;
@@ -204,6 +205,8 @@ namespace thomas
 				float m_emissionRate;
 				float m_emissionTimer;
 				float m_emissionTimeLeft;
+
+				float m_drawTimer;
 
 				BlendStates m_blendState;
 

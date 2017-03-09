@@ -85,7 +85,10 @@ namespace thomas
 					CalculateMaxNrOfParticles();
 
 				if (m_emissionTimeLeft < 0.0f)
+				{
+					m_drawTimer -= ThomasTime::GetDeltaTime();
 					StopEmitting();
+				}
 
 
 				if (m_shouldUpdateResources)
@@ -272,6 +275,7 @@ namespace thomas
 
 			void ParticleEmitterComponent::StartEmitting()
 			{
+				m_drawTimer = m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay;
 				if (!m_isEmitting)
 				{
 					m_isEmitting = true;
@@ -512,7 +516,7 @@ namespace thomas
 				file.read((char*)&m_emissionDuration, sizeof(float));
 				file.read((char*)&m_emissionRate, sizeof(float));
 				file.read((char*)&m_blendState, sizeof(BlendStates));
-							
+				
 
 				//Read Particle struct
 				file.read((char*)&m_particleBufferStruct, sizeof(ParticleEmitterComponent::InitParticleBufferStruct));
@@ -546,6 +550,11 @@ namespace thomas
 			ParticleEmitterComponent::BlendStates ParticleEmitterComponent::GetBlendState()
 			{
 				return m_blendState;
+			}
+
+			float ParticleEmitterComponent::GetDrawTimer()
+			{
+				return m_drawTimer;
 			}
 
 

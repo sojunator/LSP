@@ -948,6 +948,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[0] = true;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(1); //Increase plunder speed first time
 				ShipStats::s_playerStats->SetTreasure(-200);
+				m_plunderIcon->SetName("PlunderIcon1");
 			}
 			if (undo)
 			{
@@ -955,6 +956,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[0] = false;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(0); //Increase plunder speed first time
 				ShipStats::s_playerStats->SetTreasure(200);
+				m_plunderIcon->SetName("PlunderIcon");
 			}
 		}
 		else if ((upgrade && m_plunderCheck[0] && !m_plunderCheck[1]) || (!m_plunderCheck[2] && undo && m_plunderCheck[1]))
@@ -965,6 +967,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[1] = true;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(2); //Increase plunder speed second time
 				ShipStats::s_playerStats->SetTreasure(-300);
+				m_plunderIcon->SetName("PlunderIcon2");
 			}
 			if (undo)
 			{
@@ -972,6 +975,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[1] = false;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(1); //Decrease second plunder speed
 				ShipStats::s_playerStats->SetTreasure(300);
+				m_plunderIcon->SetName("PlunderIcon1");
 			}
 		}
 		else if ((upgrade && m_plunderCheck[1] && !m_plunderCheck[2]) || (!m_plunderCheck[3] && undo && m_plunderCheck[2]))
@@ -982,6 +986,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[2] = true;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(3); //Decrease third plunder speed
 				ShipStats::s_playerStats->SetTreasure(-500);
+				m_plunderIcon->SetName("PlunderIcon3");
 			}
 			if (undo)
 			{
@@ -989,6 +994,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[2] = false;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(2); //Decrease third plunder speed
 				ShipStats::s_playerStats->SetTreasure(500);
+				m_plunderIcon->SetName("PlunderIcon2");
 			}
 		}
 		else if ((upgrade && m_plunderCheck[2] && !m_plunderCheck[3]) || (!m_plunderCheck[4] && undo && m_plunderCheck[3]))
@@ -999,6 +1005,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[3] = true;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(4); //Increase plunder speed fourth time
 				ShipStats::s_playerStats->SetTreasure(-750);
+				m_plunderIcon->SetName("PlunderIcon4");
 			}
 			if (undo)
 			{
@@ -1006,6 +1013,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[3] = false;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(3); //Decrease fourth plunder speed
 				ShipStats::s_playerStats->SetTreasure(750);
+				m_plunderIcon->SetName("PlunderIcon3");
 			}
 		}
 		else if ((upgrade && m_plunderCheck[3] && !m_plunderCheck[4]) || (m_plunderCheck[4] && undo))
@@ -1016,6 +1024,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[4] = true;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(5); //Increase plunder speed fifth time
 				ShipStats::s_playerStats->SetTreasure(-1000);
+				m_plunderIcon->SetName("PlunderIcon5");
 			}
 			if (undo)
 			{
@@ -1023,6 +1032,7 @@ void UpgradeMenuObject::PlunderCheck(bool upgrade, bool undo)
 				m_plunderCheck[4] = false;
 				ShipStats::s_playerStats->IncreasePlunderSpeed(4); //Decrease fifth plunder speed
 				ShipStats::s_playerStats->SetTreasure(1000);
+				m_plunderIcon->SetName("PlunderIcon4");
 			}
 		}
 	}
