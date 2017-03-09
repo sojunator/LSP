@@ -46,7 +46,7 @@ namespace thomas
 				e = (e + 1.00) * (1 - 2.00*pow(d, 1.70));
 
 				if (e < 0.0f)
-					e = -50.0f;
+					e = -55.0f;
 
 				plane.verts[i].position.y = e;
 			}

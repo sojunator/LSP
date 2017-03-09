@@ -10,9 +10,7 @@ namespace thomas
 	{
 	public:
 	
-		Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize);
-		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m);
-		void ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes);
+		Islands(int nrOfIslands, graphics::Material* m, int minSize, int maxSize, float detail, int mapSize);
 		~Islands();
 
 		int GetPlunderRate();									//GetplunderRate
@@ -36,10 +34,10 @@ namespace thomas
 		float StealTreasure(int island);						//Get stolen treasure for specific island
 		int GetSizeOFIsland(int island);						//Get size of specific island
 
-		void ChangeHeightMapValues(std::vector<utils::Plane::PlaneData> &tempPlane);
-
 	private:
 		void GeneratePos();
+		void GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m);
+		void MoveCenterFromCornerToCenter(int island, utils::Plane::PlaneData& tempPlanes);
 
 	private:
 		int m_plunderRate;

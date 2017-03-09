@@ -3,7 +3,7 @@
 
 namespace thomas
 {
-	Islands::Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize)
+	Islands::Islands(int nrOfIslands, graphics::Material* m, int minSize, int maxSize, float detail, int mapSize)
 	{
 		std::srand(time(NULL));
 		std::vector<thomas::utils::Plane::PlaneData> tempPlane;
@@ -13,24 +13,28 @@ namespace thomas
 
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-			float min = std::sqrt(std::pow(size / 2, 2) + std::pow(size / 2, 2))*1.5;	//Now same, but will change when islands can be different sizes
+			float islandSize = rand() % maxSize + minSize;
+			float powIsland = std::pow(islandSize / 2, 2);
+			float min = std::sqrt(powIsland + powIsland) * 1.5;		//Depends on size of island
+
+			float treasure = rand() % 800 + islandSize;
 
 			m_lostTreasureSinceLastEnemySpawn.push_back(0);
-			m_size.push_back(size);
+			m_size.push_back(islandSize);
 			m_minDistance.push_back(min);
 			m_detail.push_back(detail);
-			m_treasure.push_back(1000);
-			m_totalTreasure.push_back(1000);
-			m_plunderRadius.push_back(size*0.43);
-			m_collisionRadius.push_back(size*0.33);
+			m_treasure.push_back(islandSize * 1.5);
+			m_totalTreasure.push_back(treasure);
+			m_plunderRadius.push_back(islandSize * 0.43);
+			m_collisionRadius.push_back(islandSize * 0.33);
 		}
 
 		GeneratePos();
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-			tempPlane.push_back(thomas::utils::Plane::CreatePlane(size, detail));
-			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
-			ApplyOffSet(i, tempPlane[i]);
+			tempPlane.push_back(thomas::utils::Plane::CreatePlane(m_size[i], detail));
+			utils::HeightMap::ApplyHeightMap(m_size[i], detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
+			MoveCenterFromCornerToCenter(i, tempPlane[i]);
 		}
 		GenerateMesh(tempPlane, m);
 	}
@@ -46,14 +50,12 @@ namespace thomas
 		}
 	}
 
-	void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
+	void Islands::MoveCenterFromCornerToCenter(int island, utils::Plane::PlaneData& tempPlanes)
 	{
 		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
 			tempPlanes.verts[i].position.x -= m_size[island] / 2;
 			tempPlanes.verts[i].position.z += m_size[island] / 2;
-			//tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-			//tempPlanes.verts[i].position.z -= m_worldPosOffset[island].z;
 		}
 	}
 
@@ -179,18 +181,6 @@ namespace thomas
 		return m_size[island];
 	}
 
-	void Islands::ChangeHeightMapValues(std::vector<utils::Plane::PlaneData> &tempPlane)
-	{
-		for (int i = 0; i < m_nrOfIslands; i++)
-		{
-			for (int j = 0; j < tempPlane[j].verts.size(); j++)
-			{
-				if (tempPlane[i].verts[j].position.y < 5.0)
-					tempPlane[i].verts[j].position.y = -20.0;
-			}
-		}
-	}
-
 	void Islands::GeneratePos()
 	{
 		const int MAX_ATTEMPTS = 1200;
@@ -198,18 +188,15 @@ namespace thomas
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
 
-		//tempOffset.x = m_mapSize - (m_mapSize / 2);
-		//tempOffset.y = 0;
-		//tempOffset.z = m_mapSize - (m_mapSize / 2);
-		tempOffset.x = 0;
+		tempOffset.x = 0;			//Should be +mapSize / 2. So that we can't spawn in an island
 		tempOffset.y = 0;
-		tempOffset.z = 0;
+		tempOffset.z = 0;			//Should be -mapSize / 2. So that we can't spawn in an island
 
 
 		math::Vector3 tempCenter;
-		tempCenter.x = tempOffset.x + m_size[0] / 2;
+		tempCenter.x = tempOffset.x + 1024 / 2;
 		tempCenter.y = 0;
-		tempCenter.z = tempOffset.z - m_size[0] / 2;
+		tempCenter.z = tempOffset.z - 1024 / 2;
 
 		m_worldPosOffset.push_back(tempOffset);
 		m_islandCenterWorldPos.push_back(tempCenter);
@@ -225,9 +212,9 @@ namespace thomas
 				tempOffset.y = 0;
 				tempOffset.z = rand() % m_mapSize - (m_mapSize / 2);
 
-				tempCenter.x = tempOffset.x + m_size[0] / 2;
+				tempCenter.x = tempOffset.x + m_size[i] / 2;
 				tempCenter.y = 0;
-				tempCenter.z = tempOffset.z - m_size[0] / 2;
+				tempCenter.z = tempOffset.z - m_size[i] / 2;
 
 				for (int j = 0; j < m_islandCenterWorldPos.size(); ++j)
 				{

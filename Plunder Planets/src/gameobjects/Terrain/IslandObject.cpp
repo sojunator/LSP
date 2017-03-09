@@ -8,7 +8,7 @@ IslandObject::~IslandObject()
 
 void IslandObject::Start()
 {
-	//m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
+	m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
 	m_renderer = thomas::object::GameObject::AddComponent<thomas::object::component::RenderComponent>();
 	m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
 	m_sound->SetClip("fPlunder");

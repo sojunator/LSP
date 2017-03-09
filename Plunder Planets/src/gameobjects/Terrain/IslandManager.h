@@ -14,7 +14,7 @@ public:
 	IslandManager(Scene* scene)
 	{
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(5, mat, 1024, 1 / 8.f, 4096);
+		m_islands = new thomas::Islands(10, mat, 512, 2048, 1 / 8.f, 4096);
 		int nrOfIslands = m_islands->GetNrOfIslands();
 		for (int i = 0; i < nrOfIslands; i++)
 		{
