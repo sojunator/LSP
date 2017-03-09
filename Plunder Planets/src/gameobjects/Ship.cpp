@@ -130,6 +130,20 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterRight2->SetSpread(2.5f);
 
+	// Death msg
+	m_deathMsg = AddComponent<component::TextComponent>();
+	m_deathMsg->SetFont("SafeToLeave");
+	m_deathMsg->SetOutput("You are dead");
+	m_deathMsg->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
+	m_deathMsg->SetRotation(0.0f);
+	m_deathMsg->SetScale(1.0f);
+	m_deathMsg->SetPositionX(Window::GetWidth() / 2.0f - 150.0f);
+	m_deathMsg->SetPositionY(Window::GetHeight() / 2.0f);
+	m_deathMsg->SetDropshadow(true);
+	m_deathMsg->SetOutline(true);
+	m_deathMsg->SetOrigin(false);
+	m_deathMsg->SetActive(false);
+
 	//Fire cost
 	m_firingCost = AddComponent<component::ParticleEmitterComponent>();
 	m_firingCost->SetTexture("../res/textures/FiringCost" + std::to_string((int)ShipStats::s_playerStats->GetCannonCost()) + ".png");
@@ -212,6 +226,7 @@ void Ship::Start()
 
 	m_spawnedWormhole = false;
 	m_aiming = false;
+	utils::DebugTools::AddBool(m_notDead, "helt");
 }
 bool Ship::GetFreeCamera()
 {
@@ -737,6 +752,7 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		if (m_health <= 0)
 		{
 			m_notDead = true;
+			m_deathMsg->SetActive(true);
 		}
 
 	}
