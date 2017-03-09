@@ -83,7 +83,6 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-
 		std::string title = "FPS: " + std::to_string(ThomasTime::GetFPS()) + " FrameTime: " + std::to_string(ThomasTime::GetFrameTime());
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
 

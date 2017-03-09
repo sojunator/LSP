@@ -98,8 +98,11 @@ namespace thomas
 				itr = s_fonts.erase(itr);
 			}
 			
+			s_spriteBatch.release();
 			s_spriteBatch.reset();
+			s_states.release();
 			s_states.reset();
+			s_effects.release();
 			s_effects.reset();
 		}
 

@@ -59,7 +59,6 @@ namespace thomas
 		if (s_currentScene)
 		{
 			std::string name = s_currentScene->GetName();
-			std::vector<object::Object*> objects = object::Object::GetAllObjectsInScene(s_currentScene);
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
