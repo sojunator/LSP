@@ -32,13 +32,13 @@ namespace thomas
 			m_shader = Shader::GetShaderByName(shader);
 			if (!m_shader)
 				LOG("Failed to create material with shader: " << shader);
+			
 		}
 
 
 		Material::~Material()
 		{
-			if(m_materialPropertiesBuffer)
-				m_materialPropertiesBuffer->Release();
+			SAFE_RELEASE(m_materialPropertiesBuffer);
 		}
 
 		Material * Material::CreateMaterial(Material * material)
@@ -118,10 +118,7 @@ namespace thomas
 			if (s_materialTypes.find(type) == s_materialTypes.end()) //Material is not already registered.
 			{
 				s_materialTypes[type] = material;
-				//return true;
 			}
-			
-			//return false;
 			return material;
 		}
 

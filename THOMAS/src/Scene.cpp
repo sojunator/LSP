@@ -190,6 +190,7 @@ namespace thomas
 			oceanShader->Unbind();
 			graphics::Renderer::UnbindDepthBufferTexture();
 			graphics::Renderer::UnBindGameObjectBuffer();
+			ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
 		}
 		
 		camera->BindSkybox();
