@@ -481,7 +481,7 @@ void UpgradeMenuObject::Update()
 	Navigation();
 	
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
-		ThomasCore::Exit();
+		Scene::LoadScene<MenuScene>();
 
 	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
 	{

@@ -152,6 +152,8 @@ namespace thomas
 
 				void AddToDebugMenu();
 
+				float GetSpawnedParticleCount();
+
 			private:
 				math::Vector3 m_offset;
 				math::Vector3 m_directionVector;
@@ -166,6 +168,7 @@ namespace thomas
 				float m_emissionDuration;
 				bool m_shouldUpdateResources;
 				unsigned int m_maxNrOfParticles;
+				unsigned int m_spawnedParticleCount;
 				float m_emissionRate;
 				float m_emissionTimer;
 				float m_emissionTimeLeft;

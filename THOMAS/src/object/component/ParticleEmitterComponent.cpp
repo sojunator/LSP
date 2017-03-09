@@ -67,7 +67,7 @@ namespace thomas
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/standardParticle.png");
 				m_d3dData.swapUAVandSRV = true;
 
-
+				m_spawnedParticleCount = 0;
 				CalculateMaxNrOfParticles();
 				CreateInitBuffer();
 			}
@@ -92,6 +92,17 @@ namespace thomas
 							CalculateMaxNrOfParticles();
 							m_shouldUpdateResources = false;
 							CreateParticleUAVsandSRVs();
+
+							float minSize = m_particleBufferStruct.minSize;
+							float maxSize = m_particleBufferStruct.maxSize;
+							float endSize = m_particleBufferStruct.endSize;
+							m_particleBufferStruct.minSize = m_particleBufferStruct.maxDelay = m_particleBufferStruct.endSize = 0;
+							graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
+							m_particleBufferStruct.minSize = minSize;
+							m_particleBufferStruct.maxSize = maxSize;
+							m_particleBufferStruct.endSize = endSize;
+
+
 						}
 						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + m_offset;
 						SetDirection(m_directionVector);
@@ -99,6 +110,8 @@ namespace thomas
 						utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
 						graphics::ParticleSystem::SpawnParticles(this, numberOfParticlesToEmit);
 						m_particleBufferStruct.currentParticleStartIndex = (m_particleBufferStruct.currentParticleStartIndex + numberOfParticlesToEmit) % m_maxNrOfParticles;
+						m_spawnedParticleCount += numberOfParticlesToEmit;
+						m_spawnedParticleCount = min(m_spawnedParticleCount, m_maxNrOfParticles);
 					}
 				}
 			}
@@ -392,6 +405,11 @@ namespace thomas
 
 				utils::DebugTools::AddFloat(m_emissionRate, "Emission rate", barName);
 				utils::DebugTools::AddBool(m_shouldUpdateResources, "Update", barName);
+			}
+
+			float ParticleEmitterComponent::GetSpawnedParticleCount()
+			{
+				return m_spawnedParticleCount;
 			}
 
 

@@ -123,7 +123,7 @@ namespace thomas
 			graphics::LightManager::BindAllLights();
 			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
 			{
-				material->Bind();
+				bool matBound = false;
 				for (object::component::RenderComponent* renderComponent : renderComponents)
 				{
 					if (renderComponent->GetModel())
@@ -134,6 +134,11 @@ namespace thomas
 							std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
 							if (!meshes.empty())
 							{
+								if (!matBound)
+								{
+									material->Bind();
+									matBound = true;
+								}
 								graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
 								for (graphics::Mesh* mesh : meshes)
 								{
@@ -200,7 +205,7 @@ namespace thomas
 			if (gameObject->GetActive())
 				for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
 				{
-					if (emitterComponent->GetActive())
+					if (emitterComponent->GetActive() && emitterComponent->GetSpawnedParticleCount() > 0)
 						graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
 				}
 		}

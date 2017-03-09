@@ -78,6 +78,7 @@ namespace thomas
 		{
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
+			LOG(trans->Up().x);
 			s_cameraBufferStruct.deltaTime = ThomasTime::GetDeltaTime();
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
@@ -143,7 +144,7 @@ namespace thomas
 			s_updateParticlesCS->BindResource(s_activeParticleSRV, 0);
 			s_updateParticlesCS->BindBuffer(s_cameraBuffer, 0);
 
-			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfMaxParticles() / 256 + 1, 1, 1);
+			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetSpawnedParticleCount() / 256 + 1, 1, 1);
 			//unbind CS
 			s_updateParticlesCS->BindUAV(NULL, 6);
 			s_updateParticlesCS->BindUAV(NULL, 7);
@@ -172,7 +173,7 @@ namespace thomas
 
 			emitter->GetTexture()->Bind();
 
-			ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfMaxParticles() * 6, 0);
+			ThomasCore::GetDeviceContext()->Draw(emitter->GetSpawnedParticleCount() * 6, 0);
 
 			ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 

@@ -25,8 +25,6 @@ namespace thomas
 			SAFE_RELEASE(m_data.constantBuffer);
 			SAFE_RELEASE(m_data.rasterizerState);
 			SAFE_RELEASE(m_data.depthStencilState);
-			SAFE_RELEASE(m_depthstencilP);
-			SAFE_RELEASE(m_rasterizerP);
 		}
 
 		bool Skybox::Bind(math::Matrix viewMatrix, math::Matrix mvpMatrix)

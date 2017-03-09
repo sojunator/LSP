@@ -1,7 +1,7 @@
 
-SamplerState ObjSamplerState : register(s0);
-TextureCube SkyMap : register(t0);
-TextureCube SkyMap2 : register(t1);
+SamplerState ObjSamplerState : register(s10);
+TextureCube SkyMap : register(t10);
+TextureCube SkyMap2 : register(t11);
 
 struct VSInput
 {
