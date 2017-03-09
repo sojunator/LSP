@@ -24,10 +24,8 @@ namespace thomas
 
 			RigidBodyComponent::~RigidBodyComponent()
 			{
-				btMotionState* tempMotionState = getMotionState();
-				btCollisionShape* temp = getCollisionShape();
-				delete tempMotionState;
-				delete temp;
+				delete getMotionState();
+				delete getCollisionShape();
 				
 				Physics::s_world->removeRigidBody(this);
 				
