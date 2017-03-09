@@ -30,7 +30,6 @@ public:
 		m_camera = AddComponent<component::Camera>();
 		m_transform->SetPosition(0, 1, 3);
 		m_music = AddComponent<component::SoundComponent>();
-		m_seagull = AddComponent<component::SoundComponent>();
 		m_creak = AddComponent<component::SoundComponent>();
 		m_pirateMusic = AddComponent<component::SoundComponent>();
 		m_text = AddComponent<component::TextComponent>();
@@ -53,10 +52,6 @@ public:
 		m_flySpeed = m_normalSpeed;
 		m_jaw = 0;
 		m_pitch = 0;
-
-		m_seagull->SetClip("aSeagull");
-		m_seagull->SetVolume(0.2);
-		m_seagull->Play();
 
 		m_creak->SetClip("fCreakLoop");
 		m_creak->SetVolume(3);

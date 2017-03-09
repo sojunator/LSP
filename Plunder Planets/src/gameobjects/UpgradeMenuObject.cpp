@@ -44,7 +44,10 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent4 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent5 = AddComponent<component::SpriteComponent>(); 
 	m_exitButton = AddComponent<component::SpriteComponent>();
+
 	m_music = AddComponent<component::SoundComponent>();
+	m_plunder = AddComponent<component::SoundComponent>();
+
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 	m_currentGold = AddComponent<component::TextComponent>();
 	m_currentHealth = AddComponent<component::TextComponent>();
@@ -56,10 +59,14 @@ void UpgradeMenuObject::Start()
 	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
 	cam->SetFov(50); //makes wormhole fit screen
+	m_resourceHolder = ShipStats::s_playerStats->GetTreasure();
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
+
+	m_plunder->SetClip("fUpdate");
+	m_plunder->SetLooping(false);
 
 	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
 	m_currentGold->SetFont("Pirate");
@@ -430,6 +437,11 @@ void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	m_upgradeDelay = m_upgradeDelay - ThomasTime::GetDeltaTime(); //Upgrade delay so can't spam and glitch out upgrades.
+
+	if (m_resourceHolder > ShipStats::s_playerStats->GetTreasure())
+		m_plunder->PlayOneShot("fUpdate", 1);
+	
+	m_resourceHolder = ShipStats::s_playerStats->GetTreasure();
 
 	UpdateGoldCounter();
 	UpdateHealthCounter();

@@ -2,6 +2,7 @@
 
 #include "HighscoreMenuObject.h"
 #include "../scenes/MenuScene.h"
+
 #include <fstream>
 #include <ctime>
 
@@ -11,6 +12,11 @@ void HighscoreMenuObject::Start()
 	m_highscoreBackground = AddComponent<component::SpriteComponent>();
 	m_centText = AddComponent<component::SpriteComponent>();
 	m_exitText = AddComponent<component::SpriteComponent>();
+	m_music = AddComponent<component::SoundComponent>();
+
+	m_music->SetClip("mMenuTheme");
+	m_music->SetLooping(true);
+	m_music->Play();
 
 	//Names
 	m_name1 = AddComponent<component::TextComponent>();

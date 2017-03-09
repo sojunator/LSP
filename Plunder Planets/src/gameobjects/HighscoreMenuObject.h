@@ -43,6 +43,7 @@ private:
 	component::SpriteComponent* m_highscoreBackground;
 	component::SpriteComponent* m_centText;
 	component::SpriteComponent* m_exitText;
+	component::SoundComponent* m_music;
 
 	//Names
 	component::TextComponent* m_name1;
