@@ -90,7 +90,6 @@ public:
 		/*m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+ 
 			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToRadians(m_pitch))) + 
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw))));*/
-		m_damageAmount = ShipStats::s_playerStats->GetCannonDamage();
 	}
 
 	float GetVelocity()
@@ -130,11 +129,16 @@ public:
 			
 	}
 
-	void OnCollision(component::RigidBodyComponent* other)
+	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if(other->m_gameObject != m_spawnedBy && other->m_gameObject->GetType() != "Projectile")
+		if(collision.otherRigidbody->m_gameObject != m_spawnedBy && collision.otherRigidbody->m_gameObject->GetType() != "Projectile")
 			Destroy(this);
 
+	}
+
+	void SetDamageAmount(float amount)
+	{
+		m_damageAmount = amount;
 	}
 
 	float GetDamageAmount()

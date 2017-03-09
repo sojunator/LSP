@@ -13,7 +13,8 @@
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
-#include "../gameobjects/Enemy.h"
+#include "../gameobjects/BasicEnemy.h"
+#include "../gameobjects/Toby.h"
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
 #include "../gameobjects/PauseObjectMenuObject.h"
@@ -25,7 +26,7 @@ public:
 	GameScene() : Scene("GameScene")
 	{
 		//Init shaders
-
+		
 		LoadShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/phong.hlsl");
 		LoadShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/oceanShader.hlsl");
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
@@ -38,13 +39,10 @@ public:
 		LoadMaterial("waterMaterial", new WaterMaterial("oceanShader"));
 		LoadMaterial("terrainMaterial", new TerrainMaterial("Terrain"));
 		
-		//Init models
+		//Init models		
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
-		LoadModel("testModel0", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
-		LoadModel("testModel1", "../res/models/Boat/ship1fbx.fbx", "phongMaterial");
-		LoadModel("testModel2", "../res/models/Boat/ship2fbx.fbx", "phongMaterial");
-		LoadModel("testModel3", "../res/models/Boat/ship3fbx.fbx", "phongMaterial");
-		LoadModel("testModelEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
+		LoadModel("playerModel", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
+		LoadModel("basicEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		
@@ -108,7 +106,7 @@ public:
 		LoadObject<SettingsMenuObject>();
 		
 		//LoadObject<PhysicsObject>();
-
+		
 	};
 	
 	~GameScene()

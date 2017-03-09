@@ -51,10 +51,17 @@ namespace thomas
 			
 			object::component::RigidBodyComponent* rbA = static_cast<object::component::RigidBodyComponent*>(obA);
 			object::component::RigidBodyComponent* rbB = static_cast<object::component::RigidBodyComponent*>(obB);
+
 			if (object::Object::IsAlive(rbA) && object::Object::IsAlive(rbB))
 			{
-				rbA->m_gameObject->OnCollision(rbB);
-				rbB->m_gameObject->OnCollision(rbA);
+				object::component::RigidBodyComponent::Collision colA;
+				object::component::RigidBodyComponent::Collision colB;
+				colA.thisRigidbody = rbA;
+				colA.otherRigidbody = rbB;
+				colB.thisRigidbody = rbB;
+				colB.otherRigidbody = rbA;
+				rbA->m_gameObject->OnCollision(colA);
+				rbB->m_gameObject->OnCollision(colB);
 			}
 				
 		}
@@ -69,6 +76,10 @@ namespace thomas
 	void Physics::Destroy()
 	{
 		//Destroy everything????
+		btCollisionObjectArray arr = s_world->getCollisionObjectArray();
+		
+			arr.clear();
+		
 	}
 
 	graphics::BulletDebugDraw * Physics::getDebugDraw()
@@ -78,5 +89,26 @@ namespace thomas
 		else
 			return nullptr;
 	}
+
+	btVector3 Physics::ToBullet(math::Vector3 & vector)
+	{
+		return *(btVector3*)&vector;
+	}
+
+	math::Vector3 Physics::ToSimple(btVector3 & vector)
+	{
+		return (math::Vector3)vector;
+	}
+	btQuaternion Physics::ToBullet(math::Quaternion& quaternion)
+	{
+		return *(btQuaternion*)&quaternion;
+	}
+
+	math::Quaternion Physics::ToSimple(btQuaternion & quaternion)
+	{
+		return (math::Quaternion)quaternion;
+	}
+
+
 
 }

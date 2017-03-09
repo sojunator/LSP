@@ -53,8 +53,12 @@ namespace thomas
 
 		
 
-		void Object::Destroy()
+		void Object::Destroy()//this should be static right
 		{
+			for (int i = 0; i < s_objects.size(); ++i)
+			{
+				delete s_objects[i];
+			}
 			s_objects.clear();
 		}
 		bool Object::IsAlive(const Object* object)

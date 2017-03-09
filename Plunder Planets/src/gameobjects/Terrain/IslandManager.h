@@ -2,7 +2,7 @@
 
 #include "Thomas.h"
 #include <string>
-#include "../Enemy.h"
+#include "../BasicEnemy.h"
 #include "IslandObject.h"
 
 class IslandManager
@@ -65,7 +65,7 @@ public:
 						math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
 						randDir.Normalize();
 						math::Vector3 spawnPos = m_islands->GetCenter(i) + (m_islands->GetCollisionRadius(i) + 30)*math::Vector3(randDir.x, 0, randDir.y);
-						Instantiate<Enemy>(spawnPos, math::Quaternion::Identity, Scene::GetCurrentScene());*/
+						Instantiate<BasicEnemy>(spawnPos, math::Quaternion::Identity, Scene::GetCurrentScene());*/
 					}
 				}
 				else if (!m_islands->GetTreasure(i))

@@ -41,8 +41,11 @@ public:
 
 	void Float(float dt);
 
+	void TakeDamage(float dmg);
+	void Die();
+
 	void Update();
-	void OnCollision(component::RigidBodyComponent* other);
+	void OnCollision(component::RigidBodyComponent::Collision collision);
 
 public:
 	bool m_startUpSequence;

@@ -86,7 +86,7 @@ namespace thomas
 				UINT stride = sizeof(VertexData);
 				if (geometry->m_data.size())
 				{
-					utils::D3d::FillDynamicBufferVector(geometry->m_vertexBuffer, geometry->m_data); //TODO: for some reason nothing is written to the second position of the vertexbuffer
+					utils::D3d::FillDynamicBufferVector(geometry->m_vertexBuffer, geometry->m_data);
 
 					UINT offset = 0;
 					ThomasCore::GetDeviceContext()->VSSetConstantBuffers(0, 1, &geometry->m_constantBuffer);
@@ -100,12 +100,28 @@ namespace thomas
 				if (geometry->m_geometryShader)
 					ThomasCore::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 				ThomasCore::GetDeviceContext()->PSSetShader(NULL, NULL, 0);
+				ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
+				ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);//is this standard?
 			}
 		}
 		void GeometryDraw::Update(object::component::Camera* camera)
 		{
 			m_cbData.viewProjectionMatrix = camera->GetViewProjMatrix().Transpose();
 			utils::D3d::FillDynamicBufferStruct(m_constantBuffer, m_cbData);
+		}
+		void GeometryDraw::Destroy()
+		{
+			for (int i = 0; i < s_geometry.size(); ++i)
+			{
+				SAFE_RELEASE(s_geometry[i]->m_constantBuffer);
+				SAFE_RELEASE(s_geometry[i]->m_geometryShader);
+				SAFE_RELEASE(s_geometry[i]->m_inputLayout);
+				SAFE_RELEASE(s_geometry[i]->m_pixelShader);
+				SAFE_RELEASE(s_geometry[i]->m_vertexBuffer);
+				SAFE_RELEASE(s_geometry[i]->m_vertexShader);
+				delete s_geometry[i];	
+			}
+			s_geometry.clear();
 		}
 	}
 }

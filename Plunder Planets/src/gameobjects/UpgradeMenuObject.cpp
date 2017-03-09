@@ -466,7 +466,9 @@ void UpgradeMenuObject::Update()
 		Scene::LoadScene<MenuScene>();
 
 	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
-		Scene::LoadScene<GameScene>();
+	{
+		Scene::LoadScene<GameScene>();		
+	}
 }
 
 void UpgradeMenuObject::UpdateGoldCounter()

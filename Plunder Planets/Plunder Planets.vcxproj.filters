@@ -53,6 +53,8 @@
     <ClInclude Include="src\gameobjects\ShipStats.h" />
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="src\scenes\HighscoreScene.h" />
+    <ClInclude Include="src\gameobjects\BasicEnemy.h" />
+    <ClInclude Include="src\gameobjects\Toby.h" />
     <ClInclude Include="src\materials\SkyboxMaterial.h" />
     <ClInclude Include="src\gameobjects\PauseObjectMenuObject.h" />
     <ClInclude Include="src\gameobjects\SettingsMenuObject.h" />

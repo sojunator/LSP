@@ -106,6 +106,7 @@ void AI::AttackingUpdate()
 	{
 		if (distanceToTarget <= m_fireRadius+200)
 		{
+			m_moveToPos = m_target->m_transform->GetPosition();
 		}
 		else
 		{
