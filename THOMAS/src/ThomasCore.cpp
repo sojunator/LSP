@@ -49,6 +49,8 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = graphics::Renderer::Init();
 
+		utils::DebugTools::Init();
+
 		if (s_initialized)
 			s_initialized = ThomasTime::Init();
 
@@ -65,10 +67,6 @@ namespace thomas {
 			s_initialized = graphics::Sprite::Initialize();		
 		if (s_initialized)
 			s_initialized = Physics::Init();
-
-
-		utils::DebugTools::Init();
-
 
 		graphics::ParticleSystem::Init();
 		

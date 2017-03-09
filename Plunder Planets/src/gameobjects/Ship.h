@@ -99,6 +99,8 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight2;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
+	component::ParticleEmitterComponent* m_firingCost;
+	component::ParticleEmitterComponent* m_boostCost;
 	component::TextComponent* m_safeToLeave;
 
 	GeometryDraw* m_arc;

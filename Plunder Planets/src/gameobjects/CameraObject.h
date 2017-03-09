@@ -42,7 +42,10 @@ public:
 		m_armIcon = AddComponent<component::SpriteComponent>();
 
 
-		m_camera->SetSkybox("../res/textures/cubemapTest.dds", "skyboxShader");
+		m_camera->SetSkybox("../res/textures/day.dds", "skyboxShader", 0);
+		m_camera->AddSkybox("../res/textures/test.dds", 1);
+		srand(time(NULL));
+		m_camera->SetSkyboxLerpValue(math::Vector3((float)rand() / ((float)RAND_MAX * 2.f), (float)rand() / ((float)RAND_MAX * 2.f), (float)rand() / ((float)RAND_MAX * 2.f)));
 		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
 		m_fastSpeed = 300.0f;
@@ -156,10 +159,6 @@ public:
 		}
 		else
 		{
-			//To add more armor, simply do: m_ship->m_armor++ and (m_armor / m_maxArmor)
-
-
-
 			if (m_ship->m_armor > 0)
 			{
 				m_armbar->SetScale(math::Vector2(m_ship->m_armor, 1.0f));
@@ -167,7 +166,7 @@ public:
 
 			else if (m_ship->m_armor <= 0)
 			{
-				m_healthbar->SetScale(math::Vector2(m_ship->m_health / m_ship->m_maxHealth, 1.0f));
+				m_healthbar->SetScale(math::Vector2(m_ship->m_health, 1.0f));
 			}
 			
 			m_gold->SetOutput(std::to_string(m_ship->GetTreasure()));
@@ -206,25 +205,25 @@ public:
 		{
 			if (Input::GetKey(Input::Keys::A))
 			{
-				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::D))
 			{
-				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::W))
 			{
-				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::S))
 			{
-				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 		}
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetDeltaTime();
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetActualDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);

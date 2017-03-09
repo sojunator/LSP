@@ -56,18 +56,6 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -181,6 +169,7 @@
     <ClInclude Include="src\gameobjects\CameraObject.h" />
     <ClInclude Include="src\gameobjects\Broadside.h" />
     <ClInclude Include="src\gameobjects\Cannon.h" />
+    <ClInclude Include="src\gameobjects\PauseObjectMenuObject.h" />
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
     <ClInclude Include="src\gameobjects\MainMenuObject.h" />
@@ -199,6 +188,7 @@
     <ClInclude Include="src\gameobjects\WaterSplashParticle.h" />
     <ClInclude Include="src\gameobjects\Wormhole.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
+    <ClInclude Include="src\materials\SkyboxMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
     <ClInclude Include="src\materials\WaterMaterial.h" />
     <ClInclude Include="src\Ocean\FFT\fft_512x512.h" />
@@ -227,6 +217,7 @@
     <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
+    <ClCompile Include="src\materials\SkyboxMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
     <ClCompile Include="src\Ocean\FFT\fft_512x512_c2c.cpp" />

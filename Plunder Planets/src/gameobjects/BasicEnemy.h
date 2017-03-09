@@ -20,6 +20,7 @@ public:
 	void Start()
 	{
 		m_mass = 500000;
+
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 

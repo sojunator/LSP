@@ -11,9 +11,15 @@ namespace thomas
 			graphics::Shader::ReloadShaders();
 		}
 
+		void TW_CALL DebugTools::CopyStdStringToClient(std::string & destClientString, const std::string & sourceLibraryString)
+		{
+			destClientString = sourceLibraryString;
+		}
+
 		void DebugTools::Init()
 		{
 			TwInit(TW_DIRECT3D11, ThomasCore::GetDevice());
+			TwCopyStdStringToClientFunc(CopyStdStringToClient);
 			TwWindowSize(Window::GetWidth(), Window::GetHeight());
 
 			CreateBar("mainBar");
@@ -73,6 +79,11 @@ namespace thomas
 
 		}
 
+		void DebugTools::RemoveBar(std::string name)
+		{
+			TwDeleteBar(GetBar(name)->bar);
+		}
+
 
 		void DebugTools::AddFloat(float &variable, const char* name, std::string barName)
 		{
@@ -123,6 +134,11 @@ namespace thomas
 		void DebugTools::AddString(std::string & string, const char * name, std::string barName)
 		{
 			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_STDSTRING, &string, "");
+		}
+
+		void DebugTools::AddEnum(TwType enumDesc, int& enumData, const char * name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, enumDesc, &enumData, "");
 		}
 
 

@@ -44,7 +44,7 @@ float4 PSMain(VS_OUT input) : SV_Target
 {
     float4 outputColor = diffuseTexture.Sample(diffuseSampler, input.uvs);
 
-    outputColor *= input.colorFactor;
+   // outputColor *= input.colorFactor;
     
 	return outputColor;
 

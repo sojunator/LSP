@@ -16,6 +16,12 @@ namespace thomas
 			{
 			public:
 				
+
+				enum class BlendStates {
+					ADDITIVE,
+					ALPHA_BLEND
+				};
+
 				struct D3DData {
 					ID3D11UnorderedAccessView* particleUAV1;
 					ID3D11ShaderResourceView* particleSRV1;
@@ -34,7 +40,7 @@ namespace thomas
 				struct InitParticleBufferStruct
 				{
 					math::Vector3 position;
-					float spread;//This is a hack
+					float spread;
 					
 					unsigned int currentParticleStartIndex;
 					float maxSpeed;
@@ -59,14 +65,17 @@ namespace thomas
 					math::Color startColor;
 
 					math::Color endColor;
-
 					math::Matrix directionMatrix;
+
+					float gravity;
+					math::Vector3 padding;
+
 				};
 
 				struct ParticleStruct
 				{
 					math::Vector3 position;
-					float padding;
+					float gravity;
 
 					math::Vector3 direction;
 					float speed;
@@ -93,11 +102,12 @@ namespace thomas
 				void CalculateMaxNrOfParticles();
 			public:
 				ParticleEmitterComponent();
-				
-				void Destroy();
+				~ParticleEmitterComponent();
 
 				void Start();
 				void Update();
+
+				void TogglePause();
 
 				void SetSpread(float const other);
 				void SetDirection(math::Vector3 other);
@@ -123,6 +133,8 @@ namespace thomas
 				void SetRotationSpeed(float const other);
 				void SetRotation(float const other);
 				void SetLooping(bool const other);
+
+				void SetGravity(float const other);
 				
 				void SetStartColor(math::Vector4 const other);
 				void SetEndColor(math::Vector4 const other);
@@ -153,7 +165,20 @@ namespace thomas
 
 				void AddToDebugMenu();
 
+				std::string GetDebugMenuName();
+
+				InitParticleBufferStruct* GetInitData();
+
+				bool IsPaused();
+
+				void ExportEmitter(std::string path);
+				void ImportEmitter(std::string path);
+
+				void SetBlendState(BlendStates state);
+				BlendStates GetBlendState();
+
 			private:
+				std::string m_debugBarName;
 				math::Vector3 m_offset;
 				math::Vector3 m_directionVector;
 				D3DData m_d3dData;
@@ -161,6 +186,11 @@ namespace thomas
 				graphics::Texture* m_texture;
 
 				InitParticleBufferStruct m_particleBufferStruct;
+
+				bool m_paused;
+				float m_tempMaxDelay;
+				float m_tempMaxLifeTime;
+				float m_tempEmissionRate;
 
 				bool m_isEmitting;
 				bool m_looping;
@@ -170,6 +200,9 @@ namespace thomas
 				float m_emissionRate;
 				float m_emissionTimer;
 				float m_emissionTimeLeft;
+
+				BlendStates m_blendState;
+
 			};
 		}
 	}

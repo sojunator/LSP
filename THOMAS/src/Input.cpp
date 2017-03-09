@@ -45,7 +45,6 @@ namespace thomas
 			s_gamePadState = s_gamePad->GetState(0);
 			
 			s_mouseState = s_mouse->GetState();
-
 			s_vibrateTimeLeft -= ThomasTime::GetDeltaTime();
 			if(s_vibrateTimeLeft < 0.0f)
 				s_gamePad->SetVibration(0, 0, 0);
@@ -70,7 +69,10 @@ namespace thomas
 	void Input::ProcessMouse(UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		if (s_initialized)
+		{
 			s_mouse->ProcessMessage(message, wParam, lParam);
+		}
+			
 	}
 
 	void Input::ProcessGamePad(UINT message, WPARAM wParam, LPARAM lParam)
@@ -288,6 +290,11 @@ namespace thomas
 	LONG Input::GetMouseX()
 	{
 		return s_mouseState.x;
+	}
+
+	float Input::GetMouseScroll()
+	{
+		return s_mouseState.scrollWheelValue;
 	}
 
 	bool Input::GetMouseButtonDown(MouseButtons button)
