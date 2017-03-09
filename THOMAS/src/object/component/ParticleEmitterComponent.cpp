@@ -59,7 +59,7 @@ namespace thomas
 				m_particleBufferStruct.minLifeTime = 1.0f;
 				m_tempMaxLifeTime = 1.0f;
 				m_particleBufferStruct.rotationSpeed = 0.0f;
-				m_particleBufferStruct.rotation = -math::PI / 2;
+				m_particleBufferStruct.rotation = 0;
 				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.currentParticleStartIndex = 0;
