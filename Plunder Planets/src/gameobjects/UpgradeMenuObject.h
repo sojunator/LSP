@@ -99,4 +99,6 @@ private:
 	int m_xArray[2] = { 1, 0 };		//2 columns
 	float m_delay = 0.3f;
 	float m_upgradeDelay = 0.3f;
+	int m_healthRepairCounts = 0;
+	int m_refundHolder = 0;
 };

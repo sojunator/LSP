@@ -885,23 +885,49 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 {
 	if (m_repairIcon->isHovering())
 	{
-		if ((!m_repairCheck[0] && upgrade && (ShipStats::s_playerStats->GetHealthAmount() != 1))|| (m_repairCheck[0] && undo)) //If upgrading or undoing, checks if not already full hp
+		if ((!m_repairCheck[0] && upgrade && (ShipStats::s_playerStats->GetHealthAmount() != 1))|| (m_healthRepairCounts > 0 && undo)) //If upgrading or undoing, checks if not already full hp
 		{
 			float goldCost = 100 * (1 - ShipStats::s_playerStats->GetHealthAmount()) * 15;
 			float goldRefund = 100 * (ShipStats::s_playerStats->GetPlaceholderHealthAmount()) * 15;
 
 			if (upgrade && (ShipStats::s_playerStats->GetTreasure() >= goldCost))
 			{
-				m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
-				ShipStats::s_playerStats->RepairHealth(1); //Repair health
-				ShipStats::s_playerStats->SetTreasure(-goldCost);
-				m_repairCheck[0] = true;
+				if (ShipStats::s_playerStats->GetHealthAmount() <= 0.75)
+				{
+					m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+					m_refundHolder = 25;
+					m_healthRepairCounts += 1;
+
+					goldCost = 25 * 15; //Can Repair 25 health, costs 15 each
+					ShipStats::s_playerStats->RepairHealth(1); //Repair health
+					ShipStats::s_playerStats->SetTreasure(-goldCost);
+					if(ShipStats::s_playerStats->GetHealthAmount() == 1)
+						m_repairCheck[0] = true;
+				}
+				else if (ShipStats::s_playerStats->GetHealthAmount() > 0.75)
+				{
+					m_repairTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+					int castHealth = ShipStats::s_playerStats->GetHealthAmount() * 100;
+					m_refundHolder = 100 - castHealth;
+					m_healthRepairCounts += 1;
+					
+					goldCost = (100 - castHealth) * 15; //Can Repair less than 25 health, costs 15 each
+					ShipStats::s_playerStats->RepairHealth(1); //Repair health
+					ShipStats::s_playerStats->SetTreasure(-goldCost);
+					if (ShipStats::s_playerStats->GetHealthAmount() == 1)
+						m_repairCheck[0] = true;
+				}
 			}
 			else if (undo)
 			{
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				if (ShipStats::s_playerStats->GetHealthAmount() == 1)
+					goldRefund = m_refundHolder * 15; //Refunds less than 25 health * 15 gold each
+				else
+					goldRefund = 25 * 15;
 				ShipStats::s_playerStats->RepairHealth(0); //Reset health
 				ShipStats::s_playerStats->SetTreasure(goldRefund);
+				m_healthRepairCounts -= 1;
 				m_repairCheck[0] = false;
 			}
 		}

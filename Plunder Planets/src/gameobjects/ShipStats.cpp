@@ -11,7 +11,7 @@ ShipStats::ShipStats()
 	m_boostCost = 20;
 	m_cannonCost = 50;
 	m_shieldAmount = 0;
-	m_healthAmount = 1;
+	m_healthAmount = 0.55f;
 	m_placeHolderHealthAmount = 1;
 	m_plunderSpeed = 30;
 	m_settingsFOV = 50;
@@ -158,14 +158,22 @@ void ShipStats::IncreaseShieldAmount(float talentAmount)
 
 void ShipStats::RepairHealth(float talentAmount)
 {
-	if (talentAmount == 1)
+	if (talentAmount == 1 && m_healthAmount <= 0.75)
+	{
+		m_healthAmount += 0.25;
+		/*m_placeHolderHealthAmount = 1 - m_healthAmount;
+		m_healthAmount = 1;*/
+	}
+	else if (talentAmount == 1 && m_healthAmount > 0.75)
 	{
 		m_placeHolderHealthAmount = 1 - m_healthAmount;
 		m_healthAmount = 1;
 	}
-	if (talentAmount == 0)
+	else if (talentAmount == 0)
 	{
-		m_healthAmount = m_placeHolderHealthAmount;
+		m_placeHolderHealthAmount = 0.25;
+		m_healthAmount -= 0.25;
+		//m_healthAmount = m_placeHolderHealthAmount;
 	}
 	LOG("Health Amount: " + std::to_string(m_healthAmount));
 }
