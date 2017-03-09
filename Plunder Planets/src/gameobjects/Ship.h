@@ -42,6 +42,7 @@ public:
 	void Float(float dt);
 
 	void TakeDamage(float dmg);
+	void Die();
 
 	void Update();
 	void OnCollision(component::RigidBodyComponent::Collision collision);

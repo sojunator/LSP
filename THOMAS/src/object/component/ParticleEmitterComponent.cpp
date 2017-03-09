@@ -102,7 +102,7 @@ namespace thomas
 							m_shouldUpdateResources = false;
 							CreateParticleUAVsandSRVs();
 						}
-						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + m_offset;
+						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + math::Vector3::Transform(m_offset, math::Matrix::CreateFromQuaternion(m_gameObject->m_transform->GetRotation())) ;
 						SetDirection(m_directionVector);
 						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
 						utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);

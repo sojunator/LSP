@@ -34,7 +34,6 @@ public:
 
 	void Start()
 	{
-		LOG(m_transform->GetPosition().y);
 		m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 		m_wormholeParticles = AddComponent<component::ParticleEmitterComponent>();
 
@@ -161,7 +160,6 @@ public:
 	{
 		if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
-			LOG("End the scene");
 			thomas::Scene::UnloadScene();
 			Scene::LoadScene<UpgradeScene>();
 		}

@@ -74,6 +74,8 @@ void Ship::Start()
 	m_boosterParticlesEmitterLeft1->SetRadius(2.2f);
 	m_boosterParticlesEmitterLeft1->SpawnAtSphereEdge(true);
 	m_boosterParticlesEmitterLeft1->SetSpread(2.7f);
+	m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+	m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
 
 	m_boosterParticlesEmitterLeft2 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterLeft2->SetTexture("../res/textures/fire2.png");
@@ -91,6 +93,8 @@ void Ship::Start()
 	m_boosterParticlesEmitterLeft2->SetMinLifeTime(0.3f);
 	m_boosterParticlesEmitterLeft2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterLeft2->SetSpread(2.5f);
+	m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+	m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
 
 	m_boosterParticlesEmitterRight1 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterRight1->SetTexture("../res/textures/fire.png");
@@ -110,6 +114,8 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight1->SetRadius(2.2f);
 	m_boosterParticlesEmitterRight1->SpawnAtSphereEdge(true);
 	m_boosterParticlesEmitterRight1->SetSpread(2.7f);
+	m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+	m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 
 	m_boosterParticlesEmitterRight2 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterRight2->SetTexture("../res/textures/fire2.png");
@@ -127,6 +133,13 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight2->SetMinLifeTime(0.3f);
 	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterRight2->SetSpread(2.5f);
+	m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+	m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
+
+	
+	
+	
+	
 
 	//Fire cost
 	m_firingCost = AddComponent<component::ParticleEmitterComponent>();
@@ -181,7 +194,7 @@ void Ship::Start()
 
 	//model
 	m_modelIndex = 0;
-	m_renderer->SetModel("testModel0");
+	m_renderer->SetModel("playerModel");
 	m_moving = false;
 	//sound
 	m_boostSound->SetClip("fFlames");
@@ -568,23 +581,19 @@ void Ship::TakeDamage(float dmg)
 		Die();
 	}
 }
+void Ship::Die()
+{
+	LOG("Why are you not dead?");
+}
 void Ship::Update()
 {
 	float const dt = ThomasTime::GetDeltaTime();
 
 	if (m_startUpSequence)
 	{
-		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterLeft1->StartEmitting();
-		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterLeft2->StartEmitting();
-		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight1->StartEmitting();
-		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight2->StartEmitting();
 		m_boostSound->Play();
 		Float(dt);
@@ -667,19 +676,11 @@ void Ship::Update()
 	ShipAimCannons();
 	if (m_flying)
 	{
-		//Input::Vibrate(0.1, 0.1);
-		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
-		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
+		Input::Vibrate(0.1, 0.1);
 		m_boosterParticlesEmitterLeft1->StartEmitting();
-		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
+
 		m_boosterParticlesEmitterLeft2->StartEmitting();
-		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight1->StartEmitting();
-		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight2->StartEmitting();
 
 		m_boostCost->StartEmitting();
@@ -729,4 +730,9 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 			TakeDamage(p->GetDamageAmount());
 		}
 	}
+
+
+
+
+
 }

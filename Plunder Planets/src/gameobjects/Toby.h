@@ -74,7 +74,7 @@ public:
 		m_ai->SetActive(false);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_renderer->SetModel("testModelEnemy");
+		m_renderer->SetModel("basicEnemy");
 		m_moving = false;
 
 
@@ -121,6 +121,8 @@ public:
 		m_boosterParticlesEmitterLeft1->SetRadius(2.2f);
 		m_boosterParticlesEmitterLeft1->SpawnAtSphereEdge(true);
 		m_boosterParticlesEmitterLeft1->SetSpread(2.7f);
+		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
 
 		m_boosterParticlesEmitterLeft2 = AddComponent<component::ParticleEmitterComponent>();
 		m_boosterParticlesEmitterLeft2->SetTexture("../res/textures/fire2.png");
@@ -138,6 +140,8 @@ public:
 		m_boosterParticlesEmitterLeft2->SetMinLifeTime(0.3f);
 		m_boosterParticlesEmitterLeft2->SetRotationSpeed(2.0f);
 		m_boosterParticlesEmitterLeft2->SetSpread(2.5f);
+		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
 
 		m_boosterParticlesEmitterRight1 = AddComponent<component::ParticleEmitterComponent>();
 		m_boosterParticlesEmitterRight1->SetTexture("../res/textures/fire.png");
@@ -157,6 +161,8 @@ public:
 		m_boosterParticlesEmitterRight1->SetRadius(2.2f);
 		m_boosterParticlesEmitterRight1->SpawnAtSphereEdge(true);
 		m_boosterParticlesEmitterRight1->SetSpread(2.7f);
+		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 
 		m_boosterParticlesEmitterRight2 = AddComponent<component::ParticleEmitterComponent>();
 		m_boosterParticlesEmitterRight2->SetTexture("../res/textures/fire2.png");
@@ -174,13 +180,10 @@ public:
 		m_boosterParticlesEmitterRight2->SetMinLifeTime(0.3f);
 		m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 		m_boosterParticlesEmitterRight2->SetSpread(2.5f);
+		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 
 
-
-		m_explosionParticle = AddComponent<component::ParticleEmitterComponent>();
-		m_explosionParticle->SetTexture("../res/textures/fire2.png");
-		m_explosionParticle->SetLooping(true);
-		m_explosionParticle->AddToDebugMenu();
 
 		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
 		m_frustumCullingComponent->SetRadius(15);
@@ -296,7 +299,6 @@ public:
 
 	void Update()
 	{
-		m_explosionParticle->StartEmitting();
 		float const dt = ThomasTime::GetDeltaTime();
 
 		if (m_dead)
@@ -326,17 +328,9 @@ public:
 			{
 				//Input::Vibrate(0.1, 0.1);
 				//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
-				m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-				m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
 				m_boosterParticlesEmitterLeft1->StartEmitting();
-				m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-				m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
 				m_boosterParticlesEmitterLeft2->StartEmitting();
-				m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-				m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 				m_boosterParticlesEmitterRight1->StartEmitting();
-				m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-				m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 				m_boosterParticlesEmitterRight2->StartEmitting();
 			}
 
@@ -422,7 +416,7 @@ private:
 	component::RigidBodyComponent* m_explosionCollider;
 	component::FrustumCullingComponent* m_frustumCullingComponent;
 
-	component::ParticleEmitterComponent* m_explosionParticle;
+	component::ParticleEmitterComponent* m_explosionParticle1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterRight2;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft1;

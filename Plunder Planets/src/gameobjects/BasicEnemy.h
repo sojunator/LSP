@@ -83,7 +83,7 @@ public:
 		m_broadSideRight->CreateCannons();
 		m_broadSideLeft->CreateCannons();
 
-		m_renderer->SetModel("testModelEnemy");
+		m_renderer->SetModel("basicEnemy");
 		//Rigidbody init
 		m_rigidBody->SetMass(m_mass);
 		m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 12, 8)));
