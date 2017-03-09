@@ -86,7 +86,7 @@ namespace thomas
 			mirrorDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
 			mirrorDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
 			mirrorDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
+				
 			ThomasCore::GetDevice()->CreateDepthStencilState(&mirrorDesc, &s_depthStencilState);
 
 
@@ -166,6 +166,7 @@ namespace thomas
 			s_emitParticlesCS->BindUAV(NULL, 7);
 			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_emitParticlesCS->Unbind();
+
 		}
 
 		void ParticleSystem::UpdateParticles(object::component::ParticleEmitterComponent * emitter)
@@ -197,9 +198,20 @@ namespace thomas
 			UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->IsPaused());
 			UpdateParticles(emitter);
 
+			if (emitter->m_firstFrame)
+			{
+				emitter->m_firstFrame = false;
+				return;
+			}
+			else if (emitter->m_secondFrame)
+			{
+				emitter->m_secondFrame = false;
+				return;
+			}
+			
 
 			FLOAT blendfactor[4] = { 0, 0, 0, 0 };
-
+			
 			switch (emitter->GetBlendState())
 			{
 			case object::component::ParticleEmitterComponent::BlendStates::ADDITIVE:
