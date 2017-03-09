@@ -154,6 +154,10 @@ namespace thomas
 			ThomasCore::GetDeviceContext()->PSSetShaderResources(5, 1, &nullSRV);
 			BindDepthNormal();
 		}
+		void Renderer::ResetDepthStencilState()
+		{
+			ThomasCore::GetDeviceContext()->OMSetDepthStencilState(s_depthStencilState, 1);
+		}
 	}
 }
 

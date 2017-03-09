@@ -9,7 +9,7 @@ namespace thomas
 		{
 			void Camera::UpdateProjMatrix()
 			{
-				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(m_fov, m_viewport.AspectRatio(), m_near, m_far);
+				m_projMatrix = math::Matrix::CreatePerspectiveFieldOfView(math::DegreesToRadians(m_fov), m_viewport.AspectRatio(), m_near, m_far);
 			}
 
 			Camera::Camera(): Component("CameraComponent")

@@ -551,11 +551,7 @@ void Ship::Float(float dt)
 }
 void Ship::Update()
 {
-
-
-
 	float const dt = ThomasTime::GetDeltaTime();
-
 
 	if (m_startUpSequence)
 	{
@@ -611,8 +607,8 @@ void Ship::Update()
 		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
 
 		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
-
-		CameraRotate(right_x, right_y, dt, distanceVector);
+		
+		CameraRotate(ShipStats::s_playerStats->GetInvertCamX() * right_x, ShipStats::s_playerStats->GetInvertCamY() * right_y, dt, distanceVector);
 
 		//Move camera "distance" away from boat.
 		/*math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*distance);
@@ -685,7 +681,7 @@ void Ship::Update()
 	Float(dt);
 
 
-	if (m_treasure > 100000 && !m_spawnedWormhole && !m_startUpSequence)
+	if (m_treasure > 1500 && !m_spawnedWormhole && !m_startUpSequence)
 	{
 		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0f,0),math::Quaternion::Identity,m_scene);
 		wormhole->SetEndLevel(true);

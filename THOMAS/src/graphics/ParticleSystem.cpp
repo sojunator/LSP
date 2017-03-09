@@ -16,6 +16,7 @@ namespace thomas
 		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV; //pong
 
 		ID3D11BlendState* ParticleSystem::s_particleBlendState;
+		ID3D11DepthStencilState* ParticleSystem::s_depthStencilState;
 
 		unsigned int ParticleSystem::s_maxNumberOfBillboardsSupported;
 
@@ -28,7 +29,7 @@ namespace thomas
 
 		ParticleSystem::~ParticleSystem()
 		{
-
+			s_depthStencilState->Release();
 		}
 
 		void ParticleSystem::Init()
@@ -48,18 +49,30 @@ namespace thomas
 
 			rtbd.BlendEnable = true;
 			rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-			rtbd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			rtbd.DestBlend = D3D11_BLEND_ONE;
 			rtbd.BlendOp = D3D11_BLEND_OP_ADD;
 			rtbd.SrcBlendAlpha = D3D11_BLEND_ONE;
 			rtbd.DestBlendAlpha = D3D11_BLEND_ZERO;
 			rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
 			rtbd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-			blendDesc.AlphaToCoverageEnable = true;
 			blendDesc.RenderTarget[0] = rtbd;
 
-
 			HRESULT hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_particleBlendState);
+
+
+			D3D11_DEPTH_STENCIL_DESC mirrorDesc;
+			mirrorDesc.DepthEnable = true;
+			mirrorDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+			mirrorDesc.DepthFunc = D3D11_COMPARISON_LESS;
+			mirrorDesc.StencilEnable = false;
+			mirrorDesc.StencilReadMask = 0xff;
+			mirrorDesc.StencilWriteMask = 0xff;
+			mirrorDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			mirrorDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+			mirrorDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
+			mirrorDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+			ThomasCore::GetDevice()->CreateDepthStencilState(&mirrorDesc, &s_depthStencilState);
 
 
 			s_cameraBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(s_cameraBufferStruct, D3D11_BIND_CONSTANT_BUFFER);
@@ -74,12 +87,19 @@ namespace thomas
 			SAFE_RELEASE(s_matrixBuffer);
 		}
 
-		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix)
+		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, bool paused)
 		{
 			s_cameraBufferStruct.right = trans->Right();
 			s_cameraBufferStruct.up = trans->Up();
-			LOG(trans->Up().x);
-			s_cameraBufferStruct.deltaTime = ThomasTime::GetDeltaTime();
+			if (paused)
+			{
+				s_cameraBufferStruct.deltaTime = 0;
+			}
+			else
+			{
+				s_cameraBufferStruct.deltaTime = ThomasTime::GetDeltaTime();
+			}
+			
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
 
@@ -134,7 +154,7 @@ namespace thomas
 
 		void ParticleSystem::UpdateParticles(object::component::ParticleEmitterComponent * emitter)
 		{
-
+			
 			SwapUAVsandSRVs(emitter);
 
 			//bind CS
@@ -156,7 +176,9 @@ namespace thomas
 
 		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter)
 		{
-			UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose());
+
+
+			UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->IsPaused());
 			UpdateParticles(emitter);
 
 
@@ -173,7 +195,9 @@ namespace thomas
 
 			emitter->GetTexture()->Bind();
 
-			ThomasCore::GetDeviceContext()->Draw(emitter->GetSpawnedParticleCount() * 6, 0);
+			emitter->GetShader()->BindPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+			ThomasCore::GetDeviceContext()->Draw(emitter->GetNrOfMaxParticles() * 6, 0);
 
 			ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 
@@ -182,6 +206,11 @@ namespace thomas
 			emitter->GetShader()->BindResource(NULL, 1);
 			emitter->GetShader()->BindBuffer(NULL, 0);
 			emitter->GetShader()->Unbind();
+		}
+
+		ID3D11DepthStencilState * ParticleSystem::GetDepthStencilState()
+		{
+			return s_depthStencilState;
 		}
 
 		void ParticleSystem::CreateBillboardUAVandSRV(int maxAmountOfParticles, ID3D11Buffer*& buffer, ID3D11UnorderedAccessView*& uav, ID3D11ShaderResourceView*& srv)

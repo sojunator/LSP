@@ -27,12 +27,17 @@ cbuffer InitBuffer : register(b0)
 	float4 initEndColor;
 
 	matrix directionMatrix;
+
+	float initGravity;
+	float3 padding;
+
 };
 
 struct ParticleStruct
 {
 	float3 position;
-	float padding2;
+	float gravity;
+
 	float3 direction;
 	float speed;
 
@@ -118,6 +123,7 @@ void CSMain(uint3 Gid : SV_GroupID)
 	}
 
 	particlesWrite[index].position = position;
+	particlesWrite[index].gravity = initGravity;
 	particlesWrite[index].direction = dir;
 	particlesWrite[index].speed = speed;
 	particlesWrite[index].endSpeed = initEndSpeed;
@@ -131,7 +137,9 @@ void CSMain(uint3 Gid : SV_GroupID)
 	particlesWrite[index].startColor = initStartColor;
 	particlesWrite[index].endColor = initEndColor;
 
+
 	particlesWrite2[index].position = position;
+	particlesWrite2[index].gravity = initGravity;
 	particlesWrite2[index].direction = dir;
 	particlesWrite2[index].speed = speed;
 	particlesWrite2[index].endSpeed = initEndSpeed;

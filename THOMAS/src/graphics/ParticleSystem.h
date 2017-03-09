@@ -22,7 +22,7 @@ namespace thomas
 		private:
 			
 
-			static void UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix);
+			static void UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, bool paused);
 			static void SwapUAVsandSRVs(object::component::ParticleEmitterComponent * emitter);//ping pong
 			
 		public:
@@ -35,6 +35,8 @@ namespace thomas
 			static void SpawnParticles(object::component::ParticleEmitterComponent* emitter, int amountOfParticles);
 			static void UpdateParticles(object::component::ParticleEmitterComponent* emitter);
 			static void DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter);
+
+			static ID3D11DepthStencilState* GetDepthStencilState();
 
 		private:
 			struct BillboardStruct
@@ -68,6 +70,7 @@ namespace thomas
 			static ID3D11ShaderResourceView* s_activeParticleSRV;
 
 			static ID3D11BlendState* s_particleBlendState;
+			static ID3D11DepthStencilState* s_depthStencilState;
 
 			static unsigned int s_maxNumberOfBillboardsSupported;
 		public:

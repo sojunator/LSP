@@ -6,6 +6,7 @@
 #include "../scenes/MenuScene.h"
 #include "../../graphics/Sprite.h"
 #include "Ship.h"
+#include "PauseObjectMenuObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -23,7 +24,7 @@ public:
 	void Start()
 	{
 		m_far = 4000;
-		m_fov = 70;
+		m_fov = ShipStats::s_playerStats->GetFOV();
 
 
 		m_camera = AddComponent<component::Camera>();
@@ -151,12 +152,14 @@ public:
 	void Update()
 	{
 		m_camera->SetFar(m_far);
-		m_camera->SetFov(m_fov);
+		m_camera->SetFov(ShipStats::s_playerStats->GetFOV());
 
 		if (m_ship == nullptr)
 		{
 			m_ship = (Ship*)Find("Ship");
 		}
+		else if (m_pauseObj == nullptr)
+			m_pauseObj = (PauseObjectMenuObject*)Find("PauseObjectMenuObject");
 		else
 		{
 			if (m_ship->m_armor > 0)
@@ -205,25 +208,25 @@ public:
 		{
 			if (Input::GetKey(Input::Keys::A))
 			{
-				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(-m_transform->Right()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::D))
 			{
-				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(m_transform->Right()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::W))
 			{
-				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(m_transform->Forward()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 			if (Input::GetKey(Input::Keys::S))
 			{
-				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetDeltaTime());
+				m_transform->Translate(-m_transform->Forward()*m_flySpeed*ThomasTime::GetActualDeltaTime());
 			}
 		}
 		if (Input::GetMouseButton(Input::MouseButtons::RIGHT))
 		{
 			Input::SetMouseMode(Input::MouseMode::POSITION_RELATIVE);
-			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetDeltaTime();
+			math::Vector2 mouseDelta = Input::GetMousePosition() *m_sensitivity*ThomasTime::GetActualDeltaTime();
 
 			m_jaw += -mouseDelta.x*m_sensitivity*(math::PI / 180.0f);
 			m_pitch += -mouseDelta.y*m_sensitivity*(math::PI / 180.0f);
@@ -249,7 +252,7 @@ public:
 			m_flySpeed = m_normalSpeed;
 
 		
-		if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
+		if ((Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK)) && !m_pauseObj->GetPauseState())
 			Scene::LoadScene<MenuScene>();
 
 		/*if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START)) //When pause scene implemented
@@ -263,6 +266,7 @@ public:
 
 private:
 	Ship* m_ship;
+	PauseObjectMenuObject* m_pauseObj;
 	component::Camera* m_camera;
 	component::SoundComponent* m_seagull;
 	component::SoundComponent* m_creak;

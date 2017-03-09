@@ -16,6 +16,7 @@
     <ClCompile Include="src\gameobjects\HighscoreMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\ShipStats.cpp" />
     <ClCompile Include="src\materials\SkyboxMaterial.cpp" />
+    <ClCompile Include="src\gameobjects\SettingsMainMenuObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -55,6 +56,10 @@
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="src\scenes\HighscoreScene.h" />
     <ClInclude Include="src\materials\SkyboxMaterial.h" />
+    <ClInclude Include="src\gameobjects\PauseObjectMenuObject.h" />
+    <ClInclude Include="src\gameobjects\SettingsMenuObject.h" />
+    <ClInclude Include="src\gameobjects\SettingsMainMenuObject.h" />
+    <ClInclude Include="src\scenes\SettingsScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

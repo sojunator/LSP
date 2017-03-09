@@ -51,6 +51,8 @@ namespace thomas {
 		if (s_initialized)
 			s_initialized = graphics::Renderer::Init();
 
+		utils::DebugTools::Init();
+
 		if (s_initialized)
 			s_initialized = ThomasTime::Init();
 
