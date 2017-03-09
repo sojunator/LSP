@@ -11,7 +11,7 @@ ShipStats::ShipStats()
 	m_boostCost = 20;
 	m_cannonCost = 50;
 	m_shieldAmount = 0;
-	m_healthAmount = 0.55f;
+	m_healthAmount = 1;
 	m_placeHolderHealthAmount = 1;
 	m_plunderSpeed = 30;
 	m_settingsFOV = 50;

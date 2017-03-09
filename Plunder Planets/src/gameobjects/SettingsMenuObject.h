@@ -48,7 +48,10 @@ public:
 		m_settingsHeadLine->SetOrigin(false);
 
 		m_settingsCamRotateX->SetFont("SafeToLeave");
-		m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (No)");
+		if(ShipStats::s_playerStats->GetInvertCamX() == -1)
+			m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (No)");
+		else
+			m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (Yes)");
 		m_settingsCamRotateX->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsCamRotateX->SetRotation(0.0f);
 		m_settingsCamRotateX->SetScale(1.0f);
@@ -59,7 +62,10 @@ public:
 		m_settingsCamRotateX->SetOrigin(false);
 
 		m_settingsCamRotateY->SetFont("SafeToLeave");
-		m_settingsCamRotateY->SetOutput("Invert Camera Rotation Y (No)");
+		if (ShipStats::s_playerStats->GetInvertCamY() == -1)
+			m_settingsCamRotateY->SetOutput("Invert Camera Rotation Y (No)");
+		else
+			m_settingsCamRotateY->SetOutput("Invert Camera Rotation Y (Yes)");
 		m_settingsCamRotateY->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsCamRotateY->SetRotation(0.0f);
 		m_settingsCamRotateY->SetScale(1.0f);
@@ -285,7 +291,7 @@ public:
 
 	void Choice()
 	{
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_pauseObj->GetSettingsState()) //FIX IF PRESS B, m_pauseObj->SetSettingsState(false)
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_pauseObj->GetSettingsState())
 		{
 			if (!m_firstTimeHax) //Because same action that opened settings menu also triggers an action in settingsmenu
 				m_firstTimeHax = true;

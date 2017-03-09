@@ -15,7 +15,6 @@ public:
 	float GetTreasure();
 	void SetTreasure(float goldDifference);
 	float GetCannonDamage();
-	float GetCannonSpread();
 	float GetCannonQuantity();
 	float GetSpeed();
 	float GetBoostCost();

@@ -218,6 +218,7 @@ public:
 			if (m_quitActive)
 			{
 				thomas::Scene::UnloadScene();
+				thomas::ThomasTime::SetTimescale(1.0f);
 				Scene::LoadScene<MenuScene>();
 			}
 

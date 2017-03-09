@@ -21,10 +21,9 @@ public:
 			thomas::graphics::Sprite::LoadTexture("MovementIcon", "../res/GUI/upgrade/speed.png");
 			thomas::graphics::Sprite::LoadTexture("ResourceIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("ShieldIcon", "../res/GUI/upgrade/shield.png");
-			thomas::graphics::Sprite::LoadTexture("RepairIcon", "../res/GUI/upgrade/icon.png");
+			thomas::graphics::Sprite::LoadTexture("RepairIcon", "../res/GUI/upgrade/repair.png");
 			thomas::graphics::Sprite::LoadTexture("PlunderIcon", "../res/GUI/upgrade/icon.png");
 			thomas::graphics::Sprite::LoadTexture("UpgradeMenuExit", "../res/GUI/menu/exit.png");
-			thomas::graphics::Sprite::LoadTexture("UpgradeMenuBackground", "../res/GUI/upgrade/background.jpg");
 			//Upgrade icons
 			thomas::graphics::Sprite::LoadTexture("CannonIcon1", "../res/GUI/upgrade/cannon1.png");
 			thomas::graphics::Sprite::LoadTexture("CannonIcon2", "../res/GUI/upgrade/cannon2.png");

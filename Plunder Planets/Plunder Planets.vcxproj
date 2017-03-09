@@ -182,6 +182,7 @@
     <ClInclude Include="src\gameobjects\Broadside.h" />
     <ClInclude Include="src\gameobjects\Cannon.h" />
     <ClInclude Include="src\gameobjects\PauseObjectMenuObject.h" />
+    <ClInclude Include="src\gameobjects\SettingsMainMenuObject.h" />
     <ClInclude Include="src\gameobjects\SettingsMenuObject.h" />
     <ClInclude Include="src\gameobjects\ShipFloat.h" />
     <ClInclude Include="src\gameobjects\PhysicsObject.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
+    <ClInclude Include="src\scenes\SettingsScene.h" />
     <ClInclude Include="src\scenes\UpgradeScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +226,7 @@
     <ClCompile Include="src\gameobjects\MainMenuObject.cpp" />
     <ClCompile Include="src\AI\AI.cpp" />
     <ClCompile Include="src\AI\Pathfinding.cpp" />
+    <ClCompile Include="src\gameobjects\SettingsMainMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\Ship.cpp" />
     <ClCompile Include="src\gameobjects\ShipStats.cpp" />
     <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
