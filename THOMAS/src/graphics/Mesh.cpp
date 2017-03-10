@@ -17,6 +17,8 @@ namespace thomas {
 		{
 			SAFE_RELEASE(m_data.vertexBuffer);
 			SAFE_RELEASE(m_data.indexBuffer);
+			m_data.vertices.clear();
+			m_data.indices.clear();
 		}
 
 

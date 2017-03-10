@@ -9,6 +9,12 @@ namespace thomas
 		{
 			class THOMAS_API RigidBodyComponent : public Component, public btRigidBody
 			{
+			public:
+				struct Collision
+				{
+					RigidBodyComponent* thisRigidbody;
+					RigidBodyComponent* otherRigidbody;
+				};
 			private:
 				void UpdateRigidbodyMass(float mass);
 			public:

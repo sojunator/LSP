@@ -1,6 +1,10 @@
 #include "ship.h"
-#include "TerrainObject.h"
+#include "Terrain/IslandManager.h"
 #include "Wormhole.h"
+#include "../scenes/GameScene.h"
+
+IslandManager* GameScene::s_islandManager;
+
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -43,7 +47,7 @@ void Ship::Start()
 	m_sound = AddComponent<component::SoundComponent>();
 	m_boostSound = AddComponent<component::SoundComponent>();
 	m_cameraObject = Find("CameraObject");
-	m_terrainObject = (TerrainObject*)Find("TerrainObject");
+	m_islandManager = GameScene::s_islandManager;
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
@@ -74,6 +78,8 @@ void Ship::Start()
 	m_boosterParticlesEmitterLeft1->SetRadius(2.2f);
 	m_boosterParticlesEmitterLeft1->SpawnAtSphereEdge(true);
 	m_boosterParticlesEmitterLeft1->SetSpread(2.7f);
+	m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+	m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
 
 	m_boosterParticlesEmitterLeft2 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterLeft2->SetTexture("../res/textures/fire2.png");
@@ -91,6 +97,8 @@ void Ship::Start()
 	m_boosterParticlesEmitterLeft2->SetMinLifeTime(0.3f);
 	m_boosterParticlesEmitterLeft2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterLeft2->SetSpread(2.5f);
+	m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
+	m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
 
 	m_boosterParticlesEmitterRight1 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterRight1->SetTexture("../res/textures/fire.png");
@@ -110,6 +118,8 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight1->SetRadius(2.2f);
 	m_boosterParticlesEmitterRight1->SpawnAtSphereEdge(true);
 	m_boosterParticlesEmitterRight1->SetSpread(2.7f);
+	m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+	m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 
 	m_boosterParticlesEmitterRight2 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterRight2->SetTexture("../res/textures/fire2.png");
@@ -127,6 +137,13 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight2->SetMinLifeTime(0.3f);
 	m_boosterParticlesEmitterRight2->SetRotationSpeed(2.0f);
 	m_boosterParticlesEmitterRight2->SetSpread(2.5f);
+	m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
+	m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
+
+	
+	
+	
+	
 
 	//Fire cost
 	m_firingCost = AddComponent<component::ParticleEmitterComponent>();
@@ -181,7 +198,7 @@ void Ship::Start()
 
 	//model
 	m_modelIndex = 0;
-	m_renderer->SetModel("testModel0");
+	m_renderer->SetModel("playerModel");
 	m_moving = false;
 	//sound
 	m_boostSound->SetClip("fFlames");
@@ -361,6 +378,7 @@ void Ship::ShipAimCannons()
 		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
+			m_broadSideLeft->SetProjectileDmg(ShipStats::s_playerStats->GetCannonDamage());
 			m_broadSideLeft->Fire(); //Temporary fix
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			m_firingCost->StartEmitting();
@@ -393,6 +411,7 @@ void Ship::ShipAimCannons()
 		{
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
+			m_broadSideRight->SetProjectileDmg(ShipStats::s_playerStats->GetCannonDamage());
 			m_broadSideRight->Fire(); //Temporary fix
 			m_firingCost->StartEmitting();
 		}
@@ -436,7 +455,7 @@ void Ship::DrawAimArc(Broadside* broadside)
 		//Physics::getDebugDraw()->drawLine(prevPoint, point, btVector3(1, 1, 0));
 		prevPoint = point;
 	}
-
+	
 }
 
 void Ship::CameraRotate(float const right_x, float const right_y, float const dt, math::Vector3 const distanceVector)
@@ -492,7 +511,8 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
+	if (m_islandManager)
+		m_treasure += m_islandManager->Plunder(m_transform->GetPosition());
 }
 int Ship::GetTreasure()
 {
@@ -548,23 +568,37 @@ void Ship::Float(float dt)
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 	}
 }
+void Ship::TakeDamage(float dmg)
+{
+	float dmgRemaining = dmg;
+	if (m_armor > 0)
+	{
+		m_armor -= dmgRemaining;
+		dmgRemaining -= m_armor;
+	}
+	if (dmgRemaining > 0)
+	{
+		m_health -= dmgRemaining;
+	}
+
+	if (m_health <= 0)
+	{
+		Die();
+	}
+}
+void Ship::Die()
+{
+	LOG("Why are you not dead?");
+}
 void Ship::Update()
 {
 	float const dt = ThomasTime::GetDeltaTime();
 
 	if (m_startUpSequence)
 	{
-		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterLeft1->StartEmitting();
-		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterLeft2->StartEmitting();
-		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight1->StartEmitting();
-		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight2->StartEmitting();
 		m_boostSound->Play();
 		Float(dt);
@@ -645,22 +679,13 @@ void Ship::Update()
 	ShipFly(upFactorPitch, upFactorRoll, left_y, dt);
 	ShipFireCannons();
 	ShipAimCannons();
-
 	if (m_flying)
 	{
-		//Input::Vibrate(0.1, 0.1);
-		//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
-		m_boosterParticlesEmitterLeft1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft1->SetDirection(m_transform->Forward());
+		Input::Vibrate(0.1, 0.1);
 		m_boosterParticlesEmitterLeft1->StartEmitting();
-		m_boosterParticlesEmitterLeft2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * 6.66f);
-		m_boosterParticlesEmitterLeft2->SetDirection(m_transform->Forward());
+
 		m_boosterParticlesEmitterLeft2->StartEmitting();
-		m_boosterParticlesEmitterRight1->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight1->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight1->StartEmitting();
-		m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
-		m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 		m_boosterParticlesEmitterRight2->StartEmitting();
 
 		m_boostCost->StartEmitting();
@@ -699,33 +724,20 @@ void Ship::Update()
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }
-void Ship::OnCollision(component::RigidBodyComponent* other)
+void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 {
-	if (other->m_gameObject->GetType() == "Projectile")
+	if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 	{
-		Projectile* p = ((Projectile*)other->m_gameObject);
-		if (p->m_spawnedBy == this)
-			return;
-
-		if (m_armor > 0)
+		Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
+		
+		if (p->m_spawnedBy != this)
 		{
-			//m_armor -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
-			m_armor -= 5;
-			LOG("hit armor: " << m_armor);
+			TakeDamage(p->GetDamageAmount());
 		}
-		else if (m_armor <= 0)
-		{
-			//m_health -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
-			m_health -= 5;
-			LOG("hit hp: " << m_health);
-		}
-	
-		if (m_health <= 0)
-		{
-			LOG("You are dead!");
-			Scene::LoadScene<MenuScene>(); //Load Game Over instead
-			//Delete shipStats;
-		}
-
 	}
+
+
+
+
+
 }

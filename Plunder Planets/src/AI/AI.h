@@ -1,11 +1,10 @@
 #pragma once
 
 #include "../gameobjects/Ship.h"
-#include "Pathfinding.h"
 #include "Thomas.h"
 #include "../../THOMAS/src/object/component/Component.h"
 
-class TerrainObject;
+class IslandManager;
 class THOMAS_API AI : public thomas::object::component::Component
 {
 public:
@@ -35,7 +34,7 @@ private:
 	State m_currentState;
 	float m_searchRadius;
 	float m_fireRadius;
-	TerrainObject* m_terrainObject;
+	IslandManager* m_islandManager;
 	GameObject* m_target;
 	math::Vector3 m_lastKnownPos;
 	math::Vector3 m_moveToPos;

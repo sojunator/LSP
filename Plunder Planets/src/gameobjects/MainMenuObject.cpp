@@ -108,23 +108,22 @@ void MainMenuObject::Update()
 		}
 			
 	}
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKey(Input::Keys::Enter))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter))
 	{
 		if (m_startButton->isHovering())
 		{
 			Scene::LoadScene<UpgradeScene>();
 		}
-		if (m_highScoreButton->isHovering())
+		else if (m_highScoreButton->isHovering())
 		{
 			Scene::LoadScene<HighscoreScene>();
 		}
-		if (m_optionButton->isHovering())
+		else if (m_optionButton->isHovering())
 			Scene::LoadScene<SettingsScene>();
 
-		if (m_creditsButton->isHovering())
-			Scene::LoadScene<CreditsScene>();
-
-		if (m_exitButton->isHovering())
+		else if (m_creditsButton->isHovering())
+					Scene::LoadScene<CreditsScene>();
+		else if (m_exitButton->isHovering())
 			ThomasCore::Exit();
 	}
 

@@ -34,7 +34,6 @@ public:
 
 	void Start()
 	{
-		LOG(m_transform->GetPosition().y);
 		m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 		m_wormholeParticles = AddComponent<component::ParticleEmitterComponent>();
 
@@ -89,7 +88,7 @@ public:
 			m_wormhole->StartEmitting();
 
 
-			if (m_time > 5.5f)
+			if (m_time > 4.5f)
 			{
 				m_wormhole->SetSize(50);
 				m_wormhole->SetRotationSpeed(math::DegreesToRadians(20));
@@ -157,12 +156,10 @@ public:
 			StartLevel();
 	}
 
-	void OnCollision(component::RigidBodyComponent* other)
+	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if (other->m_gameObject->GetType() == "Ship")
+		if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
-			LOG("End the scene");
-			thomas::Scene::UnloadScene();
 			Scene::LoadScene<UpgradeScene>();
 		}
 	}

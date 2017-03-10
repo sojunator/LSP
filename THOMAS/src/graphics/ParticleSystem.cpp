@@ -9,17 +9,13 @@ namespace thomas
 		ID3D11Buffer* ParticleSystem::s_cameraBuffer;
 		ID3D11Buffer* ParticleSystem::s_matrixBuffer;
 
-		ID3D11Buffer* ParticleSystem::s_billboardsBuffer;
-
 		Shader* ParticleSystem::s_updateParticlesCS;
 		Shader* ParticleSystem::s_emitParticlesCS;
-		ID3D11UnorderedAccessView* ParticleSystem::s_billboardsUAV;
-		ID3D11ShaderResourceView* ParticleSystem::s_billboardsSRV;
 
 		ID3D11UnorderedAccessView* ParticleSystem::s_activeParticleUAV; //ping
 		ID3D11ShaderResourceView* ParticleSystem::s_activeParticleSRV; //pong
 
-		ID3D11BlendState* ParticleSystem::s_particleBlendState;
+		ParticleSystem::BlendStates ParticleSystem::s_blendStates;
 		ID3D11DepthStencilState* ParticleSystem::s_depthStencilState;
 
 		unsigned int ParticleSystem::s_maxNumberOfBillboardsSupported;
@@ -44,26 +40,39 @@ namespace thomas
 			s_emitParticlesCS = Shader::CreateComputeShader("EmitParticlesCS", "../res/shaders/emitParticlesCS.hlsl", NULL);
 			s_updateParticlesCS = Shader::CreateComputeShader("UpdateParticlesCS", "../res/shaders/updateParticlesCS.hlsl", NULL);
 
-			//CreateBillboardUAVandSRV();
-
 
 			D3D11_BLEND_DESC blendDesc;
 			ZeroMemory(&blendDesc, sizeof(blendDesc));
 
-			D3D11_RENDER_TARGET_BLEND_DESC rtbd;
-			ZeroMemory(&rtbd, sizeof(rtbd));
+			D3D11_RENDER_TARGET_BLEND_DESC blendState;
+			ZeroMemory(&blendState, sizeof(blendState));
 
-			rtbd.BlendEnable = true;
-			rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-			rtbd.DestBlend = D3D11_BLEND_ONE;
-			rtbd.BlendOp = D3D11_BLEND_OP_ADD;
-			rtbd.SrcBlendAlpha = D3D11_BLEND_ONE;
-			rtbd.DestBlendAlpha = D3D11_BLEND_ZERO;
-			rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-			rtbd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-			blendDesc.RenderTarget[0] = rtbd;
+			//Additive
 
-			HRESULT hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_particleBlendState);
+			blendState.BlendEnable = true;
+			blendState.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			blendState.DestBlend = D3D11_BLEND_ONE;
+			blendState.BlendOp = D3D11_BLEND_OP_ADD;
+			blendState.SrcBlendAlpha = D3D11_BLEND_ONE;
+			blendState.DestBlendAlpha = D3D11_BLEND_ZERO;
+			blendState.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			blendState.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+			blendDesc.RenderTarget[0] = blendState;
+
+			HRESULT hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_blendStates.additive);
+
+			//alpha blend
+			blendState.BlendEnable = true;
+			blendState.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			blendState.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			blendState.BlendOp = D3D11_BLEND_OP_ADD;
+			blendState.SrcBlendAlpha = D3D11_BLEND_ONE;
+			blendState.DestBlendAlpha = D3D11_BLEND_ZERO;
+			blendState.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			blendState.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+			blendDesc.RenderTarget[0] = blendState;
+
+			hr = ThomasCore::GetDevice()->CreateBlendState(&blendDesc, &s_blendStates.alphaBlend);
 
 
 			D3D11_DEPTH_STENCIL_DESC mirrorDesc;
@@ -77,7 +86,7 @@ namespace thomas
 			mirrorDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
 			mirrorDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
 			mirrorDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
+				
 			ThomasCore::GetDevice()->CreateDepthStencilState(&mirrorDesc, &s_depthStencilState);
 
 
@@ -88,6 +97,11 @@ namespace thomas
 
 		void ParticleSystem::Destroy()
 		{
+			SAFE_RELEASE(s_blendStates.additive);
+			SAFE_RELEASE(s_blendStates.alphaBlend);
+			SAFE_RELEASE(s_cameraBuffer);
+			SAFE_RELEASE(s_matrixBuffer);
+			SAFE_RELEASE(s_depthStencilState);
 		}
 
 		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, bool paused)
@@ -102,7 +116,7 @@ namespace thomas
 			{
 				s_cameraBufferStruct.deltaTime = ThomasTime::GetDeltaTime();
 			}
-			
+
 
 			s_matrixBufferStruct.viewProjMatrix = viewProjMatrix;
 
@@ -141,37 +155,39 @@ namespace thomas
 		void ParticleSystem::SpawnParticles(object::component::ParticleEmitterComponent * emitter, int amountOfParticles)
 		{
 			object::component::ParticleEmitterComponent::D3DData* emitterD3D = emitter->GetD3DData();
-			ID3D11UnorderedAccessView* nulluav[1] = { NULL };
+			
 			s_emitParticlesCS->Bind();
 			s_emitParticlesCS->BindBuffer(emitterD3D->particleBuffer, 0);
-			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 0);
-			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV1, 1);
+			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV2, 6);
+			s_emitParticlesCS->BindUAV(emitterD3D->particleUAV1, 7);
 
 			ThomasCore::GetDeviceContext()->Dispatch(amountOfParticles, 1, 1);
 
-			s_emitParticlesCS->BindUAV(NULL, 0);
-			s_emitParticlesCS->BindUAV(NULL, 0);
+			s_emitParticlesCS->BindUAV(NULL, 6);
+			s_emitParticlesCS->BindUAV(NULL, 7);
 			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_emitParticlesCS->Unbind();
+
 		}
 
 		void ParticleSystem::UpdateParticles(object::component::ParticleEmitterComponent * emitter)
 		{
-			
+
 			SwapUAVsandSRVs(emitter);
 
 			//bind CS
 			s_updateParticlesCS->Bind();
-			s_updateParticlesCS->BindUAV(s_activeParticleUAV, 0);
-			s_updateParticlesCS->BindUAV(emitter->GetD3DData()->billboardsUAV, 1);
+			s_updateParticlesCS->BindUAV(s_activeParticleUAV, 6);
+			s_updateParticlesCS->BindUAV(emitter->GetD3DData()->billboardsUAV, 7);
 			s_updateParticlesCS->BindResource(s_activeParticleSRV, 0);
 			s_updateParticlesCS->BindBuffer(s_cameraBuffer, 0);
 
-			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetNrOfMaxParticles() / 256 + 1, 1, 1);
+			ThomasCore::GetDeviceContext()->Dispatch(emitter->GetSpawnedParticleCount() / 256 + 1, 1, 1);
 			//unbind CS
-			s_updateParticlesCS->BindUAV(NULL, 0);
-			s_updateParticlesCS->BindUAV(NULL, 1);
+			s_updateParticlesCS->BindUAV(NULL, 6);
+			s_updateParticlesCS->BindUAV(NULL, 7);
 			s_updateParticlesCS->BindResource(NULL, 0);
+			s_emitParticlesCS->BindBuffer(NULL, 0);
 			s_updateParticlesCS->Unbind();
 
 		}
@@ -183,15 +199,40 @@ namespace thomas
 			UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->IsPaused());
 			UpdateParticles(emitter);
 
+			if (emitter->m_firstFrame)
+			{
+				emitter->m_firstFrame = false;
+				return;
+			}
+			else if (emitter->m_secondFrame)
+			{
+				emitter->m_secondFrame = false;
+				return;
+			}
+			
 
 			FLOAT blendfactor[4] = { 0, 0, 0, 0 };
-			ThomasCore::GetDeviceContext()->OMSetBlendState(s_particleBlendState, blendfactor, 0xffffffff);
+			
+			switch (emitter->GetBlendState())
+			{
+			case object::component::ParticleEmitterComponent::BlendStates::ADDITIVE:
+				ThomasCore::GetDeviceContext()->OMSetBlendState(s_blendStates.additive, blendfactor, 0xffffffff);
+				break;
+			case object::component::ParticleEmitterComponent::BlendStates::ALPHA_BLEND:
+				ThomasCore::GetDeviceContext()->OMSetBlendState(s_blendStates.alphaBlend, blendfactor, 0xffffffff);
+				break;
+			default:
+				ThomasCore::GetDeviceContext()->OMSetBlendState(s_blendStates.additive, blendfactor, 0xffffffff);
+				break;
+			}
+
 			//bind Emitter
 
 			emitter->GetShader()->Bind();
 			emitter->GetShader()->BindResource(emitter->GetD3DData()->billboardsSRV, 1);
 			emitter->GetShader()->BindBuffer(s_matrixBuffer, 0);
 			ThomasCore::GetDeviceContext()->IASetInputLayout(NULL);
+			ThomasCore::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			emitter->GetShader()->BindVertexBuffer(NULL, 0, 0);
 
 			emitter->GetTexture()->Bind();

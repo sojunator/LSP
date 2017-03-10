@@ -3,59 +3,60 @@
 
 namespace thomas
 {
-	Islands::Islands(int nrOfIslands, graphics::Material* m, int size, float detail, int mapSize, int minDistance)
+	Islands::Islands(int nrOfIslands, graphics::Material* m, int minSize, int maxSize, float detail, int mapSize)
 	{
 		std::srand(time(NULL));
-		utils::Plane::PlaneData plane = utils::Plane::CreatePlane(mapSize, detail);
+		std::vector<thomas::utils::Plane::PlaneData> tempPlane;
 		m_mapSize = mapSize;
-		m_minDistance = minDistance;
 		m_nrOfIslands = nrOfIslands;
 		m_plunderRate = ShipStats::s_playerStats->GetPlunderSpeed();
 
-		for (int i = 0; i < nrOfIslands; i++)
+		for (int i = 0; i < m_nrOfIslands; i++)
 		{
+			int randNumber = rand() % (maxSize - minSize) + minSize;
+			float islandSize = std::round(randNumber * detail) / detail;	//Generates a size that is divisible by "detail". This ensures that the islands don't have holes in them.
+			float powIsland = std::pow(islandSize / 2, 2);
+			float min = std::sqrt(powIsland + powIsland) + 300/** 1.5*/;		//Depends on size of island
+
+			float treasure = rand() % 800 + islandSize;
+
 			m_lostTreasureSinceLastEnemySpawn.push_back(0);
-			m_size.push_back(size);
+			m_size.push_back(islandSize);
+			m_minDistance.push_back(min);
 			m_detail.push_back(detail);
-			m_treasure.push_back(1000);
-			m_totalTreasure.push_back(1000);
-			m_plunderRadius.push_back(size*0.43);
-			m_collisionRadius.push_back(size*0.3);
+			m_treasure.push_back(islandSize * 1.5);
+			m_totalTreasure.push_back(treasure);
+			m_collisionRadius.push_back(islandSize * 0.33);
+			m_plunderRadius.push_back(m_collisionRadius[i] + 100);
 		}
 
 		GeneratePos();
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
-			utils::HeightMap::ApplyHeightMap(size, detail, mapSize, plane, math::Vector2(m_worldPosOffset[i].z, m_worldPosOffset[i].x));
-			m_islandCenterWorldPos[i].x -= mapSize / 2;
-			m_islandCenterWorldPos[i].z += mapSize / 2;
+			tempPlane.push_back(thomas::utils::Plane::CreatePlane(m_size[i], detail));
+			utils::HeightMap::ApplyHeightMap(m_size[i], detail, mapSize, tempPlane[i], math::Vector2(m_worldPosOffset[i].x, m_worldPosOffset[i].z));
+			MoveCenterFromCornerToCenter(i, tempPlane[i]);
 		}
-
-		for (int i = 0; i < plane.verts.size(); i++)
-		{
-			plane.verts[i].position.x -= mapSize / 2;
-			plane.verts[i].position.z += mapSize / 2;
-		}
-
-
-		ChangeHeightMapValues(plane);
-		GenerateMesh(plane, m);
-
+		GenerateMesh(tempPlane, m);
 	}
-	
-	void Islands::GenerateMesh(utils::Plane::PlaneData tempPlane, graphics::Material* m)
+
+	void Islands::GenerateMesh(std::vector<utils::Plane::PlaneData> tempPlane, graphics::Material* m)
 	{
 		std::vector<thomas::graphics::Mesh*> mesh;
-		mesh.push_back(new graphics::Mesh(tempPlane.verts, tempPlane.indices, "Islands", m));
-		m_mesh.push_back(mesh);
+		for (int i = 0; i < tempPlane.size(); i++)
+		{
+			mesh.push_back(new graphics::Mesh(tempPlane[i].verts, tempPlane[i].indices, "Islands", m));
+			m_mesh.push_back(mesh);
+			mesh.clear();
+		}
 	}
 
-	void Islands::ApplyOffSet(int island, utils::Plane::PlaneData& tempPlanes)
+	void Islands::MoveCenterFromCornerToCenter(int island, utils::Plane::PlaneData& tempPlanes)
 	{
 		for (unsigned int i = 0; i < tempPlanes.verts.size(); ++i)
 		{
-			tempPlanes.verts[i].position.x += m_worldPosOffset[island].x;
-			tempPlanes.verts[i].position.z += m_worldPosOffset[island].z;
+			tempPlanes.verts[i].position.x -= m_size[island] / 2;
+			tempPlanes.verts[i].position.z += m_size[island] / 2;
 		}
 	}
 
@@ -90,9 +91,9 @@ namespace thomas
 		return m_mapSize;
 	}
 
-	int Islands::GetMinDistance()
+	int Islands::GetMinDistance(int island)
 	{
-		return m_minDistance;
+		return m_minDistance[island];
 	}
 
 	math::Vector3 Islands::GetCenter(int island)
@@ -178,16 +179,7 @@ namespace thomas
 
 	int Islands::GetSizeOFIsland(int island)
 	{
-		return m_size[island]/* * m_detail[island]*/;
-	}
-
-	void Islands::ChangeHeightMapValues(thomas::utils::Plane::PlaneData& plane)
-	{
-		for (int i = 0; i < plane.verts.size(); i++)
-		{
-			if (plane.verts[i].position.y < 5.0)
-				plane.verts[i].position.y = -20.0;
-		}
+		return m_size[island];
 	}
 
 	void Islands::GeneratePos()
@@ -196,22 +188,16 @@ namespace thomas
 		int attempt = 0;
 		int addedIslands = 0;
 		math::Vector3 tempOffset;
-		/*tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+
+		tempOffset.x = m_mapSize / 2;			//Should be +mapSize / 2. So that we can't spawn in an island
 		tempOffset.y = 0;
-		tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);*/
+		tempOffset.z = -m_mapSize / 2;			//Should be -mapSize / 2. So that we can't spawn in an island
 
-		tempOffset.x = m_mapSize / 2;
-		tempOffset.y = 0;
-		tempOffset.z = m_mapSize / 2;
-
-
-		tempOffset.x += 10;
-		tempOffset.z += 10;
 
 		math::Vector3 tempCenter;
-		tempCenter.x = tempOffset.x + m_size[0] / 2;
+		tempCenter.x = tempOffset.x + 1024 / 2;
 		tempCenter.y = 0;
-		tempCenter.z = -tempOffset.z - m_size[0] / 2;
+		tempCenter.z = tempOffset.z - 1024 / 2;
 
 		m_worldPosOffset.push_back(tempOffset);
 		m_islandCenterWorldPos.push_back(tempCenter);
@@ -221,17 +207,15 @@ namespace thomas
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{
 			bool foundPos = false;
-			while (!foundPos && MAX_ATTEMPTS != attempt)
+			while (!foundPos && attempt != MAX_ATTEMPTS)
 			{
-				tempOffset.x = rand() % (m_mapSize - m_size[0] - 10);
+				tempOffset.x = rand() % m_mapSize - (m_mapSize / 2);
 				tempOffset.y = 0;
-				tempOffset.z = rand() % (m_mapSize - m_size[0] - 10);
-				tempOffset.x += 10;
-				tempOffset.z += 10;
-				
-				tempCenter.x = tempOffset.x + m_size[0] / 2;
+				tempOffset.z = rand() % m_mapSize - (m_mapSize / 2);
+
+				tempCenter.x = tempOffset.x + m_size[i] / 2;
 				tempCenter.y = 0;
-				tempCenter.z = -tempOffset.z - m_size[0] / 2;
+				tempCenter.z = tempOffset.z - m_size[i] / 2;
 
 				for (int j = 0; j < m_islandCenterWorldPos.size(); ++j)
 				{
@@ -243,7 +227,7 @@ namespace thomas
 
 				for (int j = 0; j < distance.size(); j++)
 				{
-					if (distance[j] <= m_minDistance)
+					if (distance[j] <= m_minDistance[i])
 						tooSmall = true;
 				}
 
@@ -262,6 +246,7 @@ namespace thomas
 			}
 
 		}
+
 		m_worldPosOffset.erase(m_worldPosOffset.begin());
 		m_islandCenterWorldPos.erase(m_islandCenterWorldPos.begin());
 		m_nrOfIslands = --addedIslands;

@@ -13,6 +13,7 @@ namespace thomas
 			private:
 			public:
 				GameObject* m_gameObject;
+				
 				Component(std::string name);
 				bool GetActive();
 			private:

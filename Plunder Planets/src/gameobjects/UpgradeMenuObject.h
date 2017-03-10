@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Thomas.h>
+#include "Thomas.h"
 #include "ShipStats.h"
 
 using namespace thomas;
