@@ -1,5 +1,7 @@
 #pragma once
 #include <Thomas.h>
+#include "../../THOMAS/src/object/component/SoundComponent.h"
+#include "../scenes/MenuScene.h"
 
 using namespace thomas;
 using namespace object;
@@ -90,7 +92,6 @@ public:
 		m_pauseResume->SetActive(true);
 		m_pauseSettings->SetActive(true);
 		m_pauseQuit->SetActive(true);
-		
 	}
 
 	void HideMenu()
@@ -103,16 +104,27 @@ public:
 
 	void CheckState()
 	{
-		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter))
+		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Escape))
 		{
 			
 			if (m_isPaused)
 			{	
+				for (auto object : object::GameObject::FindGameObjectsWithComponent<object::component::SoundComponent>())
+				{
+					object::component::SoundComponent* comp = object->GetComponent<object::component::SoundComponent>();
+					comp->Resume();
+				}
 				HideMenu();
 				m_isPaused = false;
 			}
 			else
 			{
+				for (auto object : object::GameObject::FindGameObjectsWithComponent<object::component::SoundComponent>())
+				{
+					object::component::SoundComponent* comp = object->GetComponent<object::component::SoundComponent>();
+					comp->SetLooping(false);
+					comp->Pause();
+				}
 				DisplayMenu();
 				m_isPaused = true;
 			}
@@ -213,22 +225,21 @@ public:
 
 	void Choice()
 	{
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && !m_settingsChosen)
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter) || Input::GetKeyDown(Input::Keys::Space)) && !m_settingsChosen)
 		{
 			if (m_quitActive)
 			{
-				thomas::Scene::UnloadScene();
 				thomas::ThomasTime::SetTimescale(1.0f);
 				Scene::LoadScene<MenuScene>();
 			}
 
-			if (m_resumeActive)
+			else if (m_resumeActive)
 			{
 				m_isPaused = false;
 				HideMenu();
 			}
 
-			if (m_settingsActive)
+			else if (m_settingsActive)
 			{
 				m_settingsChosen = true;
 			}

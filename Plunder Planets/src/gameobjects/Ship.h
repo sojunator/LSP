@@ -58,8 +58,8 @@ public:
 	float m_maxArmor;
 
 private:
-	int m_flyCost;
-	bool m_spawnedWormhole;
+	float m_aimDistance;
+	float m_roof;
 	bool m_moving;
 	bool m_turning;
 	bool m_flying;
@@ -67,11 +67,10 @@ private:
 	bool m_notDead;
 	//used for the camera
 	bool m_freeCamera;
-	float m_aimDistance;
-	float m_roof;
 	float m_treasure;
 	float m_mass;
 	float m_flyTurnSpeed;
+	float m_flyCost;
 	float m_speed;
 	float m_turnSpeed;
 	float m_elevateCamSpeed;//for moving cam up and down

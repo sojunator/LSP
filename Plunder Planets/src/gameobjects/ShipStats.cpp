@@ -3,6 +3,7 @@ ShipStats* ShipStats::s_playerStats;
 unsigned int ShipStats::s_currentLevel;
 float ShipStats::s_totalgold;
 bool ShipStats::s_playerDied;
+
 ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
@@ -20,10 +21,50 @@ ShipStats::ShipStats()
 	m_settingsInvertCamY = -1;
 	m_settingsInvertShip = 0;
 	m_settingsCamRotateSpeed = 0;
-	s_currentLevel = 0;
-	s_totalgold = m_currentGold;
-	s_playerDied = false;
+	s_currentLevel = 1;
 }
+
+void ShipStats::SetCurrentGold(float gold)
+{
+	m_currentGold = gold;
+}
+
+void ShipStats::SetCannonDamage(float cannondamage)
+{
+	m_cannonDamage = cannondamage;
+}
+
+void ShipStats::SetSpeed(float speed)
+{
+	m_speed = speed;
+}
+
+void ShipStats::SetBoostCost(float boost)
+{
+	m_boostCost = boost;
+}
+
+void ShipStats::SetCannonCost(float cannonCost)
+{
+	m_cannonCost = cannonCost;
+}
+
+void ShipStats::SetShieldAmount(float shield)
+{
+	m_shieldAmount = shield;
+}
+
+void ShipStats::SetCurrentHealth(float health)
+{
+	m_healthAmount = health;
+	m_placeHolderHealthAmount = health;
+}
+
+void ShipStats::SetPlunderSpeed(float plunder)
+{
+	m_plunderSpeed = plunder;
+}
+
 
 float ShipStats::GetTreasure()
 {
@@ -167,7 +208,7 @@ void ShipStats::IncreaseShieldAmount(float talentAmount)
 	if (talentAmount == 1)
 		m_shieldAmount = 0.3;
 	else
-		m_shieldAmount = 0.3 + (0.175 * (talentAmount-1)); //0.3, 0.475, 0.65, 0.825, 1
+		m_shieldAmount = 0.3 + (0.175 * (talentAmount - 1)); //0.3, 0.475, 0.65, 0.825, 1
 	LOG("Shield amount: " + std::to_string(m_shieldAmount));
 }
 

@@ -37,6 +37,7 @@ public:
 private:
 	component::Camera* fov;
 	component::ParticleEmitterComponent* m_wormhole;
+	component::SpriteComponent* m_explanation;
 	component::SpriteComponent* m_cannonInfo;
 	component::SpriteComponent* m_movementInfo;
 	component::SpriteComponent* m_resourceInfo;
@@ -77,7 +78,10 @@ private:
 	component::SpriteComponent* m_plunderTalent4;
 	component::SpriteComponent* m_plunderTalent5;
 	component::SpriteComponent* m_exitButton;
+
 	component::SoundComponent* m_music;
+	component::SoundComponent* m_plunder;
+
 	component::TextComponent* m_currentGold;
 	component::TextComponent* m_currentHealth;
 	component::TextComponent* m_cannonCosts;
@@ -101,4 +105,6 @@ private:
 	float m_upgradeDelay = 0.3f;
 	int m_healthRepairCounts = 0;
 	int m_refundHolder = 0;
+
+	float m_resourceHolder = 0;
 };

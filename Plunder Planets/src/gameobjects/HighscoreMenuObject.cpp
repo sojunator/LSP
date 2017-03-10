@@ -2,6 +2,7 @@
 
 #include "HighscoreMenuObject.h"
 #include "../scenes/MenuScene.h"
+
 #include <fstream>
 #include <ctime>
 
@@ -87,7 +88,7 @@ void HighscoreMenuObject::Start()
 
 	m_exitText->SetName("HighscoreExit");
 	m_exitText->SetPositionX(50);
-	m_exitText->SetPositionY(970);
+	m_exitText->SetPositionY(950);
 	m_exitText->SetScale(math::Vector2(1.0f, 1.0f));
 	m_exitText->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_exitText->SetHoverColor(math::Color(0.5, 0.5, 0.5));

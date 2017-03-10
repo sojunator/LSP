@@ -1,11 +1,10 @@
 #pragma once
 
-#include "../gameobjects/Ship.h"
 #include "Thomas.h"
-#include "../../THOMAS/src/object/component/Component.h"
-
+using namespace thomas;
+using namespace object;
 class IslandManager;
-class THOMAS_API AI : public thomas::object::component::Component
+class THOMAS_API AI : public component::Component
 {
 public:
 	enum class State
@@ -34,7 +33,6 @@ private:
 	State m_currentState;
 	float m_searchRadius;
 	float m_fireRadius;
-	IslandManager* m_islandManager;
 	GameObject* m_target;
 	math::Vector3 m_lastKnownPos;
 	math::Vector3 m_moveToPos;

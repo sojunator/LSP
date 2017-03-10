@@ -9,6 +9,7 @@ public:
 		LoadShader("particleShader", thomas::graphics::Shader::InputLayouts::NONE, "../res/shaders/particleShader.hlsl");
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
+			thomas::graphics::Sprite::LoadTexture("Explanation", "../res/GUI/upgrade/explanation.png");
 			thomas::graphics::Sprite::LoadTexture("CannonInfo", "../res/GUI/upgrade/cannoninfo.png");
 			thomas::graphics::Sprite::LoadTexture("MovementInfo", "../res/GUI/upgrade/movementinfo.png");
 			thomas::graphics::Sprite::LoadTexture("ResourceInfo", "../res/GUI/upgrade/resourceinfo.png");

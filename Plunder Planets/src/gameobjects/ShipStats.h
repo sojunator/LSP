@@ -12,6 +12,15 @@ private:
 
 public:
 	ShipStats();
+	void SetCurrentGold(float gold);
+	void SetCannonDamage(float cannondamage);
+	void SetSpeed(float speed);
+	void SetBoostCost(float boost);
+	void SetCannonCost(float cannonCost);
+	void SetShieldAmount(float shield);
+	void SetCurrentHealth(float health);
+	void SetPlunderSpeed(float plunde);
+
 	float GetTreasure();
 	void SetTreasure(float goldDifference);
 	float GetCannonDamage();

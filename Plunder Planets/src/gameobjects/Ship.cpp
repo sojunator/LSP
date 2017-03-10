@@ -197,7 +197,6 @@ void Ship::Start()
 
 	m_safeToLeave = AddComponent<component::TextComponent>();
 
-
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
@@ -235,7 +234,6 @@ void Ship::Start()
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
 	m_notDead = true;
 
-	m_spawnedWormhole = false;
 	m_aiming = false;
 	utils::DebugTools::AddBool(m_notDead, "helt");
 	utils::DebugTools::AddBool(ShipStats::s_playerDied, "tes");
@@ -297,7 +295,7 @@ void Ship::ShipRotate(float const dt)
 }
 void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 {
-	if ((Input::GetButton(Input::Buttons::LT) || Input::GetKey(Input::Keys::Space) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
+	if ((Input::GetButton(Input::Buttons::LT) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
 	{
 		m_treasure -= m_flyCost*dt;
 		math::Vector3 forward = m_transform->Forward();
@@ -369,6 +367,10 @@ void Ship::ShipAimCannons()
 	if (m_aimRight)
 	{
 		float deltaX = Input::GetRightStickY();
+		if (Input::GetKey(Input::Keys::Up))
+			deltaX = Input::GetKey(Input::Keys::Up);
+		else if (Input::GetKey(Input::Keys::Down))
+			deltaX = -Input::GetKey(Input::Keys::Down);
 		m_aimDistance += deltaX*ThomasTime::GetDeltaTime() * 70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
@@ -381,14 +383,14 @@ void Ship::ShipAimCannons()
 		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 		if (angle > -500.0)
 		{
-			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+			float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideLeft->m_transform->Forward()));
 			m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 			DrawAimArc(m_broadSideLeft);
 		}
 
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->SetProjectileDmg(ShipStats::s_playerStats->GetCannonDamage());
@@ -401,7 +403,10 @@ void Ship::ShipAimCannons()
 	else if (m_aimLeft)
 	{
 		float deltaX = Input::GetRightStickY();
-		
+		if (Input::GetKey(Input::Keys::Up))
+			deltaX = Input::GetKey(Input::Keys::Up);
+		else if (Input::GetKey(Input::Keys::Down))
+			deltaX = -Input::GetKey(Input::Keys::Down);
 		m_aimDistance += deltaX*ThomasTime::GetDeltaTime()*70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
@@ -414,13 +419,13 @@ void Ship::ShipAimCannons()
 		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 		if (angle > -500.0)
 		{
-			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+			float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideRight->m_transform->Forward()));
 			m_broadSideRight->SetCanonAngle(-angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 			DrawAimArc(m_broadSideRight);
 		}
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideRight->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
@@ -582,7 +587,8 @@ void Ship::Float(float dt)
 }
 void Ship::TakeDamage(float dmg)
 {
-	float dmgRemaining = dmg;
+	float dmgRemaining = dmg/100.0f;
+	Input::Vibrate(0.5f, 0.5f);
 	if (m_armor > 0)
 	{
 		m_armor -= dmgRemaining;
@@ -647,9 +653,12 @@ void Ship::Update()
 	{
 		CameraZoom(dt);
 
+		
 		//Recalculate look at point and the new distance from cam to ship
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+		math::Vector3 distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+		
+		
 
 		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
 		
@@ -663,21 +672,47 @@ void Ship::Update()
 		//m_cameraObject->m_transform->SetPosition(newPos);
 
 		//move camera behind boat
-		math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
-		posBehindBoat.y = 35;
+		if (Input::GetButton(Input::Buttons::RS)) //snap infront of boat(look behind you)
+		{
+			math::Vector3 posBehindBoat = m_lookAtPoint - (m_transform->Forward()*m_cameraDistance);
+			posBehindBoat.y = 35;
 
-		posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
+			m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
-		m_cameraObject->m_transform->SetPosition(posBehindBoat);
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
 
-		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
-		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+		}
+		else if (Input::GetButtonUp(Input::Buttons::RS))//snap back
+		{
+			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
+			posBehindBoat.y = 35;
 
-		math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
+			m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
-		newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+		}
+		else
+		{
+			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
+			posBehindBoat.y = 35;
 
-		m_cameraObject->m_transform->SetPosition(newPos);
+			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
+
+			m_cameraObject->m_transform->SetPosition(posBehindBoat);
+
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+
+			math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
+
+			newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
+
+			m_cameraObject->m_transform->SetPosition(newPos);
+		}
+		
+		
 	}
 
 	m_moving = false;
@@ -727,23 +762,6 @@ void Ship::Update()
 		}
 	}
 
-
-	if (m_treasure > 1500 && !m_spawnedWormhole && !m_startUpSequence)
-	{
-		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0,3.0f,0),math::Quaternion::Identity,m_scene);
-		wormhole->SetEndLevel(true);
-		m_spawnedWormhole = true;
-		m_safeToLeave->SetFont("SafeToLeave");
-		m_safeToLeave->SetOutput("Wormhole open\nEnter it to leave planet");
-		m_safeToLeave->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
-		m_safeToLeave->SetRotation(0.0f);
-		m_safeToLeave->SetScale(1.0f);
-		m_safeToLeave->SetPositionX(Window::GetWidth() - 620);
-		m_safeToLeave->SetPositionY(Window::GetHeight() - 155);
-		m_safeToLeave->SetDropshadow(true);
-		m_safeToLeave->SetOutline(true);
-		m_safeToLeave->SetOrigin(false);
-	}
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }

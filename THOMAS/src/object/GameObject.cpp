@@ -83,7 +83,7 @@ namespace thomas
 		}
 		bool GameObject::GetActive()
 		{
-			if (m_transform->GetParent() && m_transform->GetParent()->m_gameObject)
+			if (m_transform && m_transform->GetParent())
 			{
 				return m_active && m_transform->GetParent()->m_gameObject->GetActive();
 			}

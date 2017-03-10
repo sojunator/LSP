@@ -1,6 +1,6 @@
 #pragma once
 #include "Thomas.h"
-
+class PauseObjectMenuObject;
 class IslandObject : public thomas::object::GameObject
 {
 public:
@@ -24,4 +24,5 @@ private:
 	thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
 	bool m_falling;
 	bool m_destroy;
+	PauseObjectMenuObject* m_pauseObj;
 };

@@ -5,6 +5,7 @@ void UpgradeMenuObject::Start()
 {
 	component::Camera* cam = AddComponent<component::Camera>();
 	m_cannonInfo = AddComponent<component::SpriteComponent>();
+	m_explanation = AddComponent<component::SpriteComponent>();
 	m_movementInfo = AddComponent<component::SpriteComponent>();
 	m_resourceInfo = AddComponent<component::SpriteComponent>();
 	m_shieldInfo = AddComponent<component::SpriteComponent>();
@@ -44,7 +45,10 @@ void UpgradeMenuObject::Start()
 	m_plunderTalent4 = AddComponent<component::SpriteComponent>();
 	m_plunderTalent5 = AddComponent<component::SpriteComponent>(); 
 	m_exitButton = AddComponent<component::SpriteComponent>();
+
 	m_music = AddComponent<component::SoundComponent>();
+	m_plunder = AddComponent<component::SoundComponent>();
+
 	m_wormhole = AddComponent<component::ParticleEmitterComponent>();
 	m_currentGold = AddComponent<component::TextComponent>();
 	m_currentHealth = AddComponent<component::TextComponent>();
@@ -56,10 +60,14 @@ void UpgradeMenuObject::Start()
 	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
 	cam->SetFov(50); //makes wormhole fit screen
+	m_resourceHolder = ShipStats::s_playerStats->GetTreasure();
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
 	m_music->Play();
+
+	m_plunder->SetClip("fUpdate");
+	m_plunder->SetLooping(false);
 
 	int currentGoldCast = ShipStats::s_playerStats->GetTreasure();
 	m_currentGold->SetFont("Pirate");
@@ -84,6 +92,14 @@ void UpgradeMenuObject::Start()
 	m_currentHealth->SetDropshadow(true);
 	m_currentHealth->SetOutline(true);
 	m_currentHealth->SetOrigin(false);
+
+	m_explanation->SetName("Explanation");
+	m_explanation->SetPositionX(57);
+	m_explanation->SetPositionY(830);
+	m_explanation->SetScale(math::Vector2(1.0f, 1.0f));
+	m_explanation->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_explanation->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+	m_explanation->SetInteractable(false);
 
 	m_cannonInfo->SetName("CannonInfo");
 	m_cannonInfo->SetPositionX(680);
@@ -407,7 +423,7 @@ void UpgradeMenuObject::Start()
 
 	m_exitButton->SetName("UpgradeMenuExit");
 	m_exitButton->SetPositionX(50);
-	m_exitButton->SetPositionY(970);
+	m_exitButton->SetPositionY(950);
 	m_exitButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_exitButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_exitButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
@@ -430,6 +446,11 @@ void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	m_upgradeDelay = m_upgradeDelay - ThomasTime::GetDeltaTime(); //Upgrade delay so can't spam and glitch out upgrades.
+
+	if (m_resourceHolder > ShipStats::s_playerStats->GetTreasure())
+		m_plunder->PlayOneShot("fUpdate", 1);
+	
+	m_resourceHolder = ShipStats::s_playerStats->GetTreasure();
 
 	UpdateGoldCounter();
 	UpdateHealthCounter();

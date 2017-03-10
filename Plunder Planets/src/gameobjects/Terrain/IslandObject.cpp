@@ -1,4 +1,5 @@
 #include "IslandObject.h"
+#include "../PauseObjectMenuObject.h"
 
 thomas::object::component::SoundComponent* IslandObject::m_sound;
 
@@ -15,6 +16,7 @@ void IslandObject::Start()
 	m_sound->SetLooping(true);
 	m_falling = false;
 	m_destroy = false;
+	m_pauseObj = nullptr;
 }
 
 void IslandObject::Update()
@@ -27,6 +29,10 @@ void IslandObject::Update()
 		{
 			m_destroy = true;
 		}
+	}
+	if (!m_pauseObj)
+	{
+		m_pauseObj = (PauseObjectMenuObject*)Find("PauseObjectMenuObject");
 	}
 }
 
@@ -48,7 +54,7 @@ void IslandObject::SinkIsland()
 
 void IslandObject::Looting(bool gotLoot)
 {
-	if (gotLoot)
+	if (gotLoot && !m_pauseObj->GetPauseState())
 		m_sound->Play();
 	else
 		m_sound->Pause();

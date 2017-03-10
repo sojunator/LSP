@@ -18,6 +18,7 @@
 #include "../gameobjects/PauseObjectMenuObject.h"
 #include "../gameobjects/SettingsMenuObject.h"
 #include "../gameobjects/EnemyManager.h"
+#include "../gameobjects/MainGameManager.h"
 
 class GameScene : public thomas::Scene
 {
@@ -57,6 +58,9 @@ public:
 			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
 			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
 			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
+			thomas::graphics::Sprite::LoadTexture("Goldbar", "../res/GUI/goldbar.png");
+			thomas::graphics::Sprite::LoadTexture("GoldbarEmpty", "../res/GUI/goldbar-empty.png");
+
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
@@ -66,6 +70,8 @@ public:
 			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
 			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
 			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
+			thomas::graphics::Sprite::LoadTexture("Goldbar", "../res/GUI/goldbar.png");
+			thomas::graphics::Sprite::LoadTexture("GoldbarEmpty", "../res/GUI/goldbar-empty.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
 		{
@@ -75,6 +81,8 @@ public:
 			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
 			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
 			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
+			thomas::graphics::Sprite::LoadTexture("Goldbar", "../res/GUI/goldbar.png");
+			thomas::graphics::Sprite::LoadTexture("GoldbarEmpty", "../res/GUI/goldbar-empty.png");
 		}		
 		else
 		{
@@ -84,6 +92,8 @@ public:
 			thomas::graphics::Sprite::LoadTexture("HealthIcon", "../res/GUI/healthSign.png");
 			thomas::graphics::Sprite::LoadTexture("ArmorIcon", "../res/GUI/armsign.png");
 			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
+			thomas::graphics::Sprite::LoadTexture("Goldbar", "../res/GUI/goldbar.png");
+			thomas::graphics::Sprite::LoadTexture("GoldbarEmpty", "../res/GUI/goldbar-empty.png");
 		}
 
 		//Init text
@@ -102,6 +112,7 @@ public:
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		LoadObject<SettingsMenuObject>();
 		LoadObject<EnemyManager>();
+		LoadObject<MainGameManager>();
 		
 		//LoadObject<PhysicsObject>();
 		
