@@ -402,6 +402,7 @@ public:
 
 	void Die()
 	{
+		m_sound->Pause();
 		m_dead = true;
 		m_explode = true;
 		m_hasExploded = false;

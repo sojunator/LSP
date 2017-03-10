@@ -7,7 +7,7 @@ bool ShipStats::s_playerDied;
 ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
-	s_totalgold = m_currentGold;
+	s_totalgold = 0;
 	m_cannonDamage = 5;
 	//m_cannonQuantity; //Add later
 	m_speed = 50;

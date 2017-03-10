@@ -1,6 +1,6 @@
 #include "MainMenuObject.h"
 #include "../scenes/HighscoreScene.h"
-#include "../scenes/UpgradeScene.h"
+#include "../scenes/GameScene.h"
 #include "../scenes/SettingsScene.h"
 #include "../scenes/CreditsScene.h"
 
@@ -160,7 +160,7 @@ void MainMenuObject::Update()
 		m_delay = 0.3f;
 	}
 	if (Input::GetButtonDown(Input::Buttons::START))
-		Scene::LoadScene<UpgradeScene>();
+		Scene::LoadScene<GameScene>();
 
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		ThomasCore::Exit();

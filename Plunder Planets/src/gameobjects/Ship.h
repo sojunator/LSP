@@ -64,7 +64,7 @@ private:
 	bool m_turning;
 	bool m_flying;
 	bool m_retardControllsOn;
-	bool m_notDead;
+	bool m_dead;
 	//used for the camera
 	bool m_freeCamera;
 	float m_treasure;
@@ -104,7 +104,6 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 	component::ParticleEmitterComponent* m_firingCost;
 	component::ParticleEmitterComponent* m_boostCost;
-	component::TextComponent* m_safeToLeave;
 	component::TextComponent* m_deathMsg;
 
 	GeometryDraw* m_arc;

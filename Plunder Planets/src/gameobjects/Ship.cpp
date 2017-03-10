@@ -143,16 +143,16 @@ void Ship::Start()
 
 	// Death msg
 	m_deathMsg = AddComponent<component::TextComponent>();
-	m_deathMsg->SetFont("SafeToLeave");
+	m_deathMsg->SetFont("Name");
 	m_deathMsg->SetOutput("You are dead");
 	m_deathMsg->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 	m_deathMsg->SetRotation(0.0f);
-	m_deathMsg->SetScale(1.0f);
-	m_deathMsg->SetPositionX(Window::GetWidth() / 2.0f - 150.0f);
+	m_deathMsg->SetScale(10.0f);
+	m_deathMsg->SetPositionX(Window::GetWidth() / 2.0f);
 	m_deathMsg->SetPositionY(Window::GetHeight() / 2.0f);
 	m_deathMsg->SetDropshadow(true);
 	m_deathMsg->SetOutline(true);
-	m_deathMsg->SetOrigin(false);
+	m_deathMsg->SetOrigin(true);
 	m_deathMsg->SetActive(false);
 
 	//Fire cost
@@ -193,9 +193,6 @@ void Ship::Start()
 	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
 	//m_firingCost->SpawnAtSphereEdge(true);
 
-	thomas::graphics::TextRender::LoadFont("SafeToLeave", "../res/font/pirate.spritefont");
-
-	m_safeToLeave = AddComponent<component::TextComponent>();
 
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
@@ -232,7 +229,7 @@ void Ship::Start()
 	m_aimDistance = 20;
 	m_health = ShipStats::s_playerStats->GetHealthAmount();
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
-	m_notDead = true;
+	m_dead = false;
 
 	m_aiming = false;
 }
@@ -606,13 +603,24 @@ void Ship::TakeDamage(float dmg)
 }
 void Ship::Die()
 {
-	m_notDead = false;
+	m_dead = true;
 	ShipStats::s_playerDied = true;
-	LOG("Why are you not dead?");
+	m_deathMsg->SetActive(true);
 }
 void Ship::Update()
 {
 	float const dt = ThomasTime::GetDeltaTime();
+
+	if (m_dead)
+	{
+		if (m_transform->GetPosition().y < -27.0)
+		{
+			Destroy(this);
+			thomas::Scene::UnloadScene();
+			Scene::LoadScene<HighscoreScene>();
+		}
+		return;
+	}
 
 	if (m_startUpSequence)
 	{
@@ -751,21 +759,11 @@ void Ship::Update()
 
 	PlunderIsland();
 
-	if (m_notDead)
-	{
-		Float(dt);
-		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
-		ShipStats::s_playerStats->SetCurrentGold(m_treasure);
-	}
-	else
-	{
-		if (m_transform->GetPosition().y < -27.0)
-		{
-			Destroy(this);
-			thomas::Scene::UnloadScene();
-			Scene::LoadScene<HighscoreScene>();
-		}
-	}
+
+	Float(dt);
+	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
+	ShipStats::s_playerStats->SetCurrentGold(m_treasure);
+	
 }
 void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 {
