@@ -510,7 +510,7 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
+	m_treasure += ShipStats::IncreaseTotalGold(m_terrainObject->Plunder(m_transform->GetPosition()));
 }
 int Ship::GetTreasure()
 {

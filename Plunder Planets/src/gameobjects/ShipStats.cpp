@@ -1,7 +1,7 @@
 #include "ShipStats.h"
 ShipStats* ShipStats::s_playerStats;
 unsigned int ShipStats::s_currentLevel;
-
+float ShipStats::s_totalgold;
 ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
@@ -20,6 +20,7 @@ ShipStats::ShipStats()
 	m_settingsInvertShip = 0;
 	m_settingsCamRotateSpeed = 0;
 	s_currentLevel = 1;
+	s_totalgold = m_currentGold;
 }
 
 float ShipStats::GetTreasure()
@@ -114,6 +115,17 @@ void ShipStats::SetInvertCamY(bool state)
 		m_settingsInvertCamY = 1;
 	else
 		m_settingsInvertCamY = -1;
+}
+
+float ShipStats::IncreaseTotalGold(float gold)
+{
+	s_totalgold += gold;
+	return gold; // We need to use this again later
+}
+
+float ShipStats::GetTotalGold()
+{
+	return s_totalgold;
 }
 
 void ShipStats::IncreaseCannonDamage(float talentAmount)

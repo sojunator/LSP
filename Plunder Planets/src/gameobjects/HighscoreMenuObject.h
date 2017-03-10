@@ -26,6 +26,9 @@ private:
 	}myObject;
 
 public:
+	void WriteUserDataToFile();
+	void ReadUserDataFromFile();
+
 	HighscoreMenuObject() : GameObject("HighscoreMenuObject")
 	{
 
@@ -45,44 +48,17 @@ private:
 	component::SpriteComponent* m_exitText;
 
 	//Names
-	component::TextComponent* m_name1;
-	component::TextComponent* m_name2;
-	component::TextComponent* m_name3;
-	component::TextComponent* m_name4;
-	component::TextComponent* m_name5;
-	component::TextComponent* m_name6;
-	component::TextComponent* m_name7;
-	component::TextComponent* m_name8;
+	std::vector<component::TextComponent*> m_names;
 
 	//Levels
-	component::TextComponent* m_level1;
-	component::TextComponent* m_level2;
-	component::TextComponent* m_level3;
-	component::TextComponent* m_level4;
-	component::TextComponent* m_level5;
-	component::TextComponent* m_level6;
-	component::TextComponent* m_level7;
-	component::TextComponent* m_level8;
+	std::vector<component::TextComponent*> m_levels;
+
 
 	//Gold
-	component::TextComponent* m_gold1;
-	component::TextComponent* m_gold2;
-	component::TextComponent* m_gold3;
-	component::TextComponent* m_gold4;
-	component::TextComponent* m_gold5;
-	component::TextComponent* m_gold6;
-	component::TextComponent* m_gold7;
-	component::TextComponent* m_gold8;
+	std::vector<component::TextComponent*> m_gold;
 
 	//Dates
-	component::TextComponent* m_date1;
-	component::TextComponent* m_date2;
-	component::TextComponent* m_date3;
-	component::TextComponent* m_date4;
-	component::TextComponent* m_date5;
-	component::TextComponent* m_date6;
-	component::TextComponent* m_date7;
-	component::TextComponent* m_date8;
+	std::vector<component::TextComponent*> m_date;
 
 	std::vector <std::string> m_tempName;
 	std::vector <std::string> m_tempLevel;

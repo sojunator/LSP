@@ -340,6 +340,67 @@ namespace thomas
 		return s_keyboardTracker.IsKeyPressed((DirectX::Keyboard::Keys)key);
 	}
 
+	std::string Input::GetKeyDown()
+	{
+		if (GetKeyDown(Keys::Q))
+			return "Q";
+		if (GetKeyDown(Keys::W))
+			return "W";
+		if (GetKeyDown(Keys::E))
+			return "E";
+		if (GetKeyDown(Keys::R))
+			return "R";
+		if (GetKeyDown(Keys::T))
+			return "T";
+		if (GetKeyDown(Keys::Y))
+			return "Y";
+		if (GetKeyDown(Keys::U))
+			return "U";
+		if (GetKeyDown(Keys::I))
+			return "I";
+		if (GetKeyDown(Keys::P))
+			return "P";
+		if (GetKeyDown(Keys::O))
+			return "O";
+		if (GetKeyDown(Keys::A))
+			return "A";
+		if (GetKeyDown(Keys::D))
+			return "D";
+		if (GetKeyDown(Keys::S))
+			return "S";
+		if (GetKeyDown(Keys::F))
+			return "F";
+		if (GetKeyDown(Keys::G))
+			return "G";
+		if (GetKeyDown(Keys::H))
+			return "J";
+		if (GetKeyDown(Keys::J))
+			return "J";
+		if (GetKeyDown(Keys::K))
+			return "K";
+		if (GetKeyDown(Keys::L))
+			return "L";
+		if (GetKeyDown(Keys::Z))
+			return "Z";
+		if (GetKeyDown(Keys::X))
+			return "X";
+		if (GetKeyDown(Keys::C))
+			return "C";
+		if (GetKeyDown(Keys::V))
+			return "V";
+		if (GetKeyDown(Keys::B))
+			return "B";
+		if (GetKeyDown(Keys::N))
+			return "N";
+		if (GetKeyDown(Keys::M))
+			return "M";
+		if (GetKeyDown(Keys::Space))
+			return " ";
+		if (GetKeyDown(Keys::Back))
+			return "-1";
+		return "0";
+	}
+
 	bool Input::GetKeyUp(Keys key)
 	{
 		return s_keyboardTracker.IsKeyReleased((DirectX::Keyboard::Keys)key);

@@ -29,6 +29,8 @@ public:
 	float GetInvertCamY();
 	void SetInvertCamX(bool state);
 	void SetInvertCamY(bool state);
+	static float IncreaseTotalGold(float gold);
+	static float GetTotalGold();
 
 	void IncreaseCannonDamage(float talentAmount);
 	//void IncreaseCannonQuantity();
@@ -41,6 +43,7 @@ public:
 	static ShipStats* s_playerStats;
 	static unsigned int s_currentLevel;
 private:
+	static float s_totalgold;
 	float m_currentGold;
 	float m_cannonDamage;
 	float m_cannonQuantity;
