@@ -17,6 +17,7 @@
     <ClCompile Include="src\materials\SkyboxMaterial.cpp" />
     <ClCompile Include="src\gameobjects\SettingsMainMenuObject.cpp" />
     <ClCompile Include="src\gameobjects\Terrain\IslandObject.cpp" />
+    <ClCompile Include="src\gameobjects\EnemyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -33,7 +34,6 @@
     <ClInclude Include="src\scenes\LoadScreenScene.h" />
     <ClInclude Include="src\scenes\MenuScene.h" />
     <ClInclude Include="src\postEffects\OceanPostProcess.h" />
-    <ClInclude Include="src\gameobjects\Enemy.h" />
     <ClInclude Include="src\AI\AI.h" />
     <ClInclude Include="src\postEffects\testEffect.h" />
     <ClInclude Include="src\gameobjects\OceanFloor.h" />
@@ -62,6 +62,7 @@
     <ClInclude Include="src\scenes\SettingsScene.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandObject.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandManager.h" />
+    <ClInclude Include="src\gameobjects\EnemyManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

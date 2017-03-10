@@ -2,8 +2,6 @@
 #include "Thomas.h"
 #include "WaterObject.h"
 #include "WaterSplashParticle.h"
-#include "ShipStats.h"
-#include "Ship.h"
 using namespace thomas;
 using namespace object;
 class Projectile : public GameObject
@@ -131,7 +129,8 @@ public:
 
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if(collision.otherRigidbody->m_gameObject != m_spawnedBy && collision.otherRigidbody->m_gameObject->GetType() != "Projectile")
+		if(collision.otherRigidbody->m_gameObject != m_spawnedBy && collision.otherRigidbody->m_gameObject->GetType() != "Projectile" 
+			&& collision.otherRigidbody->m_gameObject->GetType() != "IslandObject")
 			Destroy(this);
 
 	}

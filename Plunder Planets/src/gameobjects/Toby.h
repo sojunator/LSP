@@ -5,8 +5,6 @@
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
 #include "ShipStats.h"
-
-
 using namespace thomas;
 using namespace object;
 class Toby : public GameObject
@@ -74,7 +72,7 @@ public:
 		m_ai->SetActive(false);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_renderer->SetModel("basicEnemy");
+		m_renderer->SetModel("tobyEnemy");
 		m_moving = false;
 
 
@@ -305,6 +303,7 @@ public:
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
 			m_deathTime -= dt;
+			((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::TOBY);
 			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 				Destroy(this);
 			return;
@@ -316,7 +315,7 @@ public:
 		{
 			if (thomas::object::GameObject::Find("Ship"))
 			{
-				//m_ai->SetActive(true);
+				m_ai->SetActive(true);
 			}
 		}
 		else
@@ -396,6 +395,7 @@ public:
 
 	void Die()
 	{
+		LOG("WTF");
 		m_dead = true;
 		m_explode = true;
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
