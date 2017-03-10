@@ -247,8 +247,8 @@ public:
 			m_flySpeed = m_normalSpeed;
 
 		
-		if ((Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK)) && !m_pauseObj->GetPauseState())
-			Scene::LoadScene<MenuScene>();
+		/*if ((Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK)) && !m_pauseObj->GetPauseState())
+			Scene::LoadScene<MenuScene>();*/
 
 		/*if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START)) //When pause scene implemented
 			Scene::LoadScene<PauseScene>();*/

@@ -2,25 +2,70 @@
 ShipStats* ShipStats::s_playerStats;
 unsigned int ShipStats::s_currentLevel;
 
-ShipStats::ShipStats()
+ShipStats::ShipStats(int startup)
 {
-	m_currentGold = 1000;
-	m_cannonDamage = 5;
-	//m_cannonQuantity; //Add later
-	m_speed = 50;
-	m_boostCost = 20;
-	m_cannonCost = 50;
-	m_shieldAmount = 0;
-	m_healthAmount = 1;
-	m_placeHolderHealthAmount = 1;
-	m_plunderSpeed = 30;
-	m_settingsFOV = 50;
-	m_settingsInvertCamX = -1;
-	m_settingsInvertCamY = -1;
-	m_settingsInvertShip = 0;
-	m_settingsCamRotateSpeed = 0;
-	s_currentLevel = 1;
+	if (startup == 0)
+	{
+		m_currentGold = 1000;
+		m_cannonDamage = 5;
+		//m_cannonQuantity; //Add later
+		m_speed = 50;
+		m_boostCost = 20;
+		m_cannonCost = 50;
+		m_shieldAmount = 0;
+		m_healthAmount = 1;
+		m_placeHolderHealthAmount = 1;
+		m_plunderSpeed = 30;
+		m_settingsFOV = 50;
+		m_settingsInvertCamX = -1;
+		m_settingsInvertCamY = -1;
+		m_settingsInvertShip = 0;
+		m_settingsCamRotateSpeed = 0;
+		s_currentLevel = 1;
+	}
 }
+
+void ShipStats::SetCurrentGold(float gold)
+{
+	m_currentGold = gold;
+}
+
+void ShipStats::SetCannonDamage(float cannondamage)
+{
+	m_cannonDamage = cannondamage;
+}
+
+void ShipStats::SetSpeed(float speed)
+{
+	m_speed = speed;
+}
+
+void ShipStats::SetBoostCost(float boost)
+{
+	m_boostCost = boost;
+}
+
+void ShipStats::SetCannonCost(float cannonCost)
+{
+	m_cannonCost = cannonCost;
+}
+
+void ShipStats::SetShieldAmount(float shield)
+{
+	m_shieldAmount = shield;
+}
+
+void ShipStats::SetCurrentHealth(float health)
+{
+	m_healthAmount = health;
+	m_placeHolderHealthAmount = health;
+}
+
+void ShipStats::SetPlunderSpeed(float plunder)
+{
+	m_plunderSpeed = plunder;
+}
+
 
 float ShipStats::GetTreasure()
 {
