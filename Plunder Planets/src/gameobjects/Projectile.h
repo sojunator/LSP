@@ -46,7 +46,7 @@ public:
 		m_velocity = 130.f;
 		m_water = (WaterObject*)Find("WaterObject");
 
-		m_deathTime = 4.0f;
+		m_deathTime = 8.0f;
 		m_hitSurface = false;
 
 		m_emitterSplash = AddComponent<component::ParticleEmitterComponent>();
@@ -107,19 +107,21 @@ public:
 			float heightBelowWater = deltawater - m_transform->GetPosition().y;
 			if (heightBelowWater > 3.0)
 			{
-				m_deathTime -= ThomasTime::GetDeltaTime();
-				//Instantiate<WaterSplashParticle>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				if (!m_hitSurface)
 				{
 					m_emitterSplash->StartEmitting();
 					m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 					m_hitSurface = true;
-					Destroy(this);
+					m_rigidbody->setLinearVelocity(m_rigidbody->getLinearVelocity() * 0.10f);
 				}
-				if (m_deathTime < 0.0f)
+				else
 				{
-					Destroy(this);
-					m_emitterSplash->StopEmitting();
+					m_deathTime -= ThomasTime::GetDeltaTime();
+					if (m_deathTime < 0.0f)
+					{
+						Destroy(this);
+						m_emitterSplash->StopEmitting();
+					}
 				}
 			}
 		}
