@@ -24,6 +24,7 @@ public:
 
 	void Start()
 	{
+		m_explosionDelay = 3;
 		m_mass = 500000;
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
@@ -68,8 +69,9 @@ public:
 		m_ai->SetActive(false);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_renderer->SetModel("tobyEnemy");
+		m_renderer->SetModel("tobyEnemy0");
 		m_moving = false;
+		m_swapDelay = 0;
 
 
 		//Rigidbody init
@@ -138,12 +140,13 @@ public:
 		m_boosterParticlesEmitterMiddle2->SetDirection(m_transform->Forward());
 
 
-
-
+		m_swapDelay = 0;
+		m_modelIndex = 0;
 
 		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
 		m_frustumCullingComponent->SetRadius(15);
 		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
+		m_ai->SetFireRadius(500);
 	}
 
 
@@ -257,7 +260,7 @@ public:
 	void Update()
 	{
 		float const dt = ThomasTime::GetDeltaTime();
-
+		m_explode = false;
 		if (m_dead)
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
@@ -289,9 +292,36 @@ public:
 				//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 				m_boosterParticlesEmitterMiddle1->StartEmitting();
 				m_boosterParticlesEmitterMiddle2->StartEmitting();
+
+
+				m_explosionDelay -= ThomasTime::GetDeltaTime();
+				m_swapDelay -= ThomasTime::GetDeltaTime();
+
+				if (m_swapDelay <= 0)
+				{
+					m_modelIndex = (m_modelIndex + 1) % 2;
+					if (m_explosionDelay > 0.5)
+					{
+						float l = 1-(m_explosionDelay/3.0);
+						m_swapDelay = (1.0 * (1.0f - l)) + (0.0 * l);
+					}
+					else if (m_explosionDelay > 0.0)
+					{
+						m_swapDelay = 0;
+						m_modelIndex = 1;
+					}
+					
+					m_renderer->SetModel("tobyEnemy" + std::to_string(m_modelIndex));
+				}
+
+				
+				
 			}
 
 		}
+
+		if (m_explosionDelay <= 0)
+			Die();
 
 		Float(dt);
 	}
@@ -360,6 +390,7 @@ public:
 		m_dead = true;
 		m_explode = true;
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
+		m_explosionParticle1->StartEmitting();
 	}
 
 public:
@@ -398,4 +429,7 @@ private:
 	//Sound
 	float m_soundDelay;
 	float m_soundDelayLeft;
+	int m_modelIndex;
+	float m_explosionDelay;
+	float m_swapDelay;
 };

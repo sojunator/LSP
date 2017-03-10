@@ -28,6 +28,7 @@ public:
 	
 	math::Vector3 GetMovePos();
 	math::Vector3 GetTargetPos();
+	void SetFireRadius(float radius);
 
 private:
 	State m_currentState;

@@ -44,7 +44,8 @@ public:
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("playerModel", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("basicEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
-		LoadModel("tobyEnemy", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
+		LoadModel("tobyEnemy1", "../res/models/Boat/tobyboatRed.fbx", "phongMaterial");
+		LoadModel("tobyEnemy0", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		

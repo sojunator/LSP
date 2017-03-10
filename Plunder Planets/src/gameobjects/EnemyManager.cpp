@@ -20,6 +20,9 @@ void EnemyManager::Update()
 	{
 		float randVal = ((double)rand() / (RAND_MAX));
 		int enemyType = (int)(randVal + 0.5);
+		LOG(enemyType);
+		if (m_amountOfSpecificEnemy[(EnemyTypes)enemyType] >= m_maxAmountOfSpecificEnemy[(EnemyTypes)enemyType])
+			enemyType = (enemyType + 1) % 2;
 		SpawnEnemy((EnemyTypes)(enemyType), GameScene::s_islandManager->GetRandomPosAroundIsland(50));
 		m_delayBetweenSpawnsTimeLeft = m_delayBetweenSpawns - 0.2 * m_difficulty;
 	}

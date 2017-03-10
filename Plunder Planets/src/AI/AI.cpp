@@ -161,4 +161,9 @@ math::Vector3 AI::GetTargetPos()
 	return m_target->m_transform->GetPosition();
 }
 
+void AI::SetFireRadius(float radius)
+{
+	m_fireRadius = radius;
+}
+
 
