@@ -1,6 +1,7 @@
 #include "AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
-#include "../gameobjects/TerrainObject.h"
+#include "../gameobjects/Terrain/IslandManager.h"
+
 AI::AI() : thomas::object::component::Component("AI")
 {
 	
@@ -8,7 +9,7 @@ AI::AI() : thomas::object::component::Component("AI")
 
 void AI::Start()
 {
-	m_terrainObject = (TerrainObject*)thomas::object::GameObject::Find("TerrainObject");
+	m_islandManager = (IslandManager*)thomas::object::GameObject::Find("TerrainObject");
 
 	m_currentState = State::Searching;
 	m_searchRadius = 800;
@@ -77,12 +78,12 @@ void AI::SearchingUpdate()
 	}
 	else if(math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 2.0)
 	{
-		float r = ((double)rand() / (RAND_MAX)) + 1;
+		float r = ((double)rand() / (RAND_MAX));
 		float rads = r * math::PI * 2;
 		math::Vector3 randDir = math::Vector3(cosf(rads), 0, sinf(rads));
 		randDir.Normalize();
 
-		float r2 = ((double)rand() / (RAND_MAX)) + 1;
+		float r2 = ((double)rand() / (RAND_MAX));
 		float randLength = r2 * m_searchRadius + 50;
 
 		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
@@ -137,7 +138,7 @@ bool AI::LineOfSight(math::Vector3 dir, float maxLength)
 	for (float l = 0; l < maxLength; l++)
 	{
 		math::Vector3 colPos = m_gameObject->m_transform->GetPosition() + dir*l;
-		if (m_terrainObject->Collision(colPos))
+		if (m_islandManager->Collision(colPos))
 			return false;
 	}
 	return true;

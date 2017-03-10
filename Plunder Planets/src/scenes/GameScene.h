@@ -2,7 +2,7 @@
 #include "../src/Scene.h"
 #include "../../THOMAS/src/object/Object.h"
 #include "../gameobjects/CameraObject.h"
-#include "../gameobjects/TerrainObject.h"
+#include "../gameobjects/Terrain/IslandManager.h"
 #include "../gameobjects/WaterObject.h"
 #include "../gameobjects/TestDirectionalLight.h"
 #include "../gameobjects/OceanFloor.h"
@@ -13,12 +13,11 @@
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
-#include "../gameobjects/BasicEnemy.h"
-#include "../gameobjects/Toby.h"
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
 #include "../gameobjects/PauseObjectMenuObject.h"
 #include "../gameobjects/SettingsMenuObject.h"
+#include "../gameobjects/EnemyManager.h"
 
 class GameScene : public thomas::Scene
 {
@@ -43,6 +42,7 @@ public:
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("playerModel", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("basicEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
+		LoadModel("tobyEnemy", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		
@@ -90,27 +90,32 @@ public:
 		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
-		m_terrainObject = LoadObject<TerrainObject>();
 		m_waterObject = LoadObject<WaterObject>();
-		//for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
-		//{
-		//	LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
-		//}
+
+		//Not a GameObject
+		s_islandManager = new IslandManager(this);
+		
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
 		LoadObject<PauseObjectMenuObject>();
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		LoadObject<SettingsMenuObject>();
+		LoadObject<EnemyManager>();
 		
 		//LoadObject<PhysicsObject>();
 		
 	};
+	
+	~GameScene()
+	{
+		delete s_islandManager;
+	}
 
-	
-	
+public:
+	static IslandManager* s_islandManager;
+
 private:
 	CameraObject* m_cameraObject;
-	TerrainObject* m_terrainObject;
 	Ship* m_ship;
 	//std::vector<Enemy*> m_enemyShip;
 	WaterObject* m_waterObject;

@@ -1,9 +1,9 @@
 #pragma once
-#include <Thomas.h>
 #include "Broadside.h"
 #include "../AI/AI.h"
 #include "../../THOMAS/src/utils/DebugTools.h"
 #include "ShipStats.h"
+#include "EnemyManager.h"
 
 using namespace thomas;
 using namespace object;
@@ -323,6 +323,7 @@ public:
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
 			m_deathTime -= dt;
+			((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::BASIC);
 			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 				Destroy(this);
 			return;
@@ -386,9 +387,6 @@ private:
 	ShipFloat* m_floats[12];
 	Broadside* m_broadSideRight;
 	Broadside* m_broadSideLeft;
-	Broadside* m_broadSideRightCannonball;
-	Broadside* m_broadSideLeftCannonball;
-	Broadside* m_broadSideFront;
 	//ShipStats* m_shipStats = new ShipStats(1);
 
 	//Components

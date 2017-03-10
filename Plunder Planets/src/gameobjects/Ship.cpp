@@ -1,6 +1,10 @@
 #include "ship.h"
-#include "TerrainObject.h"
+#include "Terrain/IslandManager.h"
 #include "Wormhole.h"
+#include "../scenes/GameScene.h"
+
+IslandManager* GameScene::s_islandManager;
+
 void Ship::Start()
 {
 	m_freeCamera = false;
@@ -43,7 +47,7 @@ void Ship::Start()
 	m_sound = AddComponent<component::SoundComponent>();
 	m_boostSound = AddComponent<component::SoundComponent>();
 	m_cameraObject = Find("CameraObject");
-	m_terrainObject = (TerrainObject*)Find("TerrainObject");
+	m_islandManager = GameScene::s_islandManager;
 	m_waterObject = (WaterObject*)Find("WaterObject");
 	m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
@@ -507,8 +511,8 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	if (m_terrainObject)
-		m_treasure += m_terrainObject->Plunder(m_transform->GetPosition());
+	if (m_islandManager)
+		m_treasure += m_islandManager->Plunder(m_transform->GetPosition());
 }
 int Ship::GetTreasure()
 {
