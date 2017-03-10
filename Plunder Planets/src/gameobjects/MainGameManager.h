@@ -22,7 +22,7 @@ public:
 private:
 	component::SpriteComponent* m_goldbar;
 	component::SpriteComponent* m_goldbarEmpty;
-	component::TextComponent* m_safeToLeave;
+	component::SpriteComponent* m_safeToLeave;
 	bool m_wormholeSpawned;
 	EnemyManager* m_enemyManager;
 	float m_difficulty;

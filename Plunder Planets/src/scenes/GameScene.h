@@ -61,7 +61,8 @@ public:
 			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 			thomas::graphics::Sprite::LoadTexture("Goldbar", "../res/GUI/goldbar.png");
 			thomas::graphics::Sprite::LoadTexture("GoldbarEmpty", "../res/GUI/goldbar-empty.png");
-
+			thomas::graphics::Sprite::LoadTexture("Wormhole open", "../res/GUI/Wormhole open.png");
+			thomas::graphics::Sprite::LoadTexture("Plunder Planets", "../res/GUI/Plunder Planets.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{

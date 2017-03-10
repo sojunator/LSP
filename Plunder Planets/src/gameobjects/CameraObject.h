@@ -32,7 +32,6 @@ public:
 		m_music = AddComponent<component::SoundComponent>();
 		m_creak = AddComponent<component::SoundComponent>();
 		m_pirateMusic = AddComponent<component::SoundComponent>();
-		m_text = AddComponent<component::TextComponent>();
 		m_gold = AddComponent<component::TextComponent>();
 		m_sprite = AddComponent<component::SpriteComponent>();
 		m_backbar = AddComponent<component::SpriteComponent>();
@@ -40,6 +39,8 @@ public:
 		m_armbar = AddComponent<component::SpriteComponent>();
 		m_healthIcon = AddComponent<component::SpriteComponent>();
 		m_armIcon = AddComponent<component::SpriteComponent>();
+		m_text = AddComponent<component::SpriteComponent>();
+		m_levelT = AddComponent<component::TextComponent>();
 
 
 		m_camera->SetSkybox("../res/textures/day.dds", "skyboxShader", 10);
@@ -107,17 +108,22 @@ public:
 		m_armIcon->SetScale(math::Vector2(1.0f, 1.0f));
 		m_armIcon->SetColor(math::Vector4(0.0f, 0.4f, 0.9f, 1.0f));
 
-		//Simple font
-		m_text->SetFont("Pirate");
-		m_text->SetOutput("Plunder Planets");
-		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
-		m_text->SetRotation(0.0f);
-		m_text->SetScale(1.0f);
-		m_text->SetPositionX((Window::GetWidth() / 2.f) - 210);
-		m_text->SetPositionY(10);
-		m_text->SetDropshadow(true);
-		m_text->SetOutline(true);
-		m_text->SetOrigin(false);
+		//Plunder Planets text
+		m_text->SetName("Plunder Planets");
+		m_text->SetPositionX(Window::GetWidth() / 2.0f - 250); //Middle of screen minus half of text length in pixels (roughly)
+		m_text->SetPositionY(10); //10 pixels from top
+
+		//Level font
+		m_levelT->SetFont("Pirate");
+		m_levelT->SetOutput("Level " + std::to_string(ShipStats::s_currentLevel));
+		m_levelT->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
+		m_levelT->SetRotation(0.0f);
+		m_levelT->SetScale(1.0f);
+		m_levelT->SetPositionX(Window::GetWidth() - 300);
+		m_levelT->SetPositionY(20);
+		m_levelT->SetOutline(true);
+		m_levelT->SetDropshadow(true);
+
 
 		//Gold font
 		m_gold->SetFont("Pirate");
@@ -126,14 +132,6 @@ public:
 		m_gold->SetRotation(0.0f);
 		m_gold->SetScale(1.0f);
 		m_gold->SetPositionX(250);
-
-	/*	if (Window::GetAspectRatio() == Window::Ratio::STANDARD_169)
-			m_gold->SetPositionX(Window::GetWidth() / 6.4f);
-		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
-			m_gold->SetPositionX(Window::GetWidth() / 7.2f);
-		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_43)
-			m_gold->SetPositionX(Window::GetWidth() / 6.5f);*/
-
 		m_gold->SetPositionY(20);
 		m_gold->SetDropshadow(true);
 		m_gold->SetOutline(true);
@@ -267,8 +265,9 @@ private:
 	component::SoundComponent* m_creak;
 	component::SoundComponent* m_music;
 	component::SoundComponent* m_pirateMusic;
-	component::TextComponent* m_text;
 	component::TextComponent* m_gold;
+	component::TextComponent* m_levelT;
+	component::SpriteComponent* m_text;
 	component::SpriteComponent* m_sprite;
 	component::SpriteComponent* m_healthbar;
 	component::SpriteComponent* m_backbar;

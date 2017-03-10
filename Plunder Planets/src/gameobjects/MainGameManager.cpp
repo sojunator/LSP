@@ -16,8 +16,11 @@ void MainGameManager::Start()
 	m_goldbarEmpty->SetName("GoldbarEmpty");
 	m_goldbarEmpty->SetPositionX(Window::GetWidth() - 350);
 	m_goldbarEmpty->SetPositionY(Window::GetHeight() - 800);
-	m_safeToLeave = AddComponent<component::TextComponent>();
-
+	m_safeToLeave = AddComponent<component::SpriteComponent>();
+	m_safeToLeave->SetName("Wormhole open");
+	m_safeToLeave->SetPositionX(Window::GetWidth() - 860);
+	m_safeToLeave->SetPositionY(Window::GetHeight() - 120);
+	m_safeToLeave->SetActive(false);
 }
 
 void MainGameManager::Update()
@@ -39,15 +42,6 @@ void MainGameManager::Update()
 			Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0, 3.0f, 0), math::Quaternion::Identity, m_scene);
 			wormhole->SetEndLevel(true);
 			m_wormholeSpawned = true;
-			m_safeToLeave->SetFont("Pirate");
-			m_safeToLeave->SetOutput("Wormhole open\nEnter it to leave planet");
-			m_safeToLeave->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
-			m_safeToLeave->SetRotation(0.0f);
-			m_safeToLeave->SetScale(1.0f);
-			m_safeToLeave->SetPositionX(Window::GetWidth() - 720);
-			m_safeToLeave->SetPositionY(Window::GetHeight() - 155);
-			m_safeToLeave->SetDropshadow(true);
-			m_safeToLeave->SetOutline(true);
-			m_safeToLeave->SetOrigin(false);
+			m_safeToLeave->SetActive(true);
 	}
 }
