@@ -39,6 +39,8 @@ namespace thomas
 		bool Object::Destroy(Object *object)
 		{
 			object->m_alive = false;
+			object->SetActive(false);
+			object->OnDestroy();
 			return true;
 		}
 		void Object::Destroy(Scene * scene)

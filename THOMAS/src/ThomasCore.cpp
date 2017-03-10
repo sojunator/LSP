@@ -91,9 +91,8 @@ namespace thomas {
 
 		if (Input::GetKeyDown(Input::Keys::F1))
 			utils::DebugTools::ToggleVisibility();
-
-		Physics::Update();
 		Scene::UpdateCurrentScene();
+		Physics::Update();
 		Scene::Render();
 	}
 
