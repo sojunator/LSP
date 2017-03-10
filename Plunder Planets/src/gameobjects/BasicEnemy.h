@@ -260,14 +260,14 @@ public:
 				if (realDir == left)
 				{
 					float angle = m_broadSideLeft->CalculateCanonAngle(m_ai->GetTargetPos());
-					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+					float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideLeft->m_transform->Forward()));
 					m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
 					m_broadSideLeft->Fire();
 				}
 				else
 				{
 					float angle = m_broadSideRight->CalculateCanonAngle(m_ai->GetTargetPos());
-					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+					float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideRight->m_transform->Forward()));
 					m_broadSideRight->SetCanonAngle(-angle - boatAngle);
 					m_broadSideRight->Fire();
 				}
