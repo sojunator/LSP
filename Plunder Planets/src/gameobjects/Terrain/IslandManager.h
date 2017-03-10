@@ -57,6 +57,7 @@ public:
 				if (distance <= m_islands->GetPlunderRadiusSquared(i) && m_islands->GetTreasure(i))
 				{
 					treasure = m_islands->StealTreasure(i);
+					m_lootedTreasure += treasure;
 					gotLoot = true;
 				}
 				else if (!m_islands->GetTreasure(i))
@@ -66,7 +67,6 @@ public:
 				m_islandObjects[i]->Looting(gotLoot);
 			}
 		}
-		m_lootedTreasure = 0;
 		return treasure;
 	}
 

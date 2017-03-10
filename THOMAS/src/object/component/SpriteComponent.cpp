@@ -17,6 +17,8 @@ namespace thomas
 			{
 				m_interactable = false;
 				m_hovering = false;
+				m_currentColor = math::Color(1, 1, 1, 1);
+				m_scale = math::Vector2(1, 1);
 			}
 
 			math::Vector2 SpriteComponent::GetPosition()

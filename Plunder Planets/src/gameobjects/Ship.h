@@ -58,8 +58,6 @@ public:
 	float m_maxArmor;
 
 private:
-	bool m_spawnedWormhole;
-
 	float m_aimDistance;
 	float m_roof;
 	bool m_moving;
@@ -104,7 +102,6 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 	component::ParticleEmitterComponent* m_firingCost;
 	component::ParticleEmitterComponent* m_boostCost;
-	component::TextComponent* m_safeToLeave;
 
 	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];
