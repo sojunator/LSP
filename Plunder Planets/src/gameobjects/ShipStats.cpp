@@ -21,7 +21,7 @@ ShipStats::ShipStats()
 	m_settingsInvertCamY = -1;
 	m_settingsInvertShip = 0;
 	m_settingsCamRotateSpeed = 0;
-	s_currentLevel = 1;
+	s_currentLevel = 0;
 }
 
 void ShipStats::SetCurrentGold(float gold)

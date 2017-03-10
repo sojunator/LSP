@@ -606,6 +606,8 @@ void Ship::TakeDamage(float dmg)
 }
 void Ship::Die()
 {
+	m_notDead = false;
+	ShipStats::s_playerDied = true;
 	LOG("Why are you not dead?");
 }
 void Ship::Update()
@@ -752,18 +754,17 @@ void Ship::Update()
 	if (m_notDead)
 	{
 		Float(dt);
+		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 	}
 	else
 	{
 		if (m_transform->GetPosition().y < -27.0)
 		{
+			Destroy(this);
 			thomas::Scene::UnloadScene();
 			Scene::LoadScene<HighscoreScene>();
 		}
 	}
-
-
-	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
 }
 void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 {
@@ -774,19 +775,6 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 		if (p->m_spawnedBy != this)
 		{
 			TakeDamage(p->GetDamageAmount());
-		}
-		else if (m_armor <= 0)
-		{
-			//m_health -= p->GetDamageAmount(); //Set to 5? Shares function with enemy.
-			m_health -= 5;
-			LOG("hit hp: " << m_health);
-		}
-
-		if (m_health <= 0)
-		{
-			m_notDead = true;
-			ShipStats::s_playerDied = true;
-			m_deathMsg->SetActive(true);
 		}
 	}
 }
