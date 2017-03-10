@@ -16,9 +16,9 @@ public:
 	{
 		float randVal = ((double)rand() / (RAND_MAX));
 		m_health = 5 + difficulty * randVal * 5;
-		m_speed = 200 + difficulty * randVal * 20;
-		m_turnSpeed = 50 + difficulty * randVal * 2.5f;
-		m_explosionDamage = 25 + difficulty * randVal * 10;
+		m_speed = 300 + difficulty * randVal * 50;
+		m_turnSpeed = 80 + difficulty * randVal * 5.5f;
+		m_explosionDamage = 20 + difficulty * 10;
 	}
 
 

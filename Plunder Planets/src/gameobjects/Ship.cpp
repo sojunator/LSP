@@ -577,7 +577,7 @@ void Ship::Float(float dt)
 }
 void Ship::TakeDamage(float dmg)
 {
-	float dmgRemaining = dmg;
+	float dmgRemaining = dmg/100.0f;
 	if (m_armor > 0)
 	{
 		m_armor -= dmgRemaining;
