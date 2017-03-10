@@ -60,6 +60,7 @@ void IslandObject::SinkIsland()
 void IslandObject::Looting(bool gotLoot)
 {
 	if (gotLoot && !m_pauseObj->GetPauseState())
+	{
 		m_sound->Play();
 		
 		m_goldEmitter->StartEmitting();
