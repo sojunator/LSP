@@ -24,7 +24,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("MainMenuHighScore", "../res/GUI/menu/highscore.png");
 			thomas::graphics::Sprite::LoadTexture("MainMenuOptions", "../res/GUI/menu/options.png");
 			thomas::graphics::Sprite::LoadTexture("MainMenuCredits", "../res/GUI/menu/credits.png");
-			thomas::graphics::Sprite::LoadTexture("MainMenuExit", "../res/GUI/menu/exit.png");
+			thomas::graphics::Sprite::LoadTexture("MainMenuExit", "../res/GUI/menu/exit1.png");
 			thomas::graphics::Sprite::LoadTexture("MainMenuBackground", "../res/GUI/menu/background.png");
 
 		}

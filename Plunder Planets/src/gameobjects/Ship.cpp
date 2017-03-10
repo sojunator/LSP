@@ -284,7 +284,7 @@ void Ship::ShipRotate(float const dt)
 }
 void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 {
-	if ((Input::GetButton(Input::Buttons::LT) || Input::GetKey(Input::Keys::Space) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
+	if ((Input::GetButton(Input::Buttons::LT) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
 	{
 		m_treasure -= m_flyCost*dt;
 		math::Vector3 forward = m_transform->Forward();
@@ -379,7 +379,7 @@ void Ship::ShipAimCannons()
 			DrawAimArc(m_broadSideLeft);
 		}
 
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_treasure >= 50 && m_broadSideLeft->CanFire())
 		{
 			Input::Vibrate(0.0, 0.5, 0.5);
 			m_broadSideLeft->SetProjectileDmg(ShipStats::s_playerStats->GetCannonDamage());
@@ -414,7 +414,7 @@ void Ship::ShipAimCannons()
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
 			DrawAimArc(m_broadSideRight);
 		}
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::T)) && m_treasure >= 50 && m_broadSideRight->CanFire())
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && m_treasure >= 50 && m_broadSideRight->CanFire())
 		{
 			m_treasure -= ShipStats::s_playerStats->GetCannonCost();
 			Input::Vibrate(0.5, 0, 0.5);
