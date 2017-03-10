@@ -1,5 +1,6 @@
 #pragma once
 #include <Thomas.h>
+#include "../../THOMAS/src/object/component/SoundComponent.h"
 
 using namespace thomas;
 using namespace object;
@@ -108,11 +109,21 @@ public:
 			
 			if (m_isPaused)
 			{	
+				for (auto object : object::GameObject::FindGameObjectsWithComponent<object::component::SoundComponent>())
+				{
+					object::component::SoundComponent* comp = object->GetComponent<object::component::SoundComponent>();
+					comp->Resume();
+				}
 				HideMenu();
 				m_isPaused = false;
 			}
 			else
 			{
+				for (auto object : object::GameObject::FindGameObjectsWithComponent<object::component::SoundComponent>())
+				{
+					object::component::SoundComponent* comp = object->GetComponent<object::component::SoundComponent>();
+					comp->Pause();
+				}
 				DisplayMenu();
 				m_isPaused = true;
 			}
