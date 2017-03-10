@@ -221,7 +221,7 @@ void HighscoreMenuObject::Update()
 	if (ShipStats::s_playerDied)
 	{
 		if (!done)
-			inputString = Input::GetKeyDown();
+			//inputString = Input::GetKeyDown();	//What?
 
 		if (inputString == "-1")
 		{

@@ -235,8 +235,6 @@ void Ship::Start()
 	m_notDead = true;
 
 	m_aiming = false;
-	utils::DebugTools::AddBool(m_notDead, "helt");
-	utils::DebugTools::AddBool(ShipStats::s_playerDied, "tes");
 }
 bool Ship::GetFreeCamera()
 {
