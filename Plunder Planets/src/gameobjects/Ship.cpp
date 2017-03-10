@@ -755,6 +755,7 @@ void Ship::Update()
 	{
 		Float(dt);
 		((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
+		ShipStats::s_playerStats->SetCurrentGold(m_treasure);
 	}
 	else
 	{
