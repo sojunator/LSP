@@ -642,9 +642,12 @@ void Ship::Update()
 	{
 		CameraZoom(dt);
 
+		
 		//Recalculate look at point and the new distance from cam to ship
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
-		math::Vector3 const distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+		math::Vector3 distanceVector = m_lookAtPoint - m_cameraObject->m_transform->GetPosition();
+		
+		
 
 		m_lookAtOffset = math::Vector3(0, (distanceVector.Length() / 4) + 5, 0);//recalculate lookatoffset depending on camera range from boat
 		
@@ -658,21 +661,50 @@ void Ship::Update()
 		//m_cameraObject->m_transform->SetPosition(newPos);
 
 		//move camera behind boat
-		math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
-		posBehindBoat.y = 35;
+		if (Input::GetButton(Input::Buttons::RS))
+		{
+			math::Vector3 posBehindBoat = m_lookAtPoint - (m_transform->Forward()*m_cameraDistance);
+			posBehindBoat.y = 35;
 
-		posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
+			//posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
 
-		m_cameraObject->m_transform->SetPosition(posBehindBoat);
+			m_cameraObject->m_transform->SetPosition(posBehindBoat);
 
-		m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
-		m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
 
-		math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
+		}
+		else
+		{
+			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
+			posBehindBoat.y = 35;
 
-		newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
+			posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
 
-		m_cameraObject->m_transform->SetPosition(newPos);
+			m_cameraObject->m_transform->SetPosition(posBehindBoat);
+
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+
+			math::Vector3 newPos = m_lookAtPoint - (m_cameraObject->m_transform->Forward()*m_cameraDistance);
+
+			newPos = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), newPos, dt*2.5);
+
+			m_cameraObject->m_transform->SetPosition(newPos);
+		}
+		if (Input::GetButtonUp(Input::Buttons::RS))
+		{
+			math::Vector3 posBehindBoat = m_lookAtPoint + (m_transform->Forward()*m_cameraDistance);
+			posBehindBoat.y = 35;
+
+			//posBehindBoat = math::Vector3::Lerp(m_cameraObject->m_transform->GetPosition(), posBehindBoat, dt * 2);
+
+			m_cameraObject->m_transform->SetPosition(posBehindBoat);
+
+			m_cameraObject->m_transform->SetRotation(0, 0, 0); //reset rotation
+			m_cameraObject->m_transform->LookAt(m_lookAtPoint);//reset to planar orientation of camera with lookat
+		}
+		
 	}
 
 	m_moving = false;
@@ -742,9 +774,4 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 			TakeDamage(p->GetDamageAmount());
 		}
 	}
-
-
-
-
-
 }
