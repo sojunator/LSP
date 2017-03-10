@@ -49,7 +49,7 @@ namespace thomas
 		
 		delete s_currentScene;
 		s_currentScene = nullptr;
-
+		ThomasTime::SetTimescale(1.0f);
 		object::Object::Clean();
 		graphics::GeometryDraw::Destroy();
 	}

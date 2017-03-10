@@ -143,11 +143,11 @@ void Ship::Start()
 
 	// Death msg
 	m_deathMsg = AddComponent<component::TextComponent>();
-	m_deathMsg->SetFont("Name");
+	m_deathMsg->SetFont("Pirate");
 	m_deathMsg->SetOutput("You are dead");
 	m_deathMsg->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 	m_deathMsg->SetRotation(0.0f);
-	m_deathMsg->SetScale(10.0f);
+	m_deathMsg->SetScale(6.0f);
 	m_deathMsg->SetPositionX(Window::GetWidth() / 2.0f);
 	m_deathMsg->SetPositionY(Window::GetHeight() / 2.0f);
 	m_deathMsg->SetDropshadow(true);
@@ -285,8 +285,6 @@ void Ship::ShipRotate(float const dt)
 		turnDelta *= 2;
 	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*m_rigidBody->GetMass(), 0));
 
-	if (abs(turnDelta) > 0.02)
-		m_turning = true;
 }
 void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 {
@@ -552,13 +550,7 @@ void Ship::Float(float dt)
 
 	}
 
-	m_rigidBody->setDamping(0.0, 0.0);
-	if (m_moving)
-	{
-		m_rigidBody->setDamping(0.5, 0.5);
-	}
-	if (m_turning)
-		m_rigidBody->setDamping(0.3, 0.3);
+	m_rigidBody->setDamping(0.5, 0.5);
 	m_rigidBody->applyDamping(dt);
 
 
@@ -727,7 +719,6 @@ void Ship::Update()
 
 	m_moving = false;
 	m_flying = false;
-	m_turning = false;
 
 	m_arc->Update(m_cameraObject->GetComponent<object::component::Camera>());
 	//Ship Movement
@@ -738,7 +729,7 @@ void Ship::Update()
 	ShipAimCannons();
 	if (m_flying)
 	{
-		Input::Vibrate(0.1, 0.1);
+		Input::Vibrate(0.08, 0.08);
 		m_boosterParticlesEmitterLeft1->StartEmitting();
 
 		m_boosterParticlesEmitterLeft2->StartEmitting();

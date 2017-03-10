@@ -61,7 +61,6 @@ private:
 	float m_aimDistance;
 	float m_roof;
 	bool m_moving;
-	bool m_turning;
 	bool m_flying;
 	bool m_retardControllsOn;
 	bool m_dead;

@@ -98,8 +98,7 @@ public:
 		}
 
 		//Init text
-		thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
-		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
+		thomas::graphics::TextRender::LoadFont("Pirate", "../res/font/pirate.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
 		m_waterObject = LoadObject<WaterObject>();

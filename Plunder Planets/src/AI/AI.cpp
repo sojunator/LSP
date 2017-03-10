@@ -88,6 +88,12 @@ void AI::SearchingUpdate()
 		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
 		while (!LineOfSight(randDir, randLength))
 		{
+			r = ((double)rand() / (RAND_MAX));
+			rads = r * math::PI * 2;
+			randDir = math::Vector3(cosf(rads), 0, sinf(rads));
+			randDir.Normalize();
+			r2 = ((double)rand() / (RAND_MAX));
+			randLength = r2 * 50 + 50;
 			newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
 		}
 		

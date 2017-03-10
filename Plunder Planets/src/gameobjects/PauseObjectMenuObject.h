@@ -34,7 +34,7 @@ public:
 
 	void InitMenu()
 	{
-		m_pauseHeadLine->SetFont("SafeToLeave");
+		m_pauseHeadLine->SetFont("Pirate");
 		m_pauseHeadLine->SetOutput("Paused");
 		m_pauseHeadLine->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseHeadLine->SetRotation(0.0f);
@@ -45,7 +45,7 @@ public:
 		m_pauseHeadLine->SetOutline(true);
 		m_pauseHeadLine->SetOrigin(false);
 
-		m_pauseResume->SetFont("SafeToLeave");
+		m_pauseResume->SetFont("Pirate");
 		m_pauseResume->SetOutput("Resume");
 		m_pauseResume->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseResume->SetRotation(0.0f);
@@ -56,7 +56,7 @@ public:
 		m_pauseResume->SetOutline(true);
 		m_pauseResume->SetOrigin(false);
 
-		m_pauseSettings->SetFont("SafeToLeave");
+		m_pauseSettings->SetFont("Pirate");
 		m_pauseSettings->SetOutput("Settings");
 		m_pauseSettings->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseSettings->SetRotation(0.0f);
@@ -67,7 +67,7 @@ public:
 		m_pauseSettings->SetOutline(true);
 		m_pauseSettings->SetOrigin(false);
 
-		m_pauseQuit->SetFont("SafeToLeave");
+		m_pauseQuit->SetFont("Pirate");
 		m_pauseQuit->SetOutput("Quit");
 		m_pauseQuit->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_pauseQuit->SetRotation(0.0f);
@@ -115,6 +115,7 @@ public:
 					comp->Resume();
 				}
 				HideMenu();
+				ThomasTime::SetTimescale(1.0f);
 				m_isPaused = false;
 			}
 			else
@@ -134,6 +135,7 @@ public:
 			if (m_isPaused)
 			{
 				HideMenu();
+				ThomasTime::SetTimescale(1.0f);
 				m_isPaused = false;
 			}
 		}
@@ -236,6 +238,7 @@ public:
 			else if (m_resumeActive)
 			{
 				m_isPaused = false;
+				ThomasTime::SetTimescale(1.0f);
 				HideMenu();
 			}
 
@@ -263,10 +266,6 @@ public:
 		if (m_isPaused)
 		{
 			ThomasTime::SetTimescale(0.0f);
-		}
-		else
-		{
-			ThomasTime::SetTimescale(1.0f);
 		}
 	}
 
