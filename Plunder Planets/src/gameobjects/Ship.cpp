@@ -356,6 +356,10 @@ void Ship::ShipAimCannons()
 	if (m_aimRight)
 	{
 		float deltaX = Input::GetRightStickY();
+		if (Input::GetKey(Input::Keys::Up))
+			deltaX = Input::GetKey(Input::Keys::Up);
+		else if (Input::GetKey(Input::Keys::Down))
+			deltaX = -Input::GetKey(Input::Keys::Down);
 		m_aimDistance += deltaX*ThomasTime::GetDeltaTime() * 70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();
@@ -388,7 +392,10 @@ void Ship::ShipAimCannons()
 	else if (m_aimLeft)
 	{
 		float deltaX = Input::GetRightStickY();
-		
+		if (Input::GetKey(Input::Keys::Up))
+			deltaX = Input::GetKey(Input::Keys::Up);
+		else if (Input::GetKey(Input::Keys::Down))
+			deltaX = -Input::GetKey(Input::Keys::Down);
 		m_aimDistance += deltaX*ThomasTime::GetDeltaTime()*70;
 		m_aimDistance = min(400, max(m_aimDistance, 100));
 		math::Vector3 flatRight = m_transform->Right();

@@ -217,18 +217,17 @@ public:
 		{
 			if (m_quitActive)
 			{
-				thomas::Scene::UnloadScene();
 				thomas::ThomasTime::SetTimescale(1.0f);
 				Scene::LoadScene<MenuScene>();
 			}
 
-			if (m_resumeActive)
+			else if (m_resumeActive)
 			{
 				m_isPaused = false;
 				HideMenu();
 			}
 
-			if (m_settingsActive)
+			else if (m_settingsActive)
 			{
 				m_settingsChosen = true;
 			}
