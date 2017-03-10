@@ -1,11 +1,10 @@
 #pragma once
 
-#include "../gameobjects/Ship.h"
 #include "Thomas.h"
-#include "../../THOMAS/src/object/component/Component.h"
-
+using namespace thomas;
+using namespace object;
 class IslandManager;
-class THOMAS_API AI : public thomas::object::component::Component
+class THOMAS_API AI : public component::Component
 {
 public:
 	enum class State

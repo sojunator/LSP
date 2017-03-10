@@ -1,7 +1,6 @@
 #include "EnemyManager.h"
 #include "BasicEnemy.h"
 #include "Toby.h"
-#include "ShipStats.h"
 #include "../scenes/GameScene.h"
 void EnemyManager::Start()
 {
@@ -30,8 +29,6 @@ void EnemyManager::SpawnEnemy(EnemyTypes type, math::Vector3 position)
 {
 	if (m_amountOfSpecificEnemy[type] >= m_maxAmountOfSpecificEnemy[type]) //too many of that enemy
 		return;
-
-	ShipStats shipStats;
 
 	m_amountOfSpecificEnemy[type]++;
 

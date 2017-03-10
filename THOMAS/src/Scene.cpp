@@ -61,17 +61,18 @@ namespace thomas
 			std::string name = s_currentScene->GetName();
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
-				if (object->GetActive())
-					object->Update();
 				if (name != s_currentScene->GetName())
 					break;
+				if (object->GetActive())
+					object->Update();
+				
 			}
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
-				if (object->GetActive())
-					object->LateUpdate();
 				if (name != s_currentScene->GetName())
 					break;
+				if (object->GetActive())
+					object->LateUpdate();
 			}
 
 		}

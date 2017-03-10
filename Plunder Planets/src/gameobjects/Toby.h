@@ -1,10 +1,6 @@
 #pragma once
-
-
-#include <Thomas.h>
 #include "../AI/AI.h"
-#include "../../THOMAS/src/utils/DebugTools.h"
-#include "ShipStats.h"
+#include "Ship.h"
 using namespace thomas;
 using namespace object;
 class Toby : public GameObject
@@ -240,6 +236,7 @@ public:
 			forward.y = 0;		//Remove y so no flying
 			m_rigidBody->activate();
 			math::Vector3 targetD = m_ai->GetMovePos() - m_transform->GetPosition();
+			targetD.y = 0;
 			targetD.Normalize();
 
 			float dir = AngleDir(-forward, targetD, math::Vector3::Up);
@@ -277,7 +274,7 @@ public:
 		m_rigidBody->setDamping(0.0, 0.0);
 		if (m_moving)
 		{
-			m_rigidBody->setDamping(0.5, 0.5);
+			m_rigidBody->setDamping(0.9, 0.9);
 		}
 		m_rigidBody->applyDamping(dt);
 
@@ -320,6 +317,7 @@ public:
 		}
 		else
 		{
+			
 			Rotate(dt);
 			Move(dt);
 
@@ -351,7 +349,11 @@ public:
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy != this)
+			{
 				TakeDamage(p->GetDamageAmount());
+				Destroy(p);
+			}
+				
 		}
 		else if (collision.thisRigidbody == m_explosionCollider && collision.otherRigidbody != m_rigidBody && m_explode)
 		{
@@ -401,6 +403,8 @@ public:
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
 	}
 
+public:
+	component::RigidBodyComponent* m_explosionCollider;
 private:
 
 	float m_deathTime;
@@ -413,7 +417,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;
-	component::RigidBodyComponent* m_explosionCollider;
+	
 	component::FrustumCullingComponent* m_frustumCullingComponent;
 
 	component::ParticleEmitterComponent* m_explosionParticle1;

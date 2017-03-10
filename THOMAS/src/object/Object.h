@@ -16,6 +16,7 @@ namespace thomas
 
 			virtual void OnEnable(){}
 			virtual void OnDisable(){}
+			virtual void OnDestroy() {}
 			virtual void Start() {}
 			virtual void Update() {}
 			virtual void FixedUpdate() {}

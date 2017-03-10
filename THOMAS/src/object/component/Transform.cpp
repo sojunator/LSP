@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "../GameObject.h"
 namespace thomas
 {
 	namespace object
@@ -176,11 +176,27 @@ namespace thomas
 			{
 				if (m_parent) //Remove from old parent
 				{
-					auto it = std::find(m_parent->m_children.begin(), m_parent->m_children.end(), this);
-					if (it != m_parent->m_children.end())
-						m_parent->m_children.erase(it);
+					for (int i = 0; i < m_parent->m_children.size(); i++)
+					{
+						if (m_parent->m_children[i] == this)
+						{
+							m_parent->m_children[i] = NULL;
+							m_parent->m_children.erase(m_parent->m_children.begin() + i);
+							i -= 1;
+						}
+							
+					}
 				}
 				m_parent = NULL;
+			}
+			void Transform::OnDestroy()
+			{	
+				for (int i = 0; i < m_children.size(); i++)
+				{
+					GameObject::Destroy(m_children[i]->m_gameObject);
+					m_children.erase(m_children.begin() + i);
+					i -= 1;
+				}
 			}
 		}
 	}
