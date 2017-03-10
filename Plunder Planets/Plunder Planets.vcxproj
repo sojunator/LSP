@@ -191,6 +191,7 @@
     <ClInclude Include="src\gameobjects\WaterObject.h" />
     <ClInclude Include="src\gameobjects\WaterSplashParticle.h" />
     <ClInclude Include="src\gameobjects\Wormhole.h" />
+    <ClInclude Include="src\gameobjects\MainGameManager.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\SkyboxMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="src\gameobjects\Terrain\IslandObject.cpp" />
     <ClCompile Include="src\gameobjects\UpgradeMenuObject.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\gameobjects\MainGameManager.cpp" />
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\SkyboxMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />

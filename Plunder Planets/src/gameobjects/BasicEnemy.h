@@ -21,7 +21,6 @@ public:
 		m_health = 20 + difficulty * randVal * 25;
 		m_speed = 200 + difficulty * randVal * 50;
 		m_turnSpeed = 100 + difficulty * randVal * 8.5f;
-
 		float projectileDmg = 5 + difficulty * 5;
 		m_broadSideLeft->SetProjectileDmg(projectileDmg);
 		m_broadSideRight->SetProjectileDmg(projectileDmg);

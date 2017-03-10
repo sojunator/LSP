@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\PhongMaterial.cpp" />
     <ClCompile Include="src\materials\TerrainMaterial.cpp" />
     <ClCompile Include="src\materials\WaterMaterial.cpp" />
@@ -19,6 +18,8 @@
     <ClCompile Include="src\gameobjects\Terrain\IslandObject.cpp" />
     <ClCompile Include="src\gameobjects\EnemyManager.cpp" />
     <ClCompile Include="src\gameobjects\CreditsMenuObject.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\gameobjects\MainGameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -66,6 +67,7 @@
     <ClInclude Include="src\gameobjects\Terrain\IslandObject.h" />
     <ClInclude Include="src\gameobjects\Terrain\IslandManager.h" />
     <ClInclude Include="src\gameobjects\EnemyManager.h" />
+    <ClInclude Include="src\gameobjects\MainGameManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />
