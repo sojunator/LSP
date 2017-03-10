@@ -78,12 +78,12 @@ void AI::SearchingUpdate()
 	}
 	else if(math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 2.0)
 	{
-		float r = ((double)rand() / (RAND_MAX)) + 1;
+		float r = ((double)rand() / (RAND_MAX));
 		float rads = r * math::PI * 2;
 		math::Vector3 randDir = math::Vector3(cosf(rads), 0, sinf(rads));
 		randDir.Normalize();
 
-		float r2 = ((double)rand() / (RAND_MAX)) + 1;
+		float r2 = ((double)rand() / (RAND_MAX));
 		float randLength = r2 * m_searchRadius + 50;
 
 		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;

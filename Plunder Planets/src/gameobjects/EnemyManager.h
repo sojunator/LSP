@@ -9,7 +9,7 @@ using namespace object;
 class EnemyManager : public GameObject
 {
 
-private:
+public:
 	enum class EnemyTypes
 	{
 		BASIC,
@@ -24,8 +24,9 @@ public:
 
 	void Start();
 	void Update();
-	void SpawnEnemy(EnemyTypes type, math::Vector3 position, float difficulty);
-
+	void SpawnEnemy(EnemyTypes type, math::Vector3 position);
+	void SetDifficulty(float difficulty);
+	float GetDifficulity();
 	void RemoveEnemy(EnemyTypes type);
 
 private:
@@ -33,5 +34,5 @@ private:
 	std::map<EnemyTypes, int> m_amountOfSpecificEnemy;
 	float m_delayBetweenSpawns;
 	float m_delayBetweenSpawnsTimeLeft;
-	float m_diffculity;
+	float m_difficulty;
 };

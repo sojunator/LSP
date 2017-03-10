@@ -86,6 +86,26 @@ public:
 		return false;
 	}
 
+
+	math::Vector3 GetRandomPosAroundIsland(float offset)
+	{
+
+		float randIsland = (int)((((double)rand() / (RAND_MAX))) * m_islandObjects.size());
+		
+		while (!m_islandObjects[randIsland])
+		{
+			randIsland = (int)((((double)rand() / (RAND_MAX))) * m_islandObjects.size());
+		}
+
+
+		float r = ((double)rand() / (RAND_MAX));
+		float rads = r * math::PI * 2;
+		math::Vector2 randDir = math::Vector2(cosf(rads), sinf(rads));
+		randDir.Normalize();
+		math::Vector3 pos = m_islands->GetCenter(randIsland) + (m_islands->GetCollisionRadius(randIsland) + offset)*math::Vector3(randDir.x, 0, randDir.y);
+		return pos;
+	}
+
 	void CheckForDeadIslands()
 	{
 		for (int i = 0; i < m_islandObjects.size(); i++)

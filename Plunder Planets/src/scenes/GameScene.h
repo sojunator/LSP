@@ -13,12 +13,11 @@
 #include "../src/graphics/TextRender.h"
 #include "../gameobjects/PhysicsObject.h"
 #include "../gameobjects/StandardParticleEmitter.h"
-#include "../gameobjects/BasicEnemy.h"
-#include "../gameobjects/Toby.h"
 #include "../gameobjects/Ship.h"
 #include "../gameobjects/Wormhole.h"
 #include "../gameobjects/PauseObjectMenuObject.h"
 #include "../gameobjects/SettingsMenuObject.h"
+#include "../gameobjects/EnemyManager.h"
 
 class GameScene : public thomas::Scene
 {
@@ -43,6 +42,7 @@ public:
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("playerModel", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("basicEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
+		LoadModel("tobyEnemy", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		
@@ -94,16 +94,13 @@ public:
 
 		//Not a GameObject
 		s_islandManager = new IslandManager(this);
-
-		for (int startEnemies = 0; startEnemies < 1; startEnemies++) //10 = number of AI
-		{
-			//LoadObject<Enemy>(math::Vector3(startEnemies * 200, 0.5, 200), math::Quaternion::Identity);
-		}
+		
 		m_testDirectionalLight = LoadObject<TestDirectionalLight>();
 		LoadObject<OceanFloor>();
 		LoadObject<PauseObjectMenuObject>();
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		LoadObject<SettingsMenuObject>();
+		LoadObject<EnemyManager>();
 		
 		//LoadObject<PhysicsObject>();
 		
