@@ -37,6 +37,7 @@ public:
 private:
 	component::Camera* fov;
 	component::ParticleEmitterComponent* m_wormhole;
+	component::SpriteComponent* m_explanation;
 	component::SpriteComponent* m_cannonInfo;
 	component::SpriteComponent* m_movementInfo;
 	component::SpriteComponent* m_resourceInfo;

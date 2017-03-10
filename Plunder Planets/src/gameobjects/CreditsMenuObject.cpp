@@ -17,7 +17,7 @@ void CreditsMenuObject::Start()
 	m_exitButton = AddComponent<component::SpriteComponent>();
 	m_exitButton->SetName("Exit");
 	m_exitButton->SetPositionX(50);
-	m_exitButton->SetPositionY(970);
+	m_exitButton->SetPositionY(950);
 	m_exitButton->SetScale(math::Vector2(1.0f, 1.0f));
 	m_exitButton->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_exitButton->SetHoverColor(math::Color(0.5, 0.5, 0.5));
@@ -138,7 +138,7 @@ void CreditsMenuObject::Start()
 
 	m_jakob = AddComponent<component::TextComponent>();
 	m_jakob->SetFont("Pirate");
-	m_jakob->SetOutput("Jakob Arneteg");
+	m_jakob->SetOutput("Jakob Ahrneteg");
 	m_jakob->SetColor(math::Vector3(1.0f, 1.0f, 1.0f));
 	m_jakob->SetRotation(0.0f);
 	m_jakob->SetScale(1.0f);

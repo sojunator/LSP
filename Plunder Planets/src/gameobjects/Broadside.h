@@ -16,7 +16,7 @@ public:
 
 	void Start()
 	{
-		m_delay = 0;
+		m_delay = 1;
 		m_delayLeft = 0;
 		m_fireSFX = AddComponent<component::SoundComponent>();
 		m_pitch = 0.f;

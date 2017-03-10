@@ -103,7 +103,7 @@ public:
 
 	void CheckState()
 	{
-		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter) || Input::GetKeyDown(Input::Keys::Escape))
+		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Escape))
 		{
 			
 			if (m_isPaused)
@@ -213,7 +213,7 @@ public:
 
 	void Choice()
 	{
-		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Space)) && !m_settingsChosen)
+		if ((Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter) || Input::GetKeyDown(Input::Keys::Space)) && !m_settingsChosen)
 		{
 			if (m_quitActive)
 			{
