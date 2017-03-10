@@ -447,9 +447,11 @@ void Ship::DrawAimArc(Broadside* broadside)
 {
 	p0 = math::Vector3(broadside->m_transform->GetPosition().x, broadside->m_transform->GetPosition().y - 10, broadside->m_transform->GetPosition().z); //boat pos
 	p3 = m_aimPosition; //aim pos
-
-	p1 = p0 + broadside->m_transform->Forward() * 50; //vector defining starting direction of projectiles
-	p2 = p3 + math::Vector3(0, 1, 0) * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f);
+	math::Vector3 forward = broadside->GetCannon()->m_transform->Forward();
+	p1 = p0 + forward * 50; //vector defining starting direction of projectiles
+	forward.x *= -1;
+	forward.z *= -1;
+	p2 = p3 + forward * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f); //math::Vector3(0, 1, 0) * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f);
 	math::Vector3 point, prevPoint = p0;
 	for (int i = 1; i <= 10; ++i)
 	{
