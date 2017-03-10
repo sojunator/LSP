@@ -114,4 +114,5 @@ private:
 	bool m_startNextScene;
 
 	float m_resourceHolder = 0;
+	float m_resourceMax = 0;
 };
