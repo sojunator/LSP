@@ -2,6 +2,7 @@
 
 #include "HighscoreMenuObject.h"
 #include "../scenes/MenuScene.h"
+
 #include <fstream>
 #include <ctime>
 
@@ -11,6 +12,11 @@ void HighscoreMenuObject::Start()
 	m_highscoreBackground = AddComponent<component::SpriteComponent>();
 	m_centText = AddComponent<component::SpriteComponent>();
 	m_exitText = AddComponent<component::SpriteComponent>();
+	m_music = AddComponent<component::SoundComponent>();
+
+	m_music->SetClip("mMenuTheme");
+	m_music->SetLooping(true);
+	m_music->Play();
 
 	//Names
 	m_name1 = AddComponent<component::TextComponent>();
@@ -577,22 +583,6 @@ void HighscoreMenuObject::Start()
 
 void HighscoreMenuObject::Update()
 {
-	//if (Input::GetMouseButtonDown(Input::MouseButtons::LEFT))
-	//{
-	//	if (m_exitButton->isHovering())
-	//		ThomasCore::Exit();
-
-	//	if (m_startButton->isHovering())
-	//	{
-	//		Scene::LoadScene<UpgradeScene>();
-	//	}
-
-	//	//Highscore
-	//}
-
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK) || Input::GetButtonDown(Input::Buttons::B))
 		Scene::LoadScene<MenuScene>();
-
-	/*if (Input::GetKeyDown(Input::Keys::Enter))
-		Scene::LoadScene<UpgradeScene>();*/
 }

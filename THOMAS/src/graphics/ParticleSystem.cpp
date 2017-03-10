@@ -101,6 +101,7 @@ namespace thomas
 			SAFE_RELEASE(s_blendStates.alphaBlend);
 			SAFE_RELEASE(s_cameraBuffer);
 			SAFE_RELEASE(s_matrixBuffer);
+			SAFE_RELEASE(s_depthStencilState);
 		}
 
 		void ParticleSystem::UpdateCameraBuffers(object::component::Transform* trans, math::Matrix viewProjMatrix, bool paused)

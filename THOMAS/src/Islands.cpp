@@ -195,14 +195,14 @@ namespace thomas
 
 
 		math::Vector3 tempCenter;
-		tempCenter.x = tempOffset.x + 1024 / 2;
+		tempCenter.x = 0;
 		tempCenter.y = 0;
-		tempCenter.z = tempOffset.z - 1024 / 2;
+		tempCenter.z = 0;
 
 		m_worldPosOffset.push_back(tempOffset);
 		m_islandCenterWorldPos.push_back(tempCenter);
 		addedIslands++;
-
+		
 		std::vector<float> distance;
 		for (int i = 0; i < m_nrOfIslands; i++)
 		{

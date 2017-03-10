@@ -31,8 +31,6 @@ void EnemyManager::SpawnEnemy(EnemyTypes type, math::Vector3 position)
 	if (m_amountOfSpecificEnemy[type] >= m_maxAmountOfSpecificEnemy[type]) //too many of that enemy
 		return;
 
-	ShipStats shipStats;
-
 	m_amountOfSpecificEnemy[type]++;
 
 	if(type == EnemyManager::EnemyTypes::BASIC)

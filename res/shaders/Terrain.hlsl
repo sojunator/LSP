@@ -124,46 +124,22 @@ float4 TerrainColour(VSOutput input)
 
 float4 PSMain(VSOutput input) : SV_TARGET
 {
-
     float4 textureColor = TerrainColour(input);
     float4 ambientColor = float4(0, 0, 0, 1);
     float4 outputColor = float4(0, 0, 0, 1);
-	//input.normal = float3(input.normal.x, input.normal.y, -input.normal.z); //correct for lightdirCalcs, fucks specular
 
     float3 sunDir = normalize(-directionalLights[0].lightDir);
 
     ambientColor = (diffuseColor + textureColor) * 0.5f; //0.5 is a scalefactor for how strong the ambient will be
-	//CURRENTLY NO NORMAL MAP
-	/*float4 bumpMap = normalTexture.Sample(normalSampler, input.tex);
 
-	bumpMap = (bumpMap * 2.0f) - 1.0f;
-
-	float3 bumpNormal = (bumpMap.x*input.tangent) + (bumpMap.y*input.binormal) + (bumpMap.z*input.normal);
-	bumpNormal = normalize(bumpNormal);*/
-	//float lightIntensity = saturate(dot(bumpNormal, lightDir));
 
     for (uint i = 0; i < nrOfDirectionalLights; i++)
     {
-		//float3 tempLightDir = float3(0, 0, 1); //for testing
         float lightIntensity = saturate(dot(input.normal, sunDir));
-		//float lightIntensity = saturate(dot(input.normal, tempLightDir));
 
         float4 diffuse = saturate((diffuseColor + textureColor) * lightIntensity) * directionalLights[i].lightColor;
-
-        float4 specular = float4(0, 0, 0, 0);
-        if (lightIntensity > 0.0f)
-        {
-            float3 viewDirection = camPosition - input.positionWS;
-
-			//float4 specularIntensity = specularTexture.Sample(specularSampler, input.tex); //specularTexture gives a 0,0,0,0 float4 somehow
-            float3 reflection = normalize(directionalLights[i].lightDir + viewDirection);
-			//float3 reflection = normalize(tempLightDir + viewDirection); //for testing
-			//specular = pow(saturate(dot(bumpNormal, reflection)),specularPower)*lightIntensity; //NO WORKING NORMAL MEP YET
-            specular = pow(saturate(dot(input.normal, reflection)), specularPower) * specularColor; // * lightIntensity; //specularPower = shiny
-			//specular = specular * specularIntensity;
-        }
-        outputColor += diffuse + specular;
+        outputColor += diffuse;
     }
-
+    return outputColor + ambientColor;
     return float4((outputColor + ambientColor).rgb, 1);
 }
