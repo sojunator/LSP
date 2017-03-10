@@ -22,6 +22,8 @@ private:
 	thomas::object::component::RigidBodyComponent* m_rigidBody;
 	static thomas::object::component::SoundComponent* m_sound;
 	thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
+	thomas::object::component::ParticleEmitterComponent* m_goldEmitter;
+	thomas::object::component::ParticleEmitterComponent* m_smokeEmitter;
 	bool m_falling;
 	bool m_destroy;
 	PauseObjectMenuObject* m_pauseObj;
