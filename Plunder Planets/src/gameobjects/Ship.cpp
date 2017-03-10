@@ -372,7 +372,7 @@ void Ship::ShipAimCannons()
 		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 		if (angle > -500.0)
 		{
-			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+			float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideLeft->m_transform->Forward()));
 			m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
@@ -408,7 +408,7 @@ void Ship::ShipAimCannons()
 		float angle = m_broadSideLeft->CalculateCanonAngle(m_aimPosition);
 		if (angle > -500.0)
 		{
-			float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+			float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideRight->m_transform->Forward()));
 			m_broadSideRight->SetCanonAngle(-angle - boatAngle);
 
 			m_waterObject->UpdateAim(math::Vector2(m_transform->GetPosition().x, m_transform->GetPosition().z), target);
@@ -577,7 +577,7 @@ void Ship::Float(float dt)
 }
 void Ship::TakeDamage(float dmg)
 {
-	float dmgRemaining = dmg;
+	float dmgRemaining = dmg/100.0f;
 	Input::Vibrate(0.5f, 0.5f);
 	if (m_armor > 0)
 	{

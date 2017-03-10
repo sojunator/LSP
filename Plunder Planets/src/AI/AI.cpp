@@ -1,6 +1,5 @@
 #include "AI.h"
-#include "../gameobjects/Terrain/IslandManager.h"
-
+#include "../scenes/GameScene.h"
 AI::AI() : component::Component("AI")
 {
 	
@@ -8,8 +7,6 @@ AI::AI() : component::Component("AI")
 
 void AI::Start()
 {
-	m_islandManager = (IslandManager*)GameObject::Find("TerrainObject");
-
 	m_currentState = State::Searching;
 	m_searchRadius = 800;
 	m_fireRadius = 300;
@@ -71,8 +68,10 @@ void AI::SearchingUpdate()
 	float distanceToTarget = targetD.Length();
 	targetD.Normalize();
 
+	
 	if (distanceToTarget < m_searchRadius && LineOfSight(targetD, distanceToTarget + 1))
 	{
+		
 		m_currentState = State::Chasing;
 		m_moveToPos = m_target->m_transform->GetPosition();
 	}
@@ -87,11 +86,11 @@ void AI::SearchingUpdate()
 		float randLength = r2 * m_searchRadius + 50;
 
 		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
-		//while (!LineOfSight(randDir, randLength))
-		//{
-		//	
-		//}
-		newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
+		while (!LineOfSight(randDir, randLength))
+		{
+			newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
+		}
+		
 		m_moveToPos = newPos;
 	}
 
@@ -139,7 +138,7 @@ bool AI::LineOfSight(math::Vector3 dir, float maxLength)
 	for (float l = 0; l < maxLength; l++)
 	{
 		math::Vector3 colPos = m_gameObject->m_transform->GetPosition() + dir*l;
-		if (m_islandManager->Collision(colPos))
+		if (GameScene::s_islandManager->Collision(colPos))
 			return false;
 	}
 	return true;

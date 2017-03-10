@@ -19,10 +19,10 @@ public:
 	{
 		float randVal = ((double)rand() / (RAND_MAX));
 		m_health = 20 + difficulty * randVal * 25;
-		m_speed = 150 + difficulty * randVal * 10;
-		m_turnSpeed = 80 + difficulty * randVal * 2.5f;
+		m_speed = 200 + difficulty * randVal * 50;
+		m_turnSpeed = 100 + difficulty * randVal * 8.5f;
 
-		float projectileDmg = 5 + difficulty * randVal * 5;
+		float projectileDmg = 5 + difficulty * 5;
 		m_broadSideLeft->SetProjectileDmg(projectileDmg);
 		m_broadSideRight->SetProjectileDmg(projectileDmg);
 	}
@@ -341,7 +341,7 @@ public:
 		}
 		else
 		{
-
+			
 			Rotate(dt);
 			Move(dt);
 			FireCannons();

@@ -33,7 +33,6 @@ private:
 	State m_currentState;
 	float m_searchRadius;
 	float m_fireRadius;
-	IslandManager* m_islandManager;
 	GameObject* m_target;
 	math::Vector3 m_lastKnownPos;
 	math::Vector3 m_moveToPos;
