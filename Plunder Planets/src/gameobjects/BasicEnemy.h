@@ -1,10 +1,8 @@
 #pragma once
 #include "Broadside.h"
 #include "../AI/AI.h"
-#include "../../THOMAS/src/utils/DebugTools.h"
-#include "ShipStats.h"
 #include "EnemyManager.h"
-
+#include "ShipFloat.h"
 using namespace thomas;
 using namespace object;
 
@@ -195,6 +193,7 @@ public:
 			forward.y = 0;		//Remove y so no flying
 			m_rigidBody->activate();
 			math::Vector3 targetD = m_ai->GetMovePos() - m_transform->GetPosition();
+			targetD.y = 0;
 			targetD.Normalize();
 
 			float dir = AngleDir(-forward, targetD, math::Vector3::Up);
@@ -219,6 +218,7 @@ public:
 
 			m_rigidBody->activate();
 			math::Vector3 targetD = m_ai->GetTargetPos() - m_transform->GetPosition();
+			targetD.y = 0;
 			targetD.Normalize();
 
 			float dir = AngleDir(realDir, targetD, math::Vector3::Up);
@@ -253,6 +253,7 @@ public:
 				realDir = right;
 
 			math::Vector3 targetD = m_ai->GetTargetPos() - m_transform->GetPosition();
+			targetD.y = 0;
 			targetD.Normalize();
 			float dir = AngleDir(realDir, targetD, math::Vector3::Up);
 			if (abs(dir) <= 0.1)
@@ -297,7 +298,7 @@ public:
 		m_rigidBody->setDamping(0.0, 0.0);
 		if (m_moving)
 		{
-			m_rigidBody->setDamping(0.5, 0.5);
+			m_rigidBody->setDamping(0.9, 0.9);
 		}
 		m_rigidBody->applyDamping(dt);
 
@@ -340,6 +341,7 @@ public:
 		}
 		else
 		{
+
 			Rotate(dt);
 			Move(dt);
 			FireCannons();

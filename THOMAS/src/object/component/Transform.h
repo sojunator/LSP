@@ -12,7 +12,7 @@ namespace thomas
 			private:
 				void Decompose();
 			public:
-
+				
 				math::Quaternion m_localRotation;
 				math::Vector3 m_localPosition;
 				math::Vector3 m_localScale;
@@ -56,6 +56,7 @@ namespace thomas
 				void SetParent(Transform* parent);
 				Transform* GetParent();
 				void RemoveParent();
+				void OnDestroy();
 
 			private:
 				Transform* m_parent;

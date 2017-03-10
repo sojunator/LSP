@@ -1,7 +1,6 @@
 #include "EnemyManager.h"
 #include "BasicEnemy.h"
 #include "Toby.h"
-#include "ShipStats.h"
 #include "../scenes/GameScene.h"
 void EnemyManager::Start()
 {

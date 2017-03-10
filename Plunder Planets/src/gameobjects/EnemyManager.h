@@ -5,7 +5,6 @@
 using namespace thomas;
 using namespace object;
 
-
 class EnemyManager : public GameObject
 {
 

@@ -40,11 +40,16 @@ namespace thomas
 	void Physics::Update()
 	{
 
-		s_world->stepSimulation(ThomasTime::GetDeltaTime(), 7);
+		s_world->stepSimulation(ThomasTime::GetDeltaTime(), 7); 
 
 		int numManifolds = s_world->getDispatcher()->getNumManifolds();
 		for (int i = 0; i < numManifolds; i++)
 		{
+			if (numManifolds > s_world->getDispatcher()->getNumManifolds())
+			{
+				break;
+			}
+				
 			btPersistentManifold* contactManifold = s_world->getDispatcher()->getManifoldByIndexInternal(i);
 			btCollisionObject* obA = (btCollisionObject*)contactManifold->getBody0();
 			btCollisionObject* obB = (btCollisionObject*)contactManifold->getBody1();
