@@ -341,7 +341,7 @@ public:
 		}
 		else
 		{
-
+			
 			Rotate(dt);
 			Move(dt);
 			FireCannons();
