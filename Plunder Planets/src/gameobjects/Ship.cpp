@@ -598,7 +598,7 @@ void Ship::TakeDamage(float dmg)
 	{
 		m_health -= dmgRemaining;
 	}
-
+	m_sound->PlayOneShot("fSmallExplosion", 1.0);
 	if (m_health <= 0)
 	{
 		Die();

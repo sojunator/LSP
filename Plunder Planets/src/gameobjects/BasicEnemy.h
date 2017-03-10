@@ -355,6 +355,9 @@ public:
 	void TakeDamage(float dmg)
 	{
 		m_health -= dmg;
+		m_emitterSmoke->StartEmitting();
+		m_emitterSpark->StartEmitting();
+		m_sound->PlayOneShot("fSmallExplosion", 0.7);
 		if (m_health <= 0)
 			Die();
 	}

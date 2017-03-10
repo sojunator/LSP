@@ -152,6 +152,10 @@ public:
 		m_frustumCullingComponent->SetRadius(15);
 		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
 		m_ai->SetFireRadius(500);
+		m_sound->SetClip("fTobyTimer");
+		m_sound->SetVolume(0.7);
+		m_sound->SetLooping(false);
+		
 	}
 
 
@@ -298,6 +302,7 @@ public:
 
 			if (m_boosting)
 			{
+				m_sound->Play();
 				//Input::Vibrate(0.1, 0.1);
 				//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 				m_boosterParticlesEmitterMiddle1->StartEmitting();
@@ -339,6 +344,7 @@ public:
 
 	void TakeDamage(float dmg)
 	{
+		m_sound->PlayOneShot("fSmallExplosion", 0.7);
 		m_health -= dmg;
 		if (m_health <= 0)
 			Die();
@@ -399,7 +405,7 @@ public:
 		m_dead = true;
 		m_explode = true;
 		m_hasExploded = false;
-		m_sound->PlayOneShot("fEnemyExplode", 0.7);
+		m_sound->PlayOneShot("fTobyExplode", 0.7);
 		m_explosionParticle1->StartEmitting();
 		m_explosionSmokeParticle->StartEmitting();
 	}
