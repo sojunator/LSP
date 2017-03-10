@@ -141,15 +141,16 @@ float4 PSMain(VSOutput input) : SV_TARGET
         outputColor += diffuse;
     }
     float4 outputTotal = outputColor + ambientColor;
+    float4 smallShadedOutput = float4(outputTotal.xyz * 0.5f, 1);
     float4 unShadedOutput = float4(textureColor.xyz * 0.5f, 1);
     if (input.positionWS.y > 0.0f)
         return outputTotal;
 
     if (input.positionWS.y > -30.0f)
     {
-        float heightLerpValue = (30 + input.positionWS.y) * 0.1;
+        float heightLerpValue = (30 + input.positionWS.y) / 30.0f;
         float heightLerpValueInv = 1 - heightLerpValue;
-        return outputTotal * heightLerpValue + unShadedOutput * heightLerpValueInv;
+        return float4(outputTotal.xyz * heightLerpValue + unShadedOutput.xyz * heightLerpValueInv, 1);
     }
     
     return unShadedOutput;  
