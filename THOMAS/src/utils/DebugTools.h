@@ -32,6 +32,7 @@ namespace thomas
 			static void AddQuaternion(math::Quaternion& quaternion, const char* name, std::string barName = "mainBar");
 			static void AddRotation(math::Quaternion& rotation, const char* name, std::string barName = "mainBar");
 			static void AddString(std::string& string, const char* name, std::string barName = "mainBar");
+			static void AddEnum(TwType enumDesc, int& enumData, const char * name, std::string barName = "mainBar");
 			static void Draw();
 			static void ToggleVisibility(std::string barName = "mainBar");
 			static void Hide(std::string barName = "mainBar");

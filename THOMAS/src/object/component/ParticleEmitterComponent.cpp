@@ -17,6 +17,7 @@ namespace thomas
 
 			ParticleEmitterComponent::~ParticleEmitterComponent()
 			{
+				
 				SAFE_RELEASE(m_d3dData.particleBuffer1);
 				SAFE_RELEASE(m_d3dData.particleBuffer2);
 				SAFE_RELEASE(m_d3dData.particleUAV1);
@@ -32,6 +33,7 @@ namespace thomas
 
 			void ParticleEmitterComponent::Start()
 			{
+				m_blendState = BlendStates::ALPHA_BLEND;
 				m_offset = math::Vector3(0, 0, 0);
 				m_shouldUpdateResources = true;
 				m_emissionDuration = 1.0;
@@ -59,7 +61,7 @@ namespace thomas
 				m_particleBufferStruct.minLifeTime = 1.0f;
 				m_tempMaxLifeTime = 1.0f;
 				m_particleBufferStruct.rotationSpeed = 0.0f;
-				m_particleBufferStruct.rotation = -math::PI / 2;
+				m_particleBufferStruct.rotation = 0;
 				m_particleBufferStruct.startColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.endColor = math::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				m_particleBufferStruct.currentParticleStartIndex = 0;
@@ -72,19 +74,42 @@ namespace thomas
 				m_texture = graphics::Texture::CreateTexture(thomas::graphics::Texture::SamplerState::WRAP, thomas::graphics::Texture::TextureType::DIFFUSE, "../res/textures/standardParticle.png");
 				m_d3dData.swapUAVandSRV = true;
 
-
+				m_spawnedParticleCount = 0;
 				CalculateMaxNrOfParticles();
 				CreateInitBuffer();
 			}
 
 			void ParticleEmitterComponent::Update()
 			{
-
 				if (m_particleBufferStruct.maxLifeTime != m_tempMaxLifeTime || m_particleBufferStruct.maxDelay != m_tempMaxDelay || m_emissionRate != m_tempEmissionRate)
 					CalculateMaxNrOfParticles();
 
 				if (m_emissionTimeLeft < 0.0f)
+				{
+					m_drawTimer -= ThomasTime::GetDeltaTime();
 					StopEmitting();
+				}
+
+
+				if (m_shouldUpdateResources)
+				{
+					m_shouldUpdateResources = false;
+					CreateParticleUAVsandSRVs();
+
+					m_particleBufferStruct.currentParticleStartIndex = 0;
+					ParticleEmitterComponent::InitParticleBufferStruct tempStruct = m_particleBufferStruct;
+					tempStruct.startColor = math::Color(0, 0, 0, 0);
+					tempStruct.endColor = math::Color(0, 0, 0, 0);
+					tempStruct.minSize = 0;
+					tempStruct.maxSize = 0;
+					tempStruct.endSize = 0;
+					utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, tempStruct);
+					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
+					m_spawnedParticleCount = m_maxNrOfParticles;
+					graphics::ParticleSystem::UpdateParticles(this);
+					m_firstFrame = true;
+				}
+
 
 				if (m_isEmitting && !m_paused)
 				{
@@ -96,23 +121,16 @@ namespace thomas
 					if (numberOfParticlesToEmit > 0)
 					{
 						m_emissionTimer = 0;
-						if (m_shouldUpdateResources)
-						{
-							m_shouldUpdateResources = false;
-							CreateParticleUAVsandSRVs();
-						}
-						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + m_offset;
+						m_particleBufferStruct.position = m_gameObject->m_transform->GetPosition() + math::Vector3::Transform(m_offset, math::Matrix::CreateFromQuaternion(m_gameObject->m_transform->GetRotation())) ;
 						SetDirection(m_directionVector);
 						m_particleBufferStruct.rand = (std::rand() % 1000) / 1000.f;
 						utils::D3d::FillDynamicBufferStruct(m_d3dData.particleBuffer, m_particleBufferStruct);
 						graphics::ParticleSystem::SpawnParticles(this, numberOfParticlesToEmit);
 						m_particleBufferStruct.currentParticleStartIndex = (m_particleBufferStruct.currentParticleStartIndex + numberOfParticlesToEmit) % m_maxNrOfParticles;
+						m_spawnedParticleCount += numberOfParticlesToEmit;
+						m_spawnedParticleCount = min(m_spawnedParticleCount, m_maxNrOfParticles);
 					}
 				}
-
-
-
-
 			}
 
 			void ParticleEmitterComponent::TogglePause()
@@ -257,6 +275,7 @@ namespace thomas
 
 			void ParticleEmitterComponent::StartEmitting()
 			{
+				m_drawTimer = m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay;
 				if (!m_isEmitting)
 				{
 					m_isEmitting = true;
@@ -348,7 +367,6 @@ namespace thomas
 				m_particleBufferStruct.maxDelay = m_tempMaxDelay;
 				m_emissionRate = m_tempEmissionRate;
 				m_maxNrOfParticles = (m_particleBufferStruct.maxLifeTime + m_particleBufferStruct.maxDelay)*m_emissionRate;
-				m_maxNrOfParticles += m_emissionRate + 1; //add some padding :)
 				m_shouldUpdateResources = true;
 
 			}
@@ -426,6 +444,10 @@ namespace thomas
 				
 				utils::DebugTools::AddFloat(m_tempEmissionRate, "Emission rate", m_debugBarName);
 				
+				TwEnumVal blendStates[] = { {(int)BlendStates::ADDITIVE, "Additive"}, {(int)BlendStates::ALPHA_BLEND, "Alpha Blend"} };
+				TwType blendType = TwDefineEnum("Blend State", blendStates, 2);
+				utils::DebugTools::AddEnum(blendType, *(int*)&m_blendState, "BlendState", m_debugBarName);
+				
 			}
 
 			std::string ParticleEmitterComponent::GetDebugMenuName()
@@ -467,6 +489,7 @@ namespace thomas
 				file.write(reinterpret_cast<char*>(&m_directionVector), sizeof(math::Vector3));
 				file.write(reinterpret_cast<char*>(&m_emissionDuration), sizeof(float));
 				file.write(reinterpret_cast<char*>(&m_emissionRate), sizeof(float));
+				file.write(reinterpret_cast<char*>(&m_blendState), sizeof(BlendStates));
 
 				file.write(reinterpret_cast<char*>(&m_particleBufferStruct), sizeof(ParticleEmitterComponent::InitParticleBufferStruct));
 				file.close();
@@ -492,7 +515,7 @@ namespace thomas
 				file.read((char*)&m_directionVector, sizeof(math::Vector3));
 				file.read((char*)&m_emissionDuration, sizeof(float));
 				file.read((char*)&m_emissionRate, sizeof(float));
-
+				file.read((char*)&m_blendState, sizeof(BlendStates));
 				
 
 				//Read Particle struct
@@ -512,6 +535,26 @@ namespace thomas
 				StartEmitting();
 
 				SetTexture(textureName);
+			}
+
+			float ParticleEmitterComponent::GetSpawnedParticleCount()
+			{
+				return m_spawnedParticleCount;
+			}
+
+			void ParticleEmitterComponent::SetBlendState(BlendStates state)
+			{
+				m_blendState = state;
+			}
+
+			ParticleEmitterComponent::BlendStates ParticleEmitterComponent::GetBlendState()
+			{
+				return m_blendState;
+			}
+
+			float ParticleEmitterComponent::GetDrawTimer()
+			{
+				return m_drawTimer;
 			}
 
 

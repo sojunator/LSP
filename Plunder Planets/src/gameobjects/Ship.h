@@ -1,5 +1,5 @@
 #pragma once
-#include <Thomas.h>
+#include "Thomas.h"
 #include <string>
 #include <algorithm>
 #include "Broadside.h"
@@ -12,7 +12,7 @@
 
 using namespace thomas;
 using namespace object;
-class TerrainObject;
+class IslandManager;
 class Ship : public GameObject
 {
 
@@ -41,8 +41,11 @@ public:
 
 	void Float(float dt);
 
+	void TakeDamage(float dmg);
+	void Die();
+
 	void Update();
-	void OnCollision(component::RigidBodyComponent* other);
+	void OnCollision(component::RigidBodyComponent::Collision collision);
 
 public:
 	bool m_startUpSequence;
@@ -108,7 +111,7 @@ private:
 	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];
 	GameObject* m_cameraObject;
-	TerrainObject* m_terrainObject;
+	IslandManager* m_islandManager;
 	WaterObject* m_waterObject;
 
 	Broadside* m_broadSideLeft;

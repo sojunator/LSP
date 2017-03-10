@@ -16,6 +16,13 @@ namespace thomas
 			{
 			public:
 				
+				bool m_firstFrame;
+				bool m_secondFrame;
+				enum class BlendStates {
+					ADDITIVE,
+					ALPHA_BLEND
+				};
+
 				struct D3DData {
 					ID3D11UnorderedAccessView* particleUAV1;
 					ID3D11ShaderResourceView* particleSRV1;
@@ -168,6 +175,12 @@ namespace thomas
 				void ExportEmitter(std::string path);
 				void ImportEmitter(std::string path);
 
+				void SetBlendState(BlendStates state);
+				BlendStates GetBlendState();
+
+				float GetSpawnedParticleCount();
+
+				float GetDrawTimer();
 			private:
 				std::string m_debugBarName;
 				math::Vector3 m_offset;
@@ -188,9 +201,15 @@ namespace thomas
 				float m_emissionDuration;
 				bool m_shouldUpdateResources;
 				unsigned int m_maxNrOfParticles;
+				unsigned int m_spawnedParticleCount;
 				float m_emissionRate;
 				float m_emissionTimer;
 				float m_emissionTimeLeft;
+
+				float m_drawTimer;
+
+				BlendStates m_blendState;
+
 			};
 		}
 	}

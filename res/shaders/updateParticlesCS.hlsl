@@ -39,8 +39,8 @@ struct BillboardStruct
 };
 
 StructuredBuffer<ParticleStruct> particlesRead : register(t0);
-RWStructuredBuffer<ParticleStruct> particlesWrite : register(u0);
-RWStructuredBuffer<BillboardStruct> billboards : register(u1);
+RWStructuredBuffer<ParticleStruct> particlesWrite : register(u6);
+RWStructuredBuffer<BillboardStruct> billboards : register(u7);
 
 
 [numthreads(256, 1, 1)]
@@ -69,15 +69,18 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 		particlesWrite[index].position = particlePosWS;
 
 
-		float scale = lerp(particlesRead[index].size, particlesRead[index].endSize, lerpValue);
-		billboards[index].colorFactor = lerp(particlesRead[index].startColor, particlesRead[index].endColor, lerpValue);
+		float scale = 0;
 
 		if (particlesRead[index].lifeTimeLeft < 0.0f)
 		{
 			scale = 0;
+			billboards[index].colorFactor = float4(0, 0, 0, 0);
+
 		}
 		else
 		{
+			scale = lerp(particlesRead[index].size, particlesRead[index].endSize, lerpValue);
+			billboards[index].colorFactor = lerp(particlesRead[index].startColor, particlesRead[index].endColor, lerpValue);
 			particlesWrite[index].lifeTimeLeft = particlesRead[index].lifeTimeLeft - deltaTime;
             
 		}
@@ -98,16 +101,16 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 		billboards[index].quad[0][0] = particlePosWS + up + right;
 		billboards[index].quad[0][1] = particlePosWS + up - right;
 		billboards[index].quad[0][2] = particlePosWS - up + right;
-		billboards[index].uvs[0][0] = float2(1, 1);
-		billboards[index].uvs[0][1] = float2(0, 1);
-		billboards[index].uvs[0][2] = float2(1, 0);
+        billboards[index].uvs[0][0] = float2(1, 1);
+        billboards[index].uvs[0][1] = float2(1, 0);
+        billboards[index].uvs[0][2] = float2(0, 1);
         //tri 2
 		billboards[index].quad[1][0] = particlePosWS - up + right;
 		billboards[index].quad[1][1] = particlePosWS + up - right;
 		billboards[index].quad[1][2] = particlePosWS - up - right;
-		billboards[index].uvs[1][0] = float2(1, 0);
-		billboards[index].uvs[1][1] = float2(0, 1);
-		billboards[index].uvs[1][2] = float2(0, 0);
+        billboards[index].uvs[1][0] = float2(0, 1);
+        billboards[index].uvs[1][1] = float2(1, 0);
+        billboards[index].uvs[1][2] = float2(0, 0);
 
 		
 	}

@@ -29,14 +29,29 @@ namespace thomas
 	void Scene::UnloadScene()
 	{
 		utils::DebugTools::RemoveAllVariables();
+
 		graphics::LightManager::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy(s_currentScene);
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
+		
+		Physics::Destroy();
+		//graphics::Sprite::Destroy();
+		//graphics::TextRender::Destroy();
 		object::Object::Destroy(s_currentScene);
+		
+		object::GameObject::Destroy();
+		//object::Object::Destroy();
+		//graphics::ParticleSystem::Destroy();
+		//graphics::ParticleSystem::Init();
+		
+		
 		delete s_currentScene;
 		s_currentScene = nullptr;
+
+		object::Object::Clean();
+		graphics::GeometryDraw::Destroy();
 	}
 	void Scene::UpdateCurrentScene()
 	{
@@ -44,20 +59,26 @@ namespace thomas
 		graphics::Renderer::RenderSetup(NULL);
 		if (s_currentScene)
 		{
+			std::string name = s_currentScene->GetName();
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
 					object->Update();
+				if (name != s_currentScene->GetName())
+					break;
 			}
 			for (object::Object* object : object::Object::GetAllObjectsInScene(s_currentScene))
 			{
 				if (object->GetActive())
 					object->LateUpdate();
+				if (name != s_currentScene->GetName())
+					break;
 			}
 
 		}
 		else
 			LOG("No scene set");
+		graphics::Renderer::ResetDepthStencilState();
 		object::Object::Clean();
 	}
 	void Scene::Render()
@@ -93,7 +114,7 @@ namespace thomas
 		std::vector<object::component::RenderComponent*> renderComponents = GetAllRenderComponents();
 
 		utils::FrustumCulling::GenerateClippingPlanes(camera);
-		
+
 		for (graphics::Shader* shader : graphics::Shader::GetShadersByScene(s_currentScene))
 		{
 			if (shader->GetName() == "oceanShader")
@@ -104,7 +125,7 @@ namespace thomas
 			graphics::LightManager::BindAllLights();
 			for (graphics::Material* material : graphics::Material::GetMaterialsByShader(shader))
 			{
-				material->Bind();
+				bool matBound = false;
 				for (object::component::RenderComponent* renderComponent : renderComponents)
 				{
 					if (renderComponent->GetModel())
@@ -115,16 +136,23 @@ namespace thomas
 							std::vector<graphics::Mesh*> meshes = renderComponent->GetModel()->GetMeshesByMaterial(material);
 							if (!meshes.empty())
 							{
+								if (!matBound)
+								{
+									material->Bind();
+									matBound = true;
+								}
 								graphics::Renderer::UpdateGameObjectBuffer(camera, renderComponent->m_gameObject);
 								for (graphics::Mesh* mesh : meshes)
 								{
 									mesh->Bind();
 									mesh->Draw();
+									mesh->Unbind();
 								}
 							}
 						}
-					}	
+					}
 				}
+				material->Unbind();
 			}
 			shader->Unbind();
 		}
@@ -155,19 +183,22 @@ namespace thomas
 							{
 								mesh->Bind();
 								mesh->Draw();
+								mesh->Unbind();
 							}
 						}
 
 					}
 
 				}
+				material->Unbind();
 			}
 			graphics::LightManager::Unbind();
 			oceanShader->Unbind();
 			graphics::Renderer::UnbindDepthBufferTexture();
 			graphics::Renderer::UnBindGameObjectBuffer();
+			ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
 		}
-
+		
 		camera->BindSkybox();
 		camera->UnbindSkybox();
 
@@ -179,7 +210,7 @@ namespace thomas
 			if (gameObject->GetActive())
 				for (object::component::ParticleEmitterComponent* emitterComponent : gameObject->GetComponents<object::component::ParticleEmitterComponent>())
 				{
-					if (emitterComponent->GetActive())
+					if (emitterComponent->GetActive() && emitterComponent->GetSpawnedParticleCount() > 0 && emitterComponent->GetDrawTimer() > 0)
 						graphics::ParticleSystem::DrawParticles(camera, emitterComponent);
 				}
 		}

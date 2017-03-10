@@ -18,6 +18,8 @@
 #include <atlconv.h>
 #include "utils/d3d.h"
 #include "graphics\ParticleSystem.h"
+#include "Scene.h"
+
 namespace thomas {
 	ID3D11Debug* ThomasCore::s_debug;
 	ID3D11Device* ThomasCore::s_device;
@@ -71,10 +73,8 @@ namespace thomas {
 
 		utils::DebugTools::Init();
 
-
 		graphics::ParticleSystem::Init();
 		
-
 		return s_initialized;
 	}
 
@@ -85,7 +85,6 @@ namespace thomas {
 
 	void ThomasCore::Update()
 	{
-
 		std::string title = "FPS: " + std::to_string(ThomasTime::GetFPS()) + " FrameTime: " + std::to_string(ThomasTime::GetFrameTime());
 		SetWindowText(Window::GetWindowHandler(), CA2W(title.c_str()));
 
@@ -147,10 +146,12 @@ namespace thomas {
 	{
 		Scene::UnloadScene();
 		graphics::LightManager::Destroy();
+		graphics::ParticleSystem::Destroy();
 		graphics::Sprite::Destroy();
 		graphics::TextRender::Destroy();
 		graphics::Material::Destroy();
 		graphics::Shader::Destroy();
+		graphics::Texture::ReleaseSamplers();
 		graphics::Texture::Destroy();
 		graphics::Model::Destroy();
 		graphics::Renderer::Destroy();
@@ -160,9 +161,11 @@ namespace thomas {
 		s_context->Release();
 		s_device->Release();
 
+		
 		s_swapchain = nullptr;
 		s_context = nullptr;
 		s_device = nullptr;
+		
 
 		#ifdef _DEBUG
 		s_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);

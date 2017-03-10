@@ -1,9 +1,6 @@
 Texture2D diffuseTexture : register(t0);
 SamplerState diffuseSampler : register(s0);
 
-Texture2D specularTexture : register(t1); //Gör ingenting
-SamplerState specularSampler : register(s1);
-
 Texture2D normalTexture : register(t2);
 SamplerState normalSampler : register(s2);
 

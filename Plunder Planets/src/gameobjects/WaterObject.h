@@ -67,7 +67,6 @@ public:
 		m_transform->SetPosition(math::Vector3(x-m_dimensions / 2, 0, z+m_dimensions / 2));
 	}
 
-
 	float GetWaterHeightAtColliderIndex(int index)
 	{
 		return m_oceanSim->GetColliderOceanHeight(index);

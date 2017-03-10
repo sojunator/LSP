@@ -11,6 +11,10 @@ namespace thomas
 				
 			}
 
+			TextComponent::~TextComponent()
+			{
+			}
+
 			math::Vector2 TextComponent::GetPosition()
 			{
 				return m_fontPos;

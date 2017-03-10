@@ -136,6 +136,11 @@ namespace thomas
 			TwAddVarRW(GetBar(barName)->bar, name, TW_TYPE_STDSTRING, &string, "");
 		}
 
+		void DebugTools::AddEnum(TwType enumDesc, int& enumData, const char * name, std::string barName)
+		{
+			TwAddVarRW(GetBar(barName)->bar, name, enumDesc, &enumData, "");
+		}
+
 
 		void DebugTools::Draw()
 		{

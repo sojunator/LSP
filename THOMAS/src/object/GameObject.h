@@ -29,6 +29,7 @@ namespace thomas
 			static std::vector<GameObject*> GetGameObjects();
 
 			static bool Destroy(GameObject *object);
+			static void Destroy();
 			template<typename T>
 			static T* Instantiate(Scene* scene);
 			template<typename T>
@@ -44,7 +45,7 @@ namespace thomas
 			virtual void LateUpdate() {}
 			virtual void Render() {}
 			bool GetActive();
-			virtual void OnCollision(component::RigidBodyComponent* other) {}
+			virtual void OnCollision(component::RigidBodyComponent::Collision collision) {}
 			static std::vector<GameObject*> GetAllGameObjectsInScene(Scene* scene);
 
 		private:
