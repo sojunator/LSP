@@ -742,6 +742,8 @@ void Ship::Update()
 
 
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
+
+	ShipStats::s_playerStats->SetCurrentGold(m_treasure);
 }
 void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 {

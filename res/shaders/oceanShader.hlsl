@@ -255,8 +255,13 @@ float4 PSMain(PSInput input) : SV_TARGET
 
 
 	float depth = depthBufferTexture.Sample(depthBufferSampler, ndc).r;
+    if (depth > 0.9999)
+    {
+        depth = input.position.z;
+    }
+    
 	float near = 0.1;
-	float far = 3000.0;
+	float far = 4000.0;
 	float floorDistance = (2 * near) / (far + near - depth * far - near);
 
 	depth = input.position.z;
@@ -264,6 +269,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float waterDistance = (2 * near) / (far + near - depth * far - near);
 
 	float waterDepth = floorDistance - waterDistance;
+    
 
 
 	float3 sunDir = normalize(float3(-directionalLights[0].lightDir.x, -directionalLights[0].lightDir.y, directionalLights[0].lightDir.z)); //lightDir needs to be upside down for some reason
@@ -306,7 +312,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	// How fast will colours fade out. You can also think about this
 // values as how clear water is. Therefore use smaller values (eg. 0.05f)
 // to have crystal clear water and bigger to achieve "muddy" water.
-	float fadeSpeed = 0.05f;
+	float fadeSpeed = 0.01f;
 
 	// Water transparency along eye vector.
 	float visibility = 1.0f;
@@ -315,7 +321,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float sunScale = 3.0f;
 	float3 reflectVec = reflect(-eyeDir, normal);
 
-	float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
+    float3 reflection = reflectionTexture.Sample(reflectionSampler, reflectVec).xyz;
 
 
 	float fresnel = fresnelTerm(normal, camDirection * eyeDir);
@@ -342,7 +348,7 @@ float4 PSMain(PSInput input) : SV_TARGET
 	float2 texCoord = (input.positionWS.xz + eyeDir.xz * 0.1+perlinMovement) * 0.05;
 	float3 foamColor = foamTexture.Sample(foamSampler, texCoord);
 	
-	float foamshit = clamp(waterDepth / 0.0005, 0, 1);
+    float foamshit = 1; //= clamp(waterDepth / 0.0005, 0, 1);
 
 	foam = lerp(foamColor, 0.0f, foamshit);
 
@@ -359,13 +365,14 @@ float4 PSMain(PSInput input) : SV_TARGET
 	
 	else
 	{
+        
 		waterColor = saturate(waterColor + max(specular, foam * sunColor));
 	}
-    waterColor = lerp(waterColor, baseColor, saturate(depthN * shoreHardness));
+    //waterColor = lerp(waterColor, baseColor, saturate(depthN * shoreHardness));
     foamshit = clamp(waterDepth / 0.00005, 0, 1);
-    waterColor = lerp(1.0, waterColor, foamshit);
+    //waterColor = lerp(1.0, waterColor, foamshit);
 	foamshit = saturate(1.0 - foamshit);
 
 	float opacity = clamp(waterDepth / 0.02, 0.5, 1);
-	return float4(waterColor, opacity + foamshit);
+    return float4(waterColor, opacity + foamshit);
 }
