@@ -1,9 +1,7 @@
 
 Texture2D backBufferTexture : register(t0);
-SamplerState backBufferSampler : register(s0);
 
 Texture2D depthBufferTexture : register(t1);
-SamplerState depthBufferSampler : register(s1);
 
 Texture2D displacementTexture : register(t2);
 SamplerState displacementSampler : register(s2);

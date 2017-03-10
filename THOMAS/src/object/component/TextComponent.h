@@ -12,6 +12,7 @@ namespace thomas
 			{
 			public:
 				TextComponent();
+				~TextComponent();
 				math::Vector2 GetPosition();
 				math::Vector3 GetColor();
 				std::string GetFont();

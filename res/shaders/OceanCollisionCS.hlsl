@@ -2,7 +2,7 @@ Texture2D displacementMap : register(t0);
 SamplerState displacementSampler : register(s1);
 cbuffer CollisionBuffer : register(b0)
 {
-	float2 UVs[2000];
+	float2 UVs[1000];
 }
 
 RWStructuredBuffer<float> CollisionWrite : register(u0);

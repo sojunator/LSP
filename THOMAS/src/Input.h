@@ -250,6 +250,7 @@ namespace thomas
 		//Mouse
 		static LONG GetMouseY();
 		static LONG GetMouseX();
+		static float GetMouseScroll();
 		static bool GetMouseButtonDown(MouseButtons button);
 		static bool GetMouseButtonUP(MouseButtons button);
 		static bool GetMouseButton(MouseButtons button);

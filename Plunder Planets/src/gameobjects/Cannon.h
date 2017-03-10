@@ -74,6 +74,13 @@ public:
 		m_emitterSpark->SetSpread(3.14f);
 		m_emitterSpark->SetEmissionDuration(0.15f);
 		
+		math::Vector3 dir = m_transform->Forward() * 3 + m_transform->Up();
+		dir.Normalize();
+		m_emitterSmoke->SetDirection(dir);
+		m_emitterSmoke2->SetDirection(dir);
+		m_emitterSpark->SetDirection(dir);
+		//m_emitterSmoke->SetLooping(true);
+		//m_emitterSmoke2->SetLooping(true);
 
 		roof = 0.8f;
 		ReseedDelay();
@@ -96,13 +103,8 @@ public:
 			m_monteCarloDelay = 0;
 			if (m_monteCarloDelay <= 0)
 			{
-				math::Vector3 dir = m_transform->Forward() * 3 + m_transform->Up();
-				dir.Normalize();
-				m_emitterSmoke->SetDirection(dir);
-				m_emitterSmoke->StartEmitting();
-				m_emitterSmoke2->SetDirection(dir);
 				m_emitterSmoke2->StartEmitting();
-				m_emitterSpark->SetDirection(dir);
+				m_emitterSmoke->StartEmitting();
 				m_emitterSpark->StartEmitting();
 				
 				
@@ -110,7 +112,7 @@ public:
 				// instanciate projectile
 				Projectile* p = Instantiate<Projectile>(m_transform->GetPosition(), m_transform->GetRotation(), m_scene);
 				p->m_spawnedBy = m_transform->GetParent()->GetParent()->m_gameObject;
-				
+				p->SetDamageAmount(m_projectileDamage);
 				m_fire = false;
 				ReseedDelay();
 			}
@@ -134,6 +136,11 @@ public:
 		}
 	}
 
+	void SetProjectileDamage(float dmg)
+	{
+		m_projectileDamage = dmg;
+	}
+
 	~Cannon()
 	{
 
@@ -143,6 +150,7 @@ private:
 	bool m_fire;
 	float roof;
 	float m_monteCarloDelay;
+	float m_projectileDamage;
 	component::ParticleEmitterComponent* m_emitterSmoke;
 	component::ParticleEmitterComponent* m_emitterSmoke2;
 	component::ParticleEmitterComponent* m_emitterSpark;

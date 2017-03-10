@@ -73,6 +73,10 @@ namespace thomas {
 
 		void Model::Destroy()
 		{
+			for (unsigned int i = 0; i < s_loadedModels.size(); ++i)
+			{
+				delete s_loadedModels[i];
+			}
 			s_loadedModels.clear();
 		}
 
