@@ -107,7 +107,6 @@ namespace thomas
 					graphics::ParticleSystem::SpawnParticles(this, m_maxNrOfParticles);
 					m_spawnedParticleCount = m_maxNrOfParticles;
 					graphics::ParticleSystem::UpdateParticles(this);
-					m_firstFrame = true;
 				}
 
 

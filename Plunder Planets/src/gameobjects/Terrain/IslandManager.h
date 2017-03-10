@@ -50,6 +50,7 @@ public:
 		float treasure = 0;
 		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
 		{
+			gotLoot = false;
 			if (m_islandObjects[i] != nullptr)	//If the island has been deleted
 			{
 				center = m_islands->GetCenter(i);
@@ -64,7 +65,7 @@ public:
 				{
 					m_islandObjects[i]->SinkIsland();
 				}
-				m_islandObjects[i]->Looting(gotLoot);
+				m_islandObjects[i]->Looting(gotLoot, pos);
 			}
 		}
 		return treasure;

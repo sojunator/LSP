@@ -1,6 +1,7 @@
 #include "IslandObject.h"
 #include "../PauseObjectMenuObject.h"
 
+
 thomas::object::component::SoundComponent* IslandObject::m_sound;
 
 IslandObject::~IslandObject()
@@ -12,9 +13,7 @@ void IslandObject::Start()
 	m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
 	m_renderer = thomas::object::GameObject::AddComponent<thomas::object::component::RenderComponent>();
 	m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
-	m_goldEmitter = thomas::object::GameObject::AddComponent<thomas::object::component::ParticleEmitterComponent>();
-	m_goldEmitter->ImportEmitter("../res/textures/goldemission.thomasps");
-	m_goldEmitter->StopEmitting();
+	m_goldEmitterObject = Instantiate<GoldEmitterObject>(m_scene);
 	m_smokeEmitter = thomas::object::GameObject::AddComponent<thomas::object::component::ParticleEmitterComponent>();
 	m_sound->SetClip("fPlunder");
 	m_sound->SetLooping(true);
@@ -57,18 +56,21 @@ void IslandObject::SinkIsland()
 	}
 }
 
-void IslandObject::Looting(bool gotLoot)
+void IslandObject::Looting(bool gotLoot, thomas::math::Vector3 shipPos)
 {
+	math::Vector3 dir = shipPos - m_transform->GetPosition();
+	dir.Normalize();
 	if (gotLoot && !m_pauseObj->GetPauseState())
 	{
-		m_sound->Play();
 		
-		m_goldEmitter->StartEmitting();
+		m_sound->Play();
+		m_goldEmitterObject->m_transform->SetPosition(dir * 10);
+		m_goldEmitterObject->StartEmittingParticles(dir);
 	}
 	else
 	{
 		m_sound->Pause();
-		m_goldEmitter->StopEmitting();
+		m_goldEmitterObject->StopEmittingParticles();
 	}
 }
 

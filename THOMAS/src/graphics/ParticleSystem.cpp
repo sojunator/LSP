@@ -194,22 +194,8 @@ namespace thomas
 
 		void ParticleSystem::DrawParticles(object::component::Camera * camera, object::component::ParticleEmitterComponent* emitter)
 		{
-
-
 			UpdateCameraBuffers(camera->m_gameObject->m_transform, camera->GetViewProjMatrix().Transpose(), emitter->IsPaused());
 			UpdateParticles(emitter);
-
-			if (emitter->m_firstFrame)
-			{
-				emitter->m_firstFrame = false;
-				return;
-			}
-			else if (emitter->m_secondFrame)
-			{
-				emitter->m_secondFrame = false;
-				return;
-			}
-			
 
 			FLOAT blendfactor[4] = { 0, 0, 0, 0 };
 			

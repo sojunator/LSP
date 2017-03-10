@@ -116,6 +116,24 @@ void CSMain(uint3 Gid : SV_GroupID, uint3 GTid : SV_GroupThreadID)
 	}
 	else
 	{
+        float3 right = 0.0f;
+        //cameraRight * scale;
+        float3 up = 0.0f;
+        //-cameraUp * scale;
+        //tri 1
+        billboards[index].quad[0][0] = 0;
+        billboards[index].quad[0][1] = 0;
+        billboards[index].quad[0][2] = 0;
+        billboards[index].uvs[0][0] = float2(1, 1);
+        billboards[index].uvs[0][1] = float2(1, 0);
+        billboards[index].uvs[0][2] = float2(0, 1);
+        //tri 2
+        billboards[index].quad[1][0] = 0;
+        billboards[index].quad[1][1] = 0;
+        billboards[index].quad[1][2] = 0;
+        billboards[index].uvs[1][0] = float2(0, 1);
+        billboards[index].uvs[1][1] = float2(1, 0);
+        billboards[index].uvs[1][2] = float2(0, 0);
 		particlesWrite[index].delay = particlesRead[index].delay - deltaTime;
 	}
 }
