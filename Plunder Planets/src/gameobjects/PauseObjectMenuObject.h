@@ -1,6 +1,7 @@
 #pragma once
 #include <Thomas.h>
 #include "../../THOMAS/src/object/component/SoundComponent.h"
+#include "../scenes/MenuScene.h"
 
 using namespace thomas;
 using namespace object;
@@ -121,6 +122,7 @@ public:
 				for (auto object : object::GameObject::FindGameObjectsWithComponent<object::component::SoundComponent>())
 				{
 					object::component::SoundComponent* comp = object->GetComponent<object::component::SoundComponent>();
+					comp->SetLooping(false);
 					comp->Pause();
 				}
 				DisplayMenu();
