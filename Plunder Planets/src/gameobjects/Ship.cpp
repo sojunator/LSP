@@ -578,6 +578,7 @@ void Ship::Float(float dt)
 void Ship::TakeDamage(float dmg)
 {
 	float dmgRemaining = dmg;
+	Input::Vibrate(0.5f, 0.5f);
 	if (m_armor > 0)
 	{
 		m_armor -= dmgRemaining;
