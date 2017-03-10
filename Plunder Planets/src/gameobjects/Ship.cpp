@@ -523,7 +523,7 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += ShipStats::IncreaseTotalGold(m_terrainObject->Plunder(m_transform->GetPosition()));
+	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition()));
 }
 int Ship::GetTreasure()
 {
@@ -751,7 +751,7 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 	if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 	{
 		Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
-		
+
 		if (p->m_spawnedBy != this)
 		{
 			TakeDamage(p->GetDamageAmount());
@@ -762,11 +762,11 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 			m_health -= 5;
 			LOG("hit hp: " << m_health);
 		}
-	
+
 		if (m_health <= 0)
 		{
 			m_notDead = true;
 			m_deathMsg->SetActive(true);
 		}
-
+	}
 }
