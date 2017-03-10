@@ -91,7 +91,6 @@ public:
 		m_pauseResume->SetActive(true);
 		m_pauseSettings->SetActive(true);
 		m_pauseQuit->SetActive(true);
-		
 	}
 
 	void HideMenu()

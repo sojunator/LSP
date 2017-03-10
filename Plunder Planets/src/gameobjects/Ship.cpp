@@ -183,6 +183,10 @@ void Ship::Start()
 	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
 	//m_firingCost->SpawnAtSphereEdge(true);
 
+	thomas::graphics::TextRender::LoadFont("SafeToLeave", "../res/font/pirate.spritefont");
+
+	m_safeToLeave = AddComponent<component::TextComponent>();
+
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
