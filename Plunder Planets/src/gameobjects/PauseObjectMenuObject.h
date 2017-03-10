@@ -103,7 +103,7 @@ public:
 
 	void CheckState()
 	{
-		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter))
+		if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter) || Input::GetKeyDown(Input::Keys::Escape))
 		{
 			
 			if (m_isPaused)
