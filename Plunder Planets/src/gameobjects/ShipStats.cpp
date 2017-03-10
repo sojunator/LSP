@@ -2,6 +2,7 @@
 ShipStats* ShipStats::s_playerStats;
 unsigned int ShipStats::s_currentLevel;
 float ShipStats::s_totalgold;
+bool ShipStats::s_playerDied;
 ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
@@ -19,8 +20,9 @@ ShipStats::ShipStats()
 	m_settingsInvertCamY = -1;
 	m_settingsInvertShip = 0;
 	m_settingsCamRotateSpeed = 0;
-	s_currentLevel = 1;
+	s_currentLevel = 0;
 	s_totalgold = m_currentGold;
+	s_playerDied = false;
 }
 
 float ShipStats::GetTreasure()
@@ -127,6 +129,7 @@ float ShipStats::GetTotalGold()
 {
 	return s_totalgold;
 }
+
 
 void ShipStats::IncreaseCannonDamage(float talentAmount)
 {

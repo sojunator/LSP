@@ -8,7 +8,7 @@ void Ship::Start()
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
 	float mass = 20000;
-
+	ShipStats::s_playerDied = false;
 	//Front
 	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -227,6 +227,7 @@ void Ship::Start()
 	m_spawnedWormhole = false;
 	m_aiming = false;
 	utils::DebugTools::AddBool(m_notDead, "helt");
+	utils::DebugTools::AddBool(ShipStats::s_playerDied, "tes");
 }
 bool Ship::GetFreeCamera()
 {
@@ -752,6 +753,7 @@ void Ship::OnCollision(component::RigidBodyComponent* other)
 		if (m_health <= 0)
 		{
 			m_notDead = true;
+			ShipStats::s_playerDied = true;
 			m_deathMsg->SetActive(true);
 		}
 

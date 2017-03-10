@@ -18,6 +18,11 @@ private:
 		std::string level;
 		std::string gold;
 		std::string date;
+		bool operator<(const ScoreLayout& x) {
+			if (std::stoi(this->level) == std::stoi(x.level))
+				return std::stoi(this->gold) > std::stoi(x.gold);
+			return std::stoi(this->level) > std::stoi(x.level);
+		}
 	};
 
 	struct myOperator
@@ -53,21 +58,19 @@ private:
 	//Levels
 	std::vector<component::TextComponent*> m_levels;
 
-
 	//Gold
 	std::vector<component::TextComponent*> m_gold;
 
 	//Dates
 	std::vector<component::TextComponent*> m_date;
 
-	std::vector <std::string> m_tempName;
-	std::vector <std::string> m_tempLevel;
-	std::vector <std::string> m_tempGold;
-	std::vector <std::string> m_tempDate;
-	std::vector <int> m_amount;
+	//Input marker
+	component::TextComponent* m_inputMarker;
+
 	std::vector <ScoreLayout> m_scoreReader;
 
 	float m_nameYOffset = 290;
+	int m_playerIndex;
 };
 
 

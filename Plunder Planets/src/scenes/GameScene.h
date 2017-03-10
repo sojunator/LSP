@@ -25,6 +25,7 @@ public:
 	GameScene() : Scene("GameScene")
 	{
 		//Init shaders
+		ShipStats::s_currentLevel += 1;
 
 		LoadShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/phong.hlsl");
 		LoadShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/oceanShader.hlsl");

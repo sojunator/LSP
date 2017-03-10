@@ -16,81 +16,45 @@ void HighscoreMenuObject::WriteUserDataToFile()
 	timeinfo = localtime(&rawtime);
 
 	strftime(buffer, 80, "%Y-%m-%d", timeinfo);
-	std::string str(buffer);
+	std::string date(buffer);
 
 	//Writing to the highscore file
-	std::ofstream writeFile("../res/GUI/Highscore/score.txt", std::ios::app);
+	std::ofstream writeFile("../res/GUI/Highscore/score.txt");
 	if (writeFile.is_open())
 	{
-		writeFile << "n User\n";
-		writeFile << "l 18\n";
-		writeFile << "g 1500\n";
-		writeFile << "d " << buffer << "\n";
-		writeFile << "*\n";
+		writeFile << std::to_string(m_scoreReader.size()) + "\n";
+		for (auto it : m_scoreReader)
+		{
+			writeFile << it.name + "\n";
+			writeFile << it.gold + "\n";
+			writeFile << it.level + "\n";
+			writeFile << date + "\n";
+		}
 		writeFile.close();
 	}
 }
 
 void HighscoreMenuObject::ReadUserDataFromFile()
 {
-	//Read highscore file, text file for now
-	std::string line;
 	std::ifstream readFile("../res/GUI/Highscore/score.txt");
 
-	while (!readFile.eof())
+	std::string tempName;
+	std::string tempGold;
+	std::string tempLevel;
+	std::string tempDate;
+	std::string line;
+	int amountOfEntries;
+	std::getline(readFile, line);
+	amountOfEntries = std::stoi(line);
+	for (int i = 0; i < amountOfEntries; i++)
 	{
-		getline(readFile, line);
-		if (line[0] == 'n')
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				line.erase(line.begin());
-			}
-			m_tempName.push_back(line);
-		}
-
-		getline(readFile, line);
-		if (line[0] == 'l')
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				line.erase(line.begin());
-			}
-			m_tempLevel.push_back(line);
-		}
-
-		getline(readFile, line);
-		if (line[0] == 'g')
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				line.erase(line.begin());
-			}
-			m_tempGold.push_back(line);
-		}
-
-		getline(readFile, line);
-		if (line[0] == 'd')
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				line.erase(line.begin());
-			}
-			m_tempDate.push_back(line);
-		}
-
-		getline(readFile, line);
-		if (line[0] == '*')
-		{
-			m_amount.push_back(1);
-		}
+		std::getline(readFile, tempName);
+		std::getline(readFile, tempGold);
+		std::getline(readFile, tempLevel);
+		std::getline(readFile, tempDate);
+		m_scoreReader.push_back(ScoreLayout(tempName, tempLevel, tempGold, tempDate));
 	}
 	readFile.close();
-
-	for (unsigned int i = 0; i < m_amount.size(); i++)
-	{
-		m_scoreReader.push_back(ScoreLayout(m_tempName[i], m_tempLevel[i], m_tempGold[i], m_tempDate[i]));
-	}
 }
 
 void HighscoreMenuObject::Start()
@@ -99,6 +63,7 @@ void HighscoreMenuObject::Start()
 	m_highscoreBackground = AddComponent<component::SpriteComponent>();
 	m_centText = AddComponent<component::SpriteComponent>();
 	m_exitText = AddComponent<component::SpriteComponent>();
+	m_inputMarker = AddComponent<component::TextComponent>();
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -128,21 +93,69 @@ void HighscoreMenuObject::Start()
 	m_exitText->SetHoverColor(math::Color(0.5, 0.5, 0.5));
 	m_exitText->SetInteractable(true);
 
+	m_inputMarker->SetFont("Highscore");
+	m_inputMarker->SetOutput("-");
+	m_inputMarker->SetColor(math::Vector3(0.0f, 0.0f, 0.0f));
+	m_inputMarker->SetRotation(0.0f);
+	m_inputMarker->SetScale(1.0f);
+	m_inputMarker->SetPositionX(130);
+	m_inputMarker->SetPositionY(0);
+	m_inputMarker->SetDropshadow(false);
+	m_inputMarker->SetOutline(true);
+	m_inputMarker->SetOrigin(false);
+	m_inputMarker->SetActive(false);
+
 	ReadUserDataFromFile();
 	int scoreSmallerThan = 0;
-
-	for (auto it : m_scoreReader)
+	if (ShipStats::s_playerDied)
 	{
-		if (std::stof(it.gold) > ShipStats::GetTotalGold())
+		if (m_scoreReader.size() > 0)
 		{
-			scoreSmallerThan++;
+			for (auto it : m_scoreReader)
+			{
+				if (std::stof(it.gold) > ShipStats::GetTotalGold())
+				{
+					scoreSmallerThan++;
+				}
+			}
+		}
+
+		bool addPlayerToHighScore = true;
+		if (scoreSmallerThan > 7)
+			addPlayerToHighScore = false;
+
+
+		if (addPlayerToHighScore)
+		{
+			if (m_scoreReader.size() == 8)
+			{
+				m_scoreReader.pop_back();
+			}
+			time_t rawtime;
+			struct tm * timeinfo;
+			char buffer[80];
+
+
+			time(&rawtime);
+			timeinfo = localtime(&rawtime);
+
+			strftime(buffer, 80, "%Y-%m-%d", timeinfo);
+			std::string str(buffer);
+			m_scoreReader.push_back(ScoreLayout("", std::to_string(ShipStats::s_currentLevel), std::to_string((int)ShipStats::GetTotalGold()), str));
 		}
 	}
 
-	bool addPlayerToHighScore = true;
-	if (scoreSmallerThan > 7)
-		addPlayerToHighScore = false;
+	std::sort(m_scoreReader.begin(), m_scoreReader.end());
 
+	for (int i = 0; i < m_scoreReader.size(); i++)
+	{
+		if (m_scoreReader[i].name == "")
+		{
+			m_playerIndex = i;
+			break;
+		}
+		m_playerIndex = -1;
+	}
 
 
 	for (int i = 0; i < m_scoreReader.size(); i++)
@@ -166,7 +179,7 @@ void HighscoreMenuObject::Start()
 		m_levels[i]->SetRotation(0.0f);
 		m_levels[i]->SetScale(1.0f);
 		m_levels[i]->SetPositionX(535);
-		m_levels[i]->SetPositionY(m_nameYOffset + (i * 50) + 20);
+		m_levels[i]->SetPositionY(m_nameYOffset + (i * 50) + 30);
 		m_levels[i]->SetDropshadow(false);
 		m_levels[i]->SetOutline(true);
 		m_levels[i]->SetOrigin(true);
@@ -194,32 +207,60 @@ void HighscoreMenuObject::Start()
 		m_date[i]->SetDropshadow(false);
 		m_date[i]->SetOutline(true);
 		m_date[i]->SetOrigin(false);
+
+
 	}
 }
 
 void HighscoreMenuObject::Update()
 {
 	static std::string playerName;
-	std::string inputString = Input::GetKeyDown();
-	if (inputString == "-1")
+	static bool done = false;
+	std::string inputString;
+	if (ShipStats::s_playerDied)
 	{
-		if (playerName.size() > 0) // if it looks stupid it probably is
+		if (!done)
+			inputString = Input::GetKeyDown();
+
+		if (inputString == "-1")
 		{
-			playerName.pop_back();
+			if (playerName.size() > 0) // if it looks stupid it probably is
+			{
+				playerName.pop_back();
+			}
 		}
-	}
-	else if (inputString == "0")
-	{
+		else if (inputString == "0")
+		{
+
+		}
+		else
+		{
+			playerName += inputString;
+		}
+
+		if (m_playerIndex != -1 && !done)
+		{
+			m_names[m_playerIndex]->SetOutput(playerName);
+			m_scoreReader[m_playerIndex].name = playerName;
+			m_inputMarker->SetActive(true);
+			m_inputMarker->SetPositionY(m_names[m_playerIndex]->GetPosition().y);
+		}
+
+		if (Input::GetKeyDown(Input::Keys::Enter) && !done)
+		{
+			done = true;
+			ShipStats::s_playerDied = false;
+			m_inputMarker->SetActive(false);
+			WriteUserDataToFile();
+		}
 
 	}
-	else
-	{
-		playerName += inputString;
-	}
-
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK) || Input::GetButtonDown(Input::Buttons::B))
+	{
 		Scene::LoadScene<MenuScene>();
-
+		done = false;
+		playerName = "";
+	}
 }
 
 

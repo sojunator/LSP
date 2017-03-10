@@ -373,7 +373,7 @@ namespace thomas
 		if (GetKeyDown(Keys::G))
 			return "G";
 		if (GetKeyDown(Keys::H))
-			return "J";
+			return "H";
 		if (GetKeyDown(Keys::J))
 			return "J";
 		if (GetKeyDown(Keys::K))

@@ -42,6 +42,7 @@ public:
 
 	static ShipStats* s_playerStats;
 	static unsigned int s_currentLevel;
+	static bool s_playerDied;
 private:
 	static float s_totalgold;
 	float m_currentGold;
@@ -59,4 +60,5 @@ private:
 	float m_settingsInvertCamY;
 	float m_settingsInvertShip;
 	float m_settingsCamRotateSpeed;
+
 };
