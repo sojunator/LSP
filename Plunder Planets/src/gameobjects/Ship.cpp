@@ -776,6 +776,7 @@ void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 		if (p->m_spawnedBy != this)
 		{
 			TakeDamage(p->GetDamageAmount());
+			Destroy(p);
 		}
 	}
 }

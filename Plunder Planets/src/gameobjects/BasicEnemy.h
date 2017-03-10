@@ -365,7 +365,11 @@ public:
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy != this)
+			{
 				TakeDamage(p->GetDamageAmount());
+				Destroy(p);
+			}
+				
 		}
 
 	}

@@ -83,7 +83,7 @@ void AI::SearchingUpdate()
 		randDir.Normalize();
 
 		float r2 = ((double)rand() / (RAND_MAX));
-		float randLength = r2 * m_searchRadius + 50;
+		float randLength = r2 * 50 + 50;
 
 		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
 		while (!LineOfSight(randDir, randLength))
