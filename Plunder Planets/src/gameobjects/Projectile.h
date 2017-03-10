@@ -1,6 +1,4 @@
 #pragma once
-#include "Thomas.h"
-#include "WaterObject.h"
 #include "WaterSplashParticle.h"
 using namespace thomas;
 using namespace object;
@@ -44,10 +42,10 @@ public:
 		m_rigidbody = AddComponent<component::RigidBodyComponent>();
 		constant = -0.5 * m_Cd * 1.21f * m_radius * m_radius * math::PI;
 		m_rigidbody->setCollisionShape(new btSphereShape(0.35f));
-		m_rigidbody->SetMass(m_mass); 
+		m_rigidbody->SetMass(m_mass);
 		m_velocity = 130.f;
 		m_water = (WaterObject*)Find("WaterObject");
-		
+
 		m_deathTime = 4.0f;
 		m_hitSurface = false;
 
@@ -85,8 +83,8 @@ public:
 		m_rigidbody->setLinearVelocity(*(btVector3*)&(m_velocity * (m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw)) +
 			m_transform->Up() * sinf(math::DegreesToRadians(m_pitch)) +
 			m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw)))));
-		/*m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+ 
-			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToRadians(m_pitch))) + 
+		/*m_rigidbody->setLinearVelocity(m_velocity * (*(btVector3*)&m_transform->Forward() * cosf(math::DegreesToRadians(m_pitch)) * cosf(math::DegreesToRadians(m_yaw))+
+			*(btVector3*)&m_transform->Up() * (sinf(math::DegreesToRadians(m_pitch))) +
 			*(btVector3*)&m_transform->Right() * cosf(math::DegreesToRadians(m_pitch)) * sinf(math::DegreesToRadians(m_yaw))));*/
 	}
 
@@ -99,7 +97,7 @@ public:
 	void Update()
 	{
 		CalculateDrag();
-		
+
 		m_rigidbody->applyCentralForce(m_force);
 
 		if (!m_hitWater)
@@ -116,6 +114,7 @@ public:
 					m_emitterSplash->StartEmitting();
 					m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 					m_hitSurface = true;
+					Destroy(this);
 				}
 				if (m_deathTime < 0.0f)
 				{
@@ -124,14 +123,17 @@ public:
 				}
 			}
 		}
-			
+
 	}
 
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if(collision.otherRigidbody->m_gameObject != m_spawnedBy && collision.otherRigidbody->m_gameObject->GetType() != "Projectile" 
-			&& collision.otherRigidbody->m_gameObject->GetType() != "IslandObject")
+		if (collision.otherRigidbody->m_gameObject != m_spawnedBy && collision.otherRigidbody->m_gameObject->GetType() != "Projectile"
+			&& collision.otherRigidbody->m_gameObject->GetType() != "IslandObject" && collision.otherRigidbody->m_gameObject->GetType() != "TobyEnemy")
+		{
 			Destroy(this);
+		}
+
 
 	}
 
@@ -161,7 +163,7 @@ private:
 
 	float m_deathTime;
 	bool m_hitSurface;
-	
+
 	component::SoundComponent* m_splashSound;
 	component::RenderComponent* m_renderer;
 	component::RigidBodyComponent* m_rigidbody;

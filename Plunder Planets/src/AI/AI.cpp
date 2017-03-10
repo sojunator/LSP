@@ -1,15 +1,14 @@
 #include "AI.h"
-#include "../../THOMAS/src/utils/DebugTools.h"
 #include "../gameobjects/Terrain/IslandManager.h"
 
-AI::AI() : thomas::object::component::Component("AI")
+AI::AI() : component::Component("AI")
 {
 	
 }
 
 void AI::Start()
 {
-	m_islandManager = (IslandManager*)thomas::object::GameObject::Find("TerrainObject");
+	m_islandManager = (IslandManager*)GameObject::Find("TerrainObject");
 
 	m_currentState = State::Searching;
 	m_searchRadius = 800;
@@ -19,7 +18,7 @@ void AI::Start()
 
 void AI::OnEnable()
 {
-	m_target = thomas::object::GameObject::Find("Ship");
+	m_target = GameObject::Find("Ship");
 }
 
 void AI::Update()
@@ -75,6 +74,7 @@ void AI::SearchingUpdate()
 	if (distanceToTarget < m_searchRadius && LineOfSight(targetD, distanceToTarget + 1))
 	{
 		m_currentState = State::Chasing;
+		m_moveToPos = m_target->m_transform->GetPosition();
 	}
 	else if(math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 2.0)
 	{
@@ -87,10 +87,11 @@ void AI::SearchingUpdate()
 		float randLength = r2 * m_searchRadius + 50;
 
 		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
-		while (!LineOfSight(randDir, randLength))
-		{
-			newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
-		}
+		//while (!LineOfSight(randDir, randLength))
+		//{
+		//	
+		//}
+		newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
 		m_moveToPos = newPos;
 	}
 
