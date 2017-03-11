@@ -52,6 +52,7 @@ public:
 			thomas::graphics::Sprite::LoadTexture("ResourceIcon4", "../res/GUI/upgrade/moneys4.png");
 			thomas::graphics::Sprite::LoadTexture("ResourceIcon5", "../res/GUI/upgrade/moneys5.png");
 
+			thomas::graphics::Sprite::LoadTexture("Loading", "../res/GUI/upgrade/loading.jpg");
 		}
 		else if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_1610) //FIX FITTING LATER
 		{

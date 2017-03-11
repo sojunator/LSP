@@ -31,7 +31,7 @@ void MainGameManager::Update()
 	m_goldbar->SetPositionY(Window::GetHeight() - 800 + (1-scale)*738);
 
 
-	if (Input::GetKey(Input::Keys::M) && GameScene::s_islandManager->GetLootedTreasure() < 9500)
+	if (Input::GetKey(Input::Keys::M) && GameScene::s_islandManager->GetLootedTreasure() < 9000)
 		 GameScene::s_islandManager->IncreaseLootedTreasure(500);
 
 	if (GameScene::s_islandManager->GetLootedTreasure() > 7500 && !m_wormholeSpawned)

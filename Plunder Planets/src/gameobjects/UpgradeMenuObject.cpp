@@ -3,7 +3,7 @@
 #include "ShipStats.h"
 void UpgradeMenuObject::Start()
 {
-	component::Camera* cam = AddComponent<component::Camera>();
+	m_cam = AddComponent<component::Camera>();
 	m_cannonInfo = AddComponent<component::SpriteComponent>();
 	m_explanation = AddComponent<component::SpriteComponent>();
 	m_movementInfo = AddComponent<component::SpriteComponent>();
@@ -59,7 +59,11 @@ void UpgradeMenuObject::Start()
 	m_repairCosts = AddComponent<component::TextComponent>();
 	m_plunderSpeedCosts = AddComponent<component::TextComponent>();
 
-	cam->SetFov(50); //makes wormhole fit screen
+	m_loading = AddComponent<component::SpriteComponent>();
+
+	m_startNextScene = false;
+
+	m_cam->SetFov(50); //makes wormhole fit screen
 	m_resourceHolder = ShipStats::s_playerStats->GetTreasure();
 	ShipStats::s_playerStats->SetGoldPlacerHolder(ShipStats::s_playerStats->GetTreasure());
 
@@ -438,7 +442,7 @@ void UpgradeMenuObject::Start()
 	m_wormhole->SetEmissionRate(1.0f / 72.0);
 	m_wormhole->SetSize(65);
 	m_wormhole->SetRotationSpeed(math::DegreesToRadians(5));
-	m_wormhole->SetOffset(cam->m_gameObject->m_transform->Forward() * 50);
+	m_wormhole->SetOffset(m_cam->m_gameObject->m_transform->Forward() * 50);
 	m_wormhole->StartEmitting();
 
 }
@@ -491,13 +495,27 @@ void UpgradeMenuObject::Update()
 	}
 
 	Navigation();
-	
+	if(m_startNextScene)
+		Scene::LoadScene<GameScene>();
+
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		Scene::LoadScene<MenuScene>();
 
 	if (Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
-	{
-		Scene::LoadScene<GameScene>();		
+	{	
+		float deltaTemp = 0.1f;
+		m_currentGold->SetActive(false);
+		m_currentHealth->SetActive(false);
+
+		m_loading->SetName("Loading");
+		m_loading->SetPositionX(0);
+		m_loading->SetPositionY(0);
+		m_loading->SetScale(math::Vector2(1.0f, 1.0f));
+		m_loading->SetColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_loading->SetHoverColor(math::Color(0.5, 0.5, 0.5));
+		m_loading->SetInteractable(false);
+		
+		m_startNextScene = true;
 	}
 }
 

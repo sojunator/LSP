@@ -92,6 +92,10 @@ private:
 	component::TextComponent* m_repairCosts;
 	component::TextComponent* m_plunderSpeedCosts;
 
+	component::SpriteComponent* m_loading;
+
+	component::Camera* m_cam;
+
 	//Bool checks for talents
 	bool m_cannonCheck[5] = { false };
 	bool m_movementCheck[5] = { false };
@@ -106,6 +110,8 @@ private:
 	float m_upgradeDelay = 0.3f;
 	int m_healthRepairCounts = 0;
 	int m_refundHolder = 0;
+
+	bool m_startNextScene;
 
 	float m_resourceHolder = 0;
 };
