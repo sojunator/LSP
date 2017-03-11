@@ -108,7 +108,7 @@ public:
 		m_armIcon->SetColor(math::Vector4(0.0f, 0.4f, 0.9f, 1.0f));
 
 		//Simple font
-		m_text->SetFont("Name");
+		m_text->SetFont("Pirate");
 		m_text->SetOutput("Plunder Planets");
 		m_text->SetColor(math::Vector3(0.3f, 0.15f, 0.0f));
 		m_text->SetRotation(0.0f);
@@ -120,7 +120,7 @@ public:
 		m_text->SetOrigin(false);
 
 		//Gold font
-		m_gold->SetFont("Name");
+		m_gold->SetFont("Pirate");
 		m_gold->SetOutput("0");
 		m_gold->SetColor(math::Vector3(1.0f, 0.88f, 0.0f));
 		m_gold->SetRotation(0.0f);
