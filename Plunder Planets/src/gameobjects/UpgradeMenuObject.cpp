@@ -448,12 +448,10 @@ void UpgradeMenuObject::Update()
 	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	m_upgradeDelay = m_upgradeDelay - ThomasTime::GetDeltaTime(); //Upgrade delay so can't spam and glitch out upgrades.
 
-	float memes = ShipStats::s_playerStats->GetGoldPlacerHolder();
+	UpdateTalents();
 
 	if (ShipStats::s_playerStats->GetTreasure() > ShipStats::s_playerStats->GetGoldPlacerHolder())
 		ShipStats::s_playerStats->HardSetTreasure(ShipStats::s_playerStats->GetGoldPlacerHolder());
-
-	float memes2 = ShipStats::s_playerStats->GetTreasure();
 
 	if ((!m_cannonCheck[0] && !m_movementCheck[0] && !m_resourceCheck[0] && !m_shieldCheck[0] && m_healthRepairCounts == 0 && !m_plunderCheck[0]) && ShipStats::s_playerStats->GetTreasure() < ShipStats::s_playerStats->GetGoldPlacerHolder())
 		ShipStats::s_playerStats->HardSetTreasure(ShipStats::s_playerStats->GetGoldPlacerHolder());
@@ -513,6 +511,223 @@ void UpgradeMenuObject::UpdateHealthCounter()
 {
 	int currentHealthCast = ShipStats::s_playerStats->GetHealthAmount() * 100;
 	m_currentHealth->SetOutput("Current health: " + std::to_string(currentHealthCast) + "/ 100");
+}
+
+void UpgradeMenuObject::UpdateTalents()
+{
+	for (int i = 1; i < 6; i++)
+	{
+		if (ShipStats::s_playerStats->GetCannonCounter() == i)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				m_cannonCheck[j] = true;
+			}
+			if (i == 1)
+			{
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonIcon->SetName("CannonIcon1");
+			}
+			if (i == 2)
+			{
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonIcon->SetName("CannonIcon2");
+			}
+			if (i == 3)
+			{
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1)); 
+				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonIcon->SetName("CannonIcon3");
+			}
+			if (i == 4)
+			{
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1)); 
+				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonIcon->SetName("CannonIcon4");
+			}
+			if (i == 5)
+			{
+				m_cannonTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1)); 
+				m_cannonTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_cannonIcon->SetName("CannonIcon5");
+			}
+		}
+		if (ShipStats::s_playerStats->GetMovementCounter() == i)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				m_movementCheck[j] = true;
+			}
+			if (i == 1)
+			{
+				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementIcon->SetName("MovementIcon1");
+			}
+			if (i == 2)
+			{
+				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementIcon->SetName("MovementIcon2");
+			}
+			if (i == 3)
+			{
+				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementIcon->SetName("MovementIcon3");
+			}
+			if (i == 4)
+			{
+				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementIcon->SetName("MovementIcon4");
+			}
+			if (i == 5)
+			{
+				m_movementTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_movementIcon->SetName("MovementIcon5");
+			}
+		}
+		if (ShipStats::s_playerStats->GetResourceCounter() == i)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				m_resourceCheck[j] = true;
+			}
+			if (i == 1)
+			{
+				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceIcon->SetName("ResourceIcon1");
+			}
+			if (i == 2)
+			{
+				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceIcon->SetName("ResourceIcon2");
+			}
+			if (i == 3)
+			{
+				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceIcon->SetName("ResourceIcon3");
+			}
+			if (i == 4)
+			{
+				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceIcon->SetName("ResourceIcon4");
+			}
+			if (i == 5)
+			{
+				m_resourceTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_resourceIcon->SetName("ResourceIcon5");
+			}
+		}
+		if (ShipStats::s_playerStats->GetShieldCounter() == i)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				m_shieldCheck[j] = true;
+			}
+			if (i == 1)
+			{
+				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldIcon->SetName("ShieldIcon1");
+			}
+			if (i == 2)
+			{
+				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldIcon->SetName("ShieldIcon2");
+			}
+			if (i == 3)
+			{
+				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldIcon->SetName("ShieldIcon3");
+			}
+			if (i == 4)
+			{
+				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldIcon->SetName("ShieldIcon4");
+			}
+			if (i == 5)
+			{
+				m_shieldTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_shieldIcon->SetName("ShieldIcon5");
+			}
+		}
+		if (ShipStats::s_playerStats->GetPlunderCounter() == i)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				m_plunderCheck[j] = true;
+			}
+			if (i == 1)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderIcon->SetName("PlunderIcon1");
+			}
+			if (i == 2)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderIcon->SetName("PlunderIcon2");
+			}
+			if (i == 3)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderIcon->SetName("PlunderIcon3");
+			}
+			if (i == 4)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderIcon->SetName("PlunderIcon4");
+			}
+			if (i == 5)
+			{
+				m_plunderTalent1->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent2->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent3->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent4->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderTalent5->SetColor(math::Vector4(0.5, 0.5, 0.5, 1));
+				m_plunderIcon->SetName("PlunderIcon5");
+			}
+		}
+	}
 }
 
 void UpgradeMenuObject::CannonCheck(bool upgrade, bool undo)

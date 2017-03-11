@@ -8,6 +8,11 @@ ShipStats::ShipStats()
 {
 	m_currentGold = 1000;
 	s_totalgold = 0;
+	m_cannonCounter = 0;
+	m_movementCounter = 0;
+	m_resourceCounter = 0;
+	m_shieldCounter = 0;
+	m_plunderCounter = 0;
 	m_cannonDamage = 5;
 	//m_cannonQuantity; //Add later
 	m_speed = 50;
@@ -90,6 +95,31 @@ float ShipStats::GetGoldPlacerHolder()
 void ShipStats::SetGoldPlacerHolder(float gold)
 {
 	m_goldPlaceHolder = gold;
+}
+
+float ShipStats::GetCannonCounter()
+{
+	return m_cannonCounter;
+}
+
+float ShipStats::GetMovementCounter()
+{
+	return m_movementCounter;
+}
+
+float ShipStats::GetResourceCounter()
+{
+	return m_resourceCounter;
+}
+
+float ShipStats::GetShieldCounter()
+{
+	return m_shieldCounter;
+}
+
+float ShipStats::GetPlunderCounter()
+{
+	return m_plunderCounter;
 }
 
 float ShipStats::GetCannonDamage()
@@ -190,12 +220,14 @@ float ShipStats::GetTotalGold()
 
 void ShipStats::IncreaseCannonDamage(float talentAmount)
 {
+	m_cannonCounter = talentAmount;
 	m_cannonDamage = 5 + (talentAmount * 2);
 	LOG("Cannon damage: " + std::to_string(m_cannonDamage));
 }
 
 void ShipStats::IncreaseSpeed(float talentAmount)
 {
+	m_movementCounter = talentAmount;
 	if (talentAmount == 5)
 		m_speed = 200;
 	else
@@ -205,6 +237,7 @@ void ShipStats::IncreaseSpeed(float talentAmount)
 
 void ShipStats::DecreaseCosts(float talentAmount)
 {
+	m_resourceCounter = talentAmount;
 	if (talentAmount == 5)
 	{
 		m_cannonCost = 20;
@@ -221,6 +254,7 @@ void ShipStats::DecreaseCosts(float talentAmount)
 
 void ShipStats::IncreaseShieldAmount(float talentAmount)
 {
+	m_shieldCounter = talentAmount;
 	if (talentAmount == 1)
 		m_shieldAmount = 0.3;
 	else
@@ -233,8 +267,6 @@ void ShipStats::RepairHealth(float talentAmount)
 	if (talentAmount == 1 && m_healthAmount <= 0.75)
 	{
 		m_healthAmount += 0.25;
-		/*m_placeHolderHealthAmount = 1 - m_healthAmount;
-		m_healthAmount = 1;*/
 	}
 	else if (talentAmount == 1 && m_healthAmount > 0.75)
 	{
@@ -245,13 +277,13 @@ void ShipStats::RepairHealth(float talentAmount)
 	{
 		m_placeHolderHealthAmount = 0.25;
 		m_healthAmount -= 0.25;
-		//m_healthAmount = m_placeHolderHealthAmount;
 	}
 	LOG("Health Amount: " + std::to_string(m_healthAmount));
 }
 
 void ShipStats::IncreasePlunderSpeed(float talentAmount)
 {
+	m_plunderCounter = talentAmount;
 	if (talentAmount == 5)
 		m_plunderSpeed = 250;
 	else

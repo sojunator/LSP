@@ -25,6 +25,7 @@ public:
 	void Update();
 	void UpdateGoldCounter();
 	void UpdateHealthCounter();
+	void UpdateTalents();
 	void CannonCheck(bool upgrade, bool undo);
 	void MovementCheck(bool upgrade, bool undo);
 	void ResourceCheck(bool upgrade, bool undo);

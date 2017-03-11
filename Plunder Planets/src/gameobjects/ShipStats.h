@@ -26,6 +26,11 @@ public:
 	void SetTreasure(float goldDifference);
 	float GetGoldPlacerHolder();
 	void SetGoldPlacerHolder(float gold);
+	float GetCannonCounter();
+	float GetMovementCounter();
+	float GetResourceCounter();
+	float GetShieldCounter();
+	float GetPlunderCounter();
 	float GetCannonDamage();
 	float GetCannonQuantity();
 	float GetSpeed();
@@ -57,6 +62,11 @@ public:
 	static bool s_playerDied;
 private:
 	static float s_totalgold;
+	float m_cannonCounter;
+	float m_movementCounter;
+	float m_resourceCounter;
+	float m_shieldCounter;
+	float m_plunderCounter;
 	float m_goldPlaceHolder;
 	float m_currentGold;
 	float m_cannonDamage;
