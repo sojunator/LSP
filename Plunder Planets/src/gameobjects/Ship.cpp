@@ -589,6 +589,7 @@ void Ship::TakeDamage(float dmg)
 	if (dmgRemaining > 0)
 	{
 		m_health -= dmgRemaining;
+		ShipStats::s_playerStats->LowerCurrentHealth(dmgRemaining);
 	}
 	m_sound->PlayOneShot("fSmallExplosion", 1.0);
 	if (m_health <= 0)

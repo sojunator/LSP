@@ -66,6 +66,11 @@ void ShipStats::SetCurrentHealth(float health)
 	m_placeHolderHealthAmount = health;
 }
 
+void ShipStats::LowerCurrentHealth(float healthDifference)
+{
+	m_healthAmount -= healthDifference;
+}
+
 void ShipStats::SetPlunderSpeed(float plunder)
 {
 	m_plunderSpeed = plunder;

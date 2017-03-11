@@ -19,6 +19,7 @@ public:
 	void SetCannonCost(float cannonCost);
 	void SetShieldAmount(float shield);
 	void SetCurrentHealth(float health);
+	void LowerCurrentHealth(float healthDifference);
 	void SetPlunderSpeed(float plunde);
 
 	float GetTreasure();
