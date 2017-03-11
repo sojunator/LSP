@@ -1051,6 +1051,8 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				ShipStats::s_playerStats->IncreaseShieldAmount(1);//Buy Shield
 				ShipStats::s_playerStats->SetTreasure(-750);
 				m_shieldIcon->SetName("ShieldIcon1");
+				float meme = ShipStats::s_playerStats->GetShieldAmount();
+				int stopper = 0;
 			}
 			else if (undo)
 			{
@@ -1059,6 +1061,8 @@ void UpgradeMenuObject::ShieldCheck(bool upgrade, bool undo)
 				ShipStats::s_playerStats->IncreaseShieldAmount(0);//Undo last shield upgrade
 				ShipStats::s_playerStats->SetTreasure(750);
 				m_shieldIcon->SetName("ShieldIcon");
+				float meme2 = ShipStats::s_playerStats->GetShieldAmount();
+				int stopper2 = 0;
 			}
 		}
 		else if ((upgrade && m_shieldCheck[0] && !m_shieldCheck[1]) || (undo && !m_shieldCheck[2] && m_shieldCheck[1]))

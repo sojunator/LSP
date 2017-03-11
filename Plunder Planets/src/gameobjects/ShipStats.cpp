@@ -262,6 +262,8 @@ void ShipStats::IncreaseShieldAmount(float talentAmount)
 	m_shieldCounter = talentAmount;
 	if (talentAmount == 1)
 		m_shieldAmount = 0.3;
+	else if (talentAmount == 0)
+		m_shieldAmount = 0;
 	else
 		m_shieldAmount = 0.3 + (0.175 * (talentAmount - 1)); //0.3, 0.475, 0.65, 0.825, 1
 	LOG("Shield amount: " + std::to_string(m_shieldAmount));

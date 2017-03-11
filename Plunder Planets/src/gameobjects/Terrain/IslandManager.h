@@ -120,6 +120,11 @@ public:
 		return (int)m_lootedTreasure;
 	}
 
+	void IncreaseLootedTreasure(float loot)
+	{
+		m_lootedTreasure += loot;
+	}
+
 private:
 	thomas::Islands* m_islands;
 	std::vector<IslandObject*> m_islandObjects;

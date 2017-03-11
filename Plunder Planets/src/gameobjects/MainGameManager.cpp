@@ -30,7 +30,11 @@ void MainGameManager::Update()
 	m_goldbar->SetScale(math::Vector2(1, scale));
 	m_goldbar->SetPositionY(Window::GetHeight() - 800 + (1-scale)*738);
 
-	if (GameScene::s_islandManager->GetLootedTreasure() > 10 && !m_wormholeSpawned)
+
+	if (Input::GetKey(Input::Keys::M) && GameScene::s_islandManager->GetLootedTreasure() < 9500)
+		 GameScene::s_islandManager->IncreaseLootedTreasure(500);
+
+	if (GameScene::s_islandManager->GetLootedTreasure() > 7500 && !m_wormholeSpawned)
 	{
 			Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0, 3.0f, 0), math::Quaternion::Identity, m_scene);
 			wormhole->SetEndLevel(true);
