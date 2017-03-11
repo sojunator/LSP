@@ -183,7 +183,7 @@ void Ship::Start()
 	//m_firingCost->SetLooping(false);
 	m_boostCost->SetDirection(0, 1, 0);
 	m_boostCost->SetSpread(0);
-	m_boostCost->SetSpeed(25);
+	m_boostCost->SetSpeed(40);
 	//m_firingCost->SetEndSpeed(200);
 	//m_firingCost->SetRotationSpeed(11);
 	m_boostCost->SetLifeTime(1.5);
@@ -218,6 +218,7 @@ void Ship::Start()
 	m_turnSpeed = 20;
 	m_roof = 1.0;
 	m_flyCost = ShipStats::s_playerStats->GetBoostCost();
+	m_displayBoostCostParticleFloaterThingy = ShipStats::s_playerStats->GetBoostCost();
 
 	//controlls/camera
 	m_controlSensitivity = 0.13f;
@@ -301,6 +302,7 @@ void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float co
 	if ((Input::GetButton(Input::Buttons::LT) || Input::GetKey(Input::Keys::LeftShift)) && m_treasure > m_flyCost)//Goes in even when m_treasure < m_flyCost * dt
 	{
 		m_treasure -= m_flyCost*dt;
+		m_displayBoostCostParticleFloaterThingy -= m_flyCost*dt;
 		math::Vector3 forward = m_transform->Forward();
 		m_moving = true;
 		forward.y = 0;
@@ -761,7 +763,11 @@ void Ship::Update()
 		m_boosterParticlesEmitterRight1->StartEmitting();
 		m_boosterParticlesEmitterRight2->StartEmitting();
 
-		m_boostCost->StartEmitting();
+		if (m_displayBoostCostParticleFloaterThingy < 0.0f)
+		{
+			m_displayBoostCostParticleFloaterThingy = ShipStats::s_playerStats->GetBoostCost();
+			m_boostCost->StartEmitting();
+		}
 		
 		m_boostSound->Play();
 	}

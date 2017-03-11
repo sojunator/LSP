@@ -71,7 +71,7 @@ private:
 	float m_treasure;
 	float m_mass;
 	float m_flyTurnSpeed;
-	float m_flyCost;
+	float m_flyCost; float m_displayBoostCostParticleFloaterThingy;
 	float m_speed;
 	float m_turnSpeed;
 	float m_elevateCamSpeed;//for moving cam up and down
