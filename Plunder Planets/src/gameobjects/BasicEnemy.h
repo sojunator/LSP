@@ -19,8 +19,8 @@ public:
 	{
 		float randVal = ((double)rand() / (RAND_MAX));
 		m_health = 10 + difficulty * randVal * 10;
-		m_speed = 200 + difficulty * randVal * 50;
-		m_turnSpeed = 100 + difficulty * randVal * 8.5f;
+		m_speed = 500 + difficulty * randVal * 100;
+		m_turnSpeed = 150 + difficulty * randVal * 8.5f;
 		float projectileDmg = difficulty * 5;
 		m_broadSideLeft->SetProjectileDmg(projectileDmg);
 		m_broadSideRight->SetProjectileDmg(projectileDmg);
@@ -29,7 +29,8 @@ public:
 	void Start()
 	{
 		m_mass = 500000;
-
+		m_roof = 0.5;
+		m_timeLeftToActivateRoof = 0;
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
 
@@ -92,7 +93,6 @@ public:
 		m_dead = false;
 		m_deathTime = 10;
 		//Movement
-		m_moving = false;
 		m_speed = 150;
 		m_turnSpeed = 80;
 
@@ -142,13 +142,18 @@ public:
 	}
 
 
+	void DisableRoof()
+	{
+		m_roof = 100000;
+		m_timeLeftToActivateRoof = 1.0f;
+	}
+
 	void Move(float dt)
 	{
 		if (m_ai->GetState() == AI::State::Chasing || m_ai->GetState() == AI::State::Searching || m_ai->GetState() == AI::State::Attacking)
 		{
 			math::Vector3 forward = m_transform->Forward();
 			forward.y = 0;		//Remove y so no flying
-			m_moving = true;
 
 			float dir = calcDir();
 
@@ -284,33 +289,39 @@ public:
 			
 			if (i < 8)
 			{
-				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody);
 				bois += m_floats[i]->m_transform->GetPosition();
 			}
 			else
 			{
-				m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				m_floats[i]->UpdateBoat(m_rigidBody);
 			}
 
 		}
 
-		m_rigidBody->setDamping(0.0, 0.0);
-		if (m_moving)
+		if (m_timeLeftToActivateRoof <= 0)
 		{
 			m_rigidBody->setDamping(0.9, 0.9);
+			m_rigidBody->applyDamping(dt);
 		}
-		m_rigidBody->applyDamping(dt);
 
 
 		bois /= 8;
 		waveHeight /= 8;
-		if (bois.y > waveHeight + 0.5)
+		if (bois.y > waveHeight + m_roof)
 		{
 			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
 			float oldY = v.getY();
-			float newY = waveHeight + 0.5;
+			float newY = waveHeight + m_roof;
 			newY = oldY + dt*4.0 * (newY - oldY);
 			v.setY(newY);
+		}
+		else if (bois.y < waveHeight)
+		{
+			if (m_timeLeftToActivateRoof <= 0)
+				m_roof = 0.5f;
+			else
+				m_timeLeftToActivateRoof -= ThomasTime::GetDeltaTime();
 		}
 	}
 
@@ -411,10 +422,10 @@ private:
 	float m_mass;
 	float m_speed;
 	float m_turnSpeed;
-	bool m_moving;
 
 	//Sound
 	float m_soundDelay;
 	float m_soundDelayLeft;
-
+	float m_roof;
+	float m_timeLeftToActivateRoof;
 };

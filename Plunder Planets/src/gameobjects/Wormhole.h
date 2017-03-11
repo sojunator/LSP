@@ -105,8 +105,8 @@ public:
 		{
 			m_ship = Instantiate<Ship>(m_transform->GetPosition(), math::Quaternion::Identity, m_scene);
 			math::Vector3 shipForward = -m_ship->m_transform->Forward();
-
-			m_ship->GetComponent<component::RigidBodyComponent>()->applyCentralImpulse(*(btVector3*)&shipForward * 100 * m_ship->GetComponent<component::RigidBodyComponent>()->GetMass());
+			math::Vector3 shipUp = m_ship->m_transform->Up();
+			m_ship->GetComponent<component::RigidBodyComponent>()->applyCentralImpulse((*(btVector3*)&shipForward * 100 + *(btVector3*)&shipUp * 500) * m_ship->GetComponent<component::RigidBodyComponent>()->GetMass());
 		}
 
 		if (m_ship && m_ship->m_startUpSequence)

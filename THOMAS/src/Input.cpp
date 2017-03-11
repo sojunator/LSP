@@ -118,6 +118,16 @@ namespace thomas
 		return s_gamePadState.thumbSticks.rightX;
 	}
 
+	float Input::GetLeftTriggerDelta()
+	{
+		return s_gamePadState.triggers.left;
+	}
+
+	float Input::GetRightTriggerDelta()
+	{
+		return s_gamePadState.triggers.right;
+	}
+
 	math::Vector2 Input::GetMousePosition()
 	{
 		if (s_recordPosition)
