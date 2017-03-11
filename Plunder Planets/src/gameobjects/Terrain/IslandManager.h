@@ -4,6 +4,7 @@
 #include <string>
 #include "../BasicEnemy.h"
 #include "IslandObject.h"
+#include "../GoldEmitterObject.h"
 
 class IslandManager
 {
@@ -41,7 +42,7 @@ public:
 	{
 	}
 
-	float Plunder(math::Vector3 pos)
+	float Plunder(math::Vector3 pos, GoldEmitterObject* goldEmitter)
 	{
 		CheckForDeadIslands();
 		bool gotLoot = false;
@@ -65,7 +66,7 @@ public:
 				{
 					m_islandObjects[i]->SinkIsland();
 				}
-				m_islandObjects[i]->Looting(gotLoot, pos);
+				m_islandObjects[i]->Looting(gotLoot, pos, goldEmitter);
 			}
 		}
 		return treasure;

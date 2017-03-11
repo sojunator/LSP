@@ -60,7 +60,10 @@ void Ship::Start()
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
-	
+	goldEmitterObject = Instantiate<GoldEmitterObject>(math::Vector3(0, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
+	//m_goldParticlesEmitterComponent = AddComponent<component::ParticleEmitterComponent>();
+	//m_goldParticlesEmitterComponent->ImportEmitter("../res/textures/goldemission.thomasps");
+
 	m_boosterParticlesEmitterLeft1 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterLeft1->SetTexture("../res/textures/fire.png");
 	m_boosterParticlesEmitterLeft1->SetShader("particleShader");
@@ -524,7 +527,7 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition()));
+	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition(), goldEmitterObject));
 }
 int Ship::GetTreasure()
 {

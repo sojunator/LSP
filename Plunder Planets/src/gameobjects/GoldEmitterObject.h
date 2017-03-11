@@ -20,6 +20,7 @@ public:
 	{
 		m_goldEmitter = thomas::object::GameObject::AddComponent<thomas::object::component::ParticleEmitterComponent>();
 		m_goldEmitter->ImportEmitter("../res/textures/goldemission.thomasps");
+
 	};
 
 
@@ -38,6 +39,7 @@ public:
 	void StopEmittingParticles()
 	{
 		m_goldEmitter->StopEmitting();
+		
 	}
 private:
 	thomas::object::component::ParticleEmitterComponent* m_goldEmitter;

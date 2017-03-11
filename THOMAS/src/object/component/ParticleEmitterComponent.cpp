@@ -531,6 +531,7 @@ namespace thomas
 				
 
 				CalculateMaxNrOfParticles();
+				StartEmitting();
 
 				SetTexture(textureName);
 			}
