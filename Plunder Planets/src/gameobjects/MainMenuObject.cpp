@@ -108,11 +108,11 @@ void MainMenuObject::Update()
 		}
 			
 	}
-	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter))
+	if (Input::GetButtonDown(Input::Buttons::A) || Input::GetKeyDown(Input::Keys::Enter) || Input::GetButtonDown(Input::Buttons::START))
 	{
 		if (m_startButton->isHovering())
 		{
-			Scene::LoadScene<UpgradeScene>();
+			Scene::LoadScene<UpgradeScene>(); //Change to GameScene if we don't want Main Menu to launch Upgrade Scene first time.
 		}
 		else if (m_highScoreButton->isHovering())
 		{
@@ -159,9 +159,6 @@ void MainMenuObject::Update()
 		}
 		m_delay = 0.3f;
 	}
-	if (Input::GetButtonDown(Input::Buttons::START))
-		Scene::LoadScene<GameScene>();
-
 	if (Input::GetKeyDown(Input::Keys::Escape) || Input::GetButtonDown(Input::Buttons::BACK))
 		ThomasCore::Exit();
 }
