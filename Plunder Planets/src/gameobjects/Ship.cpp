@@ -349,12 +349,12 @@ void Ship::Aim(float side, math::Vector2 aimPos)
 }
 void Ship::ShipAimCannons()
 {
-	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKeyDown(Input::Keys::E))
+	if (Input::GetButtonDown(Input::Buttons::RB) || Input::GetKeyDown(Input::Keys::E) || Input::GetButtonDown(Input::Buttons::B))
 	{
 		m_aimRight = !m_aimRight;
 		m_aimLeft = false;
 	}
-	else if(Input::GetButtonDown(Input::Buttons::LB) || Input::GetKeyDown(Input::Keys::Q))
+	else if(Input::GetButtonDown(Input::Buttons::LB) || Input::GetKeyDown(Input::Keys::Q) || Input::GetButtonDown(Input::Buttons::X))
 	{
 		m_aimLeft = !m_aimLeft;
 		m_aimRight = false;
