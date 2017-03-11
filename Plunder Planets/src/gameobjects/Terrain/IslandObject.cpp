@@ -13,8 +13,6 @@ void IslandObject::Start()
 	m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
 	m_renderer = thomas::object::GameObject::AddComponent<thomas::object::component::RenderComponent>();
 	m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
-	//m_goldEmitterObject = Instantiate<GoldEmitterObject>(math::Vector3(0,0,0), math::Quaternion::Identity, m_transform, m_scene);
-	m_smokeEmitter = thomas::object::GameObject::AddComponent<thomas::object::component::ParticleEmitterComponent>();
 	m_sound->SetClip("fPlunder");
 	m_sound->SetLooping(true);
 	m_falling = false;
@@ -53,19 +51,14 @@ void IslandObject::SinkIsland()
 		m_rigidBody->SetMass(8000000);
 		m_rigidBody->activate();
 		m_falling = true;
-		m_smokeEmitter->StartEmitting();
 	}
 }
 
-void IslandObject::Looting(bool gotLoot, thomas::math::Vector3 shipPos, GoldEmitterObject* goldEmitter)
+void IslandObject::Looting(bool gotLoot, thomas::math::Vector3 shipPos, thomas::object::component::ParticleEmitterComponent* goldEmitter)
 {
-	math::Vector3 dir = m_transform->GetPosition() - shipPos;
-	dir.Normalize();
-
 	if (gotLoot && !m_pauseObj->GetPauseState())
 	{
-		goldEmitter->m_transform->SetPosition(dir * m_radius * 0.2f);
-		goldEmitter->StartEmittingParticles(-dir);
+		goldEmitter->StartEmitting();
 		m_sound->Play();
 	}
 	else

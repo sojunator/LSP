@@ -4,7 +4,7 @@
 #include <string>
 #include "../BasicEnemy.h"
 #include "IslandObject.h"
-#include "../GoldEmitterObject.h"
+#include "object\component\ParticleEmitterComponent.h"
 
 class IslandManager
 {
@@ -34,15 +34,7 @@ public:
 		delete m_islands;
 	}
 
-	void Start()
-	{
-	}
-
-	void Update()
-	{
-	}
-
-	float Plunder(math::Vector3 pos, GoldEmitterObject* goldEmitter)
+	float Plunder(math::Vector3 pos, thomas::object::component::ParticleEmitterComponent* goldEmitter)
 	{
 		CheckForDeadIslands();
 		bool gotLoot = false;
@@ -110,17 +102,17 @@ public:
 
 	void CheckForDeadIslands()
 	{
-		for (int i = 0; i < m_islandObjects.size(); i++)
+		/*for (int i = 0; i < m_islandObjects.size(); i++)
 		{
 			if (m_islandObjects[i] != nullptr)
 			{
 				if (m_islandObjects[i]->CheckDestory())
 				{
-					delete m_islandObjects[i];
-					m_islandObjects[i] = nullptr;
+					//delete m_islandObjects[i];
+					//m_islandObjects[i] = nullptr;
 				}
 			}
-		}
+		}*/
 	}
 
 	int GetLootedTreasure()
