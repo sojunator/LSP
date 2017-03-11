@@ -22,7 +22,10 @@ public:
 	void SetPlunderSpeed(float plunde);
 
 	float GetTreasure();
+	void HardSetTreasure(float gold);
 	void SetTreasure(float goldDifference);
+	float GetGoldPlacerHolder();
+	void SetGoldPlacerHolder(float gold);
 	float GetCannonDamage();
 	float GetCannonQuantity();
 	float GetSpeed();
@@ -54,6 +57,7 @@ public:
 	static bool s_playerDied;
 private:
 	static float s_totalgold;
+	float m_goldPlaceHolder;
 	float m_currentGold;
 	float m_cannonDamage;
 	float m_cannonQuantity;

@@ -61,6 +61,7 @@ void UpgradeMenuObject::Start()
 
 	cam->SetFov(50); //makes wormhole fit screen
 	m_resourceHolder = ShipStats::s_playerStats->GetTreasure();
+	ShipStats::s_playerStats->SetGoldPlacerHolder(ShipStats::s_playerStats->GetTreasure());
 
 	m_music->SetClip("mMenuTheme");
 	m_music->SetLooping(true);
@@ -446,6 +447,16 @@ void UpgradeMenuObject::Update()
 {
 	m_delay = m_delay - ThomasTime::GetDeltaTime();
 	m_upgradeDelay = m_upgradeDelay - ThomasTime::GetDeltaTime(); //Upgrade delay so can't spam and glitch out upgrades.
+
+	float memes = ShipStats::s_playerStats->GetGoldPlacerHolder();
+
+	if (ShipStats::s_playerStats->GetTreasure() > ShipStats::s_playerStats->GetGoldPlacerHolder())
+		ShipStats::s_playerStats->HardSetTreasure(ShipStats::s_playerStats->GetGoldPlacerHolder());
+
+	float memes2 = ShipStats::s_playerStats->GetTreasure();
+
+	if ((!m_cannonCheck[0] && !m_movementCheck[0] && !m_resourceCheck[0] && !m_shieldCheck[0] && m_healthRepairCounts == 0 && !m_plunderCheck[0]) && ShipStats::s_playerStats->GetTreasure() < ShipStats::s_playerStats->GetGoldPlacerHolder())
+		ShipStats::s_playerStats->HardSetTreasure(ShipStats::s_playerStats->GetGoldPlacerHolder());
 
 	if (m_resourceHolder > ShipStats::s_playerStats->GetTreasure())
 		m_plunder->PlayOneShot("fUpdate", 1);

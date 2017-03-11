@@ -72,9 +72,24 @@ float ShipStats::GetTreasure()
 	return m_currentGold;
 }
 
+void ShipStats::HardSetTreasure(float gold)
+{
+	m_currentGold = gold;
+}
+
 void ShipStats::SetTreasure(float goldDifference)
 {
 	m_currentGold = m_currentGold + goldDifference;
+}
+
+float ShipStats::GetGoldPlacerHolder()
+{
+	return m_goldPlaceHolder;
+}
+
+void ShipStats::SetGoldPlacerHolder(float gold)
+{
+	m_goldPlaceHolder = gold;
 }
 
 float ShipStats::GetCannonDamage()
