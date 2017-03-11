@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Thomas.h"
-
 using namespace thomas;
 using namespace object;
 class ShipFloat : public GameObject
@@ -21,6 +20,27 @@ public:
 		m_transform->SetScale(m_radius);
 		m_mass = 625.0;
 		m_water = ((WaterObject*)Find("WaterObject"));
+
+		m_emitterSplash = AddComponent<component::ParticleEmitterComponent>();
+		m_emitterSplash->SetTexture("../res/textures/millsplash01.png");
+		m_emitterSplash->SetShader("particleShader");
+		m_emitterSplash->SetDirection(math::Vector3(0, 0.1, -0.9));
+		m_emitterSplash->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_emitterSplash->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+		m_emitterSplash->SetMaxDelay(1.2f);
+		m_emitterSplash->SetMinDelay(0.16f);
+		m_emitterSplash->SetMinSpeed(1.0f);
+		m_emitterSplash->SetMaxSpeed(10.0f);
+		m_emitterSplash->SetSize(4);
+		m_emitterSplash->SetMaxLifeTime(1.6f);
+		m_emitterSplash->SetMinLifeTime(0.3f);
+		m_emitterSplash->SetRotationSpeed(0.07f);
+		m_emitterSplash->SetSpread(0.6f);
+		m_emitterSplash->SetEmissionRate(15);
+		m_emitterSplash->SetEmissionDuration(0.1f);
+		m_emitterSplash->SetRadius(4.0f);
+		m_splashSound = AddComponent<component::SoundComponent>();
+
 	}
 
 	void SetMass(float m)
@@ -31,7 +51,7 @@ public:
 		m_transform->SetScale(m_radius);
 	}
 
-	float UpdateBoat(component::RigidBodyComponent* rb, bool moving) 
+	float UpdateBoat(component::RigidBodyComponent* rb) 
 	{
 
 		float deltaWater = m_water->GetWaterHeightAtColliderIndex(m_collisionIndex);
@@ -49,29 +69,31 @@ public:
 				volumeUnderWater = height;
 			volumeUnderWater = (4.0 / 3.0)*math::PI*volumeUnderWater/2;
 			
-			float waterDensity = 3.0 * density;
+			float waterDensity = 5.0 * density;
 			btVector3 force = (volumeUnderWater*waterDensity)*-rb->getGravity();
 			math::Vector3 pos = math::Vector3::Transform(m_transform->m_localPosition, math::Matrix::CreateFromQuaternion(rb->m_gameObject->m_transform->GetRotation()));
-			if (heightBelowWater < 0.3)
+
+			float damping;
+			if (heightBelowWater < 2.0)
 			{
-				rb->setDamping(0.9, 0.9);
-			}
-			else if(heightBelowWater < 1.5)
-			{
-				rb->setDamping(0.7, 0.7);
-			}
-			else if (heightBelowWater < 2.0)
-			{
-				rb->setDamping(0.5, 0.5);
+				damping = 0.5;
 			}
 			else
 			{
-				rb->setDamping(0.3, 0.3);
+				damping = 1.0;
 			}
-			
+			force *= damping;
+			LOG(force.length() / rb->GetMass());
+			if (force.length()/rb->GetMass() > 10)
+			{
+				float splashForce = force.length() / rb->GetMass();
+				float size = (splashForce - 10) / 3;
+				m_emitterSplash->SetSize(size);
+				m_emitterSplash->StartEmitting();
+				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], size/30);
+				
+			}
 			rb->applyImpulse(force*ThomasTime::GetDeltaTime(), *(btVector3*)&pos);
-			if(!moving)
-				rb->applyDamping(ThomasTime::GetDeltaTime());
 		}
 		
 		return deltaWater;
@@ -89,4 +111,7 @@ private:
 	float m_radius;
 	float m_mass;
 	WaterObject* m_water;
+	component::ParticleEmitterComponent* m_emitterSplash;
+	component::SoundComponent* m_splashSound;
+	std::string m_SFXs[3] = { "fSplash1", "fSplash2", "fSplash3" };
 };

@@ -9,7 +9,6 @@
 #include "../scenes/MenuScene.h"
 #include "ShipStats.h"
 #include "graphics\GeometryDraw.h"
-#include "GoldEmitterObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -41,6 +40,7 @@ public:
 	int GetTreasure();
 
 	void Float(float dt);
+	void DisableRoof();
 
 	void TakeDamage(float dmg);
 	void Die();
@@ -49,6 +49,7 @@ public:
 	void OnCollision(component::RigidBodyComponent::Collision collision);
 
 public:
+	float m_timeLeftToActivateRoof;
 	bool m_startUpSequence;
 	//Health attributes
 	float m_health;
@@ -104,7 +105,7 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 	component::ParticleEmitterComponent* m_firingCost;
 	component::ParticleEmitterComponent* m_boostCost;
-	GoldEmitterObject* goldEmitterObject;
+	component::ParticleEmitterComponent* m_goldEmitter;
 	//component::ParticleEmitterComponent* m_goldParticlesEmitterComponent;
 	component::TextComponent* m_safeToLeave;
 	component::TextComponent* m_deathMsg;

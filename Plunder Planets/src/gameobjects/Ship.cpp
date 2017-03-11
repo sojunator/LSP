@@ -10,7 +10,7 @@ void Ship::Start()
 {
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
-	float mass = 20000;
+	float mass = 500000;
 	ShipStats::s_playerDied = false;
 	//Front
 	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -60,9 +60,8 @@ void Ship::Start()
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
-	goldEmitterObject = Instantiate<GoldEmitterObject>(math::Vector3(0, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
-	//m_goldParticlesEmitterComponent = AddComponent<component::ParticleEmitterComponent>();
-	//m_goldParticlesEmitterComponent->ImportEmitter("../res/textures/goldemission.thomasps");
+	m_goldEmitter = thomas::object::GameObject::AddComponent<thomas::object::component::ParticleEmitterComponent>();
+	m_goldEmitter->ImportEmitter("../res/textures/goldemission.thomasps");
 
 	m_boosterParticlesEmitterLeft1 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterLeft1->SetTexture("../res/textures/fire.png");
@@ -196,7 +195,7 @@ void Ship::Start()
 	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
 	//m_firingCost->SpawnAtSphereEdge(true);
 
-
+	m_timeLeftToActivateRoof = 0;
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
 	m_rigidBody->SetCollider(new btBoxShape(btVector3(3, 20, 8)));
@@ -243,14 +242,22 @@ bool Ship::GetFreeCamera()
 void Ship::ShipMove(float const dt)
 {
 	//ship controls
-	if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera && Input::GetKey(Input::Keys::W)) || (m_freeCamera && Input::GetKey(Input::Keys::Up)))
+	if (Input::GetButton(Input::Buttons::RT) || (!m_freeCamera && Input::GetKey(Input::Keys::W)) || (m_freeCamera && Input::GetKey(Input::Keys::Up) || Input::GetRightTriggerDelta() > 0))
 	{
 		math::Vector3 forward = m_transform->Forward();
 
 		//Remove y part;
 		forward.y = 0;
 		m_moving = true;
-		m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*m_rigidBody->GetMass()));
+		if (Input::GetRightTriggerDelta() > 0)
+		{
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*m_rigidBody->GetMass()*Input::GetRightTriggerDelta()));
+		}
+		else
+		{
+			m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed*m_rigidBody->GetMass()));
+		}
+		
 	}
 }
 void Ship::ShipRotate(float const dt)
@@ -527,7 +534,7 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition(), goldEmitterObject));
+	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition(), m_goldEmitter));
 }
 int Ship::GetTreasure()
 {
@@ -543,20 +550,21 @@ void Ship::Float(float dt)
 
 		if (i < 8)
 		{
-			waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+			waveHeight += m_floats[i]->UpdateBoat(m_rigidBody);
 			bois += m_floats[i]->m_transform->GetPosition();
 		}
 		else
 		{
-			m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+			m_floats[i]->UpdateBoat(m_rigidBody);
 		}
 
 	}
-
-	m_rigidBody->setDamping(0.5, 0.5);
-	m_rigidBody->applyDamping(dt);
-
-
+	if (m_timeLeftToActivateRoof <= 0 || m_startUpSequence)
+	{
+		m_rigidBody->setDamping(0.3, 0.3);
+		m_rigidBody->applyDamping(dt);
+	}
+	
 	bois /= 8;
 	waveHeight /= 8;
 	if (bois.y > waveHeight + m_roof && waveHeight > -10)
@@ -569,13 +577,26 @@ void Ship::Float(float dt)
 	}
 	else if (bois.y < waveHeight && m_startUpSequence)
 	{
-		m_roof = 1.0f;
+		m_roof = 0.5f;
 		m_startUpSequence = false;
 		//m_cameraObject->m_transform->SetPosition(m_transform->GetPosition() + m_transform->Forward() * 200 + math::Vector3(0, 25, 0));
 		m_lookAtOffset = math::Vector3(0, 20, 0);
 		m_lookAtPoint = m_transform->GetPosition() + m_lookAtOffset;
 		m_cameraObject->m_transform->LookAt(m_lookAtPoint);
 	}
+	else if (bois.y < waveHeight && !m_startUpSequence)
+	{
+		if (m_timeLeftToActivateRoof <= 0)
+			m_roof = 0.5f;
+		else
+			m_timeLeftToActivateRoof -= ThomasTime::GetDeltaTime();
+	}
+	
+}
+void Ship::DisableRoof()
+{
+	m_roof = 10000;
+	m_timeLeftToActivateRoof = 1.0f;
 }
 void Ship::TakeDamage(float dmg)
 {

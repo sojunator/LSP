@@ -28,7 +28,8 @@ public:
 		m_mass = 500000;
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
-
+		m_roof = 0.5;
+		m_timeLeftToActivateRoof = 0;
 		//Front
 		m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
 		m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, 0, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -70,7 +71,6 @@ public:
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
 		m_renderer->SetModel("tobyEnemy0");
-		m_moving = false;
 		m_swapDelay = 0;
 
 
@@ -155,6 +155,7 @@ public:
 		m_sound->SetClip("fTobyTimer");
 		m_sound->SetVolume(0.7);
 		m_sound->SetLooping(false);
+
 		
 	}
 
@@ -165,12 +166,11 @@ public:
 		{
 			math::Vector3 forward = m_transform->Forward();
 			forward.y = 0;		//Remove y so no flying
-			m_moving = true;
 
 			float dir = calcDir();
 
 			float moveSpeed = 1 - abs(dir);
-
+			
 			if (m_ai->GetState() == AI::State::Attacking)
 			{
 				m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * 2.0 * m_rigidBody->GetMass() * moveSpeed));
@@ -226,6 +226,12 @@ public:
 		return dir;
 	}
 
+	void DisableRoof()
+	{
+		m_roof = 100000;
+		m_timeLeftToActivateRoof = 1.0f;
+	}
+
 	void Float(float dt)
 	{
 		float waveHeight = 0;
@@ -235,33 +241,39 @@ public:
 
 			if (i < 8)
 			{
-				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				waveHeight += m_floats[i]->UpdateBoat(m_rigidBody);
 				bois += m_floats[i]->m_transform->GetPosition();
 			}
 			else
 			{
-				m_floats[i]->UpdateBoat(m_rigidBody, m_moving);
+				m_floats[i]->UpdateBoat(m_rigidBody);
 			}
 
 		}
 
-		m_rigidBody->setDamping(0.0, 0.0);
-		if (m_moving)
+		if (m_timeLeftToActivateRoof <= 0)
 		{
 			m_rigidBody->setDamping(0.9, 0.9);
+			m_rigidBody->applyDamping(dt);
 		}
-		m_rigidBody->applyDamping(dt);
 
 
 		bois /= 8;
 		waveHeight /= 8;
-		if (bois.y > waveHeight + 0.5)
+		if (bois.y > waveHeight + m_roof)
 		{
 			btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
 			float oldY = v.getY();
-			float newY = waveHeight + 0.5;
+			float newY = waveHeight + m_roof;
 			newY = oldY + dt*4.0 * (newY - oldY);
 			v.setY(newY);
+		}
+		else if (bois.y < waveHeight)
+		{
+			if (m_timeLeftToActivateRoof <= 0)
+				m_roof = 0.5f;
+			else
+				m_timeLeftToActivateRoof -= ThomasTime::GetDeltaTime();
 		}
 	}
 
@@ -366,28 +378,30 @@ public:
 		{
 			math::Vector3 impulseVector = collision.otherRigidbody->m_gameObject->m_transform->GetPosition() - m_transform->GetPosition();
 			float distanceFromCenter = impulseVector.Length();
-			float dmgModifier =  1-(distanceFromCenter / m_explosionRadius);
+			float dmgModifier = 1-(distanceFromCenter / m_explosionRadius);
 			impulseVector.Normalize();
-			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier * 100);
-
-
+			impulseVector.y = 0.12;
+			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier * 250);
 			if(collision.otherRigidbody->m_gameObject->GetType() == "TobyEnemy")
 			{
 				m_hasExploded = true;
 				Toby* tobyEnemy = (Toby*)collision.otherRigidbody->m_gameObject;
 				tobyEnemy->TakeDamage(dmgModifier*m_explosionDamage);
+				tobyEnemy->DisableRoof();
 			}
 			else if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 			{
 				m_hasExploded = true;
 				Ship* player = (Ship*)collision.otherRigidbody->m_gameObject;
 				player->TakeDamage(dmgModifier*m_explosionDamage);
+				player->DisableRoof();
 			}
 			else if (collision.otherRigidbody->m_gameObject->GetType() == "BasicEnemy")
 			{
 
 				BasicEnemy* basicEnemy = (BasicEnemy*)collision.otherRigidbody->m_gameObject;
 				basicEnemy->TakeDamage(dmgModifier*m_explosionDamage);
+				basicEnemy->DisableRoof();
 			}
 
 
@@ -409,11 +423,14 @@ public:
 		m_sound->PlayOneShot("fTobyExplode", 0.7);
 		m_explosionParticle1->StartEmitting();
 		m_explosionSmokeParticle->StartEmitting();
+		m_renderer->SetActive(false);
+		m_rigidBody->SetActive(false);
 	}
 
 public:
 	component::RigidBodyComponent* m_explosionCollider;
 private:
+
 
 	float m_deathTime;
 	bool m_dead;
@@ -442,7 +459,6 @@ private:
 	float m_speed;
 	float m_turnSpeed;
 	bool m_boosting;
-	bool m_moving;
 	bool m_explode;
 	float m_explosionRadius;
 	float m_explosionDamage;
@@ -452,4 +468,6 @@ private:
 	int m_modelIndex;
 	float m_explosionDelay;
 	float m_swapDelay;
+	float m_roof;
+	float m_timeLeftToActivateRoof;
 };

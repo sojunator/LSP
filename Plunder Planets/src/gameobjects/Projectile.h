@@ -110,6 +110,7 @@ public:
 				{
 					m_emitterSplash->StartEmitting();
 					m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
+
 					m_hitSurface = true;
 					m_rigidbody->setLinearVelocity(m_rigidbody->getLinearVelocity() * 0.20f);
 				}

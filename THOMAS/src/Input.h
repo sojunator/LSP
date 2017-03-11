@@ -272,6 +272,8 @@ namespace thomas
 		static float GetLeftStickX();
 		static float GetRightStickY();
 		static float GetRightStickX();
+		static float GetLeftTriggerDelta();
+		static float GetRightTriggerDelta();
 
 		static math::Vector2 GetMousePosition();
 
