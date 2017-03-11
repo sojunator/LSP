@@ -1,28 +1,28 @@
 #include "ShipStats.h"
 ShipStats* ShipStats::s_playerStats;
 unsigned int ShipStats::s_currentLevel;
+float ShipStats::s_totalgold;
+bool ShipStats::s_playerDied;
 
-ShipStats::ShipStats(int startup)
+ShipStats::ShipStats()
 {
-	if (startup == 0)
-	{
-		m_currentGold = 1000;
-		m_cannonDamage = 5;
-		//m_cannonQuantity; //Add later
-		m_speed = 50;
-		m_boostCost = 20;
-		m_cannonCost = 50;
-		m_shieldAmount = 0;
-		m_healthAmount = 1;
-		m_placeHolderHealthAmount = 1;
-		m_plunderSpeed = 30;
-		m_settingsFOV = 50;
-		m_settingsInvertCamX = -1;
-		m_settingsInvertCamY = -1;
-		m_settingsInvertShip = 0;
-		m_settingsCamRotateSpeed = 0;
-		s_currentLevel = 1;
-	}
+	m_currentGold = 1000;
+	s_totalgold = 0;
+	m_cannonDamage = 5;
+	//m_cannonQuantity; //Add later
+	m_speed = 50;
+	m_boostCost = 20;
+	m_cannonCost = 50;
+	m_shieldAmount = 0;
+	m_healthAmount = 1;
+	m_placeHolderHealthAmount = 1;
+	m_plunderSpeed = 30;
+	m_settingsFOV = 50;
+	m_settingsInvertCamX = -1;
+	m_settingsInvertCamY = -1;
+	m_settingsInvertShip = 0;
+	m_settingsCamRotateSpeed = 0;
+	s_currentLevel = 0;
 }
 
 void ShipStats::SetCurrentGold(float gold)
@@ -161,6 +161,18 @@ void ShipStats::SetInvertCamY(bool state)
 		m_settingsInvertCamY = -1;
 }
 
+float ShipStats::IncreaseTotalGold(float gold)
+{
+	s_totalgold += gold;
+	return gold; // We need to use this again later
+}
+
+float ShipStats::GetTotalGold()
+{
+	return s_totalgold;
+}
+
+
 void ShipStats::IncreaseCannonDamage(float talentAmount)
 {
 	m_cannonDamage = 5 + (talentAmount * 2);
@@ -197,7 +209,7 @@ void ShipStats::IncreaseShieldAmount(float talentAmount)
 	if (talentAmount == 1)
 		m_shieldAmount = 0.3;
 	else
-		m_shieldAmount = 0.3 + (0.175 * (talentAmount-1)); //0.3, 0.475, 0.65, 0.825, 1
+		m_shieldAmount = 0.3 + (0.175 * (talentAmount - 1)); //0.3, 0.475, 0.65, 0.825, 1
 	LOG("Shield amount: " + std::to_string(m_shieldAmount));
 }
 

@@ -2,6 +2,7 @@
 #include "Terrain/IslandManager.h"
 #include "Wormhole.h"
 #include "../scenes/GameScene.h"
+#include "../scenes/HighScoreScene.h"
 
 IslandManager* GameScene::s_islandManager;
 
@@ -10,7 +11,7 @@ void Ship::Start()
 	m_freeCamera = false;
 	utils::DebugTools::AddBool(m_freeCamera, "Free camera");
 	float mass = 20000;
-
+	ShipStats::s_playerDied = false;
 	//Front
 	m_floats[0] = Instantiate<ShipFloat>(math::Vector3(1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
 	m_floats[1] = Instantiate<ShipFloat>(math::Vector3(-1.5, -0.5, 8), math::Quaternion::Identity, m_transform, m_scene);
@@ -59,7 +60,10 @@ void Ship::Start()
 	m_broadSideLeft->CreateCannons();
 	m_broadSideRight->CreateCannons();
 
-	
+	goldEmitterObject = Instantiate<GoldEmitterObject>(math::Vector3(0, 0, 0), math::Quaternion::Identity, m_transform, m_scene);
+	//m_goldParticlesEmitterComponent = AddComponent<component::ParticleEmitterComponent>();
+	//m_goldParticlesEmitterComponent->ImportEmitter("../res/textures/goldemission.thomasps");
+
 	m_boosterParticlesEmitterLeft1 = AddComponent<component::ParticleEmitterComponent>();
 	m_boosterParticlesEmitterLeft1->SetTexture("../res/textures/fire.png");
 	m_boosterParticlesEmitterLeft1->SetShader("particleShader");
@@ -140,10 +144,19 @@ void Ship::Start()
 	m_boosterParticlesEmitterRight2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f + m_transform->Right() * -6.66f);
 	m_boosterParticlesEmitterRight2->SetDirection(m_transform->Forward());
 
-	
-	
-	
-	
+	// Death msg
+	m_deathMsg = AddComponent<component::TextComponent>();
+	m_deathMsg->SetFont("Pirate");
+	m_deathMsg->SetOutput("You are dead");
+	m_deathMsg->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
+	m_deathMsg->SetRotation(0.0f);
+	m_deathMsg->SetScale(6.0f);
+	m_deathMsg->SetPositionX(Window::GetWidth() / 2.0f);
+	m_deathMsg->SetPositionY(Window::GetHeight() / 2.0f);
+	m_deathMsg->SetDropshadow(true);
+	m_deathMsg->SetOutline(true);
+	m_deathMsg->SetOrigin(true);
+	m_deathMsg->SetActive(false);
 
 	//Fire cost
 	m_firingCost = AddComponent<component::ParticleEmitterComponent>();
@@ -183,9 +196,6 @@ void Ship::Start()
 	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
 	//m_firingCost->SpawnAtSphereEdge(true);
 
-	thomas::graphics::TextRender::LoadFont("SafeToLeave", "../res/font/pirate.spritefont");
-
-	m_safeToLeave = AddComponent<component::TextComponent>();
 
 	//Rigidbody init
 	m_rigidBody->SetMass(mass);
@@ -222,6 +232,8 @@ void Ship::Start()
 	m_aimDistance = 20;
 	m_health = ShipStats::s_playerStats->GetHealthAmount();
 	m_armor = ShipStats::s_playerStats->GetShieldAmount();
+	m_dead = false;
+
 	m_aiming = false;
 }
 bool Ship::GetFreeCamera()
@@ -276,8 +288,6 @@ void Ship::ShipRotate(float const dt)
 		turnDelta *= 2;
 	m_rigidBody->applyTorque(btVector3(0, m_turnSpeed*turnDelta*m_rigidBody->GetMass(), 0));
 
-	if (abs(turnDelta) > 0.02)
-		m_turning = true;
 }
 void Ship::ShipFly(float const upFactorPitch, float const upFactorRoll, float const left_y, float const dt)
 {
@@ -447,9 +457,11 @@ void Ship::DrawAimArc(Broadside* broadside)
 {
 	p0 = math::Vector3(broadside->m_transform->GetPosition().x, broadside->m_transform->GetPosition().y - 10, broadside->m_transform->GetPosition().z); //boat pos
 	p3 = m_aimPosition; //aim pos
-
-	p1 = p0 + broadside->m_transform->Forward() * 50; //vector defining starting direction of projectiles
-	p2 = p3 + math::Vector3(0, 1, 0) * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f);
+	math::Vector3 forward = broadside->GetCannon()->m_transform->Forward();
+	p1 = p0 + forward * 50; //vector defining starting direction of projectiles
+	forward.x *= -1;
+	forward.z *= -1;
+	p2 = p3 + forward * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f); //math::Vector3(0, 1, 0) * ((m_transform->GetPosition() - m_aimPosition).Length() / 25.f);
 	math::Vector3 point, prevPoint = p0;
 	for (int i = 1; i <= 10; ++i)
 	{
@@ -515,8 +527,7 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	if (m_islandManager)
-		m_treasure += m_islandManager->Plunder(m_transform->GetPosition());
+	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition(), goldEmitterObject));
 }
 int Ship::GetTreasure()
 {
@@ -542,13 +553,7 @@ void Ship::Float(float dt)
 
 	}
 
-	m_rigidBody->setDamping(0.0, 0.0);
-	if (m_moving)
-	{
-		m_rigidBody->setDamping(0.5, 0.5);
-	}
-	if (m_turning)
-		m_rigidBody->setDamping(0.3, 0.3);
+	m_rigidBody->setDamping(0.5, 0.5);
 	m_rigidBody->applyDamping(dt);
 
 
@@ -585,7 +590,7 @@ void Ship::TakeDamage(float dmg)
 	{
 		m_health -= dmgRemaining;
 	}
-
+	m_sound->PlayOneShot("fSmallExplosion", 1.0);
 	if (m_health <= 0)
 	{
 		Die();
@@ -593,11 +598,24 @@ void Ship::TakeDamage(float dmg)
 }
 void Ship::Die()
 {
-	LOG("Why are you not dead?");
+	m_dead = true;
+	ShipStats::s_playerDied = true;
+	m_deathMsg->SetActive(true);
 }
 void Ship::Update()
 {
 	float const dt = ThomasTime::GetDeltaTime();
+
+	if (m_dead)
+	{
+		if (m_transform->GetPosition().y < -27.0)
+		{
+			Destroy(this);
+			thomas::Scene::UnloadScene();
+			Scene::LoadScene<HighscoreScene>();
+		}
+		return;
+	}
 
 	if (m_startUpSequence)
 	{
@@ -704,7 +722,6 @@ void Ship::Update()
 
 	m_moving = false;
 	m_flying = false;
-	m_turning = false;
 
 	m_arc->Update(m_cameraObject->GetComponent<object::component::Camera>());
 	//Ship Movement
@@ -715,7 +732,7 @@ void Ship::Update()
 	ShipAimCannons();
 	if (m_flying)
 	{
-		Input::Vibrate(0.1, 0.1);
+		Input::Vibrate(0.08, 0.08);
 		m_boosterParticlesEmitterLeft1->StartEmitting();
 
 		m_boosterParticlesEmitterLeft2->StartEmitting();
@@ -736,22 +753,22 @@ void Ship::Update()
 
 	PlunderIsland();
 
+
 	Float(dt);
-
-
 	((WaterObject*)Find("WaterObject"))->SetOceanCenter(m_transform->GetPosition().x, m_transform->GetPosition().z);
-
 	ShipStats::s_playerStats->SetCurrentGold(m_treasure);
+	
 }
 void Ship::OnCollision(component::RigidBodyComponent::Collision collision)
 {
 	if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
 	{
 		Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
-		
+
 		if (p->m_spawnedBy != this)
 		{
 			TakeDamage(p->GetDamageAmount());
+			Destroy(p);
 		}
 	}
 }

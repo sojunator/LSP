@@ -257,8 +257,10 @@ namespace thomas
 
 		//Keyboard
 		static bool GetKeyDown(Keys key);
+		static std::string GetKeyDown(); // Don't open, dead inside
 		static bool GetKeyUp(Keys key);
 		static bool GetKey(Keys key);
+	
 
 		//Gamepad
 		static bool GetButtonDown(Buttons button);

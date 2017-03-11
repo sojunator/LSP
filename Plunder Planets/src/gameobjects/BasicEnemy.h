@@ -18,10 +18,10 @@ public:
 	void Init(float difficulty)
 	{
 		float randVal = ((double)rand() / (RAND_MAX));
-		m_health = 20 + difficulty * randVal * 25;
+		m_health = 10 + difficulty * randVal * 10;
 		m_speed = 200 + difficulty * randVal * 50;
 		m_turnSpeed = 100 + difficulty * randVal * 8.5f;
-		float projectileDmg = 5 + difficulty * 5;
+		float projectileDmg = difficulty * 5;
 		m_broadSideLeft->SetProjectileDmg(projectileDmg);
 		m_broadSideRight->SetProjectileDmg(projectileDmg);
 	}
@@ -260,14 +260,14 @@ public:
 				if (realDir == left)
 				{
 					float angle = m_broadSideLeft->CalculateCanonAngle(m_ai->GetTargetPos());
-					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideLeft->m_transform->Forward()));
+					float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideLeft->m_transform->Forward()));
 					m_broadSideLeft->SetCanonAngle(-angle - boatAngle);
 					m_broadSideLeft->Fire();
 				}
 				else
 				{
 					float angle = m_broadSideRight->CalculateCanonAngle(m_ai->GetTargetPos());
-					float boatAngle = asinf(m_transform->Up().Dot(m_broadSideRight->m_transform->Forward()));
+					float boatAngle = asinf(math::Vector3::Up.Dot(m_broadSideRight->m_transform->Forward()));
 					m_broadSideRight->SetCanonAngle(-angle - boatAngle);
 					m_broadSideRight->Fire();
 				}
@@ -355,6 +355,9 @@ public:
 	void TakeDamage(float dmg)
 	{
 		m_health -= dmg;
+		m_emitterSmoke->StartEmitting();
+		m_emitterSpark->StartEmitting();
+		m_sound->PlayOneShot("fSmallExplosion", 0.7);
 		if (m_health <= 0)
 			Die();
 	}
@@ -365,7 +368,11 @@ public:
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy != this)
+			{
 				TakeDamage(p->GetDamageAmount());
+				Destroy(p);
+			}
+				
 		}
 
 	}

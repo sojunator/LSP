@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="src\gameobjects\EnemyManager.h" />
     <ClInclude Include="src\gameobjects\CreditsMenuObject.h" />
+    <ClInclude Include="src\gameobjects\GoldEmitterObject.h" />
     <ClInclude Include="src\gameobjects\HighscoreMenuObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\AI\AI.h" />

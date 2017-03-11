@@ -9,6 +9,7 @@
 #include "../scenes/MenuScene.h"
 #include "ShipStats.h"
 #include "graphics\GeometryDraw.h"
+#include "GoldEmitterObject.h"
 
 using namespace thomas;
 using namespace object;
@@ -61,16 +62,17 @@ private:
 	float m_aimDistance;
 	float m_roof;
 	bool m_moving;
-	bool m_turning;
 	bool m_flying;
+	bool m_retardControllsOn;
+	bool m_dead;
+	//used for the camera
+	bool m_freeCamera;
 	float m_treasure;
 	float m_mass;
 	float m_flyTurnSpeed;
+	float m_flyCost;
 	float m_speed;
 	float m_turnSpeed;
-	int m_flyCost;
-	//used for the camera
-	bool m_freeCamera;
 	float m_elevateCamSpeed;//for moving cam up and down
 	float m_camRotationSpeed;
 	float m_camZoomSpeed;
@@ -79,7 +81,7 @@ private:
 	float m_camMaxDistanceFromBoat;
 	//used for both
 	float m_controlSensitivity;
-	bool m_retardControllsOn;
+
 
 	math::Vector3 m_lookAtPoint;//point slightly above the boat
 	math::Vector3 m_lookAtOffset;
@@ -102,7 +104,10 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 	component::ParticleEmitterComponent* m_firingCost;
 	component::ParticleEmitterComponent* m_boostCost;
+	GoldEmitterObject* goldEmitterObject;
+	//component::ParticleEmitterComponent* m_goldParticlesEmitterComponent;
 	component::TextComponent* m_safeToLeave;
+	component::TextComponent* m_deathMsg;
 
 	GeometryDraw* m_arc;
 	ShipFloat* m_floats[12];

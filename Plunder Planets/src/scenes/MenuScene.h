@@ -7,7 +7,7 @@ class MenuScene : public thomas::Scene
 public:
 	MenuScene() : Scene("MenuScene")
 	{
-		ShipStats::s_currentLevel = 1;
+		ShipStats::s_currentLevel = 0;
 		//Reset Upgrades/Gold
 		ShipStats::s_playerStats->SetCurrentGold(1000);
 		ShipStats::s_playerStats->SetCannonDamage(5);

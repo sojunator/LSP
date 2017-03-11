@@ -48,7 +48,7 @@ namespace thomas
 			for (int i = 0; i < s_objects.size(); ++i)
 			{
 				if (s_objects[i]->m_scene == scene)
-					s_objects[i]->m_alive = false;
+					Destroy(s_objects[i]);
 			}
 				
 		}
@@ -59,9 +59,11 @@ namespace thomas
 		{
 			for (int i = 0; i < s_objects.size(); ++i)
 			{
-				delete s_objects[i];
+				Destroy(s_objects[i]);
 			}
+			Clean();
 			s_objects.clear();
+			s_objects.resize(0);
 		}
 		bool Object::IsAlive(const Object* object)
 		{
@@ -94,7 +96,8 @@ namespace thomas
 			{
 				if (s_objects[i]->m_alive == false)
 				{
-					delete s_objects[i];
+					if(s_objects[i])
+						delete s_objects[i];
 					s_objects.erase(s_objects.begin() + i);
 					i -= 1;
 				}

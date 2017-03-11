@@ -71,24 +71,25 @@ public:
 		//m_wormhole->StartEmitting();
 		m_camera = (CameraObject*)Find("CameraObject");
 		m_endLevel = false;
+		m_endSceneTimeLeft = 2.0f;
 	}
 
 
 	void StartLevel()
 	{
+		m_time += ThomasTime::GetDeltaTime();
 		if (!m_spawned)
-		{
-			m_time += ThomasTime::GetActualDeltaTime();
+		{	
 			m_camera->m_transform->SetPosition(m_transform->GetPosition() + math::Vector3(200, 20, 0));
 			m_camera->m_transform->LookAt(m_transform->GetPosition());
 		}
 
-		if (m_spawning && m_time > 3.0f)
+		if (m_spawning && m_time > 4.0f)
 		{
 			m_wormhole->StartEmitting();
 
 
-			if (m_time > 4.5f)
+			if (m_time > 5.5f)
 			{
 				m_wormhole->SetSize(50);
 				m_wormhole->SetRotationSpeed(math::DegreesToRadians(20));
@@ -100,7 +101,7 @@ public:
 			}
 		}
 
-		if (m_spawned && !m_ship)
+		if (m_spawned && !m_ship && m_time > 7.0f)
 		{
 			m_ship = Instantiate<Ship>(m_transform->GetPosition(), math::Quaternion::Identity, m_scene);
 			math::Vector3 shipForward = -m_ship->m_transform->Forward();
@@ -154,13 +155,30 @@ public:
 			EndLevel();
 		else
 			StartLevel();
+
+
+		if (m_hasEnteredWormhole)
+		{
+			
+			if (m_endSceneTimeLeft > 1.0)
+				m_endSceneTimeLeft -= ThomasTime::GetActualDeltaTime()*0.8;
+			else
+				m_endSceneTimeLeft -= ThomasTime::GetActualDeltaTime();
+			
+			float fov = 50 + (1 - m_endSceneTimeLeft/2.0) * (170 - 50);
+			((CameraObject*)Find("CameraObject"))->GetComponent<component::Camera>()->SetFov(fov);
+
+			if(m_endSceneTimeLeft <= 0)
+				Scene::LoadScene<UpgradeScene>();
+		}
 	}
 
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
 		if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
-			Scene::LoadScene<UpgradeScene>();
+			m_hasEnteredWormhole = true;
+			ThomasTime::SetTimescale(0.0f);
 		}
 	}
 
@@ -170,6 +188,8 @@ public:
 	}
 
 private:
+	bool m_hasEnteredWormhole;
+	float m_endSceneTimeLeft;
 	bool m_endLevel;
 	bool m_spawned;
 	bool m_spawning;

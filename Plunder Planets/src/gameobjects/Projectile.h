@@ -54,22 +54,21 @@ public:
 		m_emitterSplash->SetShader("particleShader");
 		m_emitterSplash->SetDirection(math::Vector3(0, 1, 0));
 		m_emitterSplash->SetStartColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSplash->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m_emitterSplash->SetMaxDelay(0.75f);
-		m_emitterSplash->SetMinDelay(0.0f);
+		m_emitterSplash->SetEndColor(math::Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+		m_emitterSplash->SetMaxDelay(1.2f);
+		m_emitterSplash->SetMinDelay(0.16f);
 		m_emitterSplash->SetMaxSpeed(10.0f);
 		m_emitterSplash->SetMinSpeed(1.0f);
-		m_emitterSplash->SetMaxSize(3.7f);
-		m_emitterSplash->SetMinSize(1.0f);
-		m_emitterSplash->SetEndSize(3.7f);
-		m_emitterSplash->SetMaxLifeTime(1.2f);
+		m_emitterSplash->SetMaxSize(3.8f);
+		m_emitterSplash->SetMinSize(2.0f);
+		m_emitterSplash->SetEndSize(5.7f);
+		m_emitterSplash->SetMaxLifeTime(1.6f);
 		m_emitterSplash->SetMinLifeTime(0.3f);
 		m_emitterSplash->SetRotationSpeed(0.07f);
-		m_emitterSplash->SetSpread(2.7f);
-		m_emitterSplash->SetEmissionRate(30);
+		m_emitterSplash->SetSpread(0.6f);
+		m_emitterSplash->SetEmissionRate(15);
 		m_emitterSplash->SetEmissionDuration(0.1f);
-		m_emitterSplash->SetRadius(0.7f);
-		m_emitterSplash->SetOffset(math::Vector3(0, 3, 0));
+		m_emitterSplash->SetRadius(4.0f);
 
 		if (!m_water)
 		{
@@ -112,7 +111,7 @@ public:
 					m_emitterSplash->StartEmitting();
 					m_splashSound->PlayOneShot(m_SFXs[rand() % 3], 0.5);
 					m_hitSurface = true;
-					m_rigidbody->setLinearVelocity(m_rigidbody->getLinearVelocity() * 0.10f);
+					m_rigidbody->setLinearVelocity(m_rigidbody->getLinearVelocity() * 0.20f);
 				}
 				else
 				{

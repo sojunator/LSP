@@ -26,7 +26,8 @@ public:
 	GameScene() : Scene("GameScene")
 	{
 		//Init shaders
-		
+		ShipStats::s_currentLevel += 1;
+
 		LoadShader("Phong", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/phong.hlsl");
 		LoadShader("oceanShader", thomas::graphics::Shader::InputLayouts::STANDARD, "../res/shaders/oceanShader.hlsl");
 		LoadShader("OceanFX", thomas::graphics::Shader::InputLayouts::POST_EFFECT, "../res/shaders/oceanPostProcess.hlsl");
@@ -43,7 +44,8 @@ public:
 		LoadModel("cannonball", "../res/models/cannonball/cannonball.fbx", "phongMaterial");
 		LoadModel("playerModel", "../res/models/Boat/ship0fbx.fbx", "phongMaterial");
 		LoadModel("basicEnemy", "../res/models/Boat/shipenemy.fbx", "phongMaterial");
-		LoadModel("tobyEnemy", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
+		LoadModel("tobyEnemy1", "../res/models/Boat/tobyboatRed.fbx", "phongMaterial");
+		LoadModel("tobyEnemy0", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 
 		
@@ -96,8 +98,7 @@ public:
 		}
 
 		//Init text
-		thomas::graphics::TextRender::LoadFont("Name", "../res/font/pirate.spritefont");
-		thomas::graphics::TextRender::LoadFont("Gold", "../res/font/myfile.spritefont");
+		thomas::graphics::TextRender::LoadFont("Pirate", "../res/font/pirate.spritefont");
 
 		m_cameraObject = LoadObject<CameraObject>();
 		m_waterObject = LoadObject<WaterObject>();

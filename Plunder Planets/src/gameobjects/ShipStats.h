@@ -11,7 +11,7 @@ static class ShipStats
 private:
 
 public:
-	ShipStats(int startup);
+	ShipStats();
 	void SetCurrentGold(float gold);
 	void SetCannonDamage(float cannondamage);
 	void SetSpeed(float speed);
@@ -38,6 +38,8 @@ public:
 	float GetInvertCamY();
 	void SetInvertCamX(bool state);
 	void SetInvertCamY(bool state);
+	static float IncreaseTotalGold(float gold);
+	static float GetTotalGold();
 
 	void IncreaseCannonDamage(float talentAmount);
 	//void IncreaseCannonQuantity();
@@ -49,7 +51,9 @@ public:
 
 	static ShipStats* s_playerStats;
 	static unsigned int s_currentLevel;
+	static bool s_playerDied;
 private:
+	static float s_totalgold;
 	float m_currentGold;
 	float m_cannonDamage;
 	float m_cannonQuantity;
@@ -65,4 +69,5 @@ private:
 	float m_settingsInvertCamY;
 	float m_settingsInvertShip;
 	float m_settingsCamRotateSpeed;
+
 };

@@ -24,6 +24,7 @@ public:
 
 	void Start()
 	{
+		m_explosionDelay = 4;
 		m_mass = 500000;
 		m_soundDelay = 5;
 		m_soundDelayLeft = 5;
@@ -68,8 +69,9 @@ public:
 		m_ai->SetActive(false);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
-		m_renderer->SetModel("tobyEnemy");
+		m_renderer->SetModel("tobyEnemy0");
 		m_moving = false;
+		m_swapDelay = 0;
 
 
 		//Rigidbody init
@@ -136,14 +138,24 @@ public:
 		m_boosterParticlesEmitterMiddle2->SetSpread(2.5f);
 		m_boosterParticlesEmitterMiddle2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f);
 		m_boosterParticlesEmitterMiddle2->SetDirection(m_transform->Forward());
+		
+		m_explosionParticle1 = AddComponent<component::ParticleEmitterComponent>();
+		m_explosionParticle1->ImportEmitter("../res/particles/tobyExplode1.thomasps");
 
+		m_explosionSmokeParticle = AddComponent<component::ParticleEmitterComponent>();
+		m_explosionSmokeParticle->ImportEmitter("../res/particles/tobysmoke.thomasps");
 
-
-
+		m_swapDelay = 0;
+		m_modelIndex = 0;
 
 		m_frustumCullingComponent = AddComponent<component::FrustumCullingComponent>();
 		m_frustumCullingComponent->SetRadius(15);
 		m_frustumCullingComponent->SetPosition(m_transform->GetPosition());
+		m_ai->SetFireRadius(500);
+		m_sound->SetClip("fTobyTimer");
+		m_sound->SetVolume(0.7);
+		m_sound->SetLooping(false);
+		
 	}
 
 
@@ -256,8 +268,13 @@ public:
 
 	void Update()
 	{
-		float const dt = ThomasTime::GetDeltaTime();
 
+		if (m_hasExploded)
+		{
+			m_explode = false;
+		}
+
+		float const dt = ThomasTime::GetDeltaTime();
 		if (m_dead)
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
@@ -285,19 +302,49 @@ public:
 
 			if (m_boosting)
 			{
+				m_sound->Play();
 				//Input::Vibrate(0.1, 0.1);
 				//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
 				m_boosterParticlesEmitterMiddle1->StartEmitting();
 				m_boosterParticlesEmitterMiddle2->StartEmitting();
+
+
+				m_explosionDelay -= ThomasTime::GetDeltaTime();
+				m_swapDelay -= ThomasTime::GetDeltaTime();
+
+				if (m_swapDelay <= 0)
+				{
+					m_modelIndex = (m_modelIndex + 1) % 2;
+					if (m_explosionDelay > 0.5)
+					{
+						float l = 1-(m_explosionDelay/4.0);
+						m_swapDelay = 0;
+						m_swapDelay = (0.5 * (1.0f - l)) + (0.0 * l);
+					}
+					else if (m_explosionDelay > 0.0)
+					{
+						m_swapDelay = 0;
+						m_modelIndex = 1;
+					}
+					
+					m_renderer->SetModel("tobyEnemy" + std::to_string(m_modelIndex));
+				}
+
+				
+				
 			}
 
 		}
+
+		if (m_explosionDelay <= 0)
+			Die();
 
 		Float(dt);
 	}
 
 	void TakeDamage(float dmg)
 	{
+		m_sound->PlayOneShot("fSmallExplosion", 0.7);
 		m_health -= dmg;
 		if (m_health <= 0)
 			Die();
@@ -305,7 +352,7 @@ public:
 
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile" && collision.thisRigidbody == m_rigidBody)
+		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile" && collision.thisRigidbody == m_rigidBody &!m_dead)
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy != this)
@@ -321,18 +368,18 @@ public:
 			float distanceFromCenter = impulseVector.Length();
 			float dmgModifier =  1-(distanceFromCenter / m_explosionRadius);
 			impulseVector.Normalize();
-			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier);
+			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier * 100);
 
 
 			if(collision.otherRigidbody->m_gameObject->GetType() == "TobyEnemy")
 			{
-
+				m_hasExploded = true;
 				Toby* tobyEnemy = (Toby*)collision.otherRigidbody->m_gameObject;
 				tobyEnemy->TakeDamage(dmgModifier*m_explosionDamage);
 			}
 			else if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 			{
-
+				m_hasExploded = true;
 				Ship* player = (Ship*)collision.otherRigidbody->m_gameObject;
 				player->TakeDamage(dmgModifier*m_explosionDamage);
 			}
@@ -345,21 +392,23 @@ public:
 
 
 		}
-		else if (collision.thisRigidbody == m_rigidBody && collision.otherRigidbody->m_gameObject->GetType() == "Ship")
+		else if (collision.thisRigidbody == m_rigidBody && collision.otherRigidbody->m_gameObject->GetType() == "Ship" && !m_dead)
 		{
 			Die();
 		}
-
-
 
 	}
 
 
 	void Die()
 	{
+		m_sound->Pause();
 		m_dead = true;
 		m_explode = true;
-		m_sound->PlayOneShot("fEnemyExplode", 0.7);
+		m_hasExploded = false;
+		m_sound->PlayOneShot("fTobyExplode", 0.7);
+		m_explosionParticle1->StartEmitting();
+		m_explosionSmokeParticle->StartEmitting();
 	}
 
 public:
@@ -368,6 +417,7 @@ private:
 
 	float m_deathTime;
 	bool m_dead;
+	bool m_hasExploded;
 	//Objects
 	ShipFloat* m_floats[12];
 	//ShipStats* m_shipStats = new ShipStats(1);
@@ -379,6 +429,7 @@ private:
 	
 	component::FrustumCullingComponent* m_frustumCullingComponent;
 
+	component::ParticleEmitterComponent* m_explosionSmokeParticle;
 	component::ParticleEmitterComponent* m_explosionParticle1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterMiddle1;
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterMiddle2;
@@ -398,4 +449,7 @@ private:
 	//Sound
 	float m_soundDelay;
 	float m_soundDelayLeft;
+	int m_modelIndex;
+	float m_explosionDelay;
+	float m_swapDelay;
 };

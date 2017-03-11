@@ -49,7 +49,7 @@ namespace thomas
 		
 		delete s_currentScene;
 		s_currentScene = nullptr;
-
+		ThomasTime::SetTimescale(1.0f);
 		object::Object::Clean();
 		graphics::GeometryDraw::Destroy();
 	}
@@ -157,6 +157,9 @@ namespace thomas
 			}
 			shader->Unbind();
 		}
+		
+		camera->BindSkybox();
+		camera->UnbindSkybox();
 
 
 		graphics::Shader* oceanShader = graphics::Shader::GetShaderByName("oceanShader");
@@ -199,10 +202,6 @@ namespace thomas
 			graphics::Renderer::UnBindGameObjectBuffer();
 			ThomasCore::GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
 		}
-		
-		camera->BindSkybox();
-		camera->UnbindSkybox();
-
 
 
 		ThomasCore::GetDeviceContext()->OMSetDepthStencilState(graphics::ParticleSystem::GetDepthStencilState(), 1);
