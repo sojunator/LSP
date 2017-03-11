@@ -105,6 +105,9 @@ private:
 	component::ParticleEmitterComponent* m_boosterParticlesEmitterLeft2;
 	component::ParticleEmitterComponent* m_firingCost;
 	component::ParticleEmitterComponent* m_boostCost;
+	component::ParticleEmitterComponent* m_goldEmitter;
+	//component::ParticleEmitterComponent* m_goldParticlesEmitterComponent;
+	component::TextComponent* m_safeToLeave;
 	component::TextComponent* m_deathMsg;
 
 	GeometryDraw* m_arc;
