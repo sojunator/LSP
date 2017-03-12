@@ -15,7 +15,7 @@ namespace thomas
 		{
 			int randNumber = rand() % (maxSize - minSize) + minSize;
 			float islandSize = std::round(randNumber * detail) / detail;	//Generates a size that is divisible by "detail". This ensures that the islands don't have holes in them.
-			float powIsland = std::pow(islandSize / 2, 2);
+			float powIsland = (islandSize / 2) * (islandSize / 2);
 			float min = std::sqrt(powIsland + powIsland) + 512;		//Depends on size of island
 
 			float treasure = rand() % 800 + islandSize;
