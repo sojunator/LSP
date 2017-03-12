@@ -285,6 +285,13 @@ void ShipStats::RepairHealth(float talentAmount)
 		m_placeHolderHealthAmount = 0.25;
 		m_healthAmount -= 0.25;
 	}
+	else if (talentAmount == 2 && m_healthAmount != 1)
+	{
+		if (m_healthAmount <= 0.93) //seems to run twice when an enemy dies, so heals 14, not 7
+			m_healthAmount += 0.07;
+		else
+			m_healthAmount = 1;
+	}
 	LOG("Health Amount: " + std::to_string(m_healthAmount));
 }
 

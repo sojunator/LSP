@@ -24,7 +24,7 @@ void EnemyManager::Update()
 		if (m_amountOfSpecificEnemy[(EnemyTypes)enemyType] >= m_maxAmountOfSpecificEnemy[(EnemyTypes)enemyType])
 			enemyType = (enemyType + 1) % 2;
 		SpawnEnemy((EnemyTypes)(enemyType), GameScene::s_islandManager->GetRandomPosAroundIsland(50));
-		m_delayBetweenSpawnsTimeLeft = m_delayBetweenSpawns - 0.2 * m_difficulty;
+		m_delayBetweenSpawnsTimeLeft = m_delayBetweenSpawns - (0.2 * m_difficulty);
 	}
 }
 

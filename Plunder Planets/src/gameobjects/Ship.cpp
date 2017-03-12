@@ -624,6 +624,7 @@ void Ship::Die()
 void Ship::Update()
 {
 	float const dt = ThomasTime::GetDeltaTime();
+	m_health = ShipStats::s_playerStats->GetHealthAmount();
 
 	if (m_dead)
 	{
