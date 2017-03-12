@@ -161,20 +161,15 @@ void Ship::Start()
 	m_firingCost = AddComponent<component::ParticleEmitterComponent>();
 	m_firingCost->SetTexture("../res/textures/FiringCost" + std::to_string((int)ShipStats::s_playerStats->GetCannonCost()) + ".png");
 	m_firingCost->SetShader("particleShader");
-	//m_firingCost->SetLooping(false);
 	m_firingCost->SetDirection(0, 1, 0);
 	m_firingCost->SetSpread(0);
-	m_firingCost->SetSpeed(25);
-	//m_firingCost->SetEndSpeed(200);
-	//m_firingCost->SetRotationSpeed(11);
-	m_firingCost->SetLifeTime(1.5);
+	m_firingCost->SetSpeed(65);
+	m_firingCost->SetEndSpeed(35);
+	m_firingCost->SetLifeTime(1.2f);
 	m_firingCost->SetSize(3);
-	m_firingCost->SetEmissionRate(1);
-	m_firingCost->SetEmissionDuration(1);
-	m_firingCost->SetEndSize(3);
-	//m_firingCost->SetRadius(70);
-	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
-	//m_firingCost->SpawnAtSphereEdge(true);
+	m_firingCost->SetEmissionRate(10);
+	m_firingCost->SetEmissionDuration(0.1f);
+	
 
 
 	m_boostCost = AddComponent<component::ParticleEmitterComponent>();
@@ -183,13 +178,13 @@ void Ship::Start()
 	//m_firingCost->SetLooping(false);
 	m_boostCost->SetDirection(0, 1, 0);
 	m_boostCost->SetSpread(0);
-	m_boostCost->SetSpeed(40);
+	m_boostCost->SetSpeed(80);
 	//m_firingCost->SetEndSpeed(200);
 	//m_firingCost->SetRotationSpeed(11);
-	m_boostCost->SetLifeTime(1.5);
+	m_boostCost->SetLifeTime(0.5f);
 	m_boostCost->SetSize(3);
-	m_boostCost->SetEmissionRate(1);
-	m_boostCost->SetEmissionDuration(1);
+	m_boostCost->SetEmissionRate(10);
+	m_boostCost->SetEmissionDuration(0.1);
 	m_boostCost->SetEndSize(3);
 	//m_firingCost->SetRadius(70);
 	//m_firingCost->SetEndColor(math::Color(0, 1, 0, 1));
