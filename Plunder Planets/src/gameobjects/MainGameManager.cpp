@@ -25,16 +25,16 @@ void MainGameManager::Update()
 	float difficulty = ShipStats::s_currentLevel + GameScene::s_islandManager->GetLootedTreasure() / 2000.0f;
 	m_enemyManager->SetDifficulty(difficulty);
 
-	float maxGold = 9260;
+	float maxGold = 2160;
 	float scale = GameScene::s_islandManager->GetLootedTreasure() / maxGold;
 	m_goldbar->SetScale(math::Vector2(1, scale));
 	m_goldbar->SetPositionY(Window::GetHeight() - 800 + (1-scale)*738);
 
 
-	if (Input::GetKey(Input::Keys::M) && GameScene::s_islandManager->GetLootedTreasure() < 9000)
-		 GameScene::s_islandManager->IncreaseLootedTreasure(500);
+	if (Input::GetKey(Input::Keys::M) && GameScene::s_islandManager->GetLootedTreasure() < maxGold)
+		 GameScene::s_islandManager->IncreaseLootedTreasure(50);
 
-	if (GameScene::s_islandManager->GetLootedTreasure() > 7500 && !m_wormholeSpawned)
+	if (GameScene::s_islandManager->GetLootedTreasure() > 1750 && !m_wormholeSpawned)
 	{
 			Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0, 3.0f, 0), math::Quaternion::Identity, m_scene);
 			wormhole->SetEndLevel(true);

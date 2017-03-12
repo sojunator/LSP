@@ -24,7 +24,7 @@ namespace thomas
 			m_size.push_back(islandSize);
 			m_minDistance.push_back(min);
 			m_detail.push_back(detail);
-			m_treasure.push_back(islandSize * 1.5);
+			m_treasure.push_back(islandSize * 0.35);
 			m_totalTreasure.push_back(treasure);
 			m_collisionRadius.push_back(islandSize * 0.33);
 			m_plunderRadius.push_back(m_collisionRadius[i] + 100);
