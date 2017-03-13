@@ -1202,6 +1202,7 @@ void UpgradeMenuObject::RepairCheck(bool upgrade, bool undo)
 			else if (undo)
 			{
 				m_repairTalent1->SetColor(math::Vector4(1.0, 1.0, 1.0, 1));
+				m_refundHolder = ShipStats::s_playerStats->GetPlaceholderHealthAmount() * 100;
 				if (ShipStats::s_playerStats->GetHealthAmount() == 1)
 					goldRefund = m_refundHolder * 15; //Refunds less than 25 health * 15 gold each
 				else

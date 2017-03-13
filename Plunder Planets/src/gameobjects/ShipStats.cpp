@@ -307,8 +307,8 @@ void ShipStats::RepairHealth(float talentAmount)
 	}
 	else if (talentAmount == 0)
 	{
+		m_healthAmount -= m_placeHolderHealthAmount;
 		m_placeHolderHealthAmount = 0.25;
-		m_healthAmount -= 0.25;
 	}
 	else if (talentAmount == 2 && m_healthAmount != 1)
 	{
