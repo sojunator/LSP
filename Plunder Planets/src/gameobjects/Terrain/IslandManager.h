@@ -15,7 +15,7 @@ public:
 	IslandManager(Scene* scene)
 	{
 		thomas::graphics::Material* mat = thomas::graphics::Material::CreateMaterial("terrainMat", "terrainMaterial");
-		m_islands = new thomas::Islands(30, mat, 512, 2048, 1 / 8.f, 4096);
+		m_islands = new thomas::Islands(30, mat, 512, 2048, 1 / 8.f, 4096 * 1.5);
 		int nrOfIslands = m_islands->GetNrOfIslands();
 		m_lootedTreasure = 0;
 		for (int i = 0; i < nrOfIslands; i++)
