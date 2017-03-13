@@ -28,6 +28,7 @@ public:
 		m_pauseSettings = AddComponent<component::TextComponent>();
 		m_pauseQuit = AddComponent<component::TextComponent>();
 		
+		SetSettingsState(false);
 
 		InitMenu();
 	}
@@ -244,6 +245,7 @@ public:
 
 			else if (m_settingsActive)
 			{
+				SetSettingsState(true);
 				m_settingsChosen = true;
 			}
 		}

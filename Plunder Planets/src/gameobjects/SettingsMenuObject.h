@@ -36,7 +36,7 @@ public:
 
 	void InitMenu()
 	{
-		m_settingsHeadLine->SetFont("SafeToLeave");
+		m_settingsHeadLine->SetFont("Pirate");
 		m_settingsHeadLine->SetOutput("Settings");
 		m_settingsHeadLine->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsHeadLine->SetRotation(0.0f);
@@ -47,7 +47,7 @@ public:
 		m_settingsHeadLine->SetOutline(true);
 		m_settingsHeadLine->SetOrigin(false);
 
-		m_settingsCamRotateX->SetFont("SafeToLeave");
+		m_settingsCamRotateX->SetFont("Pirate");
 		if(ShipStats::s_playerStats->GetInvertCamX() == -1)
 			m_settingsCamRotateX->SetOutput("Invert Camera Rotation X (No)");
 		else
@@ -61,7 +61,7 @@ public:
 		m_settingsCamRotateX->SetOutline(true);
 		m_settingsCamRotateX->SetOrigin(false);
 
-		m_settingsCamRotateY->SetFont("SafeToLeave");
+		m_settingsCamRotateY->SetFont("Pirate");
 		if (ShipStats::s_playerStats->GetInvertCamY() == -1)
 			m_settingsCamRotateY->SetOutput("Invert Camera Rotation Y (No)");
 		else
@@ -75,7 +75,7 @@ public:
 		m_settingsCamRotateY->SetOutline(true);
 		m_settingsCamRotateY->SetOrigin(false);
 
-		m_settingsFovMin->SetFont("SafeToLeave");
+		m_settingsFovMin->SetFont("Pirate");
 		m_settingsFovMin->SetOutput("FOV-");
 		m_settingsFovMin->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsFovMin->SetRotation(0.0f);
@@ -86,7 +86,7 @@ public:
 		m_settingsFovMin->SetOutline(true);
 		m_settingsFovMin->SetOrigin(false);
 
-		m_settingsFovPlus->SetFont("SafeToLeave");
+		m_settingsFovPlus->SetFont("Pirate");
 		m_settingsFovPlus->SetOutput("FOV+");
 		m_settingsFovPlus->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsFovPlus->SetRotation(0.0f);
@@ -98,7 +98,7 @@ public:
 		m_settingsFovPlus->SetOrigin(false);
 
 		int fovInt = ShipStats::s_playerStats->GetFOV();
-		m_settingsFov->SetFont("SafeToLeave");
+		m_settingsFov->SetFont("Pirate");
 		m_settingsFov->SetOutput(std::to_string(fovInt));
 		m_settingsFov->SetColor(math::Vector3(1.0f, 1.0f, 0.0f));
 		m_settingsFov->SetRotation(0.0f);
@@ -140,18 +140,19 @@ public:
 
 	void CheckState()
 	{
-		if (m_pauseObj->GetSettingsState())
+		if (!m_pauseObj->GetSettingsState())
+		{
+			HideMenu();
+			
+		}
+		else if(m_pauseObj->GetSettingsState())
 		{
 			DisplayMenu();
-			if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Enter))
+			if (Input::GetButtonDown(Input::Buttons::START) || Input::GetKeyDown(Input::Keys::Back))
 			{
 				m_pauseObj->SetSettingsState(false);
 				HideMenu();
 			}
-		}
-		else
-		{
-			HideMenu();
 		}
 		
 	}
