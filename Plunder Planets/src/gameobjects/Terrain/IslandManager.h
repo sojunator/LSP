@@ -125,6 +125,15 @@ public:
 		m_lootedTreasure += loot;
 	}
 
+	int GetTotalTreasure()
+	{
+		int treasure = 0;
+		for (int i = 0; i < m_islands->GetNrOfIslands(); ++i)
+		{
+			treasure += m_islands->GetTotalTreasure(i);
+		}
+		return treasure;
+	}
 private:
 	thomas::Islands* m_islands;
 	std::vector<IslandObject*> m_islandObjects;
