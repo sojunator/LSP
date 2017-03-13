@@ -12,6 +12,7 @@ namespace thomas
 			{
 			public:
 				SoundComponent();
+				~SoundComponent();
 				bool SetClip(std::string name);
 				std::string GetName();
 				bool SetVolume(float volume);

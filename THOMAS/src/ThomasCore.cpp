@@ -94,6 +94,7 @@ namespace thomas {
 		Scene::UpdateCurrentScene();
 		Physics::Update();
 		Scene::Render();
+		Sound::Update();
 	}
 
 	void ThomasCore::Start()

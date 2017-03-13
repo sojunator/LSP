@@ -52,6 +52,8 @@ namespace thomas
 		
 	}
 
+
+
 	void Sound::SetMasterVolume(float volume)
 	{
 		s_masterVolume = volume;
@@ -85,5 +87,9 @@ namespace thomas
 	void Sound::Destroy()
 	{
 		s_audioEngine->Suspend();
+	}
+	void Sound::Update()
+	{
+		s_audioEngine->Update();
 	}
 }

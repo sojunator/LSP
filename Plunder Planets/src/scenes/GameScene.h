@@ -19,7 +19,6 @@
 #include "../gameobjects/SettingsMenuObject.h"
 #include "../gameobjects/EnemyManager.h"
 #include "../gameobjects/MainGameManager.h"
-#include "../gameobjects/HealthCrate.h"
 
 class GameScene : public thomas::Scene
 {
@@ -115,9 +114,7 @@ public:
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		LoadObject<SettingsMenuObject>();
 		LoadObject<EnemyManager>();
-		LoadObject<MainGameManager>();
-		LoadObject<HealthCrate>();
-		
+		LoadObject<MainGameManager>();	
 		//LoadObject<PhysicsObject>();
 		
 	};

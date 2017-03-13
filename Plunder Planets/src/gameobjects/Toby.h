@@ -380,8 +380,8 @@ public:
 			float distanceFromCenter = impulseVector.Length();
 			float dmgModifier = 1-(distanceFromCenter / m_explosionRadius);
 			impulseVector.Normalize();
-			impulseVector.y = 0.12;
-			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier * 250);
+			impulseVector.y = 0.06;
+			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier * 150);
 			if(collision.otherRigidbody->m_gameObject->GetType() == "TobyEnemy")
 			{
 				m_hasExploded = true;

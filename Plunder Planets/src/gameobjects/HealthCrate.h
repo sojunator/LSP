@@ -38,13 +38,10 @@ public:
 		m_float[3] = Instantiate<ShipFloat>(math::Vector3(-3,2,-3), math::Quaternion::Identity, m_transform, m_scene);
 		m_float[3]->SetMass(1000);
 
-		t = 5.0f;
+
 	}
 	void Update()
 	{
-		t -= ThomasTime::GetDeltaTime();
-		if (t > 0)
-			return;
 		float waveHeight = 0;
 		math::Vector3 bois;
 		
@@ -71,7 +68,7 @@ public:
 	}
 
 
-	void OnCollide(component::RigidBodyComponent::Collision collision)
+	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
 		if (collision.otherRigidbody->m_gameObject->GetType() == "Ship")
 		{
@@ -81,7 +78,6 @@ public:
 	}
 
 private:
-	float t;
 	component::RigidBodyComponent* m_rigidbody;
 	component::RenderComponent* m_renderer;
 	ShipFloat* m_float[4];
