@@ -41,6 +41,7 @@ void IslandObject::SinkIsland()
 {
 	if (!m_falling)
 	{
+		m_rigidBody->SetCollider(new btSphereShape(10));
 		m_rigidBody->SetKinematic(false);
 		m_rigidBody->SetMass(8000000);
 		m_rigidBody->activate();
