@@ -19,6 +19,7 @@
 #include "../gameobjects/SettingsMenuObject.h"
 #include "../gameobjects/EnemyManager.h"
 #include "../gameobjects/MainGameManager.h"
+#include "../gameobjects/HealthCrate.h"
 
 class GameScene : public thomas::Scene
 {
@@ -47,6 +48,7 @@ public:
 		LoadModel("tobyEnemy1", "../res/models/Boat/tobyboatRed.fbx", "phongMaterial");
 		LoadModel("tobyEnemy0", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
+		LoadModel("healthCrate", "../res/models/crate_mesh.obj", "phongMaterial");
 
 		
 
@@ -114,6 +116,7 @@ public:
 		LoadObject<SettingsMenuObject>();
 		LoadObject<EnemyManager>();
 		LoadObject<MainGameManager>();
+		LoadObject<HealthCrate>();
 		
 		//LoadObject<PhysicsObject>();
 		
