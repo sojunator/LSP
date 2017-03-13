@@ -154,7 +154,6 @@ public:
 				HideMenu();
 			}
 		}
-		
 	}
 
 	void CheckInput()

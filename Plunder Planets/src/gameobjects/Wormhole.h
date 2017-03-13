@@ -3,6 +3,7 @@
 #include "Thomas.h"
 #include "CameraObject.h"
 #include "../scenes/UpgradeScene.h"
+#include "ShipStats.h"
 using namespace thomas;
 using namespace object;
 class Wormhole : public GameObject
@@ -110,7 +111,10 @@ public:
 		}
 
 		if (m_ship && m_ship->m_startUpSequence)
+		{
 			m_camera->m_transform->LookAt(m_ship->m_transform->GetPosition());
+			ShipStats::s_playerStats->GetHealthAmount() > 0; //Can't exit planet when dead
+		}
 		else if (m_ship && !m_ship->m_startUpSequence)
 		{
 			Destroy(this);
