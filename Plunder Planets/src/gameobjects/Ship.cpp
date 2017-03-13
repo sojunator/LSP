@@ -45,7 +45,11 @@ void Ship::Start()
 	m_floats[11]->SetMass(0.5*mass);
 
 	m_renderer = AddComponent<component::RenderComponent>();
+
 	m_sound = AddComponent<component::SoundComponent>();
+	m_sound->SetClip("fPlunder");
+	m_sound->SetLooping(true);
+
 	m_boostSound = AddComponent<component::SoundComponent>();
 	m_cameraObject = Find("CameraObject");
 	m_islandManager = GameScene::s_islandManager;
@@ -531,7 +535,16 @@ void Ship::CameraZoom(float const dt)
 }
 void Ship::PlunderIsland()
 {
-	m_treasure += ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition(), m_goldEmitter));
+	float treasure = ShipStats::IncreaseTotalGold(m_islandManager->Plunder(m_transform->GetPosition(), m_goldEmitter));
+	if (treasure > 0)
+	{
+		m_sound->Play();
+		m_treasure += treasure;
+	}
+	else
+	{
+		m_sound->Pause();
+	}
 }
 int Ship::GetTreasure()
 {

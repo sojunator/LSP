@@ -1,9 +1,6 @@
 #include "IslandObject.h"
 #include "../PauseObjectMenuObject.h"
 
-
-thomas::object::component::SoundComponent* IslandObject::m_sound;
-
 IslandObject::~IslandObject()
 {
 }
@@ -12,9 +9,6 @@ void IslandObject::Start()
 {
 	m_frustrumCullingComponent = AddComponent<thomas::object::component::FrustumCullingComponent>();
 	m_renderer = thomas::object::GameObject::AddComponent<thomas::object::component::RenderComponent>();
-	m_sound = thomas::object::GameObject::AddComponent<thomas::object::component::SoundComponent>();
-	m_sound->SetClip("fPlunder");
-	m_sound->SetLooping(true);
 	m_falling = false;
 	m_destroy = false;
 	m_pauseObj = nullptr;
@@ -57,14 +51,7 @@ void IslandObject::SinkIsland()
 void IslandObject::Looting(bool gotLoot, thomas::math::Vector3 shipPos, thomas::object::component::ParticleEmitterComponent* goldEmitter)
 {
 	if (gotLoot && !m_pauseObj->GetPauseState())
-	{
 		goldEmitter->StartEmitting();
-		m_sound->Play();
-	}
-	else
-	{
-		m_sound->Pause();
-	}
 }
 
 void IslandObject::PlaceRigidBody(float radius, thomas::math::Vector3 center)

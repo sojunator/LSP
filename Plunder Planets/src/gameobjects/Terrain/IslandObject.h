@@ -22,7 +22,6 @@ public:
 private:
 	thomas::object::component::RenderComponent* m_renderer;
 	thomas::object::component::RigidBodyComponent* m_rigidBody;
-	static thomas::object::component::SoundComponent* m_sound;
 	thomas::object::component::FrustumCullingComponent* m_frustrumCullingComponent;
 	bool m_falling;
 	bool m_destroy;
