@@ -47,6 +47,7 @@ public:
 		LoadModel("tobyEnemy1", "../res/models/Boat/tobyboatRed.fbx", "phongMaterial");
 		LoadModel("tobyEnemy0", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
+		LoadModel("healthCrate", "../res/models/crate_mesh.obj", "phongMaterial");
 
 		
 
@@ -61,7 +62,8 @@ public:
 			thomas::graphics::Sprite::LoadTexture("Armor", "../res/GUI/armor.png");
 			thomas::graphics::Sprite::LoadTexture("Goldbar", "../res/GUI/goldbar.png");
 			thomas::graphics::Sprite::LoadTexture("GoldbarEmpty", "../res/GUI/goldbar-empty.png");
-
+			thomas::graphics::Sprite::LoadTexture("Wormhole open", "../res/GUI/Wormhole open.png");
+			thomas::graphics::Sprite::LoadTexture("Plunder Planets", "../res/GUI/Plunder Planets.png");
 		}
 		else if (Window::GetAspectRatio() == Window::Ratio::STANDARD_1610)
 		{
@@ -112,8 +114,7 @@ public:
 		LoadObject<Wormhole>(math::Vector3(0,100,0),math::Quaternion::Identity);
 		LoadObject<SettingsMenuObject>();
 		LoadObject<EnemyManager>();
-		LoadObject<MainGameManager>();
-		
+		LoadObject<MainGameManager>();	
 		//LoadObject<PhysicsObject>();
 		
 	};

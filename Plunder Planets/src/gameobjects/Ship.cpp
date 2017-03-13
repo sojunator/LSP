@@ -753,8 +753,20 @@ void Ship::Update()
 	if (m_flying)
 	{
 		Input::Vibrate(0.08, 0.08);
+		/*if (ShipStats::s_playerStats->GetMovementCounter() == 5)
+		{
+			m_boosterParticlesEmitterLeft1->SetRadius(4);
+			m_boosterParticlesEmitterLeft1->SetEmissionRate(5000);
+			m_boosterParticlesEmitterLeft1->SetMaxSize(1.2f);
+			m_boosterParticlesEmitterRight1->SetRadius(4);
+			m_boosterParticlesEmitterRight1->SetEmissionRate(5000);
+			m_boosterParticlesEmitterRight1->SetMaxSize(1.2f);
+			m_boosterParticlesEmitterLeft2->SetSpread(3);
+			m_boosterParticlesEmitterLeft2->SetMaxSize(1.2f);
+			m_boosterParticlesEmitterRight2->SetSpread(3);
+			m_boosterParticlesEmitterRight2->SetMaxSize(1.2f);
+		}*/
 		m_boosterParticlesEmitterLeft1->StartEmitting();
-
 		m_boosterParticlesEmitterLeft2->StartEmitting();
 		m_boosterParticlesEmitterRight1->StartEmitting();
 		m_boosterParticlesEmitterRight2->StartEmitting();

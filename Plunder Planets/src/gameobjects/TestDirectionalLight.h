@@ -44,5 +44,4 @@ private:
 	component::DirectionalLight* m_dirLight;
 	math::Color m_lightColor;
 	float m_rot;
-	math::Quaternion m_rotation;
 };

@@ -14,6 +14,14 @@ namespace thomas
 				m_looping = true;
 			}
 
+			SoundComponent::~SoundComponent()
+			{
+
+			}
+
+
+
+
 			bool SoundComponent::SetClip(std::string name)
 			{
 				m_instance = Sound::CreateInstance(name);

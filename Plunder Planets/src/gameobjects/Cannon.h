@@ -2,6 +2,7 @@
 #include "Thomas.h"
 #include "Projectile.h"
 #include <time.h>
+#include "ShipStats.h"
 
 using namespace thomas;
 using namespace object;
@@ -18,6 +19,10 @@ public:
 
 	void Start()
 	{
+		m_fire = false;
+		m_fireTwice = false;
+		m_fireTwiceTimer = 0.7f;
+
 		m_emitterSmoke = AddComponent<component::ParticleEmitterComponent>();
 		m_emitterSmoke->SetTexture("../res/textures/smokelight.png");
 		m_emitterSmoke->SetShader("particleShader");
@@ -74,6 +79,7 @@ public:
 		m_emitterSpark->SetSpread(3.14f);
 		m_emitterSpark->SetEmissionDuration(0.15f);
 		
+		
 		math::Vector3 dir = m_transform->Forward() * 3 + m_transform->Up();
 		dir.Normalize();
 		m_emitterSmoke->SetDirection(dir);
@@ -98,8 +104,21 @@ public:
 
 	void Update()
 	{
+
+		if (m_fireTwice)
+		{
+			m_fireTwiceTimer -= ThomasTime::GetDeltaTime();
+			if (m_fireTwiceTimer <= 0.0f)
+			{
+				m_fireTwice = false;
+				m_fireTwiceTimer = 0.4f;
+				m_fire = true;
+			}
+		}
+
 		if (m_fire)
 		{
+			
 			m_monteCarloDelay = 0;
 			if (m_monteCarloDelay <= 0)
 			{
@@ -133,6 +152,10 @@ public:
 		if (!m_fire)
 		{
 			m_fire = true;
+			if ((int)ShipStats::s_playerStats->GetCannonCounter() == 5)
+			{
+				m_fireTwice = true;
+			}
 		}
 	}
 
@@ -148,6 +171,9 @@ public:
 
 private:
 	bool m_fire;
+	bool m_fireTwice;
+	float m_fireTwiceTimer;
+
 	float roof;
 	float m_monteCarloDelay;
 	float m_projectileDamage;

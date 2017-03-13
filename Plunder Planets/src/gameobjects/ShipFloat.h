@@ -76,6 +76,10 @@ public:
 			float damping;
 			if (heightBelowWater < 2.0)
 			{
+				damping = 0.2;
+			}
+			else if (heightBelowWater < 5.0)
+			{
 				damping = 0.5;
 			}
 			else

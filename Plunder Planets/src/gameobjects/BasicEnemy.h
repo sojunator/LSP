@@ -4,6 +4,7 @@
 #include "EnemyManager.h"
 #include "ShipFloat.h"
 #include "ShipStats.h"
+#include "HealthCrate.h"
 using namespace thomas;
 using namespace object;
 
@@ -380,7 +381,7 @@ public:
 
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile")
+		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile" && !m_dead)
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy != this)
@@ -401,6 +402,9 @@ public:
 		m_emitterSmoke->StartEmitting();
 		m_emitterSpark->StartEmitting();
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
+		math::Vector3 cratePos = m_transform->GetPosition();
+		cratePos.y = 0;
+		Instantiate<HealthCrate>(cratePos, math::Quaternion::Identity, m_scene);
 	}
 
 private:

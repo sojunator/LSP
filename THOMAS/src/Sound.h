@@ -21,7 +21,7 @@ namespace thomas
 		static float GetMusicVolume();
 		static bool LoadWaveBank(std::string name);
 		static void Destroy();
-
+		static void Update();
 	private:
 		static float s_masterVolume;
 		static float s_fxVolume;
