@@ -107,9 +107,19 @@ float ShipStats::GetCannonCounter()
 	return m_cannonCounter;
 }
 
+void ShipStats::SetCannonCounter(float count)
+{
+	m_cannonCounter = count;
+}
+
 float ShipStats::GetMovementCounter()
 {
 	return m_movementCounter;
+}
+
+void ShipStats::SetMovementCounter(float count)
+{
+	m_movementCounter = count;
 }
 
 float ShipStats::GetResourceCounter()
@@ -117,14 +127,29 @@ float ShipStats::GetResourceCounter()
 	return m_resourceCounter;
 }
 
+void ShipStats::SetResourceCounter(float count)
+{
+	m_resourceCounter = count;
+}
+
 float ShipStats::GetShieldCounter()
 {
 	return m_shieldCounter;
 }
 
+void ShipStats::SetShieldCounter(float count)
+{
+	m_shieldCounter = count;
+}
+
 float ShipStats::GetPlunderCounter()
 {
 	return m_plunderCounter;
+}
+
+void ShipStats::SetPlunderCounter(float count)
+{
+	m_plunderCounter = count;
 }
 
 float ShipStats::GetCannonDamage()
