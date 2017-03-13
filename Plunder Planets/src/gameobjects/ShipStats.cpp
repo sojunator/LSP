@@ -107,9 +107,19 @@ float ShipStats::GetCannonCounter()
 	return m_cannonCounter;
 }
 
+void ShipStats::SetCannonCounter(float count)
+{
+	m_cannonCounter = count;
+}
+
 float ShipStats::GetMovementCounter()
 {
 	return m_movementCounter;
+}
+
+void ShipStats::SetMovementCounter(float count)
+{
+	m_movementCounter = count;
 }
 
 float ShipStats::GetResourceCounter()
@@ -117,14 +127,29 @@ float ShipStats::GetResourceCounter()
 	return m_resourceCounter;
 }
 
+void ShipStats::SetResourceCounter(float count)
+{
+	m_resourceCounter = count;
+}
+
 float ShipStats::GetShieldCounter()
 {
 	return m_shieldCounter;
 }
 
+void ShipStats::SetShieldCounter(float count)
+{
+	m_shieldCounter = count;
+}
+
 float ShipStats::GetPlunderCounter()
 {
 	return m_plunderCounter;
+}
+
+void ShipStats::SetPlunderCounter(float count)
+{
+	m_plunderCounter = count;
 }
 
 float ShipStats::GetCannonDamage()
@@ -287,8 +312,8 @@ void ShipStats::RepairHealth(float talentAmount)
 	}
 	else if (talentAmount == 2 && m_healthAmount != 1)
 	{
-		if (m_healthAmount <= 0.93) //seems to run twice when an enemy dies, so heals 14, not 7
-			m_healthAmount += 0.07;
+		if (m_healthAmount <= 0.85)
+			m_healthAmount += 0.15;
 		else
 			m_healthAmount = 1;
 	}

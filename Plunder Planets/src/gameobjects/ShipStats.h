@@ -28,10 +28,15 @@ public:
 	float GetGoldPlacerHolder();
 	void SetGoldPlacerHolder(float gold);
 	float GetCannonCounter();
+	void SetCannonCounter(float count);
 	float GetMovementCounter();
+	void SetMovementCounter(float count);
 	float GetResourceCounter();
+	void SetResourceCounter(float count);
 	float GetShieldCounter();
+	void SetShieldCounter(float count);
 	float GetPlunderCounter();
+	void SetPlunderCounter(float count);
 	float GetCannonDamage();
 	float GetCannonQuantity();
 	float GetSpeed();

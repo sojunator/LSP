@@ -17,6 +17,11 @@ public:
 		ShipStats::s_playerStats->SetShieldAmount(0);
 		ShipStats::s_playerStats->SetCurrentHealth(1);
 		ShipStats::s_playerStats->SetPlunderSpeed(30);
+		ShipStats::s_playerStats->SetCannonCounter(0);
+		ShipStats::s_playerStats->SetMovementCounter(0);
+		ShipStats::s_playerStats->SetResourceCounter(0);
+		ShipStats::s_playerStats->SetShieldCounter(0);
+		ShipStats::s_playerStats->SetPlunderCounter(0);
 
 		if (thomas::Window::GetAspectRatio() == thomas::Window::Ratio::STANDARD_169)
 		{
