@@ -491,9 +491,7 @@ void UpgradeMenuObject::Update()
 
 		PlunderCheck(upgrade, undo);
 
-		ShipStats::s_playerStats->SetCurrentGold(min(m_resourceMax, ShipStats::s_playerStats->GetTreasure())); //fixes gold going over starting amount
-
-		//m_upgradeDelay = 0.3f; //Reset upgrade delay
+		m_upgradeDelay = 0.3f; //Reset upgrade delay
 	}
 
 	Navigation();
