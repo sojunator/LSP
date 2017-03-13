@@ -333,13 +333,14 @@ public:
 
 		if (m_dead)
 		{
+			if (m_deathTime == 10)
+				ShipStats::s_playerStats->RepairHealth(2);
 			m_rigidBody->setDamping(0.5, 0.5);
 			m_deathTime -= dt;
 			((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::BASIC);
 			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 			{
 				Destroy(this);
-				ShipStats::s_playerStats->RepairHealth(2);
 			}
 			return;
 		}
