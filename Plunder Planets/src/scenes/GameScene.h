@@ -48,6 +48,7 @@ public:
 		LoadModel("tobyEnemy0", "../res/models/Boat/tobyboat.fbx", "phongMaterial");
 		LoadModel("box1", "../res/models/box.obj", "phongMaterial");
 		LoadModel("healthCrate", "../res/models/crate_mesh.obj", "phongMaterial");
+		LoadModel("goldCrate", "../res/models/crate_gold_mesh.obj", "phongMaterial");
 
 		
 

@@ -30,6 +30,8 @@ public:
 	math::Vector3 GetTargetPos();
 	void SetFireRadius(float radius);
 
+	math::Vector3 GetRandomPos();
+
 private:
 	State m_currentState;
 	float m_searchRadius;

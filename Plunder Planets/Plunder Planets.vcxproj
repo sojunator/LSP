@@ -193,6 +193,7 @@
     <ClInclude Include="src\gameobjects\WaterSplashParticle.h" />
     <ClInclude Include="src\gameobjects\Wormhole.h" />
     <ClInclude Include="src\gameobjects\MainGameManager.h" />
+    <ClInclude Include="src\gameobjects\GoldCrate.h" />
     <ClInclude Include="src\materials\PhongMaterial.h" />
     <ClInclude Include="src\materials\SkyboxMaterial.h" />
     <ClInclude Include="src\materials\TerrainMaterial.h" />

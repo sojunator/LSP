@@ -5,6 +5,7 @@
 #include "ShipFloat.h"
 #include "ShipStats.h"
 #include "HealthCrate.h"
+#include "GoldCrate.h"
 using namespace thomas;
 using namespace object;
 
@@ -404,7 +405,25 @@ public:
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
 		math::Vector3 cratePos = m_transform->GetPosition();
 		cratePos.y = 0;
-		Instantiate<HealthCrate>(cratePos, math::Quaternion::Identity, m_scene);
+
+
+		float r = ((double)rand() / (RAND_MAX));
+		int crateType = (int)r * 3;
+
+		if (r == 0)
+		{
+			Instantiate<HealthCrate>(cratePos, math::Quaternion::Identity, m_scene);
+		}
+		else if (r == 1)
+		{
+			Instantiate<GoldCrate>(cratePos, math::Quaternion::Identity, m_scene);
+		}
+		else
+		{
+			LOG("You get nothing! Good day sir!");
+		}
+
+		
 	}
 
 private:

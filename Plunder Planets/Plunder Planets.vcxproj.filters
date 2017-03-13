@@ -69,6 +69,7 @@
     <ClInclude Include="src\gameobjects\EnemyManager.h" />
     <ClInclude Include="src\gameobjects\MainGameManager.h" />
     <ClInclude Include="src\gameobjects\HealthCrate.h" />
+    <ClInclude Include="src\gameobjects\GoldCrate.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Plunder Planets.rc" />

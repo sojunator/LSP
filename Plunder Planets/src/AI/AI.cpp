@@ -10,7 +10,7 @@ void AI::Start()
 	m_currentState = State::Searching;
 	m_searchRadius = 800;
 	m_fireRadius = 300;
-	m_moveToPos = math::Vector3(0,0,0);
+	m_moveToPos = GetRandomPos();
 }
 
 void AI::OnEnable()
@@ -75,29 +75,10 @@ void AI::SearchingUpdate()
 		m_currentState = State::Chasing;
 		m_moveToPos = m_target->m_transform->GetPosition();
 	}
-	else if(math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 2.0)
+	else if(math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 5.0)
 	{
-		float r = ((double)rand() / (RAND_MAX));
-		float rads = r * math::PI * 2;
-		math::Vector3 randDir = math::Vector3(cosf(rads), 0, sinf(rads));
-		randDir.Normalize();
 
-		float r2 = ((double)rand() / (RAND_MAX));
-		float randLength = r2 * 50 + 50;
-
-		math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
-		while (!LineOfSight(randDir, randLength))
-		{
-			r = ((double)rand() / (RAND_MAX));
-			rads = r * math::PI * 2;
-			randDir = math::Vector3(cosf(rads), 0, sinf(rads));
-			randDir.Normalize();
-			r2 = ((double)rand() / (RAND_MAX));
-			randLength = r2 * 50 + 50;
-			newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
-		}
-		
-		m_moveToPos = newPos;
+		m_moveToPos = GetRandomPos();
 	}
 
 	
@@ -170,6 +151,31 @@ math::Vector3 AI::GetTargetPos()
 void AI::SetFireRadius(float radius)
 {
 	m_fireRadius = radius;
+}
+
+math::Vector3 AI::GetRandomPos()
+{
+	float r = ((double)rand() / (RAND_MAX));
+	float rads = r * math::PI * 2;
+	math::Vector3 randDir = math::Vector3(cosf(rads), 0, sinf(rads));
+	randDir.Normalize();
+
+	float r2 = ((double)rand() / (RAND_MAX));
+	float randLength = r2 * 50 + 50;
+
+	math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
+	while (!LineOfSight(randDir, randLength))
+	{
+		r = ((double)rand() / (RAND_MAX));
+		rads = r * math::PI * 2;
+		randDir = math::Vector3(cosf(rads), 0, sinf(rads));
+		randDir.Normalize();
+		r2 = ((double)rand() / (RAND_MAX));
+		randLength = r2 * 50 + 50;
+		newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
+	}
+
+	return newPos;
 }
 
 

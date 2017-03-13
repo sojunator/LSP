@@ -398,7 +398,7 @@ public:
 			}
 			else if (collision.otherRigidbody->m_gameObject->GetType() == "BasicEnemy")
 			{
-
+				m_hasExploded = true;
 				BasicEnemy* basicEnemy = (BasicEnemy*)collision.otherRigidbody->m_gameObject;
 				basicEnemy->TakeDamage(dmgModifier*m_explosionDamage);
 				basicEnemy->DisableRoof();
