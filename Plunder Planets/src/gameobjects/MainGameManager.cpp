@@ -36,7 +36,7 @@ void MainGameManager::Update()
 	if (Input::GetKey(Input::Keys::M) && GameScene::s_islandManager->GetLootedTreasure() < maxGold)
 		GameScene::s_islandManager->IncreaseLootedTreasure(50);
 
-	if (GameScene::s_islandManager->GetLootedTreasure() > 1750 && !m_wormholeSpawned)
+	if (GameScene::s_islandManager->GetLootedTreasure() > (0.875 * maxGold) && !m_wormholeSpawned)
 	{
 		Wormhole* wormhole = Instantiate<Wormhole>(math::Vector3(0, 3.0f, 0), math::Quaternion::Identity, m_scene);
 		wormhole->SetEndLevel(true);

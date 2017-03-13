@@ -344,7 +344,7 @@ public:
 				}
 			}
 		}
-		if (Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back))
+		if (Input::GetButtonDown(Input::Buttons::B) || Input::GetKeyDown(Input::Keys::Back) || Input::GetKey(Input::Keys::Escape))
 		{
 			m_pauseObj->SetSettingsState(false);
 			m_firstTimeHax = false;

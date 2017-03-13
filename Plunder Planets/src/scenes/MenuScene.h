@@ -9,7 +9,7 @@ public:
 	{
 		ShipStats::s_currentLevel = 0;
 		//Reset Upgrades/Gold
-		ShipStats::s_playerStats->SetCurrentGold(10000);
+		ShipStats::s_playerStats->SetCurrentGold(1000);
 		ShipStats::s_playerStats->SetCannonDamage(5);
 		ShipStats::s_playerStats->SetSpeed(50);
 		ShipStats::s_playerStats->SetBoostCost(20);
