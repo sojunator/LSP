@@ -164,6 +164,7 @@ math::Vector3 AI::GetRandomPos()
 	float randLength = r2 * 50 + 50;
 
 	math::Vector3 newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
+	int loopCount = 0;
 	while (!LineOfSight(randDir, randLength))
 	{
 		r = ((double)rand() / (RAND_MAX));
@@ -171,8 +172,13 @@ math::Vector3 AI::GetRandomPos()
 		randDir = math::Vector3(cosf(rads), 0, sinf(rads));
 		randDir.Normalize();
 		r2 = ((double)rand() / (RAND_MAX));
-		randLength = r2 * 50 + 50;
+		randLength = r2 * 50 + 100;
 		newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
+		loopCount++;
+		if (loopCount > 5)
+		{
+			return m_gameObject->m_transform->GetPosition();
+		}
 	}
 
 	return newPos;

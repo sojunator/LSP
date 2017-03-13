@@ -5,7 +5,6 @@ namespace thomas
 {
 	Islands::Islands(int nrOfIslands, graphics::Material* m, int minSize, int maxSize, float detail, int mapSize)
 	{
-		std::srand(time(NULL));
 		std::vector<thomas::utils::Plane::PlaneData> tempPlane;
 		m_mapSize = mapSize;
 		m_nrOfIslands = nrOfIslands;

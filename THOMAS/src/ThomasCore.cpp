@@ -30,12 +30,13 @@ namespace thomas {
 
 	bool ThomasCore::Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow, LONG windowWidth, LONG windowHeight, LPWSTR title)
 	{
+		srand(time(NULL));
 		//#ifdef _DEBUG
 		//		AllocConsole();
 		//		freopen("CONOUT$", "w", stdout);
 		//#endif
-				AllocConsole();
-				freopen("CONOUT$", "w", stdout);
+		AllocConsole();
+		freopen("CONOUT$", "w", stdout);
 		s_hInstance = hInstance;
 		s_initialized = Window::Init(hInstance, nCmdShow, windowWidth, windowHeight, title);
 

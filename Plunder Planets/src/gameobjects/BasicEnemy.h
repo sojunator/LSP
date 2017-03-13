@@ -335,8 +335,6 @@ public:
 
 		if (m_dead)
 		{
-			if (m_deathTime == 10)
-				ShipStats::s_playerStats->RepairHealth(2);
 			m_rigidBody->setDamping(0.5, 0.5);
 			m_deathTime -= dt;
 			((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::BASIC);
@@ -408,13 +406,11 @@ public:
 
 
 		float r = ((double)rand() / (RAND_MAX));
-		int crateType = (int)r * 3;
-
-		if (r == 0)
+		if (r > 0.66)
 		{
 			Instantiate<HealthCrate>(cratePos, math::Quaternion::Identity, m_scene);
 		}
-		else if (r == 1)
+		else if (r > 0.33)
 		{
 			Instantiate<GoldCrate>(cratePos, math::Quaternion::Identity, m_scene);
 		}

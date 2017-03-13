@@ -8,7 +8,7 @@
 #ifdef _DEBUG
 #define LOG(msg) std::cout <<__FUNCTION__  << ": "<< msg << std::endl;
 #else
-#define LOG(msg) 
+#define LOG(msg) ;
 #endif
 
 #ifdef _DEBUG

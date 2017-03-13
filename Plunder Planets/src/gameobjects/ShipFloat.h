@@ -87,7 +87,6 @@ public:
 				damping = 1.0;
 			}
 			force *= damping;
-			LOG(force.length() / rb->GetMass());
 			if (force.length()/rb->GetMass() > 10)
 			{
 				float splashForce = force.length() / rb->GetMass();

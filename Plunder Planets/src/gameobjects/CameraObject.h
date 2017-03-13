@@ -45,7 +45,6 @@ public:
 
 		m_camera->SetSkybox("../res/textures/day.dds", "skyboxShader", 10);
 		m_camera->AddSkybox("../res/textures/test.dds", 11);
-		srand(time(NULL));
 		m_camera->SetSkyboxLerpValue(math::Vector3((float)rand() / ((float)RAND_MAX * 2.f), (float)rand() / ((float)RAND_MAX * 2.f), (float)rand() / ((float)RAND_MAX * 2.f)));
 		m_sensitivity = 2.5f;
 		m_normalSpeed = 50.0f;
@@ -56,15 +55,15 @@ public:
 
 		m_creak->SetClip("fCreakLoop");
 		m_creak->SetVolume(3);
-		m_creak->Play();
+		//m_creak->Play();
 
 		m_music->SetClip("aOceanAmbient");
 		m_music->SetVolume(0.3);
-		m_music->Play();
+		//m_music->Play();
 
 		m_pirateMusic->SetClip("mSeaChanty");
 		m_pirateMusic->SetVolume(2);
-		m_pirateMusic->Play();
+		//m_pirateMusic->Play();
 
 		//GUI images
 		m_sprite->SetName("GUI");
