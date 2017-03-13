@@ -18,13 +18,13 @@ namespace thomas
 			float powIsland = (islandSize / 2) * (islandSize / 2);
 			float min = std::sqrt(powIsland + powIsland) + 512;		//Depends on size of island
 
-			float treasure = rand() % 800 + islandSize;
+			float treasure = rand() % 200 + islandSize * 0.35;
 
 			m_lostTreasureSinceLastEnemySpawn.push_back(0);
 			m_size.push_back(islandSize);
 			m_minDistance.push_back(min);
 			m_detail.push_back(detail);
-			m_treasure.push_back(islandSize * 0.35);
+			m_treasure.push_back(treasure);
 			m_totalTreasure.push_back(treasure);
 			m_collisionRadius.push_back(islandSize * 0.33);
 			m_plunderRadius.push_back(m_collisionRadius[i] + 100);
