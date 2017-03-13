@@ -16,7 +16,8 @@ public:
 public:
 	AI();
 	void Start();
-	void OnEnable();
+	void FindTarget();
+	bool HasTarget();
 	void Update();
 	void ChasingUpdate();
 	void SearchingUpdate();

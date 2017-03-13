@@ -13,13 +13,23 @@ void AI::Start()
 	m_moveToPos = GetRandomPos();
 }
 
-void AI::OnEnable()
+void AI::FindTarget()
 {
 	m_target = GameObject::Find("Ship");
 }
 
+bool AI::HasTarget()
+{
+	return m_target;
+}
+
 void AI::Update()
 {
+	if (!HasTarget())
+	{
+		SearchingUpdate();
+		return;
+	}
 
 	switch (m_currentState)
 	{
@@ -63,22 +73,33 @@ void AI::ChasingUpdate()
 void AI::SearchingUpdate()
 {
 
-
-	math::Vector3 targetD = m_target->m_transform->GetPosition() - m_gameObject->m_transform->GetPosition();
-	float distanceToTarget = targetD.Length();
-	targetD.Normalize();
-
-	
-	if (distanceToTarget < m_searchRadius && LineOfSight(targetD, distanceToTarget + 1))
+	if (HasTarget())
 	{
-		
-		m_currentState = State::Chasing;
-		m_moveToPos = m_target->m_transform->GetPosition();
+		math::Vector3 targetD = m_target->m_transform->GetPosition() - m_gameObject->m_transform->GetPosition();
+		float distanceToTarget = targetD.Length();
+		targetD.Normalize();
+
+
+		if (distanceToTarget < m_searchRadius && LineOfSight(targetD, distanceToTarget + 1))
+		{
+
+			m_currentState = State::Chasing;
+			m_moveToPos = m_target->m_transform->GetPosition();
+		}
+		else if (math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 15.0)
+		{
+
+			m_moveToPos = GetRandomPos();
+		}
 	}
-	else if(math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 5.0)
+	else
 	{
-
-		m_moveToPos = GetRandomPos();
+		if (math::Vector3::Distance(m_gameObject->m_transform->GetPosition(), m_moveToPos) <= 15.0)
+		{
+			
+			m_moveToPos = GetRandomPos();
+			
+		}
 	}
 
 	
@@ -172,7 +193,7 @@ math::Vector3 AI::GetRandomPos()
 		randDir = math::Vector3(cosf(rads), 0, sinf(rads));
 		randDir.Normalize();
 		r2 = ((double)rand() / (RAND_MAX));
-		randLength = r2 * 50 + 100;
+		randLength = r2 * 200 + 200;
 		newPos = m_gameObject->m_transform->GetPosition() + randDir * randLength;
 		loopCount++;
 		if (loopCount > 5)

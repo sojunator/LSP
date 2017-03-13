@@ -67,7 +67,6 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_ai = AddComponent<AI>();
-		m_ai->SetActive(false);
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
 		m_renderer->SetModel("tobyEnemy0");
@@ -138,7 +137,7 @@ public:
 		m_boosterParticlesEmitterMiddle2->SetSpread(2.5f);
 		m_boosterParticlesEmitterMiddle2->SetOffset(m_transform->Forward() * 10.45f + m_transform->Up() * 3.25f);
 		m_boosterParticlesEmitterMiddle2->SetDirection(m_transform->Forward());
-		
+
 		m_explosionParticle1 = AddComponent<component::ParticleEmitterComponent>();
 		m_explosionParticle1->ImportEmitter("../res/particles/tobyExplode1.thomasps");
 
@@ -156,7 +155,7 @@ public:
 		m_sound->SetVolume(0.7);
 		m_sound->SetLooping(false);
 
-		
+
 	}
 
 
@@ -170,7 +169,7 @@ public:
 			float dir = calcDir();
 
 			float moveSpeed = 1 - abs(dir);
-			
+
 			if (m_ai->GetState() == AI::State::Attacking)
 			{
 				m_rigidBody->applyCentralForce(*(btVector3*)&(-forward * m_speed * 2.0 * m_rigidBody->GetMass() * moveSpeed));
@@ -204,7 +203,7 @@ public:
 
 	float calcDir()
 	{
-		if (m_ai->GetState() == AI::State::Chasing || m_ai->GetState() == AI::State::Searching ||m_ai->GetState() == AI::State::Attacking)
+		if (m_ai->GetState() == AI::State::Chasing || m_ai->GetState() == AI::State::Searching || m_ai->GetState() == AI::State::Attacking)
 		{
 			math::Vector3 forward = m_transform->Forward();
 			forward.y = 0;		//Remove y so no flying
@@ -299,51 +298,42 @@ public:
 
 		m_boosting = false;
 
-		if (!m_ai->GetActive())
+		if (!m_ai->HasTarget())
 		{
-			if (thomas::object::GameObject::Find("Ship"))
-			{
-				m_ai->SetActive(true);
-			}
+			m_ai->FindTarget();
 		}
-		else
+
+		Rotate(dt);
+		Move(dt);
+
+		if (m_boosting)
 		{
-			
-			Rotate(dt);
-			Move(dt);
+			m_sound->Play();
+			//Input::Vibrate(0.1, 0.1);
+			//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
+			m_boosterParticlesEmitterMiddle1->StartEmitting();
+			m_boosterParticlesEmitterMiddle2->StartEmitting();
 
-			if (m_boosting)
+
+			m_explosionDelay -= ThomasTime::GetDeltaTime();
+			m_swapDelay -= ThomasTime::GetDeltaTime();
+
+			if (m_swapDelay <= 0)
 			{
-				m_sound->Play();
-				//Input::Vibrate(0.1, 0.1);
-				//m_renderer->SetModel("testModel" + std::to_string(m_modelIndex));
-				m_boosterParticlesEmitterMiddle1->StartEmitting();
-				m_boosterParticlesEmitterMiddle2->StartEmitting();
-
-
-				m_explosionDelay -= ThomasTime::GetDeltaTime();
-				m_swapDelay -= ThomasTime::GetDeltaTime();
-
-				if (m_swapDelay <= 0)
+				m_modelIndex = (m_modelIndex + 1) % 2;
+				if (m_explosionDelay > 0.5)
 				{
-					m_modelIndex = (m_modelIndex + 1) % 2;
-					if (m_explosionDelay > 0.5)
-					{
-						float l = 1-(m_explosionDelay/4.0);
-						m_swapDelay = 0;
-						m_swapDelay = (0.5 * (1.0f - l)) + (0.0 * l);
-					}
-					else if (m_explosionDelay > 0.0)
-					{
-						m_swapDelay = 0;
-						m_modelIndex = 1;
-					}
-					
-					m_renderer->SetModel("tobyEnemy" + std::to_string(m_modelIndex));
+					float l = 1 - (m_explosionDelay / 4.0);
+					m_swapDelay = 0;
+					m_swapDelay = (0.5 * (1.0f - l)) + (0.0 * l);
+				}
+				else if (m_explosionDelay > 0.0)
+				{
+					m_swapDelay = 0;
+					m_modelIndex = 1;
 				}
 
-				
-				
+				m_renderer->SetModel("tobyEnemy" + std::to_string(m_modelIndex));
 			}
 
 		}
@@ -364,7 +354,7 @@ public:
 
 	void OnCollision(component::RigidBodyComponent::Collision collision)
 	{
-		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile" && collision.thisRigidbody == m_rigidBody &!m_dead)
+		if (collision.otherRigidbody->m_gameObject->GetType() == "Projectile" && collision.thisRigidbody == m_rigidBody & !m_dead)
 		{
 			Projectile* p = ((Projectile*)collision.otherRigidbody->m_gameObject);
 			if (p->m_spawnedBy != this)
@@ -372,17 +362,17 @@ public:
 				TakeDamage(p->GetDamageAmount());
 				Destroy(p);
 			}
-				
+
 		}
 		else if (collision.thisRigidbody == m_explosionCollider && collision.otherRigidbody != m_rigidBody && m_explode)
 		{
 			math::Vector3 impulseVector = collision.otherRigidbody->m_gameObject->m_transform->GetPosition() - m_transform->GetPosition();
 			float distanceFromCenter = impulseVector.Length();
-			float dmgModifier = 1-(distanceFromCenter / m_explosionRadius);
+			float dmgModifier = 1 - (distanceFromCenter / m_explosionRadius);
 			impulseVector.Normalize();
 			impulseVector.y = 0.06;
 			collision.otherRigidbody->applyCentralImpulse(Physics::ToBullet(impulseVector)*collision.otherRigidbody->GetMass() * dmgModifier * 150);
-			if(collision.otherRigidbody->m_gameObject->GetType() == "TobyEnemy")
+			if (collision.otherRigidbody->m_gameObject->GetType() == "TobyEnemy")
 			{
 				m_hasExploded = true;
 				Toby* tobyEnemy = (Toby*)collision.otherRigidbody->m_gameObject;
@@ -443,7 +433,7 @@ private:
 	component::RenderComponent* m_renderer;
 	component::SoundComponent* m_sound;
 	component::RigidBodyComponent* m_rigidBody;
-	
+
 	component::FrustumCullingComponent* m_frustumCullingComponent;
 
 	component::ParticleEmitterComponent* m_explosionSmokeParticle;

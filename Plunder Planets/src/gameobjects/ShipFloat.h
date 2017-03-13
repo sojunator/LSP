@@ -40,7 +40,8 @@ public:
 		m_emitterSplash->SetEmissionDuration(0.1f);
 		m_emitterSplash->SetRadius(4.0f);
 		m_splashSound = AddComponent<component::SoundComponent>();
-
+		m_splashSound->SetClip(m_SFXs[rand() % 3]);
+		m_splashSound->SetLooping(false);
 	}
 
 	void SetMass(float m)
@@ -93,7 +94,10 @@ public:
 				float size = (splashForce - 10) / 3;
 				m_emitterSplash->SetSize(size);
 				m_emitterSplash->StartEmitting();
-				m_splashSound->PlayOneShot(m_SFXs[rand() % 3], size/30);
+				
+				float v = min(size / 30, 0.5);
+				m_splashSound->SetVolume(size / 30);
+				m_splashSound->Play();
 				
 			}
 			rb->applyImpulse(force*ThomasTime::GetDeltaTime(), *(btVector3*)&pos);

@@ -74,7 +74,7 @@ public:
 		m_renderer = AddComponent<component::RenderComponent>();
 		m_sound = AddComponent<component::SoundComponent>();
 		m_ai = AddComponent<AI>();
-		m_ai->SetActive(false);
+
 
 		m_rigidBody = AddComponent<component::RigidBodyComponent>();
 
@@ -347,22 +347,14 @@ public:
 
 		
 
-		if (!m_ai->GetActive())
+		if (!m_ai->HasTarget())
 		{
-			if (thomas::object::GameObject::Find("Ship"))
-			{
-				m_ai->SetActive(true);
-			}
-		}
-		else
-		{
-			
-			Rotate(dt);
-			Move(dt);
-			FireCannons();
+			m_ai->FindTarget();
 		}
 
-		
+		Rotate(dt);
+		Move(dt);
+		FireCannons();
 
 		Float(dt);
 	}
