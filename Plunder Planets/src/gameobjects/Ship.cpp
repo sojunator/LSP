@@ -215,7 +215,7 @@ void Ship::Start()
 	//movement
 	m_speed = ShipStats::s_playerStats->GetSpeed();
 	m_turnSpeed = 20;
-	m_roof = 1.0;
+	m_roof = 100.0;
 	m_flyCost = ShipStats::s_playerStats->GetBoostCost();
 	m_displayBoostCostParticleFloaterThingy = ShipStats::s_playerStats->GetBoostCost();
 
@@ -577,7 +577,7 @@ void Ship::Float(float dt)
 	
 	bois /= 8;
 	waveHeight /= 8;
-	if (bois.y > waveHeight + m_roof && waveHeight > -10)
+	if (bois.y > waveHeight + m_roof && waveHeight > -10 && !m_startUpSequence)
 	{
 		btVector3& v = m_rigidBody->getWorldTransform().getOrigin();
 		float oldY = v.getY();
