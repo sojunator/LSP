@@ -59,7 +59,7 @@ namespace ocean
 		// ---------------------------------- Collision -----------------------------------
 		struct OceanCollisionDataStruct
 		{
-			thomas::math::Vector2 UVs[2000];
+			thomas::math::Vector2 UVs[10000];
 		}m_oceanCollisionData;
 		int m_nextCollisionIndex = 0;
 		ID3D11Buffer* m_oceanCollisionDataBuffer;

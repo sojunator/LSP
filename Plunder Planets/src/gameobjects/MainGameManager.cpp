@@ -25,7 +25,7 @@ void MainGameManager::Start()
 
 void MainGameManager::Update()
 {
-	float difficulty = ShipStats::s_currentLevel + GameScene::s_islandManager->GetLootedTreasure() / 10000.0f/*2000.0f*/;
+	float difficulty = ShipStats::s_currentLevel + GameScene::s_islandManager->GetLootedTreasure() / 1000.0f;
 	m_enemyManager->SetDifficulty(difficulty);
 
 	float maxGold = GameScene::s_islandManager->GetTotalTreasure();

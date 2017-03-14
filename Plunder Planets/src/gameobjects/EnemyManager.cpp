@@ -7,7 +7,7 @@ void EnemyManager::Start()
 	m_difficulty = 1;
 	m_amountOfSpecificEnemy[EnemyTypes::BASIC] = 0;
 	m_amountOfSpecificEnemy[EnemyTypes::TOBY] = 0;
-	m_delayBetweenSpawns = 10;
+	m_delayBetweenSpawns = 8;
 	m_delayBetweenSpawnsTimeLeft = 0;
 }
 

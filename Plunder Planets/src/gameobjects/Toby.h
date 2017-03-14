@@ -290,7 +290,7 @@ public:
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
 			m_deathTime -= dt;
-			((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::TOBY);
+			
 			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 				Destroy(this);
 			return;
@@ -415,6 +415,7 @@ public:
 		m_explosionSmokeParticle->StartEmitting();
 		m_renderer->SetActive(false);
 		m_rigidBody->SetActive(false);
+		((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::TOBY);
 	}
 
 public:

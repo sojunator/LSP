@@ -303,9 +303,9 @@ namespace ocean
 
 
 		m_oceanCollisionDataBuffer = thomas::utils::D3d::CreateDynamicBufferFromStruct(m_oceanCollisionData, D3D11_BIND_CONSTANT_BUFFER);
-		m_oceanCPUBuffer = thomas::utils::D3d::CreateStagingBuffer(sizeof(float) * 2000, sizeof(float));
+		m_oceanCPUBuffer = thomas::utils::D3d::CreateStagingBuffer(sizeof(float) * 10000, sizeof(float));
 		thomas::utils::D3d::CreateCPUReadBufferAndUAV(m_oceanCollisionHeightData,
-			sizeof(float)*2000, sizeof(float),
+			sizeof(float)* 10000, sizeof(float),
 			m_oceanCollisionHeightDataBuffer, m_oceanCollisionHeightDataUAV);
 
 		ID3D10Blob* CSBlob;

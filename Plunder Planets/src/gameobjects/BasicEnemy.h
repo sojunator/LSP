@@ -337,7 +337,6 @@ public:
 		{
 			m_rigidBody->setDamping(0.5, 0.5);
 			m_deathTime -= dt;
-			((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::BASIC);
 			if (m_deathTime < 0)//m_transform->GetPosition().y < -10)
 			{
 				Destroy(this);
@@ -395,6 +394,7 @@ public:
 		m_sound->PlayOneShot("fEnemyExplode", 0.7);
 		math::Vector3 cratePos = m_transform->GetPosition();
 		cratePos.y = 0;
+		((EnemyManager*)Find("EnemyManager"))->RemoveEnemy(EnemyManager::EnemyTypes::BASIC);
 
 
 		float r = ((double)rand() / (RAND_MAX));
